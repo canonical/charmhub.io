@@ -1,0 +1,43 @@
+<!doctype html>
+
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- TO DO - update description and google drive link -->
+  <meta name="description"
+    content="{% block meta_description %}Charmhub{% endblock %}" />
+  <meta name="copydoc"
+    content="{% block meta_copydoc %}https://drive.google.com/drive/u/1/folders/1gqxew2MS9-OkQF5bTStPgmyLS35JpztF{% endblock %}">
+  <meta name="author" content="Canonical Ltd" />
+
+  <title>charmhub.io</title>
+
+  <link rel="preconnect" href="https://assets.ubuntu.com">
+
+  <link rel="stylesheet" type="text/css" media="screen"
+    href="/static/css/styles.css" />
+
+
+  <link rel="preload" as="font" type="font/woff2"
+    href="https://assets.ubuntu.com/v1/e8c07df6-Ubuntu-L_W.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2"
+    href="https://assets.ubuntu.com/v1/7f100985-Ubuntu-Th_W.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2"
+    href="https://assets.ubuntu.com/v1/f8097dea-Ubuntu-LI_W.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2"
+    href="https://assets.ubuntu.com/v1/fff37993-Ubuntu-R_W.woff2" crossorigin>
+</head>
+
+<body>
+  {% include "partial/_navigation.html" %}
+
+  <main class="p-container">
+    {% block content %}{% endblock content %}
+  </main>
+  {% include 'partial/_footer.html' %}
+</body>
+
+</html>

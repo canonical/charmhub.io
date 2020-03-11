@@ -1,0 +1,15 @@
+@mixin p-charmhub-link {
+  .p-link--inverted {
+    color: $color-light;
+    text-decoration: underline;
+    font-weight: $font-weight-bold;
+
+    &:hover {
+      color: $color-light;
+    }
+
+    &:visited {
+      color: darken($color-light, 10%);
+    }
+  }
+}

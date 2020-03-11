@@ -1,53 +1,393 @@
-<!doctype html>
+{% extends 'base_index.html' %}
 
-<html class="js" lang="en" dir="ltr">
-  <head>
-    <!-- Add meta charset below -->
-    <meta charset="UTF-8" />
+{% block meta_copydoc %}https://docs.google.com/document/d/1WcNN2RlQQrbLSP5ZgcIsAeQAHj5h_yDW6Yd5oBMmU3M{% endblock meta_copydoc %}
 
-    <!-- Add meta name below -->
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
-    <!-- Add page title below -->
-    <title>charmhub.io</title>
-    
-    <!-- Add preconnect/dns-prefetch below -->
-    <link rel="preconnect" href="https://assets.ubuntu.com">
-    <!-- <link rel="dns-prefetch" href="http://www.spreadfirefox.com/"> -->
-    
-    <!-- Add inline JS below -->
-    <script>// Inline JS</script>
-    
-    <!-- Add stylesheet below -->
-    <link rel="stylesheet" type="text/css" media="screen" href="/static/css/styles.css" />
-    
-    <!-- Add inline CSS below -->
-    <style>/* Inline CSS */</style>
-    
-    <!-- Add preload below -->
-    <link rel="preload" as="font" type="font/woff2" href="https://assets.ubuntu.com/v1/e8c07df6-Ubuntu-L_W.woff2" crossorigin>
-    <link rel="preload" as="font" type="font/woff2" href="https://assets.ubuntu.com/v1/7f100985-Ubuntu-Th_W.woff2" crossorigin>
-    <link rel="preload" as="font" type="font/woff2" href="https://assets.ubuntu.com/v1/f8097dea-Ubuntu-LI_W.woff2" crossorigin>
-    <link rel="preload" as="font" type="font/woff2" href="https://assets.ubuntu.com/v1/fff37993-Ubuntu-R_W.woff2" crossorigin>
+{% block meta_description %}Charmhub description{% endblock %}
 
-    <!-- Add script below -->
-    <!-- <script src=""></script> -->
-
-    <!-- Add prefetch/prerender below -->
-    <!-- <link rel="prefetch" href="/style.css" as="style" />
-    <link rel="prerender" href="https://example.com/about.html" /> -->
-  </head>
-
-  <body>
-    <!-- Add navigation below -->
-    <main>
-      <!-- Add main content below -->
-      <div class="p-strip--dark">
-        <div class="u-fixed-width">
-	    <h1>charmhub.io</h1>
+{% block content %}
+<section class="p-strip--charmhub is-dark">
+  <div class="u-fixed-width">
+    <h1>The app store for clouds</h1>
+    <p>Find and deploy <a href="" class="p-link--inverted">Juju</a>
+      solutions.</p>
+  </div>
+</section>
+<section class="p-strip--main">
+  <div class="row">
+    <div class="col-3 u-hide--small">
+      <div class="p-sidenav">
+        <p class="p-sidenav-title">Categories</p>
+        <ul class="p-sidenav-section">
+          <li class="p-sidenav-section__item is-active">
+            <a href="/?category=analytics" class="p-link--soft">Analitycs</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?category=app-servers" class="p-link--soft">App servers</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?category=big-data"
+              class="p-link--soft">Big data</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?category=containers" class="p-link--soft">Containers</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?category=databases" class="p-link--soft">Databases</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?category=keystone" class="p-link--soft">Keystone</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?category=kubernetes" class="p-link--soft">Kubernetes</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?category=identity" class="p-link--soft">Identity</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?category=monitoring" class="p-link--soft">Monitoring</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?category=network" class="p-link--soft">Network</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?category=openstack" class="p-link--soft">OpenStack</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?category=operations" class="p-link--soft">Operations</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?category=performance" class="p-link--soft">Performance</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?category=security" class="p-link--soft">Security</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?category=system" class="p-link--soft">System</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?category=storage" class="p-link--soft">Storage</a>
+          </li>
+        </ul>
+        <p class="p-sidenav-title">Publisher</p>
+        <ul class="p-sidenav-section">
+          <li class="p-sidenav-section__item ">
+            <a href="/?publisher=charmers" class="p-link--soft">Charmers</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?publisher=containers" class="p-link--soft">Containers</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?publisher=bigdata-charmers" class="p-link--soft">Bigdata-charmers</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?publisher=omnivector" class="p-link--soft">Omnivector</a>
+          </li>
+          <li class="p-sidenav-section__item ">
+            <a href="/?publisher=spicule" class="p-link--soft">Spicule</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- TO DO - update mobile -->
+    <!-- <div class="col-3 u-hide--medium u-hide--large">
+      <select name="menu" onchange="location.href=this.value">
+        <option disabled="disabled" value="" selected="">Go to...</option>
+        <option value="/careers/engineering">Engineering</option>
+        <option value="/careers/tech-ops">TechOps</option>
+        <option value="/careers/commercial-ops">Operations</option>
+        <option value="/careers/sales">Sales</option>
+        <option value="/careers/marketing">Marketing</option>
+        <option value="/careers/design">Web &amp; design</option>
+        <option value="/careers/project-management">Project Management
+        </option>
+        <option value="/careers/finance">Finance</option>
+        <option value="/careers/legal">Legal</option>
+        <option value="/careers/admin">Admin</option>
+        <option value="/careers/hr">Human Resources</option>
+        <option value="/careers/lifestyle">Lifestyle</option>
+        <option value="/careers/ethics">Ethics</option>
+        <option value="/careers/travel">Travel</option>
+        <option value="/careers/progression">Progression</option>
+        <option value="/careers/diversity">Diversity</option>
+        <option value="/careers/all">All</option>
+      </select>
+    </div> -->
+    <div class="col-9">
+      <div class="row u-vertically-center">
+        <div class="col-2">
+          <h4 class="p-muted-heading u-float-left">326 items</h4>
+        </div>
+        <div class="col-3 col-start-large-7">
+          <select name="filter">
+            <option disabled="disabled" value="" selected="">Filter</option>
+            <option value="/careers/engineering">Date</option>
+            <option value="/careers/tech-ops">Publisher</option>
+            <option value="/careers/commercial-ops">Category</option>
+            <option value="/careers/all">All</option>
+          </select>
         </div>
       </div>
-    </main>
-    <!-- Add footer below -->
-  </body>
-</html>
+      <div class="row">
+        <div class="col-3">
+          <div class="p-card--charm">
+            <div class="p-card__image-container">
+              <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg"
+                class="p-card__image--left">
+              <div class="p-card__image--right">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+              </div>
+            </div>
+            <p class="p-card__title">Kibana</p>
+            <p class="p-card__subtitle">by containers</p>
+            <p class="p-card__sidenav">
+              Kibana lets you visualize your Elasticsearch data and navigate the…
+            </p>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="p-card--charm">
+            <div class="p-card__image-container">
+              <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg"
+                class="p-card__image--left">
+              <div class="p-card__image--right">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+              </div>
+            </div>
+            <p class="p-card__title">Nagios</p>
+            <p class="p-card__subtitle">by containers</p>
+            <p class="p-card__sidenav">
+              Nagios is a monitoring and management system for hosts…
+            </p>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="p-card--charm">
+            <div class="p-card__image-container">
+              <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg"
+                class="p-card__image--left">
+              <div class="p-card__image--right">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+              </div>
+            </div>
+            <p class="p-card__title">Nagios</p>
+            <p class="p-card__subtitle">by containers</p>
+            <p class="p-card__sidenav">
+              Nagios is a monitoring and management system for hosts…
+            </p>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="p-card--charm">
+            <div class="p-card__image-container">
+              <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg"
+                class="p-card__image--left">
+              <div class="p-card__image--right">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+              </div>
+            </div>
+            <p class="p-card__title">Nagios</p>
+            <p class="p-card__subtitle">by containers</p>
+            <p class="p-card__sidenav">
+              Nagios is a monitoring and management system for hosts…
+            </p>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="p-card--charm">
+            <div class="p-card__image-container">
+              <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg"
+                class="p-card__image--left">
+              <div class="p-card__image--right">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+              </div>
+            </div>
+            <p class="p-card__title">Nagios</p>
+            <p class="p-card__subtitle">by containers</p>
+            <p class="p-card__sidenav">
+              Nagios is a monitoring and management system for hosts…
+            </p>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="p-card--charm">
+            <div class="p-card__image-container">
+              <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg"
+                class="p-card__image--left">
+              <div class="p-card__image--right">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+              </div>
+            </div>
+            <p class="p-card__title">Nagios</p>
+            <p class="p-card__subtitle">by containers</p>
+            <p class="p-card__sidenav">
+              Nagios is a monitoring and management system for hosts…
+            </p>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="p-card--charm">
+            <div class="p-card__image-container">
+              <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg"
+                class="p-card__image--left">
+              <div class="p-card__image--right">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+              </div>
+            </div>
+            <p class="p-card__title">Nagios</p>
+            <p class="p-card__subtitle">by containers</p>
+            <p class="p-card__sidenav">
+              Nagios is a monitoring and management system for hosts…
+            </p>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="p-card--charm">
+            <div class="p-card__image-container">
+              <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg"
+                class="p-card__image--left">
+              <div class="p-card__image--right">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+              </div>
+            </div>
+            <p class="p-card__title">Nagios</p>
+            <p class="p-card__subtitle">by containers</p>
+            <p class="p-card__sidenav">
+              Nagios is a monitoring and management system for hosts…
+            </p>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="p-card--charm">
+            <div class="p-card__image-container">
+              <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg"
+                class="p-card__image--left">
+              <div class="p-card__image--right">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+              </div>
+            </div>
+            <p class="p-card__title">Nagios</p>
+            <p class="p-card__subtitle">by containers</p>
+            <p class="p-card__sidenav">
+              Nagios is a monitoring and management system for hosts…
+            </p>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="p-card--charm">
+            <div class="p-card__image-container">
+              <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg"
+                class="p-card__image--left">
+              <div class="p-card__image--right">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+              </div>
+            </div>
+            <p class="p-card__title">Nagios</p>
+            <p class="p-card__subtitle">by containers</p>
+            <p class="p-card__sidenav">
+              Nagios is a monitoring and management system for hosts…
+            </p>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="p-card--charm">
+            <div class="p-card__image-container">
+              <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg"
+                class="p-card__image--left">
+              <div class="p-card__image--right">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+              </div>
+            </div>
+            <p class="p-card__title">Nagios</p>
+            <p class="p-card__subtitle">by containers</p>
+            <p class="p-card__sidenav">
+              Nagios is a monitoring and management system for hosts…
+            </p>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="p-card--charm">
+            <div class="p-card__image-container">
+              <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg"
+                class="p-card__image--left">
+              <div class="p-card__image--right">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+              </div>
+            </div>
+            <p class="p-card__title">Nagios</p>
+            <p class="p-card__subtitle">by containers</p>
+            <p class="p-card__sidenav">
+              Nagios is a monitoring and management system for hosts…
+            </p>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="p-card--charm">
+            <div class="p-card__image-container">
+              <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg"
+                class="p-card__image--left">
+              <div class="p-card__image--right">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+              </div>
+            </div>
+            <p class="p-card__title">Nagios</p>
+            <p class="p-card__subtitle">by containers</p>
+            <p class="p-card__sidenav">
+              Nagios is a monitoring and management system for hosts…
+            </p>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="p-card--charm">
+            <div class="p-card__image-container">
+              <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg"
+                class="p-card__image--left">
+              <div class="p-card__image--right">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+              </div>
+            </div>
+            <p class="p-card__title">Nagios</p>
+            <p class="p-card__subtitle">by containers</p>
+            <p class="p-card__sidenav">
+              Nagios is a monitoring and management system for hosts…
+            </p>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="p-card--charm">
+            <div class="p-card__image-container">
+              <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg"
+                class="p-card__image--left">
+              <div class="p-card__image--right">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+                <img src="https://assets.ubuntu.com/v1/0a529437-karlos.jpeg">
+              </div>
+            </div>
+            <p class="p-card__title">Nagios</p>
+            <p class="p-card__subtitle">by containers</p>
+            <p class="p-card__sidenav">
+              Nagios is a monitoring and management system for hosts…
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="u-fixed-width">
+        <div class="u-align--center"><i class="p-icon--spinner"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

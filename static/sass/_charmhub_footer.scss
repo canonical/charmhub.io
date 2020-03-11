@@ -1,0 +1,32 @@
+@mixin charmhub-p-footer {
+  .p-footer {
+    @extend %vf-strip;
+    background-image:
+      linear-gradient(to bottom left,#3fc8f2 0%,#3fc8f2 49.9%, rgba(119,41,83,0) 50%, rgba(119,41,83,0) 100%),
+      linear-gradient(266deg, #044f66 99%, #022935);
+    background-size:
+      25% 15%,
+      100%;
+    background-position: top right;
+    background-repeat: no-repeat;
+    clip-path: polygon(100% 0%, 100% 100%, 0% 100%, 0% calc(0% + 4rem));
+    color: $color-x-light;
+    margin-top: -4rem;
+    padding-bottom: 2.5rem;
+    padding-top: 6rem;
+
+    &__link {
+      color: $color-x-light;
+
+      &:hover, 
+      &:visited {
+        color: $color-mid-light;
+      }
+    }
+
+    .p-inline-list--middot .p-inline-list__item::after {
+      color: $color-x-light;
+      right: -0.8rem;
+    }
+  }
+}
