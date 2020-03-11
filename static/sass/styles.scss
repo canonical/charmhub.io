@@ -40,8 +40,6 @@ $theme-default-nav: dark;
 @include vf-u-vertically-center;
 
 // Import site specific patterns and overrides
-@import 'pattern_p-card';
-@include p-charmhub-card;
 @import 'pattern_p-link';
 @include p-charmhub-link;
 @import 'pattern_p-strip';
@@ -53,4 +51,21 @@ $theme-default-nav: dark;
 
 .p-container {
   background-color: #f0f5f7;
+}
+
+// XXX Ant - 11.03.20: This can be removed once this issue is closed.
+// https://github.com/canonical-web-and-design/vanilla-framework/issues/2922
+.u-text--subtle {
+  color: $color-mid-dark;
+  font-size: .875rem;
+}
+
+// XXX Ant - 11.03.20: This can be removed once this issue is closed.
+// https://github.com/canonical-web-and-design/vanilla-framework/issues/2923
+.u-flex {
+  display: flex;
+
+  &__split {
+    flex: 1;
+  }
 }
