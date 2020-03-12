@@ -1,6 +1,8 @@
 from canonicalwebteam.flask_base.app import FlaskBase
 from flask import render_template
 
+from webapp import helpers
+
 # Rename your project below
 app = FlaskBase(
     __name__,
@@ -10,6 +12,14 @@ app = FlaskBase(
     template_404="404.html",
     template_500="500.html",
 )
+
+
+@app.context_processor
+def utility_processor():
+    return {
+        "add_filter": helpers.add_filter,
+        "active_filter": helpers.active_filter,
+    }
 
 
 @app.route("/")

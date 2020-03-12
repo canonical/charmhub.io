@@ -18,71 +18,70 @@
         <p class="p-sidenav-title">Categories</p>
         <ul class="p-sidenav-section">
           <li class="p-sidenav-section__item is-active">
-            <a href="/?category=analytics" class="p-link--soft">Analitycs</a>
+            <a href="{{ add_filter("category", "analytics") }}" class="p-link--soft{% if active_filter("category", "analytics") %} is-active{% endif %}">Analytics</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?category=app-servers" class="p-link--soft">App servers</a>
+            <a href="{{ add_filter("category", "app-servers") }}" class="p-link--soft">App servers</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?category=big-data"
-            class="p-link--soft">Big data</a>
+            <a href="{{ add_filter("category", "big-data") }}" class="p-link--soft">Big data</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?category=containers" class="p-link--soft">Containers</a>
+            <a href="{{ add_filter("category", "containers") }}" class="p-link--soft">Containers</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?category=databases" class="p-link--soft">Databases</a>
+            <a href="{{ add_filter("category", "databases") }}" class="p-link--soft">Databases</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?category=keystone" class="p-link--soft">Keystone</a>
+            <a href="{{ add_filter("category", "keystone") }}" class="p-link--soft">Keystone</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?category=kubernetes" class="p-link--soft">Kubernetes</a>
+            <a href="{{ add_filter("category", "kubernetes") }}" class="p-link--soft">Kubernetes</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?category=identity" class="p-link--soft">Identity</a>
+            <a href="{{ add_filter("category", "identity") }}" class="p-link--soft">Identity</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?category=monitoring" class="p-link--soft">Monitoring</a>
+            <a href="{{ add_filter("category", "monitoring") }}" class="p-link--soft">Monitoring</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?category=network" class="p-link--soft">Network</a>
+            <a href="{{ add_filter("category", "network") }}" class="p-link--soft">Network</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?category=openstack" class="p-link--soft">OpenStack</a>
+            <a href="{{ add_filter("category", "openstack") }}" class="p-link--soft">OpenStack</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?category=operations" class="p-link--soft">Operations</a>
+            <a href="{{ add_filter("category", "operations") }}" class="p-link--soft">Operations</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?category=performance" class="p-link--soft">Performance</a>
+            <a href="{{ add_filter("category", "performance") }}" class="p-link--soft">Performance</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?category=security" class="p-link--soft">Security</a>
+            <a href="{{ add_filter("category", "security") }}" class="p-link--soft">Security</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?category=system" class="p-link--soft">System</a>
+            <a href="{{ add_filter("category", "system") }}" class="p-link--soft">System</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?category=storage" class="p-link--soft">Storage</a>
+            <a href="{{ add_filter("category", "storage") }}" class="p-link--soft">Storage</a>
           </li>
         </ul>
         <p class="p-sidenav-title">Publisher</p>
         <ul class="p-sidenav-section">
           <li class="p-sidenav-section__item ">
-            <a href="/?publisher=charmers" class="p-link--soft">Charmers</a>
+            <a href="{{ add_filter("publisher", "charmers") }}" class="p-link--soft">Charmers</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?publisher=containers" class="p-link--soft">Containers</a>
+            <a href="{{ add_filter("publisher", "containers") }}" class="p-link--soft">Containers</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?publisher=bigdata-charmers" class="p-link--soft">Bigdata-charmers</a>
+            <a href="{{ add_filter("publisher", "bigdata-charmers") }}" class="p-link--soft">Bigdata-charmers</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?publisher=omnivector" class="p-link--soft">Omnivector</a>
+            <a href="{{ add_filter("publisher", "omnivector") }}" class="p-link--soft">Omnivector</a>
           </li>
           <li class="p-sidenav-section__item ">
-            <a href="/?publisher=spicule" class="p-link--soft">Spicule</a>
+            <a href="{{ add_filter("publisher", "spicule") }}" class="p-link--soft">Spicule</a>
           </li>
         </ul>
       </div>
