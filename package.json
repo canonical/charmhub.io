@@ -12,8 +12,20 @@
     "test": "yarn run lint-scss && yarn run lint-python && yarn run test-python",
     "test-python": "python3 -m unittest discover tests"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.py": "./run exec yarn lint-python",
+    "**/*.js": "./run exec yarn lint-js",
+    "**/*.scss": "./run exec yarn lint-scss"
+  },
   "dependencies": {
     "autoprefixer": "9.7.4",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.8",
     "node-sass": "4.13.1",
     "postcss-cli": "7.1.0",
     "sass-lint": "1.13.1",

@@ -1,8 +1,8 @@
 @mixin p-charmhub-link {
   .p-link--inverted {
     color: $color-light;
-    text-decoration: underline;
     font-weight: $font-weight-bold;
+    text-decoration: underline;
 
     &:hover {
       color: $color-light;
