@@ -1,0 +1,112 @@
+@mixin charmhub-p-side-navigation {
+  // color default text
+  $color-sidenav-text-default: $color-mid-dark;
+  // color active text
+  $color-sidenav-text-active: $color-dark;
+  // color highlight background
+  $color-sidenav-item-background-highlight: #cef3ff;
+  // color highlight border
+  $color-sidenav-item-border-highlight: #35cdff;
+  // color list border
+  $color-sidenav-list-border: $color-mid-x-light;
+
+  .p-side-navigation {
+    color: $color-sidenav-text-default;
+    margin-top: $spv-outer--small/2;
+    padding-top: 0.5 * $spv-inner--x-small;
+  }
+
+  .p-side-navigation__list {
+    @extend %vf-list;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+
+    &:not(:last-child) {
+      position: relative;
+
+      &::after {
+        @extend %vf-pseudo-border;
+        background: $color-sidenav-list-border;
+        bottom: -0.5 * $spv-outer--scaleable; // place border in the middle of the margin
+        left: $sph-inner;
+      }
+    }
+  }
+
+  .p-side-navigation__item--title {
+    color: $color-mid-dark;
+    text-transform: uppercase;
+  }
+
+  .p-side-navigation__item {
+    padding-left: $sph-inner;
+  }
+
+  .p-side-navigation__text,
+  .p-side-navigation__link {
+    display: block;
+    padding: $spv-inner--x-small $sph-inner--small $spv-inner--x-small
+      $sph-inner;
+
+    // nested 2 or 3 levels
+    .p-side-navigation__item .p-side-navigation__item & {
+      padding-left: 2 * $sph-inner;
+    }
+
+    .p-side-navigation__item
+      .p-side-navigation__item
+      .p-side-navigation__item
+      & {
+      padding-left: 3 * $sph-inner;
+    }
+  }
+
+  .p-side-navigation__link {
+    &,
+    &:link,
+    &:visited {
+      @include vf-focus;
+      color: $color-sidenav-text-default;
+    }
+
+    &.is-active {
+      background-color: $color-sidenav-item-background-highlight;
+      color: $color-sidenav-text-active;
+      font-weight: $font-weight-bold;
+      position: relative;
+
+      .p-icon--close {
+        @extend %icon;
+        @include vf-icon-close($color-mid-dark);
+
+        float: right;
+        height: .9rem;
+        margin-top: .35rem;
+        width: .9rem;
+      }
+
+      &::before {
+        background-color: $color-sidenav-item-border-highlight;
+        bottom: 0;
+        content: "";
+        height: auto;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: $bar-thickness;
+      }
+    }
+
+    &.is-selected {
+      color: $color-sidenav-text-active;
+      font-weight: $font-weight-bold;
+    }
+
+    &:hover {
+      background: $color-sidenav-item-background-highlight;
+      color: $color-sidenav-text-active;
+      text-decoration: none;
+    }
+  }
+}

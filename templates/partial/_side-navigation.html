@@ -1,0 +1,134 @@
+<div class="col-3 u-hide--small">
+  <div class="p-side-navigation" data-js="side-navigation"> 
+    <ul class="p-side-navigation__list">
+      <li class="p-side-navigation__item--title">
+        <span class="p-side-navigation__text">Categories</span>
+      </li>
+      <noscript>
+        <li class="p-side-navigation__item">
+          <a href="/"
+            class="p-side-navigation__link{%if not request.args.get('category')%} is-active{%endif%}">All categories</a>
+        </li>
+      </noscript>
+      <li class="p-side-navigation__item">
+        <a href="/?category=analytics"
+          class="p-side-navigation__link{%if request.args.get('category')=='analytics'%} is-active{%endif%}">Analytics<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?category=app-servers"
+          class="p-side-navigation__link{%if request.args.get('category')=='app-servers'%} is-active{%endif%}">App
+          servers<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?category=big-data"
+          class="p-side-navigation__link{%if request.args.get('category')=='big-data'%} is-active{%endif%}">Big data<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?category=containers"
+          class="p-side-navigation__link{%if request.args.get('category')=='containers'%} is-active{%endif%}">Containers<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?category=databases"
+          class="p-side-navigation__link{%if request.args.get('category')=='databases'%} is-active{%endif%}">Databases<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?category=keystone"
+          class="p-side-navigation__link{%if request.args.get('category')=='keystone'%} is-active{%endif%}">Keystone<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?category=kubernetes"
+          class="p-side-navigation__link{%if request.args.get('category')=='kubernetes'%} is-active{%endif%}">Kubernetes<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?category=identity"
+          class="p-side-navigation__link{%if request.args.get('category')=='identity'%} is-active{%endif%}">Identity<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?category=monitoring"
+          class="p-side-navigation__link{%if request.args.get('category')=='monitoring'%} is-active{%endif%}">Monitoring<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?category=network"
+          class="p-side-navigation__link{%if request.args.get('category')=='network'%} is-active{%endif%}">Network<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?category=openstack"
+          class="p-side-navigation__link{%if request.args.get('category')=='openstack'%} is-active{%endif%}">OpenStack<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?category=performance"
+          class="p-side-navigation__link{%if request.args.get('category')=='performance'%} is-active{%endif%}">Performance<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?category=security"
+          class="p-side-navigation__link{%if request.args.get('category')=='security'%} is-active{%endif%}">Security<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?category=system"
+          class="p-side-navigation__link{%if request.args.get('category')=='system'%} is-active{%endif%}">System<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?category=storage"
+          class="p-side-navigation__link{%if request.args.get('category')=='storage'%} is-active{%endif%}">Storage<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+    </ul>
+    <ul class="p-side-navigation__list">
+      <li class="p-side-navigation__item--title">
+        <span class="p-side-navigation__text">Publisher</span>
+      </li>
+      <noscript>
+        <li class="p-side-navigation__item">
+          <a href="/"
+            class="p-side-navigation__link{%if not request.args.get('publisher')%} is-active{%endif%}">All
+            publishers</a>
+        </li>
+      </noscript>
+      <li class="p-side-navigation__item">
+        <a href="/?publisher=charmers"
+          class="p-side-navigation__link{%if request.args.get('publisher')=='charmers'%} is-active{%endif%}">Charmers<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?publisher=containers"
+          class="p-side-navigation__link{%if request.args.get('publisher')=='containers'%} is-active{%endif%}">Containers<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?publisher=bigdata-charmers"
+          class="p-side-navigation__link{%if request.args.get('publisher')=='bigdata-charmers'%} is-active{%endif%}">Bigdata-charmers<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?publisher=omnivector"
+          class="p-side-navigation__link{%if request.args.get('publisher')=='omnivector'%} is-active{%endif%}">Omnivector<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+      <li class="p-side-navigation__item ">
+        <a href="/?publisher=spicule"
+          class="p-side-navigation__link{%if request.args.get('publisher')=='spicule'%} is-active{%endif%}">Spicule<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      </li>
+    </ul>
+  </div>
+</div>
+<!-- TO DO - update mobile -->
+<!-- <div class="col-3 u-hide--medium u-hide--large">
+      <select name="menu" onchange="location.href=this.value">
+        <option disabled="disabled" value="" selected="">Go to...</option>
+        <option value="/careers/engineering">Engineering</option>
+        <option value="/careers/tech-ops">TechOps</option>
+        <option value="/careers/commercial-ops">Operations</option>
+        <option value="/careers/sales">Sales</option>
+        <option value="/careers/marketing">Marketing</option>
+        <option value="/careers/design">Web &amp; design</option>
+        <option value="/careers/project-management">Project Management
+        </option>
+        <option value="/careers/finance">Finance</option>
+        <option value="/careers/legal">Legal</option>
+        <option value="/careers/admin">Admin</option>
+        <option value="/careers/hr">Human Resources</option>
+        <option value="/careers/lifestyle">Lifestyle</option>
+        <option value="/careers/ethics">Ethics</option>
+        <option value="/careers/travel">Travel</option>
+        <option value="/careers/progression">Progression</option>
+        <option value="/careers/diversity">Diversity</option>
+        <option value="/careers/all">All</option>
+      </select>
+    </div> -->
+    <script src="{{ versioned_static('js/side-navigation.js') }}" defer></script>
+    

@@ -46,9 +46,11 @@ $theme-default-nav: dark;
 @include p-charmhub-strip;
 @import "charmhub_footer";
 @include charmhub-p-footer;
-@import "charmhub_sidenav";
-@include charmhub-p-sidenav;
+// XXX Ovi - 12.03.20: This can be removed once side navigation is added to vanilla.
+@import 'patterns_side-navigation';
+@include charmhub-p-side-navigation;
 
+// set app background color
 .p-container {
   background-color: #f0f5f7;
 }
