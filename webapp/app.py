@@ -19,6 +19,7 @@ def utility_processor():
     return {
         "add_filter": helpers.add_filter,
         "active_filter": helpers.active_filter,
+        "remove_filter": helpers.remove_filter,
     }
 
 

@@ -1,107 +1,145 @@
 <div class="col-3 u-hide--small">
-  <div class="p-side-navigation" data-js="side-navigation"> 
+  <div class="p-side-navigation">
     <ul class="p-side-navigation__list">
       <li class="p-side-navigation__item--title">
         <span class="p-side-navigation__text">Categories</span>
       </li>
-      <noscript>
-        <li class="p-side-navigation__item">
-          <a href="/"
-            class="p-side-navigation__link{%if not request.args.get('category')%} is-active{%endif%}">All categories</a>
-        </li>
-      </noscript>
       <li class="p-side-navigation__item">
-        <a href="/?category=analytics"
-          class="p-side-navigation__link{%if request.args.get('category')=='analytics'%} is-active{%endif%}">Analytics<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+        <div class="p-side-navigation__link{% if active_filter('category', 'analytics') %} is-active{% endif %}">
+          <a href="{{ add_filter("category", "analytics") }}" class="p-side-navigation__link-text">Analytics</a>
+          <a href="{{ remove_filter("category", "analytics") }}" class="p-side-navigation__link-icon"><i class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?category=app-servers"
-          class="p-side-navigation__link{%if request.args.get('category')=='app-servers'%} is-active{%endif%}">App
-          servers<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('category', 'app-servers') %} is-active{% endif %}">
+          <a href="{{ add_filter("category", "app-servers") }}"
+            class="p-side-navigation__link-text">App servers</a>
+          <a href="{{ remove_filter("category", "app-servers") }}" class="p-side-navigation__link-icon"><i class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?category=big-data"
-          class="p-side-navigation__link{%if request.args.get('category')=='big-data'%} is-active{%endif%}">Big data<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('category', 'big-data') %} is-active{% endif %}">
+          <a href="{{ add_filter("category", "big-data") }}" class="p-side-navigation__link-text">Big data</a>
+          <a href="{{ remove_filter("category", "big-data") }}" class="p-side-navigation__link-icon"><i class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?category=containers"
-          class="p-side-navigation__link{%if request.args.get('category')=='containers'%} is-active{%endif%}">Containers<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('category', 'containers') %} is-active{% endif %}">
+          <a href="{{ add_filter("category", "containers") }}" class="p-side-navigation__link-text">Containers</a>
+          <a href="{{ remove_filter("category", "containers") }}" class="p-side-navigation__link-icon"><i class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?category=databases"
-          class="p-side-navigation__link{%if request.args.get('category')=='databases'%} is-active{%endif%}">Databases<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('category', 'databases') %} is-active{% endif %}">
+          <a href="{{ add_filter("category", "databases") }}" class="p-side-navigation__link-text">Databases</a>
+          <a href="{{ remove_filter("category", "databases") }}" class="p-side-navigation__link-icon"><i class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?category=keystone"
-          class="p-side-navigation__link{%if request.args.get('category')=='keystone'%} is-active{%endif%}">Keystone<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('category', 'keystone') %} is-active{% endif %}">
+          <a href="{{ add_filter("category", "keystone") }}" class="p-side-navigation__link-text">Keystone</a>
+          <a href="{{ remove_filter("category", "keystone") }}" class="p-side-navigation__link-icon"><i class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?category=kubernetes"
-          class="p-side-navigation__link{%if request.args.get('category')=='kubernetes'%} is-active{%endif%}">Kubernetes<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('category', 'kubernetes') %} is-active{% endif %}">
+          <a href="{{ add_filter("category", "kubernetes") }}" class="p-side-navigation__link-text">Kubernetes</a>
+          <a href="{{ remove_filter("category", "kubernetes") }}" class="p-side-navigation__link-icon"><i class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?category=identity"
-          class="p-side-navigation__link{%if request.args.get('category')=='identity'%} is-active{%endif%}">Identity<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('category', 'identity') %} is-active{% endif %}">
+          <a href="{{ add_filter("category", "identity") }}" class="p-side-navigation__link-text">Identity</a>
+          <a href="{{ remove_filter("category", "identity") }}" class="p-side-navigation__link-icon"><i class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?category=monitoring"
-          class="p-side-navigation__link{%if request.args.get('category')=='monitoring'%} is-active{%endif%}">Monitoring<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('category', 'monitoring') %} is-active{% endif %}">
+          <a href="{{ add_filter("category", "monitoring") }}" class="p-side-navigation__link-text">Monitoring</a>
+          <a href="{{ remove_filter("category", "monitoring") }}" class="p-side-navigation__link-icon"><i class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?category=network"
-          class="p-side-navigation__link{%if request.args.get('category')=='network'%} is-active{%endif%}">Network<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('category', 'network') %} is-active{% endif %}">
+          <a href="{{ add_filter("category", "network") }}" class="p-side-navigation__link-text">Network</a>
+          <a href="{{ remove_filter("category", "network") }}" class="p-side-navigation__link-icon"><i class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?category=openstack"
-          class="p-side-navigation__link{%if request.args.get('category')=='openstack'%} is-active{%endif%}">OpenStack<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('category', 'openstack') %} is-active{% endif %}">
+          <a href="{{ add_filter("category", "openstack") }}" class="p-side-navigation__link-text">OpenStack</a>
+          <a href="{{ remove_filter("category", "openstack") }}" class="p-side-navigation__link-icon"><i class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?category=performance"
-          class="p-side-navigation__link{%if request.args.get('category')=='performance'%} is-active{%endif%}">Performance<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('category', 'operations') %} is-active{% endif %}">
+          <a href="{{ add_filter("category", "operations") }}" class="p-side-navigation__link-text">Operations</a>
+          <a href="{{ remove_filter("category", "operations") }}" class="p-side-navigation__link-icon"><i class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?category=security"
-          class="p-side-navigation__link{%if request.args.get('category')=='security'%} is-active{%endif%}">Security<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('category', 'performance') %} is-active{% endif %}">
+          <a href="{{ add_filter("category", "performance") }}" class="p-side-navigation__link-text">Performance</a>
+          <a href="{{ remove_filter("category", "performance") }}" class="p-side-navigation__link-icon"><i class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?category=system"
-          class="p-side-navigation__link{%if request.args.get('category')=='system'%} is-active{%endif%}">System<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('category', 'security') %} is-active{% endif %}">
+          <a href="{{ add_filter("category", "security") }}" class="p-side-navigation__link-text">Security</a>
+          <a href="{{ remove_filter("category", "security") }}" class="p-side-navigation__link-icon"><i class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?category=storage"
-          class="p-side-navigation__link{%if request.args.get('category')=='storage'%} is-active{%endif%}">Storage<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('category', 'system') %} is-active{% endif %}">
+          <a href="{{ add_filter("category", "system") }}" class="p-side-navigation__link-text">System</a>
+          <a href="{{ remove_filter("category", "system") }}" class="p-side-navigation__link-icon"><i class="p-icon--close"></i></a>
+        </div>
+      </li>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('category', 'storage') %} is-active{% endif %}">
+          <a href="{{ add_filter("category", "storage") }}" class="p-side-navigation__link-text">Storage</a>
+          <a href="{{ remove_filter("category", "storage") }}" class="p-side-navigation__link-icon"><i class="p-icon--close"></i></a>
+        </div>
       </li>
     </ul>
     <ul class="p-side-navigation__list">
       <li class="p-side-navigation__item--title">
         <span class="p-side-navigation__text">Publisher</span>
       </li>
-      <noscript>
-        <li class="p-side-navigation__item">
-          <a href="/"
-            class="p-side-navigation__link{%if not request.args.get('publisher')%} is-active{%endif%}">All
-            publishers</a>
-        </li>
-      </noscript>
       <li class="p-side-navigation__item">
-        <a href="/?publisher=charmers"
-          class="p-side-navigation__link{%if request.args.get('publisher')=='charmers'%} is-active{%endif%}">Charmers<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+        <div class="p-side-navigation__link{% if active_filter('publisher', 'charmers') %} is-active{% endif %}">
+          <a href="{{ add_filter("publisher", "charmers") }}" class="p-side-navigation__link-text">Charmers</a>
+          <a href="{{ remove_filter("publisher", "charmers") }}" class="p-side-navigation__link-icon"><i
+              class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?publisher=containers"
-          class="p-side-navigation__link{%if request.args.get('publisher')=='containers'%} is-active{%endif%}">Containers<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('publisher', 'containers') %} is-active{% endif %}">
+          <a href="{{ add_filter("publisher", "containers") }}" class="p-side-navigation__link-text">Containers</a>
+          <a href="{{ remove_filter("publisher", "containers") }}" class="p-side-navigation__link-icon"><i
+              class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?publisher=bigdata-charmers"
-          class="p-side-navigation__link{%if request.args.get('publisher')=='bigdata-charmers'%} is-active{%endif%}">Bigdata-charmers<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('publisher', 'bigdata-charmers') %} is-active{% endif %}">
+          <a href="{{ add_filter("publisher", "bigdata-charmers") }}" class="p-side-navigation__link-text">Bigdata-charmers</a>
+          <a href="{{ remove_filter("publisher", "bigdata-charmers") }}" class="p-side-navigation__link-icon"><i
+              class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?publisher=omnivector"
-          class="p-side-navigation__link{%if request.args.get('publisher')=='omnivector'%} is-active{%endif%}">Omnivector<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('publisher', 'omnivector') %} is-active{% endif %}">
+          <a href="{{ add_filter("publisher", "omnivector") }}" class="p-side-navigation__link-text">Omnivector</a>
+          <a href="{{ remove_filter("publisher", "omnivector") }}" class="p-side-navigation__link-icon"><i
+              class="p-icon--close"></i></a>
+        </div>
       </li>
-      <li class="p-side-navigation__item ">
-        <a href="/?publisher=spicule"
-          class="p-side-navigation__link{%if request.args.get('publisher')=='spicule'%} is-active{%endif%}">Spicule<i data-js="side-navigation-icon" class="p-icon--close u-hide"></i></a>
+      <li class="p-side-navigation__item">
+        <div class="p-side-navigation__link{% if active_filter('publisher', 'spicule') %} is-active{% endif %}">
+          <a href="{{ add_filter("publisher", "spicule") }}" class="p-side-navigation__link-text">Spicule</a>
+          <a href="{{ remove_filter("publisher", "spicule") }}" class="p-side-navigation__link-icon"><i
+              class="p-icon--close"></i></a>
+        </div>
       </li>
     </ul>
   </div>
@@ -130,5 +168,3 @@
         <option value="/careers/all">All</option>
       </select>
     </div> -->
-    <script src="{{ versioned_static('js/side-navigation.js') }}" defer></script>
-    
