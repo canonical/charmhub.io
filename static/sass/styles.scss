@@ -11,7 +11,7 @@ $theme-default-nav: dark;
 // @import "cookie-policy/build/css/cookie-policy";
 
 // Import Vanilla framework
-@import 'vanilla-framework/scss/vanilla';
+@import "vanilla-framework/scss/vanilla";
 
 // Base Vanilla styles
 @include vf-base;
@@ -40,13 +40,13 @@ $theme-default-nav: dark;
 @include vf-u-vertically-center;
 
 // Import site specific patterns and overrides
-@import 'pattern_p-link';
+@import "pattern_p-link";
 @include p-charmhub-link;
-@import 'pattern_p-strip';
+@import "pattern_p-strip";
 @include p-charmhub-strip;
-@import 'charmhub_footer';
+@import "charmhub_footer";
 @include charmhub-p-footer;
-@import 'charmhub_sidenav';
+@import "charmhub_sidenav";
 @include charmhub-p-sidenav;
 
 .p-container {
@@ -57,7 +57,7 @@ $theme-default-nav: dark;
 // https://github.com/canonical-web-and-design/vanilla-framework/issues/2922
 .u-text--subtle {
   color: $color-mid-dark;
-  font-size: .875rem;
+  font-size: 0.875rem;
 }
 
 // XXX Ant - 11.03.20: This can be removed once this issue is closed.
