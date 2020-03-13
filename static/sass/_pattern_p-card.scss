@@ -1,0 +1,7 @@
+@mixin p-charmhub-card {
+  .p-card {
+    .u-align--right > .p-card__thumbnail {
+      max-height: 1.5rem;
+    }
+  }
+}

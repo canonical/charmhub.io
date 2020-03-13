@@ -40,15 +40,19 @@ $theme-default-nav: dark;
 @include vf-u-vertically-center;
 
 // Import site specific patterns and overrides
+@import "pattern_p-card";
+@include p-charmhub-card;
 @import "pattern_p-link";
 @include p-charmhub-link;
 @import "pattern_p-strip";
 @include p-charmhub-strip;
 @import "charmhub_footer";
 @include charmhub-p-footer;
-@import "charmhub_sidenav";
-@include charmhub-p-sidenav;
+// XXX Ovi - 12.03.20: This can be removed once side navigation is implemented in vanilla.
+@import 'patterns_side-navigation';
+@include charmhub-p-side-navigation;
 
+// set app background color
 .p-container {
   background-color: #f0f5f7;
 }
