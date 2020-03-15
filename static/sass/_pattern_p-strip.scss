@@ -1,42 +1,22 @@
 @mixin p-charmhub-strip {
   .p-strip--charmhub {
     @extend %vf-strip;
-    background-blend-mode: multiply, multiply, normal;
     background-image: linear-gradient(
         to bottom left,
-        rgba(216, 216, 216, 0.54) 0%,
-        rgba(216, 216, 216, 0.54) 49.9%,
-        rgba(216, 216, 216, 0) 50%,
-        rgba(216, 216, 216, 0) 100%
+        rgba(255, 255, 255, 0.04) 0,
+        rgba(255, 255, 255, 0.04) 49.9%,
+        transparent 50%
       ),
       linear-gradient(
-        to top left,
-        rgba(216, 216, 216, 0.54) 0%,
-        rgba(216, 216, 216, 0.54) 49.9%,
-        rgba(216, 216, 216, 0) 50%,
-        rgba(216, 216, 216, 0) 100%
+        to bottom right,
+        transparent 50%,
+        rgba(255, 255, 255, 0.04) 0,
+        rgba(255, 255, 255, 0.04) 49.9%
       ),
-      linear-gradient(268deg, #044f66 100%, #022733);
-    @supports not (background-blend-mode: multiply) {
-      background-image: linear-gradient(
-          to bottom left,
-          rgba(216, 216, 216, 0.54) 0%,
-          rgba(216, 216, 216, 0.54) 49.9%,
-          rgba(216, 216, 216, 0) 50%,
-          rgba(216, 216, 216, 0) 100%
-        ),
-        linear-gradient(
-          to top left,
-          rgba(216, 216, 216, 0.54) 0%,
-          rgba(216, 216, 216, 0.54) 49.9%,
-          rgba(216, 216, 216, 0) 50%,
-          rgba(216, 216, 216, 0) 100%
-        ),
-        linear-gradient(268deg, #044f66 100%, #022733);
-    }
+      linear-gradient(268deg, $brand-color 8%, darken($brand-color, 10%) 100%);
     background-position: top right, bottom right, 0% 0%;
     background-repeat: no-repeat;
-    background-size: 50% 100%, 15% 100%, auto;
+    background-size: 50% 100%, 8% 100%, auto;
 
     &.is-dark {
       color: $color-x-light;
