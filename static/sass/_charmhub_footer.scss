@@ -1,16 +1,30 @@
 @mixin charmhub-p-footer {
   .p-footer {
     @extend %vf-strip;
+
+    background-color: $brand-color;
     background-image: linear-gradient(
         to bottom left,
         #3fc8f2 0%,
-        #3fc8f2 49.9%,
+        #3fc8f2 49.3%,
         rgba(119, 41, 83, 0) 50%,
         rgba(119, 41, 83, 0) 100%
       ),
-      linear-gradient(266deg, #044f66 99%, #022935);
-    background-size: 25% 15%, 100%;
-    background-position: top right;
+      linear-gradient(
+        to top right,
+        rgba(255, 255, 255, 0.04) 0,
+        rgba(255, 255, 255, 0.04) 49.9%,
+        transparent 50%
+      ),
+      linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0.04) 0,
+        rgba(255, 255, 255, 0.04) 49.9%,
+        transparent 50%
+      ),
+      linear-gradient(268deg, $brand-color 8%, darken($brand-color, 10%) 100%);
+    background-size: 25% 15%, 60% 100%, 25% 100%, 100%;
+    background-position: top right, bottom left, bottom left;
     background-repeat: no-repeat;
     clip-path: polygon(100% 0%, 100% 100%, 0% 100%, 0% calc(0% + 4rem));
     color: $color-x-light;
