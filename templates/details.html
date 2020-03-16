@@ -6,105 +6,73 @@
 {% block meta_description %}Charmhub description{% endblock %}
 
 {% block content %}
-<div class="p-strip--light is-shallow">
+<div class="p-strip--header is-shallow">
   <div class="row">
-    <div class="p-media-object--medium">
-      <img src="https://assets.ubuntu.com/v1/60d9b81e-picto-canonical.svg" class="p-media-object__image">
-      <div class="p-media-object__details">
-        <h1 class="p-media-object__title">
-          openstack-dashboard
-        </h1>
-        <p class="p-media-object__content">
-          <ul class="p-inline-list--middot">
-            <li class="p-inline-list__item u-hide--small">
-              By <a href="#">openstack-charmers</a>
-              <span class="p-verified p-tooltip p-tooltip--top-center" aria-describedby="postman-tooltip">
-                <img src="https://assets.ubuntu.com/v1/75654c90-rosette.svg">
-              </span>
-            </li>
-            <li class="p-inline-list__item">
-              <a href="#">Openstack</a>
-            </li>
-          </ul>
-        </p>
-      </div>
-    </div>
-    <!-- <div class="p-snap-heading">
-      <img
-        src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_60,h_60/https://dashboard.snapcraft.io/site_media/appmedia/2018/11/logo-mark.png"
-        srcset="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_120,h_120/https://dashboard.snapcraft.io/site_media/appmedia/2018/11/logo-mark.png 2x"
-        alt="Postman" width="60" height="60" loading="eager" class="p-snap-heading__icon" data-live="icon">
-      <div class="p-snap-heading__title">
-        <h1 class="p-heading--two p-snap-heading__name" data-live="title">Postman</h1>
-        <div class="u-hide u-show--small">
-          Postman, Inc. (postman-inc)
-          <span class="p-verified p-tooltip p-tooltip--top-center" aria-describedby="postman-tooltip">
-            <img src="https://assets.ubuntu.com/v1/75654c90-rosette.svg">
-            <span class="p-tooltip__message u-align--center" role="tooltip" id="postman-tooltip">Verified account</span>
-          </span>
+    <div class="col-8">
+      <div class="p-charm-header">
+        <div class="p-media-object--medium u-no-margin--bottom">
+          <img src="https://assets.ubuntu.com/v1/60d9b81e-picto-canonical.svg" class="p-media-object__image">
+          <div class="p-media-object__details">
+            <h1 class="p-media-object__title">
+              openstack-dashboard
+            </h1>
+            <div class="p-media-object__content u-no-margin--bottom">
+              <ul class="p-inline-list--middot">
+                <li class="p-inline-list__item u-hide--small">
+                  By <a href="/">openstack-charmers</a>
+                  <span class="p-verified p-tooltip p-tooltip--top-center" aria-describedby="postman-tooltip">
+                    <img src="https://assets.ubuntu.com/v1/75654c90-rosette.svg">
+                  </span>
+                </li>
+                <li class="p-inline-list__item">
+                  <a href="/">Openstack</a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <ul class="p-inline-list--middot">
-          <li class="p-inline-list__item u-hide--small">
-            Postman, Inc. (postman-inc)
-            <span class="p-verified p-tooltip p-tooltip--top-center" aria-describedby="postman-tooltip">
-              <img src="https://assets.ubuntu.com/v1/75654c90-rosette.svg">
-              <span class="p-tooltip__message u-align--center" role="tooltip" id="postman-tooltip">Verified
-                account</span>
-            </span>
-          </li>
-          <li class="p-inline-list__item">
-            <a href="/search?category=development">Development</a>
-          </li>
-        </ul>
-      </div>
-      <div class="p-snap-install-buttons">
-        <button class="p-button--neutral p-snap-install-buttons__versions" data-js="open-channel-map"
-          data-controls="channel-map-versions" aria-controls="channel-map-versions">
+        <!-- TO DO - add dropdown functionality -->
+        <button class="p-button--neutral u-no-margin--bottom" data-controls="channel-map-versions"
+          aria-controls="channel-map-versions">
           latest/stable 7.20.1&nbsp;&nbsp;<i class="p-icon--contextual-menu"></i>
         </button>
-        <code>juju deploy openstack-dashboard</code>
+        <p class="p-charm-header__code"><code>juju deploy openstack-dashboard</code></p>
       </div>
-    </div> -->
+    </div>
+    <div class="col-4">
+      <img src="https://assets.ubuntu.com/v1/adac6928-ubuntu.svg" alt="" width="89" height="20">
+      <div class="series-tags">
+        <span class="series-tag">
+          16.04 LTS
+        </span>
+        <span class="series-tag">
+          18.04 LTS
+        </span>
+        <span class="series-tag">
+          18.10
+        </span>
+        <span class="series-tag">
+          19.04
+        </span>
+        <span class="series-tag">
+          14.04 LTS
+        </span>
+      </div>
+      <p>Also supports: <a href="/">Kubernets</a></p>
+    </div>
   </div>
 </div>
-<div class="u-fixed-width">
-  <nav class="p-tabs">
-    <ul class="p-tabs__list" role="tablist">
-      <li class="p-tabs__item" role="presentation">
-        <a href="#section1" class="p-tabs__link" tabindex="0" role="tab" aria-controls="section1"
-          aria-selected="true">Overview</a>
-      </li>
-      <li class="p-tabs__item" role="presentation">
-        <a href="#section2" class="p-tabs__link" tabindex="-1" role="tab" aria-controls="section2">Configuration</a>
-      </li>
-      <li class="p-tabs__item" role="presentation">
-        <a href="#section3" class="p-tabs__link" tabindex="-1" role="tab" aria-controls="section3">Actions</a>
-      </li>
-      <li class="p-tabs__item" role="presentation">
-        <a href="#section4" class="p-tabs__link" tabindex="-1" role="tab" aria-controls="section4">Integrations</a>
-      </li>
-      <li class="p-tabs__item" role="presentation">
-        <a href="#section5" class="p-tabs__link" tabindex="-1" role="tab" aria-controls="section5">Docs</a>
-      </li>
-      <li class="p-tabs__item" role="presentation">
-        <a href="#section6" class="p-tabs__link" tabindex="-1" role="tab" aria-controls="section6">History</a>
-      </li>
-      <li class="p-tabs__item" role="presentation">
-        <a href="#section7" class="p-tabs__link" tabindex="-1" role="tab" aria-controls="section7">Contribute</a>
-      </li>
-    </ul>
-  </nav>
+<div class="p-strip is-deep u-no-padding--top">
+  {% include "partial/_tabs-navigation.html" %}
+
+  {% include "partial/_tab-overview.html" %}
+  {% include "partial/_tab-configuration.html" %}
+  {% include "partial/_tab-actions.html" %}
+  {% include "partial/_tab-integrations.html" %}
+  {% include "partial/_tab-docs.html" %}
+  {% include "partial/_tab-history.html" %}
+  {% include "partial/_tab-contribute.html" %}
 </div>
-<div class="row">
-  <div class="col-8">
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, quisquam? Ducimus distinctio, labore culpa nam quod hic rerum reprehenderit, ab, fugiat quaerat cum. Distinctio maiores dolorum quasi odit totam quisquam.</p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat accusamus natus incidunt eos doloribus. Distinctio soluta voluptatem pariatur atque, enim veniam quibusdam ducimus quos optio, minima necessitatibus, dolores dolor eligendi!</p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat accusamus natus incidunt eos doloribus. Distinctio soluta voluptatem pariatur atque, enim veniam quibusdam ducimus quos optio, minima necessitatibus, dolores dolor eligendi!</p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat accusamus natus incidunt eos doloribus. Distinctio soluta voluptatem pariatur atque, enim veniam quibusdam ducimus quos optio, minima necessitatibus, dolores dolor eligendi!</p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat accusamus natus incidunt eos doloribus. Distinctio soluta voluptatem pariatur atque, enim veniam quibusdam ducimus quos optio, minima necessitatibus, dolores dolor eligendi!</p>
-  </div>
-  <div class="col-4">
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis deserunt dolorem laboriosam ratione molestias. Perspiciatis illo culpa nobis voluptates temporibus? Ut dolorum iusto ex nihil nam officia nesciunt quibusdam excepturi?</p>
-  </div>
-</div>
+
+<script defer src="{{ versioned_static('js/tabs.js') }}"></script>
 {% endblock %}

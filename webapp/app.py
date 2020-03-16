@@ -28,6 +28,6 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/details")
+@app.route("/charm")
 def details():
     return render_template("details.html")

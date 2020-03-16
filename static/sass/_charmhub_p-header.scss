@@ -1,0 +1,27 @@
+@mixin charmhub-p-header {
+  .p-charm-header {
+    &__code {
+      display: inline-block;
+      padding-left: $spv-outer--small;
+
+      code {
+        background-color: transparent;
+        box-shadow: none;
+      }
+    }
+
+    .p-media-object--medium {
+      @extend %p-media-object;
+
+      .p-media-object__image {
+        max-height: 4rem;
+        max-width: 4rem;
+      }
+
+      .p-media-object__title {
+        @extend %vf-heading-2;
+        padding-bottom: $spv-inner--x-small;
+      }
+    }
+  }
+}

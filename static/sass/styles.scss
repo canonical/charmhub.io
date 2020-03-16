@@ -8,7 +8,7 @@ $theme-default-nav: dark;
 // import custom mixins
 
 // import cookie policy
-// @import "cookie-policy/build/css/cookie-policy";
+// @import 'cookie-policy/build/css/cookie-policy';
 
 // Import Vanilla framework
 @import "vanilla-framework/scss/vanilla";
@@ -39,6 +39,8 @@ $theme-default-nav: dark;
 @include vf-u-layout;
 @include vf-u-off-screen;
 @include vf-u-hide;
+@include vf-u-margin-collapse;
+@include vf-u-padding-collapse;
 @include vf-u-vertically-center;
 
 // Import site specific patterns and overrides
@@ -48,18 +50,17 @@ $theme-default-nav: dark;
 @include p-charmhub-link;
 @import "pattern_p-strip";
 @include p-charmhub-strip;
-@import "pattern_p-media-object";
-@include p-charmhub-media-object;
 @import "charmhub_footer";
 @include charmhub-p-footer;
+@import "charmhub_p-group";
+@include charmhub-p-group;
+@import "charmhub_p-header";
+@include charmhub-p-header;
+@import "charmhub_p-series-tag";
+@include charmhub-p-series-tag;
 // XXX Ovi - 12.03.20: This can be removed once side navigation is implemented in vanilla.
-@import 'patterns_side-navigation';
+@import "patterns_side-navigation";
 @include charmhub-p-side-navigation;
-
-// set app background color
-.p-container {
-  background-color: #f0f5f7;
-}
 
 // XXX Ant - 11.03.20: This can be removed once this issue is closed.
 // https://github.com/canonical-web-and-design/vanilla-framework/issues/2922
@@ -77,3 +78,13 @@ $theme-default-nav: dark;
     flex: 1;
   }
 }
+
+ .u-position--sticky {
+   background-color: $color-x-light;
+   position: sticky;
+   top: 0;
+   z-index: 1;
+  }
+
+
+
