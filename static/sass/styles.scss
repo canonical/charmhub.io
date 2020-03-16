@@ -26,9 +26,11 @@ $theme-default-nav: dark;
 @include vf-p-icons;
 @include vf-p-links;
 @include vf-p-lists;
+@include vf-p-media-object;
 @include vf-p-muted-heading;
 @include vf-p-navigation;
 @include vf-p-strip;
+@include vf-p-tabs;
 
 // Vanilla utilities
 @include vf-u-align;
@@ -46,6 +48,8 @@ $theme-default-nav: dark;
 @include p-charmhub-link;
 @import "pattern_p-strip";
 @include p-charmhub-strip;
+@import "pattern_p-media-object";
+@include p-charmhub-media-object;
 @import "charmhub_footer";
 @include charmhub-p-footer;
 // XXX Ovi - 12.03.20: This can be removed once side navigation is implemented in vanilla.

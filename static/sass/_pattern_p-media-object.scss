@@ -1,0 +1,14 @@
+@mixin p-charmhub-media-object {
+  .p-media-object--medium {
+    @extend %p-media-object;
+
+    .p-media-object__image {
+      max-height: 4rem;
+      max-width: 4rem;
+    }
+
+    .p-media-object__title {
+      @extend %vf-heading-2;
+    }
+  }
+}

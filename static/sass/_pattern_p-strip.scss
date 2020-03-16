@@ -45,6 +45,7 @@
 
   .p-strip--main {
     @extend %vf-strip;
+    background-color: #f0f5f7;
     padding-bottom: $spv-outer--regular-scaleable * 2;
     padding-top: $spv-outer--scaleable;
   }
