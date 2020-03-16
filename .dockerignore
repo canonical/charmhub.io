@@ -9,6 +9,8 @@
 cache.sqlite
 README.md
 HACKING.md
+renovate.json
+LICENCE
 
 # The run script isn't needed
 run
