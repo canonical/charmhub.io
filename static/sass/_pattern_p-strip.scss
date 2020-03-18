@@ -23,8 +23,29 @@
     }
   }
 
+  .p-strip--header {
+    @extend %vf-strip;
+    background-image: linear-gradient(
+        to bottom left,
+        rgba(63,200,242, 0.04) 0,
+        rgba(63,200,242, 0.04) 49.9%,
+        transparent 50%
+      ),
+      linear-gradient(
+        to bottom right,
+        transparent 50%,
+        rgba(63,200,242, 0.04) 0,
+        rgba(63,200,242, 0.04) 49.9%
+      ),
+      linear-gradient(268deg, #f0f5f7 0%, #f0f5f7 100%);
+    background-position: top right, bottom right, 0% 0%;
+    background-repeat: no-repeat;
+    background-size: 50% 100%, 8% 100%, auto;
+  }
+
   .p-strip--main {
     @extend %vf-strip;
+    background-color: #f0f5f7;
     padding-bottom: $spv-outer--regular-scaleable * 2;
     padding-top: $spv-outer--scaleable;
   }

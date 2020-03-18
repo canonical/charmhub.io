@@ -1,0 +1,9 @@
+@mixin charmhub-p-group {
+  .p-group {
+    margin-bottom: 2rem;
+
+    i {
+      margin-right: $spv-inner--small;
+    }
+  }
+}

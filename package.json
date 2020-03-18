@@ -8,6 +8,7 @@
     "build-css": "node-sass --include-path node_modules static/sass --source-map true --output-style compressed --output static/css && postcss --map false --use autoprefixer --replace 'static/css/**/*.css'",
     "format-python": "black --line-length 79 webapp",
     "lint-python": "flake8 webapp tests && black --check --line-length 79 webapp tests",
+    "lint-js": "eslint static/js",
     "lint-scss": "sass-lint static/**/*.scss --verbose --no-exit",
     "serve": "./entrypoint 0.0.0.0:${PORT}",
     "test": "yarn run lint-scss && yarn run lint-python && yarn run test-python",
@@ -25,10 +26,15 @@
   },
   "dependencies": {
     "autoprefixer": "9.7.4",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "husky": "^4.2.3",
     "lint-staged": "^10.0.8",
     "node-sass": "4.13.1",
     "postcss-cli": "7.1.0",
+    "prettier": "^1.19.1",
     "sass-lint": "1.13.1",
     "vanilla-framework": "2.8.0",
     "watch-cli": "0.2.3"

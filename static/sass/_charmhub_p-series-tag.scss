@@ -1,0 +1,25 @@
+@mixin charmhub-p-series-tag {
+  .series-tags {
+    margin-top: $spv-outer--small;
+  }
+  .series-tag {
+    display: inline-block;
+    border-radius: 4px;
+    font-size: .875rem;
+    font-weight: 500;
+    padding: 0 $spv-inner--small;
+    margin-right: $spv-inner--x-small;
+    margin-bottom: $spv-inner--x-small;
+    text-transform: capitalize;
+    border: 1px solid $color-mid-dark;
+    color: $color-mid-dark;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
