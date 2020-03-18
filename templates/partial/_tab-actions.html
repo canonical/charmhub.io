@@ -1,6 +1,69 @@
 <div class="u-fixed-width p-tabs__content" id="actions">
-  <h4>This is actions tab</h4>
-  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate possimus eos dolore voluptatem cum, ducimus
-    iste natus deserunt aspernatur reprehenderit veritatis recusandae assumenda aut inventore a est vel cupiditate
-    officia?</p>
+  <aside class="p-accordion" role="tablist" aria-multiselect="true">
+    <ul class="p-accordion__list">
+      <li class="p-accordion__group">
+        <button type="button" class="p-accordion__tab" id="tab1" role="tab">
+          <div class="row">
+            <div class="col-4">
+              pause
+            </div>
+            <div class="col-8">
+              <span class="p-accordion__tab-description">Pause the openstack-dashboard unit</span>
+            </div>
+          </div>
+        </button>
+      </li>
+      <li class="p-accordion__group">
+        <button type="button" class="p-accordion__tab" id="tab1" role="tab">
+          <div class="row">
+            <div class="col-4">
+              resume
+            </div>
+            <div class="col-8">
+              <span class="p-accordion__tab-description">Resume the openstack-dashboard unit</span>
+            </div>
+          </div>
+        </button>
+      </li>
+      <li class="p-accordion__group">
+        <button type="button" class="p-accordion__tab" id="tab1" role="tab" aria-controls="tab1-section"
+          aria-expanded="true">openstack-upgrade</button>
+        <section class="p-accordion__panel" id="tab1-section" role="tabpanel" aria-hidden="false"
+          aria-labelledby="tab1-section">
+          <p class="p-accordion__panel-title">description</p>
+          <p class="u-offset--1">Set a value for the pool</p>
+          <hr>
+          <p class="p-accordion__panel-title">params:</p>
+          <p class="p-accordion__panel-subtitle">pool-name:</p>
+          <p class="u-offset--2">type: string</p>
+          <p class="u-offset--2">description: The pool to set this variable on.</p>
+          <p class="p-accordion__panel-subtitle">Key:</p>
+          <p class="u-offset--2">type: string</p>
+          <p class="u-offset--2">description: Any valid Ceph key from
+            http://docs.ceph.com/docs/master/rados/operations/pools/#set-pool-values</p>
+          <p class="p-accordion__panel-subtitle">Value:</p>
+          <p class="u-offset--2">type: string</p>
+          <p class="u-offset--2">description: The value to set</p>
+          <hr>
+          <p class="p-accordion__panel-title">required</p>
+          <p class="u-offset--1">[key, value, pool-name]</p>
+          <hr>
+          <p class="p-accordion__panel-title">additionalProperties</p>
+          <p class="u-offset--1">False</p>
+        </section>
+      </li>
+      <li class="p-accordion__group">
+        <button type="button" class="p-accordion__tab" id="tab1" role="tab">
+          <div class="row">
+            <div class="col-4">
+              security-checklist
+            </div>
+            <div class="col-8">
+              <span class="p-accordion__tab-description">Validate the running configuration against the OpenStack security guides checklist.</span>
+            </div>
+          </div>
+        </button>
+      </li>
+    </ul>
+  </aside>
 </div>
