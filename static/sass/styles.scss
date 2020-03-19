@@ -54,8 +54,6 @@ $theme-default-nav: dark;
 @include p-charmhub-strip;
 @import "charmhub_footer";
 @include charmhub-p-footer;
-@import "charmhub_p-group";
-@include charmhub-p-group;
 @import "charmhub_p-header";
 @include charmhub-p-header;
 @import "charmhub_p-series-tag";
