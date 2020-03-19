@@ -3,7 +3,8 @@
     @extend %vf-strip;
 
     background-color: $brand-color;
-    background-image: linear-gradient(
+    background-image:
+      linear-gradient(
         to bottom left,
         #3fc8f2 0%,
         #3fc8f2 49.3%,
@@ -23,9 +24,9 @@
         transparent 50%
       ),
       linear-gradient(268deg, $brand-color 8%, darken($brand-color, 10%) 100%);
-    background-size: 25% 15%, 60% 100%, 25% 100%, 100%;
     background-position: top right, bottom left, bottom left;
     background-repeat: no-repeat;
+    background-size: 25% 15%, 60% 100%, 25% 100%, 100%;
     clip-path: polygon(100% 0%, 100% 100%, 0% 100%, 0% calc(0% + 4rem));
     color: $color-x-light;
     margin-top: -4rem;
