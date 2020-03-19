@@ -18,6 +18,7 @@
 
   .p-side-navigation__list {
     @extend %vf-list;
+
     list-style: none;
     margin-left: 0;
     padding-left: 0;
@@ -27,6 +28,7 @@
 
       &::after {
         @extend %vf-pseudo-border;
+
         background: $color-sidenav-list-border;
         bottom: -0.5 * $spv-outer--scaleable; // place border in the middle of the margin
         left: $sph-inner;
@@ -43,10 +45,10 @@
     padding-left: $sph-inner;
   }
 
-  .p-side-navigation__text,
-  .p-side-navigation__link-text {
+  .p-side-navigation__text {
     display: block;
-    padding: $spv-inner--x-small $sph-inner--small $spv-inner--x-small
+    padding:
+      $spv-inner--x-small $sph-inner--small $spv-inner--x-small
       $sph-inner;
 
     // nested 2 or 3 levels
@@ -54,26 +56,36 @@
       padding-left: 2 * $sph-inner;
     }
 
-    .p-side-navigation__item
-      .p-side-navigation__item
-      .p-side-navigation__item
-      & {
+    .p-side-navigation__item .p-side-navigation__item .p-side-navigation__item & {
       padding-left: 3 * $sph-inner;
     }
   }
 
   .p-side-navigation__link {
     .p-side-navigation__link-text {
+      display: block;
+      padding:
+        $spv-inner--x-small $sph-inner--small $spv-inner--x-small
+        $sph-inner;
+
       &,
       &:link,
       &:visited {
         @include vf-focus;
+
         color: $color-sidenav-text-default;
       }
-      
+
       &:hover {
         text-decoration: none;
       }
+    }
+
+    .p-side-navigation__link-icon {
+      display: none;
+      position: absolute;
+      right: $spv-inner--small;
+      top: $spv-inner--x-small;
     }
 
     &.is-active {
@@ -98,21 +110,14 @@
       }
     }
 
-    .p-side-navigation__link-icon {
-      display: none;
-      position: absolute;
-      right: $spv-inner--small;
-      top: $spv-inner--x-small;
+    &:hover {
+      background: $color-sidenav-item-background-highlight;
+      color: $color-sidenav-text-active;
     }
 
     &.is-selected {
       color: $color-sidenav-text-active;
       font-weight: $font-weight-bold;
-    }
-
-    &:hover {
-      background: $color-sidenav-item-background-highlight;
-      color: $color-sidenav-text-active;
     }
   }
 }
