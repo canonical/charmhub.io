@@ -32,6 +32,7 @@ $theme-default-nav: dark;
 @include vf-p-muted-heading;
 @include vf-p-navigation;
 @include vf-p-strip;
+@include vf-p-table-of-contents;
 @include vf-p-tabs;
 
 // Vanilla utilities
@@ -57,6 +58,10 @@ $theme-default-nav: dark;
 @import "pattern_p-strip";
 
 @include p-charmhub-strip;
+
+@import "pattern_p-table-of-contents";
+
+@include p-charmhub-table-of-contents;
 
 @import "charmhub_footer";
 
