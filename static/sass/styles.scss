@@ -64,6 +64,10 @@ $theme-default-nav: dark;
 
 @include p-charmhub-accordion;
 
+@import "pattern_p-table-of-contents";
+
+@include p-charmhub-table-of-contents;
+
 @import "charmhub_footer";
 
 @include charmhub-p-footer;
