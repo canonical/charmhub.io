@@ -13,24 +13,22 @@
     }
 
     .p-accordion__panel {
-      padding-left: 0;
-
-      .p-accordion__panel-title {
+      .p-list__item {
         font-weight: 400;
-      }
 
-      .p-accordion__panel-subtitle {
-        font-style: italic;
-        padding-left: $spv-inner--large;
-      }
-
-      .u-offset {
-        &--1 {
+        .p-list__item {
+          font-style: italic;
+          font-weight: 300;
           padding-left: $spv-inner--large;
-        }
 
-        &--2 {
-          padding-left: $spv-inner--large * 2;
+          &::after {
+            border: none;
+          }
+
+          .p-list__item {
+            font-style: normal;
+            padding-left: 2 * $spv-inner--large;
+          }
         }
       }
     }

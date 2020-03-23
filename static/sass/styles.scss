@@ -19,6 +19,7 @@ $theme-default-nav: dark;
 @include vf-base;
 
 // Vanilla components
+@include vf-p-accordion;
 @include vf-p-buttons;
 @include vf-p-card;
 @include vf-p-forms;
@@ -58,6 +59,10 @@ $theme-default-nav: dark;
 @import "pattern_p-strip";
 
 @include p-charmhub-strip;
+
+@import "pattern_p-accordion";
+
+@include p-charmhub-accordion;
 
 @import "pattern_p-table-of-contents";
 
