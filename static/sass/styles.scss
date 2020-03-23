@@ -38,6 +38,7 @@ $theme-default-nav: dark;
 
 // Vanilla utilities
 @include vf-u-align;
+@include vf-u-clearfix;
 @include vf-u-equal-height;
 @include vf-u-floats;
 @include vf-u-layout;
@@ -48,10 +49,6 @@ $theme-default-nav: dark;
 @include vf-u-vertically-center;
 
 // Import site specific patterns and overrides
-@import "pattern_p-card";
-
-@include p-charmhub-card;
-
 @import "pattern_p-link";
 
 @include p-charmhub-link;
@@ -89,16 +86,6 @@ $theme-default-nav: dark;
 .u-text--subtle {
   color: $color-mid-dark;
   font-size: 0.875rem;
-}
-
-// XXX Ant - 11.03.20: This can be removed once this issue is closed.
-// https://github.com/canonical-web-and-design/vanilla-framework/issues/2923
-.u-flex {
-  display: flex;
-
-  &__split {
-    flex: 1;
-  }
 }
 
 .u-position--sticky {
