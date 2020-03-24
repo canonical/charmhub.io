@@ -28,6 +28,19 @@ def index():
     return render_template("index.html")
 
 
+# TO DO - the routes below ("/charm" and "/bundle") need to be merged in one
+# single route "/details"
 @app.route("/charm")
-def details():
-    return render_template("details.html")
+def charm():
+    context = {
+        "detail_type": "charm",
+    }
+    return render_template("details.html", **context)
+
+
+@app.route("/bundle")
+def bundle():
+    context = {
+        "detail_type": "bundle",
+    }
+    return render_template("details.html", **context)
