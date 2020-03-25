@@ -32,9 +32,8 @@ def index():
 def details(entity_name):
     # TODO this will not be required when we have the type from the API
     entity_type = request.args.get("type", "charm")
-    
+
     context = {
         "entity_type": entity_type,
     }
     return render_template("details.html", **context)
-
