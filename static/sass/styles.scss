@@ -26,6 +26,7 @@ $theme-default-nav: dark;
 @include vf-p-grid;
 @include vf-p-grid-modifications;
 @include vf-p-headings;
+@include vf-p-heading-icon;
 @include vf-p-icons;
 @include vf-p-links;
 @include vf-p-lists;
@@ -93,4 +94,8 @@ $theme-default-nav: dark;
   position: sticky;
   top: 0;
   z-index: 1;
+}
+
+.p-heading-icon__group {
+  margin-bottom: 1rem;
 }
