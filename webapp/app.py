@@ -37,3 +37,4 @@ def details(entity_name):
         "entity_type": entity_type,
     }
     return render_template("details.html", **context)
+
