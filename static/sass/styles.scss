@@ -35,6 +35,7 @@ $theme-default-nav: dark;
 @include vf-p-navigation;
 @include vf-p-strip;
 @include vf-p-table-of-contents;
+@include vf-p-table-mobile-card;
 @include vf-p-tabs;
 @include vf-p-tooltips;
 
