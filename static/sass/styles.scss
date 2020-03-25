@@ -36,6 +36,7 @@ $theme-default-nav: dark;
 @include vf-p-strip;
 @include vf-p-table-of-contents;
 @include vf-p-tabs;
+@include vf-p-tooltips;
 
 // Vanilla utilities
 @include vf-u-align;
@@ -50,9 +51,17 @@ $theme-default-nav: dark;
 @include vf-u-vertically-center;
 
 // Import site specific patterns and overrides
+@import "pattern_p-card";
+
+@include p-charmhub-card;
+
 @import "pattern_p-link";
 
 @include p-charmhub-link;
+
+@import "pattern_p-media-object";
+
+@include p-charmhub-media-object;
 
 @import "pattern_p-strip";
 
@@ -65,6 +74,10 @@ $theme-default-nav: dark;
 @import "pattern_p-table-of-contents";
 
 @include p-charmhub-table-of-contents;
+
+@import "charmhub_p-bundle-icons";
+
+@include charmhub-p-bundle-icons;
 
 @import "charmhub_footer";
 

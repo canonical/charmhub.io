@@ -1,0 +1,9 @@
+@mixin p-charmhub-media-object {
+  .p-media-object--medium {
+    .p-bundle-icons {
+      height: fit-content;
+      margin-right: $spv-inner--medium;
+      margin-top: $spv-inner--large;
+    }
+  }
+}

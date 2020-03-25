@@ -10,6 +10,7 @@
           <a href="#configuration" class="p-tabs__link" tabindex="-1" role="tab"
             aria-controls="configuration">Configuration</a>
         </li>
+        {% if detail_type == "charm" %}
         <li class="p-tabs__item" role="presentation">
           <a href="#actions" class="p-tabs__link" tabindex="-1" role="tab" aria-controls="actions">Actions</a>
         </li>
@@ -20,6 +21,7 @@
         <li class="p-tabs__item" role="presentation">
           <a href="#docs" class="p-tabs__link" tabindex="-1" role="tab" aria-controls="docs">Docs</a>
         </li>
+        {% endif %}
         <li class="p-tabs__item" role="presentation">
           <a href="#history" class="p-tabs__link" tabindex="-1" role="tab" aria-controls="history">History</a>
         </li>
