@@ -1,4 +1,4 @@
-{% extends 'base_index.html' %}
+{% extends 'base_layout.html' %}
 
 <!-- To DO - update copydoc and description -->
 {% block meta_copydoc %}https://docs.google.com/document/d/1WcNN2RlQQrbLSP5ZgcIsAeQAHj5h_yDW6Yd5oBMmU3M{% endblock meta_copydoc %}
@@ -11,7 +11,7 @@
     <div class="col-8">
       <div class="p-charm-header">
         <div class="p-media-object--medium u-no-margin--bottom">
-          {% if detail_type == "charm" %}
+          {% if entity_type == "charm" %}
           <img src="https://assets.ubuntu.com/v1/60d9b81e-picto-canonical.svg" class="p-media-object__image">
           {% else %}
           <a href="/canonical-kubernetes/bundle/804" class="p-bundle-icons">
@@ -77,7 +77,7 @@
   {% include "partial/_tab-overview.html" %}
   {% include "partial/_tab-configuration.html" %}
   {% include "partial/_tab-contribute.html" %}
-  {% if detail_type == "charm" %}
+  {% if entity_type == "charm" %}
     {% include "partial/_tab-actions.html" %}
     {% include "partial/_tab-integrations.html" %}
     {% include "partial/_tab-docs.html" %}
