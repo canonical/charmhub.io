@@ -11,6 +11,7 @@
     "lint-js": "eslint static/js",
     "lint-scss": "stylelint static/**/*.scss",
     "serve": "./entrypoint 0.0.0.0:${PORT}",
+    "start": "yarn run build && concurrently --raw 'yarn run watch' 'yarn run serve'",
     "test": "yarn run lint-scss && yarn run lint-python && yarn run test-python",
     "test-python": "python3 -m unittest discover tests"
   },
@@ -38,7 +39,8 @@
     "vanilla-framework": "2.8.0",
     "watch-cli": "0.2.3"
   },
-    "devDependencies": {
+  "devDependencies": {
+    "concurrently": "^5.1.0",
     "stylelint": "^13.2.1",
     "stylelint-config-standard": "^20.0.0",
     "stylelint-order": "^4.0.0"
