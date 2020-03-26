@@ -1,12 +1,12 @@
 from canonicalwebteam.flask_base.app import FlaskBase
-from flask import render_template
+from flask import render_template, request
 
 from webapp import helpers
+from webapp.charmhub import config
 
-# Rename your project below
 app = FlaskBase(
     __name__,
-    "charmhub.io",
+    config.app_name,
     template_folder="../templates",
     static_folder="../static",
     template_404="404.html",
@@ -28,19 +28,12 @@ def index():
     return render_template("index.html")
 
 
-# TO DO - the routes below ("/charm" and "/bundle") need to be merged in one
-# single route "/details"
-@app.route("/charm")
-def charm():
-    context = {
-        "detail_type": "charm",
-    }
-    return render_template("details.html", **context)
+@app.route('/<regex("' + config.details_regex + '"):entity_name>')
+def details(entity_name):
+    # TODO this will not be required when we have the type from the API
+    entity_type = request.args.get("type", "charm")
 
-
-@app.route("/bundle")
-def bundle():
     context = {
-        "detail_type": "bundle",
+        "entity_type": entity_type,
     }
     return render_template("details.html", **context)
