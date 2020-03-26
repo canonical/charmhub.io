@@ -41,6 +41,7 @@ $theme-default-nav: dark;
 
 // Vanilla utilities
 @include vf-u-align;
+@include vf-u-animations;
 @include vf-u-clearfix;
 @include vf-u-equal-height;
 @include vf-u-floats;
