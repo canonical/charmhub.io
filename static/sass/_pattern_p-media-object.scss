@@ -1,9 +1,36 @@
 @mixin p-charmhub-media-object {
   .p-media-object--medium {
     .p-bundle-icons {
+      $icon-size: 3.75rem;
+
       height: fit-content;
       margin-right: $spv-inner--medium;
       margin-top: $spv-inner--large;
+
+      @media only screen and (max-width: $breakpoint-medium) {
+        margin-right: 0;
+        margin-top: $spv-inner--medium;
+      }
+
+      @media only screen and (max-width: $breakpoint-small) {
+        width: 5.5rem;
+      }
+
+      @media only screen and (min-width: $breakpoint-medium) {
+        .p-bundle-icons__image {
+          border-radius: $icon-size / 2;
+          height: $icon-size;
+          width: $icon-size;
+
+          &:nth-child(2) {
+            margin-left: -3.4rem;
+          }
+
+          &:nth-child(3) {
+            margin-left: -3.4rem;
+          }
+        }
+      }
     }
   }
 }
