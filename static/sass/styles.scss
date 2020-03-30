@@ -9,7 +9,7 @@ $theme-default-nav: dark;
 
 // import custom mixins
 
-// import cookie policy
+// import cookie policys
 // @import 'cookie-policy/build/css/cookie-policy';
 
 // Import Vanilla framework
@@ -28,12 +28,14 @@ $theme-default-nav: dark;
 @include vf-p-headings;
 @include vf-p-heading-icon;
 @include vf-p-icons;
+@include vf-p-label;
 @include vf-p-links;
 @include vf-p-lists;
 @include vf-p-media-object;
 @include vf-p-muted-heading;
 @include vf-p-navigation;
 @include vf-p-strip;
+@include vf-p-side-navigation;
 @include vf-p-table-of-contents;
 @include vf-p-table-mobile-card;
 @include vf-p-tabs;
@@ -92,16 +94,26 @@ $theme-default-nav: dark;
 @import "charmhub_p-series-tag";
 
 @include charmhub-p-series-tag;
-// XXX Ovi - 12.03.20: This can be removed once side navigation is implemented in vanilla.
-@import "patterns_side-navigation";
-
-@include charmhub-p-side-navigation;
 
 // XXX Ant - 11.03.20: This can be removed once this issue is closed.
 // https://github.com/canonical-web-and-design/vanilla-framework/issues/2922
 .u-text--subtle {
   color: $color-mid-dark;
   font-size: 0.875rem;
+}
+
+// XXX Ovi - 30.03.20: This can be removed once this issue is closed.
+// https://github.com/canonical-web-and-design/vanilla-framework/issues/2960
+.p-side-navigation__link {
+  .p-side-navigation__status.is-toggle {
+    display: none;
+  }
+
+  &:hover {
+    .p-side-navigation__status.is-toggle {
+      display: block;
+    }
+  }
 }
 
 .u-position--sticky {
