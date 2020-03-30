@@ -5,16 +5,9 @@ $brand-color: #044f66;
 // navigation settings
 $theme-default-nav: dark;
 
-// side navigation settings
-$color-sidenav-item-background-highlight: #cef3ff;
-$color-sidenav-item-border-highlight: #35cdff;
-
 // import settings
 
 // import custom mixins
-
-// import cookie policys
-// @import 'cookie-policy/build/css/cookie-policy';
 
 // Import Vanilla framework
 @import "vanilla-framework/scss/vanilla";
@@ -98,13 +91,6 @@ $color-sidenav-item-border-highlight: #35cdff;
 @import "charmhub_p-series-tag";
 
 @include charmhub-p-series-tag;
-<<<<<<< HEAD
-=======
-
-@import "pattern_p-side-navigation";
-
-@include p-charmhub-side-navigation;
->>>>>>> Upgrade vanilla to 2.9.0 & add side navigation to home page
 
 // XXX Ant - 11.03.20: This can be removed once this issue is closed.
 // https://github.com/canonical-web-and-design/vanilla-framework/issues/2922
