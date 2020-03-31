@@ -24,4 +24,18 @@
       padding-top: $spv-inner--large;
     }
   }
+
+  .p-card {
+    .p-card__thumbnail--small {
+      filter: grayscale(100%);
+      height: 1.5rem;
+      margin-top: 0.5rem;
+      opacity: 0.18;
+
+      &:hover {
+        filter: none;
+        opacity: 1;
+      }
+    }
+  }
 }
