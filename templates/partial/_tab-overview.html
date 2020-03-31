@@ -1,41 +1,13 @@
 <div class="row p-tabs__content" id="overview">
   <div class="col-8">
     <h4>This is overview tab</h4>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, quisquam?
-      Ducimus distinctio, labore culpa nam quod hic rerum reprehenderit, ab,
-      fugiat quaerat cum. Distinctio maiores dolorum quasi odit totam quisquam.
-    </p>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat
-      accusamus natus incidunt eos doloribus. Distinctio soluta voluptatem
-      pariatur atque, enim veniam quibusdam ducimus quos optio, minima
-      necessitatibus, dolores dolor eligendi!
-    </p>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat
-      accusamus natus incidunt eos doloribus. Distinctio soluta voluptatem
-      pariatur atque, enim veniam quibusdam ducimus quos optio, minima
-      necessitatibus, dolores dolor eligendi!
-    </p>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat
-      accusamus natus incidunt eos doloribus. Distinctio soluta voluptatem
-      pariatur atque, enim veniam quibusdam ducimus quos optio, minima
-      necessitatibus, dolores dolor eligendi!
-    </p>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat
-      accusamus natus incidunt eos doloribus. Distinctio soluta voluptatem
-      pariatur atque, enim veniam quibusdam ducimus quos optio, minima
-      necessitatibus, dolores dolor eligendi!
-    </p>
+    {{ description | safe }}
   </div>
   <div class="col-4">
     <h4 class="p-muted-heading">Charm information</h4>
     <p>Latest release<br /><strong>3 days ago</strong></p>
-    <p>Deployments<br /><strong>6021</strong></p>
-    <p>License<br /><strong>Apache license 2.0</strong></p>
+    <p>Deployments<br /><strong>{{ deployments }}</strong></p>
+    <p>License<br /><strong>{{ license }}</strong></p>
     <ul class="p-list">
       <li class="p-list__item">
         <a href="#"><i class="p-icon--share"></i>&nbsp;&nbsp;Homepage</a>

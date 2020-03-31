@@ -12,7 +12,7 @@
       <div class="p-charm-header">
         <div class="p-media-object--medium u-no-margin--bottom">
           {% if entity_type == "charm" %}
-          <img src="https://assets.ubuntu.com/v1/60d9b81e-picto-canonical.svg" class="p-media-object__image">
+          <img src="{{ icon_url }}" class="p-media-object__image">
           {% else %}
           <a href="/canonical-kubernetes/bundle/804" class="p-bundle-icons">
             <img src="https://api.jujucharms.com/charmstore/v5/openstack-dashboard-271/icon.svg"
@@ -23,16 +23,18 @@
           {% endif %}
           <div class="p-media-object__details">
             <h1 class="p-media-object__title">
-              openstack-dashboard
+              {{ entity_title }}
             </h1>
             <div class="p-media-object__content u-no-margin--bottom">
               <ul class="p-inline-list--middot">
                 <li class="p-inline-list__item">
-                  By <a href="/">openstack-charmers</a>
-                  <span class="p-tooltip--top-center" aria-describedby="openstack-tooltip">
-                    <img src="https://assets.ubuntu.com/v1/75654c90-rosette.svg">
-                    <span class="p-tooltip__message" role="tooltip" id="default-tooltip">Verified account</span>
-                  </span>
+                  By <a href="{{ website }}">{{ publisher }}</a>
+                  {% if developer_validation == "verified" %}
+                    <span class="p-tooltip--top-center" aria-describedby="openstack-tooltip">
+                      <img src="https://assets.ubuntu.com/v1/75654c90-rosette.svg">
+                      <span class="p-tooltip__message" role="tooltip" id="default-tooltip">Verified account</span>
+                    </span>
+                  {% endif %}
                 </li>
                 <li class="p-inline-list__item">
                   <a href="/">Openstack</a>
@@ -46,7 +48,7 @@
           aria-controls="channel-map-versions">
           latest/stable 7.20.1&nbsp;&nbsp;<i class="p-icon--contextual-menu"></i>
         </button>
-        <p class="p-charm-header__code"><code>juju deploy openstack-dashboard</code></p>
+        <p class="p-charm-header__code"><code>juju deploy {{ package_name }}</code></p>
       </div>
     </div>
     <div class="col-4">
@@ -78,11 +80,13 @@
   {% include "partial/_tab-overview.html" %}
   {% include "partial/_tab-configuration.html" %}
   {% include "partial/_tab-contribute.html" %}
+
   {% if entity_type == "charm" %}
-  {% include "partial/_tab-actions.html" %}
-  {% include "partial/_tab-integrations.html" %}
-  {% include "partial/_tab-docs.html" %}
+    {% include "partial/_tab-actions.html" %}
+    {% include "partial/_tab-integrations.html" %}
+    {% include "partial/_tab-docs.html" %}
   {% endif %}
+
   {% include "partial/_tab-history.html" %}
 
   {% include "partial/_top-bundles.html" %}
