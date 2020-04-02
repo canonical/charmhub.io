@@ -10,16 +10,17 @@
     <p>License<br /><strong>{{ license }}</strong></p>
     <ul class="p-list">
       <li class="p-list__item">
-        <a href="#"><i class="p-icon--share"></i>&nbsp;&nbsp;Homepage</a>
+        <a href="{{ website }}"><i class="p-icon--share"></i>&nbsp;&nbsp;Homepage</a>
       </li>
       <li class="p-list__item">
-        <a href="#"><i class="p-icon--user"></i>&nbsp;&nbsp;Repository</a>
+        <a href="{{ repository_url }}"><i class="p-icon--user"></i>&nbsp;&nbsp;Repository</a>
       </li>
       <li class="p-list__item">
-        <a href="#"><i class="p-icon--search"></i>&nbsp;&nbsp;Submit a bug</a>
+        <!-- TO DO - what if the bugs are submitted to launchpad? -->
+        <a href="{{ repository_url }}/issues/new"><i class="p-icon--search"></i>&nbsp;&nbsp;Submit a bug</a>
       </li>
       <li class="p-list__item">
-        <a href="#"><i class="p-icon--code"></i>&nbsp;&nbsp;Contact</a>
+        <a href="{{ contact }}"><i class="p-icon--code"></i>&nbsp;&nbsp;Contact</a>
       </li>
     </ul>
     <h4 class="p-muted-heading">Share this charm</h4>
