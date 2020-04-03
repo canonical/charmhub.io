@@ -7,13 +7,37 @@
 {% block content %}
 <div class="p-strip is-deep">
   <div class="row">
-    <div class="col-6">
-      <img src="https://assets.ubuntu.com/v1/4de1c56c-404_v1.svg" alt="Error owl" width="400" height="400" />
+    <div class="col-4">
+      <img src="https://assets.ubuntu.com/v1/4de1c56c-404_v1.svg" alt="Error owl" width="400" height="400" class="p-image--smaller-mobile"/>
     </div>
-    <div class="col-6">
-      <h1>404: Page not found</h1>
-      <p>Sorry, we can't find the page you're looking for.</p>
-      <p>If you think this is an error on our site, please <a href="https://github.com/canonical-web-and-design/charmhub.io/issues/new" class="p-link--external">file a bug</a>.</p>
+    <div class="col-7 col-start-large-6">
+      <h1 class="p-heading--2">404: We couldn't find that page</h1>
+      <p><strong>The page you requested isn't currently available.</strong><br>
+        Here are some things that may have caused this:</p>
+      <ul>
+        <li>
+          The page that sent you here may have the wrong link.<br>
+          You can let us know about this <a href="https://github.com/canonical-web-and-design/charmhub.io/issues/new">here</a>
+        </li>
+        <li>
+          The URL may be wrong. We recommend you check it for typos
+        </li>
+        <li>
+          We made a mistake and this page has stopped working momentarily
+        </li>
+      </ul>
+      <p>You may want to do a new search:</p>
+      <!-- TO DO - update url for search page -->
+      <form action="/search" class="p-form p-form--inline">
+      <div class="p-form__group">
+        <div class="p-form__control u-clearfix">
+          <label for="search-input" class="u-off-screen">Search</label>
+          <input type="search" name="q" id="search-input" placeholder="Search" required>
+        </div>
+      </div>
+      <button type="submit" alt="search" class="p-button--positive">Search</button>
+      </form>
+      <p>Or return to the <a href="/">homepage</a>.</p>
     </div>
   </div>
 </div>

@@ -25,6 +25,7 @@ $theme-default-nav: dark;
 @include vf-p-headings;
 @include vf-p-heading-icon;
 @include vf-p-icons;
+@include vf-p-image;
 @include vf-p-label;
 @include vf-p-links;
 @include vf-p-lists;
@@ -63,6 +64,10 @@ $theme-default-nav: dark;
 @import "pattern_p-media-object";
 
 @include p-charmhub-media-object;
+
+@import "pattern_p-image";
+
+@include p-charmhub-image;
 
 @import "pattern_p-strip";
 
@@ -122,4 +127,16 @@ $theme-default-nav: dark;
 
 .p-heading-icon__group {
   margin-bottom: 1rem;
+}
+
+// XXX Ovi - 04.04.20: This can be removed once this issue is closed.
+// https://github.com/canonical-web-and-design/vanilla-framework/issues/1452
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
 }
