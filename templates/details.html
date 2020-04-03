@@ -14,12 +14,13 @@
           {% if entity_type == "charm" %}
           <img src="{{ icon_url }}" class="p-media-object__image">
           {% else %}
-          <a href="/canonical-kubernetes/bundle/804" class="p-bundle-icons">
-            <img src="https://api.jujucharms.com/charmstore/v5/openstack-dashboard-271/icon.svg"
-              class="p-bundle-icons__image" alt="">
-            <img src="https://api.jujucharms.com/charmstore/v5/lxd-22/icon.svg" class="p-bundle-icons__image" alt="">
-            <img src="https://api.jujucharms.com/charmstore/v5/ceph/icon.svg" class="p-bundle-icons__image" alt="">
-          </a>
+          <div class="p-bundle-icons">
+            {% for bundle in bundle_content %}
+              {% if loop.index0 < 3 %}
+              <img src="{{ bundle.icon_url }}" class="p-bundle-icons__image" alt="">
+              {% endif %}
+            {% endfor %}
+          </div>
           {% endif %}
           <div class="p-media-object__details">
             <h1 class="p-media-object__title">
@@ -54,21 +55,11 @@
     <div class="col-4">
       <img src="https://assets.ubuntu.com/v1/adac6928-ubuntu.svg" alt="" width="89" height="20">
       <div class="series-tags">
+        {% for supported_os in supported_os_list %}
         <span class="series-tag">
-          16.04 LTS
+          {{ supported_os }}
         </span>
-        <span class="series-tag">
-          18.04 LTS
-        </span>
-        <span class="series-tag">
-          18.10
-        </span>
-        <span class="series-tag">
-          19.04
-        </span>
-        <span class="series-tag">
-          14.04 LTS
-        </span>
+        {% endfor %}
       </div>
       <p>Also supports: <a href="/">Kubernetes</a></p>
     </div>
