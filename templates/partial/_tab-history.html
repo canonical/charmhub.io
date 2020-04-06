@@ -11,41 +11,15 @@
       </tr>
     </thead>
     <tbody>
+    {% for release in channel_map.amd64.latest %}
       <tr role="row">
-        <td role="rowheader" aria-label="Date">2019/7/4</td>
-        <td role="gridcell" aria-label="hadoop slave (charm)" class="u-align--right">1.8</td>
-        <td role="gridcell" aria-label="Jdk" class="u-align--right">12</td>
-        <td role="gridcell" aria-label="Imagery" class="u-align--right">14</td>
-        <td role="gridcell" aria-label="Translations" class="u-align--right">7</td>
+        <td role="rowheader" aria-label="Date">{{ release.created }}</td>
+        <td role="gridcell" aria-label="hadoop slave (charm)" class="u-align--right">{{ release.charm }}</td>
+        <td role="gridcell" aria-label="Jdk" class="u-align--right">{{ release.jdk }}</td>
+        <td role="gridcell" aria-label="Imagery" class="u-align--right">{{ release.imagery }}</td>
+        <td role="gridcell" aria-label="Translations" class="u-align--right">{{ release.translations }}</td>
       </tr>
-      <tr role="row">
-        <td role="rowheader" aria-label="Date">2019/6/12</td>
-        <td role="gridcell" aria-label="hadoop slave (charm)" class="u-align--right"><strong>1.7</strong></td>
-        <td role="gridcell" aria-label="Jdk" class="u-align--right">12</td>
-        <td role="gridcell" aria-label="Imagery" class="u-align--right">14</td>
-        <td role="gridcell" aria-label="Translations" class="u-align--right"><strong>6</strong></td>
-      </tr>
-      <tr role="row">
-        <td role="rowheader" aria-label="Date">2019/5/4</td>
-        <td role="gridcell" aria-label="hadoop slave (charm)" class="u-align--right">1.7</td>
-        <td role="gridcell" aria-label="Jdk" class="u-align--right"><strong>13</strong></td>
-        <td role="gridcell" aria-label="Imagery" class="u-align--right"><strong>13</strong></td>
-        <td role="gridcell" aria-label="Translations" class="u-align--right">6</td>
-      </tr>
-      <tr role="row">
-        <td role="rowheader" aria-label="Date">2019/4/3</td>
-        <td role="gridcell" aria-label="hadoop slave (charm)" class="u-align--right">1.8</td>
-        <td role="gridcell" aria-label="Jdk" class="u-align--right">12</td>
-        <td role="gridcell" aria-label="Imagery" class="u-align--right">14</td>
-        <td role="gridcell" aria-label="Translations" class="u-align--right">7</td>
-      </tr>
-      <tr role="row">
-        <td role="rowheader" aria-label="Date">2019/4/3</td>
-        <td role="gridcell" aria-label="hadoop slave (charm)" class="u-align--right">1.7</td>
-        <td role="gridcell" aria-label="Jdk" class="u-align--right">13</td>
-        <td role="gridcell" aria-label="Imagery" class="u-align--right">13</td>
-        <td role="gridcell" aria-label="Translations" class="u-align--right">6</td>
-      </tr>
+    {% endfor %}
     </tbody>
   </table>
   <!-- TO DO - add functionality -->
