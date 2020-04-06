@@ -1,0 +1,8 @@
+@mixin p-charmhub-image {
+  .p-image--smaller-mobile {
+    @media screen and (max-width: $breakpoint-medium) {
+      height: 200px;
+      margin-bottom: 2rem;
+    }
+  }
+}
