@@ -159,6 +159,71 @@ mock_entities = [
         ],
         "videos": [],
         "prices": {},
+        "configuration": [
+            {
+                "name": "action-managed-upgrade",
+                "description": "<p>If True enables openstack upgrades for"
+                " this charm via juju actions. You will still need to set"
+                " openstack-origin to the new repository but instead of an"
+                " upgrade running automatically across all units, it will"
+                " wait for you to execute the openstack-upgrade action for"
+                " this charm on each unit. If False it will revert to"
+                " existing behavior of upgrading all units on config"
+                " change.</p>\n<p>Value type: String</p>\n<p>Default"
+                " value: None</p>",
+            },
+            {
+                "name": "allow-password-autocompletion",
+                "description": "<p>Setting this to True will allow password"
+                " form autocompletion by browser.</p>\n<p>Value type: String"
+                "</p>\n<p>Default value: None</p>",
+            },
+            {
+                "name": "api-result-limit",
+                "description": "<p>The maximum number of objects (e.g."
+                " Swift objects or Glance images) to display on a single"
+                ' page before providing a paging element (a "more" link) to'
+                " paginate results.</p>\n<p>Value type: Interval</p>\n<p>"
+                "Default value: None</p>",
+            },
+            {
+                "name": "cinder-backup",
+                "description": "<p>Enable cinder backup panel.</p>\n<p>Value"
+                " type: Boolean</p>\n<p>Default value: None</p>",
+            },
+            {
+                "name": "custom-theme",
+                "description": "<p>Use a custom theme supplied as a resource."
+                " NOTE: This setting is supported OpenStack Mitaka and"
+                " this setting is mutually exclustive to ubuntu-theme and"
+                " default-theme.</p>\n<p>Value type: Boolean</p>\n<p>Default"
+                " value: None</p>",
+            },
+            {
+                "name": "customization-module",
+                "description": "<p>This option provides a means to enable"
+                " customisation modules to modify existing dashboards and"
+                " panels. This is available from Liberty onwards.</p>\n<p>"
+                "Value type: String</p>\n<p>Default value: None</p>",
+            },
+            {
+                "name": "database",
+                "description": "<p>Database name for Horizon (if enabled)."
+                "</p>\n<p>Value type: String</p>\n<p>Default value:"
+                " Horizon</p>",
+            },
+            {
+                "name": "database-user",
+                "description": "<p>Username for Horizon database access (if"
+                " enabled).</p>\n<p>Value type: String</p>\n<p>Default value:"
+                " Horizon</p>",
+            },
+            {
+                "name": "debug",
+                "description": "<p>Enable Django debug messages.</p>\n<p>"
+                "Value type: String</p>\n<p>Default value: No</p>",
+            },
+        ],
         "contact": "https://www.videolan.org/support/",
         "website": "https://www.videolan.org/vlc/",
         "summary": "The ultimate media player",
@@ -174,36 +239,31 @@ mock_entities = [
             "amd64": {
                 "latest": [
                     {
-                        "created-at": "16 December 2019",
-                        "version": "3.0.8",
+                        "created": "2019/7/4",
                         "channel": "stable",
                         "risk": "stable",
-                        "confinement": "strict",
-                        "size": 212758528,
+                        "charm": "1.8",
+                        "jdk": "12",
+                        "imagery": "13",
+                        "translations": "7",
                     },
                     {
-                        "created-at": "16 December 2019",
-                        "version": "3.0.8",
-                        "channel": "candidate",
-                        "risk": "candidate",
-                        "confinement": "strict",
-                        "size": 212758528,
+                        "created": "22019/6/12",
+                        "channel": "stable",
+                        "risk": "stable",
+                        "charm": "1.7",
+                        "jdk": "12",
+                        "imagery": "11",
+                        "translations": "6",
                     },
                     {
-                        "created-at": "30 March 2020",
-                        "version": "3.0.8-308-g9488c3e",
-                        "channel": "beta",
-                        "risk": "beta",
-                        "confinement": "strict",
-                        "size": 206848000,
-                    },
-                    {
-                        "created-at": "30 March 2020",
-                        "version": "4.0.0-dev-11534-gd2a01fe376",
-                        "channel": "edge",
-                        "risk": "edge",
-                        "confinement": "strict",
-                        "size": 340590592,
+                        "created": "22019/4/3",
+                        "channel": "stable",
+                        "risk": "stable",
+                        "charm": "1.7",
+                        "jdk": "13",
+                        "imagery": "13",
+                        "translations": "6",
                     },
                 ]
             }
@@ -395,6 +455,83 @@ mock_entities = [
                         "name": "Contrail Openstack",
                         "icon_url": "https://assets.ubuntu.com/v1/425efe3a-"
                         "lxd.svg",
+                    },
+                ],
+            },
+        ],
+        "actions": [
+            {
+                "name": "pause",
+                "hint": "Pause the openstack-dashboard unit",
+                "description": "Set a value for the pool",
+                "params": [
+                    {
+                        "name": "pool-name",
+                        "content": {
+                            "type": "string",
+                            "description": "The pool to set this variable on.",
+                        },
+                    },
+                ],
+            },
+            {
+                "name": "resume",
+                "hint": "Resume the openstack-dashboard unit",
+                "description": "Set a value for the pool",
+                "params": [
+                    {
+                        "name": "pool-name",
+                        "content": {
+                            "type": "string",
+                            "description": "The pool to set this variable on.",
+                        },
+                    },
+                ],
+            },
+            {
+                "name": "openstack-upgrade",
+                "hint": "",
+                "description": "Set a value for the pool",
+                "params": [
+                    {
+                        "name": "pool-name",
+                        "content": {
+                            "type": "string",
+                            "description": "The pool to set this variable on.",
+                        },
+                    },
+                    {
+                        "name": "Key",
+                        "content": {
+                            "type": "string",
+                            "description": "Any valid Ceph key from http://"
+                            "docs.ceph.com/docs/master/rados/operations/"
+                            "pools/#set-pool-values",
+                        },
+                    },
+                    {
+                        "name": "Value",
+                        "content": {
+                            "type": "string",
+                            "description": "The value to set",
+                        },
+                    },
+                ],
+                "required": "[key, value, pool-name]",
+                "additionalProperties": "False",
+            },
+            {
+                "name": "security-checklist",
+                "hint": "Validate the running configuration against the"
+                " OpenStack security guides checklist.",
+                "description": "Set a value for the pool",
+                "params": [
+                    {
+                        "name": "pool-name",
+                        "content": {
+                            "type": "string",
+                            "description": "The pool to set this variable on.",
+                        },
                     },
                 ],
             },
