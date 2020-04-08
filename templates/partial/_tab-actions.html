@@ -1,173 +1,66 @@
 <div class="u-fixed-width p-tabs__content" id="actions">
   <aside class="p-accordion" role="tablist" aria-multiselect="true">
     <ul class="p-accordion__list">
+    {% for action in actions %}
       <li class="p-accordion__group">
-        <button type="button" class="p-accordion__tab" id="tab1" role="tab" aria-controls="tab1-section"
+        <button type="button" class="p-accordion__tab" id="{{action.name}}" role="tab" aria-controls="{{action.name}}-section"
           aria-expanded="true">
           <div class="row">
             <div class="col-4">
-              pause
+              {{ action.name }}
             </div>
             <div class="col-8">
-              <span class="p-accordion__tab-description">Pause the openstack-dashboard unit</span>
+              <span class="p-accordion__tab-description">{{ action.hint }}</span>
             </div>
           </div>
         </button>
-        <section class="p-accordion__panel" id="tab1-section" role="tabpanel" aria-hidden="false"
-          aria-labelledby="tab1-section">
+        <section class="p-accordion__panel" id="{{action.name}}-section" role="tabpanel" aria-hidden="false"
+          aria-labelledby="{{action.name}}-section">
           <ul class="p-list--divided u-no-margin--bottom">
+            {% if action.description %}
             <li class="p-list__item">
               description
               <ul class="p-list">
-                <li class="p-list__item">Set a value for the pool</li>
+                <li class="p-list__item">{{ action.description }}</li>
               </ul>
             </li>
+            {% endif %}
+            {% if action.params %}
             <li class="p-list__item">
-              params:
+              params
+              {% for param in action.params %}
               <ul class="p-list">
                 <li class="p-list__item">
-                  pool-name:
+                  {{ param.name }}
                   <ul class="p-list">
-                    <li class="p-list__item">type: string</li>
-                    <li class="p-list__item">description: The pool to set this variable on.</li>
+                    <li class="p-list__item">type: {{ param.content.type }}</li>
+                    <li class="p-list__item">description: {{ param.content.description }}</li>
                   </ul>
                 </li>
               </ul>
+              {% endfor %}
             </li>
-          </ul>
-        </section>
-      </li>
-      <li class="p-accordion__group">
-        <button type="button" class="p-accordion__tab" id="tab2" role="tab" aria-controls="tab2-section"
-          aria-expanded="true">
-          <div class="row">
-            <div class="col-4">
-              resume
-            </div>
-            <div class="col-8">
-              <span class="p-accordion__tab-description">Resume the openstack-dashboard unit</span>
-            </div>
-          </div>
-        </button>
-        <section class="p-accordion__panel" id="tab2-section" role="tabpanel" aria-hidden="false"
-          aria-labelledby="tab1-section">
-          <ul class="p-list--divided u-no-margin--bottom">
-            <li class="p-list__item">
-              description
-              <ul class="p-list">
-                <li class="p-list__item">Set a value for the pool</li>
-              </ul>
-            </li>
-            <li class="p-list__item">
-              params:
-              <ul class="p-list">
-                <li class="p-list__item">
-                  pool-name:
-                  <ul class="p-list">
-                    <li class="p-list__item">type: string</li>
-                    <li class="p-list__item">description: The pool to set this variable on.</li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </section>
-      </li>
-      <li class="p-accordion__group">
-        <button type="button" class="p-accordion__tab" id="tab3" role="tab" aria-controls="tab3-section"
-          aria-expanded="true">openstack-upgrade</button>
-        <section class="p-accordion__panel" id="tab3-section" role="tabpanel" aria-hidden="false"
-          aria-labelledby="tab1-section">
-          <ul class="p-list--divided u-no-margin--bottom">
-            <li class="p-list__item">
-              description
-              <ul class="p-list">
-                <li class="p-list__item">Set a value for the pool</li>
-              </ul>
-            </li>
-            <li class="p-list__item">
-              params:
-              <ul class="p-list">
-                <li class="p-list__item">
-                  pool-name:
-                  <ul class="p-list">
-                    <li class="p-list__item">type: string</li>
-                    <li class="p-list__item">description: The pool to set this variable on.</li>
-                  </ul>
-                </li>
-                <li class="p-list__item">
-                  Key:
-                  <ul class="p-list">
-                    <li class="p-list__item">type: string</li>
-                    <li class="p-list__item">description: Any valid Ceph key from
-                    http://docs.ceph.com/docs/master/rados/operations/pools/#set-pool-values</li>
-                  </ul>
-                </li>
-                <li class="p-list__item">
-                  Value:
-                  <ul class="p-list">
-                    <li class="p-list__item">type: string</li>
-                    <li class="p-list__item">description: The value to set</li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
+            {% endif %}
+            {% if action.required %}
             <li class="p-list__item">
               required
               <ul class="p-list">
-                <li class="p-list__item">
-                  [key, value, pool-name]
-                </li>
+                <li class="p-list__item">{{ action.required }}</li>
               </ul>
             </li>
+            {% endif %}
+            {% if action.additionalProperties %}
             <li class="p-list__item">
               additionalProperties
               <ul class="p-list">
-                <li class="p-list__item">
-                  False
-                </li>
+                <li class="p-list__item">{{ action.additionalProperties }}</li>
               </ul>
             </li>
+            {% endif %}
           </ul>
         </section>
       </li>
-      <li class="p-accordion__group">
-        <button type="button" class="p-accordion__tab" id="tab4" role="tab" aria-controls="tab4-section"
-          aria-expanded="true">
-          <div class="row">
-            <div class="col-4">
-              security-checklist
-            </div>
-            <div class="col-8">
-              <span class="p-accordion__tab-description">Validate the running configuration against the OpenStack
-                security guides checklist.</span>
-            </div>
-          </div>
-        </button>
-        <section class="p-accordion__panel" id="tab4-section" role="tabpanel" aria-hidden="false"
-          aria-labelledby="tab1-section">
-          <ul class="p-list--divided u-no-margin--bottom">
-            <li class="p-list__item">
-              description
-              <ul class="p-list">
-                <li class="p-list__item">Set a value for the pool</li>
-              </ul>
-            </li>
-            <li class="p-list__item">
-              params:
-              <ul class="p-list">
-                <li class="p-list__item">
-                  pool-name:
-                  <ul class="p-list">
-                    <li class="p-list__item">type: string</li>
-                    <li class="p-list__item">description: The pool to set this variable on.</li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </section>
-      </li>
+    {% endfor %}
     </ul>
   </aside>
 </div>

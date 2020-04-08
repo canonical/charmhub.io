@@ -5,119 +5,24 @@
         <li class="p-side-navigation__item--title">
           <span class="p-side-navigation__text">Contents</span>
         </li>
+        {% for content in configuration %}
         <li class="p-side-navigation__item">
-          <a href="#action-managed-upgrade" class="p-side-navigation__link">
-            action-managed-upgrade
+          <a href="#{{ content.name }}" class="p-side-navigation__link">
+            {{ content.name }}
           </a>
         </li>
-        <li class="p-side-navigation__item">
-          <a href="#allow-password-autocompletion" class="p-side-navigation__link is-active">
-            allow-password-autocompletion
-          </a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#api-result-limit" class="p-side-navigation__link">
-            api-result-limit
-          </a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#cinder-backup" class="p-side-navigation__link">
-            cinder-backup
-          </a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#custom-theme" class="p-side-navigation__link">
-            custom-theme
-          </a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#customization-module" class="p-side-navigation__link">
-            customization-module
-          </a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#database" class="p-side-navigation__link">
-            database
-          </a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#database-user" class="p-side-navigation__link">
-            database-user
-          </a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#debug" class="p-side-navigation__link">
-            debug
-          </a>
-        </li>
+        {% endfor %}
       </ul>
     </div>
   </div>
   <div class="col-7 col-start-large-5">
     <ul class="p-list--divided">
-      <li class="p-list__item" id="action-managed-upgrade">
-        <p><strong>action-managed-upgrade</strong></p>
-        <p>If True enables openstack upgrades for this charm via juju actions. You will still need to set
-          openstack-origin to the new repository but instead of an upgrade running automatically across all units, it
-          will wait for you to
-          execute the openstack-upgrade action for this charm on each unit. If False it will revert to existing behavior
-          of
-          upgrading all units on config change.</p>
-        <p>Value type: String</p>
-        <p>Default value: None</p>
+      {% for content in configuration %}
+      <li class="p-list__item" id="{{ content.name }}">
+        <p><strong>{{ content.name }}</strong></p>
+        {{ content.description | safe }}
       </li>
-      <li class="p-list__item" id="allow-password-autocompletion">
-        <p><strong>allow-password-autocompletion</strong></p>
-        <p>Setting this to True will allow password form autocompletion by browser.</p>
-        <p>Value type: String</p>
-        <p>Default value: None</p>
-      </li>
-      <li class="p-list__item" id="api-result-limit">
-        <p><strong>api-result-limit</strong></p>
-        <p>The maximum number of objects (e.g. Swift objects or Glance images) to display on a single page before
-          providing a
-          paging element (a "more" link) to paginate results.</p>
-        <p>Value type: Interval</p>
-        <p>Default value: True</p>
-      </li>
-      <li class="p-list__item" id="cinder-backup">
-        <p><strong>cinder-backup</strong></p>
-        <p>Enable cinder backup panel.</p>
-        <p>Value type: Boolean</p>
-        <p>Default value: None</p>
-      </li>
-      <li class="p-list__item" id="custom-theme">
-        <p><strong>custom-theme</strong></p>
-        <p>Use a custom theme supplied as a resource. NOTE: This setting is supported >= OpenStack Mitaka and this setting is
-        mutually exclustive to ubuntu-theme and default-theme.</p>
-        <p>Value type: Boolean</p>
-        <p>Default value: None</p>
-      </li>
-      <li class="p-list__item" id="customization-module">
-        <p><strong>customization-module</strong></p>
-        <p>This option provides a means to enable customisation modules to modify existing dashboards and panels. This is available
-        from Liberty onwards.</p>
-        <p>Value type: String</p>
-        <p>Default value: None</p>
-      </li>
-      <li class="p-list__item" id="database">
-        <p><strong>database</strong></p>
-        <p>Database name for Horizon (if enabled).</p>
-        <p>Value type: String</p>
-        <p>Default value: Horizon</p>
-      </li>
-      <li class="p-list__item" id="database-user">
-        <p><strong>database-user</strong></p>
-        <p>Username for Horizon database access (if enabled).</p>
-        <p>Value type: String</p>
-        <p>Default value: Horizon</p>
-      </li>
-      <li class="p-list__item" id="debug">
-        <p><strong>debug</strong></p>
-        <p>Enable Django debug messages.</p>
-        <p>Value type: String</p>
-        <p>Default value: No</p>
-      </li>
+      {% endfor %}
     </ul>
   </div>
 </div>
