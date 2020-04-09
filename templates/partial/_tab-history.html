@@ -1,4 +1,8 @@
 <div class="u-fixed-width p-tabs__content" id="history">
+  <noscript>
+    <hr class="p-separator" />
+    <h2>History</h2>
+  </noscript>
   <p>Displaying release history for the <strong>‘latest/stable’</strong> channel:</p>
   <table class="p-table--mobile-card" role="grid">
     <thead>
@@ -11,7 +15,7 @@
       </tr>
     </thead>
     <tbody>
-    {% for release in channel_map.amd64.latest %}
+      {% for release in channel_map.amd64.latest %}
       <tr role="row">
         <td role="rowheader" aria-label="Date">{{ release.created }}</td>
         <td role="gridcell" aria-label="hadoop slave (charm)" class="u-align--right">{{ release.charm }}</td>
@@ -19,7 +23,7 @@
         <td role="gridcell" aria-label="Imagery" class="u-align--right">{{ release.imagery }}</td>
         <td role="gridcell" aria-label="Translations" class="u-align--right">{{ release.translations }}</td>
       </tr>
-    {% endfor %}
+      {% endfor %}
     </tbody>
   </table>
   <!-- TO DO - add functionality -->
