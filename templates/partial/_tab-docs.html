@@ -1,91 +1,97 @@
-<div class="row p-tabs__content" id="docs">
-  <div class="col-3">
-    <div class="p-side-navigation">
-      <ul class="p-side-navigation__list">
-        <li class="p-side-navigation__item--title">
-          <span class="p-side-navigation__text">Contents</span>
+<div class="u-fixed-width p-tabs__content" id="docs">
+  <noscript>
+    <hr class="p-separator" />
+    <h2>Docs</h2>
+  </noscript>
+  <div class="row">
+    <div class="col-3">
+      <div class="p-side-navigation">
+        <ul class="p-side-navigation__list">
+          <li class="p-side-navigation__item--title">
+            <span class="p-side-navigation__text">Contents</span>
+          </li>
+          <li class="p-side-navigation__item">
+            <a href="#deploying" class="p-side-navigation__link">
+              Deploying
+            </a>
+          </li>
+          <li class="p-side-navigation__item">
+            <a href="#network-restricted-environments" class="p-side-navigation__link is-active">
+              Network-Restricted Environments
+            </a>
+          </li>
+          <li class="p-side-navigation__item">
+            <a href="#status" class="p-side-navigation__link">
+              Status
+            </a>
+          </li>
+          <li class="p-side-navigation__item">
+            <a href="#smoke-test" class="p-side-navigation__link">
+              Smoke test
+            </a>
+          </li>
+          <li class="p-side-navigation__item">
+            <a href="#utilities" class="p-side-navigation__link">
+              Utilities
+            </a>
+          </li>
+          <li class="p-side-navigation__item">
+            <a href="#monitoring" class="p-side-navigation__link">
+              Monitoring
+            </a>
+          </li>
+          <li class="p-side-navigation__item">
+            <a href="#logging" class="p-side-navigation__link">
+              Logging
+            </a>
+          </li>
+          <li class="p-side-navigation__item">
+            <a href="#benchmarking" class="p-side-navigation__link">
+              Benchmarking
+            </a>
+          </li>
+          <li class="p-side-navigation__item">
+            <a href="#scaling" class="p-side-navigation__link">
+              Scaling
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-7 col-start-large-5">
+      <ul class="p-list">
+        <li class="p-list__item" id="deploying">
+          <h4>Deploying</h4>
+          <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <pre><code>juju deploy openstack-dashboard</code></pre>
+          <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <pre><code>juju deploy /path/to/bundle.yaml</code></pre>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+            aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
         </li>
-        <li class="p-side-navigation__item">
-          <a href="#deploying" class="p-side-navigation__link">
-            Deploying
-          </a>
+        <li class="p-list__item" id="network-restricted-environments">
+          <h4>Network-Restricted Environments</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+            aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
         </li>
-        <li class="p-side-navigation__item">
-          <a href="#network-restricted-environments" class="p-side-navigation__link is-active">
-            Network-Restricted Environments
-          </a>
+        <li class="p-list__item" id="verifying">
+          <h4>Verifying</h4>
+          <p><strong>Status</strong></p>
+          <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <pre><code>juju status</code></pre>
+          <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <pre><code>watch-n 2 juju status</code></pre>
+          <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Architecto possimus, quibusdam similique, sint minus nihil aliquid voluptatem asperiores, illum optio officia porro tempora. Esse cumque repellat, amet eaque exercitationem distinctio.</p>
         </li>
-        <li class="p-side-navigation__item">
-          <a href="#status" class="p-side-navigation__link">
-            Status
-          </a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#smoke-test" class="p-side-navigation__link">
-            Smoke test
-          </a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#utilities" class="p-side-navigation__link">
-            Utilities
-          </a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#monitoring" class="p-side-navigation__link">
-            Monitoring
-          </a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#logging" class="p-side-navigation__link">
-            Logging
-          </a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#benchmarking" class="p-side-navigation__link">
-            Benchmarking
-          </a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#scaling" class="p-side-navigation__link">
-            Scaling
-          </a>
+        <li class="p-list__item" id="smoke-test">
+          <h4>Smoke test</h4>
+          <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Architecto possimus, quibusdam similique, sint minus nihil aliquid voluptatem asperiores, illum optio officia porro tempora. Esse cumque repellat, amet eaque exercitationem distinctio.</p>
+          <pre><code>juju run-action namenode/0 smoke-test
+    juju run-action resourcemanager/0 smoke-test
+    juju run-action slave/0 smoke-test
+    juju run-action spark/0 smoke-test</code></pre>
         </li>
       </ul>
     </div>
-  </div>
-  <div class="col-7 col-start-large-5">
-    <ul class="p-list">
-      <li class="p-list__item" id="deploying">
-        <h4>Deploying</h4>
-        <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        <pre><code>juju deploy openstack-dashboard</code></pre>
-        <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        <pre><code>juju deploy /path/to/bundle.yaml</code></pre>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-        aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      </li>
-      <li class="p-list__item" id="network-restricted-environments">
-        <h4>Network-Restricted Environments</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-        aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      </li>
-      <li class="p-list__item" id="verifying">
-        <h4>Verifying</h4>
-        <p><strong>Status</strong></p>
-        <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        <pre><code>juju status</code></pre>
-        <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        <pre><code>watch-n 2 juju status</code></pre>
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Architecto possimus, quibusdam similique, sint minus nihil aliquid voluptatem asperiores, illum optio officia porro tempora. Esse cumque repellat, amet eaque exercitationem distinctio.</p>
-      </li>
-      <li class="p-list__item" id="smoke-test">
-        <h4>Smoke test</h4>
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Architecto possimus, quibusdam similique, sint minus nihil aliquid voluptatem asperiores, illum optio officia porro tempora. Esse cumque repellat, amet eaque exercitationem distinctio.</p>
-        <pre><code>juju run-action namenode/0 smoke-test
-juju run-action resourcemanager/0 smoke-test
-juju run-action slave/0 smoke-test
-juju run-action spark/0 smoke-test</code></pre>
-      </li>
-    </ul>
   </div>
 </div>

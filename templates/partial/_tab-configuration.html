@@ -1,28 +1,34 @@
-<div class="row p-tabs__content" id="configuration">
-  <div class="col-3">
-    <div class="p-side-navigation">
-      <ul class="p-side-navigation__list">
-        <li class="p-side-navigation__item--title">
-          <span class="p-side-navigation__text">Contents</span>
-        </li>
+<div class="u-fixed-width p-tabs__content" id="configuration">
+  <noscript>
+    <hr class="p-separator" />
+    <h2>Configuration</h2>
+  </noscript>
+  <div class="row">
+    <div class="col-3">
+      <div class="p-side-navigation">
+        <ul class="p-side-navigation__list">
+          <li class="p-side-navigation__item--title">
+            <span class="p-side-navigation__text">Contents</span>
+          </li>
+          {% for content in configuration %}
+          <li class="p-side-navigation__item">
+            <a href="#{{ content.name }}" class="p-side-navigation__link">
+              {{ content.name }}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="col-7 col-start-large-5">
+      <ul class="p-list--divided">
         {% for content in configuration %}
-        <li class="p-side-navigation__item">
-          <a href="#{{ content.name }}" class="p-side-navigation__link">
-            {{ content.name }}
-          </a>
+        <li class="p-list__item" id="{{ content.name }}">
+          <p><strong>{{ content.name }}</strong></p>
+          {{ content.description | safe }}
         </li>
         {% endfor %}
       </ul>
     </div>
-  </div>
-  <div class="col-7 col-start-large-5">
-    <ul class="p-list--divided">
-      {% for content in configuration %}
-      <li class="p-list__item" id="{{ content.name }}">
-        <p><strong>{{ content.name }}</strong></p>
-        {{ content.description | safe }}
-      </li>
-      {% endfor %}
-    </ul>
   </div>
 </div>
