@@ -70,15 +70,13 @@
 
   {% include "partial/_tab-overview.html" %}
   {% include "partial/_tab-configuration.html" %}
-  {% include "partial/_tab-contribute.html" %}
-
   {% if entity_type == "charm" %}
     {% include "partial/_tab-actions.html" %}
     {% include "partial/_tab-integrations.html" %}
     {% include "partial/_tab-docs.html" %}
   {% endif %}
-
   {% include "partial/_tab-history.html" %}
+  {% include "partial/_tab-contribute.html" %}
 
   {% include "partial/_top-bundles.html" %}
 </div>
