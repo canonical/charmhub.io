@@ -7,12 +7,12 @@
       </li>
       {% for category in categories %}
       <li class="p-side-navigation__item">
-        <a href="{% if active_filter('category', category.slug) %}{{ remove_filter('category', category.slug) }}{% else %}{{ add_filter('category', category.slug) }}{% endif %}" class="p-side-navigation__link{% if active_filter('category', category.slug) %} is-active{% endif %}">
-          {{ category.name }}
+        <div href="{% if active_filter('category', category.slug) %}{{ remove_filter('category', category.slug) }}{% else %}{{ add_filter('category', category.slug) }}{% endif %}" class="p-side-navigation__link{% if active_filter('category', category.slug) %} is-active{% endif %}">
+          <input type="checkbox" id="{{category.slug}}" >
+          <label for="{{category.slug}}" class="u-no-margin--bottom">{{ category.name }}</label>
           {% if active_filter('category', category.slug) %}
-          <div class="p-side-navigation__status is-toggle"><i class="p-icon--close"></i></div>
           {% endif %}
-        </a>
+        </div>
       </li>
       {% endfor %}
     </ul>
