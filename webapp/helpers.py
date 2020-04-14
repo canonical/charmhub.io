@@ -57,3 +57,12 @@ def active_filter(filter_type, filter_name):
         return True
 
     return False
+
+
+def get_filter_count():
+    filters = split_filters(request.args)
+    count = 0
+    for filter_type in filters:
+        count += len(filters[filter_type])
+
+    return count

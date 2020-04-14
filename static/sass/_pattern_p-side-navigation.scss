@@ -1,9 +1,0 @@
-@mixin p-charmhub-side-navigation {
-  .p-side-navigation-filter {
-    @extend %vf-p-side-navigation;
-
-    .p-side-navigation__text {
-      padding-left: $spv-inner--small;
-    }
-  }
-}

@@ -1,34 +1,31 @@
 <div class="col-3 u-hide--small">
-  <div class="p-side-navigation">
+  <div class="p-filter-list">
+    <div class="p-muted-heading">Filter ({{ get_filter_count() }})</div>
     {% if categories %}
-    <ul class="p-side-navigation__list">
-      <li class="p-side-navigation__item--title">
-        <span class="p-side-navigation__text">Categories</span>
+    <ul class="p-filter-list__list">
+      <li class="p-filter-list__item--title">
+        <span class="p-filter-list__text">Categories</span>
       </li>
       {% for category in categories %}
-      <li class="p-side-navigation__item">
-        <div href="{% if active_filter('category', category.slug) %}{{ remove_filter('category', category.slug) }}{% else %}{{ add_filter('category', category.slug) }}{% endif %}" class="p-side-navigation__link{% if active_filter('category', category.slug) %} is-active{% endif %}">
-          <input type="checkbox" id="{{category.slug}}" >
-          <label for="{{category.slug}}" class="u-no-margin--bottom">{{ category.name }}</label>
-          {% if active_filter('category', category.slug) %}
-          {% endif %}
-        </div>
+      <li class="p-filter-list__item">
+        <a href="{% if active_filter('category', category.slug) %}{{ remove_filter('category', category.slug) }}{% else %}{{ add_filter('category', category.slug) }}{% endif %}" class="p-filter-list__link{% if active_filter('category', category.slug) %} is-active{% endif %}">
+          <input type="checkbox" id="{{category.slug}}" {% if active_filter('category', category.slug) %}checked{% endif %}>
+          <div class="p-filter-list__label">{{ category.name }}</div>
+        </a>
       </li>
       {% endfor %}
     </ul>
     {% endif %}
     {% if publisher_list %}
-    <ul class="p-side-navigation__list">
-      <li class="p-side-navigation__item--title">
-        <span class="p-side-navigation__text">Publisher</span>
+    <ul class="p-filter-list__list">
+      <li class="p-filter-list__item--title">
+        <span class="p-filter-list__text">Publisher</span>
       </li>
       {% for publisher in publisher_list %}
-      <li class="p-side-navigation__item">
-        <a href="{% if active_filter('publisher', publisher.slug) %}{{ remove_filter('publisher', publisher.slug) }}{% else %}{{ add_filter('publisher', publisher.slug) }}{% endif %}" class="p-side-navigation__link{% if active_filter('publisher', publisher.slug) %} is-active{% endif %}">
-          {{ publisher.name }}
-          {% if active_filter('publisher', publisher.slug) %}
-          <div class="p-side-navigation__status is-toggle"><i class="p-icon--close"></i></div>
-          {% endif %}
+      <li class="p-filter-list__item">
+        <a href="{% if active_filter('publisher', publisher.slug) %}{{ remove_filter('publisher', publisher.slug) }}{% else %}{{ add_filter('publisher', publisher.slug) }}{% endif %}" class="p-filter-list__link{% if active_filter('publisher', publisher.slug) %} is-active{% endif %}">
+          <input type="checkbox" id="{{publisher.slug}}" {% if active_filter('publisher', publisher.slug) %}checked{% endif %}>
+          <div class="p-filter-list__label">{{ publisher.name }}</div>
         </a>
       </li>
       {% endfor %}

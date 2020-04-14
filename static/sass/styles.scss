@@ -81,9 +81,9 @@ $theme-default-nav: dark;
 
 @include p-charmhub-table-of-contents;
 
-@import "pattern_p-side-navigation";
+@import "pattern_p-filter-list";
 
-@include p-charmhub-side-navigation;
+@include p-charmhub-filter-list;
 
 @import "charmhub_p-bundle-icons";
 
