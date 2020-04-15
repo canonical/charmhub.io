@@ -1,18 +1,20 @@
-<div class="col-3 p-card">
-  <div class="u-clearfix">
-    <div class="u-float-left">
-      <a href="/{{ entity.package_name }}">
-        <img src="{{ entity.icon_url }}" alt="{{ entity.title}}" class="p-card__thumbnail">
-      </a>
+<div class="col-3">
+  <a href="/{{ entity.package_name }}" class="p-card--link-wrapper">
+    <div class="p-card">
+      <div class="u-clearfix">
+        <div class="u-float-left">
+          <img src="{{ entity.icon_url }}" alt="{{ entity.title}}" class="p-card__thumbnail">
+        </div>
+        <div class="u-float-right">
+          <img src="https://assets.ubuntu.com/v1/31c507a5-image-juju.svg" alt="" class="p-card__thumbnail--small">
+          <img src="https://assets.ubuntu.com/v1/31c507a5-image-juju.svg" alt="" class="p-card__thumbnail--small">
+        </div>
+      </div>
+      <h5 class="p-card__title u-no-margin--bottom">{{ entity.title }}</h5>
+      <div class="p-card__content">
+        <p class="u-text--subtle">by {{ entity.publisher }}</p>
+        <p><small>{{ entity.summary }}</small></p>
+      </div>
     </div>
-    <div class="u-float-right">
-      <img src="https://assets.ubuntu.com/v1/31c507a5-image-juju.svg" alt="" class="p-card__thumbnail">
-      <img src="https://assets.ubuntu.com/v1/31c507a5-image-juju.svg" alt="" class="p-card__thumbnail">
-    </div>
-  </div>
-  <h5 class="p-card__title u-no-margin--bottom">{{ entity.title }}</h5>
-  <div class="p-card__content">
-    <p class="u-text--subtle">by {{ entity.publisher }}</p>
-    <p><small>{{ entity.summary }}</small></p>
-  </div>
+  </a>
 </div>
