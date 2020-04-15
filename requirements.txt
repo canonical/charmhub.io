@@ -1,2 +1,1 @@
-canonicalwebteam.flask-base==0.4.3
-gunicorn[gevent]
+canonicalwebteam.flask-base==0.5.1
