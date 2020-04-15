@@ -6,7 +6,6 @@
 
     .p-card__title {
       padding-bottom: $spv-inner--small;
-      // padding-top: $spv-inner--large;
 
       .p-card__title-text {
         display: inline;
@@ -22,6 +21,17 @@
     .p-card__content {
       padding-bottom: $spv-inner--large;
       padding-top: $spv-inner--large;
+    }
+  }
+
+  // Make the whole card clickable and underline title only on hover
+  .p-card--link-wrapper {
+    &:hover {
+      text-decoration: none;
+
+      .p-card__title {
+        text-decoration: underline;
+      }
     }
   }
 

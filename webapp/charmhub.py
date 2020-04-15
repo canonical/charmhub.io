@@ -37,7 +37,7 @@ mock_search_results = [
         "type": "bundle",
         "publisher": "Tomas CaseyWilcox",
         "sections": [{"featured": True, "name": "finance"}],
-        "summary": "Lightweight Bitcoin Client",
+        "summary": "Lightweight Bitcoin Client for Amazon Web Services",
         "title": "electrum",
     },
     {
@@ -93,7 +93,7 @@ mock_search_results = [
         "package_name": "android-studio",
         "publisher": "Snapcrafters",
         "sections": [{"featured": True, "name": "development"}],
-        "summary": "The IDE for Android",
+        "summary": "The IDE for Android and other platforms",
         "title": "Android Studio",
     },
 ]
