@@ -7,42 +7,7 @@
 {% block content %}
 <section class="p-strip--charmhub is-shallow is-dark">
   <div class="u-fixed-width">
-    <h1 class="p-heading--2">The app store for clouds</h1>
-    <p>Find and deploy <a href="" class="p-link--inverted">Juju</a> solutions.</p>
+    <h1 class="p-heading--2">This is the home page</h1>
   </div>
-</section>
-<section class="p-strip--main">
-  <div class="row">
-
-    {% include "partial/_side-navigation.html" %}
-
-    <div class="col-9">
-      <div class="row u-vertically-center">
-        <div class="col-2">
-          <h4 class="p-muted-heading u-float-left">326 items</h4>
-        </div>
-        <div class="col-3 col-start-large-7">
-          <!-- TO DO - add filter functionality -->
-          <select name="filter">
-            <option disabled="disabled" value="" selected="">Sort by</option>
-            <option value="/careers/engineering">Most popular</option>
-            <option value="/careers/tech-ops">Name A/Z</option>
-            <option value="/careers/commercial-ops">Name Z/A</option>
-            <option value="/careers/commercial-ops">Author</option>
-            <option value="/careers/all">Featured</option>
-          </select>
-        </div>
-      </div>
-      <div class="row">
-      {% if results %}
-        {% for entity in results %}
-          {% include "partial/_entity-card.html" %}
-        {% endfor %}
-      {% endif %}
-      </div>
-      <div class="u-fixed-width">
-        <div class="u-align--center"><i class="p-icon--spinner u-animation--spin"></i></div>
-      </div>
-    </div>
 </section>
 {% endblock %}

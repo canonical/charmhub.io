@@ -31,12 +31,22 @@ def utility_processor():
 
 @app.route("/")
 def index():
+    return render_template("index.html")
+
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+
+@app.route("/collections")
+def collections():
     context = {
         "categories": mock_categories,
         "publisher_list": mock_publisher_list,
         "results": mock_search_results,
     }
-    return render_template("index.html", **context)
+    return render_template("collections.html", **context)
 
 
 @app.route('/<regex("' + config.details_regex + '"):entity_name>')
