@@ -18,33 +18,39 @@
         <a href="#main-content">Jump to main content</a>
       </span>
       <!-- TO DO - update navigation -->
-      <!-- <ul class="p-navigation__links" role="menu">
+      <ul class="p-navigation__links" role="menu">
         <li
-          class="p-navigation__link {% if request.path == 'developers' %}is-selected{% endif %}"
+          class="p-navigation__link {% if request.path == '/about' %}is-selected{% endif %}"
           role="menuitem">
-          <a href="/developers">
-            Developers
+          <a href="/about">
+            About
           </a>
         </li>
         <li
-          class="p-navigation__link {% if request.path == 'discourse' %}is-selected{% endif %}"
-          role="menuitem">
-          <a href="/discourse" class="p-link--external">
-            Discourse
-          </a>
-        </li>
-        <li
-          class="p-navigation__link {% if page_slug == 'docs' %}is-selected{% endif %}"
+          class="p-navigation__link {% if request.path == '/docs' %}is-selected{% endif %}"
           role="menuitem">
           <a href="/docs">
             Docs
           </a>
         </li>
+        <li
+          class="p-navigation__link {% if request.path == '/tutorials' %}is-selected{% endif %}"
+          role="menuitem">
+          <a href="/tutorials">
+            Tutorials
+          </a>
+        </li>
+        <li class="p-navigation__link {% if request.path == '/discourse' %}is-selected{% endif %}" role="menuitem">
+          <a href="/discourse" class="p-link--external">
+            Discourse
+          </a>
+        </li>
+        <li class="p-navigation__link {% if request.path == '/collections' %}is-selected{% endif %}" role="menuitem">
+          <a href="/collections">
+            Collections
+          </a>
+        </li>
       </ul>
-      <ul class="p-navigation__links" role="menu">
-        <li class="p-navigation__link" role="menuitem"><a href="#"><i
-              class="p-icon--user"></i> Developer account</a></li>
-      </ul> -->
     </nav>
   </div>
 </header>
