@@ -39,14 +39,14 @@ def about():
     return render_template("about.html")
 
 
-@app.route("/collections")
-def collections():
+@app.route("/store")
+def store():
     context = {
         "categories": mock_categories,
         "publisher_list": mock_publisher_list,
         "results": mock_search_results,
     }
-    return render_template("collections.html", **context)
+    return render_template("store.html", **context)
 
 
 @app.route('/<regex("' + config.details_regex + '"):entity_name>')
