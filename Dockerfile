@@ -14,6 +14,12 @@ WORKDIR /srv
 ADD package.json .
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn yarn install
 
+# Build stage: Run "yarn run build-js"
+# ===
+FROM yarn-dependencies AS build-js
+ADD static/js static/js
+RUN yarn run build-js
+
 # Build stage: Run "yarn run build-css"
 # ===
 FROM yarn-dependencies AS build-css
@@ -37,6 +43,7 @@ ENV PATH="/root/.local/bin:${PATH}"
 # Import code, build assets and mirror list
 ADD . .
 RUN rm -rf package.json yarn.lock .babelrc webpack.config.js requirements.txt
+COPY --from=build-js /srv/static/js static/js
 COPY --from=build-css /srv/static/css static/css
 
 # Set build ID
