@@ -1,13 +1,14 @@
 from canonicalwebteam.flask_base.app import FlaskBase
-from flask import render_template, request
+from canonicalwebteam.store_api.stores.charmstore import CharmStore
+from flask import jsonify, render_template, request
 
 from webapp import helpers
 from webapp.charmhub import (
     config,
-    mock_entities,
-    mock_search_results,
     mock_categories,
+    mock_entities,
     mock_publisher_list,
+    mock_search_results,
 )
 
 app = FlaskBase(
@@ -18,6 +19,7 @@ app = FlaskBase(
     template_404="404.html",
     template_500="500.html",
 )
+store = CharmStore()
 
 
 @app.context_processor
@@ -41,6 +43,9 @@ def about():
 
 @app.route("/store")
 def store():
+    api_search_results = store.find()
+    print(api_search_results)
+
     context = {
         "categories": mock_categories,
         "publisher_list": mock_publisher_list,
@@ -51,7 +56,12 @@ def store():
 
 @app.route('/<regex("' + config.details_regex + '"):entity_name>')
 def details(entity_name):
-    # TO DO - get entity info from API
+    # Get entity info from API
+    try:
+        entity = store.get_item_details(entity_name)
+        return jsonify(entity)
+    except Exception:
+        pass
 
     # TO DO this will not be required when we have the data from the API
     entity_type = request.args.get("type")
