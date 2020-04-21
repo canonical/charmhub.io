@@ -11,22 +11,21 @@ store = Blueprint(
 
 @store.route("/store")
 def store_view():
-    api_search_results = app.store_api.find()
+    query = request.args.get("q", default=None, type=str)
+
+    if query:
+        api_search_results = app.store_api.find(query=query)
+    else:
+        api_search_results = app.store_api.find()
 
     context = {
         "categories": data.mock_categories,
         "publisher_list": data.mock_publisher_list,
         "results": api_search_results.get("results", []),
+        "q": query,
     }
 
     return render_template("store.html", **context)
-
-
-@store.route("/search")
-def search():
-    query = request.args.get("q", default="", type=str)
-
-    return render_template("store.html", results=app.store_api.find(q=query))
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')

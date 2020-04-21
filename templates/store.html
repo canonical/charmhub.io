@@ -19,9 +19,15 @@
     <div class="col-9">
       <div class="row u-vertically-center">
         <div class="col-2">
-          <h4 class="p-muted-heading u-float-left">326 items</h4>
+          <h4 class="p-muted-heading u-float-left">{{ results|length }} items</h4>
         </div>
-        <div class="col-3 col-start-large-7">
+        <div class="col-4 col-start-large-4">
+          <form class="p-search-box">
+            <input type="search" class="p-search-box__input" name="q" placeholder="Search" {% if q %}value="{{ q }}"{% endif %} />
+            <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search"></i></button>
+          </form>
+        </div>
+        <div class="col-2">
           <!-- TO DO - add filter functionality -->
           <select name="filter">
             <option disabled="disabled" value="" selected="">Sort by</option>
