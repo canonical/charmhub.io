@@ -1,25 +1,23 @@
 from canonicalwebteam.flask_base.app import FlaskBase
 from canonicalwebteam.store_api.stores.charmstore import CharmStore
-from flask import jsonify, render_template, request
+from flask import render_template
 
-from webapp import helpers
-from webapp.charmhub import (
-    config,
-    mock_categories,
-    mock_entities,
-    mock_publisher_list,
-    mock_search_results,
-)
+from webapp import helpers, config
+from webapp.store.views import store
+from webapp.error_handling import register_error_handlers
 
 app = FlaskBase(
     __name__,
-    config.app_name,
+    config.APP_NAME,
     template_folder="../templates",
     static_folder="../static",
     template_404="404.html",
     template_500="500.html",
 )
-store = CharmStore()
+app.store_api = CharmStore()
+
+register_error_handlers(app)
+app.register_blueprint(store)
 
 
 @app.context_processor
@@ -39,35 +37,3 @@ def index():
 @app.route("/about")
 def about():
     return render_template("about.html")
-
-
-@app.route("/store")
-def store():
-    api_search_results = store.find()
-    print(api_search_results)
-
-    context = {
-        "categories": mock_categories,
-        "publisher_list": mock_publisher_list,
-        "results": mock_search_results,
-    }
-    return render_template("store.html", **context)
-
-
-@app.route('/<regex("' + config.details_regex + '"):entity_name>')
-def details(entity_name):
-    # Get entity info from API
-    try:
-        entity = store.get_item_details(entity_name)
-        return jsonify(entity)
-    except Exception:
-        pass
-
-    # TO DO this will not be required when we have the data from the API
-    entity_type = request.args.get("type")
-    if entity_type == "bundle":
-        context = mock_entities[0]
-    else:
-        context = mock_entities[1]
-
-    return render_template("details.html", **context)

@@ -1,2 +1,2 @@
 canonicalwebteam.flask-base==0.5.1
-canonicalwebteam.store-api==2.0.2
+canonicalwebteam.store-api==2.0.3
