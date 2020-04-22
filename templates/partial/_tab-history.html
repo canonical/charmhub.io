@@ -15,13 +15,13 @@
       </tr>
     </thead>
     <tbody>
-      {% for release in channel_map.amd64.latest %}
+      {% for release in package.store_front.channel_map["latest"]["stable"] %}
       <tr role="row">
-        <td role="rowheader" aria-label="Date">{{ release.created }}</td>
-        <td role="gridcell" aria-label="hadoop slave (charm)" class="u-align--right">{{ release.charm }}</td>
-        <td role="gridcell" aria-label="Jdk" class="u-align--right">{{ release.jdk }}</td>
-        <td role="gridcell" aria-label="Imagery" class="u-align--right">{{ release.imagery }}</td>
-        <td role="gridcell" aria-label="Translations" class="u-align--right">{{ release.translations }}</td>
+        <td role="rowheader" aria-label="Date">{{ release.created_at }}</td>
+        <td role="gridcell" aria-label="hadoop slave (charm)" class="u-align--right">N/A</td>
+        <td role="gridcell" aria-label="Jdk" class="u-align--right">N/A</td>
+        <td role="gridcell" aria-label="Imagery" class="u-align--right">N/A</td>
+        <td role="gridcell" aria-label="Translations" class="u-align--right">N/A</td>
       </tr>
       {% endfor %}
     </tbody>

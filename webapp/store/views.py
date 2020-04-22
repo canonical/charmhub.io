@@ -1,7 +1,9 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint
 from flask import current_app as app
+from flask import render_template, request
 
 from webapp.config import DETAILS_VIEW_REGEX
+from webapp.store import logic
 from webapp.store.content import data
 
 store = Blueprint(
@@ -11,12 +13,22 @@ store = Blueprint(
 
 @store.route("/store")
 def store_view():
-    api_search_results = app.store_api.find()
+    api_search_results = app.store_api.find().get("results")
+
+    for i, item in enumerate(api_search_results):
+        api_search_results[i] = data.mock_missing_properties(
+            api_search_results[i]
+        )
+
+    results = api_search_results + data.gen_mock_data()
+
+    for i, item in enumerate(results):
+        results[i] = logic.add_store_front_data(results[i])
 
     context = {
         "categories": data.mock_categories,
         "publisher_list": data.mock_publisher_list,
-        "results": api_search_results.get("results", []),
+        "results": results,
     }
 
     return render_template("store.html", **context)
@@ -32,19 +44,12 @@ def search():
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
 def details(entity_name):
     # Get entity info from API
-    try:
-        entity = app.store_api.get_item_details(entity_name)
-    except Exception:
-        pass
+    package = data.mock_missing_properties(
+        app.store_api.get_item_details(entity_name)
+    )
 
-    if entity:
-        return render_template("details.html", **entity)
+    package = logic.add_store_front_data(package)
 
-    # TO DO this will not be required when we have the data from the API
-    entity_type = request.args.get("type")
-    if entity_type == "bundle":
-        context = data.mock_entities[0]
-    else:
-        context = data.mock_entities[1]
-
-    return render_template("details.html", **context)
+    return render_template(
+        "details.html", package=package, package_type=package["package-type"]
+    )
