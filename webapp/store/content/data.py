@@ -1,88 +1,13 @@
 # Dummy data for home page
-mock_search_results = [
-    {
-        "developer_validation": "unproven",
-        "entity_type": "bundle",
-        "icon_url": "https://dashboard.snapcraft.io/site_media/appmedia/"
-        "2016/09/logo_-_256px.png",
-        "media": [
-            {
-                "type": "icon",
-                "url": "https://dashboard.snapcraft.io/site_media/"
-                "appmedia/2016/09/logo_-_256px.png",
-            },
-            {
-                "type": "screenshot",
-                "url": "https://dashboard.snapcraft.io/site_media/"
-                "appmedia/2016/09/"
-                "Electrum_2.6.4__-__default_wallet_018.png",
-            },
-        ],
-        "origin": "antonwilc0x",
-        "package_name": "electrum",
-        "type": "bundle",
-        "publisher": "Tomas CaseyWilcox",
-        "sections": [{"featured": True, "name": "finance"}],
-        "summary": "Lightweight Bitcoin Client for Amazon Web Services",
-        "title": "electrum",
-    },
-    {
-        "developer_validation": "verified",
-        "entity_type": "charm",
-        "icon_url": "https://dashboard.snapcraft.io/site_media/"
-        "appmedia/2017/06/copy_1.ico.png",
-        "media": [
-            {
-                "type": "icon",
-                "url": "https://dashboard.snapcraft.io/site_media/"
-                "appmedia/2017/06/copy_1.ico.png",
-            },
-            {
-                "type": "screenshot",
-                "url": "https://dashboard.snapcraft.io/site_media/"
-                "appmedia/2017/06/"
-                "Screen_Shot_2017-06-07_at_8.16.09_AM.png",
-            },
-        ],
-        "origin": "aws",
-        "package_name": "aws-cli",
-        "type": "charm",
-        "publisher": "Amazon Web Services",
-        "sections": [{"featured": True, "name": "server-and-cloud"}],
-        "summary": "Universal Command Line Interface for"
-        " Amazon Web Services",
-        "title": "aws-cli",
-    },
-    {
-        "developer_validation": "unproven",
-        "entity_type": "charm",
-        "icon_url": "https://dashboard.snapcraft.io/site_media/appmedia"
-        "/2018/03/rsz_android_studio_icon.png",
-        "media": [
-            {
-                "type": "icon",
-                "url": "https://dashboard.snapcraft.io/site_media"
-                "/appmedia/2018/03/rsz_android_studio_icon.png",
-            },
-            {
-                "type": "screenshot",
-                "url": "https://dashboard.snapcraft.io/site_media"
-                "/appmedia/2018/03/android-studio.png",
-            },
-            {
-                "type": "screenshot",
-                "url": "https://dashboard.snapcraft.io/site_media"
-                "/appmedia/2019/04/Screenshot_20190418_002828.png",
-            },
-        ],
-        "origin": "snapcrafters",
-        "package_name": "android-studio",
-        "publisher": "Snapcrafters",
-        "sections": [{"featured": True, "name": "development"}],
-        "summary": "The IDE for Android and other platforms",
-        "title": "Android Studio",
-    },
-]
+from faker import Faker
+from faker.providers import internet
+from random import shuffle, choice
+import collections.abc
+
+
+fake = Faker()
+fake.add_provider(internet)
+
 
 mock_categories = [
     {"name": "Analytics", "slug": "analytics"},
@@ -111,40 +36,97 @@ mock_publisher_list = [
     {"name": "Spicule", "slug": "spicule"},
 ]
 
+media_url = "https://dashboard.snapcraft.io/site_media/appmedia/"
 
-# Dummy data for details page
-mock_entities = [
-    {
-        "entity-id": "RT9mcUhVsRYrDLG8qnvGiy26NKvv6Qkd",
-        "entity_type": "bundle",
-        "entity_title": "VLC",
-        "package_name": "vlc",
-        "categories": [{"slug": "photo-and-video", "name": "Photo and Video"}],
-        "version": "3.0.8",
-        "license": "GPL-2.0+",
-        "repository_url": "https://github.com/openstack-charmers/"
-        "openstack-bundles",
-        "publisher": "VideoLAN",
-        "username": "videolan",
-        "screenshots": [
-            {
-                "height": "None",
-                "type": "screenshot",
-                "url": "https://dashboard.snapcraft.io/site_media/"
-                "appmedia/2016/07/vlc-2.0-poney.jpg",
-                "width": "None",
+app_icons = [
+    "2018/03/rsz_android_studio_icon.png",
+    "2016/09/logo_-_256px.png",
+    "2017/06/copy_1.ico.png",
+    "2018/11/b8a85a31-MicroK8s_SnapStore_icon.png",
+    "2020/02/MANO-Color.png",
+    "2018/07/io.snapcraft.Store.png",
+]
+
+
+def get_fake_channel_map_entry(risk, revision):
+    return {
+        "channel": {
+            "name": "latest/" + risk,
+            "platform": {
+                "os": "ubuntu",
+                "series": "bionic",
+                "architecture": "all",
             },
-            {
-                "height": "None",
-                "type": "screenshot",
-                "url": "https://dashboard.snapcraft.io/site_media/"
-                "appmedia/2018/04/"
-                "2018-04-26-161203_1126x899_scrot_yBFL55L.png",
-                "width": "None",
+            "released-at": "2019-12-16T19:44:44.076943+00:00",
+            "risk": risk,
+            "track": "latest",
+        },
+        "revision": {
+            "config-yaml": 'one: 1\ntwo: 2\nitems: [1,2,3,4]\n"',
+            "created-at": "2019-12-16T19:20:26.673192+00:00",
+            "download": {
+                "hash-sha-256": "92a8b825ed1108ab64864a7df05eb84ed3925a8d5e"
+                "4741169185f77cef9b52517ad4b79396bab43b19e544a908ec83c4",
+                "size": 12042240,
+                "url": "https://api.snapcraft.io/api/v1/snaps/download/"
+                "QLLfVfIKfcnTZiPFnmGcigB2vB605ZY7_16.snap",
             },
+            "metadata-yaml": "name: myname\n"
+            "version: 1.0.3\n"
+            "summary: A charm or bundle.\n"
+            "description: |\n"
+            "  This will install and setup services "
+            "optimized to run in the cloud.\n"
+            "  By default it will place Ngnix configured "
+            "to scale horizontally\n"
+            "  with Nginx's reverse proxy.\n",
+            "platforms": [
+                {"os": "ubuntu", "series": "bionic", "architecture": "all"},
+                {"os": "ubuntu", "series": "trusty", "architecture": "all"},
+            ],
+            "revision": revision,
+            "version": "1.0.3",
+        },
+    }
+
+
+def get_fake_charm():
+    return {
+        "package-type": "charm",
+        "id": "charmCHARMcharmCHARMcharmCHARM" + str(fake.random_int(10, 99)),
+        "name": fake.domain_word(),
+        "charm": {
+            "categories": [
+                {"name": "blog", "featured": True},
+                {"name": "applications", "featured": False},
+            ],
+            "description": fake.text(),
+            "license": "Apache-2.0",
+            "media": [
+                {
+                    "type": "icon",
+                    "url": f"{media_url}{choice(app_icons)}",
+                    "height": 256,
+                    "width": 256,
+                },
+            ],
+            "publisher": {"display-name": choice(mock_publisher_list)["name"]},
+            "summary": fake.text(),
+            "used-by": [
+                "wordpress-everlast",
+                "wordpress-jorge",
+                "wordpress-site",
+            ],
+        },
+        "channel-map": [
+            get_fake_channel_map_entry("stable", 16),
+            get_fake_channel_map_entry("candidate", 16),
+            get_fake_channel_map_entry("beta", 16),
+            get_fake_channel_map_entry("edge", 16),
         ],
-        "videos": [],
-        "prices": {},
+        "revision": get_fake_channel_map_entry("stable", 16),
+        # Added from us:
+        "supported_os_list": ["18.04 LTS", "19.10"],
         "configuration": [
             {
                 "name": "action-managed-upgrade",
@@ -210,50 +192,42 @@ mock_entities = [
                 "Value type: String</p>\n<p>Default value: No</p>",
             },
         ],
-        "contact": "https://www.videolan.org/support/",
-        "website": "https://www.videolan.org/vlc/",
-        "summary": "The ultimate media player",
-        "description": "<p>VLC is the VideoLAN project's media player.</p>"
-        "\n<p>Completely open source and privacy-friendly, it plays every "
-        "multimedia file and streams.</p>\n<p>It notably plays MKV, MP4, "
-        "MPEG, MPEG-2, MPEG-4, DivX, MOV, WMV, QuickTime, WebM, FLAC,"
-        " MP3, Ogg/Vorbis files, BluRays, DVDs, VCDs, podcasts, and "
-        "multimedia streams from various network sources. It supports "
-        "subtitles, closed captions and is translated in numerous "
-        "languages.</p>\n",
-        "channel_map": {
-            "amd64": {
-                "latest": [
-                    {
-                        "created": "2019/7/4",
-                        "channel": "stable",
-                        "risk": "stable",
-                        "charm": "1.8",
-                        "jdk": "12",
-                        "imagery": "13",
-                        "translations": "7",
-                    },
-                    {
-                        "created": "22019/6/12",
-                        "channel": "stable",
-                        "risk": "stable",
-                        "charm": "1.7",
-                        "jdk": "12",
-                        "imagery": "11",
-                        "translations": "6",
-                    },
-                    {
-                        "created": "22019/4/3",
-                        "channel": "stable",
-                        "risk": "stable",
-                        "charm": "1.7",
-                        "jdk": "13",
-                        "imagery": "13",
-                        "translations": "6",
-                    },
-                ]
-            }
+    }
+
+
+def get_fake_bundle():
+    return {
+        "package-type": "bundle",
+        "id": "bundleBUNDLEbundleBUNDLEbundle" + str(fake.random_int(10, 99)),
+        "name": fake.domain_word(),
+        "bundle": {
+            "categories": [{"name": "networking", "featured": False}],
+            "description": fake.text(),
+            "license": "LGPL-2.1+",
+            "media": [
+                {
+                    "type": "icon",
+                    "url": f"{media_url}{choice(app_icons)}",
+                    "height": 125,
+                    "width": 125,
+                },
+                {
+                    "type": "bundle-components",
+                    "url": "https://api.jujucharms.com/charmstore/v5/bundle/"
+                    "osm-40/diagram.svg",
+                },
+            ],
+            "summary": fake.text(),
+            "publisher": {"display-name": choice(mock_publisher_list)["name"]},
         },
+        "channel-map": [
+            get_fake_channel_map_entry("stable", 61),
+            get_fake_channel_map_entry("candidate", 61),
+            get_fake_channel_map_entry("beta", 61),
+            get_fake_channel_map_entry("edge", 61),
+        ],
+        "revision": get_fake_channel_map_entry("stable", 61),
+        # Added from us:
         "bundle_content": [
             {
                 "icon_url": "https://api.jujucharms.com/charmstore/v5/"
@@ -277,51 +251,6 @@ mock_entities = [
             },
         ],
         "supported_os_list": ["18.04 LTS", "19.10"],
-        "deployments": "6021",
-        "has_stable": True,
-        "developer_validation": "verified",
-        "default_track": "latest",
-        "lowest_risk_available": "stable",
-        "confinement": "strict",
-        "trending": False,
-        "filesize": "212.8 MB",
-        "last_updated": "16 December 2019",
-        "last_updated_raw": "2019-12-16T21:50:10.209544+00:00",
-        "is_users_snap": False,
-        "unlisted": False,
-    },
-    {
-        "entity-id": "RT9mcUhVsRYrDLG8qnvGiy26NKvv6Qkd",
-        "entity_type": "charm",
-        "entity_title": "VLC",
-        "package_name": "vlc",
-        "categories": [{"slug": "photo-and-video", "name": "Photo and Video"}],
-        "icon_url": "https://dashboard.snapcraft.io/site_media/"
-        "appmedia/2016/07/vlc.png",
-        "repository_url": "https://github.com/openstack/charm-neutron-api",
-        "version": "3.0.8",
-        "license": "GPL-2.0+",
-        "publisher": "VideoLAN",
-        "username": "videolan",
-        "screenshots": [
-            {
-                "height": "None",
-                "type": "screenshot",
-                "url": "https://dashboard.snapcraft.io/site_media/"
-                "appmedia/2016/07/vlc-2.0-poney.jpg",
-                "width": "None",
-            },
-            {
-                "height": "None",
-                "type": "screenshot",
-                "url": "https://dashboard.snapcraft.io/site_media/"
-                "appmedia/2018/04/"
-                "2018-04-26-161203_1126x899_scrot_yBFL55L.png",
-                "width": "None",
-            },
-        ],
-        "videos": [],
-        "prices": {},
         "configuration": [
             {
                 "name": "action-managed-upgrade",
@@ -387,186 +316,29 @@ mock_entities = [
                 "Value type: String</p>\n<p>Default value: No</p>",
             },
         ],
-        "contact": "https://www.videolan.org/support/",
-        "website": "https://www.videolan.org/vlc/",
-        "summary": "The ultimate media player",
-        "description": "<p>VLC is the VideoLAN project's media player.</p>"
-        "\n<p>Completely open source and privacy-friendly, it plays every "
-        "multimedia file and streams.</p>\n<p>It notably plays MKV, MP4, "
-        "MPEG, MPEG-2, MPEG-4, DivX, MOV, WMV, QuickTime, WebM, FLAC,"
-        " MP3, Ogg/Vorbis files, BluRays, DVDs, VCDs, podcasts, and "
-        "multimedia streams from various network sources. It supports "
-        "subtitles, closed captions and is translated in numerous "
-        "languages.</p>\n",
-        "integrations": [
-            {
-                "category": "certificates: tls-certificates",
-                "software": [
-                    {
-                        "name": "Vault",
-                        "icon_url": "https://assets.ubuntu.com/v1/425efe3a-"
-                        "lxd.svg",
-                    },
-                    {
-                        "name": "Easyrsa",
-                        "icon_url": "https://assets.ubuntu.com/v1/425efe3a-"
-                        "lxd.svg",
-                    },
-                ],
-            },
-            {
-                "category": "ha: hacluster",
-                "software": [
-                    {
-                        "name": "Hacluster",
-                        "icon_url": "https://assets.ubuntu.com/v1/425efe3a-"
-                        "lxd.svg",
-                    },
-                ],
-            },
-            {
-                "category": "identity-service: keystone",
-                "software": [
-                    {
-                        "name": "Keystone",
-                        "icon_url": "https://assets.ubuntu.com/v1/425efe3a-"
-                        "lxd.svg",
-                    },
-                    {
-                        "name": "Keystone K8s",
-                        "icon_url": "https://assets.ubuntu.com/v1/425efe3a-"
-                        "lxd.svg",
-                    },
-                    {
-                        "name": "Contrail Openstack",
-                        "icon_url": "https://assets.ubuntu.com/v1/425efe3a-"
-                        "lxd.svg",
-                    },
-                ],
-            },
-        ],
-        "actions": [
-            {
-                "name": "pause",
-                "hint": "Pause the openstack-dashboard unit",
-                "description": "Set a value for the pool",
-                "params": [
-                    {
-                        "name": "pool-name",
-                        "content": {
-                            "type": "string",
-                            "description": "The pool to set this variable on.",
-                        },
-                    },
-                ],
-            },
-            {
-                "name": "resume",
-                "hint": "Resume the openstack-dashboard unit",
-                "description": "Set a value for the pool",
-                "params": [
-                    {
-                        "name": "pool-name",
-                        "content": {
-                            "type": "string",
-                            "description": "The pool to set this variable on.",
-                        },
-                    },
-                ],
-            },
-            {
-                "name": "openstack-upgrade",
-                "hint": "",
-                "description": "Set a value for the pool",
-                "params": [
-                    {
-                        "name": "pool-name",
-                        "content": {
-                            "type": "string",
-                            "description": "The pool to set this variable on.",
-                        },
-                    },
-                    {
-                        "name": "Key",
-                        "content": {
-                            "type": "string",
-                            "description": "Any valid Ceph key from http://"
-                            "docs.ceph.com/docs/master/rados/operations/"
-                            "pools/#set-pool-values",
-                        },
-                    },
-                    {
-                        "name": "Value",
-                        "content": {
-                            "type": "string",
-                            "description": "The value to set",
-                        },
-                    },
-                ],
-                "required": "[key, value, pool-name]",
-                "additionalProperties": "False",
-            },
-            {
-                "name": "security-checklist",
-                "hint": "Validate the running configuration against the"
-                " OpenStack security guides checklist.",
-                "description": "Set a value for the pool",
-                "params": [
-                    {
-                        "name": "pool-name",
-                        "content": {
-                            "type": "string",
-                            "description": "The pool to set this variable on.",
-                        },
-                    },
-                ],
-            },
-        ],
-        "channel_map": {
-            "amd64": {
-                "latest": [
-                    {
-                        "created": "2019/7/4",
-                        "channel": "stable",
-                        "risk": "stable",
-                        "charm": "1.8",
-                        "jdk": "12",
-                        "imagery": "13",
-                        "translations": "7",
-                    },
-                    {
-                        "created": "22019/6/12",
-                        "channel": "stable",
-                        "risk": "stable",
-                        "charm": "1.7",
-                        "jdk": "12",
-                        "imagery": "11",
-                        "translations": "6",
-                    },
-                    {
-                        "created": "22019/4/3",
-                        "channel": "stable",
-                        "risk": "stable",
-                        "charm": "1.7",
-                        "jdk": "13",
-                        "imagery": "13",
-                        "translations": "6",
-                    },
-                ]
-            }
-        },
-        "supported_os_list": ["14.04 LTS", "18.04 LTS", "19.04", "19.10"],
-        "deployments": "6021",
-        "has_stable": True,
-        "developer_validation": "verified",
-        "default_track": "latest",
-        "lowest_risk_available": "stable",
-        "confinement": "strict",
-        "trending": False,
-        "filesize": "212.8 MB",
-        "last_updated": "16 December 2019",
-        "last_updated_raw": "2019-12-16T21:50:10.209544+00:00",
-        "is_users_snap": False,
-        "unlisted": False,
-    },
-]
+    }
+
+
+def gen_mock_data(merge_with=[]):
+    bundles = [get_fake_bundle() for i in range(fake.random_int(5, 15))]
+    charms = [get_fake_charm() for i in range(fake.random_int(5, 15))]
+    list_data = bundles + charms
+    shuffle(list_data)
+    return list_data
+
+
+def mock_missing_properties(package):
+    def update(d, u):
+        for k, v in u.items():
+            if isinstance(v, collections.abc.Mapping):
+                d[k] = update(d.get(k, {}), v)
+            else:
+                d[k] = v
+        return d
+
+    if package["package-type"] == "charm":
+        fake_package = get_fake_charm()
+    else:
+        fake_package = get_fake_bundle()
+
+    return update(fake_package, package)
