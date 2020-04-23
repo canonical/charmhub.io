@@ -1,21 +1,19 @@
 <div class="col-3">
-  <a href="/{{ package.name }}" class="p-card--link-wrapper">
-    <div class="p-card">
-      <div class="u-clearfix">
-        <div class="u-float-left">
-          <img src="{{ package.store_front.icons[0] }}" alt="{{ package.title}}" class="p-card__thumbnail">
-        </div>
-        <div class="u-float-right">
-          <img src="https://assets.ubuntu.com/v1/31c507a5-image-juju.svg" alt="" class="p-card__thumbnail--small">
-          <img src="https://assets.ubuntu.com/v1/31c507a5-image-juju.svg" alt="" class="p-card__thumbnail--small">
-        </div>
+  <a href="/{{ package.name }}" class="p-button p-card">
+    <div class="u-clearfix">
+      <div class="u-float-left">
+        <img src="{{ package.store_front.icons[0] }}" alt="{{ package.title}}" class="p-card__thumbnail">
       </div>
-      <h5 class="p-card__title u-no-margin--bottom">{{ package.name }}</h5>
-      <div class="p-card__content">
-        <p class="u-text--subtle">by {{ package.store_front.publisher_name }}</p>
+      <div class="u-float-right">
+        <img src="https://assets.ubuntu.com/v1/31c507a5-image-juju.svg" alt="" class="p-card__thumbnail--small">
+        <img src="https://assets.ubuntu.com/v1/31c507a5-image-juju.svg" alt="" class="p-card__thumbnail--small">
+      </div>
+    </div>
+    <h5 class="p-card__title u-no-margin--bottom">{{ package.name }}</h5>
+    <div class="p-card__content">
+      <p class="u-text--subtle">by {{ package.store_front.publisher_name }}</p>
 
-        <p><small>{{ package.store_front.summary }}</small></p>
-      </div>
+      <p><small>{{ package.store_front.summary }}</small></p>
     </div>
   </a>
 </div>
