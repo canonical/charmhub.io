@@ -26,11 +26,7 @@
   </head>
 
   <body>
-    <!-- Global nav -->
-    <script src="{{ versioned_static('js/build/global-nav/global-nav.js') }}/"></script>
-    <script>
-      canonicalGlobalNav.createNav({ maxWidth: '72rem' });
-    </script>
+    <script src="{{ versioned_static('js/dist/global-nav.js') }}"></script>
     {% include "partial/_navigation.html" %}
 
     <main>
@@ -38,5 +34,7 @@
     </main>
 
     {% include 'partial/_footer.html' %}
+
+    {% block page_scripts %}{% endblock page_scripts %}
   </body>
 </html>
