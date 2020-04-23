@@ -22,20 +22,19 @@
           <h4 class="p-muted-heading u-float-left">{{ results|length }} items</h4>
         </div>
         <div class="col-4 col-start-large-4">
-          <form class="p-search-box">
+          <form class="p-search-box" data-js="search-handler">
             <input type="search" class="p-search-box__input" name="q" placeholder="Search" {% if q %}value="{{ q }}"{% endif %} />
             <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search"></i></button>
           </form>
         </div>
         <div class="col-2">
-          <!-- TO DO - add filter functionality -->
-          <select name="filter">
+          <select name="sort" data-js="sort-handler">
             <option disabled="disabled" value="" selected="">Sort by</option>
-            <option value="/careers/engineering">Most popular</option>
-            <option value="/careers/tech-ops">Name A/Z</option>
-            <option value="/careers/commercial-ops">Name Z/A</option>
-            <option value="/careers/commercial-ops">Author</option>
-            <option value="/careers/all">Featured</option>
+            <option value="featured">Featured</option>
+            <option value="name-desc">Name A/Z</option>
+            <option value="name-asc">Name Z/A</option>
+            {#<option value="most-popular">Most popular</option>#}
+            {#<option value="publisher">Publisher</option>#}
           </select>
         </div>
       </div>
@@ -54,7 +53,11 @@
 <script src="{{ versioned_static('js/dist/store.js') }}" defer></script>
 <script>
   window.addEventListener("DOMContentLoaded", function () {
-    charmhub.store.test()
+    new charmhub.store.Filters({
+      filter: "[data-js='filter-handler']",
+      search: "[data-js='search-handler']",
+      sort: "[data-js='sort-handler']"
+    });
   });
 </script>
 {% endblock %}
