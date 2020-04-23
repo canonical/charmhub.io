@@ -24,19 +24,26 @@
     }
   }
 
-  // Make the whole card clickable and underline title only on hover
-  .p-card--link-wrapper {
-    &:hover {
-      text-decoration: none;
-
-      .p-card__title {
-        text-decoration: underline;
-      }
-    }
-  }
-
   .p-card {
     min-height: 12rem;
+    
+    &.p-button {
+      background: none;
+      border-color: $color-mid-light;
+      display: block;
+      text-align: left;
+
+      &:hover,
+      &:active,
+      &:active:hover {
+        background: none !important;
+        border-color: $color-mid-light;
+      }
+    }
+
+    &:hover .p-card__title {
+      text-decoration: underline;
+    }
     
     .p-card__thumbnail--small {
       filter: grayscale(100%);
