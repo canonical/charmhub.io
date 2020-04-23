@@ -5,23 +5,23 @@ function initTabs() {
   function setActiveTab() {
     var urlHash = window.location.hash;
     // hide all content tabs
-    [].forEach.call(contentTabs, function(contentTab) {
+    [].forEach.call(contentTabs, function (contentTab) {
       contentTab.classList.add("u-hide");
     });
     // deselect all navigation tabs
-    [].forEach.call(tabLinks, function(link) {
+    [].forEach.call(tabLinks, function (link) {
       link.setAttribute("aria-selected", false);
     });
 
     if (urlHash) {
       // show selected content tab
-      [].forEach.call(contentTabs, function(contentTab) {
+      [].forEach.call(contentTabs, function (contentTab) {
         if ("#" + contentTab.id === urlHash) {
           contentTab.classList.remove("u-hide");
         }
       });
       // sselect the clicked navigation tab
-      [].forEach.call(tabLinks, function(link) {
+      [].forEach.call(tabLinks, function (link) {
         if ("#" + link.getAttribute("aria-controls") === urlHash) {
           link.setAttribute("aria-selected", true);
         }
@@ -36,8 +36,8 @@ function initTabs() {
   // prevent the page jumping around when switching tabs,
   // whilst still using :target
   // https://gist.github.com/pimterry/260841c2104f27cadc954a29b9873b96#file-disable-link-jump-with-workaround-js
-  [].forEach.call(tabLinks, function(link) {
-    link.addEventListener("click", function(event) {
+  [].forEach.call(tabLinks, function (link) {
+    link.addEventListener("click", function (event) {
       event.preventDefault();
       history.pushState({}, "", link.href);
 
@@ -53,7 +53,7 @@ function initTabs() {
 
   window.addEventListener(
     "hashchange",
-    function() {
+    function () {
       setActiveTab();
     },
     false
