@@ -61,6 +61,16 @@ jobs:
       - run:
           name: Lint sass
           command: yarn lint-scss
+  lint-js:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: yarn
+      - run:
+          name: Lint JS
+          command: yarn lint-js
   test-python:
     <<: *defaults
     steps:
@@ -79,11 +89,23 @@ jobs:
           command: |
             coverage run  --source=. -m unittest discover tests
             bash <(curl -s https://codecov.io/bash) -cF python
+  test-js:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: yarn
+      - run:
+          name: Run tests with jest
+          command: yarn run test-js
 workflows:
   version: 2
   build:
     jobs:
       - test-site
       - lint-scss
+      - lint-js
+      - test-js
       - lint-python
       - test-python
