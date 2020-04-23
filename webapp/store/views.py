@@ -13,7 +13,12 @@ store = Blueprint(
 
 @store.route("/store")
 def store_view():
-    api_search_results = app.store_api.find().get("results")
+    query = request.args.get("q", default=None, type=str)
+
+    if query:
+        api_search_results = app.store_api.find(query=query).get("results", [])
+    else:
+        api_search_results = app.store_api.find().get("results", [])
 
     for i, item in enumerate(api_search_results):
         api_search_results[i] = data.mock_missing_properties(
@@ -28,17 +33,11 @@ def store_view():
     context = {
         "categories": data.mock_categories,
         "publisher_list": data.mock_publisher_list,
+        "q": query,
         "results": results,
     }
 
     return render_template("store.html", **context)
-
-
-@store.route("/search")
-def search():
-    query = request.args.get("q", default="", type=str)
-
-    return render_template("store.html", results=app.store_api.find(q=query))
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
