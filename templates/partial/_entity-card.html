@@ -14,7 +14,7 @@
       <div class="p-card__content">
         <p class="u-text--subtle">by {{ package.store_front.publisher_name }}</p>
 
-        <p><small>{{ package.store_front.summary }}</small></p>
+        <p><small>{{ package.store_front.summary|truncate(60, True) }}</small></p>
       </div>
     </div>
   </a>
