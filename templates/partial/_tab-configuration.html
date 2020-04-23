@@ -10,7 +10,7 @@
           <li class="p-side-navigation__item--title">
             <span class="p-side-navigation__text">Contents</span>
           </li>
-          {% for content in configuration %}
+          {% for content in package.configuration %}
           <li class="p-side-navigation__item">
             <a href="#{{ content.name }}" class="p-side-navigation__link">
               {{ content.name }}
@@ -22,7 +22,7 @@
     </div>
     <div class="col-7 col-start-large-5">
       <ul class="p-list--divided">
-        {% for content in configuration %}
+        {% for content in package.configuration %}
         <li class="p-list__item" id="{{ content.name }}">
           <p><strong>{{ content.name }}</strong></p>
           {{ content.description | safe }}

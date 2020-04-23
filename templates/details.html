@@ -11,8 +11,8 @@
     <div class="col-8">
       <div class="p-charm-header">
         <div class="p-media-object--medium u-no-margin--bottom">
-          {% if entity_type == "charm" %}
-          <img src="{{ icon_url }}" class="p-media-object__image">
+          {% if package_type == "charm" %}
+          <img src="{{ package.store_front.icons[0] }}" class="p-media-object__image">
           {% else %}
           <div class="p-bundle-icons">
             {% for bundle in bundle_content %}
@@ -24,12 +24,12 @@
           {% endif %}
           <div class="p-media-object__details">
             <h1 class="p-media-object__title">
-              {{ entity_title }}
+              {{ package.name }}
             </h1>
             <div class="p-media-object__content u-no-margin--bottom">
               <ul class="p-inline-list--middot">
                 <li class="p-inline-list__item">
-                  By <a href="{{ website }}">{{ publisher }}</a>
+                  By <a href="#">{{ package.publisher_name }}</a>
                   {% if developer_validation == "verified" %}
                     <span class="p-tooltip--top-center" aria-describedby="openstack-tooltip">
                       <img src="https://assets.ubuntu.com/v1/75654c90-rosette.svg">
@@ -49,13 +49,13 @@
           aria-controls="channel-map-versions">
           latest/stable 7.20.1&nbsp;&nbsp;<i class="p-icon--contextual-menu"></i>
         </button>
-        <p class="p-charm-header__code"><code>juju deploy {{ package_name }}</code></p>
+        <p class="p-charm-header__code"><code>juju deploy {{ package.name }}</code></p>
       </div>
     </div>
     <div class="col-4">
       <img src="https://assets.ubuntu.com/v1/adac6928-ubuntu.svg" alt="" width="89" height="20">
       <div class="series-tags">
-        {% for supported_os in supported_os_list %}
+        {% for supported_os in package.supported_os_list %}
         <span class="series-tag">
           {{ supported_os }}
         </span>
@@ -70,7 +70,7 @@
 
   {% include "partial/_tab-overview.html" %}
   {% include "partial/_tab-configuration.html" %}
-  {% if entity_type == "charm" %}
+  {% if package_type == "charm" %}
     {% include "partial/_tab-actions.html" %}
     {% include "partial/_tab-integrations.html" %}
     {% include "partial/_tab-docs.html" %}
