@@ -22,7 +22,7 @@ def join_filters(filters):
             filter_string.append(f"{filter_type}={filter_type_filters}")
 
     if len(filter_string) == 0:
-        filter_string = "/"
+        filter_string = ""
     elif len(filter_string) == 1:
         filter_string = f"?{filter_string[0]}"
     else:
