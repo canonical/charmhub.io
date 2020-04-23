@@ -106,6 +106,5 @@ workflows:
       - test-site
       - lint-scss
       - lint-js
-      - test-js
       - lint-python
       - test-python
