@@ -49,3 +49,12 @@
     </div>
 </section>
 {% endblock %}
+
+{% block page_scripts %}
+<script src="{{ versioned_static('js/dist/store.js') }}" defer></script>
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    charmhub.store.test()
+  });
+</script>
+{% endblock %}

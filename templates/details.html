@@ -80,6 +80,13 @@
 
   {% include "partial/_top-bundles.html" %}
 </div>
+{% endblock %}
 
-<script defer src="{{ versioned_static('js/tabs.js') }}"></script>
+{% block page_scripts %}
+<script src="{{ versioned_static('js/dist/details.js') }}" defer></script>
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    charmhub.details.test()
+  });
+</script>
 {% endblock %}
