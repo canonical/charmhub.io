@@ -1,29 +1,4 @@
 @mixin p-charmhub-card {
-  .p-card--bundle {
-    @extend %vf-card;
-
-    padding: 1rem 0 0 0;
-
-    .p-card__title {
-      padding-bottom: $spv-inner--small;
-
-      .p-card__title-text {
-        display: inline;
-      }
-    }
-
-    .p-card__subtitle {
-      .series-tags {
-        margin-top: $spv-inner--large;
-      }
-    }
-
-    .p-card__content {
-      padding-bottom: $spv-inner--large;
-      padding-top: $spv-inner--large;
-    }
-  }
-
   .p-card {
     &.p-button {
       background: none;
