@@ -1,8 +1,15 @@
+{% if package["package-type"] == "bundle" %}
+{% set isBundle = True %}
+{% endif %}
 <div class="col-3">
   <a href="/{{ package.name }}" class="p-button p-card">
     <div class="u-clearfix">
-      <div class="u-float-left">
+      <div class="u-float-left {% if isBundle %}p-bundle-icons{% endif %}">
         <img src="{{ package.store_front.icons[0] }}" alt="{{ package.title}}" class="p-card__thumbnail">
+        {% if isBundle %}
+        <img src="{{ package.store_front.icons[0] }}" alt="{{ package.title}}" class="p-card__thumbnail">
+        <img src="{{ package.store_front.icons[0] }}" alt="{{ package.title}}" class="p-card__thumbnail">
+        {% endif %}
       </div>
       <div class="u-float-right">
         <img src="https://assets.ubuntu.com/v1/31c507a5-image-juju.svg" alt="" class="p-card__thumbnail--small">
