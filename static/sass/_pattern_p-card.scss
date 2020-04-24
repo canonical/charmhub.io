@@ -25,6 +25,8 @@
   }
 
   .p-card {
+    min-height: 12rem;
+
     &.p-button {
       background: none;
       border-color: $color-mid-light;
@@ -53,10 +55,6 @@
         filter: none;
         opacity: 1;
       }
-    }
-
-    .p-card__content {
-      height: 5.5rem;
     }
   }
 }
