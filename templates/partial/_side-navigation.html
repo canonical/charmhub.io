@@ -1,5 +1,5 @@
 <div class="col-3 u-hide--small">
-  <div class="p-side-navigation">
+  <div class="p-side-navigation" data-js="filter-handler">
     {% if categories %}
     <ul class="p-side-navigation__list">
       <li class="p-side-navigation__item--title">
@@ -7,11 +7,13 @@
       </li>
       {% for category in categories %}
       <li class="p-side-navigation__item">
-        <a href="/store{% if active_filter('category', category.slug) %}{{ remove_filter('category', category.slug) }}{% else %}{{ add_filter('category', category.slug) }}{% endif %}" class="p-side-navigation__link{% if active_filter('category', category.slug) %} is-active{% endif %}">
+        <a href="/store{% if active_filter('category', category.slug) %}{{ remove_filter('category', category.slug) }}{% else %}{{ add_filter('category', category.slug) }}{% endif %}" class="p-side-navigation__link{% if active_filter('category', category.slug) %} is-active{% endif %}" data-js="filter" data-filter-type="category" data-filter-value="{{ category.slug }}">
           {{ category.name }}
-          {% if active_filter('category', category.slug) %}
-          <div class="p-side-navigation__status is-toggle"><i class="p-icon--close"></i></div>
-          {% endif %}
+          <div
+            data-js="remove-filter"
+            class="p-side-navigation__status is-toggle {% if not active_filter('category', category.slug) %}u-hide{% endif %}">
+            <i class="p-icon--close"></i>
+          </div>
         </a>
       </li>
       {% endfor %}
@@ -24,11 +26,13 @@
       </li>
       {% for publisher in publisher_list %}
       <li class="p-side-navigation__item">
-        <a href="/store{% if active_filter('publisher', publisher.slug) %}{{ remove_filter('publisher', publisher.slug) }}{% else %}{{ add_filter('publisher', publisher.slug) }}{% endif %}" class="p-side-navigation__link{% if active_filter('publisher', publisher.slug) %} is-active{% endif %}">
+        <a href="/store{% if active_filter('publisher', publisher.slug) %}{{ remove_filter('publisher', publisher.slug) }}{% else %}{{ add_filter('publisher', publisher.slug) }}{% endif %}" class="p-side-navigation__link{% if active_filter('publisher', publisher.slug) %} is-active{% endif %}" data-js="filter" data-filter-type="publisher" data-filter-value="{{ publisher.slug }}">
           {{ publisher.name }}
-          {% if active_filter('publisher', publisher.slug) %}
-          <div class="p-side-navigation__status is-toggle"><i class="p-icon--close"></i></div>
-          {% endif %}
+          <div
+            data-js="remove-filter"
+            class="p-side-navigation__status is-toggle {% if not active_filter("publisher", publisher.slug) %}u-hide{% endif %}">
+            <i class="p-icon--close"></i>
+          </div>
         </a>
       </li>
       {% endfor %}
