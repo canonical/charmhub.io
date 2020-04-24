@@ -16,7 +16,46 @@ class Filters {
     this.initEvents();
 
     window.addEventListener("popstate", (e) => {
-      if (!e.state) {
+      this._filters = e.state ? e.state.filters : null;
+      this.updateUI();
+    });
+  }
+
+  updateUI() {
+    if (!this._filters) {
+      const activeFilters = this.wrapperEls.filter.querySelectorAll(
+        "[data-filter-type][data-filter-value].is-active"
+      );
+      activeFilters.forEach((filter) => {
+        filter.classList.remove("is-active");
+        filter
+          .querySelector("[data-js='remove-filter']")
+          .classList.add("u-hide");
+      });
+
+      this.wrapperEls.sort.value = "";
+
+      this.wrapperEls.search.querySelector("[name='q']").value = "";
+
+      return;
+    }
+
+    const searchField = this.wrapperEls.search.querySelector("[name='q']");
+
+    if (this._filters.q) {
+      searchField.value = this._filters.q[0];
+    } else {
+      searchField.value = "";
+    }
+
+    if (this._filters.sort) {
+      this.wrapperEls.sort.value = this._filters.sort[0];
+    } else {
+      this.wrapperEls.sort.value = "";
+    }
+
+    Object.keys(this._filters).forEach((type) => {
+      if (type !== "q" && type !== "sort") {
         const activeFilters = this.wrapperEls.filter.querySelectorAll(
           "[data-filter-type][data-filter-value].is-active"
         );
@@ -27,53 +66,17 @@ class Filters {
             .classList.add("u-hide");
         });
 
-        this.wrapperEls.sort.value = "";
-
-        this.wrapperEls.search.querySelector("[name='q']").value = "";
-
-        return;
-      }
-
-      this._filters = e.state.filters;
-
-      const searchField = this.wrapperEls.search.querySelector("[name='q']");
-
-      if (this._filters.q) {
-        searchField.value = this._filters.q[0];
-      } else {
-        searchField.value = "";
-      }
-
-      if (this._filters.sort) {
-        this.wrapperEls.sort.value = this._filters.sort[0];
-      } else {
-        this.wrapperEls.sort.value = "";
-      }
-
-      Object.keys(this._filters).forEach((type) => {
-        if (type !== "q" && type !== "sort") {
-          const activeFilters = this.wrapperEls.filter.querySelectorAll(
-            "[data-filter-type][data-filter-value].is-active"
+        this._filters[type].forEach((value) => {
+          const el = this.wrapperEls.filter.querySelector(
+            `[data-filter-type="${type}"][data-filter-value="${value}"]`
           );
-          activeFilters.forEach((filter) => {
-            filter.classList.remove("is-active");
-            filter
-              .querySelector("[data-js='remove-filter']")
-              .classList.add("u-hide");
-          });
 
-          this._filters[type].forEach((value) => {
-            const el = this.wrapperEls.filter.querySelector(
-              `[data-filter-type="${type}"][data-filter-value="${value}"]`
-            );
-
-            el.classList.add("is-active");
-            el.querySelector("[data-js='remove-filter']").classList.remove(
-              "u-hide"
-            );
-          });
-        }
-      });
+          el.classList.add("is-active");
+          el.querySelector("[data-js='remove-filter']").classList.remove(
+            "u-hide"
+          );
+        });
+      }
     });
   }
 

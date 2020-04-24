@@ -14,6 +14,7 @@ store = Blueprint(
 @store.route("/store")
 def store_view():
     query = request.args.get("q", default=None, type=str)
+    sort = request.args.get("sort", default="", type=str)
 
     if query:
         api_search_results = app.store_api.find(query=query).get("results", [])
@@ -33,6 +34,7 @@ def store_view():
     context = {
         "categories": data.mock_categories,
         "publisher_list": data.mock_publisher_list,
+        "sort": sort,
         "q": query,
         "results": results,
     }
