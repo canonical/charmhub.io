@@ -102,6 +102,30 @@ $theme-default-nav: dark;
 
 @include charmhub-p-series-tag;
 
+.p-channel-map {
+  position: absolute;
+  z-index: 12;
+
+  &__mask {
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 11;
+  }
+}
+
+#channel-map-versions {
+  table tr {
+    cursor: pointer;
+  }
+
+  table tr.is-active td {
+    font-weight: bold;
+  }
+}
+
 // XXX Ant - 11.03.20: This can be removed once this issue is closed.
 // https://github.com/canonical-web-and-design/vanilla-framework/issues/2922
 .u-text--subtle {

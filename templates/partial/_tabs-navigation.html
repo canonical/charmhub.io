@@ -1,6 +1,6 @@
 <div class="u-position--sticky">
   <div class="u-fixed-width">
-    <nav class="p-tabs">
+    <nav class="p-tabs" data-js="tabs">
       <ul class="p-tabs__list" role="tablist">
         <li class="p-tabs__item" role="presentation">
           <a href="#overview" class="p-tabs__link" tabindex="0" role="tab" aria-controls="overview"
@@ -10,7 +10,7 @@
           <a href="#configuration" class="p-tabs__link" tabindex="-1" role="tab"
             aria-controls="configuration">Configuration</a>
         </li>
-        {% if entity_type == "charm" %}
+        {% if package["package-type"] == "charm" %}
         <li class="p-tabs__item" role="presentation">
           <a href="#actions" class="p-tabs__link" tabindex="-1" role="tab" aria-controls="actions">Actions</a>
         </li>

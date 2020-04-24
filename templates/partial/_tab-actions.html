@@ -3,9 +3,9 @@
     <hr class="p-separator" />
     <h2>Actions</h2>
   </noscript>
-  <aside class="p-accordion" role="tablist" aria-multiselect="true">
+  <aside class="p-accordion" role="tablist" aria-multiselect="true" data-js="actions">
     <ul class="p-accordion__list">
-      {% for action in actions %}
+      {% for action in package.actions %}
       <li class="p-accordion__group">
         <button type="button" class="p-accordion__tab" id="{{action.name}}" role="tab" aria-controls="{{action.name}}-section" aria-expanded="true">
           <div class="row">
@@ -35,8 +35,8 @@
                 <li class="p-list__item">
                   {{ param.name }}
                   <ul class="p-list">
-                    <li class="p-list__item">type: {{ param.content.type }}</li>
-                    <li class="p-list__item">description: {{ param.content.description }}</li>
+                    <li class="p-list__item">type: {{ param.type }}</li>
+                    <li class="p-list__item">description: {{ param.description }}</li>
                   </ul>
                 </li>
               </ul>
@@ -47,7 +47,7 @@
             <li class="p-list__item">
               required
               <ul class="p-list">
-                <li class="p-list__item">{{ action.required }}</li>
+                <li class="p-list__item">{{ ", ".join(action.required) }}</li>
               </ul>
             </li>
             {% endif %}

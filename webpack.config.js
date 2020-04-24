@@ -18,7 +18,7 @@ module.exports = {
     "global-nav": "./static/js/base/global-nav.js",
     base: "./static/js/base/base.js",
     store: "./static/js/public/store/index.js",
-    details: "./static/js/public/details.js",
+    details: "./static/js/public/details/index.js",
   },
   output: {
     filename: "[name].js",
@@ -50,7 +50,7 @@ module.exports = {
         use: ["expose-loader?charmhub.store", "babel-loader"],
       },
       {
-        test: require.resolve(__dirname + "/static/js/public/details.js"),
+        test: require.resolve(__dirname + "/static/js/public/details/index.js"),
         use: ["expose-loader?charmhub.details", "babel-loader"],
       },
     ],

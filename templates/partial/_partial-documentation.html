@@ -1,0 +1,34 @@
+<div class="u-fixed-width p-tabs__content" id="{{ section_slug }}">
+  <noscript>
+    <hr class="p-separator" />
+    <h2>{{ section_title }}</h2>
+  </noscript>
+   <div class="row">
+    <div class="col-3">
+      <div class="p-side-navigation" data-js="{{ section_slug }}">
+        <ul class="p-side-navigation__list">
+          <li class="p-side-navigation__item--title">
+            <span class="p-side-navigation__text">Contents</span>
+          </li>
+          {% for content in package[section_slug] %}
+          <li class="p-side-navigation__item">
+            <a href="#{{ content.name.replace(" ", "-") }}" class="p-side-navigation__link" role="tab" aria-controls="{{ content.name.replace(" ", "-") }}" {% if loop.index == 1 %}aria-selected="false"{% endif %}>
+              {{ content.name }}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="col-7 col-start-large-5">
+      <ul class="p-list--divided">
+        {% for content in package[section_slug] %}
+        <li class="p-list__item" id="{{ content.name.replace(" ", "-") }}">
+          <p><strong>{{ content.name }}</strong></p>
+          {{ content.description | safe }}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>

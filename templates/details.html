@@ -11,7 +11,7 @@
     <div class="col-8">
       <div class="p-charm-header">
         <div class="p-media-object--medium u-no-margin--bottom">
-          {% if package_type == "charm" %}
+          {% if package["package_type"] == "charm" %}
           <img src="{{ package.store_front.icons[0] }}" class="p-media-object__image">
           {% else %}
           <div class="p-bundle-icons">
@@ -44,12 +44,8 @@
             </div>
           </div>
         </div>
-        <!-- TO DO - add dropdown functionality -->
-        <button class="p-button--neutral u-no-margin--bottom" data-controls="channel-map-versions"
-          aria-controls="channel-map-versions">
-          latest/stable 7.20.1&nbsp;&nbsp;<i class="p-icon--contextual-menu"></i>
-        </button>
-        <p class="p-charm-header__code"><code>juju deploy {{ package.name }}</code></p>
+        {% include "partial/_channel-map.html" %}
+        <p class="p-charm-header__code"><code>juju deploy <span data-js="channel-cli">{{ package.name }}</span></code></p>
       </div>
     </div>
     <div class="col-4">
@@ -86,7 +82,8 @@
 <script src="{{ versioned_static('js/dist/details.js') }}" defer></script>
 <script>
   window.addEventListener("DOMContentLoaded", function () {
-    charmhub.details.test()
+    //charmhub.details.tabs("[data-js='tabs']");
+    charmhub.details.init("{{package.name }}");
   });
 </script>
 {% endblock %}
