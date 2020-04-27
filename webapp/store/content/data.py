@@ -127,16 +127,26 @@ def get_fake_charm():
         "revision": get_fake_channel_map_entry("stable", 16),
         # Added from us:
         "supported_os_list": ["18.04 LTS", "19.10"],
-        "overview": "<h4>Full feature web interface for interacting with instances, images, volumes and networks.</h4>"
-        "<p>Kubernetes is an open-source platform for deploying, scaling, and operations of application containers across a cluster of hosts. Kubernetes is portable in that it works with public, private, and hybrid clouds. Extensible through a pluggable infrastructure. Self healing in that it will automatically restart and place containers on healthy nodes if a node ever goes away.</p>"
+        "overview": "<h4>Full feature web interface for interacting with "
+        "instances, images, volumes and networks.</h4>"
+        "<p>Kubernetes is an open-source platform for deploying, scaling,"
+        "and operations of application containers across a cluster of "
+        "hosts. Kubernetes is portable in that it works with public, "
+        "private, and hybrid clouds. Extensible through a pluggable "
+        "infrastructure. Self healing in that it will automatically "
+        "restart and place containers on healthy nodes if a node ever "
+        "goes away.</p>"
         "<h4>Usage</h4>"
         "<p>The OpenStack Dashboard is deployed and related to keystone:</p>"
         "<pre><code>juju deploy openstack-dashboard"
         "juju add-relation openstack-dashboard keystone</code></pre>"
-        "<p>The dashboard will use keystone for user authentication and authorization and to interact with the catalog of services within the cloud.</p>"
+        "<p>The dashboard will use keystone for user authentication and"
+        "authorization and to interact with the catalog of services "
+        "within the cloud.</p>"
         "<p>The dashboard is accessible on:</p>"
         "<pre><code>http(s)://service_unit_address/horizon</code></pre>"
-        "<p>At a minimum, the cloud must provide Glance and Nova services.</p>",
+        "<p>At a minimum, the cloud must provide Glance and Nova services."
+        "</p>",
         "configuration": [
             {
                 "name": "action-managed-upgrade",
@@ -216,7 +226,9 @@ def get_fake_charm():
                     {
                         "name": "Key",
                         "type": "string",
-                        "description": "Any valid Ceph key from http://docs.ceph.com/docs/master/rados/operations/pools/#set-pool-values",
+                        "description": "Any valid Ceph key from http://docs"
+                        ".ceph.com/docs/master/rados/operations/pools"
+                        "/#set-pool-values",
                     },
                     {
                         "name": "Value",
@@ -239,7 +251,9 @@ def get_fake_charm():
                     {
                         "name": "Key",
                         "type": "string",
-                        "description": "Any valid Ceph key from http://docs.ceph.com/docs/master/rados/operations/pools/#set-pool-values",
+                        "description": "Any valid Ceph key from "
+                        "http://docs.ceph.com/docs/master/rados/"
+                        "operations/pools/#set-pool-values",
                     },
                     {
                         "name": "Value",
@@ -262,7 +276,9 @@ def get_fake_charm():
                     {
                         "name": "Key",
                         "type": "string",
-                        "description": "Any valid Ceph key from http://docs.ceph.com/docs/master/rados/operations/pools/#set-pool-values",
+                        "description": "Any valid Ceph key from "
+                        "http://docs.ceph.com/docs/master/rados/operations/"
+                        "pools/#set-pool-values",
                     },
                     {
                         "name": "Value",
@@ -343,11 +359,13 @@ def get_fake_charm():
                 "name": "certificates: tls-certificates",
                 "software": [
                     {
-                        "icon": "https://api.jujucharms.com/charmstore/v5/vault-37/icon.svg",
+                        "icon": "https://api.jujucharms.com/charmstore/v5/"
+                        "vault-37/icon.svg",
                         "name": "vault",
                     },
                     {
-                        "icon": "https://api.jujucharms.com/charmstore/v5/~yellow/easyrsa-0/icon.svg",
+                        "icon": "https://api.jujucharms.com/charmstore/v5/"
+                        "~yellow/easyrsa-0/icon.svg",
                         "name": "Easyrsa",
                     },
                 ],
@@ -356,7 +374,8 @@ def get_fake_charm():
                 "name": "ha: hacluster",
                 "software": [
                     {
-                        "icon": "https://api.jujucharms.com/charmstore/v5/hacluster-66/icon.svg",
+                        "icon": "https://api.jujucharms.com/charmstore/"
+                        "v5/hacluster-66/icon.svg",
                         "name": "Hacluster",
                     }
                 ],

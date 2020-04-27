@@ -56,10 +56,9 @@ const init = (packageName) => {
     docs = new TableOfContents(docsEl, historyState);
   }
 
-  let tabs;
   const tabsEl = document.querySelector("[data-js='tabs']");
   if (tabsEl) {
-    tabs = new Tabs(tabsEl, historyState, {
+    new Tabs(tabsEl, historyState, {
       configuration,
       docs,
     });
