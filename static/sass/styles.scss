@@ -106,7 +106,7 @@ $theme-default-nav: dark;
   position: absolute;
   z-index: 12;
 
-  &__mask {
+  .p-channel-map__mask {
     bottom: 0;
     left: 0;
     position: fixed;

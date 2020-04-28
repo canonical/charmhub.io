@@ -1,2 +1,1 @@
-console.log("Base loaded");
-export {};
+import "./polyfills";

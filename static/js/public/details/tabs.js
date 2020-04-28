@@ -7,6 +7,10 @@ class Tabs {
 
     const tabLinks = this.el.querySelectorAll("[role='tab']");
 
+    if (tabLinks.length === 0) {
+      throw new Error('Tabs: No elements found with role="tab"');
+    }
+
     tabLinks.forEach((tabLink, i) => {
       const name = tabLink.getAttribute("aria-controls");
       let isSelected = tabLink.hasAttribute("aria-selected");
