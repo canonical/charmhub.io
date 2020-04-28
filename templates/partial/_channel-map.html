@@ -1,0 +1,51 @@
+<button class="p-button--neutral u-no-margin--bottom" data-controls="channel-map-versions"
+        aria-controls="channel-map-versions" data-js="channel-map">
+  <span data-js="channel-map-selected">
+    {{ package["channel-map"][0].channel.name }} {{package["channel-map"][0].revision.version }}
+  </span>
+  &nbsp;&nbsp;<i class="p-icon--contextual-menu"></i>
+</button>
+<div id="channel-map-versions" class="u-hide">
+  <div class="p-channel-map__mask" data-js="channel-map-mask">
+  </div>
+  <div class="p-card--highlighted p-channel-map">
+    <div class="u-fixed-width">
+      <div class="p-form p-form--inline">
+        <div class="p-form__group">
+          <label class="p-form__label">Filter by series:</label>
+          <div class="p-form__control">
+            <select><option>Any</option></select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="u-fixed-width">
+      <table>
+        <thead>
+          <tr>
+            <th>Channel</th>
+            <th>Version</th>
+            <th>Published</th>
+            <th>Platform</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for channel in package["channel-map"] %}
+          <tr data-channel-map-channel="{{ channel.channel.name }}" data-channel-map-version="{{ channel.revision.version }}">
+            <td>{{ channel.channel.name }}</td>
+            <td>{{ channel.revision.version }}</td>
+            <td>{{ channel.channel["released-at"] }}</td>
+            <td>
+              <div class="series-tags u-no-margin--top">
+                {% for platform in channel.revision.platforms %}
+                <span class="series-tag">{{ platform.series }}</span>
+                {% endfor %}
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

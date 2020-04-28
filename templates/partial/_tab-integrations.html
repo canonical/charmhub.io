@@ -3,15 +3,15 @@
     <hr class="p-separator" />
     <h2>Integrations</h2>
   </noscript>
-  {% for integration_category in integrations %}
-  <p><strong>{{ integration_category.category }}</strong></p>
+  {% for integration in package.integrations %}
+  <p><strong>{{ integration.name }}</strong></p>
   <div class="row u-no-padding--left u-no-padding--right p-heading-icon__group">
-    {% for software in integration_category.software %}
+    {% for item in integration.software %}
     <div class="col-3">
       <div class="p-heading-icon--small">
         <div class="p-heading-icon__header">
-          <img class="p-heading-icon__img" src="{{ software.icon_url }}">
-          <p class="p-heading-icon__title">{{ software.name }}</p>
+          <img class="p-heading-icon__img" src="{{ item.icon }}">
+          <p class="p-heading-icon__title">{{ item.name }}</p>
         </div>
       </div>
     </div>

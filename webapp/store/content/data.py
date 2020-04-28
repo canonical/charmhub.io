@@ -81,8 +81,8 @@ def get_fake_channel_map_entry(risk, revision):
             "to scale horizontally\n"
             "  with Nginx's reverse proxy.\n",
             "platforms": [
-                {"os": "ubuntu", "series": "bionic", "architecture": "all"},
-                {"os": "ubuntu", "series": "trusty", "architecture": "all"},
+                {"os": "ubuntu", "series": "18.04 LTS", "architecture": "all"},
+                {"os": "ubuntu", "series": "14.04 LTS", "architecture": "all"},
             ],
             "revision": revision,
             "version": "1.0.3",
@@ -127,6 +127,26 @@ def get_fake_charm():
         "revision": get_fake_channel_map_entry("stable", 16),
         # Added from us:
         "supported_os_list": ["18.04 LTS", "19.10"],
+        "overview": "<h4>Full feature web interface for interacting with "
+        "instances, images, volumes and networks.</h4>"
+        "<p>Kubernetes is an open-source platform for deploying, scaling,"
+        "and operations of application containers across a cluster of "
+        "hosts. Kubernetes is portable in that it works with public, "
+        "private, and hybrid clouds. Extensible through a pluggable "
+        "infrastructure. Self healing in that it will automatically "
+        "restart and place containers on healthy nodes if a node ever "
+        "goes away.</p>"
+        "<h4>Usage</h4>"
+        "<p>The OpenStack Dashboard is deployed and related to keystone:</p>"
+        "<pre><code>juju deploy openstack-dashboard"
+        "juju add-relation openstack-dashboard keystone</code></pre>"
+        "<p>The dashboard will use keystone for user authentication and"
+        "authorization and to interact with the catalog of services "
+        "within the cloud.</p>"
+        "<p>The dashboard is accessible on:</p>"
+        "<pre><code>http(s)://service_unit_address/horizon</code></pre>"
+        "<p>At a minimum, the cloud must provide Glance and Nova services."
+        "</p>",
         "configuration": [
             {
                 "name": "action-managed-upgrade",
@@ -190,6 +210,175 @@ def get_fake_charm():
                 "name": "debug",
                 "description": "<p>Enable Django debug messages.</p>\n<p>"
                 "Value type: String</p>\n<p>Default value: No</p>",
+            },
+        ],
+        "actions": [
+            {
+                "name": "pause",
+                "hint": "Pause the unit",
+                "description": "Set a value for the pool",
+                "params": [
+                    {
+                        "name": "pool-name",
+                        "type": "string",
+                        "description": "The pool to set this variable on",
+                    },
+                    {
+                        "name": "Key",
+                        "type": "string",
+                        "description": "Any valid Ceph key from http://docs"
+                        ".ceph.com/docs/master/rados/operations/pools"
+                        "/#set-pool-values",
+                    },
+                    {
+                        "name": "Value",
+                        "type": "string",
+                        "description": "The value to set",
+                    },
+                ],
+                "required": ["key", "value", "pool-name"],
+            },
+            {
+                "name": "resume",
+                "hint": "Resume the unit",
+                "description": "Set a value for the pool",
+                "params": [
+                    {
+                        "name": "pool-name",
+                        "type": "string",
+                        "description": "The pool to set this variable on",
+                    },
+                    {
+                        "name": "Key",
+                        "type": "string",
+                        "description": "Any valid Ceph key from "
+                        "http://docs.ceph.com/docs/master/rados/"
+                        "operations/pools/#set-pool-values",
+                    },
+                    {
+                        "name": "Value",
+                        "type": "string",
+                        "description": "The value to set",
+                    },
+                ],
+                "required": ["key", "value", "pool-name"],
+            },
+            {
+                "name": "upgrade",
+                "hint": "Perform an upgrade",
+                "description": "Set a value for the pool",
+                "params": [
+                    {
+                        "name": "pool-name",
+                        "type": "string",
+                        "description": "The pool to set this variable on",
+                    },
+                    {
+                        "name": "Key",
+                        "type": "string",
+                        "description": "Any valid Ceph key from "
+                        "http://docs.ceph.com/docs/master/rados/operations/"
+                        "pools/#set-pool-values",
+                    },
+                    {
+                        "name": "Value",
+                        "type": "string",
+                        "description": "The value to set",
+                    },
+                ],
+                "required": ["key", "value", "pool-name"],
+            },
+        ],
+        "docs": [
+            {
+                "name": "Deploying",
+                "description": "<p>If True enables openstack upgrades for"
+                " this charm via juju actions. You will still need to set"
+                " openstack-origin to the new repository but instead of an"
+                " upgrade running automatically across all units, it will"
+                " wait for you to execute the openstack-upgrade action for"
+                " this charm on each unit. If False it will revert to"
+                " existing behavior of upgrading all units on config"
+                " change.</p>\n<p>Value type: String</p>\n<p>Default"
+                " value: None</p>",
+            },
+            {
+                "name": "Network-Restricted Environments",
+                "description": "<p>Setting this to True will allow password"
+                " form autocompletion by browser.</p>\n<p>Value type: String"
+                "</p>\n<p>Default value: None</p>",
+            },
+            {
+                "name": "Status",
+                "description": "<p>The maximum number of objects (e.g."
+                " Swift objects or Glance images) to display on a single"
+                ' page before providing a paging element (a "more" link) to'
+                " paginate results.</p>\n<p>Value type: Interval</p>\n<p>"
+                "Default value: None</p>",
+            },
+            {
+                "name": "Smoke test",
+                "description": "<p>Enable cinder backup panel.</p>\n<p>Value"
+                " type: Boolean</p>\n<p>Default value: None</p>",
+            },
+            {
+                "name": "Utilities",
+                "description": "<p>Use a custom theme supplied as a resource."
+                " NOTE: This setting is supported OpenStack Mitaka and"
+                " this setting is mutually exclustive to ubuntu-theme and"
+                " default-theme.</p>\n<p>Value type: Boolean</p>\n<p>Default"
+                " value: None</p>",
+            },
+            {
+                "name": "Monitoring",
+                "description": "<p>This option provides a means to enable"
+                " customisation modules to modify existing dashboards and"
+                " panels. This is available from Liberty onwards.</p>\n<p>"
+                "Value type: String</p>\n<p>Default value: None</p>",
+            },
+            {
+                "name": "Logging",
+                "description": "<p>Database name for Horizon (if enabled)."
+                "</p>\n<p>Value type: String</p>\n<p>Default value:"
+                " Horizon</p>",
+            },
+            {
+                "name": "Benchmarking",
+                "description": "<p>Username for Horizon database access (if"
+                " enabled).</p>\n<p>Value type: String</p>\n<p>Default value:"
+                " Horizon</p>",
+            },
+            {
+                "name": "Scaling",
+                "description": "<p>Enable Django debug messages.</p>\n<p>"
+                "Value type: String</p>\n<p>Default value: No</p>",
+            },
+        ],
+        "integrations": [
+            {
+                "name": "certificates: tls-certificates",
+                "software": [
+                    {
+                        "icon": "https://api.jujucharms.com/charmstore/v5/"
+                        "vault-37/icon.svg",
+                        "name": "vault",
+                    },
+                    {
+                        "icon": "https://api.jujucharms.com/charmstore/v5/"
+                        "~yellow/easyrsa-0/icon.svg",
+                        "name": "Easyrsa",
+                    },
+                ],
+            },
+            {
+                "name": "ha: hacluster",
+                "software": [
+                    {
+                        "icon": "https://api.jujucharms.com/charmstore/"
+                        "v5/hacluster-66/icon.svg",
+                        "name": "Hacluster",
+                    }
+                ],
             },
         ],
     }

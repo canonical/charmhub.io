@@ -51,6 +51,11 @@ def details(entity_name):
 
     package = logic.add_store_front_data(package)
 
+    for channel in package["channel-map"]:
+        channel["channel"]["released-at"] = logic.convert_date(
+            channel["channel"]["released-at"]
+        )
+
     return render_template(
         "details.html", package=package, package_type=package["package-type"]
     )
