@@ -525,11 +525,9 @@ def mock_missing_properties(package):
                 d[k] = v
         return d
 
-    # if package["package-type"] == "charm":
-    #    fake_package = get_fake_charm()
-    # else:
-    #    fake_package = get_fake_bundle()
-
-    fake_package = {}
+    if package["package-type"] == "charm":
+        fake_package = get_fake_charm()
+    else:
+        fake_package = get_fake_bundle()
 
     return update(fake_package, package)
