@@ -56,6 +56,10 @@ def details(entity_name):
             channel["channel"]["released-at"]
         )
 
+    # Put the information in a generic key for cleaner templates
+    package["info"] = package[package["package-type"]]
+    del package[package["package-type"]]
+
     return render_template(
         "details.html", package=package, package_type=package["package-type"]
     )

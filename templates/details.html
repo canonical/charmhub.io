@@ -1,9 +1,6 @@
 {% extends 'base_layout.html' %}
 
-<!-- To DO - update copydoc and description -->
-{% block meta_copydoc %}https://docs.google.com/document/d/1WcNN2RlQQrbLSP5ZgcIsAeQAHj5h_yDW6Yd5oBMmU3M{% endblock meta_copydoc %}
-
-{% block meta_description %}Charmhub description{% endblock %}
+{% block meta_description %}Charmhub: The app store for clouds{% endblock %}
 
 {% block content %}
 <div class="p-strip--header is-shallow">
@@ -11,17 +8,13 @@
     <div class="col-8">
       <div class="p-charm-header">
         <div class="p-media-object--medium u-no-margin--bottom">
-          {% if package["package_type"] == "charm" %}
-          <img src="{{ package.store_front.icons[0] }}" class="p-media-object__image">
-          {% else %}
-          <div class="p-bundle-icons">
-            {% for bundle in bundle_content %}
-              {% if loop.index0 < 3 %}
-              <img src="{{ bundle.icon_url }}" class="p-bundle-icons__image" alt="">
-              {% endif %}
+          <div class="{% if package_type == "bundle" %}p-bundle-icons{% endif %}">
+            {% for media in package.info.media %}
+            {% if media.type == "icon" %}
+            <img src="{{ media.url }}" class="{% if package_type == "bundle"%}p-bundle-icons__image{% else %}p-media-object__image{% endif %}" alt="" />
+            {% endif %}
             {% endfor %}
           </div>
-          {% endif %}
           <div class="p-media-object__details">
             <h1 class="p-media-object__title">
               {{ package.name }}
