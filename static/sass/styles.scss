@@ -104,7 +104,7 @@ $theme-default-nav: dark;
 
 .p-channel-map {
   position: absolute;
-  z-index: 12;
+  z-index: 11;
 
   .p-channel-map__mask {
     bottom: 0;
@@ -112,17 +112,20 @@ $theme-default-nav: dark;
     position: fixed;
     right: 0;
     top: 0;
-    z-index: 11;
-  }
-}
-
-#channel-map-versions {
-  table tr {
-    cursor: pointer;
   }
 
-  table tr.is-active td {
-    font-weight: bold;
+  .p-channel-map__content {
+    max-width: $breakpoint-large;
+    position: relative;
+    z-index: 1;
+
+    table tr {
+      cursor: pointer;
+    }
+
+    table tr.is-active td {
+      font-weight: bold;
+    }
   }
 }
 

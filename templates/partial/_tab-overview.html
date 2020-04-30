@@ -6,7 +6,7 @@
     {{ package.overview | safe }}
   </div>
   <div class="col-4">
-    <h4 class="p-muted-heading">Charm information</h4>
+    <h4 class="p-muted-heading">{{ package_type|capitalize}} information</h4>
     <p>Latest release<br /><strong>3 days ago</strong></p>
     <p>Deployments<br /><strong>{{ deployments }}</strong></p>
     <p>License<br /><strong>{{ license }}</strong></p>
@@ -25,9 +25,9 @@
         <a href="{{ contact }}"><i class="p-icon--code"></i>&nbsp;&nbsp;Contact</a>
       </li>
     </ul>
-    <h4 class="p-muted-heading">Share this charm</h4>
+    <h4 class="p-muted-heading">Share this {{ package_type }}</h4>
     <p>Generate an embeddable card to be shared on external websites.</p>
     <!-- TO DO - Needs an embed this charm overlay implemented -->
-    <p><a class="p-button--neutral" href="">Share this charm</a></p>
+    <p><a class="p-button--neutral" href="">Share this {{ package_type }}</a></p>
   </div>
 </div>

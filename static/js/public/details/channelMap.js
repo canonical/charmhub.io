@@ -9,9 +9,11 @@ const init = (packageName, channelMapButton) => {
     packageName,
   };
 
-  const channelMap = document.querySelector("#channel-map-versions");
+  const channelMap = document.querySelector(".p-channel-map");
 
-  const mask = channelMap.querySelector("[data-js='channel-map-mask']");
+  const mask = channelMap.querySelector(".p-channel-map__mask");
+
+  const channelMapContent = channelMap.querySelector(".p-channel-map__content");
 
   const selectChannel = (channel, version) => {
     const selected = document.querySelector(
@@ -68,7 +70,7 @@ const init = (packageName, channelMapButton) => {
     toggleChannelMap();
   });
 
-  channelMap.addEventListener("click", (e) => {
+  channelMapContent.addEventListener("click", (e) => {
     let row = e.target;
 
     while (
