@@ -1,28 +1,211 @@
 @mixin p-charmhub-strip {
-  .p-strip--charmhub {
-    @extend %vf-strip;
+  @include jaas-p-strip-suru;
+  @include jaas-p-strip-slanted;
+  @include jaas-p-strip-half-and-half;
+  @include jaas-p-strip-muted-suru;
+  @include charmhub-p-strip;
+}
 
-    background-image:
-      linear-gradient(
-        to bottom left,
-        rgba(255, 255, 255, 0.04) 0,
-        rgba(255, 255, 255, 0.04) 49.9%,
-        transparent 50%
-      ),
-      linear-gradient(
-        to bottom right,
-        transparent 50%,
-        rgba(255, 255, 255, 0.04) 0,
-        rgba(255, 255, 255, 0.04) 49.9%
-      ),
-      linear-gradient(268deg, $brand-color 8%, darken($brand-color, 10%) 100%);
-    background-position: top right, bottom right, 0% 0%;
+@mixin jaas-p-strip-suru {
+  $suru-accent: #3fc8f2;
+
+  %jaas-strip-suru {
+    @extend %vf-strip;
     background-repeat: no-repeat;
-    background-size: 50% 100%, 8% 100%, auto;
+    background-size: cover;
+    overflow: hidden;
+    position: relative;
+
+    &::before {
+      content: '';
+      display: block;
+      height: 4rem;
+      left: 0;
+      position: absolute;
+      width: 100%;
+      z-index: 2;
+    }
+
+    &.has-accent {
+      &::after {
+        background: $suru-accent;
+        content: '';
+        display: block;
+        height: 100px;
+        position: absolute;
+        transform: rotate(15deg);
+        width: 500px;
+        z-index: 1;
+      }
+    }
+
+    &.is-light {
+      color: $color-x-dark;
+    }
 
     &.is-dark {
       color: $color-x-light;
+
+      .link--light {
+        color: $color-x-light;
+        text-decoration: underline;
+      }
     }
+  }
+
+  .p-strip--suru-top {
+    @extend %jaas-strip-suru;
+    padding-top: 8rem;
+
+    &::before {
+      background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(255, 255, 255, 1) 49%,
+        rgba(255, 255, 255, 0) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      top: 0;
+    }
+
+    &::after {
+      right: -100px;
+      top: -70px;
+    }
+  }
+
+  .p-strip--suru-bottom {
+    @extend %jaas-strip-suru;
+    padding-bottom: 8rem;
+
+    &::before {
+      background: linear-gradient(
+        to top left,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(255, 255, 255, 1) 49%,
+        rgba(255, 255, 255, 0) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      bottom: 0;
+    }
+
+    &::after {
+      bottom: -70px;
+      left: -100px;
+    }
+
+    &.to-white {
+      &::before {
+        background: linear-gradient(
+          to top left,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 1) 49%,
+          rgba(255, 255, 255, 0) 50%,
+          rgba(255, 255, 255, 0) 100%
+        );
+      }
+    }
+  }
+}
+
+@mixin jaas-p-strip-slanted {
+  [class*='p-strip'].is-slanted {
+    overflow: hidden;
+    padding-bottom: 8rem;
+    position: relative;
+
+    &::before {
+      background: linear-gradient(
+        to top left,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(255, 255, 255, 1) 49%,
+        rgba(255, 255, 255, 0) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      content: '';
+      display: block;
+      height: 4rem;
+      left: 0;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      z-index: 2;
+    }
+  }
+}
+
+@mixin jaas-p-strip-half-and-half {
+  .p-strip--half-and-half {
+    @extend %vf-strip;
+
+    background-image: linear-gradient(
+        to bottom left,
+        rgba(77, 204, 242, 0.05) 0%,
+        rgba(77, 204, 242, 0.05) 49.9%,
+        rgba(77, 204, 242, 0) 50%,
+        rgba(77, 204, 242, 0) 100%
+      ),
+      linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(255, 255, 255, 1) 49.9%,
+        rgba(255, 255, 255, 0) 50%,
+        rgba(255, 255, 255, 0) 100%
+      ),
+      linear-gradient(
+        to right,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(255, 255, 255, 1) 49.9%,
+        rgba(255, 255, 255, 0) 50%,
+        rgba(255, 255, 255, 0) 100%
+      ),
+      linear-gradient(266deg, #044f66, #022935);
+    background-position: top right, top right 37.7%, top left 50%, right center;
+    background-repeat: no-repeat;
+    background-size: 50% 100%, 20% 100%, 100% 100%, cover;
+
+    @media (max-width: $breakpoint-medium) {
+      background: #f0f5f7;
+    }
+  }
+}
+
+@mixin jaas-p-strip-muted-suru {
+  .p-strip--muted-suru {
+    @extend %vf-strip;
+
+    background-image: linear-gradient(
+        to top left,
+        rgba(63, 200, 242, 0.03) 0%,
+        rgba(63, 200, 242, 0.03) 49.9%,
+        rgba(63, 200, 242, 0) 50%,
+        rgba(63, 200, 242, 0) 100%
+      ),
+      linear-gradient(
+        to top right,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(255, 255, 255, 0.3) 49.9%,
+        rgba(255, 255, 255, 0) 50%,
+        rgba(255, 255, 255, 0) 100%
+      ),
+      linear-gradient(266deg, #e9f3f7, #e9f3f7);
+    background-position: top right, bottom left, top left;
+    background-repeat: no-repeat;
+    background-size: 40% 100%, 80% 60%, 100% 100%;
+
+    @media (max-width: $breakpoint-medium) {
+      background: rgb(255, 255, 255);
+    }
+  }
+}
+
+@mixin charmhub-p-strip {
+  .p-strip--charmhub {
+    @extend %vf-strip;
+
+    background-image: url('https://assets.ubuntu.com/v1/a9dab044-suru-right.svg'), linear-gradient(266deg, #044f66, #022935);
+    background-position: right center;
+    background-size: auto 100%, cover;
   }
 
   .p-strip--header {
