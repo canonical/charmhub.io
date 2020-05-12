@@ -1,0 +1,127 @@
+@mixin p-charmhub-filter {
+  .p-drawer--bottom {
+    background-color: $color-x-light;
+    bottom: 0;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+    display: none;
+    max-height: 75%;
+    overflow-y: scroll;
+    position: fixed;
+    width: 100%;
+    //set this to 10 to match the stick nav - it has to be greater than 2 (bundle icons use 2)
+    z-index: 10;
+
+    @media screen and(max-width: $breakpoint-medium) {
+      display: block;
+    }
+
+    &.is-active {
+
+    }
+
+    .p-drawer--bottom__title {
+      @extend %muted-heading;
+
+      background-color: $color-x-light;
+      margin-bottom: 0;
+      padding: map-get($sp-after, small) - map-get($nudges, nudge--small)
+        $spv-inner--large;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+
+      &::after {
+        border-bottom: 1px solid $color-mid-light;
+        bottom: 0;
+        content: "";
+        height: 1px;
+        left: 0;
+        position: absolute;
+        right: 0;
+      }
+
+      &.has-shadow {
+        box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+
+        &::after {
+          border-bottom: none;
+        }
+      }
+    }
+
+    .p-drawer--bottom__content {
+      &:not(:last-child) {
+        padding-bottom: $spv-inner--small;
+      }
+
+      .p-drawer--bottom__group-name {
+        color: $color-mid-dark;
+        font-weight: 400;
+        padding: $spv-inner--small $spv-outer--small-scaleable;
+        position: relative;
+
+        &::after {
+          border-bottom: 1px solid $color-mid-light;
+          bottom: 0;
+          content: "";
+          height: 1px;
+          left: $spv-outer--small-scaleable;
+          position: absolute;
+          right: 0;
+        }
+      }
+
+      .p-drawer--bottom__item {
+        padding-left: $spv-outer--small-scaleable;
+        padding-right: $spv-outer--small-scaleable;
+        position: relative;
+
+        &:not(:last-child)::after {
+          border-bottom: 1px solid $color-mid-light;
+          bottom: 0;
+          content: "";
+          height: 1px;
+          left: 3rem;
+          position: absolute;
+          right: 0;
+        }
+
+        label {
+          margin-bottom: 0;
+          padding-bottom: $spv-inner--small;
+          width: 100%;
+        }
+      }
+    }
+
+    .p-drawer--bottom__controls {
+      background-color: $color-x-light;
+      bottom: 0;
+      box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      justify-content: space-around;
+      padding: $spv-inner--medium 0 $spv-inner--large 0;
+      position: sticky;
+
+      @media screen and(max-width: 350px) {
+        display: block;
+        padding-left: $spv-inner--small;
+        padding-right: $spv-inner--small;
+      }
+
+      & * {
+        margin-bottom: 0;
+
+        @media screen and(min-width: 351px) {
+          width: 45%;
+        }
+
+        @media screen and(max-width: 350px) {
+          &:first-child {
+            margin-bottom: $spv-inner--medium;
+          }
+        }
+      }
+    }
+  }
+}

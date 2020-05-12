@@ -106,6 +106,10 @@ $theme-default-nav: dark;
 
 @include charmhub-p-series-tag;
 
+@import 'charmhub_p-filter';
+
+@include p-charmhub-filter;
+
 .p-channel-map {
   position: absolute;
   z-index: 11;
