@@ -155,6 +155,19 @@ $theme-default-nav: dark;
   margin-bottom: 1rem;
 }
 
+// XXX Ovi - 12.05.20: This can be removed once the new icon set is implemented in vanilla
+.p-icon--filter {
+  @extend %icon;
+
+  background-image: url("https://assets.ubuntu.com/v1/d8f7cd4d-filter.svg");
+}
+// XXX Ovi - 12.05.20: This can be removed once the new icon set is implemented in vanilla
+.p-icon--sort {
+  @extend %icon;
+
+  background-image: url("https://assets.ubuntu.com/v1/e75ab0cb-sort.svg");
+}
+
 // XXX Ovi - 04.04.20: This can be removed once this issue is closed.
 // https://github.com/canonical-web-and-design/vanilla-framework/issues/1452
 html,

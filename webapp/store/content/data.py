@@ -30,7 +30,6 @@ mock_categories = [
 
 mock_publisher_list = [
     {"name": "Charmers", "slug": "charmers"},
-    {"name": "Containers", "slug": "containers"},
     {"name": "Bigdata-charmers", "slug": "bigdata-charmers"},
     {"name": "Omnivector", "slug": "omnivector"},
     {"name": "Spicule", "slug": "spicule"},

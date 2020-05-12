@@ -6,7 +6,7 @@ class Filters {
 
     this.wrapperEls = {};
 
-    Object.keys(selectors).forEach(selectorName => {
+    Object.keys(selectors).forEach((selectorName) => {
       const el = document.querySelector(selectors[selectorName]);
       if (el) {
         this.wrapperEls[selectorName] = el;
@@ -14,9 +14,8 @@ class Filters {
     });
 
     this.initEvents();
-    console.log(this.wrapperEls);
 
-    window.addEventListener("popstate", e => {
+    window.addEventListener("popstate", (e) => {
       this._filters = e.state ? e.state.filters : null;
       this.updateUI();
     });
@@ -27,7 +26,7 @@ class Filters {
       const activeFilters = this.wrapperEls.filter.querySelectorAll(
         "[data-filter-type][data-filter-value].is-active"
       );
-      activeFilters.forEach(filter => {
+      activeFilters.forEach((filter) => {
         filter.classList.remove("is-active");
         filter
           .querySelector("[data-js='remove-filter']")
@@ -55,19 +54,19 @@ class Filters {
       this.wrapperEls.sort.value = "";
     }
 
-    Object.keys(this._filters).forEach(type => {
+    Object.keys(this._filters).forEach((type) => {
       if (type !== "q" && type !== "sort") {
         const activeFilters = this.wrapperEls.filter.querySelectorAll(
           "[data-filter-type][data-filter-value].is-active"
         );
-        activeFilters.forEach(filter => {
+        activeFilters.forEach((filter) => {
           filter.classList.remove("is-active");
           filter
             .querySelector("[data-js='remove-filter']")
             .classList.add("u-hide");
         });
 
-        this._filters[type].forEach(value => {
+        this._filters[type].forEach((value) => {
           const el = this.wrapperEls.filter.querySelector(
             `[data-filter-type="${type}"][data-filter-value="${value}"]`
           );
@@ -103,7 +102,13 @@ class Filters {
   }
 
   removeFilter(filterType, filterValue) {
-    if (filterValue) {
+    if (!filterType && !filterValue) {
+      Object.keys(this._filters).forEach((filterType) => {
+        if (filterType !== "sort") {
+          delete this._filters[filterType];
+        }
+      });
+    } else if (filterValue) {
       const index = this._filters[filterType].indexOf(filterValue);
 
       this._filters[filterType].splice(index, 1);
@@ -120,7 +125,7 @@ class Filters {
   }
 
   cleanFilters() {
-    Object.keys(this._filters).forEach(filterType => {
+    Object.keys(this._filters).forEach((filterType) => {
       if (this._filters[filterType].length === 0) {
         delete this._filters[filterType];
       }
@@ -130,7 +135,7 @@ class Filters {
   updateHistory() {
     const searchParams = new URLSearchParams();
 
-    Object.keys(this._filters).forEach(filterType => {
+    Object.keys(this._filters).forEach((filterType) => {
       searchParams.set(filterType, this._filters[filterType].join(","));
     });
 
@@ -159,7 +164,7 @@ class Filters {
     } else if (selectorName === "sortMobile") {
       const options = this.wrapperEls[selectorName].querySelectorAll("input");
       if (options) {
-        options.forEach(el => {
+        options.forEach((el) => {
           if (el.value === newValue) {
             el.checked = true;
           } else {
@@ -175,7 +180,7 @@ class Filters {
   }
 
   initFilterEvents(el) {
-    el.addEventListener("click", e => {
+    el.addEventListener("click", (e) => {
       let target = e.target;
 
       while (!this.isFilterElement(target) || !target.parentNode) {
@@ -206,7 +211,7 @@ class Filters {
   }
 
   initSearchEvents(el) {
-    el.addEventListener("submit", e => {
+    el.addEventListener("submit", (e) => {
       e.preventDefault();
       const formData = new FormData(el);
       const q = formData.get("q");
@@ -224,7 +229,7 @@ class Filters {
   }
 
   initSortEvents(el) {
-    el.addEventListener("change", e => {
+    el.addEventListener("change", (e) => {
       e.preventDefault();
       this.removeFilter("sort");
       this.addFilter("sort", el.value);
@@ -236,7 +241,7 @@ class Filters {
   }
 
   initMobileSortEvents(el) {
-    el.addEventListener("change", e => {
+    el.addEventListener("change", (e) => {
       e.preventDefault();
       this.removeFilter("sort");
       this.addFilter("sort", e.target.value);
@@ -246,24 +251,76 @@ class Filters {
       this.updateHistory();
 
       // hide the drawer once clicked
-      el.classList.add("is-active");
+      el.classList.remove("is-active");
     });
   }
 
-  initMobileSortButton(el) {
-    el.addEventListener("click", e => {
+  initMobileFilterEvents(el) {
+    const mobileFilters = el.querySelectorAll("input");
+    const resetButton = el.querySelector("[data-js='filter-reset']");
+    const submitButton = el.querySelector("[data-js='filter-submit']");
+
+    if (mobileFilters) {
+      mobileFilters.forEach((filterEl) => {
+        filterEl.addEventListener("click", () => {
+          const filterType = filterEl.dataset.filterType;
+          const filterValue = filterEl.value;
+
+          if (this.filterExists(filterType, filterValue)) {
+            this.removeFilter(filterType, filterValue);
+          } else {
+            this.addFilter(filterType, filterValue);
+          }
+
+          this.cleanFilters();
+          this.updateHistory();
+        });
+      });
+    }
+
+    if (resetButton) {
+      resetButton.addEventListener("click", () => {
+        this.removeFilter();
+        this.updateHistory();
+      });
+    }
+
+    if (submitButton) {
+      submitButton.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        el.classList.remove("is-active");
+        this.cleanFilters();
+        this.updateHistory();
+      });
+    }
+  }
+
+  initMobileButton(el, targetEl) {
+    el.addEventListener("click", (e) => {
       e.preventDefault();
-      this.wrapperEls["sortMobile"].classList.remove("is-active");
+      targetEl.classList.toggle("is-active");
     });
   }
 
   initEvents() {
-    const { filter, search, sort, sortMobile } = this.wrapperEls;
+    const {
+      filter,
+      search,
+      sort,
+      sortMobile,
+      sortMobileButton,
+      filterMobile,
+      filterMobileButton,
+    } = this.wrapperEls;
     filter && this.initFilterEvents(filter);
     search && this.initSearchEvents(search);
     sort && this.initSortEvents(sort);
     sortMobile && this.initMobileSortEvents(sortMobile);
-    // sortMobileButton && this.initMobileSortButton(sortMobileButton);
+    sortMobileButton && this.initMobileButton(sortMobileButton, sortMobile);
+    filterMobile && this.initMobileFilterEvents(filterMobile);
+    filterMobileButton &&
+      this.initMobileButton(filterMobileButton, filterMobile);
   }
 }
 
