@@ -11,6 +11,59 @@
     <p>Find and deploy <a href="" class="p-link--inverted">Juju</a> solutions.</p>
   </div>
 </section>
+<div class="p-drawer--bottom u-hide" data-js="mobile-sort-handler">
+  <input type="checkbox" id="mobile-sort-opener" hidden>
+  <div class="p-drawer--bottom__title">
+    Sort by
+  </div>
+  <form class="p-drawer--bottom__content">
+    <div class="p-drawer--bottom__item">
+      <input type="radio" name="sortMobile" id="featured" value="featured" checked="">
+      <label for="featured">Featured</label>
+    </div>
+    <div class="p-drawer--bottom__item">
+      <input type="radio" name="sortMobile" id="name-desc" value="name-desc">
+      <label for="name-desc">Name A/Z</label>
+    </div>
+    <div class="p-drawer--bottom__item">
+      <input type="radio" name="sortMobile" id="name-asc" value="name-asc">
+      <label for="name-asc">Name Z/A</label>
+    </div>
+  </form>
+</div>
+<div class="p-drawer--bottom u-hide">
+  <div class="p-drawer--bottom__title">
+    Filter (22)
+  </div>
+  <form class="p-drawer--bottom__content">
+    {% if categories %}
+    <div class="p-drawer--bottom__group-name">
+      Categories
+    </div>
+      {% for category in categories %}
+      <div class="p-drawer--bottom__item">
+        <input type="checkbox" id="category-{{ category.slug }}" value="category-{{ category.slug }}">
+        <label for="category-{{ category.slug }}">{{ category.name }}</label>
+      </div>
+      {% endfor %}
+    {% endif %}
+    {% if publisher_list %}
+    <div class="p-drawer--bottom__group-name">
+      Publisher
+    </div>
+      {% for publisher in publisher_list %}
+      <div class="p-drawer--bottom__item">
+        <input type="checkbox" id="publisher-{{ publisher.slug }}" value="publisher-{{ publisher.slug }}">
+        <label for="publisher-{{ publisher.slug }}">{{ publisher.name }}</label>
+      </div>
+      {% endfor %}
+    {% endif %}
+    <div class="p-drawer--bottom__controls">
+      <a href="/store" class="p-button--neutral">Reset</input>
+      <a href="#" class="p-button--positive">Show results (22)</a>
+    </div>
+  </form>
+</div>
 <section class="p-strip--main">
   <div class="row">
 
@@ -19,15 +72,20 @@
     <div class="col-9">
       <div class="row u-vertically-center">
         <div class="col-2">
-          <h4 class="p-muted-heading u-float-left">{{ results|length }} items</h4>
+          <ul class="p-inline-list">
+            <li class="p-inline-list__item p-muted-heading u-float-left">{{ results|length }} items</li>
+            <li class="p-inline-list__item u-float-right u-no-margin--right u-hide--medium u-hide--large"><a href="#"><i class="p-icon--drag"></i>Filters (4)</a></li>
+            <!-- <li class="p-inline-list__item u-float-right u-hide--medium u-hide--large"><a href="" data-js="mobile-sort-reveal-button"><i class="p-icon--collapse"></i>Sort by</a></li> -->
+            <li class="p-inline-list__item u-float-right u-hide--medium u-hide--large"><label for="mobile-sort-opener" class="p-link">Sort by</label></li>
+          </ul>
         </div>
         <div class="col-4 col-start-large-4">
           <form class="p-search-box" data-js="search-handler">
-            <input type="search" class="p-search-box__input" name="q" placeholder="Search" {% if q %}value="{{ q }}"{% endif %} />
+            <input type="search" class="p-search-box__input" name="q" placeholder="Search" {% if q %}value="{{ q }}" {% endif %} />
             <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search"></i></button>
           </form>
         </div>
-        <div class="col-2">
+        <div class="col-2 u-hide--small u-hide--medium">
           <select name="sort" data-js="sort-handler" value="{{ sort }}">
             <option disabled="disabled" value="">Sort by</option>
             <option value="featured">Featured</option>
@@ -39,14 +97,15 @@
         </div>
       </div>
       <div class="row">
-      {% if results %}
+        {% if results %}
         {% for package in results %}
-          {% include "partial/_entity-card.html" %}
+        {% include "partial/_entity-card.html" %}
         {% endfor %}
-      {% endif %}
+        {% endif %}
       </div>
     </div>
 </section>
+
 {% endblock %}
 
 {% block page_scripts %}
@@ -56,7 +115,9 @@
     new charmhub.store.Filters({
       filter: "[data-js='filter-handler']",
       search: "[data-js='search-handler']",
-      sort: "[data-js='sort-handler']"
+      sort: "[data-js='sort-handler']",
+      sortMobile: "[data-js='mobile-sort-handler']"
+      // sortMobileButton: "[data-js='mobile-sort-reveal-button']"
     });
   });
 </script>
