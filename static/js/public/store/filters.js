@@ -6,7 +6,7 @@ class Filters {
 
     this.wrapperEls = {};
 
-    Object.keys(selectors).forEach((selectorName) => {
+    Object.keys(selectors).forEach(selectorName => {
       const el = document.querySelector(selectors[selectorName]);
       if (el) {
         this.wrapperEls[selectorName] = el;
@@ -14,8 +14,9 @@ class Filters {
     });
 
     this.initEvents();
+    console.log(this.wrapperEls);
 
-    window.addEventListener("popstate", (e) => {
+    window.addEventListener("popstate", e => {
       this._filters = e.state ? e.state.filters : null;
       this.updateUI();
     });
@@ -26,7 +27,7 @@ class Filters {
       const activeFilters = this.wrapperEls.filter.querySelectorAll(
         "[data-filter-type][data-filter-value].is-active"
       );
-      activeFilters.forEach((filter) => {
+      activeFilters.forEach(filter => {
         filter.classList.remove("is-active");
         filter
           .querySelector("[data-js='remove-filter']")
@@ -54,19 +55,19 @@ class Filters {
       this.wrapperEls.sort.value = "";
     }
 
-    Object.keys(this._filters).forEach((type) => {
+    Object.keys(this._filters).forEach(type => {
       if (type !== "q" && type !== "sort") {
         const activeFilters = this.wrapperEls.filter.querySelectorAll(
           "[data-filter-type][data-filter-value].is-active"
         );
-        activeFilters.forEach((filter) => {
+        activeFilters.forEach(filter => {
           filter.classList.remove("is-active");
           filter
             .querySelector("[data-js='remove-filter']")
             .classList.add("u-hide");
         });
 
-        this._filters[type].forEach((value) => {
+        this._filters[type].forEach(value => {
           const el = this.wrapperEls.filter.querySelector(
             `[data-filter-type="${type}"][data-filter-value="${value}"]`
           );
@@ -119,7 +120,7 @@ class Filters {
   }
 
   cleanFilters() {
-    Object.keys(this._filters).forEach((filterType) => {
+    Object.keys(this._filters).forEach(filterType => {
       if (this._filters[filterType].length === 0) {
         delete this._filters[filterType];
       }
@@ -129,7 +130,7 @@ class Filters {
   updateHistory() {
     const searchParams = new URLSearchParams();
 
-    Object.keys(this._filters).forEach((filterType) => {
+    Object.keys(this._filters).forEach(filterType => {
       searchParams.set(filterType, this._filters[filterType].join(","));
     });
 
@@ -152,12 +153,29 @@ class Filters {
     }
   }
 
+  syncSortUI(selectorName, newValue) {
+    if (selectorName === "sort") {
+      this.wrapperEls[selectorName].value = newValue;
+    } else if (selectorName === "sortMobile") {
+      const options = this.wrapperEls[selectorName].querySelectorAll("input");
+      if (options) {
+        options.forEach(el => {
+          if (el.value === newValue) {
+            el.checked = true;
+          } else {
+            el.checked = false;
+          }
+        });
+      }
+    }
+  }
+
   isFilterElement(el) {
     return el.dataset.js && el.dataset.js === "filter";
   }
 
   initFilterEvents(el) {
-    el.addEventListener("click", (e) => {
+    el.addEventListener("click", e => {
       let target = e.target;
 
       while (!this.isFilterElement(target) || !target.parentNode) {
@@ -188,7 +206,7 @@ class Filters {
   }
 
   initSearchEvents(el) {
-    el.addEventListener("submit", (e) => {
+    el.addEventListener("submit", e => {
       e.preventDefault();
       const formData = new FormData(el);
       const q = formData.get("q");
@@ -206,21 +224,46 @@ class Filters {
   }
 
   initSortEvents(el) {
-    el.addEventListener("change", (e) => {
+    el.addEventListener("change", e => {
       e.preventDefault();
       this.removeFilter("sort");
       this.addFilter("sort", el.value);
+      this.syncSortUI("sortMobile", el.value);
 
       this.cleanFilters();
       this.updateHistory();
     });
   }
 
+  initMobileSortEvents(el) {
+    el.addEventListener("change", e => {
+      e.preventDefault();
+      this.removeFilter("sort");
+      this.addFilter("sort", e.target.value);
+      this.syncSortUI("sort", e.target.value);
+
+      this.cleanFilters();
+      this.updateHistory();
+
+      // hide the drawer once clicked
+      el.classList.add("is-active");
+    });
+  }
+
+  initMobileSortButton(el) {
+    el.addEventListener("click", e => {
+      e.preventDefault();
+      this.wrapperEls["sortMobile"].classList.remove("is-active");
+    });
+  }
+
   initEvents() {
-    const { filter, search, sort } = this.wrapperEls;
+    const { filter, search, sort, sortMobile } = this.wrapperEls;
     filter && this.initFilterEvents(filter);
     search && this.initSearchEvents(search);
     sort && this.initSortEvents(sort);
+    sortMobile && this.initMobileSortEvents(sortMobile);
+    // sortMobileButton && this.initMobileSortButton(sortMobileButton);
   }
 }
 
