@@ -11,6 +11,7 @@
 
   %jaas-strip-suru {
     @extend %vf-strip;
+
     background-repeat: no-repeat;
     background-size: cover;
     overflow: hidden;
@@ -55,16 +56,18 @@
 
   .p-strip--suru-top {
     @extend %jaas-strip-suru;
+
     padding-top: 8rem;
 
     &::before {
-      background: linear-gradient(
-        to bottom right,
-        rgba(255, 255, 255, 1) 0%,
-        rgba(255, 255, 255, 1) 49%,
-        rgba(255, 255, 255, 0) 50%,
-        rgba(255, 255, 255, 0) 100%
-      );
+      background:
+        linear-gradient(
+          to bottom right,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 1) 49%,
+          rgba(255, 255, 255, 0) 50%,
+          rgba(255, 255, 255, 0) 100%
+        );
       top: 0;
     }
 
@@ -76,16 +79,18 @@
 
   .p-strip--suru-bottom {
     @extend %jaas-strip-suru;
+
     padding-bottom: 8rem;
 
     &::before {
-      background: linear-gradient(
-        to top left,
-        rgba(255, 255, 255, 1) 0%,
-        rgba(255, 255, 255, 1) 49%,
-        rgba(255, 255, 255, 0) 50%,
-        rgba(255, 255, 255, 0) 100%
-      );
+      background:
+        linear-gradient(
+          to top left,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 1) 49%,
+          rgba(255, 255, 255, 0) 50%,
+          rgba(255, 255, 255, 0) 100%
+        );
       bottom: 0;
     }
 
@@ -96,13 +101,14 @@
 
     &.to-white {
       &::before {
-        background: linear-gradient(
-          to top left,
-          rgba(255, 255, 255, 1) 0%,
-          rgba(255, 255, 255, 1) 49%,
-          rgba(255, 255, 255, 0) 50%,
-          rgba(255, 255, 255, 0) 100%
-        );
+        background:
+          linear-gradient(
+            to top left,
+            rgba(255, 255, 255, 1) 0%,
+            rgba(255, 255, 255, 1) 49%,
+            rgba(255, 255, 255, 0) 50%,
+            rgba(255, 255, 255, 0) 100%
+          );
       }
     }
   }
@@ -115,19 +121,20 @@
     position: relative;
 
     &::before {
-      background: linear-gradient(
-        to top left,
-        rgba(255, 255, 255, 1) 0%,
-        rgba(255, 255, 255, 1) 49%,
-        rgba(255, 255, 255, 0) 50%,
-        rgba(255, 255, 255, 0) 100%
-      );
+      background:
+        linear-gradient(
+          to top left,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 1) 49%,
+          rgba(255, 255, 255, 0) 50%,
+          rgba(255, 255, 255, 0) 100%
+        );
+      bottom: 0;
       content: '';
       display: block;
       height: 4rem;
       left: 0;
       position: absolute;
-      bottom: 0;
       width: 100%;
       z-index: 2;
     }
@@ -138,7 +145,8 @@
   .p-strip--half-and-half {
     @extend %vf-strip;
 
-    background-image: linear-gradient(
+    background-image:
+      linear-gradient(
         to bottom left,
         rgba(77, 204, 242, 0.05) 0%,
         rgba(77, 204, 242, 0.05) 49.9%,
@@ -174,7 +182,8 @@
   .p-strip--muted-suru {
     @extend %vf-strip;
 
-    background-image: linear-gradient(
+    background-image:
+      linear-gradient(
         to top left,
         rgba(63, 200, 242, 0.03) 0%,
         rgba(63, 200, 242, 0.03) 49.9%,

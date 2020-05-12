@@ -25,9 +25,9 @@
     }
   },
   "lint-staged": {
-    "**/*.py": "scripts/lint.sh python",
-    "**/*.js": "scripts/lint.sh js",
-    "**/*.scss": "scripts/lint.sh scss"
+    "**/*.py": "dotrun lint-python",
+    "**/*.js": "dotrun lint-js",
+    "**/*.scss": "dotrun lint-scss"
   },
   "dependencies": {
     "@canonical/global-nav": "2.4.1",
