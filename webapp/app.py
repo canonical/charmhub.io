@@ -1,10 +1,12 @@
 from canonicalwebteam.flask_base.app import FlaskBase
 from canonicalwebteam.store_api.stores.charmstore import CharmStore
-from flask import render_template
+from flask import make_response, render_template, session
 
-from webapp import helpers, config
-from webapp.store.views import store
+from webapp import authentication, config, helpers
+from webapp.decorators import login_required
 from webapp.error_handling import register_error_handlers
+from webapp.login.views import login
+from webapp.store.views import store
 
 app = FlaskBase(
     __name__,
@@ -18,6 +20,7 @@ app.store_api = CharmStore()
 
 register_error_handlers(app)
 app.register_blueprint(store)
+app.register_blueprint(login)
 
 
 @app.context_processor
@@ -31,9 +34,17 @@ def utility_processor():
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    if authentication.is_authenticated(session):
+        response = make_response(render_template("index.html"))
+    else:
+        response = make_response(render_template("holding.html"))
+
+    # Temporal fix to avoid cache since this page could return two versions
+    response.headers.set("Cache-Control", "no-store")
+    return response
 
 
 @app.route("/about")
+@login_required
 def about():
     return render_template("about.html")

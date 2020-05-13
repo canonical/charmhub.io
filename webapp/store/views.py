@@ -3,6 +3,7 @@ from flask import current_app as app
 from flask import render_template, request
 
 from webapp.config import DETAILS_VIEW_REGEX
+from webapp.decorators import login_required
 from webapp.store import logic
 from webapp.store.content import data
 
@@ -12,6 +13,7 @@ store = Blueprint(
 
 
 @store.route("/store")
+@login_required
 def store_view():
     query = request.args.get("q", default=None, type=str)
     sort = request.args.get("sort", default="", type=str)
@@ -43,6 +45,7 @@ def store_view():
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
+@login_required
 def details(entity_name):
     # Get entity info from API
     package = data.mock_missing_properties(
