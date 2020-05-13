@@ -1,3 +1,5 @@
+import throttle from "../../libs/throttle";
+
 /** Store page filters */
 class Filters {
   constructor(selectors) {
@@ -175,41 +177,6 @@ class Filters {
     }
   }
 
-  isFilterElement(el) {
-    return el.dataset.js && el.dataset.js === "filter";
-  }
-
-  initFilterEvents(el) {
-    el.addEventListener("click", (e) => {
-      let target = e.target;
-
-      while (!this.isFilterElement(target) || !target.parentNode) {
-        target = target.parentNode;
-      }
-
-      if (target) {
-        e.preventDefault();
-        const removeEl = target.querySelector("[data-js='remove-filter']");
-
-        const filterType = target.dataset.filterType;
-        const filterValue = target.dataset.filterValue;
-
-        if (this.filterExists(filterType, filterValue)) {
-          this.removeFilter(filterType, filterValue);
-          target.classList.remove("is-active");
-          removeEl.classList.add("u-hide");
-        } else {
-          this.addFilter(filterType, filterValue);
-          target.classList.add("is-active");
-          removeEl.classList.remove("u-hide");
-        }
-
-        this.cleanFilters();
-        this.updateHistory();
-      }
-    });
-  }
-
   initSearchEvents(el) {
     el.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -255,13 +222,13 @@ class Filters {
     });
   }
 
-  initMobileFilterEvents(el) {
-    const mobileFilters = el.querySelectorAll("input");
+  initFilterEvents(el) {
+    const filters = el.querySelectorAll("input");
     const resetButton = el.querySelector("[data-js='filter-reset']");
     const submitButton = el.querySelector("[data-js='filter-submit']");
 
-    if (mobileFilters) {
-      mobileFilters.forEach((filterEl) => {
+    if (filters) {
+      filters.forEach((filterEl) => {
         filterEl.addEventListener("click", () => {
           const filterType = filterEl.dataset.filterType;
           const filterValue = filterEl.value;
@@ -276,6 +243,29 @@ class Filters {
           this.updateHistory();
         });
       });
+    }
+
+    // Show shadow when scrolling through the filters on mobile
+    const elTitle = el.querySelector("[data-js='js-shadow-title']");
+    const elForm = el.querySelector("[data-js='js-shadow-form']");
+    if (elTitle && elForm) {
+      const contentTop = elForm.getBoundingClientRect().top;
+      const toggleShadow = () => {
+        // The 0.25 value depends on the maximum height of the ".p-filter" element - it is currently set to 75%
+        if (
+          el.getBoundingClientRect().top / el.getBoundingClientRect().bottom <=
+          0.25
+        ) {
+          // The value 2 has been arbitrary set because seems to work fine
+          if (contentTop - elForm.getBoundingClientRect().top > 2) {
+            elTitle.classList.add("has-shadow");
+          } else {
+            elTitle.classList.remove("has-shadow");
+          }
+        }
+      };
+      const onScroll = throttle(() => toggleShadow(), 30);
+      el.addEventListener("scroll", onScroll);
     }
 
     if (resetButton) {
@@ -310,7 +300,6 @@ class Filters {
       sort,
       sortMobile,
       sortMobileButton,
-      filterMobile,
       filterMobileButton,
     } = this.wrapperEls;
     filter && this.initFilterEvents(filter);
@@ -318,9 +307,7 @@ class Filters {
     sort && this.initSortEvents(sort);
     sortMobile && this.initMobileSortEvents(sortMobile);
     sortMobileButton && this.initMobileButton(sortMobileButton, sortMobile);
-    filterMobile && this.initMobileFilterEvents(filterMobile);
-    filterMobileButton &&
-      this.initMobileButton(filterMobileButton, filterMobile);
+    filterMobileButton && this.initMobileButton(filterMobileButton, filter);
   }
 }
 
