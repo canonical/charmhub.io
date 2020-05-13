@@ -106,9 +106,13 @@ $theme-default-nav: dark;
 
 @include charmhub-p-series-tag;
 
-@import 'charmhub_p-filter';
+@import "charmhub_p-filter";
 
 @include p-charmhub-filter;
+
+@import "charmhub_p-sort";
+
+@include p-charmhub-sort;
 
 .p-channel-map {
   position: absolute;
@@ -175,10 +179,8 @@ body {
   height: 100%;
 }
 
-// XXX Ovi - 21.05.20: Workaround z-index issue between side nav and global nav
-// This can be removed once this issue is closed.
-// https://github.com/canonical-web-and-design/vanilla-framework/issues/3075
-.p-side-navigation__drawer,
-.p-side-navigation__overlay {
-  z-index: 100;
+.u-hide--small-1 {
+  @media screen and(max-width: $breakpoint-medium - 1) {
+    display: none !important;
+  }
 }

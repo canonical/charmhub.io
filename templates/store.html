@@ -11,65 +11,59 @@
     <p>Find and deploy <a href="" class="p-link--inverted">Juju</a> solutions.</p>
   </div>
 </section>
-<div class="p-drawer--bottom" data-js="mobile-sort-handler">
-  <div class="p-drawer--bottom__title">
+<div class="p-sort" data-js="mobile-sort-handler">
+  <div class="p-sort__title">
     Sort by
   </div>
-  <form class="p-drawer--bottom__content">
-    <div class="p-drawer--bottom__item">
+  <form class="p-sort__content">
+    <div class="p-sort__item">
       <input type="radio" name="sortMobile" id="featured" value="featured" checked="">
       <label for="featured">Featured</label>
     </div>
-    <div class="p-drawer--bottom__item">
+    <div class="p-sort__item">
       <input type="radio" name="sortMobile" id="name-desc" value="name-desc">
       <label for="name-desc">Name A/Z</label>
     </div>
-    <div class="p-drawer--bottom__item">
+    <div class="p-sort__item">
       <input type="radio" name="sortMobile" id="name-asc" value="name-asc">
       <label for="name-asc">Name Z/A</label>
-    </div>
-  </form>
-</div>
-<div class="p-drawer--bottom" data-js="mobile-filter-handler">
-  <div class="p-drawer--bottom__title">
-    Filter ({{ results|length }})
-  </div>
-  <form class="p-drawer--bottom__content">
-    {% if categories %}
-    <div class="p-drawer--bottom__group-name">
-      Categories
-    </div>
-    {% for category in categories %}
-    <div class="p-drawer--bottom__item">
-      <input type="checkbox" id="{{ category.slug }}" value="{{ category.slug }}" data-filter-type="category" data-js="filter" {% if active_filter('category', category.slug) %}checked{% endif %}>
-      <label for="{{ category.slug }}">{{ category.name }}</label>
-    </div>
-    {% endfor %}
-    {% endif %}
-    {% if publisher_list %}
-    <div class="p-drawer--bottom__group-name">
-      Publisher
-    </div>
-    {% for publisher in publisher_list %}
-    <div class="p-drawer--bottom__item">
-      <input type="checkbox" id="{{ publisher.slug }}" value="{{ publisher.slug }}" data-filter-type="publisher" data-js="filter" {% if active_filter('publisher', publisher.slug) %}checked{% endif %}">
-      <label for="{{ publisher.slug }}">{{ publisher.name }}</label>
-    </div>
-    {% endfor %}
-    {% endif %}
-    <div class="p-drawer--bottom__controls">
-      <button type="reset" class="p-button--neutral" data-js="filter-reset">Reset</button>
-      <button class="p-button--positive" data-js="filter-submit">Show results ({{ results|length }})</button>
     </div>
   </form>
 </div>
 <section class="p-strip--main">
   <div class="row">
 
-    {% include "partial/_side-navigation.html" %}
+    {% include "partial/_filters.html" %}
 
     <div class="col-9">
       <div class="row u-vertically-center">
+        <div class="col-3">
+          <ul class="p-inline-list">
+            <li class="p-inline-list__item p-muted-heading u-float-left">{{ results|length }} items</li>
+            <li class="p-inline-list__item u-no-margin--right u-float-right u-hide--large u-hide--medium">
+              <a href="/store" data-js="mobile-sort-reveal-button" class="has-icon"><i class="p-icon--sort"></i>Sort by</a>
+              <a href="/store" data-js="mobile-filter-reveal-button" class="has-icon"><i class="p-icon--filter"></i>Filters (4)</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-3 col-start-large-4">
+          <form class="p-search-box" data-js="search-handler">
+            <input type="search" class="p-search-box__input" name="q" placeholder="Search" {% if q %}value="{{ q }}" {% endif %} />
+            <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search"></i></button>
+          </form>
+        </div>
+        <div class="col-3 u-hide--small-1">
+          <select name="sort" data-js="sort-handler" value="{{ sort }}">
+            <option disabled="disabled" value="">Sort by</option>
+            <option value="featured">Featured</option>
+            <option value="name-desc">Name A/Z</option>
+            <option value="name-asc">Name Z/A</option>
+            {#<option value="most-popular">Most popular</option>#}
+            {#<option value="publisher">Publisher</option>#}
+          </select>
+        </div>
+      </div>
+      <!-- <div class="row u-vertically-center">
         <div class="col-2">
           <ul class="p-inline-list">
             <li class="p-inline-list__item p-muted-heading u-float-left">{{ results|length }} items</li>
@@ -93,7 +87,7 @@
             {#<option value="publisher">Publisher</option>#}
           </select>
         </div>
-      </div>
+      </div> -->
       <div class="row">
         {% if results %}
         {% for package in results %}
@@ -116,7 +110,6 @@
       sort: "[data-js='sort-handler']",
       sortMobile: "[data-js='mobile-sort-handler']",
       sortMobileButton: "[data-js='mobile-sort-reveal-button']",
-      filterMobile: "[data-js='mobile-filter-handler']",
       filterMobileButton: "[data-js='mobile-filter-reveal-button']"
     });
   });
