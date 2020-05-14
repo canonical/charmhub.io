@@ -21,7 +21,6 @@ open_id = OpenID(
 @login.route("/login", methods=["GET", "POST"])
 @open_id.loginhandler
 def login_handler():
-    print(flask.session)
     if authentication.is_authenticated(flask.session):
         return flask.redirect(open_id.get_next_url())
 
