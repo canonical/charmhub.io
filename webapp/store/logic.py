@@ -72,12 +72,12 @@ def convert_date(date_to_convert):
 
 
 def get_icons(package):
-    media = package[package["package-type"]]["media"]
+    media = package[package["type"]]["media"]
     return [m["url"] for m in media if m["type"] == "icon"]
 
 
 def add_store_front_data(package):
-    package_data = package[package["package-type"]]
+    package_data = package[package["type"]]
     extra = {}
     extra["icons"] = get_icons(package)
     extra["publisher_name"] = package_data["publisher"]["display-name"]

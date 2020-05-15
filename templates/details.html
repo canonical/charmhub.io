@@ -9,7 +9,7 @@
       <div class="p-charm-header">
         <div class="p-media-object--medium u-no-margin--bottom">
           <div class="{% if package_type == "bundle" %}p-bundle-icons{% endif %}">
-            {% for media in package.info.media %}
+            {% for media in package.charm.media %}
             {% if media.type == "icon" %}
             <img src="{{ media.url }}" class="{% if package_type == "bundle"%}p-bundle-icons__image{% else %}p-media-object__image{% endif %}" alt="" />
             {% endif %}
