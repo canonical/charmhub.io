@@ -11,7 +11,9 @@ login = flask.Blueprint(
 )
 
 LOGIN_URL = os.getenv("LOGIN_URL", "https://login.ubuntu.com")
-LP_CANONICAL_TEAM = os.getenv("LOGIN_GROUP", "canonical-webmonkeys")
+LOGIN_LAUNCHPAD_TEAM = os.getenv(
+    "LOGIN_LAUNCHPAD_TEAM", "canonical-webmonkeys"
+)
 
 open_id = OpenID(
     stateless=True, safe_roots=[], extension_responses=[TeamsResponse],
@@ -24,7 +26,7 @@ def login_handler():
     if authentication.is_authenticated(flask.session):
         return flask.redirect(open_id.get_next_url())
 
-    lp_teams = TeamsRequest(query_membership=[LP_CANONICAL_TEAM])
+    lp_teams = TeamsRequest(query_membership=[LOGIN_LAUNCHPAD_TEAM])
 
     return open_id.try_login(
         LOGIN_URL, ask_for=["email"], extensions=[lp_teams],
@@ -33,7 +35,7 @@ def login_handler():
 
 @open_id.after_login
 def after_login(resp):
-    if LP_CANONICAL_TEAM not in resp.extensions["lp"].is_member:
+    if LOGIN_LAUNCHPAD_TEAM not in resp.extensions["lp"].is_member:
         flask.abort(403)
 
     flask.session["openid"] = {
