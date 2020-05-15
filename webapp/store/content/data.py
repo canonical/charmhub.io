@@ -92,7 +92,7 @@ def get_fake_channel_map_entry(risk, revision):
 
 def get_fake_charm():
     return {
-        "package-type": "charm",
+        "type": "charm",
         "id": "charmCHARMcharmCHARMcharmCHARM" + str(fake.random_int(10, 99)),
         "name": fake.domain_word(),
         "charm": {
@@ -386,7 +386,7 @@ def get_fake_charm():
 
 def get_fake_bundle():
     return {
-        "package-type": "bundle",
+        "type": "bundle",
         "id": "bundleBUNDLEbundleBUNDLEbundle" + str(fake.random_int(10, 99)),
         "name": fake.domain_word(),
         "bundle": {
@@ -525,7 +525,7 @@ def mock_missing_properties(package):
                 d[k] = v
         return d
 
-    if package["package-type"] == "charm":
+    if package["type"] == "charm":
         fake_package = get_fake_charm()
     else:
         fake_package = get_fake_bundle()
