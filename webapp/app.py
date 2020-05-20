@@ -47,4 +47,28 @@ def index():
 @app.route("/about")
 @login_required
 def about():
-    return render_template("about.html")
+    return render_template("about/index.html")
+
+
+@app.route("/about/manifesto")
+@login_required
+def manifesto():
+    return render_template("about/manifesto.html")
+
+
+@app.route("/about/publishing")
+@login_required
+def publishing():
+    return render_template("about/publishing.html")
+
+
+@app.route("/about/governance")
+@login_required
+def governance():
+    return render_template("about/governance.html")
+
+
+@app.route("/about/glossary")
+@login_required
+def glossary():
+    return render_template("about/glossary.html")
