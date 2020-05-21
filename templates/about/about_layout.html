@@ -1,0 +1,63 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+<section class="p-strip--charmhub is-shallow is-dark">
+  <div class="u-fixed-width">
+    <h1 class="p-heading--2">About Open Operators Collection</h1>
+  </div>
+</section>
+<section class="p-strip--main">
+  <div class="row">
+    <div class="col-2">
+      <div class="p-side-navigation" id="drawer">
+        <a href="#drawer" class="p-side-navigation__toggle js-drawer-toggle" aria-controls="drawer">
+          Toggle side navigation
+        </a>
+
+        <div class="p-side-navigation__overlay js-drawer-toggle" aria-controls="drawer"></div>
+
+        <div class="p-side-navigation__drawer">
+          <div class="p-side-navigation__drawer-header">
+            <a href="#" class="p-side-navigation__toggle--in-drawer js-drawer-toggle" aria-controls="drawer">
+              Toggle side navigation
+            </a>
+          </div>
+
+          <ul class="p-side-navigation__list">
+            <li class="p-side-navigation__item">
+              <a class="p-side-navigation__link{% if request.path == '/about' %} is-active{% endif %}" href="/about">About</a>
+            </li>
+            <li class="p-side-navigation__item ">
+              <a class="p-side-navigation__link{% if request.path == '/about/manifesto' %} is-active{% endif %}" href="/about/manifesto">Manifesto</a>
+            </li>
+            <li class="p-side-navigation__item ">
+              <a class="p-side-navigation__link{% if request.path == '/about/publishing' %} is-active{% endif %}" href="/about/publishing">Publishing</a>
+            </li>
+            <li class="p-side-navigation__item ">
+              <a class="p-side-navigation__link{% if request.path == '/about/governance' %} is-active{% endif %}" href="/about/governance">Governance</a>
+            </li>
+            <li class="p-side-navigation__item ">
+              <a class="p-side-navigation__link{% if request.path == '/about/glossary' %} is-active{% endif %}" href="/about/glossary">Glossary</a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-9 col-start-large-4">
+
+      {% block about_content %}{% endblock about_content %}
+
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ versioned_static('js/dist/about.js') }}" defer></script>
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    new charmhub.about.SideNavigation('.p-side-navigation, [class*="p-side-navigation--"]');
+  });
+</script>
+{% endblock %}

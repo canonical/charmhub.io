@@ -16,9 +16,10 @@ const minimizer = production
 module.exports = {
   entry: {
     "global-nav": "./static/js/base/global-nav.js",
+    about: "./static/js/public/about/index.js",
     base: "./static/js/base/base.js",
-    store: "./static/js/public/store/index.js",
     details: "./static/js/public/details/index.js",
+    store: "./static/js/public/store/index.js",
   },
   output: {
     filename: "[name].js",
@@ -41,6 +42,10 @@ module.exports = {
       },
       // loaders are evaluated from bottom to top (right to left)
       // so first transpile via babel, then expose as global
+      {
+        test: require.resolve(__dirname + "/static/js/public/about/index.js"),
+        use: ["expose-loader?charmhub.about", "babel-loader"],
+      },
       {
         test: require.resolve(__dirname + "/static/js/base/base.js"),
         use: ["expose-loader?charmhub.base", "babel-loader"],

@@ -10,7 +10,7 @@ $theme-default-nav: dark;
 // import custom mixins
 
 // Import Vanilla framework
-@import 'vanilla-framework/scss/vanilla';
+@import "vanilla-framework/scss/vanilla";
 
 // Base Vanilla styles
 @include vf-base;
@@ -54,51 +54,51 @@ $theme-default-nav: dark;
 @include vf-u-vertically-center;
 
 // Import site specific patterns and overrides
-@import 'pattern_p-card';
+@import "pattern_p-card";
 
 @include p-charmhub-card;
 
-@import 'pattern_p-link';
+@import "pattern_p-link";
 
 @include p-charmhub-link;
 
-@import 'pattern_p-media-object';
+@import "pattern_p-media-object";
 
 @include p-charmhub-media-object;
 
-@import 'pattern_p-image';
+@import "pattern_p-image";
 
 @include p-charmhub-image;
 
-@import 'pattern_p-strip';
+@import "pattern_p-strip";
 
 @include p-charmhub-strip;
 
-@import 'pattern_p-accordion';
+@import "pattern_p-accordion";
 
 @include p-charmhub-accordion;
 
-@import 'pattern_p-table-of-contents';
+@import "pattern_p-table-of-contents";
 
 @include p-charmhub-table-of-contents;
 
-@import 'charmhub_p-bundle-icons';
+@import "charmhub_p-bundle-icons";
 
 @include charmhub-p-bundle-icons;
 
-@import 'charmhub_p-separator';
+@import "charmhub_p-separator";
 
 @include p-charmhub-separator;
 
-@import 'charmhub_footer';
+@import "charmhub_footer";
 
 @include charmhub-p-footer;
 
-@import 'charmhub_p-header';
+@import "charmhub_p-header";
 
 @include charmhub-p-header;
 
-@import 'charmhub_p-series-tag';
+@import "charmhub_p-series-tag";
 
 @include charmhub-p-series-tag;
 
@@ -136,20 +136,6 @@ $theme-default-nav: dark;
   font-size: 0.875rem;
 }
 
-// XXX Ovi - 30.03.20: This can be removed once this issue is closed.
-// https://github.com/canonical-web-and-design/vanilla-framework/issues/2960
-.p-side-navigation__link {
-  .p-side-navigation__status.is-toggle {
-    display: none;
-  }
-
-  &:hover {
-    .p-side-navigation__status.is-toggle {
-      display: block;
-    }
-  }
-}
-
 .u-position--sticky {
   background-color: $color-x-light;
   position: sticky;
@@ -166,4 +152,12 @@ $theme-default-nav: dark;
 html,
 body {
   height: 100%;
+}
+
+// XXX Ovi - 21.05.20: Workaround z-index issue between side nav and global nav
+// This can be removed once this issue is closed.
+// https://github.com/canonical-web-and-design/vanilla-framework/issues/3075
+.p-side-navigation__drawer,
+.p-side-navigation__overlay {
+  z-index: 100;
 }
