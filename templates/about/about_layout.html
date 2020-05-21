@@ -52,3 +52,12 @@
   </div>
 </section>
 {% endblock %}
+
+{% block page_scripts %}
+<script src="{{ versioned_static('js/dist/about.js') }}" defer></script>
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    new charmhub.about.SideNavigation('.p-side-navigation, [class*="p-side-navigation--"]');
+  });
+</script>
+{% endblock %}
