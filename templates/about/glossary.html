@@ -1,10 +1,33 @@
 {% extends 'about/about_layout.html' %}
 
-<!-- TO DO - add copy doc and description -->
-{% block meta_copydoc %}{% endblock meta_copydoc %}
+{% block meta_copydoc %}https://docs.google.com/document/d/1ju0beRkngprnFOTKg2RLelkCR-Qj8a9oY5vttfZQIQ0{% endblock meta_copydoc %}
 
-{% block meta_description %}{% endblock %}
+{% block meta_description %}A coherent instance of a piece of software, which may be a cluster of units or a single unit.{% endblock %}
 
 {% block about_content %}
-<h2>Glossary page</h2>
+  <h2>Glossary of Terms</h2>
+  <p>
+    <strong>Application.</strong> A coherent instance of a piece of software, which may be a cluster of units or a single unit. For example, in a deployment of Hadoop there may be several different machines running the HDFS software, which together appear to the outside world to be a single coherent instance.
+  </p>
+  <p>
+    <strong>Charm.</strong> A package of operator code, usable on a machine or Kubernetes substrate.
+  </p>
+  <p>
+    <strong>Counterpart.</strong> A unit of the application across a relation.
+  </p>
+  <p>
+    <strong>Epoch.</strong> A generation of charm versions that is compatible with particular local data storage. Over time, a charm author may decide to change the way it stores local data &mdash; for example, it might switch from a flat file configuration to a key&ndash;value database for resiliency, and those would then be two generations &ndash; epochs &ndash; of the charm. A charm can support multiple epochs, and this provides the mechanism for upgrades over epochs. The deployment will be upgraded to the newest charm that supports both its current epoch and the next epoch, so that conversions can take place, before upgrading to the newest charm of the next epoch.
+  </p>
+  <p>
+    <strong>Peer.</strong> A unit of the same application as this one.
+  </p>
+  <p>
+    <strong>Relation.</strong> A line of integration between two applications, defined by the endpoints on each application, and typed by the interface of those endpoints with one end being the provider and the other the requirer.
+  </p>
+  <p>
+    <strong>Unit.</strong> A single instantiation of a piece of software. For example, in a high&ndash;availability database, it would be common to have two units, one of which is active and the other which is a standby. Together, those two units form the <i>application</i>.
+  </p>
+  <p>
+    <strong>Workload.</strong> The application that is driven by the operator.
+  </p>
 {% endblock %}
