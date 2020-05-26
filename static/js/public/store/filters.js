@@ -1,5 +1,3 @@
-import throttle from "../../libs/throttle";
-
 /** Store page filters */
 class Filters {
   constructor(selectors) {
@@ -63,9 +61,6 @@ class Filters {
         );
         activeFilters.forEach((filter) => {
           filter.classList.remove("is-active");
-          filter
-            .querySelector("[data-js='remove-filter']")
-            .classList.add("u-hide");
         });
 
         this._filters[type].forEach((value) => {
@@ -74,9 +69,6 @@ class Filters {
           );
 
           el.classList.add("is-active");
-          el.querySelector("[data-js='remove-filter']").classList.remove(
-            "u-hide"
-          );
         });
       }
     });
@@ -104,13 +96,7 @@ class Filters {
   }
 
   removeFilter(filterType, filterValue) {
-    if (!filterType && !filterValue) {
-      Object.keys(this._filters).forEach((filterType) => {
-        if (filterType !== "sort") {
-          delete this._filters[filterType];
-        }
-      });
-    } else if (filterValue) {
+    if (filterValue) {
       const index = this._filters[filterType].indexOf(filterValue);
 
       this._filters[filterType].splice(index, 1);
@@ -129,6 +115,22 @@ class Filters {
   cleanFilters() {
     Object.keys(this._filters).forEach((filterType) => {
       if (this._filters[filterType].length === 0) {
+        delete this._filters[filterType];
+      }
+    });
+  }
+
+  resetFilters() {
+    const filterElements = document.querySelectorAll("[data-js='filter']");
+
+    if (filterElements) {
+      filterElements.forEach((filterEl) => {
+        filterEl.firstElementChild.checked = false;
+      });
+    }
+
+    Object.keys(this._filters).forEach((filterType) => {
+      if (filterType !== "sort") {
         delete this._filters[filterType];
       }
     });
@@ -207,7 +209,7 @@ class Filters {
     });
   }
 
-  initMobileSortEvents(el) {
+  initMobileSortEvents(el, filterOverlay) {
     el.addEventListener("change", (e) => {
       e.preventDefault();
       this.removeFilter("sort");
@@ -219,58 +221,41 @@ class Filters {
 
       // hide the drawer once clicked
       el.classList.remove("is-active");
+      filterOverlay.style.display = "none";
     });
   }
 
-  initFilterEvents(el) {
-    const filters = el.querySelectorAll("input");
+  initFilterEvents(el, filterOverlay) {
     const resetButton = el.querySelector("[data-js='filter-reset']");
     const submitButton = el.querySelector("[data-js='filter-submit']");
 
-    if (filters) {
-      filters.forEach((filterEl) => {
-        filterEl.addEventListener("click", () => {
-          const filterType = filterEl.dataset.filterType;
-          const filterValue = filterEl.value;
+    el.addEventListener("click", (e) => {
+      let target = e.target.closest("li");
 
-          if (this.filterExists(filterType, filterValue)) {
-            this.removeFilter(filterType, filterValue);
-          } else {
-            this.addFilter(filterType, filterValue);
-          }
+      if (target) {
+        e.preventDefault();
 
-          this.cleanFilters();
-          this.updateHistory();
-        });
-      });
-    }
+        const filterType = target.dataset.filterType;
+        const filterValue = target.dataset.filterValue;
 
-    // Show shadow when scrolling through the filters on mobile
-    const elTitle = el.querySelector("[data-js='js-shadow-title']");
-    const elForm = el.querySelector("[data-js='js-shadow-form']");
-    if (elTitle && elForm) {
-      const contentTop = elForm.getBoundingClientRect().top;
-      const toggleShadow = () => {
-        // The 0.25 value depends on the maximum height of the ".p-filter" element - it is currently set to 75%
-        if (
-          el.getBoundingClientRect().top / el.getBoundingClientRect().bottom <=
-          0.25
-        ) {
-          // The value 2 has been arbitrary set because seems to work fine
-          if (contentTop - elForm.getBoundingClientRect().top > 2) {
-            elTitle.classList.add("has-shadow");
-          } else {
-            elTitle.classList.remove("has-shadow");
-          }
+        if (this.filterExists(filterType, filterValue)) {
+          this.removeFilter(filterType, filterValue);
+          target.firstElementChild.checked = false;
+        } else {
+          this.addFilter(filterType, filterValue);
+          target.firstElementChild.checked = true;
         }
-      };
-      const onScroll = throttle(() => toggleShadow(), 30);
-      el.addEventListener("scroll", onScroll);
-    }
+
+        this.cleanFilters();
+        this.updateHistory();
+      }
+    });
 
     if (resetButton) {
-      resetButton.addEventListener("click", () => {
-        this.removeFilter();
+      resetButton.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        this.resetFilters();
         this.updateHistory();
       });
     }
@@ -280,16 +265,29 @@ class Filters {
         e.preventDefault();
 
         el.classList.remove("is-active");
+        filterOverlay.style.display = "none";
         this.cleanFilters();
         this.updateHistory();
       });
     }
   }
 
-  initMobileButton(el, targetEl) {
+  initClickOutside(filterOverlay, filter, sortMobile) {
+    filterOverlay.addEventListener("click", () => {
+      filter.classList.remove("is-active");
+      sortMobile.classList.remove("is-active");
+      filterOverlay.style.display = "none";
+    });
+  }
+
+  initMobileButton(el, targetEl, filterOverlay) {
     el.addEventListener("click", (e) => {
       e.preventDefault();
-      targetEl.classList.toggle("is-active");
+      targetEl.classList.add("is-active");
+
+      if (filterOverlay) {
+        filterOverlay.style.display = "block";
+      }
     });
   }
 
@@ -301,13 +299,17 @@ class Filters {
       sortMobile,
       sortMobileButton,
       filterMobileButton,
+      filterOverlay,
     } = this.wrapperEls;
-    filter && this.initFilterEvents(filter);
+    filter && this.initFilterEvents(filter, filterOverlay);
     search && this.initSearchEvents(search);
     sort && this.initSortEvents(sort);
-    sortMobile && this.initMobileSortEvents(sortMobile);
-    sortMobileButton && this.initMobileButton(sortMobileButton, sortMobile);
-    filterMobileButton && this.initMobileButton(filterMobileButton, filter);
+    sortMobile && this.initMobileSortEvents(sortMobile, filterOverlay);
+    sortMobileButton &&
+      this.initMobileButton(sortMobileButton, sortMobile, filterOverlay);
+    filterMobileButton &&
+      this.initMobileButton(filterMobileButton, filter, filterOverlay);
+    filterOverlay && this.initClickOutside(filterOverlay, filter, sortMobile);
   }
 }
 

@@ -1,4 +1,16 @@
 @mixin p-charmhub-filter {
+  .p-filter__overlay {
+    bottom: 0;
+    height: auto;
+    left: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 3;
+  }
+
   .p-filter {
     @media screen and(max-width: $breakpoint-medium - 1) {
       background-color: $color-x-light;
@@ -27,6 +39,7 @@
 
       @media screen and(max-width: $breakpoint-medium - 1) {
         background-color: $color-x-light;
+        margin-bottom: 0;
         padding:
           map-get($sp-after, small) - map-get($nudges, nudge--small)
           $spv-inner--large;
@@ -43,19 +56,15 @@
           position: absolute;
           right: 0;
         }
-
-        &.has-shadow {
-          box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
-
-          &::after {
-            border-bottom: none;
-          }
-        }
       }
     }
 
     .p-filter__item {
       padding-left: $spv-inner--small;
+
+      &:hover {
+        cursor: pointer;
+      }
 
       @media screen and(max-width: $breakpoint-medium - 1) {
         padding-left: $spv-inner--large;
@@ -107,7 +116,7 @@
       padding-left: $spv-inner--small;
 
       @media screen and(max-width: $breakpoint-medium - 1) {
-        padding: 0 $spv-inner--large $spv-inner--medium $spv-inner--large;
+        padding: $spv-inner--medium $spv-inner--large;
         position: relative;
 
         &::after {
@@ -125,7 +134,7 @@
     .p-filter__controls {
       background-color: $color-x-light;
       bottom: 0;
-      box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+      // box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
       display: flex;
       justify-content: space-around;
       padding: $spv-inner--medium 0 $spv-inner--large 0;
@@ -167,5 +176,22 @@
         top: -0.5 * $spv-outer--scaleable; // place border in the middle of the margin
       }
     }
+  }
+}
+
+.p-filter__scroll-box {
+  @media screen and(max-width: $breakpoint-medium - 1) {
+    // https://css-scroll-shadows.now.sh/?bgColor=ffffff&shadowColor=979797&pxSize=6
+    background:
+      linear-gradient($color-x-light 30%, rgba(255, 255, 255, 0)),
+      linear-gradient(rgba(255, 255, 255, 0), $color-x-light 70%) 0 100%,
+      radial-gradient(farthest-side at 50% 0, rgba(151, 151, 151, 0.5), rgba(0, 0, 0, 0)),
+      radial-gradient(farthest-side at 50% 100%, rgba(151, 151, 151, 0.5), rgba(0, 0, 0, 0)) 0 100%;
+    background-attachment: local, local, scroll, scroll;
+    background-color: $color-x-light;
+    background-repeat: no-repeat;
+    background-size: 100% 12px, 100% 12px, 100% 6px, 100% 6px;
+    height: 45vh;
+    overflow: auto;
   }
 }

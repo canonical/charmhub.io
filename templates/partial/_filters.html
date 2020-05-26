@@ -1,35 +1,38 @@
 <div class="col-3">
+  <div class="p-filter__overlay" data-js="filter-overlay" style="display: none;"></div>
   <div class="p-filter" data-js="filter-handler">
     <div class="p-filter__title" data-js='js-shadow-title'>
       Filter ({{ results|length }})
     </div>
-    <form data-js="js-shadow-form">
-      {% if categories %}
-      <ul class="p-filter__list">
-        <li class="p-filter__item--title">
-          Categories
-        </li>
-        {% for category in categories %}
-        <li class="p-filter__item">
-          <input type="checkbox" id="{{ category.slug }}" value="{{ category.slug }}" data-filter-type="category" data-js="filter" {% if active_filter('category', category.slug) %}checked{% endif %}>
-          <label for="{{ category.slug }}">{{ category.name }}</label>
-        </li>
-        {% endfor %}
-      </ul>
-      {% endif %}
-      {% if publisher_list %}
-      <ul class="p-filter__list">
-        <li class="p-filter__item--title">
-          Publisher
-        </li>
-        {% for publisher in publisher_list %}
-        <li class="p-filter__item">
-          <input type="checkbox" id="{{ publisher.slug }}" value="{{ publisher.slug }}" data-filter-type="publisher" data-js="filter" {% if active_filter('publisher', publisher.slug) %}checked{% endif %}">
-          <label for="{{ publisher.slug }}">{{ publisher.name }}</label>
-        </li>
-        {% endfor %}
-      </ul>
-      {% endif %}
+    <form>
+      <div class="p-filter__scroll-box">
+        {% if categories %}
+        <ul class="p-filter__list">
+          <li class="p-filter__item--title">
+            Categories
+          </li>
+          {% for category in categories %}
+          <li class="p-filter__item" data-filter-type="category" data-js="filter" data-filter-value="{{ category.slug }}">
+            <input type="checkbox" id="{{ category.slug }}" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %}>
+            <label for="{{ category.slug }}">{{ category.name }}</label>
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% if publisher_list %}
+        <ul class="p-filter__list">
+          <li class="p-filter__item--title">
+            Publisher
+          </li>
+          {% for publisher in publisher_list %}
+          <li class="p-filter__item" data-filter-type="publisher" data-js="filter" data-filter-value="{{ publisher.slug }}">
+            <input type="checkbox" id="{{ publisher.slug }}" value="{{ publisher.slug }}" {% if active_filter('publisher', publisher.slug) %}checked{% endif %}>
+            <label for="{{ publisher.slug }}">{{ publisher.name }}</label>
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
       <noscript>
         <button type="submit" class="u-hide--small">Apply Filters</button>
       </noscript>
@@ -38,5 +41,41 @@
         <button class="p-button--positive" data-js="filter-submit">Show results ({{ results|length }})</button>
       </div>
     </form>
+  </div>
+</div>
+<div class="col-9">
+  <div class="row u-vertically-center">
+    <div class="col-3">
+      <ul class="p-inline-list">
+        <li class="p-inline-list__item p-muted-heading u-float-left">{{ results|length }} items</li>
+        <li class="p-inline-list__item u-no-margin--right u-float-right u-hide--large u-hide--medium">
+          <a href="/store" data-js="mobile-sort-reveal-button" class="has-icon"><i class="p-icon--sort"></i>Sort by</a>
+          <a href="/store" data-js="mobile-filter-reveal-button" class="has-icon"><i class="p-icon--filter"></i>Filters (4)</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-3 col-start-large-4">
+      <form class="p-search-box" data-js="search-handler">
+        <input type="search" class="p-search-box__input" name="q" placeholder="Search" {% if q %}value="{{ q }}" {% endif %} />
+        <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search"></i></button>
+      </form>
+    </div>
+    <div class="col-3 u-hide--small-1">
+      <select name="sort" data-js="sort-handler" value="{{ sort }}">
+        <option disabled="disabled" value="">Sort by</option>
+        <option value="featured" {% if active_filter('sort', 'featured') %}selected{% endif %}>Featured</option>
+        <option value="name-desc" {% if active_filter('sort', 'name-desc') %}selected{% endif %}>Name A/Z</option>
+        <option value="name-asc" {% if active_filter('sort', 'name-asc') %}selected{% endif %}>Name Z/A</option>
+        {#<option value="most-popular">Most popular</option>#}
+        {#<option value="publisher">Publisher</option>#}
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    {% if results %}
+      {% for package in results %}
+        {% include "partial/_entity-card.html" %}
+      {% endfor %}
+    {% endif %}
   </div>
 </div>
