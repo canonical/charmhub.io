@@ -31,7 +31,12 @@
     <style>
       body {
         display: grid;
-        grid-template-rows: 0rem 2rem 3rem auto 11.5rem;
+        grid-template-rows: 0 2rem 3rem auto 11.5rem;
+      }
+
+      main {
+        align-items: center !important;
+        display: grid;
       }
     </style>
 
@@ -63,12 +68,42 @@
     </header>
 
     <main>
-      <section class="p-strip--suru-bottom has-accent is-dark p-strip--charmhub">
+      <section class="p-strip">
         <div class="u-fixed-width">
-          <h2>Coming soon</h2>
+          <h2>Charmhub will be coming soon.</h2>
           <a href="/login" class="p-button--positive">Login</a>
         </div>
       </section>
+    </main>
+
+    <footer class="p-footer">
+      <div class="row">
+        <div class="col-8">
+          <p>&copy; {{ now('%Y') }} Canonical Ltd.</p>
+          <ul class="p-inline-list--middot">
+            <li class="p-inline-list__item"><a href="https://ubuntu.com/legal" class="p-footer__link">Legal information</a></li>
+            <li class="p-inline-list__item"><a href="https://github.com/canonical-web-and-design/charmhub.io/issues/new" class="p-footer__link">Report a bug on this website</a></li>
+          </ul>
+          <ul class="p-inline-list--middot">
+            <li class="p-inline-list__item"><a href="https://juju.is" class="p-footer__link">Learn about Juju</a></li>
+          </ul>
+        </div>
+        <div class="col-4 u-align--right">
+          <ul class="p-inline-list">
+            <li class="p-inline-list__item">
+              <a href="https://www.facebook.com/pages/Canonical/125818784107695?fref=ts" class="p-icon--facebook"></a>
+            </li>
+            <li class="p-inline-list__item">
+              <a href="https://twitter.com/Canonical" class="p-icon--twitter"></a>
+            </li>
+            <li class="p-inline-list__item">
+              <a href="https://www.youtube.com/user/celebrateubuntu" class="p-icon--youtube"></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
     <script src="{{ versioned_static('js/dist/base.js') }}"></script>
     {% block page_scripts %}{% endblock page_scripts %}
   </body>

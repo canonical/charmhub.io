@@ -34,10 +34,16 @@ def utility_processor():
 
 @app.route("/")
 def index():
+    email = None
     if authentication.is_authenticated(session):
-        response = make_response(render_template("index.html"))
+        email = session["openid"]["email"]
+        response = make_response(
+            render_template("index.html", email=email)
+        )
     else:
-        response = make_response(render_template("holding.html"))
+        response = make_response(
+            render_template("holding.html", email=email)
+        )
 
     # Temporal fix to avoid cache since this page could return two versions
     response.headers.set("Cache-Control", "no-store")
