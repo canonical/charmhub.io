@@ -1,0 +1,13 @@
+@mixin p-charmhub-list {
+  .p-list--ordered {
+    @extend %vf-list;
+
+    list-style: decimal;
+    margin-left: $spv-inner--large;
+
+    li {
+      margin-bottom: $spv-inner--large;
+      max-width: 40rem;
+    }
+  }
+}

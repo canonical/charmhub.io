@@ -74,6 +74,10 @@ $theme-default-nav: dark;
 
 @include p-charmhub-strip;
 
+@import "pattern_p-list";
+
+@include p-charmhub-list;
+
 @import "pattern_p-accordion";
 
 @include p-charmhub-accordion;
