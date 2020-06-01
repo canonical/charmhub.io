@@ -1,0 +1,61 @@
+@mixin charmhub-p-store {
+  .p-store__items-right,
+  .p-store__items-left {
+    display: flex;
+  }
+
+  .p-store__items-left {
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .p-store__search {
+    margin-right: $spv-inner--large;
+    width: 70%;
+  }
+
+  .p-store__sort-desktop {
+    width: 30%;
+  }
+
+  .p-store__sort-mobile {
+    display: none;
+    margin-bottom: 0.6rem;
+  }
+
+  .p-store__button {
+    &:not(:last-child) {
+      border-right: 1px solid $color-mid-light;
+      margin-right: $spv-inner--large;
+      padding-right: $spv-inner--large;
+    }
+
+    &:visited {
+      color: $color-link;
+    }
+  }
+
+  @media screen and (max-width: $breakpoint-medium - 1) {
+    .p-store__items-right {
+      grid-row-start: 1;
+    }
+
+    .p-store__search {
+      margin-right: 0;
+      width: 100%;
+    }
+
+    .p-store__sort-desktop {
+      display: none;
+    }
+
+    .p-store__sort-mobile {
+      display: block;
+    }
+
+    .p-store__items-left {
+      grid-row-start: 2;
+      margin-bottom: 0.2rem;
+    }
+  }
+}

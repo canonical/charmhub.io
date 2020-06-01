@@ -1,5 +1,4 @@
 <div class="col-3">
-  <div class="p-filter__overlay" data-js="filter-overlay" style="display: none;"></div>
   <div class="p-filter" data-js="filter-handler">
     <div class="p-filter__title" data-js='js-shadow-title'>
       Filter ({{ results|length }})
@@ -44,24 +43,22 @@
   </div>
 </div>
 <div class="col-9">
-  <div class="row u-vertically-center">
-    <div class="col-3">
-      <ul class="p-inline-list">
-        <li class="p-inline-list__item p-muted-heading u-float-left">{{ results|length }} items</li>
-        <li class="p-inline-list__item u-no-margin--right u-float-right u-hide--large u-hide--medium">
-          <a href="/store" data-js="mobile-sort-reveal-button" class="has-icon"><i class="p-icon--sort"></i>Sort by</a>
-          <a href="/store" data-js="mobile-filter-reveal-button" class="has-icon"><i class="p-icon--filter"></i>Filters (4)</a>
-        </li>
-      </ul>
+  <div class="row">
+    <div class="col-3 p-store__items-left">
+      <div class="p-store__text p-muted-heading">
+        {{ results|length }} items
+      </div>
+      <div class="p-store__sort-mobile">
+        <a href="/store" data-js="mobile-sort-reveal-button" class="has-icon p-store__button"><i class="p-icon--sort"></i>Sort by</a>
+        <a href="/store" data-js="mobile-filter-reveal-button" class="has-icon p-store__button"><i class="p-icon--filter"></i>Filters (4)</a>
+      </div>
     </div>
-    <div class="col-3 col-start-large-4">
-      <form class="p-search-box" data-js="search-handler">
+    <div class="col-6 p-store__items-right">
+      <form class="p-search-box p-store__search" data-js="search-handler">
         <input type="search" class="p-search-box__input" name="q" placeholder="Search" {% if q %}value="{{ q }}" {% endif %} />
         <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search"></i></button>
       </form>
-    </div>
-    <div class="col-3 u-hide--small-1">
-      <select name="sort" data-js="sort-handler" value="{{ sort }}">
+      <select name="sort" data-js="sort-handler" value="{{ sort }}" class="p-store__sort-desktop">
         <option disabled="disabled" value="">Sort by</option>
         <option value="featured" {% if active_filter('sort', 'featured') %}selected{% endif %}>Featured</option>
         <option value="name-desc" {% if active_filter('sort', 'name-desc') %}selected{% endif %}>Name A/Z</option>

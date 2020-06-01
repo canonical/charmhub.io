@@ -209,7 +209,7 @@ class Filters {
     });
   }
 
-  initMobileSortEvents(el, filterOverlay) {
+  initMobileSortEvents(el) {
     el.addEventListener("change", (e) => {
       e.preventDefault();
       this.removeFilter("sort");
@@ -221,11 +221,10 @@ class Filters {
 
       // hide the drawer once clicked
       el.classList.remove("is-active");
-      filterOverlay.style.display = "none";
     });
   }
 
-  initFilterEvents(el, filterOverlay) {
+  initFilterEvents(el) {
     const resetButton = el.querySelector("[data-js='filter-reset']");
     const submitButton = el.querySelector("[data-js='filter-submit']");
 
@@ -265,29 +264,41 @@ class Filters {
         e.preventDefault();
 
         el.classList.remove("is-active");
-        filterOverlay.style.display = "none";
         this.cleanFilters();
         this.updateHistory();
       });
     }
   }
 
-  initClickOutside(filterOverlay, filter, sortMobile) {
-    filterOverlay.addEventListener("click", () => {
+  // Close the drawers if click anywhere outside the drawer, except the "Sort by"/"Filters" buttons
+  initClickOutside(filter, sortMobile, filterMobileButton, sortMobileButton) {
+    document.addEventListener("click", (e) => {
+      let targetElement = e.target; // clicked element
+      do {
+        if (targetElement == filterMobileButton) {
+          sortMobile.classList.remove("is-active");
+          return;
+        } else if (targetElement == sortMobileButton) {
+          filter.classList.remove("is-active");
+          return;
+        } else if (targetElement == filter || targetElement == sortMobile) {
+          // This is a click inside. Do nothing, just return.
+          return;
+        }
+        // Go up the DOM
+        targetElement = targetElement.parentNode;
+      } while (targetElement);
+
+      // This is a click outside.
       filter.classList.remove("is-active");
       sortMobile.classList.remove("is-active");
-      filterOverlay.style.display = "none";
     });
   }
 
-  initMobileButton(el, targetEl, filterOverlay) {
+  initMobileButton(el, targetEl) {
     el.addEventListener("click", (e) => {
       e.preventDefault();
       targetEl.classList.add("is-active");
-
-      if (filterOverlay) {
-        filterOverlay.style.display = "block";
-      }
     });
   }
 
@@ -299,17 +310,23 @@ class Filters {
       sortMobile,
       sortMobileButton,
       filterMobileButton,
-      filterOverlay,
     } = this.wrapperEls;
-    filter && this.initFilterEvents(filter, filterOverlay);
+    filter && this.initFilterEvents(filter);
     search && this.initSearchEvents(search);
     sort && this.initSortEvents(sort);
-    sortMobile && this.initMobileSortEvents(sortMobile, filterOverlay);
-    sortMobileButton &&
-      this.initMobileButton(sortMobileButton, sortMobile, filterOverlay);
-    filterMobileButton &&
-      this.initMobileButton(filterMobileButton, filter, filterOverlay);
-    filterOverlay && this.initClickOutside(filterOverlay, filter, sortMobile);
+    sortMobile && this.initMobileSortEvents(sortMobile);
+    sortMobileButton && this.initMobileButton(sortMobileButton, sortMobile);
+    filterMobileButton && this.initMobileButton(filterMobileButton, filter);
+    filter &&
+      sortMobile &&
+      filterMobileButton &&
+      sortMobileButton &&
+      this.initClickOutside(
+        filter,
+        sortMobile,
+        filterMobileButton,
+        sortMobileButton
+      );
   }
 }
 

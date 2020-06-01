@@ -1,16 +1,4 @@
 @mixin p-charmhub-filter {
-  .p-filter__overlay {
-    bottom: 0;
-    height: auto;
-    left: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 3;
-  }
-
   .p-filter {
     @media screen and(max-width: $breakpoint-medium - 1) {
       background-color: $color-x-light;
@@ -83,7 +71,7 @@
 
       @media screen and(min-width: $breakpoint-medium + 1) {
         &:hover {
-          background-color: $color-mid-x-light;
+          background-color: $color-light;
         }
       }
 
