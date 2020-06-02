@@ -14,6 +14,7 @@ class Filters {
     });
 
     this.initEvents();
+    this.updateUI();
 
     window.addEventListener("popstate", (e) => {
       this._filters = e.state ? e.state.filters : null;
@@ -21,25 +22,23 @@ class Filters {
     });
   }
 
+  /**
+   * Return the number of active filters
+   * without including 'sort' and `q`
+   */
+  getSelectedFiltersCount() {
+    let count = 0;
+
+    Object.keys(this._filters).forEach((filterType) => {
+      if (filterType !== "sort" && filterType !== "q") {
+        count += this._filters[filterType].length;
+      }
+    });
+
+    return count;
+  }
+
   updateUI() {
-    if (!this._filters) {
-      const activeFilters = this.wrapperEls.filter.querySelectorAll(
-        "[data-filter-type][data-filter-value].is-active"
-      );
-      activeFilters.forEach((filter) => {
-        filter.classList.remove("is-active");
-        filter
-          .querySelector("[data-js='remove-filter']")
-          .classList.add("u-hide");
-      });
-
-      this.wrapperEls.sort.value = "";
-
-      this.wrapperEls.search.querySelector("[name='q']").value = "";
-
-      return;
-    }
-
     const searchField = this.wrapperEls.search.querySelector("[name='q']");
 
     if (this._filters.q) {
@@ -54,24 +53,35 @@ class Filters {
       this.wrapperEls.sort.value = "";
     }
 
-    Object.keys(this._filters).forEach((type) => {
-      if (type !== "q" && type !== "sort") {
-        const activeFilters = this.wrapperEls.filter.querySelectorAll(
-          "[data-filter-type][data-filter-value].is-active"
-        );
-        activeFilters.forEach((filter) => {
-          filter.classList.remove("is-active");
-        });
+    // Deselect checkboxes if there are no filters selected
+    let selectedFiltersCount = this.getSelectedFiltersCount();
 
-        this._filters[type].forEach((value) => {
-          const el = this.wrapperEls.filter.querySelector(
-            `[data-filter-type="${type}"][data-filter-value="${value}"]`
-          );
+    if (selectedFiltersCount === 0) {
+      const activeFilters = this.wrapperEls.filter.querySelectorAll(
+        "[data-js='filter']"
+      );
 
-          el.classList.add("is-active");
-        });
+      activeFilters.forEach((filter) => {
+        filter.firstElementChild.checked = false;
+      });
+    }
+
+    // Update selected filter count text
+    const filterCountTextEl = document.querySelector(
+      "[data-filters='applied-filters']"
+    );
+    const filterMobileButton = document.querySelector(
+      "[data-js='mobile-filter-reveal-button']"
+    );
+    if (filterCountTextEl && filterMobileButton) {
+      if (selectedFiltersCount > 0) {
+        filterCountTextEl.innerHTML = `Filters (${selectedFiltersCount})`;
+        filterMobileButton.innerHTML = `<i class="p-icon--filter"></i>Filters (${selectedFiltersCount})`;
+      } else {
+        filterCountTextEl.innerHTML = `Filters`;
+        filterMobileButton.innerHTML = `<i class="p-icon--filter"></i>Filters`;
       }
-    });
+    }
   }
 
   initFilters() {
@@ -121,16 +131,8 @@ class Filters {
   }
 
   resetFilters() {
-    const filterElements = document.querySelectorAll("[data-js='filter']");
-
-    if (filterElements) {
-      filterElements.forEach((filterEl) => {
-        filterEl.firstElementChild.checked = false;
-      });
-    }
-
     Object.keys(this._filters).forEach((filterType) => {
-      if (filterType !== "sort") {
+      if (filterType !== "sort" && filterType !== "q") {
         delete this._filters[filterType];
       }
     });
@@ -247,6 +249,7 @@ class Filters {
 
         this.cleanFilters();
         this.updateHistory();
+        this.updateUI();
       }
     });
 
@@ -256,6 +259,7 @@ class Filters {
 
         this.resetFilters();
         this.updateHistory();
+        this.updateUI();
       });
     }
 
