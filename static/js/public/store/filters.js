@@ -14,6 +14,7 @@ class Filters {
     });
 
     this.initEvents();
+    this.updateUI();
 
     window.addEventListener("popstate", (e) => {
       this._filters = e.state ? e.state.filters : null;
@@ -21,25 +22,23 @@ class Filters {
     });
   }
 
+  /**
+   * Return the number of active filters
+   * without including 'sort' and `q`
+   */
+  getSelectedFiltersCount() {
+    let count = 0;
+
+    Object.keys(this._filters).forEach((filterType) => {
+      if (filterType !== "sort" && filterType !== "q") {
+        count += this._filters[filterType].length;
+      }
+    });
+
+    return count;
+  }
+
   updateUI() {
-    if (!this._filters) {
-      const activeFilters = this.wrapperEls.filter.querySelectorAll(
-        "[data-filter-type][data-filter-value].is-active"
-      );
-      activeFilters.forEach((filter) => {
-        filter.classList.remove("is-active");
-        filter
-          .querySelector("[data-js='remove-filter']")
-          .classList.add("u-hide");
-      });
-
-      this.wrapperEls.sort.value = "";
-
-      this.wrapperEls.search.querySelector("[name='q']").value = "";
-
-      return;
-    }
-
     const searchField = this.wrapperEls.search.querySelector("[name='q']");
 
     if (this._filters.q) {
@@ -54,30 +53,35 @@ class Filters {
       this.wrapperEls.sort.value = "";
     }
 
-    Object.keys(this._filters).forEach((type) => {
-      if (type !== "q" && type !== "sort") {
-        const activeFilters = this.wrapperEls.filter.querySelectorAll(
-          "[data-filter-type][data-filter-value].is-active"
-        );
-        activeFilters.forEach((filter) => {
-          filter.classList.remove("is-active");
-          filter
-            .querySelector("[data-js='remove-filter']")
-            .classList.add("u-hide");
-        });
+    // Deselect checkboxes if there are no filters selected
+    let selectedFiltersCount = this.getSelectedFiltersCount();
 
-        this._filters[type].forEach((value) => {
-          const el = this.wrapperEls.filter.querySelector(
-            `[data-filter-type="${type}"][data-filter-value="${value}"]`
-          );
+    if (selectedFiltersCount === 0) {
+      const activeFilters = this.wrapperEls.filter.querySelectorAll(
+        "[data-js='filter']"
+      );
 
-          el.classList.add("is-active");
-          el.querySelector("[data-js='remove-filter']").classList.remove(
-            "u-hide"
-          );
-        });
+      activeFilters.forEach((filter) => {
+        filter.firstElementChild.checked = false;
+      });
+    }
+
+    // Update selected filter count text
+    const filterCountTextEl = document.querySelector(
+      "[data-filters='applied-filters']"
+    );
+    const filterMobileButton = document.querySelector(
+      "[data-js='mobile-filter-reveal-button']"
+    );
+    if (filterCountTextEl && filterMobileButton) {
+      if (selectedFiltersCount > 0) {
+        filterCountTextEl.innerHTML = `Filters (${selectedFiltersCount})`;
+        filterMobileButton.innerHTML = `<i class="p-icon--filter"></i>Filters (${selectedFiltersCount})`;
+      } else {
+        filterCountTextEl.innerHTML = `Filters`;
+        filterMobileButton.innerHTML = `<i class="p-icon--filter"></i>Filters`;
       }
-    });
+    }
   }
 
   initFilters() {
@@ -126,6 +130,14 @@ class Filters {
     });
   }
 
+  resetFilters() {
+    Object.keys(this._filters).forEach((filterType) => {
+      if (filterType !== "sort" && filterType !== "q") {
+        delete this._filters[filterType];
+      }
+    });
+  }
+
   updateHistory() {
     const searchParams = new URLSearchParams();
 
@@ -152,39 +164,21 @@ class Filters {
     }
   }
 
-  isFilterElement(el) {
-    return el.dataset.js && el.dataset.js === "filter";
-  }
-
-  initFilterEvents(el) {
-    el.addEventListener("click", (e) => {
-      let target = e.target;
-
-      while (!this.isFilterElement(target) || !target.parentNode) {
-        target = target.parentNode;
+  syncSortUI(selectorName, newValue) {
+    if (selectorName === "sort") {
+      this.wrapperEls[selectorName].value = newValue;
+    } else if (selectorName === "sortMobile") {
+      const options = this.wrapperEls[selectorName].querySelectorAll("input");
+      if (options) {
+        options.forEach((el) => {
+          if (el.value === newValue) {
+            el.checked = true;
+          } else {
+            el.checked = false;
+          }
+        });
       }
-
-      if (target) {
-        e.preventDefault();
-        const removeEl = target.querySelector("[data-js='remove-filter']");
-
-        const filterType = target.dataset.filterType;
-        const filterValue = target.dataset.filterValue;
-
-        if (this.filterExists(filterType, filterValue)) {
-          this.removeFilter(filterType, filterValue);
-          target.classList.remove("is-active");
-          removeEl.classList.add("u-hide");
-        } else {
-          this.addFilter(filterType, filterValue);
-          target.classList.add("is-active");
-          removeEl.classList.remove("u-hide");
-        }
-
-        this.cleanFilters();
-        this.updateHistory();
-      }
-    });
+    }
   }
 
   initSearchEvents(el) {
@@ -210,17 +204,133 @@ class Filters {
       e.preventDefault();
       this.removeFilter("sort");
       this.addFilter("sort", el.value);
+      this.syncSortUI("sortMobile", el.value);
 
       this.cleanFilters();
       this.updateHistory();
     });
   }
 
+  initMobileSortEvents(el) {
+    el.addEventListener("change", (e) => {
+      e.preventDefault();
+      this.removeFilter("sort");
+      this.addFilter("sort", e.target.value);
+      this.syncSortUI("sort", e.target.value);
+
+      this.cleanFilters();
+      this.updateHistory();
+
+      // hide the drawer once clicked
+      el.classList.remove("is-active");
+    });
+  }
+
+  initFilterEvents(el) {
+    const resetButton = el.querySelector("[data-js='filter-reset']");
+    const submitButton = el.querySelector("[data-js='filter-submit']");
+
+    el.addEventListener("click", (e) => {
+      let target = e.target.closest("li");
+
+      if (target) {
+        e.preventDefault();
+
+        const filterType = target.dataset.filterType;
+        const filterValue = target.dataset.filterValue;
+
+        if (this.filterExists(filterType, filterValue)) {
+          this.removeFilter(filterType, filterValue);
+          target.firstElementChild.checked = false;
+        } else {
+          this.addFilter(filterType, filterValue);
+          target.firstElementChild.checked = true;
+        }
+
+        this.cleanFilters();
+        this.updateHistory();
+        this.updateUI();
+      }
+    });
+
+    if (resetButton) {
+      resetButton.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        this.resetFilters();
+        this.updateHistory();
+        this.updateUI();
+      });
+    }
+
+    if (submitButton) {
+      submitButton.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        el.classList.remove("is-active");
+        this.cleanFilters();
+        this.updateHistory();
+      });
+    }
+  }
+
+  // Close the drawers if click anywhere outside the drawer, except the "Sort by"/"Filters" buttons
+  initClickOutside(filter, sortMobile, filterMobileButton, sortMobileButton) {
+    document.addEventListener("click", (e) => {
+      let targetElement = e.target; // clicked element
+      do {
+        if (targetElement == filterMobileButton) {
+          sortMobile.classList.remove("is-active");
+          return;
+        } else if (targetElement == sortMobileButton) {
+          filter.classList.remove("is-active");
+          return;
+        } else if (targetElement == filter || targetElement == sortMobile) {
+          // This is a click inside. Do nothing, just return.
+          return;
+        }
+        // Go up the DOM
+        targetElement = targetElement.parentNode;
+      } while (targetElement);
+
+      // This is a click outside.
+      filter.classList.remove("is-active");
+      sortMobile.classList.remove("is-active");
+    });
+  }
+
+  initMobileButton(el, targetEl) {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      targetEl.classList.add("is-active");
+    });
+  }
+
   initEvents() {
-    const { filter, search, sort } = this.wrapperEls;
+    const {
+      filter,
+      search,
+      sort,
+      sortMobile,
+      sortMobileButton,
+      filterMobileButton,
+    } = this.wrapperEls;
     filter && this.initFilterEvents(filter);
     search && this.initSearchEvents(search);
     sort && this.initSortEvents(sort);
+    sortMobile && this.initMobileSortEvents(sortMobile);
+    sortMobileButton && this.initMobileButton(sortMobileButton, sortMobile);
+    filterMobileButton && this.initMobileButton(filterMobileButton, filter);
+    filter &&
+      sortMobile &&
+      filterMobileButton &&
+      sortMobileButton &&
+      this.initClickOutside(
+        filter,
+        sortMobile,
+        filterMobileButton,
+        sortMobileButton
+      );
   }
 }
 

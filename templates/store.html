@@ -11,42 +11,32 @@
     <p>Find and deploy <a href="" class="p-link--inverted">Juju</a> solutions.</p>
   </div>
 </section>
+<div class="p-sort" data-js="mobile-sort-handler">
+  <div class="p-sort__title">
+    Sort by
+  </div>
+  <form class="p-sort__content">
+    <div class="p-sort__item">
+      <input type="radio" name="sortMobile" id="featured" value="featured" {% if active_filter('sort', 'featured') %}checked{% endif %}>
+      <label for="featured">Featured</label>
+    </div>
+    <div class="p-sort__item">
+      <input type="radio" name="sortMobile" id="name-desc" value="name-desc" {% if active_filter('sort', 'name-desc') %}checked{% endif %}>
+      <label for="name-desc">Name A/Z</label>
+    </div>
+    <div class="p-sort__item">
+      <input type="radio" name="sortMobile" id="name-asc" value="name-asc" {% if active_filter('sort', 'name-asc') %}checked{% endif %}>
+      <label for="name-asc">Name Z/A</label>
+    </div>
+  </form>
+</div>
 <section class="p-strip--main">
   <div class="row">
 
-    {% include "partial/_side-navigation.html" %}
+    {% include "partial/_filters.html" %}
 
-    <div class="col-9">
-      <div class="row u-vertically-center">
-        <div class="col-2">
-          <h4 class="p-muted-heading u-float-left">{{ results|length }} items</h4>
-        </div>
-        <div class="col-4 col-start-large-4">
-          <form class="p-search-box" data-js="search-handler">
-            <input type="search" class="p-search-box__input" name="q" placeholder="Search" {% if q %}value="{{ q }}"{% endif %} />
-            <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search"></i></button>
-          </form>
-        </div>
-        <div class="col-2">
-          <select name="sort" data-js="sort-handler" value="{{ sort }}">
-            <option disabled="disabled" value="">Sort by</option>
-            <option value="featured">Featured</option>
-            <option value="name-desc">Name A/Z</option>
-            <option value="name-asc">Name Z/A</option>
-            {#<option value="most-popular">Most popular</option>#}
-            {#<option value="publisher">Publisher</option>#}
-          </select>
-        </div>
-      </div>
-      <div class="row">
-      {% if results %}
-        {% for package in results %}
-          {% include "partial/_entity-card.html" %}
-        {% endfor %}
-      {% endif %}
-      </div>
-    </div>
 </section>
+
 {% endblock %}
 
 {% block page_scripts %}
@@ -56,7 +46,10 @@
     new charmhub.store.Filters({
       filter: "[data-js='filter-handler']",
       search: "[data-js='search-handler']",
-      sort: "[data-js='sort-handler']"
+      sort: "[data-js='sort-handler']",
+      sortMobile: "[data-js='mobile-sort-handler']",
+      sortMobileButton: "[data-js='mobile-sort-reveal-button']",
+      filterMobileButton: "[data-js='mobile-filter-reveal-button']",
     });
   });
 </script>

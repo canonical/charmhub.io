@@ -102,9 +102,21 @@ $theme-default-nav: dark;
 
 @include charmhub-p-header;
 
+@import "charmhub_p-store";
+
+@include charmhub-p-store;
+
 @import "charmhub_p-series-tag";
 
 @include charmhub-p-series-tag;
+
+@import "charmhub_p-filter";
+
+@include p-charmhub-filter;
+
+@import "charmhub_p-sort";
+
+@include p-charmhub-sort;
 
 .p-channel-map {
   position: absolute;
@@ -151,6 +163,19 @@ $theme-default-nav: dark;
   margin-bottom: 1rem;
 }
 
+// XXX Ovi - 12.05.20: This can be removed once the new icon set is implemented in vanilla
+.p-icon--filter {
+  @extend %icon;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cg fill='none' fill-rule='evenodd' stroke='%2306C' stroke-width='1.5' transform='translate(2 2.5)'%3E%3Cline x2='12' y1='.5' y2='.5'/%3E%3Cline x1='4' x2='8' y1='10.5' y2='10.5'/%3E%3Cline x1='2' x2='10' y1='5.5' y2='5.5'/%3E%3C/g%3E%3C/svg%3E");
+}
+// XXX Ovi - 12.05.20: This can be removed once the new icon set is implemented in vanilla
+.p-icon--sort {
+  @extend %icon;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' height='16px' width='16px' version='1.1' viewBox='0 0 16 16'%3E%3C!-- Generator: Sketch 64 (93537) - https://sketch.com --%3E%3Ctitle%3Esort-both%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cg id='sort-both' fill='%2306C'%3E%3Cpolygon id='Triangle' points='8 2 11.333 7 4.6667 7'/%3E%3Cpolygon id='Triangle' points='8 9 11.333 14 4.6667 14' transform='translate(8 11.5) rotate(180) translate(-8 -11.5)'/%3E%3C/g%3E%3C/svg%3E");
+}
+
 // XXX Ovi - 04.04.20: This can be removed once this issue is closed.
 // https://github.com/canonical-web-and-design/vanilla-framework/issues/1452
 html,
@@ -158,10 +183,8 @@ body {
   height: 100%;
 }
 
-// XXX Ovi - 21.05.20: Workaround z-index issue between side nav and global nav
-// This can be removed once this issue is closed.
-// https://github.com/canonical-web-and-design/vanilla-framework/issues/3075
-.p-side-navigation__drawer,
-.p-side-navigation__overlay {
-  z-index: 100;
+.u-hide--small-1 {
+  @media screen and(max-width: $breakpoint-medium - 1) {
+    display: none !important;
+  }
 }
