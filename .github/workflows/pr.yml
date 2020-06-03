@@ -1,5 +1,5 @@
 name: PR checks
-on: pull_request
+on: [pull_request]
 
 env:
   SECRET_KEY: insecure_test_key
