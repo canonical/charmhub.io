@@ -4,7 +4,7 @@ from flask import make_response, render_template, session
 
 from webapp import authentication, config, helpers
 from webapp.decorators import login_required
-from webapp.error_handling import register_error_handlers
+from webapp.handlers import set_handlers
 from webapp.login.views import login
 from webapp.store.views import store
 
@@ -18,32 +18,17 @@ app = FlaskBase(
 )
 app.store_api = CharmStore()
 
-register_error_handlers(app)
+set_handlers(app)
 app.register_blueprint(store)
 app.register_blueprint(login)
 
 
-@app.context_processor
-def utility_processor():
-    return {
-        "add_filter": helpers.add_filter,
-        "active_filter": helpers.active_filter,
-        "remove_filter": helpers.remove_filter,
-    }
-
-
 @app.route("/")
 def index():
-    email = None
     if authentication.is_authenticated(session):
-        email = session["openid"]["email"]
-        response = make_response(
-            render_template("index.html", email=email)
-        )
+        response = make_response(render_template("index.html"))
     else:
-        response = make_response(
-            render_template("holding.html", email=email)
-        )
+        response = make_response(render_template("holding.html"))
 
     # Temporal fix to avoid cache since this page could return two versions
     response.headers.set("Cache-Control", "no-store")
