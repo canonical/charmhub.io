@@ -1,4 +1,4 @@
-from flask import abort
+from flask import abort, session
 from canonicalwebteam.store_api.exceptions import (
     StoreApiCircuitBreaker,
     StoreApiError,
@@ -8,8 +8,32 @@ from canonicalwebteam.store_api.exceptions import (
     StoreApiTimeoutError,
 )
 
+from webapp import authentication, helpers
 
-def register_error_handlers(app):
+
+def set_handlers(app):
+    @app.context_processor
+    def utility_processor():
+        """
+        This defines the set of properties and functions that will be added
+        to the default context for processing templates. All these items
+        can be used in all templates
+        """
+
+        if authentication.is_authenticated(session):
+            email = session["openid"]["email"]
+        else:
+            email = None
+
+        return {
+            "add_filter": helpers.add_filter,
+            "active_filter": helpers.active_filter,
+            "remove_filter": helpers.remove_filter,
+            "email": email,
+        }
+
+    # Error handlers
+    # ===
     @app.errorhandler(StoreApiTimeoutError)
     def handle_store_api_timeout(e):
         abort(504, str(e))
