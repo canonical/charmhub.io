@@ -13,19 +13,19 @@ module.exports = [
   // loaders are evaluated from bottom to top (right to left)
   // so first transpile via babel, then expose as global
   {
-    test: "/static/js/public/about/index.js",
+    test: "/static/js/src/public/about/index.js",
     use: ["expose-loader?charmhub.about", "babel-loader"],
   },
   {
-    test: "/static/js/base/base.js",
+    test: "/static/js/src/base/base.js",
     use: ["expose-loader?charmhub.base", "babel-loader"],
   },
   {
-    test: "/static/js/public/store/index.js",
+    test: "/static/js/src/public/store/index.js",
     use: ["expose-loader?charmhub.store", "babel-loader"],
   },
   {
-    test: "/static/js/public/details/index.js",
+    test: "/static/js/src/public/details/index.js",
     use: ["expose-loader?charmhub.details", "babel-loader"],
   },
 ];
