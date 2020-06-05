@@ -12,12 +12,13 @@
     "build-js-bundle": "webpack",
     "format-python": "black --line-length 79 webapp",
     "lint-python": "flake8 webapp tests && black --check --line-length 79 webapp tests",
-    "lint-js": "eslint static/js",
+    "lint-js": "eslint static/js/src/**/*.js",
     "lint-scss": "stylelint static/**/*.scss",
     "serve": "./entrypoint 0.0.0.0:${PORT}",
     "start": "yarn run build && concurrently --raw 'yarn run watch' 'yarn run serve'",
     "test": "yarn run lint-scss && yarn run lint-python && yarn run test-python",
-    "test-python": "python3 -m unittest discover tests"
+    "test-python": "python3 -m unittest discover tests",
+    "test-js": "jest"
   },
   "husky": {
     "hooks": {
@@ -52,7 +53,9 @@
     "webpack-cli": "3.3.11"
   },
   "devDependencies": {
+    "babel-jest": "26.0.1",
     "concurrently": "5.2.0",
+    "jest": "26.0.1",
     "stylelint": "13.5.0",
     "stylelint-config-standard": "20.0.0",
     "stylelint-order": "4.0.0"
