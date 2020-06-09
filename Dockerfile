@@ -19,7 +19,8 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn yarn install
 FROM yarn-dependencies AS build-js
 ADD static/js static/js
 ADD webpack.config.js .
-ADD .webpack/ .webpack
+ADD webpack.config.entry.js .
+ADD webpack.config.rules.js .
 RUN yarn run build-js
 
 # Build stage: Run "yarn run build-css"
