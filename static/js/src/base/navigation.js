@@ -86,3 +86,5 @@ document.addEventListener("click", function (event) {
     closeAllSubnavs();
   }
 });
+
+export { toggleSubnav };
