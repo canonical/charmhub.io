@@ -1,0 +1,30 @@
+domain: charmhub.io
+
+image: prod-comms.docker-registry.canonical.com/charmhub.io
+
+env:
+  - name: SENTRY_DSN
+    value: https://6cacb25de947478faeb57f3836da1cf3@sentry.is.canonical.com//24
+
+  # We have to use the staging API temporarily
+  - name: CHARMSTORE_API_URL
+    value: https://api.staging.snapcraft.io/
+
+  - name: LOGIN_LAUNCHPAD_TEAM
+    value: canonical
+
+# Overrides for production
+production:
+  replicas: 5
+  nginxConfigurationSnippet: |
+    if ($host != 'charmhub.io' ) {
+      rewrite ^ https://charmhub.io$request_uri? permanent;
+    }
+    more_set_headers "Link: <https://assets.ubuntu.com>; rel=preconnect; crossorigin, <https://assets.ubuntu.com>; rel=preconnect";
+
+# Overrides for staging
+staging:
+  replicas: 3
+  nginxConfigurationSnippet: |
+    more_set_headers "X-Robots-Tag: noindex";
+    more_set_headers "Link: <https://assets.ubuntu.com>; rel=preconnect; crossorigin, <https://assets.ubuntu.com>; rel=preconnect";
