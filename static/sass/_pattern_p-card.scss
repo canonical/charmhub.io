@@ -25,7 +25,7 @@
   }
 
   .p-card {
-    min-height: 12rem;
+    width: 100%;
 
     &.p-button {
       background: $color-x-light;
@@ -36,7 +36,6 @@
       &:hover,
       &:active,
       &:active:hover {
-        background: none !important;
         border-color: $color-mid-light;
       }
     }

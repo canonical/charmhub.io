@@ -1,7 +1,7 @@
 {% if package["type"] == "bundle" %}
 {% set isBundle = True %}
 {% endif %}
-<div class="col-3">
+<div class="col-3 u-equal-height">
   <a href="/{{ package.name }}" class="p-button p-card">
     <div class="u-clearfix">
       <div class="u-float-left {% if isBundle %}p-bundle-icons{% endif %}">
