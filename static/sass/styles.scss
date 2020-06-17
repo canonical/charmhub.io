@@ -85,6 +85,10 @@ $theme-default-nav: dark;
 
 @include p-charmhub-accordion;
 
+@import "pattern_p-inline-images";
+
+@include p-charmhub-inline-images;
+
 @import "pattern_p-table-of-contents";
 
 @include p-charmhub-table-of-contents;
