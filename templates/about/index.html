@@ -50,13 +50,7 @@
     Operators in the collection declare <i>endpoints</i> that represent potential forms of integration. For example, a MySQL operator can say that it can provide a MySQL database, and that it can stream its logs with the rsyslog protocol.
   </p>
   <p>
-    <img src="https://assets.ubuntu.com/v1/e1d3143f-laptop.png" alt="">
-  </p>
-  <p>
     Each endpoint has a type and a direction, it can be ‘inbound’ or ‘outbound’. You can only integrate two endpoints if they have the same type and opposite directions.
-  </p>
-  <p>
-    <img src="https://assets.ubuntu.com/v1/e1d3143f-laptop.png" alt="">
   </p>
   <p>
     Don’t confuse the name of the endpoint with the type of the endpoint. Just because an endpoint is named ‘mysql’ doesn’t mean that it has the type ‘mysql’. The type determines the nature of the handshaking that happens during integration. This allows an operator to have multiple endpoints that integrate the same way (‘the same type’) but for different purposes.
@@ -68,13 +62,7 @@
     When two endpoints are integrated, or <i>related</i>, the operators configure their workloads appropriately for that integration. Here is the simplest example of a relation between the endpoints on two operators:
   </p>
   <p>
-    <img src="https://assets.ubuntu.com/v1/e1d3143f-laptop.png" alt="">
-  </p>
-  <p>
     And of course, by repeating the process with different endpoints on different operators you can construct a rich application graph, or topology, of multiple operators, each of which is driving their own workload and aware of integration in the graph.
-  </p>
-  <p>
-    <img src="https://assets.ubuntu.com/v1/e1d3143f-laptop.png" alt="">
   </p>
   <p>
     Operators learn about the application graph around them at deployment time, and are also expected to handle changes in the application graph dynamically.
