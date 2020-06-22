@@ -19,11 +19,9 @@
       </span>
       <!-- TO DO - update navigation -->
       <ul class="p-navigation__items" role="menu">
-        <li
-          class="p-navigation__item {% if request.path.startswith('/about') %}is-selected{% endif %}"
-          role="menuitem">
-          <a href="/about" class="p-navigation__link">
-            About
+        <li class="p-navigation__item {% if request.path == '/store' %}is-selected{% endif %}" role="menuitem">
+          <a href="/store" class="p-navigation__link">
+            Store
           </a>
         </li>
         <li
@@ -45,9 +43,11 @@
             Discourse
           </a>
         </li>
-        <li class="p-navigation__item {% if request.path == '/store' %}is-selected{% endif %}" role="menuitem">
-          <a href="/store" class="p-navigation__link">
-            Store
+        <li
+          class="p-navigation__item {% if request.path.startswith('/about') %}is-selected{% endif %}"
+          role="menuitem">
+          <a href="/about" class="p-navigation__link">
+            About
           </a>
         </li>
       </ul>
