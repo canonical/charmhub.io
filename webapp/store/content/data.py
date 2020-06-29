@@ -1,7 +1,7 @@
 # Dummy data for home page
 from faker import Faker
 from faker.providers import internet
-from random import shuffle, choice
+from random import choice
 import collections.abc
 
 
@@ -505,14 +505,6 @@ def get_fake_bundle():
             },
         ],
     }
-
-
-def gen_mock_data(merge_with=[]):
-    bundles = [get_fake_bundle() for i in range(fake.random_int(5, 15))]
-    charms = [get_fake_charm() for i in range(fake.random_int(5, 15))]
-    list_data = bundles + charms
-    shuffle(list_data)
-    return list_data
 
 
 def mock_missing_properties(package):

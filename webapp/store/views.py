@@ -19,16 +19,9 @@ def store_view():
     sort = request.args.get("sort", default="", type=str)
 
     if query:
-        api_search_results = app.store_api.find(query=query).get("results", [])
+        results = app.store_api.find(query=query).get("results", [])
     else:
-        api_search_results = app.store_api.find().get("results", [])
-
-    for i, item in enumerate(api_search_results):
-        api_search_results[i] = data.mock_missing_properties(
-            api_search_results[i]
-        )
-
-    results = api_search_results + data.gen_mock_data()
+        results = app.store_api.find().get("results", [])
 
     for i, item in enumerate(results):
         results[i] = logic.add_store_front_data(results[i])

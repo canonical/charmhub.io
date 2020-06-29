@@ -72,17 +72,17 @@ def convert_date(date_to_convert):
 
 
 def get_icons(package):
-    media = package[package["type"]]["media"]
+    media = package["charm"]["media"]
     return [m["url"] for m in media if m["type"] == "icon"]
 
 
 def add_store_front_data(package):
-    package_data = package[package["type"]]
     extra = {}
     extra["icons"] = get_icons(package)
-    extra["publisher_name"] = package_data["publisher"]["display-name"]
-    extra["summary"] = package_data["summary"]
-    extra["channel_map"] = convert_channel_maps(package["channel-map"])
+    extra["publisher_name"] = package["charm"]["publisher"]["display-name"]
+    extra["summary"] = package["charm"]["summary"]
+    if package.get("channel-map"):
+        extra["channel_map"] = convert_channel_maps(package["channel-map"])
     package["store_front"] = extra
 
     return package
