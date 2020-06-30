@@ -65,6 +65,10 @@ $theme-default-nav: dark;
 
 @include p-charmhub-link;
 
+@import "pattern_p-navigation";
+
+@include p-charmhub-navigation;
+
 @import "pattern_p-media-object";
 
 @include p-charmhub-media-object;

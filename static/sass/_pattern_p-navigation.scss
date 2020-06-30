@@ -1,0 +1,12 @@
+@mixin p-charmhub-navigation {
+  @media screen and (min-width: $breakpoint-navigation-threshold) {
+    .p-navigation .p-navigation__item.is-selected {
+      background-color: $color-x-light;
+    }
+
+    .p-navigation .p-navigation__item.is-selected > .p-navigation__link {
+      color: $color-dark;
+      opacity: 1;
+    }
+  }
+}
