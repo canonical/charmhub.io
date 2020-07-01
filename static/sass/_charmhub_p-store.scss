@@ -7,6 +7,14 @@
   .p-store__items-left {
     align-items: center;
     justify-content: space-between;
+
+    .p-store__text {
+      padding-block-start: 0;
+
+      @media screen and(max-width: $breakpoint-medium - 1) {
+        padding-block-start: 0.25rem;
+      }
+    }
   }
 
   .p-store__search {

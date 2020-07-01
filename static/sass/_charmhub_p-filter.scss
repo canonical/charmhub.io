@@ -1,5 +1,7 @@
 @mixin p-charmhub-filter {
   .p-filter {
+    padding-block-start: 0.625rem;
+
     @media screen and(max-width: $breakpoint-medium - 1) {
       background-color: $color-x-light;
       bottom: 0;
@@ -7,6 +9,7 @@
       left: 0;
       max-height: 75%;
       overflow-y: scroll;
+      padding-block-start: 0;
       position: fixed;
       right: 0;
       transform: translateY(100%);
