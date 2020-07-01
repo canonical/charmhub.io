@@ -1,9 +1,9 @@
-canonicalwebteam.flask-base==0.6.1
-canonicalwebteam.store-api==2.0.3
+canonicalwebteam.flask-base==0.6.3
+canonicalwebteam.store-api==2.2.0
 django-openid-auth==0.15
 Flask-OpenID-Stateless==1.2.6
-humanize==2.4.0
+humanize==2.4.1
 pymacaroons==0.13.0
 
 # Temporal to mock data
-faker==4.1.0
+faker==4.1.1
