@@ -1,0 +1,16 @@
+@mixin p-charmhub-grid {
+  .col-x-small-1 {
+    @media (max-width: 450px) {
+      grid-column-end: span 4;
+    }
+  }
+
+  .row.has-small-gap {
+    grid-gap: 1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .u-equal-height {
+    display: flex;
+  }
+}
