@@ -3,7 +3,9 @@ class Tabs {
     this.el = el;
     this.tabs = {};
     this.historyState = historyState;
-    this.children = children;
+    if (children) {
+      this.children = children;
+    }
 
     const tabLinks = this.el.querySelectorAll("[role='tab']");
 
@@ -113,7 +115,11 @@ class Tabs {
 
       // If there is an interactive child element, call it's focus method
       // This will set the appropriate URL
-      if (this.children[clickedTab] && this.children[clickedTab].focus) {
+      if (
+        this.children &&
+        this.children[clickedTab] &&
+        this.children[clickedTab].focus
+      ) {
         this.children[clickedTab].focus();
       } else {
         this.historyState.updatePath(0, clickedTab);

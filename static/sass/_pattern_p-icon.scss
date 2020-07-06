@@ -1,0 +1,30 @@
+@mixin p-charmhub-icon {
+  .p-icon--arrow-up {
+    @extend %icon;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cg clip-path='url(%23clip0)'%3E%3Cpath d='M14 8L2 14.9282L2 1.0718L14 8Z' fill='%230e8420'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0'%3E%3Crect width='16' height='16' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E");
+    transform: rotate(-90deg);
+    width: 10px;
+  }
+
+  .p-icon--arrow-down {
+    @extend %icon;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cg clip-path='url(%23clip0)'%3E%3Cpath d='M14 8L2 14.9282L2 1.0718L14 8Z' fill='%23c7162b'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0'%3E%3Crect width='16' height='16' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E");
+    transform: rotate(90deg);
+    width: 10px;
+  }
+
+  // XXX Ovi - 12.05.20: This can be removed once the new icon set is implemented in vanilla
+  .p-icon--filter {
+    @extend %icon;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cg fill='none' fill-rule='evenodd' stroke='%2306C' stroke-width='1.5' transform='translate(2 2.5)'%3E%3Cline x2='12' y1='.5' y2='.5'/%3E%3Cline x1='4' x2='8' y1='10.5' y2='10.5'/%3E%3Cline x1='2' x2='10' y1='5.5' y2='5.5'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  // XXX Ovi - 12.05.20: This can be removed once the new icon set is implemented in vanilla
+  .p-icon--sort {
+    @extend %icon;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' height='16px' width='16px' version='1.1' viewBox='0 0 16 16'%3E%3C!-- Generator: Sketch 64 (93537) - https://sketch.com --%3E%3Ctitle%3Esort-both%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cg id='sort-both' fill='%2306C'%3E%3Cpolygon id='Triangle' points='8 2 11.333 7 4.6667 7'/%3E%3Cpolygon id='Triangle' points='8 9 11.333 14 4.6667 14' transform='translate(8 11.5) rotate(180) translate(-8 -11.5)'/%3E%3C/g%3E%3C/svg%3E");
+  }
+}

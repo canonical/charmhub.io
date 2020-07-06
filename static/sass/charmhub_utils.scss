@@ -1,0 +1,37 @@
+@mixin charmhub-utils {
+  .is-color--positive {
+    color: $color-positive !important;
+  }
+
+  .is-color--negative {
+    color: $color-negative !important;
+  }
+
+  .u-hide--small-1 {
+    @media screen and(max-width: $breakpoint-medium - 1) {
+      display: none !important;
+    }
+  }
+
+  .u-flex {
+    display: flex;
+  }
+
+  .u-position--sticky {
+    background-color: $color-x-light;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  // XXX Ant - 11.03.20: This can be removed once this issue is closed.
+  // https://github.com/canonical-web-and-design/vanilla-framework/issues/2922
+  .u-text--subtle {
+    color: $color-mid-dark;
+    font-size: 0.875rem;
+  }
+
+  .u-extra-space {
+    margin-block-end: 3rem;
+  }
+}
