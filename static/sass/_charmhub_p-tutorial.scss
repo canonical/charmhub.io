@@ -44,7 +44,7 @@
   }
 
   .p-tutorial-content {
-    margin-top: -12.5rem; // ensure header is visible when navigating between steps (pt. 1 of 2)
+    margin-top: -20rem; // ensure header is visible when navigating between steps (pt. 1 of 2)
   }
 
   .p-tutorial-section {
@@ -52,7 +52,7 @@
 
     &:target {
       display: block;
-      padding-top: 12.5rem; // ensure header is visible when navigating between steps (pt. 2 of 2)
+      padding-top: 20rem; // ensure header is visible when navigating between steps (pt. 2 of 2)
     }
   }
 
