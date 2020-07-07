@@ -29,7 +29,9 @@ $theme-default-nav: dark;
 @include vf-p-lists;
 @include vf-p-media-object;
 @include vf-p-muted-heading;
+@include vf-p-notification;
 @include vf-p-navigation;
+@include vf-p-pagination;
 @include vf-p-subnav;
 @include vf-p-search-box;
 @include vf-p-strip;
@@ -127,6 +129,10 @@ $theme-default-nav: dark;
 @import "charmhub_p-sort";
 
 @include p-charmhub-sort;
+
+@import "charmhub_p-tutorial";
+
+@include charmhub-p-tutorial;
 
 .p-channel-map {
   position: absolute;

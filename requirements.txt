@@ -1,4 +1,6 @@
 canonicalwebteam.flask-base==0.6.3
+canonicalwebteam.discourse-docs==1.0.0
+canonicalwebteam.search==0.2.1
 canonicalwebteam.store-api==2.2.0
 django-openid-auth==0.15
 Flask-OpenID-Stateless==1.2.6
