@@ -1,4 +1,11 @@
 @mixin p-charmhub-list {
+  .p-list {
+    // Overide the default vanilla $color-accent for ticked icon
+    .p-list__item.is-ticked {
+      @include vf-icon-success($color-dark);
+    }
+  }
+
   .p-list--ordered {
     @extend %vf-list;
 
