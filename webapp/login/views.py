@@ -1,6 +1,10 @@
 import os
-
+import talisker
 import flask
+
+from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
+from webapp.login.candid import CandidClient
+from webapp.helpers import is_safe_url
 from django_openid_auth.teams import TeamsRequest, TeamsResponse
 from flask_openid import OpenID
 
@@ -18,12 +22,15 @@ LOGIN_LAUNCHPAD_TEAM = os.getenv(
 open_id = OpenID(
     stateless=True, safe_roots=[], extension_responses=[TeamsResponse],
 )
+request_session = talisker.requests.get_session()
+candid = CandidClient(request_session)
+publisher_api = CharmPublisher(request_session)
 
 
 @login.route("/login", methods=["GET", "POST"])
 @open_id.loginhandler
 def login_handler():
-    if authentication.is_authenticated(flask.session):
+    if authentication.is_canonical_employee_authenticated(flask.session):
         return flask.redirect(open_id.get_next_url())
 
     lp_teams = TeamsRequest(query_membership=[LOGIN_LAUNCHPAD_TEAM])
@@ -50,3 +57,52 @@ def after_login(resp):
 def logout():
     authentication.empty_session(flask.session)
     return flask.redirect("/")
+
+
+@login.route("/publisher/login/")
+def publisher_login():
+    # Get a bakery v2 macaroon from the publisher API to be discharged
+    # and save it in the session
+    flask.session["publisher-macaroon"] = publisher_api.get_macaroon()
+    callback_url = flask.url_for("login.login_callback", _external=True)
+    state = "foo"
+
+    login_url = candid.get_login_url(
+        flask.session["publisher-macaroon"], callback_url, state
+    )
+
+    # Next URL to redirect the user after the login
+    next_url = flask.request.args.get("next")
+
+    if next_url:
+        if not is_safe_url(next_url):
+            return flask.abort(400)
+        flask.session["next_url"] = next_url
+
+    return flask.redirect(login_url, 302)
+
+
+@login.route("/login/callback")
+def login_callback():
+    code = flask.request.args["code"]
+    # state = request.args["state"]
+    discharged_token = candid.discharge_token(code)
+    candid_macaroon = candid.discharge_macaroon(
+        flask.session["publisher-macaroon"], discharged_token
+    )
+
+    # Store bakery authentication
+    flask.session["publisher-auth"] = candid.get_serialized_bakery_macaroon(
+        flask.session["publisher-macaroon"], candid_macaroon
+    )
+
+    flask.session["publisher"] = publisher_api.whoami(
+        flask.session["publisher-auth"]
+    )
+
+    return flask.redirect(
+        flask.session.pop(
+            "login-next-url", flask.url_for("publisher.charms_and_bundles"),
+        ),
+        302,
+    )
