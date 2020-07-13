@@ -3,6 +3,7 @@
     $icon-size: 2rem;
     $padding: 0.12rem;
 
+    display: flex;
     padding: $padding 0.3rem + $padding $padding $padding;
     position: relative;
     top: -0.12rem;
@@ -39,6 +40,29 @@
 
       &:nth-child(3) {
         margin-left: -1.6rem;
+      }
+
+      &:last-of-type {
+        margin-inline-end: 1rem;
+      }
+    }
+  }
+
+  .p-heading-icon--x-small > .p-bundle-icons {
+    padding: 0;
+    top: 0;
+
+    img {
+      border-radius: 1.5rem / 2;
+      height: 1.5rem;
+      width: 1.5rem;
+
+      &:nth-child(2) {
+        margin-left: -1.1rem;
+      }
+
+      &:nth-child(3) {
+        margin-left: -1.1rem;
       }
     }
   }

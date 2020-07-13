@@ -1,0 +1,344 @@
+{% extends 'publisher/publisher_layout.html' %}
+
+<!-- To DO - add copy and description -->
+{% block meta_copydoc %}{% endblock meta_copydoc %}
+{% block meta_description %}{% endblock %}
+
+{% block publisher_content %}
+<form id="market-form" class="p-form p-form--stacked p-strip u-no-padding--top" method="POST" enctype="multipart/form-data">
+  <input type="hidden" name="csrf_token" value="IjUxNDBkYzU2MzM4MzhjNTc0YmQwNTdhMDc3ZTc3YWY0OWE4ZTA3ZTgi.XwMR_Q.iXrtuR3No456GzUDCcxdkcsJ7WI">
+  <input type="hidden" name="package_id" value="9um8kCq8xXP6agfnja3HdRiHqRqP7NJT">
+
+  <div class="u-position--sticky">
+    <div class="row" style="padding-block-start: 1rem;">
+      <div class="col-7">
+        <p>
+          Updates to this information will appear immediately on the <a href="/{{ package_name }}">{{ package_type }} listing page</a>.
+        </p>
+      </div>
+      <div class="col-5">
+        <div class="u-align--right u-clearfix">
+          <button class="js-listing-preview p-button--base p-tooltip p-tooltip--btm-center" form="preview-form" area-describedby="preview-tooltip">
+            Preview
+            <span class="p-tooltip__message" role="tooltip" id="preview-tooltip">Previews will only work in the same browser, locally</span>
+          </button>
+          <a class="p-button--neutral is--disabled" href="javascript:void(0);" style="margin-inline-end: 1rem;">Revert</a>
+          <button type="submit" class="p-button--positive" name="submit_apply" value="Save" disabled="">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <hr class="u-no-margin--bottom">
+  </div>
+
+  <section class="p-strip is-shallow">
+    <div class="u-fixed-width">
+      <h2 class="p-heading--4">
+        Listing details
+      </h2>
+    </div>
+    <div class="row p-form__group p-form__group--top" data-validation-name="icon">
+      <div class="col-2">
+        <label class="p-form__label" for="{{ package_type }}-icon">
+          {% if package_type == "charm" %}Charm{% elif package_type == "bundle" %}Bundle{% endif %} icon:
+        </label>
+      </div>
+      <div class="col-8">
+        <div class="p-form__control">
+          <div class="u-flex u-vertically-center">
+            <div class="p-editable-icon">
+              <div class="p-editable-icon__icon" tabindex="0">
+                <img class="p-editable-icon__image" src="https://dashboard.snapcraft.io/site_media/appmedia/2020/04/products-hero-ubuntu.svg.png" alt="{{ package_name }} {{ package_type }}">
+                <span class="p-editable-icon__change">Edit</span>
+                <input type="file" name="icon" id="{{ package_type }}-icon" accept="image/png,image/jpeg,image/svg+xml" hidden="">
+              </div>
+            </div>
+            <div class="p-editable-icon__actions">
+              <a href="#" role="button" tabindex="0" class="p-editable-icon__delete">
+                <i class="p-icon--delete"></i>
+              </a>
+            </div>
+          </div>
+          <p class="p-form-help-text"><a href="#" role="button" tabindex="0">Show icon restrictions</a></p>
+          <div class="u-hide">
+            <ul>
+              <li><small>Accepted image formats include: <b>PNG, JPEG &amp; SVG files</b></small></li>
+              <li><small>Min resolution: <b>40 x 40 pixels</b></small></li>
+              <li><small>Max resolution: <b>512 x 512 pixels</b></small></li>
+              <li><small>Aspect ratio: <b>1:1</b></small></li>
+              <li><small>File size limit: <b>256kB</b></small></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row p-form__group p-form-validation">
+      <div class="col-2" data-tour="listing-title">
+        <label for="{{ package_type }}-title" class="p-form__label">Title:</label>
+      </div>
+      <div class="col-8">
+        <div class="p-form__control">
+          <input class="p-form-validation__input" id="{{ package_type }}-title" type="text" name="title" value="{{ package_name }}" required="" maxlength="40">
+        </div>
+      </div>
+    </div>
+    <div class="row p-form__group">
+      <div class="col-2">
+        <label class="p-form__label">Category:</label>
+      </div>
+      <div class="col-4">
+        <div class="p-form__control">
+          <select name="primary_category">
+            <option value="">Select category</option>
+            <option value="art-and-design">Art and Design</option>
+            <option value="books-and-reference">Books and Reference</option>
+            <option value="development">Development</option>
+            <option value="devices-and-iot">Devices and IoT</option>
+            <option value="education">Education</option>
+            <option value="entertainment">Entertainment</option>
+            <option value="finance">Finance</option>
+            <option value="games">Games</option>
+            <option value="health-and-fitness">Health and Fitness</option>
+            <option value="music-and-audio">Music and Audio</option>
+            <option value="news-and-weather">News and Weather</option>
+            <option value="personalisation">Personalisation</option>
+            <option value="photo-and-video">Photo and Video</option>
+            <option value="productivity">Productivity</option>
+            <option value="science">Science</option>
+            <option value="security">Security</option>
+            <option value="server-and-cloud">Server and Cloud</option>
+            <option value="social">Social</option>
+            <option value="utilities">Utilities</option>
+            <option value="">None</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="row">
+          <div class="col-8 col-start-large-3">
+            <p class="p-form-help-text">
+              Include a category for better ranking within the CharmHub.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row p-form__group p-form-validation ">
+      <div class="col-2">
+        <label for="video" class="p-form__label">Video:</label>
+      </div>
+      <div class="col-8">
+        <div class="p-form__control">
+          <input class="p-form-validation__input" type="text" name="video_urls" value="" id="video">
+          <p class="p-form-help-text">
+            Vimeo, YouTube or asciinema URL
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="row p-form__group p-form-validation ">
+      <div class="col-2" data-tour="listing-summary">
+        <label class="p-form__label">Summary: </label>
+      </div>
+      <div class="col-8">
+        <div class="p-form__control">
+          <input data-tour="listing-summary" class="p-form-validation__input" type="text" name="summary" required="" maxlength="128">
+        </div>
+      </div>
+    </div>
+    <div class="row p-form__group p-form-validation ">
+      <div class="col-2">
+        <label class="p-form__label">Description: </label>
+      </div>
+      <div class="col-8">
+        <div class="p-form__control">
+          <textarea class="p-form-validation__input" name="description" rows="10" required=""></textarea>
+          <p class="p-form-help-text">
+            <a href="#">Show supported markdown syntax</a>
+          </p>
+          <div class="row js-markdown u-hide">
+            <div class="col-4">
+              <p><small>
+                  <b>Bold:</b> <code>**Foo**</code>
+                </small></p>
+              <p><small>
+                  <b>URLs:</b> <code>https://foo.bar</code>
+                </small></p>
+              <p class="u-no-margin--bottom"><small>
+                  <b>Lists:</b> <code>* Foo</code>
+                </small></p>
+            </div>
+            <div class="col-4">
+              <p><small>
+                  <b>Italics:</b> <code>_Foo_</code>
+                </small></p>
+              <p><small>
+                  <b>Code:</b> Text indented with 3 spaces or inside <code>`</code>
+                </small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row p-form__group p-form__group--top" data-validation-name="screenshots">
+      <div class="col-2">
+        <label class="p-form__label">Images:</label>
+      </div>
+      <div class="col-8">
+        <div class="p-form__control js-media-holder">
+          <div class="p-listing-images">
+            <div class="p-listing-images__image is-empty p-listing-images__add-image p-file-input" tabindex="0"><span role="button" class="u-align-text--center"><i class="p-icon--plus"></i><br>Add image</span><input type="file" name="screenshots" id="screenshot-0" accept="image/png,image/gif,image/jpeg" hidden=""></div>
+            <div class="p-listing-images__image is-empty p-file-input" tabindex="0"><input type="file" name="screenshots" id="screenshot-1" accept="image/png,image/gif,image/jpeg" hidden=""></div>
+            <div class="p-listing-images__image is-empty p-file-input" tabindex="0"><input type="file" name="screenshots" id="screenshot-2" accept="image/png,image/gif,image/jpeg" hidden=""></div>
+            <div class="p-listing-images__image is-empty p-file-input" tabindex="0"><input type="file" name="screenshots" id="screenshot-3" accept="image/png,image/gif,image/jpeg" hidden=""></div>
+            <div class="p-listing-images__image is-empty p-file-input" tabindex="0"><input type="file" name="screenshots" id="screenshot-4" accept="image/png,image/gif,image/jpeg" hidden=""></div>
+          </div>
+          <p class="p-form-help-text"><a href="#" role="button" tabindex="0">Show image restrictions</a></p>
+          <div class="u-hide">
+            <ul>
+              <li><small>Accepted image formats include: <b>GIF, JPEG &amp; PNG files</b></small></li>
+              <li><small>Min resolution: <b>480 x 480 pixels</b></small></li>
+              <li><small>Max resolution: <b>3840 x 2160 pixels</b></small></li>
+              <li><small>Aspect ratio: <b>Between 1:2 and 2:1</b></small></li>
+              <li><small>File size limit: <b>2MB</b></small></li>
+              <li><small>Animation min fps: <b>1</b></small></li>
+              <li><small>Animation max fps: <b>30</b></small></li>
+              <li><small>Animation max length: <b>40 seconds</b></small></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row p-form__group p-form__group--top">
+      <div class="col-2">
+        <label for="banner-image" class="p-form__label">Featured banner:</label>
+      </div>
+      <div class="col-8">
+        <div class="p-form__control p-market-banner js-banner">
+          <div class="p-market-banner__image-holder">
+            <div class=" p-file-input">
+              <div class="p-market-banner__image is-empty" tabindex="0">
+                <div class="u-align-text--center"><i class="p-icon--plus"></i>Add banner</div>
+              </div><input type="file" name="banner-image" id="banner-image" accept="image/png,image/jpeg" hidden="">
+            </div>
+          </div>
+          <p class="p-form-help-text">Adding a banner will increase your chances of being featured within the CharmHub but does not immediately make you eligible.</p>
+          <p class="p-form-help-text"><a href="#" role="button" tabindex="0">Show banner restrictions</a></p>
+          <div class="u-hide">
+            <ul>
+              <li><small>Accepted image formats include: <b>JPEG &amp; PNG files</b></small></li>
+              <li><small>Min resolution: <b>720 x 240 pixels</b><br><i>For best results on <a href="/store">the store</a> we recommend a resolution of <b>1920 x 640 pixels</b> or greater</i></small></li>
+              <li><small>Max resolution: <b>4320 x 1440 pixels</b></small></li>
+              <li><small>Aspect ratio: <b>3:1</b></small></li>
+              <li><small>File size limit: <b>2MB</b></small></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p-strip is-shallow">
+      <div class="u-fixed-width">
+        <hr class="u-no-margin--bottom">
+      </div>
+    </div>
+    <div class="u-fixed-width">
+      <h2 class="p-heading--4">Additional information</h2>
+    </div>
+    <div class="row p-form__group">
+      <div class="col-2">
+        <label class="p-form__input">Metrics:</label>
+      </div>
+      <div class="col-8">
+        <div class="p-form__control">
+          <input type="checkbox" name="public_metrics_enabled" id="public-metrics-enabled" checked="checked">
+          <label class="p-tooltip p-tooltip--top-left" for="public-metrics-enabled">Display public popularity charts
+            <span class="p-tooltip__message">These display relative popularity, not exact numbers.</span>
+          </label>
+          <div class="p-nested-inputs">
+            <input type="checkbox" name="public_metrics_territories" id="public-metrics-territories" checked="checked">
+            <label for="public-metrics-territories">World map <span class="p-form-help-text">Displays where your snap is being used by country</span></label>
+            <input type="checkbox" name="public_metrics_distros" id="public-metrics-distros" checked="checked">
+            <label for="public-metrics-distros">Linux distributions <span class="p-form-help-text">Displays where your snap is being used by distro</span></label>
+            <input type="hidden" name="public_metrics_blacklist">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row p-form__group p-form-validation ">
+      <div class="col-2" data-tour="listing-contact">
+        <label for="developer-website" class="p-form__label">Developer website:</label>
+      </div>
+      <div class="col-8">
+        <div class="p-form__control" data-tour="listing-contact">
+          <input class="p-form-validation__input" id="developer-website" type="url" name="website" value="" maxlength="256" placeholder="https://snapcraft.io">
+
+          <p class="p-form-help-text">
+            Please include a valid http:// or https:// link
+          </p>
+          <p class="p-form-help-text"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row p-form__group p-form-validation ">
+      <div class="col-2" data-tour="listing-contact">
+        <label for="contact p-form__input">Contact Ovidiu Suciu:</label>
+      </div>
+      <div class="col-8">
+        <div class="p-form__control" data-tour="listing-contact">
+          <input id="contact" class="p-form-validation__input" type="url" name="contact" value="" maxlength="256" placeholder="mailto:example@example.com">
+
+          <p class="p-form-help-text u-no-margin--bottom">
+            An http: or https: link, or an e-mail address
+          </p>
+          <p class="p-form-help-text"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-strip is-shallow">
+      <div class="row">
+        <hr class="u-no-margin--bottom">
+      </div>
+    </div>
+
+    <div class="row">
+      <h2 class="p-heading--4">Licensing</h2>
+    </div>
+
+    <div class="row p-form__group">
+      <div class="col-2">
+        <label class="p-form__input">License:</label>
+      </div>
+      <div class="col-8">
+        <div class="p-form__control">
+          <input type="hidden" name="license" value="AFL-1.1">
+          <input type="radio" name="license-type" value="simple" id="license-simple-option" checked="checked">
+          <label for="license-simple-option">Simple</label>
+          <div class="js-license p-multiselect__wrapper" id="license-simple-input">
+            <input type="text" class="js-multiselect-input" name="license-simple" value="AFL-1.1" style="display: none;">
+            <div class="js-multiselect-holder">
+              <div>
+                <div class="p-multiselect"><span class="p-multiselect__item" data-key="AFL-1.1">Academic Free License v1.1<i class="p-icon--close p-multiselect__item-remove"></i></span><input type="text" class="p-multiselect__input"></div>
+              </div>
+            </div>
+            <p class="p-form-help-text u-no-margin">The license(s) under which you will release your snap.<br>Multiple licenses can be selected to indicate alternative choices.</p>
+          </div>
+          <input type="radio" name="license-type" value="custom" id="license-custom-option">
+          <label for="license-custom-option" style="margin-bottom: 1.2rem;">Custom SPDX expression</label>
+          <textarea type="text" id="license-custom-input" name="license-custom" style="display: none;">AFL-1.1</textarea>
+          <p class="p-form-help-text">Visit <a class="p-link--external" href="https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60" target="_blank">SPDX Specification 21</a> for more information.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <input type="hidden" name="changes" value="">
+</form>
+{% endblock %}

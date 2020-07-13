@@ -17,6 +17,7 @@ $theme-default-nav: dark;
 @include vf-p-buttons;
 @include vf-p-card;
 @include vf-p-forms;
+@include vf-p-form-help-text;
 @include vf-p-grid;
 @include vf-p-grid-modifications;
 @include vf-p-headings;
@@ -78,6 +79,14 @@ $theme-default-nav: dark;
 
 @include p-charmhub-image;
 
+@import "pattern_p-table";
+
+@include p-charmhub-table;
+
+@import "pattern_p-icon";
+
+@include p-charmhub-icon;
+
 @import "pattern_p-strip";
 
 @include p-charmhub-strip;
@@ -89,6 +98,10 @@ $theme-default-nav: dark;
 @import "pattern_p-accordion";
 
 @include p-charmhub-accordion;
+
+@import "pattern_heading-icon";
+
+@include p-charmhub-heading-icon;
 
 @import "pattern_p-inline-images";
 
@@ -134,6 +147,14 @@ $theme-default-nav: dark;
 
 @include charmhub-p-tutorial;
 
+@import "charmhub_utils";
+
+@include charmhub-utils;
+
+@import "charmhub_publisher";
+
+@include charmhub-publisher;
+
 .p-channel-map {
   position: absolute;
   z-index: 11;
@@ -161,38 +182,11 @@ $theme-default-nav: dark;
   }
 }
 
-// XXX Ant - 11.03.20: This can be removed once this issue is closed.
-// https://github.com/canonical-web-and-design/vanilla-framework/issues/2922
-.u-text--subtle {
-  color: $color-mid-dark;
-  font-size: 0.875rem;
-}
-
-.u-position--sticky {
-  background-color: $color-x-light;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
 .p-heading-icon__group {
   margin-bottom: 1rem;
 }
 
-// XXX Ovi - 12.05.20: This can be removed once the new icon set is implemented in vanilla
-.p-icon--filter {
-  @extend %icon;
-
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cg fill='none' fill-rule='evenodd' stroke='%2306C' stroke-width='1.5' transform='translate(2 2.5)'%3E%3Cline x2='12' y1='.5' y2='.5'/%3E%3Cline x1='4' x2='8' y1='10.5' y2='10.5'/%3E%3Cline x1='2' x2='10' y1='5.5' y2='5.5'/%3E%3C/g%3E%3C/svg%3E");
-}
-// XXX Ovi - 12.05.20: This can be removed once the new icon set is implemented in vanilla
-.p-icon--sort {
-  @extend %icon;
-
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' height='16px' width='16px' version='1.1' viewBox='0 0 16 16'%3E%3C!-- Generator: Sketch 64 (93537) - https://sketch.com --%3E%3Ctitle%3Esort-both%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cg id='sort-both' fill='%2306C'%3E%3Cpolygon id='Triangle' points='8 2 11.333 7 4.6667 7'/%3E%3Cpolygon id='Triangle' points='8 9 11.333 14 4.6667 14' transform='translate(8 11.5) rotate(180) translate(-8 -11.5)'/%3E%3C/g%3E%3C/svg%3E");
-}
-
-// XXX Ovi - 07.07.20: This can be removed once this issue is closed.
+// XXX Ovi - 04.04.20: This can be removed once this issue is closed.
 // https://github.com/canonical-web-and-design/vanilla-framework/issues/1452
 body {
   display: grid;
@@ -200,8 +194,10 @@ body {
   min-height: 100vh;
 }
 
-.u-hide--small-1 {
-  @media screen and(max-width: $breakpoint-medium - 1) {
-    display: none !important;
+// Ovi 13.07.2020 - This can be removed once a new version of global-nav is released
+// as the issue was fixed https://github.com/canonical-web-and-design/global-nav/commit/03173d82a1f1d4b77f8e20e41ef552b90dbab798
+@media (max-width: 875px) {
+  body {
+    padding-bottom: 0 !important;
   }
 }

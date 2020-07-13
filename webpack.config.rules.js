@@ -28,4 +28,8 @@ module.exports = [
     test: require.resolve(__dirname + "/static/js/src/public/details/index.js"),
     use: ["expose-loader?exposes=charmhub.details", "babel-loader"],
   },
+  {
+    test: require.resolve(__dirname + "/static/js/src/publisher/list-page.js"),
+    use: ["expose-loader?exposes=charmhub.publisher.list", "babel-loader"],
+  },
 ];

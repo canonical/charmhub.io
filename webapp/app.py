@@ -9,7 +9,7 @@ from webapp.login.views import login
 from webapp.store.views import store
 from webapp.docs.views import init_docs
 from webapp.tutorials.views import init_tutorials
-
+from webapp.publisher.views import publisher
 
 app = FlaskBase(
     __name__,
@@ -23,6 +23,7 @@ app.store_api = CharmStore()
 
 set_handlers(app)
 app.register_blueprint(store)
+app.register_blueprint(publisher)
 app.register_blueprint(login)
 
 init_docs(app, "/docs")

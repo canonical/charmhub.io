@@ -1,0 +1,14 @@
+@mixin p-charmhub-heading-icon {
+  .p-heading-icon--x-small {
+    @extend .p-heading-icon--small;
+
+    .p-heading-icon__img {
+      height: 1.5rem;
+      width: 1.5rem;
+
+      @media screen and (max-width: $breakpoint-medium) {
+        margin-block-start: 0;
+      }
+    }
+  }
+}
