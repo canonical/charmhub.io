@@ -14,9 +14,9 @@ env:
     value: canonical
 
   - name: SEARCH_API_KEY
-      secretKeyRef:
-        key: google-custom-search-key
-        name: google-api
+    secretKeyRef:
+      key: google-custom-search-key
+      name: google-api
 
 # Overrides for production
 production:
