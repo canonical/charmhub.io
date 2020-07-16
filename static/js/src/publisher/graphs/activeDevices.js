@@ -1,7 +1,6 @@
 import { select } from "d3-selection";
 import { format } from "d3-format";
 import { line } from "d3-shape";
-import debounce from "../../libs/debounce";
 import { arraysMerge } from "../../libs/arrays";
 
 import { prepareLineData, prepareScales } from "./dataProcessing";
@@ -12,42 +11,13 @@ class WeeklyActiveDevicesTrend {
    *
    * @param {object} holderEl the element containing the graph
    * @param {string} holderSvgSelector CSS selector for the element containing the graph
-   * @param {object} rawData
-   * @param {string[]} rawdata.buckets The list of dates in the format YYYY-MM-DD
-   * @param {{name: string, values: number[]}[]} rawData.series The different series to show on the graph
+   * @param {object} rawData raw data from the API
    */
   constructor(holderEl, holderSvgSelector, rawData) {
     this.holder = holderEl;
     this.rawData = rawData;
 
-    this.margin = {
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0,
-    };
-
-    this.padding = {
-      top: 0,
-      right: 0,
-      bottom: 1,
-      left: 0,
-    };
-
-    this.width;
-    this.height;
-
     this.svg = select(`${holderSvgSelector} svg`);
-    this.g = undefined;
-
-    this.transformedData = undefined;
-    this.data = undefined;
-    this.keys = undefined;
-    this.maxYValue = undefined;
-
-    this.xScale = undefined;
-    this.yScale = undefined;
-    this.lineColor = undefined;
 
     this.hasRendered = false;
 
@@ -66,36 +36,16 @@ class WeeklyActiveDevicesTrend {
     if (Object.keys(this.rawData).length > 0) {
       this._prepareData();
     }
-
-    const resize = debounce(() => {
-      if (this.hasRendered) {
-        this._prepareSVG()._prepareData().render();
-      }
-    }, 100);
-
-    select(window).on("resize", resize);
   }
 
   _prepareSVG() {
     this.svg.selectAll("*").remove();
 
-    this.width =
-      this.holder.clientWidth -
-      this.margin.left -
-      this.margin.right -
-      this.padding.left -
-      this.padding.right;
+    this.width = this.holder.clientWidth;
+    // Subtract 1px to make the graph fit nicely
+    this.height = this.svg.attr("height") - 1;
 
-    this.height =
-      this.svg.attr("height") -
-      this.margin.top -
-      this.margin.bottom -
-      this.padding.top -
-      this.padding.bottom;
-
-    this.g = this.svg
-      .append("g")
-      .attr("transform", `translate(${this.margin.left},${this.margin.top})`);
+    this.g = this.svg.append("g");
 
     return this;
   }

@@ -1,6 +1,8 @@
 import { HistoryState } from "../public/details/historyState";
 import { Tabs } from "../public/details/tabs";
 import { WeeklyActiveDevicesTrend } from "./graphs/activeDevices";
+import debounce from "../libs/debounce";
+
 const init = () => {
   const historyState = new HistoryState();
 
@@ -83,6 +85,7 @@ const init = () => {
 
   const holderSelector = "[data-js='active-devices-trend']";
   const holderElements = document.querySelectorAll(holderSelector);
+  const graphElements = [];
   if (!holderElements) {
     throw new Error(
       `There are no elements containing ${holderSelector} attribute.`
@@ -93,10 +96,20 @@ const init = () => {
     const holderSvgSelector = `[data-svg='${holderEl.getAttribute(
       "data-svg"
     )}']`;
-    new WeeklyActiveDevicesTrend(holderEl, holderSvgSelector, DUMMY_DATA[i])
-      .render()
-      .show();
+    graphElements.push(
+      new WeeklyActiveDevicesTrend(holderEl, holderSvgSelector, DUMMY_DATA[i])
+        .render()
+        .show()
+    );
   });
+
+  const resize = debounce(() => {
+    graphElements.forEach((el) => {
+      el._prepareSVG()._prepareData().render();
+    });
+  }, 100);
+
+  window.addEventListener("resize", resize);
 };
 
 export { init };

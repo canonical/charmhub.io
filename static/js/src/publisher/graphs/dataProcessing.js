@@ -53,31 +53,11 @@ function prepareLineData() {
 }
 
 function prepareScales() {
-  this.width =
-    this.holder.clientWidth -
-    this.margin.left -
-    this.margin.right -
-    this.padding.left -
-    this.padding.right;
-
-  this.height =
-    this.svg.attr("height") -
-    this.margin.top -
-    this.margin.bottom -
-    this.padding.top -
-    this.padding.bottom;
-
   this.xScale = scaleTime()
-    .rangeRound([
-      this.padding.left,
-      this.width - this.padding.left - this.padding.right,
-    ])
+    .rangeRound([0, this.width])
     .domain(extent(this.data, (d) => d.date));
   this.yScale = scaleLinear()
-    .rangeRound([
-      this.height - this.padding.top - this.padding.bottom,
-      this.padding.top,
-    ])
+    .rangeRound([this.height, 0])
     .nice()
     .domain([0, this.maxYValue + Math.ceil(this.maxYValue * 0.1)]);
 }
