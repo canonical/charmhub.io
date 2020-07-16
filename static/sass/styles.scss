@@ -155,6 +155,10 @@ $theme-default-nav: dark;
 
 @include charmhub-publisher;
 
+@import "charmhub_metrics";
+
+@include charmhub-metrics;
+
 .p-channel-map {
   position: absolute;
   z-index: 11;
@@ -200,4 +204,10 @@ body {
   body {
     padding-bottom: 0 !important;
   }
+}
+
+// Ovi 16.07.2020 - This can be removed once this issue is closed
+// https://github.com/canonical-web-and-design/vanilla-framework/issues/3172
+.has-no-arrow-mobile.p-tabs::after {
+  content: "";
 }
