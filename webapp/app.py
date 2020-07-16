@@ -10,6 +10,7 @@ from webapp.store.views import store
 from webapp.docs.views import init_docs
 from webapp.tutorials.views import init_tutorials
 from webapp.publisher.views import publisher
+from webapp.extensions import csrf
 
 
 app = FlaskBase(
@@ -23,6 +24,8 @@ app = FlaskBase(
 app.store_api = CharmStore()
 
 set_handlers(app)
+csrf.init_app(app)
+
 app.register_blueprint(store)
 app.register_blueprint(login)
 app.register_blueprint(publisher)

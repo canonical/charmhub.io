@@ -3,11 +3,12 @@ import talisker
 import flask
 
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
+from flask_openid import OpenID
+from django_openid_auth.teams import TeamsRequest, TeamsResponse
+from flask_wtf.csrf import generate_csrf, validate_csrf
+
 from webapp.login.candid import CandidClient
 from webapp.helpers import is_safe_url
-from django_openid_auth.teams import TeamsRequest, TeamsResponse
-from flask_openid import OpenID
-
 from webapp import authentication
 
 login = flask.Blueprint(
@@ -64,11 +65,11 @@ def publisher_login():
     # Get a bakery v2 macaroon from the publisher API to be discharged
     # and save it in the session
     flask.session["publisher-macaroon"] = publisher_api.get_macaroon()
-    callback_url = flask.url_for("login.login_callback", _external=True)
-    state = "foo"
 
     login_url = candid.get_login_url(
-        flask.session["publisher-macaroon"], callback_url, state
+        macaroon=flask.session["publisher-macaroon"],
+        callback_url=flask.url_for("login.login_callback", _external=True),
+        state=generate_csrf(),
     )
 
     # Next URL to redirect the user after the login
@@ -85,7 +86,11 @@ def publisher_login():
 @login.route("/login/callback")
 def login_callback():
     code = flask.request.args["code"]
-    # state = request.args["state"]
+    state = flask.request.args["state"]
+
+    # Avoid CSRF attacks
+    validate_csrf(state)
+
     discharged_token = candid.discharge_token(code)
     candid_macaroon = candid.discharge_macaroon(
         flask.session["publisher-macaroon"], discharged_token
