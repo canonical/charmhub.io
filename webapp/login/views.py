@@ -107,7 +107,7 @@ def login_callback():
 
     return flask.redirect(
         flask.session.pop(
-            "login-next-url", flask.url_for("publisher.charms_and_bundles"),
+            "next_url", flask.url_for("publisher.charms_and_bundles"),
         ),
         302,
     )

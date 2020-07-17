@@ -83,6 +83,4 @@ def is_safe_url(url):
     """
     Return True if the URL is inside the same app
     """
-    if url.startswith(request.url_root) or url.startswith("/"):
-        return True
-    return False
+    return url.startswith(request.url_root) or url.startswith("/")
