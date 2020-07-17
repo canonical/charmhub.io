@@ -6,7 +6,7 @@
 {% block content %}
 <section class="p-strip u-extra-space is-shallow">
   <div class="u-fixed-width">
-    <nav class="p-tabs" data-js="tabs">
+    <nav class="p-tabs has-no-arrow-mobile" data-js="tabs">
       <ul class="p-tabs__list" role="tablist">
         <li class="p-tabs__item" role="presentation">
           <a href="#charms" class="p-tabs__link" tabindex="0" role="tab" aria-controls="charms" aria-selected="false">Charms</a>
@@ -37,7 +37,8 @@
             <th style="width: 15%;">Latest release</th>
             <th style="width: 10%;">Version</th>
             <th style="text-align: right; width: 10%;">Active models</th>
-            <th style="width: 25%;">Weekly trend</th>
+            <th style="width: 10%;">Weekly trend</th>
+            <th style="width: 15%;"></th>
           </tr>
         </thead>
         <tbody>
@@ -65,7 +66,12 @@
               129,597
             </td>
             <td role="gridcell" class="is-color--positive" aria-label="Weekly trend">
-              <span><i class="p-icon--arrow-up"></i> 1,923</span>
+              <i class="p-icon--arrow-up"></i> 1,923
+            </td>
+            <td role="gridcell" aria-label="Graph">
+              <div class="charmhub-metrics__graph" data-js="active-devices-trend" data-svg="spark">
+                <svg width="100%" height="20"></svg>
+              </div>
             </td>
           </tr>
           <tr role="row">
@@ -93,6 +99,11 @@
             <td role="gridcell" class="is-color--negative" aria-label="Weekly trend">
               <span><i class="p-icon--arrow-down"></i> 108</span>
             </td>
+            <td role="gridcell" aria-label="Graph">
+              <div class="charmhub-metrics__graph" data-js="active-devices-trend" data-svg="hadoop-resource-manager">
+                <svg width="100%" height="20"></svg>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -110,7 +121,7 @@
                   hadoop-waiter
                 </td>
                 <td>
-                  <a href="/docs/releasing-your-app" target="_blank" class="p-link--external p-charmhub-dispute-list__link u-float-right">Publish to this name</a>
+                  <a href="/docs/releasing-your-app" target="_blank" class="p-charmhub-dispute-list__link u-float-right">Publish to this name</a>
                 </td>
               </tr>
               <tr class="p-charmhub-dispute-list__item">
@@ -126,7 +137,7 @@
                   hadoop-hammer
                 </td>
                 <td>
-                  <a href="/docs/releasing-your-app" target="_blank" class="p-link--external p-charmhub-dispute-list__link u-float-right">Publish to this name</a>
+                  <a href="/docs/releasing-your-app" target="_blank" class="p-charmhub-dispute-list__link u-float-right">Publish to this name</a>
                 </td>
               </tr>
               <tr class="p-charmhub-dispute-list__item">
@@ -134,7 +145,7 @@
                   hadoop-driver
                 </td>
                 <td>
-                  <a href="/docs/releasing-your-app" target="_blank" class="p-link--external p-charmhub-dispute-list__link u-float-right">Publish to this name</a>
+                  <a href="/docs/releasing-your-app" target="_blank" class="p-charmhub-dispute-list__link u-float-right">Publish to this name</a>
                 </td>
               </tr>
             </tbody>
@@ -163,7 +174,8 @@
             <th style="width: 15%;">Latest release</th>
             <th style="width: 10%;">Version</th>
             <th style="text-align: right; width: 10%;">Active models</th>
-            <th style="width: 25%;">Weekly trend</th>
+            <th style="width: 10%;">Weekly trend</th>
+            <th style="width: 15%;"></th>
           </tr>
         </thead>
         <tbody>
@@ -191,7 +203,12 @@
               129,597
             </td>
             <td role="gridcell" class="is-color--positive" aria-label="Weekly trend">
-              <span><i class="p-icon--arrow-up"></i> 1,923</span>
+              <i class="p-icon--arrow-up"></i> 1,923
+            </td>
+            <td role="gridcell" aria-label="Graph">
+              <div class="charmhub-metrics__graph" data-js="active-devices-trend" data-svg="hadoop-spark">
+                <svg width="100%" height="20"></svg>
+              </div>
             </td>
           </tr>
           <tr role="row">
@@ -218,7 +235,12 @@
               15,424
             </td>
             <td role="gridcell" class="is-color--negative" aria-label="Weekly trend">
-              <span><i class="p-icon--arrow-down"></i> 108</span>
+              <i class="p-icon--arrow-down"></i> 108
+            </td>
+            <td role="gridcell" aria-label="Graph">
+              <div class="charmhub-metrics__graph" data-js="active-devices-trend" data-svg="hadoop-hammer">
+                <svg width="100%" height="20"></svg>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -237,7 +259,7 @@
                   hadoop-waiter
                 </td>
                 <td>
-                  <a href="/docs/releasing-your-app" target="_blank" class="p-link--external p-charmhub-dispute-list__link u-float-right">Publish to this name</a>
+                  <a href="/docs/releasing-your-app" target="_blank" class="p-charmhub-dispute-list__link u-float-right">Publish to this name</a>
                 </td>
               </tr>
               <tr class="p-charmhub-dispute-list__item">
@@ -245,7 +267,7 @@
                   hadoop-spanner
                 </td>
                 <td>
-                  <a href="/docs/releasing-your-app" target="_blank" class="p-link--external p-charmhub-dispute-list__link u-float-right">Publish to this name</a>
+                  <a href="/docs/releasing-your-app" target="_blank" class="p-charmhub-dispute-list__link u-float-right">Publish to this name</a>
                 </td>
               </tr>
               <tr class="p-charmhub-dispute-list__item">
@@ -253,7 +275,7 @@
                   hadoop-hammer
                 </td>
                 <td>
-                  <a href="/docs/releasing-your-app" target="_blank" class="p-link--external p-charmhub-dispute-list__link u-float-right">Publish to this name</a>
+                  <a href="/docs/releasing-your-app" target="_blank" class="p-charmhub-dispute-list__link u-float-right">Publish to this name</a>
                 </td>
               </tr>
             </tbody>
