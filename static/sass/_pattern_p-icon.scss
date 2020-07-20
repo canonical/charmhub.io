@@ -15,6 +15,12 @@
     width: 10px;
   }
 
+  .p-icon--revisions {
+    @extend %icon;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' height='12px' width='12px' version='1.1' viewBox='0 0 12 12'%3E%3Ctitle%3Erevisions copy 5%3C/title%3E%3Cg id='New-Cards-+-Topics' fill-rule='evenodd' fill='none'%3E%3Cg id='Store---With-topics' fill-rule='nonzero' fill='%23666' transform='translate(-614 -992)'%3E%3Cg id='revisions-copy-5' transform='translate(614 992)'%3E%3Cpath id='Shape' d='m1.3569 2.1573l0.8731 0.9695c-0.5929 0.7883-0.9443 1.7686-0.9443 2.8309 0 2.6037 2.1107 4.7143 4.7143 4.7143 2.3846 0 4.356-1.7705 4.67-4.0687l1.296 0.0006c-0.323 3.0099-2.8706 5.3541-5.966 5.3541-3.3137 0-6-2.6865-6-6.0003 0-1.4422 0.50887-2.7656 1.3569-3.8004zm2.7127 1.0049l1.9038 2.1526 3.4552 0.0001v1.2857h-4.0334l-2.2885-2.5864 0.9629-0.852zm6.8694-0.6118c0.422 0.6104 0.734 1.3028 0.906 2.0485l-1.33-0.0003c-0.115-0.3827-0.277-0.7449-0.48-1.0798l0.904-0.9684zm-3.65-2.4539c0.8271 0.18107 1.5904 0.53276 2.2511 1.0164l-0.8855 0.9484c-0.413-0.2819-0.8732-0.4998-1.3661-0.6396l0.0005-1.3252zm-2.0048-0.096547v1.2974c-0.5497 0.0838-1.0683 0.2625-1.5384 0.5189l-0.8793-0.97629c0.7196-0.44158 1.5396-0.73562 2.4177-0.84001z'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
   // XXX Ovi - 12.05.20: This can be removed once the new icon set is implemented in vanilla
   .p-icon--filter {
     @extend %icon;

@@ -24,25 +24,72 @@
     }
   }
 
-  .p-card {
+  a.p-card--button {
+    @extend %vf-has-box-shadow;
+
+    background-color: $color-x-light;
+    border-radius: $spv-inner--x-small;
+    color: $color-dark;
+    display: grid;
+    grid-template-rows: auto 1fr 2rem;
+    // Force obey parent's border-radius
+    overflow: hidden;
     width: 100%;
 
-    &.p-button {
-      background: $color-x-light;
-      border-color: $color-mid-light;
-      display: block;
-      margin-block-end: 0;
-      text-align: left;
+    &:hover {
+      text-decoration: none;
 
-      &:hover,
-      &:active,
-      &:active:hover {
-        border-color: $color-mid-light;
+      .p-card__title {
+        text-decoration: underline;
       }
     }
 
-    &:hover .p-card__title {
-      text-decoration: underline;
+    .p-card__header {
+      border: none;
+      padding: $spv-inner--large $spv-inner--large 1.75rem $spv-inner--large;
+
+      .p-card__title {
+        max-height: 4rem;
+        overflow: hidden;
+      }
+    }
+
+    .p-card__thumbnail {
+      max-height: 2.5rem;
+    }
+
+    .p-card__content {
+      padding: 0 $spv-inner--large $spv-inner--large $spv-inner--large;
+    }
+
+    .p-card__footer {
+      background-color: $color-light;
+      color: $color-mid-dark;
+      display: flex;
+      font-size: 0.875rem;
+      justify-content: space-between;
+      min-width: 10rem;
+      padding: $spv-inner--x-small $spv-inner--large;
+
+      .p-item--left {
+        flex: 1;
+        max-width: 8rem;
+        overflow: hidden;
+        padding-inline-end: $spv-inner--x-small;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .p-item--right {
+        white-space: nowrap;
+
+        .p-icon--revisions {
+          height: $spv-inner--medium;
+          margin-inline-end: $spv-inner--small;
+          vertical-align: -1px;
+          width: $spv-inner--medium;
+        }
+      }
     }
   }
 }
