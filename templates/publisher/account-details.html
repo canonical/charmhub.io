@@ -1,0 +1,79 @@
+{% extends 'publisher/publisher_layout.html' %}
+
+{% block title %}Account details{% endblock %}
+<!-- TO DO - add copy doc -->
+{% block meta_copydoc %}{% endblock %}
+
+{% block content %}
+<section class="p-strip">
+  <div class="u-fixed-width">
+    <ul class="p-inline-list u-no-margin--bottom">
+      <li class="p-inline-list__item">
+        <h1 class="p-heading--3" style="display: inline-block;">Publisher account details</h1>
+      </li>
+      <li class="p-inline-list__item">
+        <!-- TO DO - get edit details url dynamically -->
+        <a href="https://login.ubuntu.com" class="p-button--neutral"><span class="p-link--external">Edit details</span></a>
+      </li>
+    </ul>
+  </div>
+  <div class="row">
+    <div class="col-2">
+      Full name:
+    </div>
+    <div class="col-6">
+      <p class="u-no-padding--top"><strong>{{ publisher["display-name"] }}</strong></p>
+      <p class="p-form-help-text">
+        Who your users will see as the publisher of your charms and bundles.
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-2">
+      Username:
+    </div>
+    <div class="col-6">
+      <p class="u-no-padding--top"><strong>{{ publisher["username"] }}</strong></p>
+      <p class="p-form-help-text">
+        This is a shorthand version of your name, used when space on screen is limited.
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-2">
+      Email address:
+    </div>
+    <div class="col-6">
+      <!-- TO DO - get email dynamically -->
+      <p class="u-no-padding--top"><strong>test@email.com</strong></p>
+      <p class="p-form-help-text">
+        Your email address will not be shared publicly.
+      </p>
+    </div>
+  </div>
+  <!-- TO DO - get subscriptions dynamically -->
+  {% with subscriptions = true %}
+    {% if subscriptions %}
+    <div class="row">
+      <div class="col-2">
+        Email preferences:
+      </div>
+      <div class="col-6">
+        <!-- TO DO - update form details and add any missing fields -->
+        <form method="post">
+          <input type="checkbox" {% if subscriptions.newsletter %}checked{% endif %} name="newsletter" id="newsletter">
+          <label for="newsletter">
+            Blog posts delivered
+          </label>
+          <p class="p-form-help-text">
+            Get our latest and greatest blog posts delivered to your inbox.
+          </p>
+          <p>Please note, you will still recieve required platform related emails such as registration of charm names, the review status of a charm or any security vulnerabilities.</p>
+          <button type="submit" class="p-button--positive">Save email preferences</button>
+        </form>
+      </div>
+    </div>
+    {% endif %}
+  {% endwith %}
+</section>
+{% endblock %}

@@ -12,6 +12,13 @@ publisher = Blueprint(
 )
 
 
+@publisher.route("/account/details")
+@login_required
+def get_account_details():
+
+    return render_template("publisher/account-details.html")
+
+
 @publisher.route("/charms-and-bundles")
 @login_required
 def charms_and_bundles():
