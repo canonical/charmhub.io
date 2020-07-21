@@ -77,3 +77,10 @@ def convert_date(date_to_convert):
         return humanize.naturalday(date_parsed).title()
     else:
         return date_parsed.strftime("%-d %B %Y")
+
+
+def is_safe_url(url):
+    """
+    Return True if the URL is inside the same app
+    """
+    return url.startswith(request.url_root) or url.startswith("/")
