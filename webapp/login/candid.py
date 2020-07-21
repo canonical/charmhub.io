@@ -27,7 +27,6 @@ class CandidClient:
 
     def __init__(self, session=requests.Session()):
         self.session = session
-        self.session.headers.update({"Bakery-Protocol-Version": "2"})
 
     def _extract_caveat_to_discharge(self, macaroon):
         """
@@ -36,8 +35,22 @@ class CandidClient:
         """
         for caveat in macaroon.caveats:
             if caveat.location == CANDID_API_URL:
-                return standard_b64encode(macaroon.caveats[1].caveat_id)
+                return standard_b64encode(caveat.caveat_id)
         raise CandidAuthenticationError("Missing caveat")
+
+    def _request(self, method, url, data=None, json=None):
+        response = self.session.request(
+            method=method,
+            url=url,
+            headers={"Bakery-Protocol-Version": "2"},
+            data=data,
+            json=json,
+        )
+
+        # Candid set some cookies that we do not want on the server side
+        self.session.cookies.clear()
+
+        return response
 
     def get_login_url(self, macaroon, callback_url, state):
         """
@@ -58,8 +71,10 @@ class CandidClient:
         # Extract the caveat we are interested in
         caveat = self._extract_caveat_to_discharge(macaroon)
 
-        response = self.session.post(
-            f"{CANDID_API_URL}discharge", data={"id64": caveat}
+        response = self._request(
+            method="POST",
+            url=f"{CANDID_API_URL}discharge",
+            data={"id64": caveat},
         )
 
         data = response.json()["Info"]["InteractionMethods"][
@@ -69,8 +84,10 @@ class CandidClient:
         return f"{data['LoginURL']}?return_to={callback_url}&state={state}"
 
     def discharge_token(self, code):
-        response = self.session.post(
-            f"{CANDID_API_URL}discharge-token", json={"code": code}
+        response = self._request(
+            method="POST",
+            url=f"{CANDID_API_URL}discharge-token",
+            json={"code": code},
         ).json()
 
         return response["token"]["value"]
@@ -83,7 +100,9 @@ class CandidClient:
         caveat = self._extract_caveat_to_discharge(macaroon)
 
         data = {"id64": caveat, "token64": token, "token-kind": "macaroon"}
-        response = self.session.post(f"{CANDID_API_URL}discharge", data=data)
+        response = self._request(
+            method="POST", url=f"{CANDID_API_URL}discharge", data=data
+        )
 
         return Macaroon.deserialize(
             json.dumps(response.json()["Macaroon"]), JsonSerializer()
