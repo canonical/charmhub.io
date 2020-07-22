@@ -21,15 +21,15 @@ def set_handlers(app):
         """
 
         if authentication.is_authenticated(session):
-            email = session["openid"]["email"]
+            publisher = session["publisher"]
         else:
-            email = None
+            publisher = None
 
         return {
             "add_filter": helpers.add_filter,
             "active_filter": helpers.active_filter,
             "remove_filter": helpers.remove_filter,
-            "email": email,
+            "publisher": publisher,
         }
 
     # Error handlers

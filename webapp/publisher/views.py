@@ -5,7 +5,7 @@ from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import login_required
 
 publisher = Blueprint(
-    "publisher_snaps",
+    "publisher",
     __name__,
     template_folder="/templates",
     static_folder="/static",
