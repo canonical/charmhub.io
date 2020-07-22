@@ -1,0 +1,112 @@
+@mixin p-charmhub-multiselect {
+  $box-shadow-color: rgba(0, 0, 0, 0.12);
+
+  .p-multiselect__wrapper {
+    margin-block-end: $input-margin-bottom;
+    margin-block-start: $spv-inner--small;
+  }
+
+  .p-multiselect__clear {
+    float: right;
+    margin-block-start: -2rem;
+  }
+
+  .p-multiselect {
+    @extend %vf-clearfix;
+
+    align-content: flex-start;
+    align-items: flex-start;
+    border: 1px solid $colors--light-theme--border-high-contrast;
+    box-shadow: inset 0 1px 1px $color-input-shadow;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    line-height: 1.5rem;
+    margin-block-end: $input-margin-bottom;
+    margin-block-start: $spv-outer--small;
+    min-width: 10em;
+    padding: 0 $spv-inner--small;
+    position: relative;
+    width: 100%;
+
+    &.is-disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    &.is-focused {
+      outline: $bar-thickness solid $color-focus;
+      outline-offset: -$bar-thickness;
+    }
+
+    .p-multiselect__item {
+      border: 1px solid $color-mid-light;
+      border-radius: 2em;
+      display: block;
+      font-size: 0.875rem;
+      margin-block-start: 0.3rem;
+      margin-inline-end: $spv-outer--small;
+      padding: 0 $spv-outer--small;
+
+      .p-multiselect__item-remove {
+        cursor: pointer;
+        height: 0.75em;
+        margin-block-end: 0.125rem;
+        margin-inline-start: $spv-outer--small;
+        width: 0.75em;
+      }
+    }
+
+    .p-multiselect__input {
+      background: 0;
+      border: 0 none;
+      box-shadow: none;
+      flex-grow: 1;
+      float: left;
+      margin-block-end: 0;
+      min-width: 0;
+      outline: none;
+      width: auto;
+    }
+
+    .p-multiselect__options {
+      @extend %vf-has-box-shadow;
+
+      background: $color-x-light;
+      left: 0;
+      list-style-type: none;
+      margin-inline-start: 0;
+      max-height: 10rem;
+      min-height: 2.5rem;
+      overflow: auto;
+      padding-inline-start: 0;
+      position: absolute;
+      top: 100%;
+      width: 100%;
+      z-index: 1;
+
+      &::before {
+        color: $color-mid-light;
+        content: "No matches";
+        font-size: $sp-medium;
+        left: 0;
+        padding: $spv-outer--small;
+        position: absolute;
+        top: 0;
+      }
+    }
+
+    .p-multiselect__option {
+      background: $color-x-light;
+      cursor: pointer;
+      padding: $spv-outer--small;
+      position: relative;
+
+      &.is-highlighted,
+      &:hover {
+        background: $color-light;
+      }
+    }
+  }
+}

@@ -35,3 +35,14 @@ def listing(entity_name):
     }
 
     return render_template("publisher/listing.html", **context)
+
+
+@publisher.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/settings')
+@login_required
+def settings(entity_name):
+    context = {
+        "package_name": entity_name,
+        "package_type": "charm",
+    }
+
+    return render_template("publisher/settings.html", **context)

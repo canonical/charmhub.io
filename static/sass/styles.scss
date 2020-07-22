@@ -159,6 +159,10 @@ $theme-default-nav: dark;
 
 @include charmhub-metrics;
 
+@import "pattern_form-multiselect";
+
+@include p-charmhub-multiselect;
+
 .p-channel-map {
   position: absolute;
   z-index: 11;
