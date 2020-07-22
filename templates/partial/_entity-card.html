@@ -2,19 +2,24 @@
 {% set isBundle = True %}
 {% endif %}
 <div class="col-x-small-1 col-small-2 col-medium-2 col-3 u-equal-height">
-  <a href="/{{ package.name }}" class="p-button p-card">
-    <div class="{% if isBundle %}p-bundle-icons{% endif %}">
-      <img src="{{ package.store_front.icons[0] }}" alt="{{ package.title}}" class="p-card__thumbnail">
-      {% if isBundle %}
-      <img src="{{ package.store_front.icons[0] }}" alt="{{ package.title}}" class="p-card__thumbnail">
-      <img src="{{ package.store_front.icons[0] }}" alt="{{ package.title}}" class="p-card__thumbnail">
-      {% endif %}
-    </div>
-    <h5 class="p-card__title u-no-margin--bottom">{{ package.name }}</h5>
-    <div class="p-card__content">
+  <a href="/{{ package.name }}" class="p-card--button">
+    <div class="p-card__header">
+      <div class="{% if isBundle %}p-bundle-icons{% endif %}">
+        <img src="{{ package.store_front.icons[0] }}" alt="{{ package.title}}" class="p-card__thumbnail">
+        {% if isBundle %}
+        <img src="{{ package.store_front.icons[0] }}" alt="{{ package.title}}" class="p-card__thumbnail">
+        <img src="{{ package.store_front.icons[0] }}" alt="{{ package.title}}" class="p-card__thumbnail">
+        {% endif %}
+      </div>
+      <h4 class="p-card__title u-no-margin--bottom">{{ package.name }}</h4>
       <p class="u-text--subtle">{{ package.store_front.publisher_name }}</p>
-
+    </div>
+    <div class="p-card__content">
       <p><small>{{ package.store_front.summary|truncate(60, True) }}</small></p>
+    </div>
+    <div class="p-card__footer">
+      <div class="p-item--left">Openstack</div>
+      <div class="p-item--right"><i class="p-icon--revisions"></i>24 days ago</div>
     </div>
   </a>
 </div>

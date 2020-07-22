@@ -1,6 +1,6 @@
 @mixin charmhub-p-bundle-icons {
   .p-bundle-icons {
-    $icon-size: 2rem;
+    $icon-size: 2.5rem;
     $padding: 0.12rem;
 
     display: flex;
@@ -33,13 +33,13 @@
       }
 
       &:nth-child(2) {
-        margin-left: -1.6rem;
+        margin-left: -2rem;
         position: relative;
         z-index: 1;
       }
 
       &:nth-child(3) {
-        margin-left: -1.6rem;
+        margin-left: -2rem;
       }
 
       &:last-of-type {
