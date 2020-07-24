@@ -8,6 +8,9 @@ module.exports = [
     exclude: /node_modules\/(?!(dom7|ssr-window)\/).*/,
     use: {
       loader: "babel-loader",
+      options: {
+        presets: ["@babel/preset-react"],
+      },
     },
   },
   // loaders are evaluated from bottom to top (right to left)

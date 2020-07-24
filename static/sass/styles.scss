@@ -163,6 +163,10 @@ $theme-default-nav: dark;
 
 @include p-charmhub-multiselect;
 
+@import "pattern_p-form";
+
+@include p-charmhub-form;
+
 .p-channel-map {
   position: absolute;
   z-index: 11;

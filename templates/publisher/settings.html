@@ -56,7 +56,7 @@
       </div>
       <div class="col-8">
         <div class="p-form__control">
-          <label>This charm should be available in:</label>
+          <p>This charm should be available in:</p>
           <input type="radio" name="territories" value="all" id="territories_all" {% if not whitelist_country_codes and not blacklist_country_codes %}checked="checked" {% endif %} />
           <label for="territories_all">All territories</label>
           <input type="radio" name="territories" value="custom" id="territories_custom" {% if whitelist_country_codes or blacklist_country_codes %}checked="checked" {% endif %} />
@@ -109,12 +109,12 @@
     </div>
     <div class="row p-form__group">
       <div class="col-2">
-        <span>Store:</span>
+        <p class="is-label">Store:</p>
       </div>
       <div class="col-8">
-        <span>
+        <p class="is-label">
           Global
-        </span>
+        </p>
       </div>
     </div>
     <div class="row p-form__group">
@@ -122,12 +122,12 @@
     </div>
     <div class="row p-form__group">
       <div class="col-2">
-        <span>Status:</span>
+        <p class="is-label">Status:</p>
       </div>
       <div class="col-8">
-        <span>
+        <p class="is-label">
           Published
-        </span>
+        </p>
       </div>
     </div>
     <div class="row p-form__group">
@@ -160,6 +160,12 @@
     ];
     charmhub.publisher.settings.initMultiselect(".js-whitelist", countries);
     charmhub.publisher.settings.initMultiselect(".js-blacklist", countries);
+
+    {% if whitelist_country_codes or not blacklist_country_codes %}
+      charmhub.publisher.settings.enableInput('whitelist');
+    {% elif blacklist_country_codes %}
+      charmhub.publisher.settings.enableInput('blacklist');
+    {% endif %}
 
     document
       .getElementById('settings-form')
