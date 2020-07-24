@@ -198,6 +198,7 @@ $theme-default-nav: dark;
 // https://github.com/canonical-web-and-design/vanilla-framework/issues/1452
 body {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto auto auto 1fr auto;
   min-height: 100vh;
 }
