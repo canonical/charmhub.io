@@ -1,5 +1,7 @@
-from flask import Blueprint
-from flask import render_template
+import talisker
+from flask import Blueprint, render_template, session
+
+from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
 
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import login_required
@@ -10,20 +12,38 @@ publisher = Blueprint(
     template_folder="/templates",
     static_folder="/static",
 )
+publisher_api = CharmPublisher(talisker.requests.get_session())
 
 
 @publisher.route("/account/details")
 @login_required
 def get_account_details():
-
     return render_template("publisher/account-details.html")
 
 
-@publisher.route("/charms-and-bundles")
+@publisher.route("/charms")
 @login_required
-def charms_and_bundles():
+def charms():
+    publisher_charms = publisher_api.get_account_packages(
+        session["publisher-auth"], "charm"
+    )
 
-    return render_template("publisher/charms-and-bundles.html")
+    context = {
+        "published": [
+            c for c in publisher_charms if c["status"] == "published"
+        ],
+        "registered": [
+            c for c in publisher_charms if c["status"] == "registered"
+        ],
+    }
+
+    return render_template("publisher/charms.html", **context)
+
+
+@publisher.route("/bundles")
+@login_required
+def bundles():
+    return render_template("publisher/bundles.html")
 
 
 @publisher.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/listing')

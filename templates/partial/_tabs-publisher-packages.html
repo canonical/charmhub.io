@@ -1,0 +1,10 @@
+<nav class="p-tabs has-no-arrow-mobile" data-js="tabs">
+  <ul class="p-tabs__list" role="tablist">
+    <li class="p-tabs__item" role="presentation">
+      <a href="/charms" class="p-tabs__link" tabindex="0" {% if package_type == "charm" %}aria-selected="true"{% endif %}>Charms</a>
+    </li>
+    <li class="p-tabs__item" role="presentation">
+      <a href="/bundles" class="p-tabs__link" tabindex="-1" {% if package_type == "bundle" %}aria-selected="true"{% endif %}>Bundles</a>
+    </li>
+  </ul>
+</nav>

@@ -1,16 +1,7 @@
-import { HistoryState } from "../public/details/historyState";
-import { Tabs } from "../public/details/tabs";
 import { WeeklyActiveDevicesTrend } from "./graphs/activeDevices";
 import debounce from "../libs/debounce";
 
 const init = () => {
-  const historyState = new HistoryState();
-
-  const tabsEl = document.querySelector("[data-js='tabs']");
-  if (tabsEl) {
-    new Tabs(tabsEl, historyState);
-  }
-
   // To DO - replace dummy data with API data
   const DUMMY_DATA = [
     {

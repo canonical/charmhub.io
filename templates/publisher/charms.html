@@ -1,0 +1,106 @@
+{% extends 'base_layout.html' %}
+
+{% set package_type = "charm"%}
+
+<!-- To DO - add copy -->
+{% block meta_copydoc %}{% endblock meta_copydoc %}
+
+{% block content %}
+<section class="p-strip u-extra-space is-shallow">
+  <div class="u-fixed-width">
+    {% include "partial/_tabs-publisher-packages.html" %}
+  </div>
+  <div class="p-tabs__content">
+    {% include "partial/_header-publisher-packages.html" %}
+    <div class="u-fixed-width">
+      <table class="p-table--mobile-card" role="grid">
+        <thead>
+          <tr role="row">
+            <th style="width: 30%;">Name</th>
+            <th style="width: 10%;">Visibility</th>
+            <th style="width: 15%;">Latest release</th>
+            <th style="width: 10%;">Version</th>
+            <th style="text-align: right; width: 10%;">Active models</th>
+            <th style="width: 10%;">Weekly trend</th>
+            <th style="width: 15%;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for published_charm in published %}
+          <tr role="row">
+            <td role="rowheader" class="p-table--mobile-card__header">
+              <a href="/spark/listing" class="p-heading-icon--x-small">
+                <span class="p-heading-icon__header">
+                  <img src="https://dashboard.snapcraft.io/site_media/appmedia/2020/04/products-hero-ubuntu.svg.png" width="24" height="24" class="p-heading-icon__img">
+                  <p class="u-no-margin--bottom u-no-padding--top">
+                    {{ published_charm.name }}
+                  </p>
+                </span>
+              </a>
+            </td>
+            <td role="gridcell" aria-label="visibility">
+              {% if published_charm.private %}
+              Private
+              {% else %}
+              Public
+              {% endif %}
+            </td>
+            <td role="gridcell" aria-label="Latest release">
+              latest/stable
+            </td>
+            <td role="gridcell" aria-label="Version">
+              2019.2.3
+            </td>
+            <td role="gridcell" aria-label="Active models" style="text-align: right;">
+              129,597
+            </td>
+            <td role="gridcell" class="is-color--positive" aria-label="Weekly trend">
+              <i class="p-icon--arrow-up"></i> 1,923
+            </td>
+            <td role="gridcell" aria-label="Graph">
+              <div class="charmhub-metrics__graph" data-js="active-devices-trend" data-svg="spark">
+                <svg width="100%" height="20"></svg>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if registered %}
+    <div class="p-strip is-shallow">
+      <div class="u-fixed-width">
+        <h4 class="p-heading--5">Registered charm names ({{ registered|length }})</h4>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <table>
+            <tbody>
+              {% for registered_charm in registered %}
+              <tr class="p-charmhub-dispute-list__item">
+                <td style="width: 50%;">
+                  {{ registered_charm['name'] }}
+                </td>
+                <td>
+                  <a href="/docs/releasing-your-app" target="_blank" class="p-charmhub-dispute-list__link u-float-right">Publish to this name</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ versioned_static('js/dist/list.js') }}" defer></script>
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    charmhub.publisher.list.init();
+  });
+</script>
+{% endblock %}
