@@ -24,13 +24,17 @@ def get_account_details():
 @publisher.route("/charms")
 @login_required
 def charms():
+    publisher_charms = publisher_api.get_account_packages(
+        session["publisher-auth"], "charm"
+    )
+
     context = {
-        "published": publisher_api.get_account_packages(
-            session["publisher-auth"], "charm", "published"
-        ),
-        "registered": publisher_api.get_account_packages(
-            session["publisher-auth"], "charm", "registered"
-        ),
+        "published": [
+            c for c in publisher_charms if c["status"] == "published"
+        ],
+        "registered": [
+            c for c in publisher_charms if c["status"] == "registered"
+        ],
     }
 
     return render_template("publisher/charms.html", **context)

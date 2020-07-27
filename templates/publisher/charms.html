@@ -1,6 +1,6 @@
 {% extends 'base_layout.html' %}
 
-{% set selected_tab = "charms"%}
+{% set package_type = "charm"%}
 
 <!-- To DO - add copy -->
 {% block meta_copydoc %}{% endblock meta_copydoc %}
@@ -10,17 +10,8 @@
   <div class="u-fixed-width">
     {% include "partial/_tabs-publisher-packages.html" %}
   </div>
-  <div class="p-tabs__content" id="charms">
-    <div class="u-fixed-width">
-      <ul class="p-inline-list u-no-margin--bottom">
-        <li class="p-inline-list__item">
-          <h2 class="p-heading--4" style="display: inline-block;">My published charms</h2>
-        </li>
-        <li class="p-inline-list__item">
-          <a href="/account/register-charm" class="p-button--neutral">Register a charm name</a>
-        </li>
-      </ul>
-    </div>
+  <div class="p-tabs__content">
+    {% include "partial/_header-publisher-packages.html" %}
     <div class="u-fixed-width">
       <table class="p-table--mobile-card" role="grid">
         <thead>
@@ -76,9 +67,10 @@
         </tbody>
       </table>
     </div>
+    {% if registered %}
     <div class="p-strip is-shallow">
       <div class="u-fixed-width">
-        <h4 class="p-heading--5">Registered charm names (4)</h4>
+        <h4 class="p-heading--5">Registered charm names ({{ registered|length }})</h4>
       </div>
       <div class="row">
         <div class="col-6">
@@ -99,6 +91,7 @@
         </div>
       </div>
     </div>
+    {% endif %}
   </div>
 </section>
 {% endblock %}
