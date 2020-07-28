@@ -33,6 +33,7 @@
   "dependencies": {
     "@babel/core": "7.10.4",
     "@babel/preset-env": "7.10.4",
+    "@babel/preset-react": "7.10.4",
     "@canonical/global-nav": "2.4.1",
     "autoprefixer": "9.8.4",
     "babel-eslint": "10.1.0",
@@ -53,6 +54,8 @@
     "node-sass": "4.14.1",
     "postcss-cli": "7.1.1",
     "prettier": "2.0.5",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
     "terser-webpack-plugin": "3.0.6",
     "vanilla-framework": "2.14.0",
     "watch-cli": "0.2.3",

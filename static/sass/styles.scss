@@ -159,6 +159,14 @@ $theme-default-nav: dark;
 
 @include charmhub-metrics;
 
+@import "pattern_form-multiselect";
+
+@include p-charmhub-multiselect;
+
+@import "pattern_p-form";
+
+@include p-charmhub-form;
+
 .p-channel-map {
   position: absolute;
   z-index: 11;
@@ -194,6 +202,7 @@ $theme-default-nav: dark;
 // https://github.com/canonical-web-and-design/vanilla-framework/issues/1452
 body {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto auto auto 1fr auto;
   min-height: 100vh;
 }

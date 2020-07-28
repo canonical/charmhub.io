@@ -1,0 +1,178 @@
+{% extends 'publisher/publisher_layout.html' %}
+
+{% block title %}Settings for {{ package_name }}{% endblock %}
+
+{% set selected_tab='settings' %}
+
+{% block publisher_content %}
+<form id="settings-form" class="p-form p-form--stacked" data-js="settings-form" method="POST" enctype='multipart/form-data'>
+  <div class="u-position--sticky">
+    <div class="row" style="padding-block-start: 1rem;">
+      <div class="col-5 col-start-large-8">
+        <div class="u-align--right u-clearfix">
+          <a class="p-button--neutral is-disabled" href="javascript:void(0);" style="margin-inline-end: 1rem;">Revert</a>
+          <button type="submit" class="p-button--positive" name="submit_apply" value="Save" disabled="">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <hr class="u-no-margin--bottom">
+  </div>
+  <section class="p-strip u-extra-space" style="padding-block-start: 1.5rem;">
+    <div class="row p-form__group">
+      <div class="col-2">
+        <span class="p-form__label">Visibility:</span>
+      </div>
+      <div class="col-8">
+        <div class="p-form__control">
+          <input type="radio" name="private" id="is-public" {% if not private and not unlisted %}checked="checked" {% endif %} value="public">
+          <label for="is-public">Public
+            <span class="p-form-help-text">Anyone can find your charm in the CharmHub</span>
+          </label>
+        </div>
+        <div class="p-form__control">
+          <input type="radio" name="private" id="is-unlisted" {% if not private and unlisted %}checked="checked" {% endif %} value="unlisted">
+          <label for="is-unlisted">Unlisted
+            <span class="p-form-help-text">Does not appear in search results. Anyone can deploy using the charm name.</span>
+          </label>
+        </div>
+        <div class="p-form__control">
+          <input type="radio" name="private" id="is-private" {% if private %}checked="checked" {% endif %} value="private">
+          <label for="is-private">Private
+            <span class="p-form-help-text">Hidden in the CharmHub. Only accessible by the publisher and collaborators.</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="row p-form__group">
+      <hr class="u-no-margin--bottom">
+    </div>
+    <div class="row p-form__group">
+      <div class="col-2">
+        <span class="p-form__label">Distribution:</span>
+      </div>
+      <div class="col-8">
+        <div class="p-form__control">
+          <p>This charm should be available in:</p>
+          <input type="radio" name="territories" value="all" id="territories_all" {% if not whitelist_country_codes and not blacklist_country_codes %}checked="checked" {% endif %} />
+          <label for="territories_all">All territories</label>
+          <input type="radio" name="territories" value="custom" id="territories_custom" {% if whitelist_country_codes or blacklist_country_codes %}checked="checked" {% endif %} />
+          <label for="territories_custom">Selected territories</label>
+          <div class="{% if not whitelist_country_codes and not blacklist_country_codes %}u-hide{% endif %}" data-js="custom-territories-holder" style="margin-inline-start: 2rem;">
+            <div class="js-whitelist p-multiselect__wrapper">
+              <input type="radio" name="territories_custom_type" value="whitelist" id="territories_custom_whitelist" {% if whitelist_country_codes or not blacklist_country_codes %}checked="checked" {% endif %} />
+              <label for="territories_custom_whitelist">Only these territories</label>
+              <input type="text" class="js-multiselect-input" name="whitelist_countries" value="{% for territory in whitelist_country_codes %}{{ territory }}{{ ',' if not loop.last }}{% endfor %}" />
+              <div class="js-multiselect-holder{% if blacklist_country_codes %} is-disabled{% endif %}"></div>
+            </div>
+            <div class="js-blacklist p-multiselect__wrapper">
+              <input type="radio" name="territories_custom_type" value="blacklist" id="territories_custom_blacklist" {% if blacklist_country_codes %}checked="checked" {% endif %} />
+              <label for="territories_custom_blacklist">Exclude these territories</label>
+              <input type="text" class="js-multiselect-input" name="blacklist_countries" value="{% for territory in blacklist_country_codes %}{{ territory }}{{ ',' if not loop.last }}{% endfor %}" />
+              <div class="js-multiselect-holder{% if whitelist_country_codes or not blacklist_country_codes %} is-disabled{% endif %}"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row p-form__group">
+      <hr class="u-no-margin--bottom">
+    </div>
+    <div class="row p-form__group">
+      <div class="col-2">
+        <span class="p-form__label">Collaborators:</span>
+      </div>
+      <div class="col-8">
+        <div class="p-form__control">
+          <ul class="p-list">
+            <li class="p-list__item">
+              test@collaborator.one <span class="p-form-help-text">Unverified</span> <a href="#"><i class="p-icon--delete">Delete</i></a></li>
+            <li class="p-list__item">test@collaborator.two <a href="#"><i class="p-icon--delete">Delete</i></a></li>
+          </ul>
+          <label for="new-collaborator">Add collaborator:</label>
+          <div class="row">
+            <div class="col-3">
+              <input id="new-collaborator" placeholder="example@example.com" type="email">
+            </div>
+            <div class="col-2">
+              <a href="#" class="p-button--neutral">Add</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row p-form__group">
+      <hr class="u-no-margin--bottom">
+    </div>
+    <div class="row p-form__group">
+      <div class="col-2">
+        <p class="is-label">Store:</p>
+      </div>
+      <div class="col-8">
+        <p class="is-label">
+          Global
+        </p>
+      </div>
+    </div>
+    <div class="row p-form__group">
+      <hr class="u-no-margin--bottom">
+    </div>
+    <div class="row p-form__group">
+      <div class="col-2">
+        <p class="is-label">Status:</p>
+      </div>
+      <div class="col-8">
+        <p class="is-label">
+          Published
+        </p>
+      </div>
+    </div>
+    <div class="row p-form__group">
+      <hr>
+    </div>
+  </section>
+</form>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ versioned_static('js/dist/settings.js') }}" defer></script>
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    const countries = [
+      { key: "AW", name: "Aruba" },
+      { key: "AF", name: "Afghanistan" },
+      { key: "AO", name: "Angola" },
+      { key: "AI", name: "Anguilla" },
+      { key: "AX", name: "Åland Islands" },
+      { key: "AL", name: "Albania" },
+      { key: "AD", name: "Andorra" },
+      { key: "AE", name: "United Arab Emirates" },
+      { key: "AR", name: "Argentina" },
+      { key: "AM", name: "Armenia" },
+      { key: "AS", name: "American Samoa" },
+      { key: "AQ", name: "Antarctica" },
+      { key: "TF", name: "French Southern Territories" },
+      { key: "AG", name: "Antigua and Barbuda" },
+      { key: "AU", name: "Australia" },
+    ];
+    charmhub.publisher.settings.initMultiselect(".js-whitelist", countries);
+    charmhub.publisher.settings.initMultiselect(".js-blacklist", countries);
+
+    {% if whitelist_country_codes or not blacklist_country_codes %}
+      charmhub.publisher.settings.enableInput('whitelist');
+    {% elif blacklist_country_codes %}
+      charmhub.publisher.settings.enableInput('blacklist');
+    {% endif %}
+
+    document
+      .getElementById('settings-form')
+      .addEventListener(
+        'change',
+        charmhub.publisher.settings.changeHandler
+      );
+  });
+</script>
+{% endblock %}

@@ -1,8 +1,11 @@
 {% extends 'publisher/publisher_layout.html' %}
 
+{% block title %}Listing details for {{ package_name }}{% endblock %}
 <!-- To DO - add copy and description -->
 {% block meta_copydoc %}{% endblock meta_copydoc %}
 {% block meta_description %}{% endblock %}
+
+{% set selected_tab='listing' %}
 
 {% block publisher_content %}
 <form id="market-form" class="p-form p-form--stacked p-strip u-no-padding--top" method="POST" enctype="multipart/form-data">
@@ -22,7 +25,7 @@
             Preview
             <span class="p-tooltip__message" role="tooltip" id="preview-tooltip">Previews will only work in the same browser, locally</span>
           </button>
-          <a class="p-button--neutral is--disabled" href="javascript:void(0);" style="margin-inline-end: 1rem;">Revert</a>
+          <a class="p-button--neutral is-disabled" href="javascript:void(0);" style="margin-inline-end: 1rem;" >Revert</a>
           <button type="submit" class="p-button--positive" name="submit_apply" value="Save" disabled="">
             Save
           </button>

@@ -5,4 +5,5 @@ module.exports = {
   details: "./static/js/src/public/details/index.js",
   store: "./static/js/src/public/store/index.js",
   list: "./static/js/src/publisher/list-page.js",
+  settings: "./static/js/src/publisher/settings.js",
 };

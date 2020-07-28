@@ -1,0 +1,8 @@
+@mixin p-charmhub-form {
+  .p-form {
+    .is-label {
+      margin-block-end: 0.3rem;
+      margin-block-start: 0;
+    }
+  }
+}
