@@ -91,5 +91,23 @@
         }
       }
     }
+
+    &.is-topic-card {
+      grid-template-rows: 9rem auto;
+
+      .p-card__header {
+        background-position: top right, bottom right;
+        background-repeat: no-repeat;
+        background-size: 75% 50%, 25% 100%, auto;
+        clip-path: polygon(0 0, 100% 0%, 100% calc(100% - 0.75rem), 0% 100%);
+        color: $color-light;
+        margin-block-end: 1.25rem;
+        padding-block-end: 0;
+
+        .p-card__title {
+          max-height: unset;
+        }
+      }
+    }
   }
 }

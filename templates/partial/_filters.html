@@ -69,6 +69,7 @@
     </div>
   </div>
   <div class="row has-small-gap">
+    {% include "partial/_topic-cards.html" %}
     {% if results %}
       {% for package in results %}
         {% include "partial/_entity-card.html" %}
