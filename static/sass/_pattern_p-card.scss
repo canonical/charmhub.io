@@ -33,6 +33,7 @@
     display: grid;
     grid-template-rows: auto 1fr 2rem;
     // Force obey parent's border-radius
+    min-height: 17.25rem;
     overflow: hidden;
     width: 100%;
 
