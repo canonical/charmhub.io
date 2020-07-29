@@ -33,6 +33,7 @@
     display: grid;
     grid-template-rows: auto 1fr 2rem;
     // Force obey parent's border-radius
+    min-height: 17.25rem;
     overflow: hidden;
     width: 100%;
 
@@ -88,6 +89,24 @@
           margin-inline-end: $spv-inner--small;
           vertical-align: -1px;
           width: $spv-inner--medium;
+        }
+      }
+    }
+
+    &.is-topic-card {
+      grid-template-rows: 9rem auto;
+
+      .p-card__header {
+        background-position: top right, bottom right;
+        background-repeat: no-repeat;
+        background-size: 75% 50%, 25% 100%, auto;
+        clip-path: polygon(0 0, 100% 0%, 100% calc(100% - 0.75rem), 0% 100%);
+        color: $color-light;
+        margin-block-end: 1.25rem;
+        padding-block-end: 0;
+
+        .p-card__title {
+          max-height: unset;
         }
       }
     }

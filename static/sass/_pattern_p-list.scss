@@ -6,6 +6,14 @@
     }
   }
 
+  // Overide the default vanilla padding for p-list--divided
+  .p-list--divided.has-padding {
+    .p-list__item {
+      padding-block-end: $spv-inner--small;
+      padding-block-start: $spv-inner--small;
+    }
+  }
+
   .p-list--ordered {
     @extend %vf-list;
 

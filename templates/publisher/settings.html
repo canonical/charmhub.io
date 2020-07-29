@@ -24,7 +24,7 @@
   <section class="p-strip u-extra-space" style="padding-block-start: 1.5rem;">
     <div class="row p-form__group">
       <div class="col-2">
-        <span class="p-form__label">Visibility:</span>
+        <p class="is-label">Visibility:</p>
       </div>
       <div class="col-8">
         <div class="p-form__control">
@@ -52,11 +52,11 @@
     </div>
     <div class="row p-form__group">
       <div class="col-2">
-        <span class="p-form__label">Distribution:</span>
+        <p class="is-label">Distribution:</p>
       </div>
       <div class="col-8">
         <div class="p-form__control">
-          <p>This charm should be available in:</p>
+          <p class="is-label">This charm should be available in:</p>
           <input type="radio" name="territories" value="all" id="territories_all" {% if not whitelist_country_codes and not blacklist_country_codes %}checked="checked" {% endif %} />
           <label for="territories_all">All territories</label>
           <input type="radio" name="territories" value="custom" id="territories_custom" {% if whitelist_country_codes or blacklist_country_codes %}checked="checked" {% endif %} />
@@ -83,14 +83,35 @@
     </div>
     <div class="row p-form__group">
       <div class="col-2">
-        <span class="p-form__label">Collaborators:</span>
+        <p class="is-label">Collaborators:</p>
       </div>
-      <div class="col-8">
+      <div class="col-10">
         <div class="p-form__control">
-          <ul class="p-list">
+          <ul class="p-list--divided has-padding">
             <li class="p-list__item">
-              test@collaborator.one <span class="p-form-help-text">Unverified</span> <a href="#"><i class="p-icon--delete">Delete</i></a></li>
-            <li class="p-list__item">test@collaborator.two <a href="#"><i class="p-icon--delete">Delete</i></a></li>
+              <ul class="p-inline-list--stretch">
+                <li class="p-inline-list__item">test@collaborator.one</li>
+                <li class="p-inline-list__item u-align--right">
+                  <a href="#"><i class="p-icon--delete">Delete</i></a>
+                </li>
+              </ul>
+            </li>
+            <li class="p-list__item">
+              <ul class="p-inline-list--stretch">
+                <li class="p-inline-list__item">test@collaborator.two</li>
+                <li class="p-inline-list__item u-align--right">
+                  <a href="#"><i class="p-icon--delete">Delete</i></a>
+                </li>
+              </ul>
+            </li>
+            <li class="p-list__item">
+              <ul class="p-inline-list--stretch">
+                <li class="p-inline-list__item">test@collaborator.three</li>
+                <li class="p-inline-list__item u-align--right">
+                  <a href="#"><i class="p-icon--delete">Delete</i></a>
+                </li>
+              </ul>
+            </li>
           </ul>
           <label for="new-collaborator">Add collaborator:</label>
           <div class="row">
