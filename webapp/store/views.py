@@ -41,10 +41,7 @@ def store_view():
 @canonical_employee_login_required
 def details(entity_name):
     # Get entity info from API
-    package = data.mock_missing_properties(
-        app.store_api.get_item_details(entity_name)
-    )
-
+    package = app.store_api.get_item_details(entity_name)
     package = logic.add_store_front_data(package)
 
     for channel in package["channel-map"]:
