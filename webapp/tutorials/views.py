@@ -10,8 +10,8 @@ from canonicalwebteam.discourse_docs import (
 
 
 def init_tutorials(app, url_prefix):
-    discourse_index_id = 2628
-    category_id = 34
+    discourse_index_id = 3393
+    category_id = 30
 
     session = talisker.requests.get_session()
     tutorials_docs = DiscourseDocs(
