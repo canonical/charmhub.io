@@ -1,11 +1,11 @@
 canonicalwebteam.flask-base==0.6.3
-canonicalwebteam.discourse-docs==1.0.0
+canonicalwebteam.discourse-docs==1.0.1
 canonicalwebteam.search==0.2.1
-canonicalwebteam.store-api==2.3.2
+canonicalwebteam.store-api==2.3.3
 django-openid-auth==0.15
 Flask-OpenID-Stateless==1.2.6
 Flask-WTF==0.14.3
-humanize==2.4.1
+humanize==2.5.0
 pymacaroons==0.13.0
 
 # Temporal to mock data
