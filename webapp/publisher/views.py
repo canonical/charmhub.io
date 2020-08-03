@@ -49,9 +49,12 @@ def bundles():
 @publisher.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/listing')
 @login_required
 def listing(entity_name):
+    package_type = "charm"
+    if entity_name == "bundle":
+        package_type = "bundle"
     context = {
         "package_name": entity_name,
-        "package_type": "charm",
+        "package_type": package_type,
     }
 
     return render_template("publisher/listing.html", **context)

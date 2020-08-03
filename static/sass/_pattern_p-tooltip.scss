@@ -1,0 +1,148 @@
+@mixin p-charmhub-tooltip {
+  .p-tooltip--information {
+    $icon-size: map-get($icon-sizes, default);
+
+    margin-left: $spv-inner--small;
+    position: relative;
+
+    .p-tooltip__button {
+      @include vf-animation(#{background-color}, fast, in);
+      @include vf-focus;
+
+      background: {
+        image: url("data:image/svg+xml,%3Csvg width='16' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 1a7 7 0 110 14A7 7 0 018 1zm0 1.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM8.75 7v5.02h-1.5V7h1.5zM8.5 3.944a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-1a.5.5 0 01-.5-.5v-1a.5.5 0 01.5-.5h1z' fill='%23666' fill-rule='nonzero'/%3E%3C/svg%3E");
+        position: center;
+        repeat: no-repeat;
+        size: $icon-size;
+      }
+
+      box-sizing: content-box;
+      display: block;
+      height: $icon-size;
+      left: 0;
+      position: absolute;
+      text-indent: -999rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: $icon-size;
+
+      @media screen and (max-width: $breakpoint-medium - 1px) {
+        border: 1px solid $color-mid-dark;
+        border-radius: $border-radius;
+        cursor: pointer;
+        line-height: map-get($line-heights, default-text);
+        margin: 0 0 $spv-nudge-compensation $spv-inner--x-small;
+        padding: $spv-inner--x-small;
+        text-align: center;
+
+        &:hover {
+          background-color: #f2f2f2;
+        }
+      }
+    }
+
+    .p-tooltip__modal {
+      left: 0;
+      position: absolute;
+      top: 0;
+      transform:
+        translateX($spv-inner--large * 2)
+        translateY(-$spv-inner--large);
+      z-index: 101;
+
+      @media screen and (max-width: $breakpoint-medium - 1px) {
+        align-items: center;
+        background-color: rgba(17, 17, 17, 0.85);
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        transform: none;
+        width: 100%;
+      }
+    }
+
+    .p-tooltip__dialog {
+      @extend %vf-has-box-shadow;
+
+      background-color: $color-x-light;
+      padding: $spv-inner--large;
+      width: 24rem;
+
+      @media screen and (max-width: $breakpoint-medium - 1px) {
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        width: fit-content;
+      }
+
+      .p-inline-list__item:first-child {
+        color: $color-mid-dark;
+      }
+    }
+
+    .p-tooltip__list {
+      margin: 0;
+      padding: 0;
+
+      .p-tooltip__list-item {
+        column-gap: $spv-inner--large;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        .p-tooltip__list-text:first-of-type {
+          color: $color-mid-dark;
+          text-align: right;
+        }
+      }
+    }
+
+    .p-tooltip__close {
+      background: {
+        image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' height='90' width='90'%3E%3Cg color='%23000'%3E%3Cpath fill='none' d='M0 0h90v90H0z'/%3E%3Cpath d='M14.52 6L6 14.52 36.48 45 6 75.49 14.52 84 45 53.52 75.48 84 84 75.49 53.52 45 84 14.52 75.48 6 45 36.49z' fill='%23888'/%3E%3C/g%3E%3C/svg%3E");
+        position: center;
+        repeat: no-repeat;
+        size: $icon-size;
+      }
+
+      border: 0;
+      box-sizing: content-box;
+      cursor: pointer;
+      display: block;
+      height: $icon-size;
+      margin: $spv-inner--large $spv-inner--large 0 0;
+      padding: $spv-inner--small $sph-inner--small;
+      position: absolute;
+      right: 0;
+      text-indent: -999rem;
+      top: 0;
+      width: $icon-size;
+
+      &:focus {
+        outline: $bar-thickness solid $color-focus;
+      }
+
+      @media screen and (min-width: $breakpoint-medium) {
+        display: none;
+      }
+    }
+
+    .p-tooltip__button + .p-tooltip__modal {
+      display: none;
+    }
+
+    .p-tooltip__button + .is-open.p-tooltip__modal {
+      display: block;
+    }
+
+    .p-tooltip__button:hover + .p-tooltip__modal {
+      @media screen and (min-width: $breakpoint-medium) {
+        display: block;
+      }
+    }
+  }
+}
