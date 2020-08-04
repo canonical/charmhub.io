@@ -10,17 +10,15 @@ from canonicalwebteam.search import build_search_view
 
 
 def init_docs(app, url_prefix):
-    discourse_index_id = 11127
-    category_id = 15
+    discourse_index_id = 3394
 
     session = talisker.requests.get_session()
     discourse_docs = DiscourseDocs(
         parser=DocParser(
             api=DiscourseAPI(
-                base_url="https://forum.snapcraft.io/", session=session
+                base_url="https://discourse.juju.is/", session=session
             ),
             index_topic_id=discourse_index_id,
-            category_id=category_id,
             url_prefix=url_prefix,
         ),
         document_template="docs/document.html",
