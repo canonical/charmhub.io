@@ -1,4 +1,20 @@
 @mixin p-charmhub-list {
+  .p-list--key-value {
+    margin: 0;
+    padding: 0;
+
+    .p-list__item {
+      column-gap: $spv-inner--large;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+
+      .p-list__key {
+        color: $color-mid-dark;
+        text-align: right;
+      }
+    }
+  }
+
   .p-list {
     // Overide the default vanilla $color-accent for ticked icon
     .p-list__item.is-ticked {
