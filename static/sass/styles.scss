@@ -167,6 +167,10 @@ $theme-default-nav: dark;
 
 @include p-charmhub-form;
 
+@import "pattern_p-tooltip";
+
+@include p-charmhub-tooltip;
+
 .p-channel-map {
   position: absolute;
   z-index: 11;

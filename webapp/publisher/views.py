@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, session
 
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
 
+from webapp.helpers import get_licenses
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import login_required
 
@@ -49,9 +50,23 @@ def bundles():
 @publisher.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/listing')
 @login_required
 def listing(entity_name):
+    package_type = "charm"
+    if entity_name == "bundle":
+        package_type = "bundle"
+
+    licenses = []
+    for license in get_licenses():
+        licenses.append({"key": license["licenseId"], "name": license["name"]})
+
+    license_type = "simple"
+    license = "AFL-1.1"
+
     context = {
         "package_name": entity_name,
-        "package_type": "charm",
+        "package_type": package_type,
+        "license": license,
+        "licenses": licenses,
+        "license_type": license_type,
     }
 
     return render_template("publisher/listing.html", **context)
