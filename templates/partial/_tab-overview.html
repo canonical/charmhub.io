@@ -7,9 +7,9 @@
   </div>
   <div class="col-4">
     <h4 class="p-muted-heading">{{ package_type|capitalize}} information</h4>
-    <p>Latest release<br /><strong>3 days ago</strong></p>
-    <p>Deployments<br /><strong>{{ deployments }}</strong></p>
-    <p>License<br /><strong>{{ license }}</strong></p>
+    <p>Latest release<br /><strong>{{ package.store_front.last_release }}</strong></p>
+    <p>Deployments<br /><strong></strong></p>
+    <p>License<br /><strong>{{ package.charm.license }}</strong></p>
     <ul class="p-list">
       <li class="p-list__item">
         <a href="{{ website }}"><i class="p-icon--share"></i>&nbsp;&nbsp;Homepage</a>

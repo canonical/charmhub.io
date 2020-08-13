@@ -76,10 +76,44 @@ def get_icons(package):
     return [m["url"] for m in media if m["type"] == "icon"]
 
 
+def format_category_name(slug):
+    """Format category name into a standard title format
+    :param slug: The hypen spaced, lowercase slug to be formatted
+    :return: The formatted string
+    """
+    return (
+        slug.title()
+        .replace("-", " ")
+        .replace("And", "and")
+        .replace("Iot", "IoT")
+    )
+
+
+def get_categories(categories_json):
+    """Retrieve and flatten the nested array from the legacy API response.
+    :param categories_json: The returned json
+    :returns: A list of categories
+    """
+
+    categories = []
+    category_names = [cat["name"] for cat in categories_json]
+
+    for category in category_names:
+        categories.append(
+            {"slug": category, "name": format_category_name(category)}
+        )
+
+    return categories
+
+
 def add_store_front_data(package):
     extra = {}
     extra["icons"] = get_icons(package)
+    extra["categories"] = get_categories(package["charm"]["categories"])
     extra["publisher_name"] = package["charm"]["publisher"]["display-name"]
+    extra["last_release"] = convert_date(
+        package["default-release"]["channel"]["released-at"]
+    )
     extra["summary"] = package["charm"]["summary"]
     if package.get("channel-map"):
         extra["channel_map"] = convert_channel_maps(package["channel-map"])
