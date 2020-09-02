@@ -171,6 +171,10 @@ $theme-default-nav: dark;
 
 @include p-charmhub-tooltip;
 
+@import "pattern_p-separator";
+
+@include p-charmhub-separator;
+
 .p-channel-map {
   position: absolute;
   z-index: 11;

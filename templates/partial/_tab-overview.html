@@ -1,17 +1,12 @@
 <div class="row p-tabs__content" id="overview">
-  <div class="col-8">
-    <noscript>
-      <h2>Overview</h2>
-    </noscript>
-    {{ package.overview | safe }}
-  </div>
-  <div class="col-4">
+  <div class="col-3">
     <h4 class="p-muted-heading">{{ package_type|capitalize}} information</h4>
     <p>Latest release<br /><strong>{{ package.store_front.last_release }}</strong></p>
     <p>Deployments<br /><strong></strong></p>
-    <p>License<br /><strong>{{ package.charm.license }}</strong></p>
+    <p style="margin-block-end: 1.5rem;">License<br /><strong>{{ package.charm.license }}</strong></p>
+    <hr class="p-separator--shallow">
     <ul class="p-list">
-      <li class="p-list__item">
+      <li class="p-list__item u-no-margin--bottom">
         <a href="{{ website }}"><i class="p-icon--share"></i>&nbsp;&nbsp;Homepage</a>
       </li>
       <li class="p-list__item">
@@ -25,9 +20,16 @@
         <a href="{{ contact }}"><i class="p-icon--code"></i>&nbsp;&nbsp;Contact</a>
       </li>
     </ul>
+    <hr class="p-separator--shallow">
     <h4 class="p-muted-heading">Share this {{ package_type }}</h4>
     <p>Generate an embeddable card to be shared on external websites.</p>
     <!-- TO DO - Needs an embed this charm overlay implemented -->
     <p><a class="p-button--neutral" href="">Share this {{ package_type }}</a></p>
+  </div>
+  <div class="col-9">
+    <noscript>
+      <h2>Overview</h2>
+    </noscript>
+    {{ package.overview | safe }}
   </div>
 </div>
