@@ -1,30 +1,30 @@
 <div class="row p-tabs__content" id="overview">
   <div class="col-3">
-    <h4 class="p-muted-heading">{{ package_type|capitalize}} information</h4>
-    <p>Latest release<br /><strong>{{ package.store_front.last_release }}</strong></p>
-    <p>Deployments<br /><strong></strong></p>
-    <p style="margin-block-end: 1.5rem;">License<br /><strong>{{ package.charm.license }}</strong></p>
+    <p><strong>Latest release</strong><br />{{ package.store_front.last_release }}</p>
+    <p><strong>Deployments</strong><br /></p>
+    <p><strong>License</strong><br />{{ package.charm.license }}</p>
     <hr class="p-separator--shallow">
+    <h4 class="p-heading--5 u-no-margin--bottom">Relevant links</h4>
     <ul class="p-list">
       <li class="p-list__item u-no-margin--bottom">
-        <a href="{{ website }}"><i class="p-icon--share"></i>&nbsp;&nbsp;Homepage</a>
+        <a href="{{ website }}"><i class="p-icon--home"></i>&nbsp;&nbsp;Homepage</a>
       </li>
       <li class="p-list__item">
-        <a href="{{ repository_url }}"><i class="p-icon--user"></i>&nbsp;&nbsp;Repository</a>
+        <a href="{{ repository_url }}"><i class="p-icon--repository"></i>&nbsp;&nbsp;Repository</a>
       </li>
       <li class="p-list__item">
         <!-- TO DO - what if the bugs are submitted to launchpad? -->
-        <a href="{{ repository_url }}/issues/new"><i class="p-icon--search"></i>&nbsp;&nbsp;Submit a bug</a>
+        <a href="{{ repository_url }}/issues/new"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
       </li>
       <li class="p-list__item">
-        <a href="{{ contact }}"><i class="p-icon--code"></i>&nbsp;&nbsp;Contact</a>
+        <a href="{{ contact }}"><i class="p-icon--contact"></i>&nbsp;&nbsp;Contact</a>
       </li>
     </ul>
     <hr class="p-separator--shallow">
-    <h4 class="p-muted-heading">Share this {{ package_type }}</h4>
+    <h4 class="p-heading--5 u-no-margin--bottom">Share this {{ package_type }}</h4>
     <p>Generate an embeddable card to be shared on external websites.</p>
     <!-- TO DO - Needs an embed this charm overlay implemented -->
-    <p><a class="p-button--neutral" href="">Share this {{ package_type }}</a></p>
+    <p><a class="p-button--neutral" href="#">Share this {{ package_type }}</a></p>
   </div>
   <div class="col-9">
     <noscript>
