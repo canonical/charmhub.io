@@ -21,7 +21,9 @@ LOGIN_LAUNCHPAD_TEAM = os.getenv(
 )
 
 open_id = OpenID(
-    stateless=True, safe_roots=[], extension_responses=[TeamsResponse],
+    stateless=True,
+    safe_roots=[],
+    extension_responses=[TeamsResponse],
 )
 request_session = talisker.requests.get_session()
 candid = CandidClient(request_session)
@@ -37,7 +39,9 @@ def login_handler():
     lp_teams = TeamsRequest(query_membership=[LOGIN_LAUNCHPAD_TEAM])
 
     return open_id.try_login(
-        LOGIN_URL, ask_for=["email"], extensions=[lp_teams],
+        LOGIN_URL,
+        ask_for=["email"],
+        extensions=[lp_teams],
     )
 
 
@@ -106,5 +110,9 @@ def login_callback():
     )
 
     return flask.redirect(
-        flask.session.pop("next_url", flask.url_for("publisher.charms"),), 302,
+        flask.session.pop(
+            "next_url",
+            flask.url_for("publisher.charms"),
+        ),
+        302,
     )
