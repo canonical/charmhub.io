@@ -37,4 +37,28 @@
   .p-icon--delete:hover {
     @include vf-icon-delete($color-negative);
   }
+
+  .p-icon--home {
+    @extend %icon;
+
+    background-image: url("https://assets.ubuntu.com/v1/9bce0bc3-home.svg");
+  }
+
+  .p-icon--repository {
+    @extend %icon;
+
+    background-image: url("https://assets.ubuntu.com/v1/42a073e3-repo.svg");
+  }
+
+  .p-icon--bug {
+    @extend %icon;
+
+    background-image: url("https://assets.ubuntu.com/v1/2947d8db-bug.svg");
+  }
+
+  .p-icon--contact {
+    @extend %icon;
+
+    background-image: url("https://assets.ubuntu.com/v1/8e5d3c7e-contact.svg");
+  }
 }
