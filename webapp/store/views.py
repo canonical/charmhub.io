@@ -7,7 +7,10 @@ from webapp.store import logic
 from webapp.store.content import data
 
 store = Blueprint(
-    "store", __name__, template_folder="/templates", static_folder="/static",
+    "store",
+    __name__,
+    template_folder="/templates",
+    static_folder="/static",
 )
 
 
