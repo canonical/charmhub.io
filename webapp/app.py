@@ -37,7 +37,11 @@ init_tutorials(app, "/tutorials")
 def before_request():
     if not authentication.is_canonical_employee_authenticated(
         session
-    ) and not request.endpoint.startswith("login"):
+    ) and not (
+        request.endpoint.startswith("login")
+        or request.endpoint.startswith("index")
+        or request.endpoint.startswith("static")
+    ):
         return redirect("/login?next=" + request.path)
 
 
