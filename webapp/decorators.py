@@ -22,21 +22,3 @@ def login_required(func):
         return func(*args, **kwargs)
 
     return is_user_logged_in
-
-
-def canonical_employee_login_required(func):
-    """
-    Decorator that checks if a user is logged in, and redirects
-    to login page if not.
-    """
-
-    @functools.wraps(func)
-    def is_user_logged_in(*args, **kwargs):
-        if not authentication.is_canonical_employee_authenticated(
-            flask.session
-        ):
-            return flask.redirect("/login?next=" + flask.request.path)
-
-        return func(*args, **kwargs)
-
-    return is_user_logged_in

@@ -3,20 +3,15 @@ from flask import current_app as app
 from flask import render_template, request
 
 from webapp.config import DETAILS_VIEW_REGEX
-from webapp.decorators import canonical_employee_login_required
 from webapp.store import logic
 from webapp.store.content import data
 
 store = Blueprint(
-    "store",
-    __name__,
-    template_folder="/templates",
-    static_folder="/static",
+    "store", __name__, template_folder="/templates", static_folder="/static",
 )
 
 
 @store.route("/store")
-@canonical_employee_login_required
 def store_view():
     query = request.args.get("q", default=None, type=str)
     sort = request.args.get("sort", default="", type=str)
@@ -41,7 +36,6 @@ def store_view():
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
-@canonical_employee_login_required
 def details(entity_name):
     # Get entity info from API
     package = app.store_api.get_item_details(entity_name)
