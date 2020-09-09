@@ -2,15 +2,10 @@
 
 {% block meta_copydoc %}https://docs.google.com/document/d/1WcNN2RlQQrbLSP5ZgcIsAeQAHj5h_yDW6Yd5oBMmU3M{% endblock meta_copydoc %}
 
-{% block meta_description %}Charm Hub description{% endblock %}
+{% block meta_description %}The app store for clouds{% endblock %}
 
 {% block content %}
-{#<section class="p-strip p-strip--charmhub is-dark is-shallow">
-  <div class="u-fixed-width">
-    <h1 class="p-heading--2">The app store for clouds</h1>
-    <p>Find and deploy <a href="" class="p-link--inverted">Juju</a> solutions.</p>
-  </div>
-</section>#}
+<h1 class="u-off-screen">The app store for clouds</h1>
 <div class="p-sort" data-js="mobile-sort-handler">
   <div class="p-sort__title">
     Sort by
@@ -21,12 +16,12 @@
       <label for="featured">Featured</label>
     </div>
     <div class="p-sort__item">
-      <input type="radio" name="sortMobile" id="name-desc" value="name-desc" {% if active_filter('sort', 'name-desc') %}checked{% endif %}>
-      <label for="name-desc">Name A/Z</label>
+      <input type="radio" name="sortMobile" id="name-asc" value="name-asc" {% if active_filter('sort', 'name-asc') %}checked{% endif %}>
+      <label for="name-asc">Name A/Z</label>
     </div>
     <div class="p-sort__item">
-      <input type="radio" name="sortMobile" id="name-asc" value="name-asc" {% if active_filter('sort', 'name-asc') %}checked{% endif %}>
-      <label for="name-asc">Name Z/A</label>
+      <input type="radio" name="sortMobile" id="name-desc" value="name-desc" {% if active_filter('sort', 'name-desc') %}checked{% endif %}>
+      <label for="name-desc">Name Z/A</label>
     </div>
   </form>
 </div>

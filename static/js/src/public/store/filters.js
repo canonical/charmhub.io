@@ -15,6 +15,8 @@ class Filters {
 
     this.initEvents();
     this.updateUI();
+    this.filterDOM();
+    this.sortDOM();
 
     window.addEventListener("popstate", (e) => {
       this._filters = e.state ? e.state.filters : null;
@@ -38,6 +40,80 @@ class Filters {
     return count;
   }
 
+  sortDOM() {
+    const cardContainer = document.querySelector("[data-js='card-container']");
+    if (cardContainer) {
+      if (this._filters["sort"]) {
+        const topicCardList = [...cardContainer.children].slice(0, 3);
+        let sortableCardList = [...cardContainer.children].slice(3);
+
+        if (this._filters["sort"][0] === "name-asc") {
+          sortableCardList.sort((a, b) =>
+            a.id < b.id ? -1 : a.id < b.id ? 1 : 0
+          );
+        } else if (this._filters["sort"][0] === "name-desc") {
+          sortableCardList.sort((a, b) =>
+            b.id < a.id ? -1 : b.id < a.id ? 1 : 0
+          );
+        } else if (this._filters["sort"][0] === "featured") {
+          // For now there is no 'featured' field in the API, therefore I cannot
+          // sort the cards by 'featured' so I sort them ascending by name
+          sortableCardList.sort((a, b) =>
+            a.id < b.id ? -1 : a.id < b.id ? 1 : 0
+          );
+        }
+        cardContainer.innerHTML = "";
+
+        topicCardList.forEach((item) => cardContainer.appendChild(item));
+        sortableCardList.forEach((item) => cardContainer.appendChild(item));
+      }
+    }
+  }
+
+  // Check if element shold be filtered
+  isFilterMatch(filterText) {
+    let match = false;
+    Object.keys(this._filters).forEach((filterType) => {
+      if (filterType === "category" || filterType === "publisher") {
+        this._filters[filterType].forEach((filter) => {
+          if (filterText.includes(filter) && !match) {
+            match = true;
+          }
+        });
+      }
+    });
+    return match;
+  }
+
+  filterDOM() {
+    const cardElements = document.querySelectorAll("[data-filter]");
+    if (cardElements) {
+      const filterArray = [];
+      Object.keys(this._filters).forEach((filterType) => {
+        if (filterType === "category" || filterType === "publisher") {
+          this._filters[filterType].forEach((el) => {
+            filterArray.push(el);
+          });
+        }
+      });
+
+      if (this._filters["category"] || this._filters["publisher"]) {
+        cardElements.forEach((cardEl) => {
+          const filterText = cardEl.getAttribute("data-filter");
+          if (this.isFilterMatch(filterText)) {
+            cardEl.classList.remove("u-hide");
+          } else {
+            cardEl.classList.add("u-hide");
+          }
+        });
+      } else {
+        cardElements.forEach((cardEl) => {
+          cardEl.classList.remove("u-hide");
+        });
+      }
+    }
+  }
+
   updateUI() {
     const searchField = this.wrapperEls.search.querySelector("[name='q']");
 
@@ -46,11 +122,8 @@ class Filters {
     } else {
       searchField.value = "";
     }
-
     if (this._filters.sort) {
       this.wrapperEls.sort.value = this._filters.sort[0];
-    } else {
-      this.wrapperEls.sort.value = "";
     }
 
     // Deselect checkboxes if there are no filters selected
@@ -208,6 +281,7 @@ class Filters {
 
       this.cleanFilters();
       this.updateHistory();
+      this.sortDOM();
     });
   }
 
@@ -220,6 +294,7 @@ class Filters {
 
       this.cleanFilters();
       this.updateHistory();
+      this.sortDOM();
 
       // hide the drawer once clicked
       el.classList.remove("is-active");
@@ -250,6 +325,7 @@ class Filters {
         this.cleanFilters();
         this.updateHistory();
         this.updateUI();
+        this.filterDOM();
       }
     });
 
