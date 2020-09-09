@@ -44,23 +44,26 @@ class Filters {
     const cardContainer = document.querySelector("[data-js='card-container']");
     if (cardContainer) {
       if (this._filters["sort"]) {
-        const topicCardList = [...cardContainer.children].slice(0, 3);
-        let sortableCardList = [...cardContainer.children].slice(3);
+        const allCards = [...cardContainer.children];
+        let topicCardList = [];
+        let sortableCardList = [];
+
+        allCards.forEach((card) => {
+          if (card.getAttribute("data-js") === "topic-card") {
+            topicCardList.push(card);
+          } else {
+            sortableCardList.push(card);
+          }
+        });
 
         if (this._filters["sort"][0] === "name-asc") {
-          sortableCardList.sort((a, b) =>
-            a.id < b.id ? -1 : a.id < b.id ? 1 : 0
-          );
+          sortableCardList.sort((a, b) => a.id.localeCompare(b.id));
         } else if (this._filters["sort"][0] === "name-desc") {
-          sortableCardList.sort((a, b) =>
-            b.id < a.id ? -1 : b.id < a.id ? 1 : 0
-          );
+          sortableCardList.sort((a, b) => -a.id.localeCompare(b.id));
         } else if (this._filters["sort"][0] === "featured") {
           // For now there is no 'featured' field in the API, therefore I cannot
           // sort the cards by 'featured' so I sort them ascending by name
-          sortableCardList.sort((a, b) =>
-            a.id < b.id ? -1 : a.id < b.id ? 1 : 0
-          );
+          sortableCardList.sort((a, b) => a.id.localeCompare(b.id));
         }
         cardContainer.innerHTML = "";
 

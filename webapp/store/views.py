@@ -5,7 +5,6 @@ from flask import render_template, request
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import canonical_employee_login_required
 from webapp.store import logic
-from webapp.store.content import data
 
 store = Blueprint(
     "store",
