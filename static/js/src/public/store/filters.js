@@ -1,6 +1,7 @@
 /** Store page filters */
 class Filters {
   constructor(selectors) {
+    this.filteredItems = document.querySelector("[data-js='filtered-items']");
     this._filters = this.initFilters();
     this.searchCache = window.location.search;
 
@@ -65,7 +66,6 @@ class Filters {
           // sort the cards by 'featured' so I sort them ascending by name
           sortableCardList.sort((a, b) => a.id.localeCompare(b.id));
         }
-        cardContainer.innerHTML = "";
 
         topicCardList.forEach((item) => cardContainer.appendChild(item));
         sortableCardList.forEach((item) => cardContainer.appendChild(item));
@@ -90,6 +90,7 @@ class Filters {
 
   filterDOM() {
     const cardElements = document.querySelectorAll("[data-filter]");
+    let filteredItemsNumber = 0;
     if (cardElements) {
       const filterArray = [];
       Object.keys(this._filters).forEach((filterType) => {
@@ -104,6 +105,7 @@ class Filters {
         cardElements.forEach((cardEl) => {
           const filterText = cardEl.getAttribute("data-filter");
           if (this.isFilterMatch(filterText)) {
+            filteredItemsNumber += 1;
             cardEl.classList.remove("u-hide");
           } else {
             cardEl.classList.add("u-hide");
@@ -112,7 +114,12 @@ class Filters {
       } else {
         cardElements.forEach((cardEl) => {
           cardEl.classList.remove("u-hide");
+          filteredItemsNumber += 1;
         });
+      }
+
+      if (this.filteredItems) {
+        this.filteredItems.innerHTML = `${filteredItemsNumber} items`;
       }
     }
   }
