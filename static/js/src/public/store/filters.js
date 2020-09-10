@@ -1,6 +1,10 @@
 /** Store page filters */
 class Filters {
   constructor(selectors) {
+    this.filteredItems = document.querySelector("[data-js='filtered-items']");
+    this.submitButtonMobile = document.querySelector(
+      "[data-js='filter-submit']"
+    );
     this._filters = this.initFilters();
     this.searchCache = window.location.search;
 
@@ -15,6 +19,8 @@ class Filters {
 
     this.initEvents();
     this.updateUI();
+    this.filterDOM();
+    this.sortDOM();
 
     window.addEventListener("popstate", (e) => {
       this._filters = e.state ? e.state.filters : null;
@@ -38,6 +44,98 @@ class Filters {
     return count;
   }
 
+  sortDOM() {
+    const cardContainer = document.querySelector("[data-js='card-container']");
+    if (cardContainer) {
+      const allCards = [...cardContainer.children];
+      let topicCardList = [];
+      let sortableCardList = [];
+
+      allCards.forEach((card) => {
+        if (card.getAttribute("data-js") === "topic-card") {
+          topicCardList.push(card);
+        } else {
+          sortableCardList.push(card);
+        }
+      });
+
+      if (
+        (this._filters["sort"] && this._filters["sort"][0] === "name-asc") ||
+        !this._filters["sort"]
+      ) {
+        sortableCardList.sort((a, b) => a.id.localeCompare(b.id));
+      } else if (this._filters["sort"][0] === "name-desc") {
+        sortableCardList.sort((a, b) => -a.id.localeCompare(b.id));
+      }
+
+      topicCardList.forEach((item) => cardContainer.appendChild(item));
+      sortableCardList.forEach((item) => cardContainer.appendChild(item));
+    }
+  }
+
+  // Check if element shold be filtered
+  isFilterMatch(filterText) {
+    for (let i = 0; i < Object.keys(this._filters).length; i++) {
+      if (
+        Object.keys(this._filters)[i] === "category" ||
+        Object.keys(this._filters)[i] === "publisher"
+      ) {
+        for (
+          let j = 0;
+          j < this._filters[Object.keys(this._filters)[i]].length;
+          j++
+        ) {
+          if (
+            filterText.includes(this._filters[Object.keys(this._filters)[i]][j])
+          ) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  filterDOM() {
+    const cardElements = document.querySelectorAll("[data-filter]");
+    let filteredItemsNumber = 0;
+    if (cardElements) {
+      const filterArray = [];
+      Object.keys(this._filters).forEach((filterType) => {
+        if (filterType === "category" || filterType === "publisher") {
+          this._filters[filterType].forEach((el) => {
+            filterArray.push(el);
+          });
+        }
+      });
+
+      if (this._filters["category"] || this._filters["publisher"]) {
+        cardElements.forEach((cardEl) => {
+          const filterText = cardEl.getAttribute("data-filter");
+          if (this.isFilterMatch(filterText)) {
+            filteredItemsNumber += 1;
+            cardEl.classList.remove("u-hide");
+          } else {
+            cardEl.classList.add("u-hide");
+          }
+        });
+      } else {
+        cardElements.forEach((cardEl) => {
+          cardEl.classList.remove("u-hide");
+          filteredItemsNumber += 1;
+        });
+      }
+
+      if (this.filteredItems) {
+        this.filteredItems.innerHTML = `${filteredItemsNumber} items`;
+      }
+
+      if (this.submitButtonMobile) {
+        this.submitButtonMobile.innerHTML = `Show results (${filteredItemsNumber})`;
+      }
+    }
+  }
+
   updateUI() {
     const searchField = this.wrapperEls.search.querySelector("[name='q']");
 
@@ -46,11 +144,8 @@ class Filters {
     } else {
       searchField.value = "";
     }
-
     if (this._filters.sort) {
       this.wrapperEls.sort.value = this._filters.sort[0];
-    } else {
-      this.wrapperEls.sort.value = "";
     }
 
     // Deselect checkboxes if there are no filters selected
@@ -208,6 +303,7 @@ class Filters {
 
       this.cleanFilters();
       this.updateHistory();
+      this.sortDOM();
     });
   }
 
@@ -220,6 +316,7 @@ class Filters {
 
       this.cleanFilters();
       this.updateHistory();
+      this.sortDOM();
 
       // hide the drawer once clicked
       el.classList.remove("is-active");
@@ -228,7 +325,6 @@ class Filters {
 
   initFilterEvents(el) {
     const resetButton = el.querySelector("[data-js='filter-reset']");
-    const submitButton = el.querySelector("[data-js='filter-submit']");
 
     el.addEventListener("click", (e) => {
       let target = e.target.closest("li");
@@ -250,6 +346,7 @@ class Filters {
         this.cleanFilters();
         this.updateHistory();
         this.updateUI();
+        this.filterDOM();
       }
     });
 
@@ -263,8 +360,8 @@ class Filters {
       });
     }
 
-    if (submitButton) {
-      submitButton.addEventListener("click", (e) => {
+    if (this.submitButtonMobile) {
+      this.submitButtonMobile.addEventListener("click", (e) => {
         e.preventDefault();
 
         el.classList.remove("is-active");

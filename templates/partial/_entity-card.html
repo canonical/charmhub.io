@@ -1,7 +1,7 @@
 {% if package["type"] == "bundle" %}
 {% set isBundle = True %}
 {% endif %}
-<div class="col-x-small-1 col-small-2 col-medium-2 col-3 u-equal-height">
+<div class="col-x-small-1 col-small-2 col-medium-2 col-3 u-equal-height" id="{{ package.name }}" data-filter="{% for category in package.store_front.categories %}{{ category.slug }} {% endfor %}{{ package.store_front.publisher_name }}">
   <a href="/{{ package.name }}" class="p-card--button">
     <div class="p-card__header">
       <div class="{% if isBundle %}p-bundle-icons{% endif %}">

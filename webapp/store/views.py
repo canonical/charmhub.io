@@ -4,7 +4,6 @@ from flask import render_template, request
 
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.store import logic
-from webapp.store.content import data
 
 store = Blueprint(
     "store",
@@ -17,7 +16,7 @@ store = Blueprint(
 @store.route("/store")
 def store_view():
     query = request.args.get("q", default=None, type=str)
-    sort = request.args.get("sort", default="", type=str)
+    sort = request.args.get("sort", default="sort-asc", type=str)
 
     if query:
         results = app.store_api.find(query=query).get("results", [])
@@ -27,9 +26,21 @@ def store_view():
     for i, item in enumerate(results):
         results[i] = logic.add_store_front_data(results[i])
 
+    categories = []
+    publisher_list = []
+    for result in results:
+        for category in result["store_front"]["categories"]:
+            if category not in categories:
+                categories.append(category)
+        if result["store_front"]["publisher_name"] not in publisher_list:
+            publisher_list.append(result["store_front"]["publisher_name"])
+
+    sorted_categories = sorted(categories, key=lambda k: k["slug"])
+    sorted_publisher_list = sorted(publisher_list)
+
     context = {
-        "categories": data.mock_categories,
-        "publisher_list": data.mock_publisher_list,
+        "categories": sorted_categories,
+        "publisher_list": sorted_publisher_list,
         "sort": sort,
         "q": query,
         "results": results,

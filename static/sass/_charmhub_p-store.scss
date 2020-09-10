@@ -19,11 +19,30 @@
 
   .p-store__search {
     margin-right: $spv-inner--large;
-    width: 70%;
+    width: 65%;
+
+    @media screen and (min-width: $breakpoint-medium - 1) and (max-width: $breakpoint-large) {
+      width: 50%;
+    }
   }
 
   .p-store__sort-desktop {
-    width: 30%;
+    display: flex;
+    justify-content: flex-end;
+    width: 35%;
+
+    @media screen and (min-width: $breakpoint-medium - 1) and (max-width: $breakpoint-large) {
+      width: 50%;
+    }
+
+    .p-form__label {
+      min-width: 3.5rem;
+    }
+
+    .p-form__control {
+      min-width: 7rem;
+      width: 7rem;
+    }
   }
 
   .p-store__sort-mobile {
