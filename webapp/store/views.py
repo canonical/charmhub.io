@@ -18,7 +18,7 @@ store = Blueprint(
 @canonical_employee_login_required
 def store_view():
     query = request.args.get("q", default=None, type=str)
-    sort = request.args.get("sort", default="featured", type=str)
+    sort = request.args.get("sort", default="sort-asc", type=str)
 
     if query:
         results = app.store_api.find(query=query).get("results", [])

@@ -61,7 +61,6 @@
       <div class="p-store__sort-desktop p-form__group">
         <label for="sort" aria-label="Sort resources" class="p-form__label">Sort by</label>
         <select name="sort" data-js="sort-handler" class="p-form__control" value="{{ sort }}" id="sort">
-          <option value="featured" {% if active_filter('sort', 'featured') %}selected{% endif %}>Featured</option>
           <option value="name-asc" {% if active_filter('sort', 'name-asc') %}selected{% endif %}>Name A/Z</option>
           <option value="name-desc" {% if active_filter('sort', 'name-desc') %}selected{% endif %}>Name Z/A</option>
           {#<option value="most-popular">Most popular</option>#}
