@@ -72,7 +72,7 @@ def convert_date(date_to_convert):
 
 
 def get_icons(package):
-    media = package["charm"]["media"]
+    media = package["result"]["media"]
     return [m["url"] for m in media if m["type"] == "icon"]
 
 
@@ -109,12 +109,12 @@ def get_categories(categories_json):
 def add_store_front_data(package):
     extra = {}
     extra["icons"] = get_icons(package)
-    extra["categories"] = get_categories(package["charm"]["categories"])
-    extra["publisher_name"] = package["charm"]["publisher"]["display-name"]
+    extra["categories"] = get_categories(package["result"]["categories"])
+    extra["publisher_name"] = package["result"]["publisher"]["display-name"]
     extra["last_release"] = convert_date(
         package["default-release"]["channel"]["released-at"]
     )
-    extra["summary"] = package["charm"]["summary"]
+    extra["summary"] = package["result"]["summary"]
     if package.get("channel-map"):
         extra["channel_map"] = convert_channel_maps(package["channel-map"])
     package["store_front"] = extra
