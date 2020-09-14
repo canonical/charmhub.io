@@ -57,6 +57,11 @@ def index():
     return response
 
 
+@app.route("/topics/kubernetes")
+def kubernetes():
+    return render_template("topics/kubernetes.html")
+
+
 @app.route("/about")
 def about():
     return render_template("about/index.html")

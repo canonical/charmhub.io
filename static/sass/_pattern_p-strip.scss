@@ -224,6 +224,21 @@
 }
 
 @mixin charmhub-p-strip {
+  .p-strip--overlap {
+    @extend %vf-strip;
+
+    padding-block-end: 9rem;
+
+    & + .p-strip--overlap {
+      margin-block-start: -11rem;
+      padding-block-end: 4rem;
+    }
+
+    @media screen and (min-width: $breakpoint-large) {
+      padding-block-end: 7rem;
+    }
+  }
+
   .p-strip--charmhub {
     @extend %vf-strip;
 
@@ -254,6 +269,33 @@
         color: $color-x-light;
         text-decoration: underline;
       }
+    }
+  }
+
+  .p-strip-topic--kubernetes {
+    @extend %vf-strip;
+
+    background-image:
+      linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0.1) 0,
+        rgba(255, 255, 255, 0.1) 49.9%,
+        transparent 50%
+      ),
+      linear-gradient(
+        to top right,
+        rgba(255, 255, 255, 0.1) 0,
+        rgba(255, 255, 255, 0.1) 49.9%,
+        transparent 50%
+      ),
+      linear-gradient(110deg, #014bd1 45%, #4279f4 91%);
+    background-position: top left, bottom left, 0% 0%;
+    background-repeat: no-repeat;
+    background-size: 75% 85%, 15% 100%, auto;
+    color: $color-x-light;
+
+    @media screen and (max-width: $breakpoint-medium) {
+      background-size: 75% 85%, 35% 100%, auto;
     }
   }
 
