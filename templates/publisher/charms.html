@@ -18,11 +18,6 @@
           <tr role="row">
             <th style="width: 30%;">Name</th>
             <th style="width: 10%;">Visibility</th>
-            <th style="width: 15%;">Latest release</th>
-            <th style="width: 10%;">Version</th>
-            <th style="text-align: right; width: 10%;">Active models</th>
-            <th style="width: 10%;">Weekly trend</th>
-            <th style="width: 15%;"></th>
           </tr>
         </thead>
         <tbody>
@@ -40,27 +35,10 @@
             </td>
             <td role="gridcell" aria-label="visibility">
               {% if published_charm.private %}
-              Private
+                Private
               {% else %}
-              Public
+                Public
               {% endif %}
-            </td>
-            <td role="gridcell" aria-label="Latest release">
-              latest/stable
-            </td>
-            <td role="gridcell" aria-label="Version">
-              2019.2.3
-            </td>
-            <td role="gridcell" aria-label="Active models" style="text-align: right;">
-              129,597
-            </td>
-            <td role="gridcell" class="is-color--positive" aria-label="Weekly trend">
-              <i class="p-icon--arrow-up"></i> 1,923
-            </td>
-            <td role="gridcell" aria-label="Graph">
-              <div class="charmhub-metrics__graph" data-js="active-devices-trend" data-svg="spark">
-                <svg width="100%" height="20"></svg>
-              </div>
             </td>
           </tr>
           {% endfor %}
