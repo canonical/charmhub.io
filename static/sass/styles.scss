@@ -53,6 +53,7 @@ $theme-default-nav: dark;
 @include vf-u-margin-collapse;
 @include vf-u-padding-collapse;
 @include vf-u-vertically-center;
+@include vf-u-vertical-spacing;
 
 // Import site specific patterns and overrides
 @import "pattern_p-card";

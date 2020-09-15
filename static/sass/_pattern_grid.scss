@@ -1,4 +1,8 @@
 @mixin p-charmhub-grid {
+  .row {
+    grid-gap: 2rem;
+  }
+
   .col-x-small-1 {
     @media (max-width: 450px) {
       grid-column-end: span 4;
