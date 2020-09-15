@@ -1,4 +1,5 @@
-from flask import abort, session
+from flask import render_template, session
+
 from canonicalwebteam.store_api.exceptions import (
     StoreApiCircuitBreaker,
     StoreApiError,
@@ -36,24 +37,28 @@ def set_handlers(app):
     # ===
     @app.errorhandler(StoreApiTimeoutError)
     def handle_store_api_timeout(e):
-        abort(504, str(e))
+        render_template("500.html", error_message=str(e)), 504
 
     @app.errorhandler(StoreApiCircuitBreaker)
     def handle_store_api_circuit_breaker_exception(e):
-        abort(503, str(e))
+        render_template("500.html", error_message=str(e)), 503
 
     @app.errorhandler(StoreApiResponseErrorList)
     def handle_store_api_error_list(e):
         if e.status_code == 404:
-            abort(404, "Entity not found")
+            return render_template("404.html", message="Entity not found"), 404
 
         if e.errors:
-            abort(502, ", ".join(e.errors.key()))
+            errors = ", ".join(e.errors.key())
+            return (
+                render_template("500.html", error_message=errors),
+                502,
+            )
 
-        abort(502, "An error occurred.")
+        return render_template("500.html"), 502
 
     @app.errorhandler(StoreApiResponseDecodeError)
     @app.errorhandler(StoreApiResponseError)
     @app.errorhandler(StoreApiError)
     def handle_store_api_error(e):
-        abort(502, str(e))
+        return render_template("500.html", error_message=str(e)), 502
