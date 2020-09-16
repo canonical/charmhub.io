@@ -9,6 +9,18 @@
     }
   }
 
+  .col-large-2 {
+    @media (min-width: $breakpoint-large) {
+      grid-column-end: span 2;
+    }
+  }
+
+  .col-large-10 {
+    @media (min-width: $breakpoint-large) {
+      grid-column-end: span 10;
+    }
+  }
+
   .row.has-small-gap {
     grid-gap: 1rem;
     margin-bottom: 1.2rem;
@@ -16,5 +28,52 @@
 
   .u-equal-height {
     display: flex;
+  }
+
+  .flex-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-right: -1rem;
+
+    .p-card--button {
+      height: 15.5rem;
+
+      @media screen and (min-width: $breakpoint-medium) {
+        margin-block-end: 1rem;
+        margin-inline-end: 1rem;
+        width: 13rem;
+      }
+    }
+
+    @media screen and (min-width: 736px) and (max-width: $breakpoint-medium) {
+      display: grid;
+      grid-gap: 1rem;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+
+      .p-card--button {
+        grid-column-end: span 2;
+      }
+    }
+
+    @media screen and (min-width: 486px) and (max-width: 735px) {
+      display: grid;
+      grid-gap: 1rem;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+
+      .p-card--button {
+        grid-column-end: span 3;
+      }
+    }
+
+    @media screen and (max-width: 485px) {
+      display: grid;
+      grid-gap: 1rem;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+
+      .p-card--button {
+        grid-column-end: span 4;
+      }
+    }
   }
 }

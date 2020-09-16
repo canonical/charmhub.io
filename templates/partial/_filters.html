@@ -1,4 +1,4 @@
-<div class="col-3">
+<div class="col-3 col-large-2">
   <div class="p-filter" data-js="filter-handler">
     <div class="p-filter__title" data-filters="applied-filters">
       Filters
@@ -42,7 +42,7 @@
     </form>
   </div>
 </div>
-<div class="col-9">
+<div class="col-9 col-large-10">
   <div class="row">
     <div class="col-3 p-store__items-left">
       <div class="p-store__text p-muted-heading" data-js="filtered-items">
@@ -69,9 +69,18 @@
       </div>
     </div>
   </div>
-  <div class="row has-small-gap" data-js="card-container">
+  <div class="flex-container" data-js="card-container">
     {% include "partial/_topic-cards.html" %}
     {% if results %}
+      {% for package in results %}
+        {% include "partial/_entity-card.html" %}
+      {% endfor %}
+      {% for package in results %}
+        {% include "partial/_entity-card.html" %}
+      {% endfor %}
+      {% for package in results %}
+        {% include "partial/_entity-card.html" %}
+      {% endfor %}
       {% for package in results %}
         {% include "partial/_entity-card.html" %}
       {% endfor %}
