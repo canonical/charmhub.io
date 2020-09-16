@@ -24,14 +24,14 @@
           {% for published_charm in published %}
           <tr role="row">
             <td role="rowheader" class="p-table--mobile-card__header">
-              <a href="/spark/listing" class="p-heading-icon--x-small">
+              <div class="p-heading-icon--x-small">
                 <span class="p-heading-icon__header">
                   <img src="https://dashboard.snapcraft.io/site_media/appmedia/2020/04/products-hero-ubuntu.svg.png" width="24" height="24" class="p-heading-icon__img">
                   <p class="u-no-margin--bottom u-no-padding--top">
                     {{ published_charm.name }}
                   </p>
                 </span>
-              </a>
+              </div>
             </td>
             <td role="gridcell" aria-label="visibility">
               {% if published_charm.private %}
