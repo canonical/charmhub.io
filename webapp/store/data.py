@@ -16,11 +16,11 @@ wordpress_charm = {
                 "config-yaml": "one: 1\ntwo: 2\nitems: [1,2,3,4]\n",
                 "created-at": "2019-12-16T19:20:26.673192+00:00",
                 "download": {
-                    "hash-sha-256": "fake-data",
+                    "hash-sha-256": "92a8b825ed1108ab64864a7df05eb84ed3925a8d5e4741169185f77cef9b52517ad4b79396bab43b19e544a908ec83c4",
                     "size": 12042240,
-                    "url": "https://fake-data",
+                    "url": "https://api.snapcraft.io/api/v1/snaps/download/QLLfVfIKfcnTZiPFnmGcigB2vB605ZY7_16.snap",
                 },
-                "metadata-yaml": "data",
+                "metadata-yaml": "name: myname\nversion: 1.0.3\nsummary: A charm or bundle.\ndescription: |\n  This will install and setup services optimized to run in the cloud.\n  By default it will place Ngnix configured to scale horizontally\n  with Nginx's reverse proxy.\n",
                 "platforms": [
                     {
                         "architecture": "all",
@@ -53,11 +53,11 @@ wordpress_charm = {
                 "config-yaml": "one: 1\ntwo: 2\nitems: [1,2,3,4]\n",
                 "created-at": "2019-12-16T19:20:26.673192+00:00",
                 "download": {
-                    "hash-sha-256": "fake-data",
+                    "hash-sha-256": "92a8b825ed1108ab64864a7df05eb84ed3925a8d5e4741169185f77cef9b52517ad4b79396bab43b19e544a908ec83c4",
                     "size": 12042240,
-                    "url": "https://fake-data",
+                    "url": "https://api.snapcraft.io/api/v1/snaps/download/QLLfVfIKfcnTZiPFnmGcigB2vB605ZY7_16.snap",
                 },
-                "metadata-yaml": "fake-data",
+                "metadata-yaml": "name: myname\nversion: 1.0.3\nsummary: A charm or bundle.\ndescription: |\n  This will install and setup services optimized to run in the cloud.\n  By default it will place Ngnix configured to scale horizontally\n  with Nginx's reverse proxy.\n",
                 "platforms": [
                     {
                         "architecture": "all",
@@ -90,11 +90,11 @@ wordpress_charm = {
                 "config-yaml": "one: 1\ntwo: 2\nitems: [1,2,3,4]\n",
                 "created-at": "2019-12-16T19:20:26.673192+00:00",
                 "download": {
-                    "hash-sha-256": "fake-data",
+                    "hash-sha-256": "92a8b825ed1108ab64864a7df05eb84ed3925a8d5e4741169185f77cef9b52517ad4b79396bab43b19e544a908ec83c4",
                     "size": 12042240,
-                    "url": "fake-data",
+                    "url": "https://api.snapcraft.io/api/v1/snaps/download/QLLfVfIKfcnTZiPFnmGcigB2vB605ZY7_16.snap",
                 },
-                "metadata-yaml": "fake-data",
+                "metadata-yaml": "name: myname\nversion: 1.0.3\nsummary: A charm or bundle.\ndescription: |\n  This will install and setup services optimized to run in the cloud.\n  By default it will place Ngnix configured to scale horizontally\n  with Nginx's reverse proxy.\n",
                 "platforms": [
                     {
                         "architecture": "all",
@@ -127,11 +127,11 @@ wordpress_charm = {
                 "config-yaml": "one: 1\ntwo: 2\nitems: [1,2,3,4]\n",
                 "created-at": "2019-12-16T19:20:26.673192+00:00",
                 "download": {
-                    "hash-sha-256": "fake-data",
+                    "hash-sha-256": "92a8b825ed1108ab64864a7df05eb84ed3925a8d5e4741169185f77cef9b52517ad4b79396bab43b19e544a908ec83c4",
                     "size": 12042240,
-                    "url": "https://fake-data",
+                    "url": "https://api.snapcraft.io/api/v1/snaps/download/QLLfVfIKfcnTZiPFnmGcigB2vB605ZY7_16.snap",
                 },
-                "metadata-yaml": "fake-data",
+                "metadata-yaml": "name: myname\nversion: 1.0.3\nsummary: A charm or bundle.\ndescription: |\n  This will install and setup services optimized to run in the cloud.\n  By default it will place Ngnix configured to scale horizontally\n  with Nginx's reverse proxy.\n",
                 "platforms": [
                     {
                         "architecture": "all",
@@ -154,19 +154,18 @@ wordpress_charm = {
             {"featured": True, "name": "blog"},
             {"featured": False, "name": "applications"},
         ],
-        "description": "fake-data",
+        "description": "This will install and setup WordPress optimized to run in the cloud. By default it will place Ngnix and php-fpm configured to scale horizontally with Nginx's reverse proxy.",
         "license": "Apache-2.0",
         "media": [
             {
                 "height": 256,
                 "type": "icon",
-                "url": "https://dashboard.snapcraft.io/site_media/"
-                "appmedia/2017/04/wpcom.png",
+                "url": "https://dashboard.snapcraft.io/site_media/appmedia/2017/04/wpcom.png",
                 "width": 256,
             }
         ],
         "publisher": {"display-name": "Wordress Charmers"},
-        "summary": "fake-data",
+        "summary": "WordPress is a full featured web blogging tool, this charm deploys it.",
         "used-by": [
             "wordpress-everlast",
             "wordpress-jorge",
@@ -189,14 +188,22 @@ wordpress_charm = {
             "config-yaml": "one: 1\ntwo: 2\nitems: [1,2,3,4]\n",
             "created-at": "2019-12-16T19:20:26.673192+00:00",
             "download": {
-                "hash-sha-256": "fake-data",
+                "hash-sha-256": "92a8b825ed1108ab64864a7df05eb84ed3925a8d5e4741169185f77cef9b52517ad4b79396bab43b19e544a908ec83c4",
                 "size": 12042240,
-                "url": "https://fake-data",
+                "url": "https://api.snapcraft.io/api/v1/snaps/download/QLLfVfIKfcnTZiPFnmGcigB2vB605ZY7_16.snap",
             },
-            "metadata-yaml": "fake-data",
+            "metadata-yaml": "name: myname\nversion: 1.0.3\nsummary: A charm or bundle.\ndescription: |\n  This will install and setup services optimized to run in the cloud.\n  By default it will place Ngnix configured to scale horizontally\n  with Nginx's reverse proxy.\n",
             "platforms": [
-                {"architecture": "all", "os": "ubuntu", "series": "bionic"},
-                {"architecture": "all", "os": "ubuntu", "series": "trusty"},
+                {
+                    "architecture": "all",
+                    "os": "ubuntu",
+                    "series": "bionic",
+                },
+                {
+                    "architecture": "all",
+                    "os": "ubuntu",
+                    "series": "trusty",
+                },
             ],
             "revision": 16,
             "version": "1.0.3",
