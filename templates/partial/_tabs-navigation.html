@@ -19,7 +19,7 @@
             aria-controls="integrations">Integrations</a>
         </li>
         <li class="p-tabs__item" role="presentation">
-          <a href="#docs" class="p-tabs__link" tabindex="-1" role="tab" aria-controls="docs">Docs</a>
+          <a href="/{{ package.name }}/docs" class="p-tabs__link" tabindex="-1" role="tab" aria-controls="docs"{% if current_tab == "docs" %} aria-selected="true"{% endif %}>Docs</a>
         </li>
         {% endif %}
         <li class="p-tabs__item" role="presentation">

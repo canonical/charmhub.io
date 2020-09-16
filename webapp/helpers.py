@@ -1,9 +1,11 @@
 import datetime
 import json
 
-from flask import request
 import humanize
+from canonicalwebteam.discourse import DiscourseAPI
 from dateutil import parser
+from flask import request
+from talisker import requests
 
 
 def split_filters(filters):
@@ -129,3 +131,9 @@ def get_licenses():
         licenses = []
 
     return licenses
+
+
+session = requests.get_session()
+discourse_api = DiscourseAPI(
+    base_url="https://discourse.juju.is/", session=session
+)

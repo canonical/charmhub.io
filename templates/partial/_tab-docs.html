@@ -1,3 +1,35 @@
-{% set section_slug = "docs" %}
-{% set section_title = "Docs" %}
-{% include "partial/_partial-documentation.html" %}
+<div class="u-fixed-width p-tabs__content" id="docs">
+  <noscript>
+    <hr class="p-separator" />
+    <h2>Docs</h2>
+  </noscript>
+
+<section class="p-strip u-extra-space">
+  <div class="row">
+    <div class="col-3">
+      <nav class="p-side-navigation--raw-html" id="drawer">
+        <a href="#drawer" class="p-side-navigation__toggle js-drawer-toggle" aria-controls="drawer">
+          Toggle side navigation
+        </a>
+        <div class="p-side-navigation__overlay js-drawer-toggle" aria-controls="drawer"></div>
+        <div class="p-side-navigation__drawer">
+          <div class="p-side-navigation__drawer-header">
+            <a href="#" class="p-side-navigation__toggle--in-drawer js-drawer-toggle" aria-controls="drawer">
+              Toggle side navigation
+            </a>
+          </div>
+          {{ navigation | safe }}
+        </div>
+      </nav>
+    </div>
+    <div class="col-9">
+      {{ body_html | safe }}
+    </div>
+  </div>
+</section>
+</div>
+
+
+{% block page_scripts %}
+  {% include "docs/_scripts.html" %}
+{% endblock %}
