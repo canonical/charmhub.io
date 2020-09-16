@@ -8,10 +8,10 @@
     <div class="col-8">
       <div class="p-charm-header">
         <div class="p-media-object--medium u-no-margin--bottom">
-          <div class="{% if package_type == "bundle" %}p-bundle-icons{% endif %}">
+          <div class="{% if package.type == "bundle" %}p-bundle-icons{% endif %}">
             {% for media in package.result.media %}
             {% if media.type == "icon" %}
-            <img src="{{ media.url }}" class="{% if package_type == "bundle"%}p-bundle-icons__image{% else %}p-media-object__image{% endif %}" alt="" />
+            <img src="{{ media.url }}" class="{% if package.type == "bundle"%}p-bundle-icons__image{% else %}p-media-object__image{% endif %}" alt="" />
             {% endif %}
             {% endfor %}
           </div>
@@ -59,7 +59,7 @@
 
   {% include "partial/_tab-overview.html" %}
   {% include "partial/_tab-configuration.html" %}
-  {% if package_type == "charm" %}
+  {% if package.type == "charm" %}
     {% include "partial/_tab-actions.html" %}
     {% include "partial/_tab-integrations.html" %}
     {% include "partial/_tab-docs.html" %}

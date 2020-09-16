@@ -13,7 +13,7 @@
     <div class="row" style="padding-block-start: 1rem;">
       <div class="col-7">
         <p>
-          Updates to this information will appear immediately on the <a href="/{{ package_name }}">{{ package_type }} listing page</a>.
+          Updates to this information will appear immediately on the <a href="/{{ package_name }}">{{ package.type }} listing page</a>.
         </p>
       </div>
       <div class="col-5">
@@ -43,8 +43,8 @@
     </div>
     <div class="row p-form__group p-form__group--top">
       <div class="col-2 u-flex">
-      {% if package_type == "charm" %}
-        <label class="p-form__label" for="{{ package_type }}-icon">Charm icon:</label>
+      {% if package.type == "charm" %}
+        <label class="p-form__label" for="{{ package.type }}-icon">Charm icon:</label>
         <div class="p-tooltip--information u-vertically-center">
           <div class="p-tooltip__button" role="button" aria-controls="icon-tooltip-modal" tabindex="0">
             Show information
@@ -78,19 +78,19 @@
             </div>
           </div>
         </div>
-      {% elif package_type == "bundle" %}
+      {% elif package.type == "bundle" %}
         <p class="is-label">Bundle icon:</p>
       {% endif %}
       </div>
       <div class="col-8">
         <div class="p-form__control">
-          {% if package_type == "charm" %}
+          {% if package.type == "charm" %}
             <div class="u-flex u-vertically-center">
               <div class="p-editable-icon">
                 <div class="p-editable-icon__icon" tabindex="0">
-                  <img class="p-editable-icon__image" src="https://dashboard.snapcraft.io/site_media/appmedia/2020/04/products-hero-ubuntu.svg.png" alt="{{ package_name }} {{ package_type }}">
+                  <img class="p-editable-icon__image" src="https://dashboard.snapcraft.io/site_media/appmedia/2020/04/products-hero-ubuntu.svg.png" alt="{{ package_name }} {{ package.type }}">
                   <span class="p-editable-icon__change">Edit</span>
-                  <input type="file" name="icon" id="{{ package_type }}-icon" accept="image/png,image/jpeg,image/svg+xml" hidden="">
+                  <input type="file" name="icon" id="{{ package.type }}-icon" accept="image/png,image/jpeg,image/svg+xml" hidden="">
                 </div>
               </div>
               <div class="p-editable-icon__actions">
@@ -99,7 +99,7 @@
                 </a>
               </div>
             </div>
-          {% elif package_type == "bundle" %}
+          {% elif package.type == "bundle" %}
             <div class="p-bundle-icons" style="margin-block-end: 1.2rem;">
               <img src="https://api.jujucharms.com/charmstore/v5/openstack-dashboard-271/icon.svg" class="p-bundle-icons__image" alt="">
               <img src="https://api.jujucharms.com/charmstore/v5/lxd-22/icon.svg" class="p-bundle-icons__image" alt="">
@@ -114,11 +114,11 @@
     </div>
     <div class="row p-form__group p-form-validation">
       <div class="col-2">
-        <label for="{{ package_type }}-title" class="p-form__label">Title:</label>
+        <label for="{{ package.type }}-title" class="p-form__label">Title:</label>
       </div>
       <div class="col-8">
         <div class="p-form__control">
-          <input class="p-form-validation__input" id="{{ package_type }}-title" type="text" name="title" value="{{ package_name }}" required="" maxlength="40">
+          <input class="p-form-validation__input" id="{{ package.type }}-title" type="text" name="title" value="{{ package_name }}" required="" maxlength="40">
         </div>
       </div>
     </div>
@@ -347,7 +347,7 @@
       </div>
     </div>
 
-    {% if package_type == "bundle" %}
+    {% if package.type == "bundle" %}
       <div class="row p-form__group p-form__group--top">
         <div class="col-2">
           <label for="bundle-topology" class="p-form__label">Bundle topology:</label>
@@ -389,7 +389,7 @@
           <label for="public-metrics-deployments">
             Deployments
           </label>
-          {% if package_type == "charm" %}
+          {% if package.type == "charm" %}
           <input type="checkbox" name="public_metrics_bundles" id="public-metrics-bundles" checked="checked">
           <label for="public-metrics-bundles">
             Number of bundles this charm is used within

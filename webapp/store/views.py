@@ -1,9 +1,12 @@
+from canonicalwebteam.discourse import DocParser
 from flask import Blueprint
 from flask import current_app as app
 from flask import render_template, request
 
 from webapp.config import DETAILS_VIEW_REGEX
+from webapp.helpers import discourse_api
 from webapp.store import logic
+from webapp.store.data import wordpress_charm
 
 from mistune import (
     Renderer,
@@ -11,17 +14,12 @@ from mistune import (
 )
 
 store = Blueprint(
-    "store",
-    __name__,
-    template_folder="/templates",
-    static_folder="/static",
+    "store", __name__, template_folder="/templates", static_folder="/static",
 )
 
 
 renderer = Renderer()
-parser = Markdown(
-    renderer=renderer,
-)
+parser = Markdown(renderer=renderer,)
 
 
 @store.route("/store")
@@ -63,7 +61,8 @@ def store_view():
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
 def details(entity_name):
     # Get entity info from API
-    package = app.store_api.get_item_details(entity_name)
+    # package = app.store_api.get_item_details(entity_name)
+    package = wordpress_charm
     package = logic.add_store_front_data(package)
 
     for channel in package["channel-map"]:
@@ -79,3 +78,27 @@ def details(entity_name):
         readme=readme,
         package_type=package["type"],
     )
+
+
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs')
+def package_docs(entity_name):
+    package = app.store_api.get_item_details(entity_name)
+    package = logic.add_store_front_data(package)
+
+    # Fake package discourse topic
+    package["docs_topic"] = 3394
+
+    docs = DocParser(
+        api=discourse_api,
+        index_topic_id=package["docs_topic"],
+        url_prefix=f"/{package['name']}/docs",
+    )
+    docs.parse()
+
+    context = {
+        "package": package,
+        "navigation": docs.navigation,
+        "body_html": docs.index_document["body_html"],
+    }
+
+    return render_template("details_docs.html", **context)
