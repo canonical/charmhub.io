@@ -1,5 +1,4 @@
 import { HistoryState } from "./historyState";
-import { Tabs } from "./tabs";
 import { TableOfContents } from "./tableOfContents";
 import { channelMap } from "./channelMap";
 
@@ -54,14 +53,6 @@ const init = (packageName) => {
   const docsEl = document.querySelector("[data-js='docs']");
   if (docsEl) {
     docs = new TableOfContents(docsEl, historyState);
-  }
-
-  const tabsEl = document.querySelector("[data-js='tabs']");
-  if (tabsEl) {
-    new Tabs(tabsEl, historyState, {
-      configuration,
-      docs,
-    });
   }
 
   const channelMapButton = document.querySelector("[data-js='channel-map']");

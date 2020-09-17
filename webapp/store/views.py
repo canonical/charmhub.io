@@ -9,7 +9,10 @@ from webapp.store import logic
 from webapp.store.data import wordpress_charm
 
 store = Blueprint(
-    "store", __name__, template_folder="/templates", static_folder="/static",
+    "store",
+    __name__,
+    template_folder="/templates",
+    static_folder="/static",
 )
 
 
@@ -50,7 +53,7 @@ def store_view():
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
-def details(entity_name):
+def details_overview(entity_name):
     # Get entity info from API
     # package = app.store_api.get_item_details(entity_name)
     package = wordpress_charm
@@ -61,11 +64,11 @@ def details(entity_name):
             channel["channel"]["released-at"]
         )
 
-    return render_template("details.html", package=package)
+    return render_template("details/overview.html", package=package)
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs')
-def package_docs(entity_name):
+def details_docs(entity_name):
     # package = app.store_api.get_item_details(entity_name)
     package = wordpress_charm
     package = logic.add_store_front_data(package)
@@ -86,4 +89,32 @@ def package_docs(entity_name):
         "body_html": docs.index_document["body_html"],
     }
 
-    return render_template("details_docs.html", **context)
+    return render_template("details/docs.html", **context)
+
+
+@store.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configuration'
+)
+def details_configuration(entity_name):
+    package = wordpress_charm
+    package = logic.add_store_front_data(package)
+
+    for channel in package["channel-map"]:
+        channel["channel"]["released-at"] = logic.convert_date(
+            channel["channel"]["released-at"]
+        )
+
+    return render_template("details/configuration.html", package=package)
+
+
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/history')
+def details_history(entity_name):
+    package = wordpress_charm
+    package = logic.add_store_front_data(package)
+
+    for channel in package["channel-map"]:
+        channel["channel"]["released-at"] = logic.convert_date(
+            channel["channel"]["released-at"]
+        )
+
+    return render_template("details/history.html", package=package)

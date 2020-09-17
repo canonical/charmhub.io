@@ -32,5 +32,10 @@
 {% endblock %}
 
 {% block page_scripts %}
-  {% include "docs/_scripts.html" %}
+  <script src="{{ versioned_static('js/dist/docs.js') }}" defer></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      charmhub.docs.initSideNav();
+    });
+  </script>
 {% endblock %}
