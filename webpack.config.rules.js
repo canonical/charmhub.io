@@ -20,6 +20,10 @@ module.exports = [
     use: ["expose-loader?exposes=charmhub.about", "babel-loader"],
   },
   {
+    test: require.resolve(__dirname + "/static/js/src/public/docs/index.js"),
+    use: ["expose-loader?exposes=charmhub.docs", "babel-loader"],
+  },
+  {
     test: require.resolve(__dirname + "/static/js/src/base/base.js"),
     use: ["expose-loader?exposes=charmhub.base", "babel-loader"],
   },
@@ -30,6 +34,12 @@ module.exports = [
   {
     test: require.resolve(__dirname + "/static/js/src/public/details/index.js"),
     use: ["expose-loader?exposes=charmhub.details", "babel-loader"],
+  },
+  {
+    test: require.resolve(
+      __dirname + "/static/js/src/public/details/docs/index.js"
+    ),
+    use: ["expose-loader?exposes=charmhub.details.docs", "babel-loader"],
   },
   {
     test: require.resolve(__dirname + "/static/js/src/publisher/list-page.js"),

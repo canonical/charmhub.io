@@ -1,4 +1,4 @@
-<script>
+function initSideNav() {
   var sideNav = document.getElementById("drawer");
   var path = window.location.pathname;
   var active = sideNav.querySelector(`a[href="${path}"]`);
@@ -15,11 +15,11 @@
   function toggleDrawer(sideNavigation, show) {
     if (sideNavigation) {
       if (show) {
-        sideNavigation.classList.remove('is-collapsed');
-        sideNavigation.classList.add('is-expanded');
+        sideNavigation.classList.remove("is-collapsed");
+        sideNavigation.classList.add("is-expanded");
       } else {
-        sideNavigation.classList.remove('is-expanded');
-        sideNavigation.classList.add('is-collapsed');
+        sideNavigation.classList.remove("is-expanded");
+        sideNavigation.classList.add("is-collapsed");
       }
     }
   }
@@ -29,15 +29,19 @@
     @param {HTMLElement} sideNavigation The side navigation element.
   */
   function setupSideNavigation(sideNavigation) {
-    var toggles = [].slice.call(sideNavigation.querySelectorAll('.js-drawer-toggle'));
+    var toggles = [].slice.call(
+      sideNavigation.querySelectorAll(".js-drawer-toggle")
+    );
 
     toggles.forEach(function (toggle) {
-      toggle.addEventListener('click', function (event) {
+      toggle.addEventListener("click", function (event) {
         event.preventDefault();
-        var sideNav = document.getElementById(toggle.getAttribute('aria-controls'));
+        var sideNav = document.getElementById(
+          toggle.getAttribute("aria-controls")
+        );
 
         if (sideNav) {
-          toggleDrawer(sideNav, !sideNav.classList.contains('is-expanded'));
+          toggleDrawer(sideNav, !sideNav.classList.contains("is-expanded"));
         }
       });
     });
@@ -58,4 +62,6 @@
       sideNav.scrollTop = offset;
     }, 0);
   }
-</script>
+}
+
+export { initSideNav };

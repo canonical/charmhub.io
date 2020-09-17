@@ -1,0 +1,46 @@
+{% set current_tab = "docs" %}
+
+{% extends '/details/details_layout.html' %}
+
+{% block tab_content %}
+  <div class="u-fixed-width">
+    {% if navigation and body_html %}
+      <div class="row u-no-padding--left u-no-padding--right">
+        <div class="col-3">
+          <nav class="p-side-navigation--raw-html" id="drawer">
+            <a href="#drawer" class="p-side-navigation__toggle js-drawer-toggle" aria-controls="drawer">
+              Toggle side navigation
+            </a>
+            <div class="p-side-navigation__overlay js-drawer-toggle" aria-controls="drawer"></div>
+            <div class="p-side-navigation__drawer">
+              <div class="p-side-navigation__drawer-header">
+                <a href="#" class="p-side-navigation__toggle--in-drawer js-drawer-toggle" aria-controls="drawer">
+                  Toggle side navigation
+                </a>
+              </div>
+              {{ navigation | safe }}
+            </div>
+          </nav>
+        </div>
+        <div class="col-9">
+          {{ body_html | safe }}
+        </div>
+      </div>
+    {% else %}
+      <div class="p-notification--information">
+        <p class="p-notification__response">
+          No documentation has been added yet.
+        </p>
+      </div>
+    {% endif %}
+  </div>
+{% endblock%}
+
+{% block page_scripts %}
+  <script src="{{ versioned_static('js/dist/details_docs.js') }}" defer></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      charmhub.details.docs.initSideNav();
+    });
+  </script>
+{% endblock %}
