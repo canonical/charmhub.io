@@ -102,6 +102,10 @@ $theme-default-nav: dark;
 
 @include p-charmhub-accordion;
 
+@import "charmhub_p-layout-store";
+
+@include p-charmhub-layout-store;
+
 @import "pattern_heading-icon";
 
 @include p-charmhub-heading-icon;
@@ -129,10 +133,6 @@ $theme-default-nav: dark;
 @import "charmhub_p-header";
 
 @include charmhub-p-header;
-
-@import "charmhub_p-store";
-
-@include charmhub-p-store;
 
 @import "charmhub_p-series-tag";
 
