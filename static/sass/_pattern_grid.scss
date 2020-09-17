@@ -3,26 +3,6 @@
     grid-gap: 2rem;
   }
 
-  @media (min-width: 1150px) {
-    .row {
-      &.is-large-12 {
-        grid-template-columns: repeat(12, minmax(0, 1fr));
-      }
-
-      &.is-large-16 {
-        grid-template-columns: repeat(16, minmax(0, 1fr));
-
-        .col-large-12 {
-          grid-column-end: span 12;
-        }
-
-        .col-start-5 {
-          grid-column-start: 5;
-        }
-      }
-    }
-  }
-
   .col-x-small-1 {
     @media (max-width: 450px) {
       grid-column-end: span 4;

@@ -1,4 +1,4 @@
-<div class="col-3">
+<div class="p-layout__sidenav">
   <div class="p-filter" data-js="filter-handler">
     <div class="p-filter__title" data-filters="applied-filters">
       Filters
@@ -42,42 +42,35 @@
     </form>
   </div>
 </div>
-<div class="col-9 col-large-12 col-start-5">
-  <div class="row">
-    <div class="col-3 p-store__items-left">
-      <div class="p-store__text p-muted-heading" data-js="filtered-items">
+
+<div class="p-layout__main">
+  <div class="p-layout__filter-container">
+    <div class="p-layout__left">
+      <div class="p-muted-heading" data-js="filtered-items">
         {{ results|length }} items
       </div>
-      <div class="p-store__sort-mobile">
+      <div class="p-layout__sort-mobile">
         <a href="/store" data-js="mobile-sort-reveal-button" class="has-icon p-store__button"><i class="p-icon--sort"></i>Sort by</a>
         <a href="/store" data-js="mobile-filter-reveal-button" class="has-icon p-store__button"><i class="p-icon--filter"></i>Filters</a>
       </div>
     </div>
-    <div class="col-6 p-store__items-right">
-      <form class="p-search-box p-store__search" data-js="search-handler">
+    <div class="p-layout__right">
+      <form class="p-search-box p-layout__search" data-js="search-handler">
         <input type="search" class="p-search-box__input" name="q" placeholder="Search" {% if q %}value="{{ q }}" {% endif %} />
         <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search"></i></button>
       </form>
-      <div class="p-store__sort-desktop p-form__group">
+      <div class="p-layout__sort-desktop p-form__group">
         <label for="sort" aria-label="Sort resources" class="p-form__label">Sort by</label>
         <select name="sort" data-js="sort-handler" class="p-form__control" value="{{ sort }}" id="sort">
           <option value="name-asc" {% if active_filter('sort', 'name-asc') %}selected{% endif %}>Name A/Z</option>
           <option value="name-desc" {% if active_filter('sort', 'name-desc') %}selected{% endif %}>Name Z/A</option>
-          {#<option value="most-popular">Most popular</option>#}
-          {#<option value="publisher">Publisher</option>#}
         </select>
       </div>
     </div>
   </div>
-  <div class="row has-small-gap is-large-12" data-js="card-container">
+  <div class="p-layout__card-container" data-js="card-container">
     {% include "partial/_topic-cards.html" %}
     {% if results %}
-      {% for package in results %}
-        {% include "partial/_entity-card.html" %}
-      {% endfor %}
-      {% for package in results %}
-        {% include "partial/_entity-card.html" %}
-      {% endfor %}
       {% for package in results %}
         {% include "partial/_entity-card.html" %}
       {% endfor %}

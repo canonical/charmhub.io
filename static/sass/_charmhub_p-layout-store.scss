@@ -1,0 +1,111 @@
+@mixin p-charmhub-layout-store {
+  .p-layout--store {
+    display: flex;
+    max-width: $grid-max-width;
+
+    .p-layout__sidenav {
+      @media screen and(min-width: $breakpoint-medium) {
+        margin-inline-end: 2rem;
+        min-width: 13.5rem;
+        width: 13.5rem;
+      }
+    }
+
+    .p-layout__filter-container {
+      align-items: center;
+      display: flex;
+
+      .p-layout__left {
+        width: 25%;
+      }
+
+      .p-layout__right {
+        display: flex;
+        justify-content: flex-end;
+        width: 75%;
+      }
+
+      .p-layout__search {
+        margin-inline-end: $spv-inner--large;
+        width: 100%;
+      }
+
+      .p-layout__sort-desktop {
+        display: flex;
+
+        .p-form__label {
+          min-width: 3.5rem;
+        }
+
+        .p-form__control {
+          min-width: 8rem;
+          width: 8rem;
+        }
+      }
+
+      .p-layout__sort-mobile {
+        display: none;
+      }
+
+      @media screen and (max-width: $breakpoint-medium - 1) {
+        flex-direction: column-reverse;
+
+        .p-layout__left {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+        }
+
+        .p-layout__right {
+          width: 100%;
+        }
+
+        .p-layout__search {
+          margin-inline-end: 0;
+        }
+
+        .p-layout__sort-mobile {
+          display: block;
+        }
+
+        .p-layout__sort-desktop {
+          display: none;
+        }
+      }
+
+      @media screen and(min-width: 926px) and(max-width: 1150px) {
+        .p-layout__left {
+          width: 33.33%;
+        }
+
+        .p-layout__right {
+          width: 66.67%;
+        }
+      }
+    }
+
+    .p-layout__card-container {
+      display: flex;
+      flex-wrap: wrap;
+      margin-inline-end: -1rem;
+    }
+
+    .p-layout__card {
+      padding-block-end: 1rem;
+      padding-inline-end: 1rem;
+      width: 25%;
+
+      @media screen and(min-width: 926px) and(max-width: 1150px) {
+        width: 33.33%;
+      }
+
+      @media screen and(min-width: $breakpoint-x-small - 1) and(max-width: 925px) {
+        width: 50%;
+      }
+
+      @media screen and(max-width: $breakpoint-x-small) {
+        width: 100%;
+      }
+    }
+  }
+}
