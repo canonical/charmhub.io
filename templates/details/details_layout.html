@@ -1,0 +1,22 @@
+{% extends 'base_layout.html' %}
+
+{% block meta_description %}Charm Hub: The app store for clouds{% endblock %}
+
+{% block content %}
+  {% include "details/_details-header.html" %}
+  {% include "details/_details-tabs.html" %}
+
+  <div class="p-strip is-deep u-no-padding--top">
+    {% block tab_content %} {% endblock %}
+  </div>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ versioned_static('js/dist/details.js') }}" defer></script>
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    //charmhub.details.tabs("[data-js='tabs']");
+    charmhub.details.init("{{ package.name }}");
+  });
+</script>
+{% endblock %}
