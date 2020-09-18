@@ -81,24 +81,39 @@ def details_overview(entity_name):
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs')
-def package_docs(entity_name):
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs/<slug>')
+def details_docs(entity_name, slug=None):
     package = app.store_api.get_item_details(entity_name)
     package = logic.add_store_front_data(package)
+    docs_url_prefix = f"/{package['name']}/docs"
 
     # Fake package discourse topic
-    package["docs_topic"] = 3394
+    package["docs_topic"] = 3568
 
     docs = DocParser(
         api=discourse_api,
         index_topic_id=package["docs_topic"],
-        url_prefix=f"/{package['name']}/docs",
+        url_prefix=docs_url_prefix,
     )
     docs.parse()
+    body_html = docs.index_document["body_html"]
+
+    if slug:
+        topic_id = docs.resolve_path(slug)
+        # topic = docs.api.get_topic(topic_id)
+        # body_html = docs.parse_topic(topic)
+        slug_docs = DocParser(
+            api=discourse_api,
+            index_topic_id=topic_id,
+            url_prefix=docs_url_prefix,
+        )
+        slug_docs.parse()
+        body_html = slug_docs.index_document["body_html"]
 
     context = {
         "package": package,
         "navigation": docs.navigation,
-        "body_html": docs.index_document["body_html"],
+        "body_html": body_html,
     }
 
     return render_template("details/docs.html", **context)

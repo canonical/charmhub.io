@@ -16,6 +16,16 @@ env:
   - name: CANDID_API_URL
     value: https://api.staging.jujucharms.com/identity/
 
+  - name: DISCOURSE_API_KEY
+    secretKeyRef:
+      key: discourse-api-key
+      name: charmhub-io
+
+  - name: DISCOURSE_API_USERNAME
+    secretKeyRef:
+      key: discourse-api-username
+      name: charmhub-io
+
   - name: LOGIN_LAUNCHPAD_TEAM
     value: canonical
 
