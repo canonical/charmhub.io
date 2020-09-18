@@ -9,7 +9,10 @@ from webapp.store import logic
 from webapp.store.data import wordpress_charm
 
 store = Blueprint(
-    "store", __name__, template_folder="/templates", static_folder="/static",
+    "store",
+    __name__,
+    template_folder="/templates",
+    static_folder="/static",
 )
 
 
@@ -83,6 +86,8 @@ def details_docs(entity_name, slug=None):
     docs.parse()
     body_html = docs.index_document["body_html"]
 
+    topic_url = f'{docs.api.base_url}{docs.index_document["topic_path"]}'
+
     if slug:
         topic_id = docs.resolve_path(slug)
         # topic = docs.api.get_topic(topic_id)
@@ -94,11 +99,16 @@ def details_docs(entity_name, slug=None):
         )
         slug_docs.parse()
         body_html = slug_docs.index_document["body_html"]
+        topic_url = (
+            f'{docs.api.base_url}{slug_docs.index_document["topic_path"]}'
+        )
 
     context = {
         "package": package,
         "navigation": docs.navigation,
         "body_html": body_html,
+        "last_update": docs.index_document["updated"],
+        "topic_url": topic_url,
     }
 
     return render_template("details/docs.html", **context)
