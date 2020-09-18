@@ -116,10 +116,6 @@ $theme-default-nav: dark;
 
 @include charmhub-p-bundle-icons;
 
-@import "charmhub_p-separator";
-
-@include p-charmhub-separator;
-
 @import "charmhub_footer";
 
 @include charmhub-p-footer;

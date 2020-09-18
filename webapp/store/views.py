@@ -86,7 +86,7 @@ def details_docs(entity_name, slug=None):
     docs.parse()
     body_html = docs.index_document["body_html"]
 
-    topic_url = f'{docs.api.base_url}{docs.index_document["topic_path"]}'
+    topic_path = docs.index_document["topic_path"]
 
     if slug:
         topic_id = docs.resolve_path(slug)
@@ -99,16 +99,15 @@ def details_docs(entity_name, slug=None):
         )
         slug_docs.parse()
         body_html = slug_docs.index_document["body_html"]
-        topic_url = (
-            f'{docs.api.base_url}{slug_docs.index_document["topic_path"]}'
-        )
+        topic_path = slug_docs.index_document["topic_path"]
 
     context = {
         "package": package,
         "navigation": docs.navigation,
         "body_html": body_html,
         "last_update": docs.index_document["updated"],
-        "topic_url": topic_url,
+        "forum_url": docs.api.base_url,
+        "topic_path": topic_path,
     }
 
     return render_template("details/docs.html", **context)
