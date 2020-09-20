@@ -29,7 +29,7 @@ def convert_channel_maps(channel_map):
     channel_map_restruct = {}
 
     for channel in channel_map:
-        track = channel.get("channel").get("track")
+        track = channel.get("channel").get("track", "latest")
         risk = channel.get("channel").get("risk")
 
         if track not in channel_map_restruct:
@@ -39,7 +39,7 @@ def convert_channel_maps(channel_map):
             channel_map_restruct[track][risk] = []
 
         info = {
-            "created_at": convert_date(channel["revision"]["created-at"]),
+            # "released_at": convert_date(channel["released-at"]),
             "version": channel["revision"]["version"],
             "channel": channel["channel"]["name"],
             "risk": channel["channel"]["risk"],
@@ -109,7 +109,7 @@ def get_categories(categories_json):
 def add_store_front_data(package):
     extra = {}
     extra["icons"] = get_icons(package)
-    extra["categories"] = get_categories(package["result"]["categories"])
+    # extra["categories"] = get_categories(package["result"]["categories"])
     extra["publisher_name"] = package["result"]["publisher"]["display-name"]
     extra["last_release"] = convert_date(
         package["default-release"]["channel"]["released-at"]
