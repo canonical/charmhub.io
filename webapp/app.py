@@ -1,16 +1,16 @@
+import talisker.requests
 from canonicalwebteam.flask_base.app import FlaskBase
 from canonicalwebteam.store_api.stores.charmstore import CharmStore
 from flask import make_response, redirect, render_template, request, session
 
 from webapp import authentication, config
+from webapp.docs.views import init_docs
+from webapp.extensions import csrf
 from webapp.handlers import set_handlers
 from webapp.login.views import login
-from webapp.store.views import store
-from webapp.docs.views import init_docs
-from webapp.tutorials.views import init_tutorials
 from webapp.publisher.views import publisher
-from webapp.extensions import csrf
-
+from webapp.store.views import store
+from webapp.tutorials.views import init_tutorials
 
 app = FlaskBase(
     __name__,
@@ -20,7 +20,7 @@ app = FlaskBase(
     template_404="404.html",
     template_500="500.html",
 )
-app.store_api = CharmStore()
+app.store_api = CharmStore(session=talisker.requests.get_session())
 
 set_handlers(app)
 csrf.init_app(app)
