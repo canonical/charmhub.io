@@ -6,7 +6,6 @@ from flask import render_template, request
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.helpers import discourse_api
 from webapp.store import logic
-from webapp.store.data import wordpress_charm
 
 from mistune import (
     Renderer,
@@ -63,8 +62,7 @@ def store_view():
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
 def details_overview(entity_name):
     # Get entity info from API
-    # package = app.store_api.get_item_details(entity_name)
-    package = wordpress_charm
+    package = app.store_api.get_item_details(entity_name)
     package = logic.add_store_front_data(package)
 
     for channel in package["channel-map"]:
@@ -131,7 +129,7 @@ def details_docs(entity_name, slug=None):
     '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configuration'
 )
 def details_configuration(entity_name):
-    package = wordpress_charm
+    package = app.store_api.get_item_details(entity_name)
     package = logic.add_store_front_data(package)
 
     for channel in package["channel-map"]:
@@ -144,7 +142,7 @@ def details_configuration(entity_name):
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/history')
 def details_history(entity_name):
-    package = wordpress_charm
+    package = app.store_api.get_item_details(entity_name)
     package = logic.add_store_front_data(package)
 
     for channel in package["channel-map"]:
