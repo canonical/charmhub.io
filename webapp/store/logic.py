@@ -2,7 +2,7 @@ import datetime
 
 import humanize
 from dateutil import parser
-from webapp.helpers import get_yaml_loader
+from webapp.helpers import get_yaml_loader, format_slug
 
 
 yaml = get_yaml_loader()
@@ -80,19 +80,6 @@ def get_icons(package):
     return [m["url"] for m in media if m["type"] == "icon"]
 
 
-def format_category_name(slug):
-    """Format category name into a standard title format
-    :param slug: The hypen spaced, lowercase slug to be formatted
-    :return: The formatted string
-    """
-    return (
-        slug.title()
-        .replace("-", " ")
-        .replace("And", "and")
-        .replace("Iot", "IoT")
-    )
-
-
 def get_categories(categories_json):
     """Retrieve and flatten the nested array from the legacy API response.
     :param categories_json: The returned json
@@ -102,9 +89,7 @@ def get_categories(categories_json):
     categories = []
 
     for category in categories_json:
-        categories.append(
-            {"slug": category, "name": format_category_name(category)}
-        )
+        categories.append({"slug": category, "name": format_slug(category)})
 
     return categories
 

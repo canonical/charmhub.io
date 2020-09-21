@@ -12,7 +12,7 @@
           </div>
           <div class="p-media-object__details">
             <h1 class="p-media-object__title">
-              {{ package.name }}
+              {{ format_slug(package.name) }}
             </h1>
             <div class="p-media-object__content u-no-margin--bottom">
               <ul class="p-inline-list--middot">
@@ -27,7 +27,7 @@
                 </li>
                 {% if package.store_front.categories %}
                 <li class="p-inline-list__item">
-                    <a href="/">{{ package.store_front.categories[0].name }}</a>
+                  <a href="/">{{ package.store_front.categories[0].name }}</a>
                 </li>
                 {% endif %}
               </ul>
