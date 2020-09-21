@@ -5,6 +5,9 @@ from dateutil import parser
 from webapp.helpers import get_yaml_loader
 
 
+yaml = get_yaml_loader()
+
+
 def get_banner_url(media):
     """
     Get banner url from media object
@@ -106,25 +109,20 @@ def get_categories(categories_json):
     return categories
 
 
-def _parse_metadata_yaml(metadata):
-    """Parse metadata docs string
-
-    Args:
-        metadata (string): A valid matadata.yaml string
-    """
-    yaml = get_yaml_loader()
-    content = yaml.load(metadata)
-    return content
-
-
 def add_store_front_data(package):
     extra = {}
     extra["icons"] = get_icons(package)
-    metadata = _parse_metadata_yaml(
+    extra["metadata"] = yaml.load(
         package["default-release"]["revision"]["metadata-yaml"]
     )
-    tags = metadata.get("tags")
+    extra["config"] = yaml.load(
+        package["default-release"]["revision"]["config-yaml"]
+    )
+
+    # Use tags as categories
+    tags = extra["metadata"].get("tags")
     extra["categories"] = get_categories(tags) if tags else []
+
     extra["publisher_name"] = package["result"]["publisher"]["display-name"]
     extra["last_release"] = convert_date(
         package["default-release"]["channel"]["released-at"]
