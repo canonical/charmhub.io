@@ -47,7 +47,7 @@ def before_request():
 
 @app.route("/overview")
 def overview():
-    return render_template("holding.html")
+    return render_template("overview.html")
 
 
 @app.route("/topics/kubernetes")
