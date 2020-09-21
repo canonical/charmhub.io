@@ -132,11 +132,6 @@ def details_configuration(entity_name):
     package = app.store_api.get_item_details(entity_name)
     package = logic.add_store_front_data(package)
 
-    for channel in package["channel-map"]:
-        channel["channel"]["released-at"] = logic.convert_date(
-            channel["channel"]["released-at"]
-        )
-
     return render_template("details/configuration.html", package=package)
 
 
@@ -144,10 +139,5 @@ def details_configuration(entity_name):
 def details_history(entity_name):
     package = app.store_api.get_item_details(entity_name)
     package = logic.add_store_front_data(package)
-
-    for channel in package["channel-map"]:
-        channel["channel"]["released-at"] = logic.convert_date(
-            channel["channel"]["released-at"]
-        )
 
     return render_template("details/history.html", package=package)

@@ -3,5 +3,45 @@
 {% extends '/details/details_layout.html' %}
 
 {% block tab_content %}
+<div class="row p-tabs__content" id="configuration">
+  <div class="row">
+    {% if package.store_front.config.options %}
+    <div class="col-3">
+      <div class="p-side-navigation" data-js="{{ section_slug }}">
+        <ul class="p-side-navigation__list">
+          <li class="p-side-navigation__item--title">
+            <span class="p-side-navigation__text">Contents</span>
+          </li>
 
+          {% for config in package.store_front.config.options.keys() %}
+          <li class="p-side-navigation__item">
+            <a href="#{{ config }}" class="p-side-navigation__link" role="tab" aria-controls="{{ config }}" {% if loop.index == 1 %}aria-selected="false"{% endif %}>
+            {{ config }}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="col-7 col-start-large-5">
+      <ul class="p-list--divided">
+      {% for key, value in package.store_front.config.options.items() %}
+        <li class="p-list__item" id="{{ key }}">
+          <p><strong>{{ key }}</strong></p>
+          <p><strong>Type:</strong> {{ value.type }}</p>
+          {% if value.default %}
+          <p><strong>Default:</strong> {{ value.default }}</p>
+          {% endif %}
+          <p>{{ value.description | safe }}</p>
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
+    {% else %}
+      <div class="col-12">
+        <p>EMPTY STATE</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
 {% endblock%}
