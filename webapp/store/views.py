@@ -1,9 +1,9 @@
 from canonicalwebteam.discourse import DocParser
 from flask import Blueprint
 from flask import current_app as app
-from flask import render_template, request, session
+from flask import make_response, render_template, request, session
 
-from webapp import authentication, config
+from webapp import authentication
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.helpers import discourse_api
 from webapp.store import logic
