@@ -16,16 +16,21 @@
     <strong>Counterpart.</strong> A unit of the application across a relation.
   </p>
   <p>
-    <strong>Epoch.</strong> A generation of charm versions that is compatible with particular local data storage. Over time, a charm author may decide to change the way it stores local data &mdash; for example, it might switch from a flat file configuration to a key&ndash;value database for resiliency, and those would then be two generations &ndash; epochs &ndash; of the charm. A charm can support multiple epochs, and this provides the mechanism for upgrades over epochs. The deployment will be upgraded to the newest charm that supports both its current epoch and the next epoch, so that conversions can take place, before upgrading to the newest charm of the next epoch.
+    <strong>Epoch.</strong> A generation of charm versions that is compatible with particular local data storage. Over time, a charm author may decide to change the way it stores local data &ndash; for example, it might switch from a flat file configuration to a key&dash;value database for resiliency, and those would then be two generations &ndash; epochs &ndash; of the charm. A charm can support multiple epochs, and this provides the mechanism for upgrades over epochs. The deployment will be upgraded to the newest charm that supports both its current epoch and the next epoch, so that conversions can take place, before upgrading to the newest charm of the next epoch.
+  <p>
+    <strong>Juju.</strong> The lifecycle manager for operators, which handles event delivery and responds to model changes from administrators.
+  </p>
+  <p>
+    <strong>Operator Lifecycle Manager.</strong> The model&dash;driven operator modelling and event distribution system which coordinates activity across multiple operators in a single model.
   </p>
   <p>
     <strong>Peer.</strong> A unit of the same application as this one.
   </p>
   <p>
-    <strong>Relation.</strong> A line of integration between two applications, defined by the endpoints on each application, and typed by the interface of those endpoints with one end being the provider and the other the requirer.
+    <strong>Relation.</strong> A line of integration between two applications, defined by the endpoints on each application which must have matching type, with one being inbound and the other outbound.
   </p>
   <p>
-    <strong>Unit.</strong> A single instantiation of a piece of software. For example, in a high&ndash;availability database, it would be common to have two units, one of which is active and the other which is a standby. Together, those two units form the <i>application</i>.
+    <strong>Unit.</strong> A single instantiation of a piece of software. For example, in a high&dash;availability database, it would be common to have two units, one of which is active and the other a standby. Together, those two units form the <i>application</i>.
   </p>
   <p>
     <strong>Workload.</strong> The application that is driven by the operator.
