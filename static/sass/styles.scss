@@ -229,3 +229,7 @@ body {
 .has-no-arrow-mobile.p-tabs::after {
   content: "";
 }
+
+.global-nav .has-dropdown .global-nav__header-link-anchor {
+  display: none;
+}
