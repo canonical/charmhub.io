@@ -1,15 +1,34 @@
-import os
 import datetime
 import json
+import os
 
 import humanize
 from canonicalwebteam.discourse import DiscourseAPI
 from dateutil import parser
 from flask import request
+from ruamel.yaml import YAML
 from talisker import requests
 
 DISCOURSE_API_KEY = os.getenv("DISCOURSE_API_KEY")
 DISCOURSE_API_USERNAME = os.getenv("DISCOURSE_API_USERNAME")
+
+
+session = requests.get_session()
+discourse_api = DiscourseAPI(
+    base_url="https://discourse.juju.is/",
+    session=session,
+    api_key=DISCOURSE_API_KEY,
+    api_username=DISCOURSE_API_USERNAME,
+)
+
+_yaml = YAML(typ="rt")
+_yaml_safe = YAML(typ="safe")
+
+
+def get_yaml_loader(typ="safe"):
+    if typ == "safe":
+        return _yaml_safe
+    return _yaml
 
 
 def split_filters(filters):
@@ -135,12 +154,3 @@ def get_licenses():
         licenses = []
 
     return licenses
-
-
-session = requests.get_session()
-discourse_api = DiscourseAPI(
-    base_url="https://discourse.juju.is/",
-    session=session,
-    api_key=DISCOURSE_API_KEY,
-    api_username=DISCOURSE_API_USERNAME,
-)

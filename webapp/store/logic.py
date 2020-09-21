@@ -2,6 +2,7 @@ import datetime
 
 import humanize
 from dateutil import parser
+from webapp.helpers import get_yaml_loader
 
 
 def get_banner_url(media):
@@ -29,7 +30,7 @@ def convert_channel_maps(channel_map):
     channel_map_restruct = {}
 
     for channel in channel_map:
-        track = channel.get("channel").get("track", "latest")
+        track = channel.get("channel").get("track")
         risk = channel.get("channel").get("risk")
 
         if track not in channel_map_restruct:
@@ -39,7 +40,7 @@ def convert_channel_maps(channel_map):
             channel_map_restruct[track][risk] = []
 
         info = {
-            # "released_at": convert_date(channel["released-at"]),
+            "created_at": convert_date(channel["revision"]["created-at"]),
             "version": channel["revision"]["version"],
             "channel": channel["channel"]["name"],
             "risk": channel["channel"]["risk"],
@@ -96,9 +97,8 @@ def get_categories(categories_json):
     """
 
     categories = []
-    category_names = [cat["name"] for cat in categories_json]
 
-    for category in category_names:
+    for category in categories_json:
         categories.append(
             {"slug": category, "name": format_category_name(category)}
         )
@@ -106,17 +106,30 @@ def get_categories(categories_json):
     return categories
 
 
+def _parse_metadata_yaml(metadata):
+    """Parse metadata docs string
+
+    Args:
+        metadata (string): A valid matadata.yaml string
+    """
+    yaml = get_yaml_loader()
+    content = yaml.load(metadata)
+    return content
+
+
 def add_store_front_data(package):
     extra = {}
     extra["icons"] = get_icons(package)
-    # extra["categories"] = get_categories(package["result"]["categories"])
+    metadata = _parse_metadata_yaml(
+        package["default-release"]["revision"]["metadata-yaml"]
+    )
+    tags = metadata.get("tags")
+    extra["categories"] = get_categories(tags) if tags else []
     extra["publisher_name"] = package["result"]["publisher"]["display-name"]
     extra["last_release"] = convert_date(
         package["default-release"]["channel"]["released-at"]
     )
     extra["summary"] = package["result"]["summary"]
-    if package.get("channel-map"):
-        extra["channel_map"] = convert_channel_maps(package["channel-map"])
     package["store_front"] = extra
 
     return package
