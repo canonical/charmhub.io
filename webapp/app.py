@@ -1,7 +1,7 @@
 import talisker.requests
 from canonicalwebteam.flask_base.app import FlaskBase
 from canonicalwebteam.store_api.stores.charmstore import CharmStore
-from flask import make_response, redirect, render_template, request, session
+from flask import redirect, render_template, request, session
 
 from webapp import authentication, config
 from webapp.docs.views import init_docs
@@ -39,21 +39,15 @@ def before_request():
         session
     ) and not (
         request.endpoint.startswith("login")
-        or request.endpoint.startswith("index")
+        or request.endpoint.startswith("store.index")
         or request.endpoint.startswith("static")
     ):
         return redirect("/login?next=" + request.path)
 
 
 @app.route("/overview")
-def index():
-    if authentication.is_canonical_employee_authenticated(session):
-        response = make_response(render_template("index.html"))
-    else:
-        response = make_response(render_template("holding.html"))
-
-    # Temporal fix to avoid cache since this page could return two versions
-    return response
+def overview():
+    return render_template("holding.html")
 
 
 @app.route("/topics/kubernetes")
