@@ -14,15 +14,14 @@ from mistune import (
 )
 
 store = Blueprint(
-    "store",
-    __name__,
-    template_folder="/templates",
-    static_folder="/static",
+    "store", __name__, template_folder="/templates", static_folder="/static"
 )
 
 
 renderer = Renderer()
-parser = Markdown(renderer=renderer,)
+parser = Markdown(
+    renderer=renderer,
+)
 
 
 @store.route("/store")
