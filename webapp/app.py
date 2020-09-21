@@ -67,21 +67,21 @@ def about():
     return render_template("about/index.html")
 
 
-@app.route("/about/manifesto")
+@app.route("/manifesto")
 def manifesto():
     return render_template("about/manifesto.html")
 
 
-@app.route("/about/publishing")
+@app.route("/publishing")
 def publishing():
     return render_template("about/publishing.html")
 
 
-@app.route("/about/governance")
+@app.route("/governance")
 def governance():
     return render_template("about/governance.html")
 
 
-@app.route("/about/glossary")
+@app.route("/glossary")
 def glossary():
     return render_template("about/glossary.html")
