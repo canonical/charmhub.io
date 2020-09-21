@@ -5,11 +5,22 @@ from flask import render_template, request
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.store import logic
 
+from mistune import (
+    Renderer,
+    Markdown,
+)
+
 store = Blueprint(
     "store",
     __name__,
     template_folder="/templates",
     static_folder="/static",
+)
+
+
+renderer = Renderer()
+parser = Markdown(
+    renderer=renderer,
 )
 
 
@@ -60,8 +71,11 @@ def details(entity_name):
             channel["channel"]["released-at"]
         )
 
-    # Put the information in a generic key for cleaner templates
+    readme = parser(package["default-release"]["revision"]["readme-md"])
 
     return render_template(
-        "details.html", package=package, package_type=package["type"]
+        "details.html",
+        package=package,
+        readme=readme,
+        package_type=package["type"],
     )

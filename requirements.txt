@@ -7,3 +7,4 @@ Flask-OpenID-Stateless==1.2.6
 Flask-WTF==0.14.3
 humanize==2.6.0
 pymacaroons==0.13.0
+mistune==0.8.4
