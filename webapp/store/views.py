@@ -34,34 +34,33 @@ def index():
     query = request.args.get("q", default=None, type=str)
     sort = request.args.get("sort", default="sort-asc", type=str)
 
+    fields = ["categories", "summary", "media", "name", "publisher"]
     if query:
-        results = app.store_api.find(query=query).get("results", [])
+        results = app.store_api.find(query=query, fields=fields).get("results")
     else:
-        results = app.store_api.find().get("results", [])
+        results = app.store_api.find(fields=fields).get("results", [])
 
     for i, item in enumerate(results):
         results[i]["store_front"] = {}
-        results[i]["store_front"]["icons"] = None
+        for media in results[i]["result"]["media"]:
+            if media["type"] == "icon":
+                results[i]["store_front"]["icon"] = media["url"]
+                break
+
         results[i]["store_front"]["categories"] = [
             {"name": "No Category", "slug": "no-cat"}
         ]
-        results[i]["store_front"]["publisher_name"] = "Publisher"
 
     categories = []
-    publisher_list = []
     for result in results:
         for category in result["store_front"]["categories"]:
             if category not in categories:
                 categories.append(category)
-        if result["store_front"]["publisher_name"] not in publisher_list:
-            publisher_list.append(result["store_front"]["publisher_name"])
 
     sorted_categories = sorted(categories, key=lambda k: k["slug"])
-    sorted_publisher_list = sorted(publisher_list)
 
     context = {
         "categories": sorted_categories,
-        "publisher_list": sorted_publisher_list,
         "sort": sort,
         "q": query,
         "results": results,
