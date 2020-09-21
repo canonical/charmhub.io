@@ -1,7 +1,7 @@
 <button class="p-button--neutral u-no-margin--bottom" data-controls="channel-map-versions"
         aria-controls="channel-map-versions" data-js="channel-map">
   <span data-js="channel-map-selected">
-    {{ package["channel-map"][0].channel.name }} {{package["channel-map"][0].revision.version }}
+    {{ package["default-release"].channel.name }} {{ package["default-release"].revision.version }}
   </span>
   &nbsp;&nbsp;<i class="p-icon--contextual-menu"></i>
 </button>
@@ -30,19 +30,21 @@
           </tr>
         </thead>
         <tbody>
-          {% for channel in package["channel-map"] %}
-          <tr data-channel-map-channel="{{ channel.channel.name }}" data-channel-map-version="{{ channel.revision.version }}">
-            <td>{{ channel.channel.name }}</td>
-            <td>{{ channel.revision.version }}</td>
-            <td>{{ channel.channel["released-at"] }}</td>
+          {% for track, track_data in package.store_front.channel_map.items() %}
+          {% for channel, channel_data in track_data.items() %}
+          <tr data-channel-map-channel="{{ channel }}" data-channel-map-version="{{ channel_data.version }}">
+            <td>{{ track }}/{{ channel }}</td>
+            <td>{{ channel_data[0].version }}</td>
+            <td>{{ channel_data[0].released_at }}</td>
             <td>
               <div class="series-tags u-no-margin--top">
-                {% for platform in channel.revision.platforms %}
-                <span class="series-tag">{{ platform.series }}</span>
+                {% for data in channel_data %}
+                <span class="series-tag">{{ data.platform }}</span>
                 {% endfor %}
               </div>
             </td>
           </tr>
+          {% endfor %}
           {% endfor %}
         </tbody>
       </table>

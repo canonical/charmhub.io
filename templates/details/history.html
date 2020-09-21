@@ -9,25 +9,18 @@
       <thead>
         <tr role="row">
           <th>Date</th>
-          <th class="u-align--right">hadoop slave (charm)</th>
-          <th class="u-align--right">Jdk</th>
-          <th class="u-align--right">Imagery</th>
-          <th class="u-align--right">Translations</th>
+          <th class="u-align--right">Version</th>
         </tr>
       </thead>
       <tbody>
         {% for release in package.store_front.channel_map["latest"]["stable"] %}
         <tr role="row">
-          <td role="rowheader" aria-label="Date">{{ release.created_at }}</td>
-          <td role="gridcell" aria-label="hadoop slave (charm)" class="u-align--right">N/A</td>
-          <td role="gridcell" aria-label="Jdk" class="u-align--right">N/A</td>
-          <td role="gridcell" aria-label="Imagery" class="u-align--right">N/A</td>
-          <td role="gridcell" aria-label="Translations" class="u-align--right">N/A</td>
+          <td role="rowheader" aria-label="Date">{{ release.released_at }}</td>
+          <td role="gridcell" aria-label="Version" class="u-align--right">{{ release.version }}</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
-    <!-- TO DO - add functionality -->
     <p><a href="#">View more ‘latest/stable’ history</a></p>
   </div>
 {% endblock%}
