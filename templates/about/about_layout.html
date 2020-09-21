@@ -4,7 +4,7 @@
 <h1 class="u-off-screen">About Open Operators Collection</h1>
 <section class="p-strip--main">
   <div class="row">
-    <div class="col-2">
+    <div class="col-3">
       <div class="p-side-navigation" id="drawer">
         <a href="#drawer" class="p-side-navigation__toggle js-drawer-toggle" aria-controls="drawer">
           Toggle side navigation
@@ -22,6 +22,26 @@
           <ul class="p-side-navigation__list">
             <li class="p-side-navigation__item">
               <a class="p-side-navigation__link{% if request.path == '/about' %} is-active{% endif %}" href="/about">About</a>
+              <ul class="p-side-navigation__list">
+                <li class="p-side-navigation__item">
+                  <a class="p-side-navigation__link" href="/about#what-is-kubernetes-operator">What is a Kubernetes Operator?</a>
+                </li>
+                <li class="p-side-navigation__item">
+                  <a class="p-side-navigation__link" href="/about#what-is-the-open-operator-collection">What is the Open Operator Collection?</a>
+                </li>
+                <li class="p-side-navigation__item">
+                  <a class="p-side-navigation__link" href="/about#what-is-an-operator-lifecycle-manager">What is an Operator Lifecycle Manager?</a>
+                </li>
+                <li class="p-side-navigation__item">
+                  <a class="p-side-navigation__link" href="/about#what-is-devsecops">What is devsecops?</a>
+                </li>
+                <li class="p-side-navigation__item">
+                  <a class="p-side-navigation__link" href="/about#what-is-a-charm">What is a charm?</a>
+                </li>
+                <li class="p-side-navigation__item">
+                  <a class="p-side-navigation__link" href="/about#how-do-operators-handle-integration">How do operators handle integration?</a>
+                </li>
+              </ul>
             </li>
             <li class="p-side-navigation__item ">
               <a class="p-side-navigation__link{% if request.path == '/about/manifesto' %} is-active{% endif %}" href="/about/manifesto">Manifesto</a>
