@@ -18,6 +18,9 @@ const init = (packageName, channelMapButton) => {
   const channelMapFilter = channelMap.querySelector(
     "[data-js='channel-map-filter']"
   );
+  const channelsToBeFiltered = channelMap.querySelectorAll(
+    "[data-channel-map-filter]"
+  );
 
   const selectChannel = (channel, version) => {
     const selected = document.querySelector(
@@ -95,10 +98,6 @@ const init = (packageName, channelMapButton) => {
   });
 
   channelMapFilter.addEventListener("change", (e) => {
-    const channelsToBeFiltered = channelMap.querySelectorAll(
-      "[data-channel-map-filter]"
-    );
-
     channelsToBeFiltered.forEach((el) => {
       if (
         el.getAttribute("data-channel-map-filter").includes(e.target.value) ||

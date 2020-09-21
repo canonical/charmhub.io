@@ -7,6 +7,7 @@ describe("channelMap", () => {
     channelMapContentEl,
     channelMapEl,
     selectedEl,
+    filterEl,
     maskEl;
 
   beforeEach(() => {
@@ -25,9 +26,14 @@ describe("channelMap", () => {
     maskEl.setAttribute("class", "p-channel-map__mask");
     selectedEl = document.createElement("div");
     selectedEl.setAttribute("data-channel-map-channel", "latest/stable");
+    selectedEl.setAttribute("data-channel-map-filter", "14.04 LTS");
+
+    filterEl = document.createElement("select");
+    filterEl.setAttribute("data-js", "channel-map-filter");
 
     buttonEl.appendChild(selectedChannelEl);
     channelMapEl.appendChild(maskEl);
+    channelMapEl.appendChild(filterEl);
     channelMapEl.appendChild(channelMapContentEl);
 
     document.body.appendChild(buttonEl);
