@@ -63,7 +63,7 @@
     Operators in the collection declare endpoints that represent potential forms of integration. For example, a MySQL operator can say that it can provide a MySQL database, and that it can stream its logs with the rsyslog protocol.
   </p>
   <p>
-    Each endpoint has a type and a direction, it can be ‘inbound’ or ‘outbound’. You can only integrate two endpoints if they have the same type and opposite directions.
+    Each endpoint has a <i>type</i> and a <i>direction</i>, it can be ‘inbound’ or ‘outbound’. You can only integrate two endpoints if they have the same type and opposite directions.
   </p>
   <p>
     Don’t confuse the name of the endpoint with the type of the endpoint. Just because an endpoint is named ‘mysql’ doesn’t mean that it has the type ‘mysql’. The type determines the nature of the handshaking that happens during integration. This allows an operator to have multiple endpoints that integrate the same way (‘the same type’) but for different purposes.
