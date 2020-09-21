@@ -56,9 +56,9 @@ def index():
         )
 
         if results[i]["result"]["categories"]:
-            results[i]["store_front"]["categories"] = results[i]["result"][
-                "categories"
-            ]
+            results[i]["store_front"]["categories"] = logic.get_categories(
+                results[i]["result"]["categories"]
+            )
         else:
             results[i]["store_front"]["categories"] = [
                 {"name": "No Category", "slug": "no-cat"}
