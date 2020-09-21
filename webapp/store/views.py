@@ -50,14 +50,19 @@ def index():
 
     for i, item in enumerate(results):
         results[i]["store_front"] = {}
-        results[i]["store_front"]["icon"] = logic.get_icons(results[i])[0]
+        results[i]["store_front"]["icons"] = logic.get_icons(results[i])
         results[i]["store_front"]["last_release"] = logic.convert_date(
             results[i]["default-release"]["revision"]["created-at"]
         )
 
-        results[i]["store_front"]["categories"] = [
-            {"name": "No Category", "slug": "no-cat"}
-        ]
+        if results[i]["result"]["categories"]:
+            results[i]["store_front"]["categories"] = results[i]["result"][
+                "categories"
+            ]
+        else:
+            results[i]["store_front"]["categories"] = [
+                {"name": "No Category", "slug": "no-cat"}
+            ]
 
     categories = []
     for result in results:
