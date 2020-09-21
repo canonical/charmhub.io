@@ -185,7 +185,9 @@ def get_categories(categories_json):
     categories = []
 
     for category in categories_json:
-        categories.append({"slug": category, "name": format_slug(category)})
+        categories.append(
+            {"slug": category["name"], "name": format_slug(category["name"])}
+        )
 
     return categories
 
