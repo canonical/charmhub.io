@@ -5,8 +5,8 @@
 {% block tab_content %}
   <div class="row p-tabs__content" id="overview">
     <div class="col-3">
-      <p><strong>Latest release</strong><br />{{ package.store_front.last_release }}</p>
-      <p><strong>License</strong><br />{{ package.result.license }}</p>
+      <p><span class="u-text--muted">Latest release</span><br />{{ package.store_front.last_release }}</p>
+      <p><span class="u-text--muted">License</span><br />{{ package.result.license }}</p>
       {% if package.result.website or package.result.repository or package.result.contact %}
         <hr class="p-separator--shallow">
         <h4 class="p-heading--5 u-no-margin--bottom">Relevant links</h4>
