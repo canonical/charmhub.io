@@ -6,7 +6,9 @@
   <div class="row p-tabs__content" id="overview">
     <div class="col-3">
       <p><span class="u-text--muted">Latest release</span><br />{{ package.store_front.last_release }}</p>
-      <p><span class="u-text--muted">License</span><br />{{ package.result.license }}</p>
+      {% if package.result.license %}
+        <p><span class="u-text--muted">License</span><br />{{ package.result.license }}</p>
+      {% endif %}
       {% if package.result.website or package.result.repository or package.result.contact %}
         <hr class="p-separator--shallow">
         <h4 class="p-heading--5 u-no-margin--bottom">Relevant links</h4>
