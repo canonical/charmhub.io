@@ -15,6 +15,13 @@ const init = (packageName, channelMapButton) => {
 
   const channelMapContent = channelMap.querySelector(".p-channel-map__content");
 
+  const channelMapFilter = channelMap.querySelector(
+    "[data-js='channel-map-filter']"
+  );
+  const channelsToBeFiltered = channelMap.querySelectorAll(
+    "[data-channel-map-filter]"
+  );
+
   const selectChannel = (channel, version) => {
     const selected = document.querySelector(
       `[data-channel-map-channel="${channelMapState.channel}"]`
@@ -88,6 +95,19 @@ const init = (packageName, channelMapButton) => {
         row.dataset.channelMapVersion
       );
     }
+  });
+
+  channelMapFilter.addEventListener("change", (e) => {
+    channelsToBeFiltered.forEach((el) => {
+      if (
+        el.getAttribute("data-channel-map-filter").includes(e.target.value) ||
+        e.target.value === "any"
+      ) {
+        el.classList.remove("u-hide");
+      } else {
+        el.classList.add("u-hide");
+      }
+    });
   });
 };
 
