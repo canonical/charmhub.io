@@ -1,9 +1,10 @@
+import sys
 import datetime
+from collections import OrderedDict
 
 import humanize
 from dateutil import parser
-from webapp.helpers import get_yaml_loader, format_slug
-
+from webapp.helpers import format_slug, get_yaml_loader
 
 yaml = get_yaml_loader()
 UBUNTU_SERIES = {
@@ -65,17 +66,19 @@ def convert_channel_maps(channel_map):
 
     :returns: The channel maps reshaped
     """
-    channel_map_restruct = {}
+    result = {}
+    track_order = {"latest": 1}
+    risk_order = {"stable": 1, "candidate": 2, "beta": 3, "edge": 4}
 
     for channel in channel_map:
         track = channel["channel"].get("track", "latest")
         risk = channel["channel"]["risk"]
 
-        if track not in channel_map_restruct:
-            channel_map_restruct[track] = {}
+        if track not in result:
+            result[track] = {}
 
-        if risk not in channel_map_restruct[track]:
-            channel_map_restruct[track][risk] = []
+        if risk not in result[track]:
+            result[track][risk] = []
 
         info = {
             "released_at": convert_date(channel["channel"]["released-at"]),
@@ -88,9 +91,24 @@ def convert_channel_maps(channel_map):
             ),
         }
 
-        channel_map_restruct[track][risk].append(info)
+        result[track][risk].append(info)
 
-    return channel_map_restruct
+    # Order tracks and risks
+    result = OrderedDict(
+        sorted(
+            result.items(), key=lambda x: track_order.get(x[0], sys.maxsize)
+        )
+    )
+
+    for track, track_data in result.items():
+        result[track] = OrderedDict(
+            sorted(
+                track_data.items(),
+                key=lambda x: risk_order.get(x[0], sys.maxsize),
+            )
+        )
+
+    return result
 
 
 def extract_all_series(channel_map):
