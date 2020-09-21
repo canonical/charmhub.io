@@ -31,9 +31,9 @@
     border-radius: $spv-inner--x-small;
     color: $color-dark;
     display: grid;
-    grid-template-rows: auto 1fr 2rem;
+    grid-template-rows: auto auto 2.25rem;
     // Force obey parent's border-radius
-    min-height: 17.25rem;
+    height: 16.75rem;
     overflow: hidden;
     width: 100%;
 
@@ -47,7 +47,7 @@
 
     .p-card__header {
       border: none;
-      padding: $spv-inner--large $spv-inner--large 1.75rem $spv-inner--large;
+      padding: $spv-inner--large;
 
       .p-card__title {
         max-height: 4rem;
@@ -64,6 +64,7 @@
     }
 
     .p-card__footer {
+      align-items: center;
       background-color: $color-light;
       color: $color-mid-dark;
       display: flex;
