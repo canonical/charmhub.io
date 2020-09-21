@@ -18,19 +18,6 @@
           {% endfor %}
         </ul>
         {% endif %}
-        {% if publisher_list %}
-        <ul class="p-filter__list">
-          <li class="p-filter__item--title">
-            Publisher
-          </li>
-          {% for publisher in publisher_list %}
-          <li class="p-filter__item" data-filter-type="publisher" data-js="filter" data-filter-value="{{ publisher }}">
-            <input type="checkbox" id="{{ publisher }}" value="{{ publisher }}" {% if active_filter('publisher', publisher) %}checked{% endif %}>
-            <label for="{{ publisher }}">{{ publisher }}</label>
-          </li>
-          {% endfor %}
-        </ul>
-        {% endif %}
       </div>
       <noscript>
         <button type="submit" class="u-hide--small">Apply Filters</button>
