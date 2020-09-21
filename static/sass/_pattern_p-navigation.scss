@@ -1,4 +1,8 @@
 @mixin p-charmhub-navigation {
+  .p-navigation__banner {
+    background-color: $color-ubuntu-orange;
+  }
+
   @media screen and (min-width: $breakpoint-navigation-threshold) {
     .p-navigation .p-navigation__item.is-selected {
       background-color: $color-x-light;

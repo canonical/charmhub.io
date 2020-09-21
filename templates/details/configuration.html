@@ -27,7 +27,7 @@
       <ul class="p-list--divided has-sparator-centered">
         {% for key, value in package.store_front.config.options.items() %}
         <li class="p-list__item" id="{{ key }}">
-          <p class="p-heading--4"><strong>{{ key }}</strong><span class="u-text--muted"> | {{ value.type }}</span></p>
+          <p class="p-heading--4">{{ key }} <span class="u-text--muted">&VerticalLine; {{ value.type }}</span></p>
           {% if value.default %}
           <p><span class="u-text--muted">Default:</span> {{ value.default }}</p>
           {% endif %}
@@ -39,7 +39,7 @@
     {% else %}
     <div class="p-notification--information">
       <p class="p-notification__response">
-        No file <b>configuration.yaml</b> has been added yet.
+        No configuration details have been added yet.
       </p>
     </div>
     {% endif %}

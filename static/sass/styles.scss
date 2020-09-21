@@ -1,6 +1,7 @@
 @charset 'UTF-8';
 
 $brand-color: #044f66;
+$color-ubuntu-orange: #e95420;
 $color-accent: #f0f5f7;
 
 $grid-max-width: 82rem;
@@ -197,7 +198,7 @@ $theme-default-nav: dark;
     }
 
     table tr.is-active td {
-      font-weight: bold;
+      font-weight: 400;
     }
   }
 }
