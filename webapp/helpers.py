@@ -98,6 +98,19 @@ def active_filter(filter_type, filter_name):
     return False
 
 
+def format_slug(slug):
+    """Format slug name into a standard title format
+    :param slug: The hypen spaced, lowercase slug to be formatted
+    :return: The formatted string
+    """
+    return (
+        slug.title()
+        .replace("-", " ")
+        .replace("And", "and")
+        .replace("Iot", "IoT")
+    )
+
+
 def convert_date(date_to_convert):
     """Convert date to human readable format: Month Day Year
     If date is less than a day return: today or yesterday

@@ -30,6 +30,7 @@ def set_handlers(app):
             "add_filter": helpers.add_filter,
             "active_filter": helpers.active_filter,
             "remove_filter": helpers.remove_filter,
+            "format_slug": helpers.format_slug,
             "publisher": publisher,
         }
 
