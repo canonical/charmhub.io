@@ -15,17 +15,17 @@
 
           {% for config in package.store_front.config.options.keys() %}
           <li class="p-side-navigation__item">
-            <a href="#{{ config }}" class="p-side-navigation__link" role="tab" aria-controls="{{ config }}" {% if loop.index == 1 %}aria-selected="false"{% endif %}>
-            {{ config }}
+            <a href="#{{ config }}" class="p-side-navigation__link" role="tab" aria-controls="{{ config }}" {% if loop.index == 1 %}aria-selected="false" {% endif %}>
+              {{ config }}
             </a>
           </li>
           {% endfor %}
         </ul>
       </div>
     </div>
-    <div class="col-7 col-start-large-5">
+    <div class="col-9">
       <ul class="p-list--divided">
-      {% for key, value in package.store_front.config.options.items() %}
+        {% for key, value in package.store_front.config.options.items() %}
         <li class="p-list__item" id="{{ key }}">
           <p><strong>{{ key }}</strong></p>
           <p><strong>Type:</strong> {{ value.type }}</p>
@@ -34,13 +34,15 @@
           {% endif %}
           <p>{{ value.description | safe }}</p>
         </li>
-      {% endfor %}
+        {% endfor %}
       </ul>
     </div>
     {% else %}
-      <div class="col-12">
-        <p>EMPTY STATE</p>
-      </div>
+    <div class="p-notification--information">
+      <p class="p-notification__response">
+        No file <b>configuration.yaml</b> has been added yet.
+      </p>
+    </div>
     {% endif %}
   </div>
 </div>
