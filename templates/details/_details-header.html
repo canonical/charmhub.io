@@ -41,13 +41,12 @@
     <div class="col-4">
       <img src="https://assets.ubuntu.com/v1/adac6928-ubuntu.svg" alt="" width="89" height="20">
       <div class="series-tags">
-        {% for supported_os in package.supported_os_list %}
+        {% for version in package.store_front.ubuntu_versions %}
         <span class="series-tag">
-          {{ supported_os }}
+          Ubuntu {{ version }}
         </span>
         {% endfor %}
       </div>
-      <p>Also supports: </p>
     </div>
   </div>
 </div>

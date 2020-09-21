@@ -6,6 +6,41 @@ from webapp.helpers import get_yaml_loader, format_slug
 
 
 yaml = get_yaml_loader()
+UBUNTU_SERIES = {
+    "warty": "4.10",
+    "hoary": "5.04",
+    "breezy": "5.10",
+    "dapper": "6.06 LTS",
+    "edgy": "6.10",
+    "feisty": "7.04",
+    "gutsy": "7.10",
+    "hardy": "8.04 LTS",
+    "intrepid": "8.10",
+    "jaunty": "9.04",
+    "karmic": "9.10",
+    "lucid": "10.04 LTS",
+    "maverick": "10.10",
+    "natty": "11.04",
+    "oneiric": "11.10",
+    "precise": "12.04 LTS",
+    "quantal": "12.10",
+    "raring": "13.04",
+    "saucy": "13.10",
+    "trusty": "14.04 LTS",
+    "utopic": "14.10",
+    "vivid": "15.04",
+    "wily": "15.10",
+    "xenial": "16.04 LTS",
+    "yakkety": "16.10",
+    "zesty": "17.04",
+    "artful": "17.10",
+    "bionic": "18.04 LTS",
+    "cosmic": "18.10",
+    "disco": "19.04",
+    "eoan": "19.10",
+    "focal": "20.04 LTS",
+    "groovy": "20.10",
+}
 
 
 def get_banner_url(media):
@@ -48,12 +83,54 @@ def convert_channel_maps(channel_map):
             "channel": channel["channel"]["name"],
             "risk": channel["channel"]["risk"],
             "size": channel["revision"]["download"]["size"],
-            "platform": channel["channel"]["platform"]["series"],
+            "platform": convert_series_to_ubuntu_versions(
+                channel["channel"]["platform"]["series"]
+            ),
         }
 
         channel_map_restruct[track][risk].append(info)
 
     return channel_map_restruct
+
+
+def extract_all_series(channel_map):
+    """
+    Extract ubuntu series from channel map
+
+    :param channel_maps: The channel maps list returned by the API
+
+    :returns: Ubuntu series
+    """
+    series = []
+
+    for channel in channel_map:
+        channel_series = channel["channel"]["platform"]["series"]
+        if channel_series not in series:
+            series.append(channel_series)
+
+    return series
+
+
+def convert_series_to_ubuntu_versions(series):
+    """Return Ubuntu version based on code name series
+
+    Args:
+        series (str|list): Ubuntu series
+
+    Returns:
+        str|list: Ubuntu version
+    """
+    if isinstance(series, str):
+        return UBUNTU_SERIES[series]
+    elif isinstance(series, list):
+        result = []
+        for s in series:
+            result.append(convert_series_to_ubuntu_versions(s))
+    else:
+        raise TypeError("Invalid series object")
+
+    # Order from greater to lower version
+    return sorted(result, reverse=True)
 
 
 def convert_date(date_to_convert):
@@ -112,12 +189,18 @@ def add_store_front_data(package):
     # Reshape channel maps
     extra["channel_map"] = convert_channel_maps(package["channel-map"])
 
+    # Extract all supported series
+    extra["series"] = extract_all_series(package["channel-map"])
+
     # Some needed fields
     extra["publisher_name"] = package["result"]["publisher"]["display-name"]
     extra["last_release"] = convert_date(
         package["default-release"]["channel"]["released-at"]
     )
     extra["summary"] = package["result"]["summary"]
+    extra["ubuntu_versions"] = convert_series_to_ubuntu_versions(
+        extra["series"]
+    )
 
     package["store_front"] = extra
     return package
