@@ -85,10 +85,21 @@ def index():
     return response
 
 
+FIELDS = [
+    "media",
+    "metadata-yaml",
+    "config-yaml",
+    "tags",
+    "categories",
+    "publisher",
+    "summary",
+]
+
+
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
 def details_overview(entity_name):
     # Get entity info from API
-    package = app.store_api.get_item_details(entity_name)
+    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
     package = logic.add_store_front_data(package)
 
     for channel in package["channel-map"]:
@@ -109,7 +120,7 @@ def details_overview(entity_name):
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs')
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs/<slug>')
 def details_docs(entity_name, slug=None):
-    package = app.store_api.get_item_details(entity_name)
+    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
     package = logic.add_store_front_data(package)
     docs_url_prefix = f"/{package['name']}/docs"
 
@@ -155,7 +166,7 @@ def details_docs(entity_name, slug=None):
     '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configuration'
 )
 def details_configuration(entity_name):
-    package = app.store_api.get_item_details(entity_name)
+    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
     package = logic.add_store_front_data(package)
 
     return render_template("details/configuration.html", package=package)
@@ -163,7 +174,7 @@ def details_configuration(entity_name):
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/history')
 def details_history(entity_name):
-    package = app.store_api.get_item_details(entity_name)
+    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
     package = logic.add_store_front_data(package)
 
     return render_template("details/history.html", package=package)
