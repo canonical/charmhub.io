@@ -5,7 +5,7 @@
 {% block meta_description %}An ‘operator’ in the Kubernetes world is a trusted container which drives other containers, simplifying the work of operations for a human administrator. Since the operator is software, it can encode best practices and it never gets tired.{% endblock %}
 
 {% block about_content %}
-  <h2>What is a Kubernetes Operator?</h2>
+  <h2 id="what-is-kubernetes-operator">What is a Kubernetes Operator?</h2>
   <p>
     An ‘operator’ in the Kubernetes world is a trusted container which drives other containers, simplifying the work of operations for you. Since the operator is software it can encode best practices and it never gets tired. The operator is available 24/7 to react to problems, and it can do the tedious work of getting all the low-level details right.
   </p>
@@ -15,7 +15,7 @@
   <p>
     In this community we extend the idea of operators beyond Kubernetes, to deploy and run our legacy workloads on VMWare or bare metal or OpenStack. That legacy estate is huge and having operators do the work is exciting &mdash; it reduces cost and increases the quality of operations. Even though the term ‘operator’ started in Kubernetes, we use it more generally for ‘software that drives software’.
   </p>
-  <h2>
+  <h2 id="what-is-the-open-operator-collection">
     What is the Open Operator Collection?
   </h2>
   <p>
@@ -27,7 +27,17 @@
   <p>
     Our primary focus is Kubernetes operators because the complexity of daily operations in a sophisticated multi&ndash;cloud K8s environment lends itself to automation. However, we also accept and maintain operators for many workloads on traditional virtualization, public cloud and bare metal compute.
   </p>
-  <h2>What is dev&ndash;sec&ndash;ops?</h2>
+  <h2 id="what-is-an-operator-lifecycle-manager">What is an Operator Lifecycle Manager?</h2>
+  <p>
+    An operator lifecycle manager provides a central view of operators in a deployment, the configuration, scale and status of each of them, and the integration lines between them. An operator lifecycle manager keeps track of potential updates and upgrades for each operator and coordinates the flow of events and messages between operators.
+  </p>
+  <p>
+    The lifecycle manager for the Open Operator Collection works across Kubernetes and traditional machine environments, and can integrate Kubernetes models and operators with machine-based models and operators transparently.
+  </p>
+  <p>
+    Administrators control operators through the operator lifecycle manager which handles role-based access controls, audit, logging, leadership election, message distribution, event serialization, operator status, updates, upgrades, integration and configuration. 
+  </p>
+  <h2 id="what-is-devsecops">What is dev&ndash;sec&ndash;ops?</h2>
   <p>
     Dev&ndash;sec&ndash;ops is the merging of product development, security, and operations. Practitioners encourage the formation of multi&ndash;disciplinary teams that consider operational and security aspects of enterprise software simultaneously, ideally during product development. Instead of simply making recommendations about security and operations, dev&ndash;sec&ndash;ops teams deliver automated solutions that cover all these elements together.
   </p>
@@ -37,13 +47,13 @@
   <p>
     Anybody using our operators should automatically be working in a secure fashion, because the operators encapsulate knowledge from the wider security community. And anybody using our operators should also get the very best operational practices by default, for the same reason.
   </p>
-  <h2>
+  <h2 id="what-is-a-charm">
     What is a charm?
   </h2>
   <p>
     A charm is a software package that bundles an operator together with metadata that supports the integration of many operators in a coherent aggregated system. An operator packaged as a charm means that it is configured, operated and integrated in a standard way regardless of the vendor or the application. Charms enable multi&ndash;vendor operator collections with standardised behaviours, reducing the learning curve associated with each operator and creating richer application ecosystems.
   </p>
-  <h2>
+  <h2 id="how-do-operators-handle-integration">
     How do operators handle integration?
   </h2>
   <p>
