@@ -45,7 +45,7 @@ def before_request():
         return redirect("/login?next=" + request.path)
 
 
-@app.route("/")
+@app.route("/overview")
 def index():
     if authentication.is_canonical_employee_authenticated(session):
         response = make_response(render_template("index.html"))
@@ -53,7 +53,6 @@ def index():
         response = make_response(render_template("holding.html"))
 
     # Temporal fix to avoid cache since this page could return two versions
-    response.headers.set("Cache-Control", "no-store")
     return response
 
 

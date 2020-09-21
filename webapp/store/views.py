@@ -1,8 +1,9 @@
 from canonicalwebteam.discourse import DocParser
 from flask import Blueprint
 from flask import current_app as app
-from flask import render_template, request
+from flask import make_response, render_template, request, session
 
+from webapp import authentication
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.helpers import discourse_api
 from webapp.store import logic
@@ -23,8 +24,13 @@ parser = Markdown(
 )
 
 
-@store.route("/store")
+@store.route("/")
 def store_view():
+    if not authentication.is_canonical_employee_authenticated(session):
+        response = make_response(render_template("holding.html"))
+        response.headers.set("Cache-Control", "no-store")
+        return response
+
     query = request.args.get("q", default=None, type=str)
     sort = request.args.get("sort", default="sort-asc", type=str)
 
@@ -56,7 +62,10 @@ def store_view():
         "results": results,
     }
 
-    return render_template("store.html", **context)
+    response = make_response(render_template("store.html", **context))
+    response.headers.set("Cache-Control", "no-store")
+
+    return response
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
