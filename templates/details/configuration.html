@@ -24,13 +24,12 @@
       </div>
     </div>
     <div class="col-9">
-      <ul class="p-list--divided">
+      <ul class="p-list--divided has-sparator-centered">
         {% for key, value in package.store_front.config.options.items() %}
         <li class="p-list__item" id="{{ key }}">
-          <p><strong>{{ key }}</strong></p>
-          <p><strong>Type:</strong> {{ value.type }}</p>
+          <p class="p-heading--4"><strong>{{ key }}</strong><span class="u-text--muted"> | {{ value.type }}</span></p>
           {% if value.default %}
-          <p><strong>Default:</strong> {{ value.default }}</p>
+          <p><span class="u-text--muted">Default:</span> {{ value.default }}</p>
           {% endif %}
           <p>{{ value.description | safe }}</p>
         </li>
