@@ -202,9 +202,7 @@ def add_store_front_data(package):
         package["default-release"]["revision"]["config-yaml"]
     )
 
-    # Use tags as categories
-    tags = extra["metadata"].get("tags")
-    extra["categories"] = get_categories(tags) if tags else []
+    extra["categories"] = get_categories(package["result"]["categories"])
 
     # Reshape channel maps
     extra["channel_map"] = convert_channel_maps(package["channel-map"])
