@@ -30,6 +30,14 @@
     }
   }
 
+  .p-list--divided.has-sparator-centered {
+    .p-list__item {
+      &:not(:first-of-type) {
+        margin-block-start: $spv-inner--medium;
+      }
+    }
+  }
+
   .p-list--ordered {
     @extend %vf-list;
 
