@@ -34,7 +34,15 @@ def index():
     query = request.args.get("q", default=None, type=str)
     sort = request.args.get("sort", default="sort-asc", type=str)
 
-    fields = ["categories", "summary", "media", "name", "publisher"]
+    fields = [
+        "categories",
+        "summary",
+        "media",
+        "name",
+        "publisher",
+        "revision",
+    ]
+
     if query:
         results = app.store_api.find(query=query, fields=fields).get("results")
     else:
@@ -42,10 +50,10 @@ def index():
 
     for i, item in enumerate(results):
         results[i]["store_front"] = {}
-        for media in results[i]["result"]["media"]:
-            if media["type"] == "icon":
-                results[i]["store_front"]["icon"] = media["url"]
-                break
+        results[i]["store_front"]["icon"] = logic.get_icons(results[i])[0]
+        results[i]["store_front"]["last_release"] = logic.convert_date(
+            results[i]["default-release"]["revision"]["created-at"]
+        )
 
         results[i]["store_front"]["categories"] = [
             {"name": "No Category", "slug": "no-cat"}
