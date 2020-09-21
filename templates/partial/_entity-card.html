@@ -11,7 +11,7 @@
         <img src="{{ package.store_front.icons[0] }}" alt="{{ package.title}}" class="p-card__thumbnail">
         {% endif %}
       </div>
-      <h4 class="p-card__title u-no-margin--bottom">{{ package.name }}</h4>
+      <h4 class="p-card__title u-no-margin--bottom">{{ format_slug(package.name) }}</h4>
       <p class="u-text--subtle">{{ package.store_front.publisher_name }}</p>
     </div>
     <div class="p-card__content">

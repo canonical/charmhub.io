@@ -25,7 +25,7 @@ parser = Markdown(
 
 
 @store.route("/")
-def store_view():
+def index():
     if not authentication.is_canonical_employee_authenticated(session):
         response = make_response(render_template("holding.html"))
         response.headers.set("Cache-Control", "no-store")
@@ -40,7 +40,12 @@ def store_view():
         results = app.store_api.find().get("results", [])
 
     for i, item in enumerate(results):
-        results[i] = logic.add_store_front_data(results[i])
+        results[i]["store_front"] = {}
+        results[i]["store_front"]["icons"] = None
+        results[i]["store_front"]["categories"] = [
+            {"name": "No Category", "slug": "no-cat"}
+        ]
+        results[i]["store_front"]["publisher_name"] = "Publisher"
 
     categories = []
     publisher_list = []
