@@ -73,7 +73,7 @@ def details_overview(entity_name):
     readme = parser(package["default-release"]["revision"]["readme-md"])
 
     return render_template(
-        "details.html",
+        "details/overview.html",
         package=package,
         readme=readme,
         package_type=package["type"],

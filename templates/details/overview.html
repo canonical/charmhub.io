@@ -31,7 +31,7 @@
       <p><a class="p-button--neutral" href="#">Discuss this {{ package.type }}</a></p>
     </div>
     <div class="col-9">
-      {{ package.overview | safe }}
+      {{ readme | safe }}
     </div>
   </div>
 {% endblock%}
