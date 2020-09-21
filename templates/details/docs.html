@@ -1,0 +1,60 @@
+{% set current_tab = "docs" %}
+
+{% extends '/details/details_layout.html' %}
+
+{% block tab_content %}
+  <div class="u-fixed-width">
+    {% if navigation and body_html %}
+      <div class="row u-no-padding--left u-no-padding--right">
+        <div class="col-3">
+          <nav class="p-side-navigation--raw-html" id="drawer">
+            <a href="#drawer" class="p-side-navigation__toggle js-drawer-toggle" aria-controls="drawer">
+              Toggle side navigation
+            </a>
+            <div class="p-side-navigation__overlay js-drawer-toggle" aria-controls="drawer"></div>
+            <div class="p-side-navigation__drawer">
+              <div class="p-side-navigation__drawer-header">
+                <a href="#" class="p-side-navigation__toggle--in-drawer js-drawer-toggle" aria-controls="drawer">
+                  Toggle side navigation
+                </a>
+              </div>
+              {{ navigation | safe }}
+            </div>
+          </nav>
+        </div>
+        <div class="col-9">
+          {{ body_html | safe }}
+          <div class="u-fixed-width">
+            <hr class="p-separator--medium">
+          </div>
+          <div class="u-fixed-width">
+            <h4>Help us improve this documentation</h4>
+            <p>
+              Most of this documentation can be collaboratively discussed and changed on the respective topic in the doc category of the <a href="{{ forum_url }}" class="p-link--external">Charm Hub forum</a>. See the <a href="https://discourse.juju.is/t/how-to-write-docs-our-documentation-guidelines-for-contributors/1245" class="p-link--external">documentation guidelines</a> if you’d like to contribute.
+            </p>
+            <div class="p-notification--information">
+              <p class="p-notification__response">
+                Last updated {{ last_update }}. <a href="{{ forum_url }}{{ topic_path }}" class="p-link--external">Help improve this document in the forum</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="p-notification--information">
+        <p class="p-notification__response">
+          No documentation has been added yet.
+        </p>
+      </div>
+    {% endif %}
+  </div>
+{% endblock%}
+
+{% block page_scripts %}
+  <script src="{{ versioned_static('js/dist/details_docs.js') }}" defer></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      charmhub.details.docs.initSideNav();
+    });
+  </script>
+{% endblock %}

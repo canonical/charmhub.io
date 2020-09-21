@@ -1,17 +1,12 @@
-{% extends 'base_layout.html' %}
-
-{% block meta_description %}Charm Hub: The app store for clouds{% endblock %}
-
-{% block content %}
 <div class="p-strip--header is-shallow">
   <div class="row">
     <div class="col-8">
       <div class="p-charm-header">
         <div class="p-media-object--medium u-no-margin--bottom">
-          <div class="{% if package_type == "bundle" %}p-bundle-icons{% endif %}">
+          <div class="{% if package.type == "bundle" %}p-bundle-icons{% endif %}">
             {% for media in package.result.media %}
             {% if media.type == "icon" %}
-            <img src="{{ media.url }}" class="{% if package_type == "bundle"%}p-bundle-icons__image{% else %}p-media-object__image{% endif %}" alt="" />
+            <img src="{{ media.url }}" class="{% if package.type == "bundle"%}p-bundle-icons__image{% else %}p-media-object__image{% endif %}" alt="" />
             {% endif %}
             {% endfor %}
           </div>
@@ -24,10 +19,10 @@
                 <li class="p-inline-list__item">
                   By <a href="#">{{ package.store_front.publisher_name }}</a>
                   {% if developer_validation == "verified" %}
-                    <span class="p-tooltip--top-center" aria-describedby="openstack-tooltip">
-                      <img src="https://assets.ubuntu.com/v1/75654c90-rosette.svg">
-                      <span class="p-tooltip__message" role="tooltip" id="default-tooltip">Verified account</span>
-                    </span>
+                  <span class="p-tooltip--top-center" aria-describedby="openstack-tooltip">
+                    <img src="https://assets.ubuntu.com/v1/75654c90-rosette.svg">
+                    <span class="p-tooltip__message" role="tooltip" id="default-tooltip">Verified account</span>
+                  </span>
                   {% endif %}
                 </li>
                 <li class="p-inline-list__item">
@@ -54,27 +49,3 @@
     </div>
   </div>
 </div>
-<div class="p-strip is-deep u-no-padding--top">
-  {% include "partial/_tabs-navigation.html" %}
-
-  {% include "partial/_tab-overview.html" %}
-  {% include "partial/_tab-configuration.html" %}
-  {% if package_type == "charm" %}
-    {% include "partial/_tab-actions.html" %}
-    {% include "partial/_tab-integrations.html" %}
-    {% include "partial/_tab-docs.html" %}
-  {% endif %}
-  {% include "partial/_tab-history.html" %}
-  {% include "partial/_tab-contribute.html" %}
-</div>
-{% endblock %}
-
-{% block page_scripts %}
-<script src="{{ versioned_static('js/dist/details.js') }}" defer></script>
-<script>
-  window.addEventListener("DOMContentLoaded", function () {
-    //charmhub.details.tabs("[data-js='tabs']");
-    charmhub.details.init("{{ package.name }}");
-  });
-</script>
-{% endblock %}

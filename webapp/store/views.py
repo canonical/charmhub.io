@@ -1,8 +1,10 @@
+from canonicalwebteam.discourse import DocParser
 from flask import Blueprint
 from flask import current_app as app
 from flask import render_template, request
 
 from webapp.config import DETAILS_VIEW_REGEX
+from webapp.helpers import discourse_api
 from webapp.store import logic
 
 from mistune import (
@@ -11,10 +13,7 @@ from mistune import (
 )
 
 store = Blueprint(
-    "store",
-    __name__,
-    template_folder="/templates",
-    static_folder="/static",
+    "store", __name__, template_folder="/templates", static_folder="/static"
 )
 
 
@@ -61,7 +60,7 @@ def store_view():
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
-def details(entity_name):
+def details_overview(entity_name):
     # Get entity info from API
     package = app.store_api.get_item_details(entity_name)
     package = logic.add_store_front_data(package)
@@ -74,8 +73,81 @@ def details(entity_name):
     readme = parser(package["default-release"]["revision"]["readme-md"])
 
     return render_template(
-        "details.html",
+        "details/overview.html",
         package=package,
         readme=readme,
         package_type=package["type"],
     )
+
+
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs')
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs/<slug>')
+def details_docs(entity_name, slug=None):
+    package = app.store_api.get_item_details(entity_name)
+    package = logic.add_store_front_data(package)
+    docs_url_prefix = f"/{package['name']}/docs"
+
+    # Fake package discourse topic
+    package["docs_topic"] = 3568
+
+    docs = DocParser(
+        api=discourse_api,
+        index_topic_id=package["docs_topic"],
+        url_prefix=docs_url_prefix,
+    )
+    docs.parse()
+    body_html = docs.index_document["body_html"]
+
+    topic_path = docs.index_document["topic_path"]
+
+    if slug:
+        topic_id = docs.resolve_path(slug)
+        # topic = docs.api.get_topic(topic_id)
+        # body_html = docs.parse_topic(topic)
+        slug_docs = DocParser(
+            api=discourse_api,
+            index_topic_id=topic_id,
+            url_prefix=docs_url_prefix,
+        )
+        slug_docs.parse()
+        body_html = slug_docs.index_document["body_html"]
+        topic_path = slug_docs.index_document["topic_path"]
+
+    context = {
+        "package": package,
+        "navigation": docs.navigation,
+        "body_html": body_html,
+        "last_update": docs.index_document["updated"],
+        "forum_url": docs.api.base_url,
+        "topic_path": topic_path,
+    }
+
+    return render_template("details/docs.html", **context)
+
+
+@store.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configuration'
+)
+def details_configuration(entity_name):
+    package = app.store_api.get_item_details(entity_name)
+    package = logic.add_store_front_data(package)
+
+    for channel in package["channel-map"]:
+        channel["channel"]["released-at"] = logic.convert_date(
+            channel["channel"]["released-at"]
+        )
+
+    return render_template("details/configuration.html", package=package)
+
+
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/history')
+def details_history(entity_name):
+    package = app.store_api.get_item_details(entity_name)
+    package = logic.add_store_front_data(package)
+
+    for channel in package["channel-map"]:
+        channel["channel"]["released-at"] = logic.convert_date(
+            channel["channel"]["released-at"]
+        )
+
+    return render_template("details/history.html", package=package)
