@@ -106,6 +106,7 @@ def format_slug(slug):
     return (
         slug.title()
         .replace("-", " ")
+        .replace("_", " ")
         .replace("And", "and")
         .replace("Iot", "IoT")
     )
