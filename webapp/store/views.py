@@ -67,7 +67,10 @@ def index():
                 {"name": "No Category", "slug": "no-cat"}
             ]
 
-        if results[i]["type"] == "charm":
+        if (
+            results[i]["type"] == "charm"
+            and results[i]["result"]["publisher"]["display-name"]
+        ):
             for category in results[i]["store_front"]["categories"]:
                 if category not in categories:
                     categories.append(category)
