@@ -80,6 +80,21 @@ CATEGORIES = {
     "controllers": "Kubernetes",
     "kubeflow": "Kubernetes",
     "containers": "Kubernetes",
+    "authentication": "security",
+    "identity": "security",
+    "security": "security",
+    "app-servers": "storage",
+    "web-server": "storage",
+    "file-servers": "storage",
+    "storage": "storage",
+    "ftp": "storage",
+    "file-server": "storage",
+    "capacity-planning": "storage",
+    "openstack": "openstack",
+    "infrastructure": "openstack",
+    "keystore": "openstack",
+    "databases": "database",
+    "database": "database",
 }
 
 
