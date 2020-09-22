@@ -239,11 +239,11 @@ def get_categories(categories_json):
                 return categories
         else:
             categories.append(
-                    {
-                        "slug": mapped_catgory,
-                        "name": format_slug(mapped_catgory),
-                    }
-                )
+                {
+                    "slug": mapped_catgory,
+                    "name": format_slug(mapped_catgory),
+                }
+            )
             return categories
         i = i + 1
 
