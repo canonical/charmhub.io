@@ -64,7 +64,7 @@ def index():
             )
         else:
             results[i]["store_front"]["categories"] = [
-                {"name": "No Category", "slug": "no-cat"}
+                {"name": "Other", "slug": "other"}
             ]
 
         if (
