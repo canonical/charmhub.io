@@ -51,15 +51,15 @@
         {{ results|length }} items
       </div>
       <div class="p-layout__sort-mobile">
-        <a href="/store" data-js="mobile-sort-reveal-button" class="has-icon p-store__button"><i class="p-icon--sort"></i>Sort by</a>
-        <a href="/store" data-js="mobile-filter-reveal-button" class="has-icon p-store__button"><i class="p-icon--filter"></i>Filters</a>
+        <a href="/" data-js="mobile-sort-reveal-button" class="has-icon p-store__button"><i class="p-icon--sort"></i>Sort by</a>
+        <a href="/" data-js="mobile-filter-reveal-button" class="has-icon p-store__button"><i class="p-icon--filter"></i>Filters</a>
       </div>
     </div>
     <div class="p-layout__right">
       <form class="p-search-box p-layout__search u-hide--medium u-hide--large" data-js="search-handler-mobile">
-        <input type="search" class="p-search-box__input" name="q" placeholder="Search Charmhub" {% if q %}value="{{ q }}" {% endif %} />
-        <button type="reset" class="p-search-box__reset"><i class="p-icon--close"></i></button>
-        <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search"></i></button>
+        <input type="search" class="p-search-box__input" name="q" placeholder="Search Charmhub" {% if q %}value="{{ q }}" {% endif %} required />
+        <button type="reset" class="p-search-box__reset"><i class="p-icon--close">Clear</i></button>
+        <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search">Search</i></button>
       </form>
       <div class="p-layout__sort-desktop p-form__group">
         <label for="sort" aria-label="Sort resources" class="p-form__label">Sort by</label>
