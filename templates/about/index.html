@@ -7,7 +7,7 @@
 {% block meta_description %}An ‘operator’ in the Kubernetes world is a trusted container which drives other containers, simplifying the work of operations for a human administrator. Since the operator is software, it can encode best practices and it never gets tired.{% endblock %}
 
 {% block about_content %}
-  <h2 id="what-is-kubernetes-operator">What is a Kubernetes Operator?</h2>
+  <h1 class="p-heading--2" id="what-is-kubernetes-operator">What is a Kubernetes Operator?</h1>
   <p>
     An ‘operator’ in Kubernetes is a trusted container which drives other containers, simplifying the work of administration for you. Instead of handcrafting all the YAML for container operations of the workload, the operator generates the necessary K8s commands to cover the app lifecycle. Since the operator is software it can encode best practices and it never gets tired. The operator is available 24/7 to react to problems, and it can do the tedious work of getting all the low-level details right.
   </p>
@@ -17,9 +17,9 @@
   <p>
     In this community we extend the idea of operators beyond Kubernetes, to deploy and run our legacy workloads on VMWare or bare metal or OpenStack. That legacy estate is huge and having operators do the work is exciting - it reduces cost and increases the quality of operations. Even though the term ‘operator’ started in Kubernetes, we use it more generally for ‘software that drives software’.
   </p>
-  <h3 class="p-heading--4" id="what-is-the-open-operator-collection">
+  <h2 class="p-heading--4" id="what-is-the-open-operator-collection">
     What is the Open Operator Collection?
-  </h3>
+  </h2>
   <p>
     The Open Operator Collection is an open-source initiative to provide a large number of interoperable, easily integrated operators for common workloads.
   </p>
@@ -29,7 +29,7 @@
   <p>
     Our primary focus is Kubernetes operators because the complexity of daily operations in a sophisticated multi&ndash;cloud K8s environment lends itself to automation. However, we also accept and maintain operators for many workloads on traditional virtualization, public cloud and bare metal compute.
   </p>
-  <h3 class="p-heading--4" id="what-is-an-operator-lifecycle-manager">What is an Operator Lifecycle Manager?</h3>
+  <h2 class="p-heading--4" id="what-is-an-operator-lifecycle-manager">What is an Operator Lifecycle Manager?</h2>
   <p>
     An operator lifecycle manager provides a central view of operators in a deployment, the configuration, scale and status of each of them, and the integration lines between them. An operator lifecycle manager keeps track of potential updates and upgrades for each operator and coordinates the flow of events and messages between operators.
   </p>
@@ -39,7 +39,7 @@
   <p>
     Administrators control operators through the operator lifecycle manager which handles role-based access controls, audit, logging, leadership election, message distribution, event serialization, operator status, updates, upgrades, integration and configuration.
   </p>
-  <h3 class="p-heading--4" id="what-is-devsecops">What is devsecops?</h3>
+  <h2 class="p-heading--4" id="what-is-devsecops">What is devsecops?</h2>
   <p>
     Devsecops is the merging of product development, security, and operations. Practitioners encourage the formation of multi-disciplinary teams that consider operational and security aspects of enterprise software during product development. Instead of audits after the fact, or high-level recommendations about security, devsecops teams deliver automated solutions that cover all these elements together.
   </p>
@@ -49,18 +49,18 @@
   <p>
     Anybody using our operators is automatically working in a secure fashion, because the operators encapsulate knowledge from the wider security community. Anybody using our operators will also get the very best operational practices by default.
   </p>
-  <h3 class="p-heading--4" id="what-is-a-charm">
+  <h2 class="p-heading--4" id="what-is-a-charm">
     What is a charm?
-  </h3>
+  </h2>
   <p>
     A charm is a software package that bundles an operator together with metadata that supports the integration of many operators in a coherent aggregated system.
   </p>
   <p>
     An operator packaged as a charm means that it is configured, operated and integrated in a standard way regardless of the vendor or the application. Charms enable multi-vendor operator collections with standardised behaviours, reducing the learning curve associated with each operator and creating richer application ecosystems.
   </p>
-  <h3 class="p-heading--4" id="how-do-operators-handle-integration">
+  <h2 class="p-heading--4" id="how-do-operators-handle-integration">
     How do operators handle integration?
-  </h3>
+  </h2>
   <p>
     Operators in the collection declare endpoints that represent potential forms of integration. For example, a MySQL operator can say that it can provide a MySQL database, and that it can stream its logs with the rsyslog protocol.
   </p>
