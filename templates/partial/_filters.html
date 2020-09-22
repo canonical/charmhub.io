@@ -71,7 +71,6 @@
     </div>
   </div>
   <div class="p-layout__card-container" data-js="card-container">
-    {% include "partial/_topic-cards.html" %}
     {% if results %}
       {% for package in results %}
         {% if package["type"] == "charm" %}
