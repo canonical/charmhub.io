@@ -41,7 +41,6 @@ UBUNTU_SERIES = {
     "eoan": "19.10",
     "focal": "20.04 LTS",
     "groovy": "20.10",
-    "all": "All",
 }
 
 CATEGORIES = {
@@ -193,7 +192,7 @@ def convert_series_to_ubuntu_versions(series):
         str|list: Ubuntu version
     """
     if isinstance(series, str):
-        return UBUNTU_SERIES[series]
+        return UBUNTU_SERIES.get(series, series.capitalize())
     elif isinstance(series, list):
         result = []
         for s in series:
