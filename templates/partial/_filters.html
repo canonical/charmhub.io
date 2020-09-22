@@ -18,6 +18,23 @@
           {% endfor %}
         </ul>
         {% endif %}
+        <ul class="p-filter__list">
+          <li class="p-filter__item--title u-sv1">
+            Useful links
+          </li>
+          <li class="p-filter__item">
+            <a href="/about" class="u-sv1">What is an operator?</a>
+          </li>
+          <li class="p-filter__item">
+            <a href="/manifesto" class="u-sv1">Legacy estate, really?</a>
+          </li>
+          <li class="p-filter__item">
+            <a href="/publishing" class="u-sv1">How do I publish here?</a>
+          </li>
+          <li class="p-filter__item">
+            <a href="/glossary" class="u-sv1">Glossary</a>
+          </li>
+        </ul>
       </div>
       <noscript>
         <button type="submit" class="u-hide--small">Apply Filters</button>
@@ -42,8 +59,9 @@
       </div>
     </div>
     <div class="p-layout__right">
-      <form class="p-search-box p-layout__search" data-js="search-handler">
+      <form class="p-search-box p-layout__search u-hide--medium u-hide--large" data-js="search-handler-mobile">
         <input type="search" class="p-search-box__input" name="q" placeholder="Search Charmhub" {% if q %}value="{{ q }}" {% endif %} />
+        <button type="reset" class="p-search-box__reset"><i class="p-icon--close"></i></button>
         <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search"></i></button>
       </form>
       <div class="p-layout__sort-desktop p-form__group">

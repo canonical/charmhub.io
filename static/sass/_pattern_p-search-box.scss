@@ -1,0 +1,20 @@
+@mixin p-charmhub-search-box {
+  .p-search-box.is-dark {
+    .p-search-box__input {
+      background-color: $color-mid-dark !important;
+      border: none;
+      border-radius: 2px;
+      color: $color-mid-x-light !important;
+
+      &::placeholder {
+        color: $color-mid-x-light;
+      }
+
+      &:active,
+      &:focus,
+      &:hover {
+        background-color: $color-mid-dark !important;
+      }
+    }
+  }
+}

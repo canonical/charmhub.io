@@ -4,7 +4,7 @@ $brand-color: #044f66;
 $color-ubuntu-orange: #e95420;
 $color-accent: #f0f5f7;
 
-$grid-max-width: 82rem;
+$grid-max-width: 90rem;
 
 // navigation settings
 $theme-default-nav: dark;
@@ -175,6 +175,10 @@ $theme-default-nav: dark;
 @import "pattern_p-separator";
 
 @include p-charmhub-separator;
+
+@import "pattern_p-search-box";
+
+@include p-charmhub-search-box;
 
 .p-channel-map {
   position: absolute;

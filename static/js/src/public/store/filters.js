@@ -137,7 +137,6 @@ class Filters {
   }
 
   updateUI() {
-    console.log(this._filters);
     if (this._filters.sort) {
       this.wrapperEls.sort.value = this._filters.sort[0];
     }
@@ -378,6 +377,23 @@ class Filters {
     });
   }
 
+  resetSearch(mobileSearchEl, desktopSearchEl) {
+    mobileSearchEl.querySelector("[type='search']").value = "";
+    desktopSearchEl.querySelector("[type='search']").value = "";
+  }
+
+  initSearch(mobileSearchEl, desktopSearchEl) {
+    mobileSearchEl.addEventListener("reset", (e) => {
+      e.preventDefault();
+      this.resetSearch(mobileSearchEl, desktopSearchEl);
+    });
+
+    desktopSearchEl.addEventListener("reset", (e) => {
+      e.preventDefault();
+      this.resetSearch(mobileSearchEl, desktopSearchEl);
+    });
+  }
+
   initEvents() {
     const {
       filter,
@@ -385,7 +401,12 @@ class Filters {
       sortMobile,
       sortMobileButton,
       filterMobileButton,
+      searchMobile,
+      searchDesktop,
     } = this.wrapperEls;
+    searchMobile &&
+      searchDesktop &&
+      this.initSearch(searchMobile, searchDesktop);
     filter && this.initFilterEvents(filter);
     sort && this.initSortEvents(sort);
     sortMobile && this.initMobileSortEvents(sortMobile);

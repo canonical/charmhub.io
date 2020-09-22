@@ -1,3 +1,3 @@
 import { createNav } from "@canonical/global-nav";
 
-createNav({ maxWidth: "82rem" });
+createNav({ maxWidth: "90rem" });
