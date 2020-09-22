@@ -1,4 +1,9 @@
 @mixin p-charmhub-navigation {
+  .p-navigation {
+    position: sticky;
+    top: 0;
+  }
+
   .p-navigation__banner {
     background-color: $color-ubuntu-orange;
     padding-inline-start: 1rem;
@@ -17,5 +22,10 @@
       color: $color-dark;
       opacity: 1;
     }
+  }
+
+  .p-side-navigation {
+    position: sticky;
+    top: 3rem;
   }
 }
