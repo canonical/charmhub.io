@@ -3,13 +3,21 @@
     <div class="col-8">
       <div class="p-charm-header">
         <div class="p-media-object--medium u-no-margin--bottom">
-          <div class="{% if package.type == "bundle" %}p-bundle-icons{% endif %}">
+          {% if package.type == "bundle" %}
+          <div class="p-bundle-icons">
             {% for media in package.result.media %}
             {% if media.type == "icon" %}
-            <img src="{{ media.url }}" class="{% if package.type == "bundle"%}p-bundle-icons__image{% else %}p-media-object__image{% endif %}" alt="" />
+            <img src="{{ media.url }}" class="p-bundle-icons__image" alt="" />
             {% endif %}
             {% endfor %}
           </div>
+          {% else %}
+            {% if package["store_front"]["icons"] %}
+              <img src="{{ package.store_front.icons[0] }}" class="p-media-object__image" alt="" />
+            {% else %}
+              <img src="https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" class="p-media-object__image" alt="" />
+            {% endif %}
+          {% endif %}
           <div class="p-media-object__details">
             <h1 class="p-media-object__title">
               {{ format_slug(package.name) }}
