@@ -5,6 +5,7 @@ canonicalwebteam.store-api==2.3.6
 django-openid-auth==0.16
 Flask-OpenID-Stateless==1.2.6
 Flask-WTF==0.14.3
+greenlet==0.4.16
 humanize==2.6.0
 mistune==0.8.4
 pymacaroons==0.13.0
