@@ -238,3 +238,10 @@ body {
 .global-nav .has-dropdown .global-nav__header-link-anchor {
   display: none;
 }
+
+// Fix pre width on details pages
+.p-tabs__content {
+  pre {
+    width: 40rem;
+  }
+}

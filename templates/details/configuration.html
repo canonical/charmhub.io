@@ -25,7 +25,7 @@
         <li class="p-list__item" id="{{ key }}">
           <p class="p-heading--4">{{ key }} <span class="u-text--muted">&VerticalLine; {{ value.type }}</span></p>
           {% if value.default %}
-          <p><span class="u-text--muted">Default:</span> {{ value.default }}</p>
+          <p style="overflow-wrap: break-word;"><span class="u-text--muted">Default:</span> {{ value.default }}</p>
           {% endif %}
           <p style="overflow-wrap: break-word;">{{ value.description | safe }}</p>
         </li>

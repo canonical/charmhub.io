@@ -31,7 +31,7 @@
     border-radius: $spv-inner--x-small;
     color: $color-dark;
     display: grid;
-    grid-template-rows: auto auto 2.25rem;
+    grid-template-rows: 9.5rem auto 2.25rem;
     // Force obey parent's border-radius
     height: 16.75rem;
     overflow: hidden;
@@ -57,11 +57,13 @@
 
     .p-card__thumbnail {
       border-radius: 50%;
-      max-height: 2.5rem;
+      height: 2.5rem;
+      max-height: none;
+      width: 2.5rem;
     }
 
     .p-card__content {
-      max-height: 2.75rem;
+      max-height: 4.25rem;
       overflow: hidden;
       padding: 0 $spv-inner--large $spv-inner--large $spv-inner--large;
     }
