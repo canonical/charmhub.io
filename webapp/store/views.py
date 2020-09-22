@@ -74,7 +74,7 @@ def index():
 
             charms.append(results[i])
 
-    sorted_categories = sorted(categories, key=lambda k: k["slug"])
+    sorted_categories = sorted(categories, key=lambda k: k["name"])
 
     context = {
         "categories": sorted_categories,
