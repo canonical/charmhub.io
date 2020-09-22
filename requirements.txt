@@ -1,3 +1,4 @@
+beautifulsoup4==4.9.1
 canonicalwebteam.discourse==2.0.1
 canonicalwebteam.flask-base==0.6.4
 canonicalwebteam.search==0.2.1
