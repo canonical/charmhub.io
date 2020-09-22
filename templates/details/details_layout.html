@@ -1,6 +1,8 @@
 {% extends 'base_layout.html' %}
 
-{% block meta_description %}Charm Hub: The app store for clouds{% endblock %}
+{% block title %}Deploy {{ format_slug(package.name) }} using CharmHub - The Open Operator Collection{% endblock %}
+
+{% block meta_description %}Deploy the latest version of {{ format_slug(package.name) }} as a Kubernetes Operator on any cloud. {{ package.result.summary }}{% endblock %}
 
 {% block content %}
   {% include "details/_details-header.html" %}
