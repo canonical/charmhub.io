@@ -9,10 +9,6 @@
     <div class="col-3">
       <div class="p-side-navigation" data-js="{{ section_slug }}">
         <ul class="p-side-navigation__list">
-          <li class="p-side-navigation__item--title">
-            <span class="p-side-navigation__text">Contents</span>
-          </li>
-
           {% for config in package.store_front.config.options.keys() %}
           <li class="p-side-navigation__item">
             <a href="#{{ config }}" class="p-side-navigation__link" role="tab" aria-controls="{{ config }}" {% if loop.index == 1 %}aria-selected="false" {% endif %}>
