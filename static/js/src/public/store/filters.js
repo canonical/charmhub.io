@@ -5,8 +5,7 @@ class Filters {
     this.submitButtonMobile = document.querySelector(
       "[data-js='filter-submit']"
     );
-    this._filters = this.initFilters();
-    this.searchCache = window.location.search;
+    this._filters = {};
 
     this.wrapperEls = {};
 
@@ -36,7 +35,7 @@ class Filters {
     let count = 0;
 
     Object.keys(this._filters).forEach((filterType) => {
-      if (filterType !== "sort" && filterType !== "q") {
+      if (filterType !== "sort") {
         count += this._filters[filterType].length;
       }
     });
@@ -137,13 +136,6 @@ class Filters {
   }
 
   updateUI() {
-    const searchField = this.wrapperEls.search.querySelector("[name='q']");
-
-    if (this._filters.q) {
-      searchField.value = this._filters.q[0];
-    } else {
-      searchField.value = "";
-    }
     if (this._filters.sort) {
       this.wrapperEls.sort.value = this._filters.sort[0];
     }
@@ -177,19 +169,6 @@ class Filters {
         filterMobileButton.innerHTML = `<i class="p-icon--filter"></i>Filters`;
       }
     }
-  }
-
-  initFilters() {
-    const filters = {};
-
-    if (window.location.search) {
-      const searchParams = new URLSearchParams(window.location.search);
-      for (const [filterType, filterValue] of searchParams) {
-        filters[filterType] = filterValue.split(",");
-      }
-    }
-
-    return filters;
   }
 
   addFilter(filterType, filterValue) {
@@ -233,32 +212,6 @@ class Filters {
     });
   }
 
-  updateHistory() {
-    const searchParams = new URLSearchParams();
-
-    Object.keys(this._filters).forEach((filterType) => {
-      searchParams.set(filterType, this._filters[filterType].join(","));
-    });
-
-    let searchStr = searchParams.toString();
-
-    if (searchStr !== this.searchCache) {
-      this.searchCache = searchStr;
-
-      if (searchStr !== "") {
-        searchStr = `?${searchStr}`;
-      }
-
-      const newUrl = `${window.location.origin}${window.location.pathname}${searchStr}`;
-
-      history.pushState(
-        { filters: this._filters },
-        null,
-        decodeURIComponent(newUrl)
-      );
-    }
-  }
-
   syncSortUI(selectorName, newValue) {
     if (selectorName === "sort") {
       this.wrapperEls[selectorName].value = newValue;
@@ -276,24 +229,6 @@ class Filters {
     }
   }
 
-  initSearchEvents(el) {
-    el.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const formData = new FormData(el);
-      const q = formData.get("q");
-
-      if (q === "") {
-        this.removeFilter("q");
-      } else {
-        this.removeFilter("q");
-        this.addFilter("q", q);
-      }
-
-      this.cleanFilters();
-      this.updateHistory();
-    });
-  }
-
   initSortEvents(el) {
     el.addEventListener("change", (e) => {
       e.preventDefault();
@@ -302,7 +237,6 @@ class Filters {
       this.syncSortUI("sortMobile", el.value);
 
       this.cleanFilters();
-      this.updateHistory();
       this.sortDOM();
     });
   }
@@ -315,7 +249,6 @@ class Filters {
       this.syncSortUI("sort", e.target.value);
 
       this.cleanFilters();
-      this.updateHistory();
       this.sortDOM();
 
       // hide the drawer once clicked
@@ -344,7 +277,6 @@ class Filters {
         }
 
         this.cleanFilters();
-        this.updateHistory();
         this.updateUI();
         this.filterDOM();
       }
@@ -355,7 +287,6 @@ class Filters {
         e.preventDefault();
 
         this.resetFilters();
-        this.updateHistory();
         this.updateUI();
       });
     }
@@ -366,7 +297,6 @@ class Filters {
 
         el.classList.remove("is-active");
         this.cleanFilters();
-        this.updateHistory();
       });
     }
   }
@@ -406,14 +336,12 @@ class Filters {
   initEvents() {
     const {
       filter,
-      search,
       sort,
       sortMobile,
       sortMobileButton,
       filterMobileButton,
     } = this.wrapperEls;
     filter && this.initFilterEvents(filter);
-    search && this.initSearchEvents(search);
     sort && this.initSortEvents(sort);
     sortMobile && this.initMobileSortEvents(sortMobile);
     sortMobileButton && this.initMobileButton(sortMobileButton, sortMobile);
