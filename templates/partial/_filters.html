@@ -59,7 +59,9 @@
     {% include "partial/_topic-cards.html" %}
     {% if results %}
       {% for package in results %}
-        {% include "partial/_entity-card.html" %}
+        {% if package["type"] == "charm" %}
+          {% include "partial/_entity-card.html" %}
+        {% endif %}
       {% endfor %}
     {% endif %}
   </div>

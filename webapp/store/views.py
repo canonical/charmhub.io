@@ -48,6 +48,8 @@ def index():
     else:
         results = app.store_api.find(fields=fields).get("results", [])
 
+    charms = []
+    categories = []
     for i, item in enumerate(results):
         results[i]["store_front"] = {}
         results[i]["store_front"]["icons"] = logic.get_icons(results[i])
@@ -64,11 +66,12 @@ def index():
                 {"name": "No Category", "slug": "no-cat"}
             ]
 
-    categories = []
-    for result in results:
-        for category in result["store_front"]["categories"]:
-            if category not in categories:
-                categories.append(category)
+        if results[i]["type"] == "charm":
+            for category in results[i]["store_front"]["categories"]:
+                if category not in categories:
+                    categories.append(category)
+
+            charms.append(results[i])
 
     sorted_categories = sorted(categories, key=lambda k: k["slug"])
 
@@ -76,7 +79,7 @@ def index():
         "categories": sorted_categories,
         "sort": sort,
         "q": query,
-        "results": results,
+        "results": charms,
     }
 
     response = make_response(render_template("store.html", **context))
