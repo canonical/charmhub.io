@@ -41,6 +41,7 @@ def index():
         "name",
         "publisher",
         "revision",
+        "channel",
     ]
 
     if query:
@@ -54,7 +55,7 @@ def index():
         results[i]["store_front"] = {}
         results[i]["store_front"]["icons"] = logic.get_icons(results[i])
         results[i]["store_front"]["last_release"] = logic.convert_date(
-            results[i]["default-release"]["revision"]["created-at"]
+            results[i]["default-release"]["channel"]["released-at"]
         )
 
         if results[i]["result"]["categories"]:

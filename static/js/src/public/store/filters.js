@@ -5,7 +5,8 @@ class Filters {
     this.submitButtonMobile = document.querySelector(
       "[data-js='filter-submit']"
     );
-    this._filters = {};
+    this._filters = this.initFilters();
+    this.searchCache = window.location.search;
 
     this.wrapperEls = {};
 
@@ -35,7 +36,7 @@ class Filters {
     let count = 0;
 
     Object.keys(this._filters).forEach((filterType) => {
-      if (filterType !== "sort") {
+      if (filterType !== "sort" && filterType !== "q") {
         count += this._filters[filterType].length;
       }
     });
@@ -136,6 +137,7 @@ class Filters {
   }
 
   updateUI() {
+    console.log(this._filters);
     if (this._filters.sort) {
       this.wrapperEls.sort.value = this._filters.sort[0];
     }
@@ -169,6 +171,19 @@ class Filters {
         filterMobileButton.innerHTML = `<i class="p-icon--filter"></i>Filters`;
       }
     }
+  }
+
+  initFilters() {
+    const filters = {};
+
+    if (window.location.search) {
+      const searchParams = new URLSearchParams(window.location.search);
+      for (const [filterType, filterValue] of searchParams) {
+        filters[filterType] = filterValue.split(",");
+      }
+    }
+
+    return filters;
   }
 
   addFilter(filterType, filterValue) {
@@ -212,6 +227,32 @@ class Filters {
     });
   }
 
+  updateHistory() {
+    const searchParams = new URLSearchParams();
+
+    Object.keys(this._filters).forEach((filterType) => {
+      searchParams.set(filterType, this._filters[filterType].join(","));
+    });
+
+    let searchStr = searchParams.toString();
+
+    if (searchStr !== this.searchCache) {
+      this.searchCache = searchStr;
+
+      if (searchStr !== "") {
+        searchStr = `?${searchStr}`;
+      }
+
+      const newUrl = `${window.location.origin}${window.location.pathname}${searchStr}`;
+
+      history.pushState(
+        { filters: this._filters },
+        null,
+        decodeURIComponent(newUrl)
+      );
+    }
+  }
+
   syncSortUI(selectorName, newValue) {
     if (selectorName === "sort") {
       this.wrapperEls[selectorName].value = newValue;
@@ -237,6 +278,7 @@ class Filters {
       this.syncSortUI("sortMobile", el.value);
 
       this.cleanFilters();
+      this.updateHistory();
       this.sortDOM();
     });
   }
@@ -249,6 +291,7 @@ class Filters {
       this.syncSortUI("sort", e.target.value);
 
       this.cleanFilters();
+      this.updateHistory();
       this.sortDOM();
 
       // hide the drawer once clicked
@@ -277,6 +320,7 @@ class Filters {
         }
 
         this.cleanFilters();
+        this.updateHistory();
         this.updateUI();
         this.filterDOM();
       }
@@ -287,6 +331,7 @@ class Filters {
         e.preventDefault();
 
         this.resetFilters();
+        this.updateHistory();
         this.updateUI();
       });
     }
