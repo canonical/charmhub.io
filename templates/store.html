@@ -2,31 +2,36 @@
 
 {% block meta_copydoc %}https://docs.google.com/document/d/1WcNN2RlQQrbLSP5ZgcIsAeQAHj5h_yDW6Yd5oBMmU3M{% endblock meta_copydoc %}
 
-{% block meta_description %}The app store for clouds{% endblock %}
+{% block meta_description %}Canonical publishes Ubuntu, provides commercial services and solutions for Ubuntu, and works with hardware manufacturers, software vendors and public clouds to certify Ubuntu.{% endblock %}
 
 {% block content %}
-<h1 class="u-off-screen">The app store for clouds</h1>
-<div class="p-sort" data-js="mobile-sort-handler">
-  <div class="p-sort__title">
-    Sort by
+<div class="p-strip--accent u-no-padding--top u-no-padding--bottom">
+  <div class="p-sort" data-js="mobile-sort-handler">
+    <div class="p-sort__title">
+      Sort by
+    </div>
+    <form class="p-sort__content">
+      <div class="p-sort__item">
+        <input type="radio" name="sortMobile" id="name-asc" value="name-asc" {% if active_filter('sort', 'name-asc') %}checked{% endif %}>
+        <label for="name-asc">Name A/Z</label>
+      </div>
+      <div class="p-sort__item">
+        <input type="radio" name="sortMobile" id="name-desc" value="name-desc" {% if active_filter('sort', 'name-desc') %}checked{% endif %}>
+        <label for="name-desc">Name Z/A</label>
+      </div>
+    </form>
   </div>
-  <form class="p-sort__content">
-    <div class="p-sort__item">
-      <input type="radio" name="sortMobile" id="name-asc" value="name-asc" {% if active_filter('sort', 'name-asc') %}checked{% endif %}>
-      <label for="name-asc">Name A/Z</label>
+  <section class="p-strip--main u-fixed-width">
+    <div class="u-fixed-width">
+      <h1 class="p-heading--2">The Open Operator Collection</h1>
+      <h2 class="p-heading--4 u-sv3">Better Kubernetes operators, and operators for legacy workloads too<br><a href="/manifesto">Read our manifesto</a></h2>
     </div>
-    <div class="p-sort__item">
-      <input type="radio" name="sortMobile" id="name-desc" value="name-desc" {% if active_filter('sort', 'name-desc') %}checked{% endif %}>
-      <label for="name-desc">Name Z/A</label>
-    </div>
-  </form>
+    <div class="p-layout--store">
+
+      {% include "partial/_filters.html" %}
+
+  </section>
 </div>
-<section class="p-strip--main u-fixed-width">
-  <div class="p-layout--store">
-
-    {% include "partial/_filters.html" %}
-
-</section>
 
 {% endblock %}
 
@@ -35,6 +40,9 @@
 <script>
   window.addEventListener("DOMContentLoaded", function () {
     new charmhub.store.Filters({
+      searchMobile: "[data-js='search-handler-mobile']",
+      searchDesktop: "[data-js='search-handler-desktop']",
+      filter: "[data-js='filter-handler']",
       filter: "[data-js='filter-handler']",
       sort: "[data-js='sort-handler']",
       sortMobile: "[data-js='mobile-sort-handler']",

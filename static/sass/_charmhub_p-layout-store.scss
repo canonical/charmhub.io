@@ -97,7 +97,11 @@
     .p-layout__card {
       padding-block-end: 1rem;
       padding-inline-end: 1rem;
-      width: 25%;
+      width: 20%;
+
+      @media screen and(min-width: 1151px) and(max-width: 1600px) {
+        width: 25%;
+      }
 
       @media screen and(min-width: 926px) and(max-width: 1150px) {
         width: 33.33%;
