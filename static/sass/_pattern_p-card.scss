@@ -61,6 +61,8 @@
     }
 
     .p-card__content {
+      max-height: 2.75rem;
+      overflow: hidden;
       padding: 0 $spv-inner--large $spv-inner--large $spv-inner--large;
     }
 

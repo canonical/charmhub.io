@@ -14,6 +14,7 @@
       @extend %p-media-object;
 
       .p-media-object__image {
+        border-radius: 50%;
         max-height: 4rem;
         max-width: 4rem;
       }

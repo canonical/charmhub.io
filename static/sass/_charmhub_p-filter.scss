@@ -74,7 +74,7 @@
 
       @media screen and(min-width: $breakpoint-medium + 1) {
         &:hover {
-          background-color: $color-light;
+          background-color: #e4e9eb;
         }
       }
 
@@ -160,6 +160,16 @@
   .p-filter__list {
     @extend %vf-list;
 
+    &.has-links {
+      @media screen and(max-width: $breakpoint-medium) {
+        display: none;
+      }
+
+      .p-filter__item:hover {
+        background-color: $color-accent;
+      }
+    }
+
     & + & {
       @extend %vf-pseudo-border--top;
 
@@ -176,8 +186,12 @@
     background:
       linear-gradient($color-x-light 30%, rgba(255, 255, 255, 0)),
       linear-gradient(rgba(255, 255, 255, 0), $color-x-light 70%) 0 100%,
-      radial-gradient(farthest-side at 50% 0, rgba(151, 151, 151, 0.5), rgba(0, 0, 0, 0)),
-      radial-gradient(farthest-side at 50% 100%, rgba(151, 151, 151, 0.5), rgba(0, 0, 0, 0)) 0 100%;
+      radial-gradient(
+        farthest-side at 50% 0,
+        rgba(151, 151, 151, 0.5),
+        rgba(0, 0, 0, 0)
+      ),
+      radial-gradient(farthest-side at 50% 100% rgba(151, 151, 151, 0.5), rgba(0, 0, 0, 0)) 0 100%;
     background-attachment: local, local, scroll, scroll;
     background-color: $color-x-light;
     background-repeat: no-repeat;
