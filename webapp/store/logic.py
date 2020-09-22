@@ -44,6 +44,44 @@ UBUNTU_SERIES = {
     "all": "All",
 }
 
+CATEGORIES = {
+    "ai_ml": "ai/ml",
+    "ai": "ai/ml",
+    "machine_learning": "ai/ml",
+    "fortran": "logging-and-tracing",
+    "ldap": "logging-and-tracing",
+    "nginx": "logging-and-tracing",
+    "telemetry": "logging-and-tracing",
+    "system": "logging-and-tracing",
+    "lsf_server": "logging-and-tracing",
+    "ops": "monitoring",
+    "monitoring": "monitoring",
+    "reporting": "monitoring",
+    "cpu": "monitoring",
+    "deploy": "monitoring",
+    "prometheus": "monitoring",
+    "workload_management": "monitoring",
+    "ops, monitoring": "monitoring",
+    "job_scheduler": "monitoring",
+    "network": "networking",
+    "content_cache": "networking",
+    "networking": "networking",
+    "dns": "networking",
+    "cache_proxy": "networking",
+    "reverse_proxy": "networking",
+    "big_data": "big-data",
+    "bigdata": "big-data",
+    "tensorflow": "big-data",
+    "hadoop": "big-data",
+    "ampq": "big-data",
+    "analytics": "big-data",
+    "social": "big-data",
+    "kubernetes": "Kubernetes",
+    "controllers": "Kubernetes",
+    "kubeflow": "Kubernetes",
+    "containers": "Kubernetes",
+}
+
 
 def get_banner_url(media):
     """
@@ -184,13 +222,30 @@ def get_categories(categories_json):
     """
 
     categories = []
+    i = 0
 
     for category in categories_json:
-        categories.append(
-            {"slug": category["name"], "name": format_slug(category["name"])}
-        )
-
-    return categories
+        mapped_catgory = CATEGORIES.get(category["name"], "other")
+        # This is a hack to show only one category that is different
+        # than other if it exists. Otherwise show other.
+        if i < len(categories_json) - 1:
+            if not mapped_catgory == "other":
+                categories.append(
+                    {
+                        "slug": mapped_catgory,
+                        "name": format_slug(mapped_catgory),
+                    }
+                )
+                return categories
+        else:
+            categories.append(
+                {
+                    "slug": mapped_catgory,
+                    "name": format_slug(mapped_catgory),
+                }
+            )
+            return categories
+        i = i + 1
 
 
 def add_store_front_data(package):

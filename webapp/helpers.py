@@ -103,6 +103,10 @@ def format_slug(slug):
     :param slug: The hypen spaced, lowercase slug to be formatted
     :return: The formatted string
     """
+    # TODO Remove once we have category on store side
+    if slug.lower() == "ai/ml":
+        return slug.upper()
+
     return (
         slug.title()
         .replace("-", " ")
