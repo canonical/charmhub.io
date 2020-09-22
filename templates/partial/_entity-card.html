@@ -16,7 +16,7 @@
         {% endif %}
       </div>
       <h4 class="p-card__title u-no-margin--bottom">{{ format_slug(package.name) }}</h4>
-      <p class="u-text--subtle">{{ package["result"]["publisher"]["display-name"] }}</p>
+      <p class="u-text--subtle u-no-padding--top">{{ package["result"]["publisher"]["display-name"] }}</p>
     </div>
 
     {% if package["result"]["summary"] %}
