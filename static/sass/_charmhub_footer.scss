@@ -26,10 +26,8 @@
       linear-gradient(268deg, $brand-color 8%, darken($brand-color, 10%) 100%);
     background-position: top right, bottom left, bottom left;
     background-repeat: no-repeat;
-    background-size: 25% 15%, 60% 100%, 25% 100%, 100%;
-    clip-path: polygon(100% 0%, 100% 100%, 0% 100%, 0% calc(0% + 4rem));
+    background-size: 16rem 15%, 60% 100%, 25% 100%, 100%;
     color: $color-x-light;
-    margin-top: -4rem;
     padding-bottom: 2.5rem;
     padding-top: 6rem;
 

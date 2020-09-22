@@ -5,7 +5,6 @@
 {% block tab_content %}
   <div class="row p-tabs__content" id="overview">
     <div class="col-3">
-      <p><span class="u-text--muted">Latest release</span><br />{{ package.store_front.last_release }}</p>
       {% if package.result.license %}
         <p><span class="u-text--muted">License</span><br />{{ package.result.license }}</p>
       {% endif %}
@@ -34,7 +33,6 @@
         {% endif %}
         </ul>
       {% endif %}
-      <hr class="p-separator--shallow">
       <h4 class="p-heading--5 u-no-margin--bottom">Discuss this {{ package.type }}</h4>
       <p>Share your thoughts on this charm with the community on discourse.</p>
       <p><a class="p-button--neutral" href="https://discourse.juju.is/">Discuss this {{ package.type }}</a></p>

@@ -29,7 +29,6 @@
           <tr>
             <th>Channel</th>
             <th>Version</th>
-            <th>Published</th>
             <th>Platform</th>
           </tr>
         </thead>
@@ -39,7 +38,6 @@
           <tr data-channel-map-channel="{{ channel }}" data-channel-map-version="{{ channel_data.version }}" data-channel-map-filter="{% for data in channel_data %}{{ data.platform }} {% endfor %}">
             <td>{{ track }}/{{ channel }}</td>
             <td>{{ channel_data[0].version }}</td>
-            <td>{{ channel_data[0].released_at }}</td>
             <td>
               <div class="series-tags u-no-margin--top">
                 {% for data in channel_data %}
