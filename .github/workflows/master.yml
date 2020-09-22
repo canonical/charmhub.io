@@ -1,5 +1,8 @@
-name: PR checks
-on: [pull_request]
+name: master checks
+on:
+  push:
+    branches:
+      - master
 
 env:
   SECRET_KEY: insecure_test_key
@@ -89,9 +92,7 @@ jobs:
         run: yarn build
 
       - name: Run tests with coverage
-        run: |
-          coverage run  --source=. -m unittest discover tests
-          bash <(curl -s https://codecov.io/bash) -cF python
+        run: coverage run  --source=. -m unittest discover tests
 
   test-js:
     runs-on: ubuntu-latest
