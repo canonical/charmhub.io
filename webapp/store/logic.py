@@ -41,6 +41,7 @@ UBUNTU_SERIES = {
     "eoan": "19.10",
     "focal": "20.04 LTS",
     "groovy": "20.10",
+    "all": "All",
 }
 
 
