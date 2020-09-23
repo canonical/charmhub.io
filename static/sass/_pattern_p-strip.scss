@@ -253,6 +253,57 @@
     }
   }
 
+  .p-strip--store {
+    @extend %vf-strip;
+
+    background-blend-mode: multiply, multiply, normal, normal;
+    background-color: #772953;
+    background-image:
+      linear-gradient(
+        to bottom left,
+        rgba(228, 228, 228, 0.5) 0,
+        rgba(228, 228, 228, 0.5) 49.9%,
+        transparent 50%
+      ),
+      linear-gradient(
+        to bottom right,
+        rgba(228, 228, 228, 0.5) 0,
+        rgba(228, 228, 228, 0.5) 49.9%,
+        transparent 50%
+      ),
+      linear-gradient(
+        to top left,
+        rgba(240, 245, 247, 1) 0%,
+        rgba(240, 245, 247, 1) 49.3%,
+        rgba(255, 255, 255, 0) 50%,
+        rgba(255, 255, 255, 0) 100%
+      ),
+      linear-gradient(266deg, #044f66, #022935);
+    background-position: top right, top left, right bottom -1px, left top;
+    background-repeat: no-repeat;
+    background-size: 74% 99.83%, 68% 91%, 103.8% 20.26%, 100% 99.8%;
+    color: #fff;
+    padding-block-end: 6rem;
+    padding-block-start: 2rem;
+
+    &.has-accent {
+      position: relative;
+
+      &::after {
+        background: $suru-accent;
+        bottom: -7rem;
+        content: "";
+        display: block;
+        height: 100px;
+        left: -2rem;
+        position: absolute;
+        transform: rotate(15deg);
+        width: 500px;
+        z-index: 1;
+      }
+    }
+  }
+
   .p-strip--charmhub {
     @extend %vf-strip;
 
@@ -275,23 +326,6 @@
     background-position: top right, bottom right;
     background-repeat: no-repeat;
     background-size: 50% 100%, 50% 50%, 100% auto;
-
-    &.has-accent {
-      position: relative;
-
-      &::after {
-        background: $suru-accent;
-        bottom: -7rem;
-        content: "";
-        display: block;
-        height: 100px;
-        left: -2rem;
-        position: absolute;
-        transform: rotate(15deg);
-        width: 500px;
-        z-index: 1;
-      }
-    }
 
     &.is-dark {
       color: $color-x-light;
