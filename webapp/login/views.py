@@ -3,8 +3,6 @@ import talisker
 import flask
 
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
-from flask_openid import OpenID
-from django_openid_auth.teams import TeamsRequest, TeamsResponse
 from flask_wtf.csrf import generate_csrf, validate_csrf
 
 from webapp.login.candid import CandidClient
@@ -20,42 +18,10 @@ LOGIN_LAUNCHPAD_TEAM = os.getenv(
     "LOGIN_LAUNCHPAD_TEAM", "canonical-webmonkeys"
 )
 
-open_id = OpenID(
-    stateless=True,
-    safe_roots=[],
-    extension_responses=[TeamsResponse],
-)
+
 request_session = talisker.requests.get_session()
 candid = CandidClient(request_session)
 publisher_api = CharmPublisher(request_session)
-
-
-@login.route("/login", methods=["GET", "POST"])
-@open_id.loginhandler
-def login_handler():
-    if authentication.is_canonical_employee_authenticated(flask.session):
-        return flask.redirect(open_id.get_next_url())
-
-    lp_teams = TeamsRequest(query_membership=[LOGIN_LAUNCHPAD_TEAM])
-
-    return open_id.try_login(
-        LOGIN_URL,
-        ask_for=["email"],
-        extensions=[lp_teams],
-    )
-
-
-@open_id.after_login
-def after_login(resp):
-    if LOGIN_LAUNCHPAD_TEAM not in resp.extensions["lp"].is_member:
-        flask.abort(403)
-
-    flask.session["openid"] = {
-        "identity_url": resp.identity_url,
-        "email": resp.email,
-    }
-
-    return flask.redirect(open_id.get_next_url())
 
 
 @login.route("/logout")

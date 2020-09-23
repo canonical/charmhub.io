@@ -23,9 +23,6 @@ env:
       key: discourse-api-username
       name: charmhub-io
 
-  - name: LOGIN_LAUNCHPAD_TEAM
-    value: canonical
-
   - name: SEARCH_API_KEY
     secretKeyRef:
       key: google-custom-search-key

@@ -1,9 +1,9 @@
 import talisker.requests
 from canonicalwebteam.flask_base.app import FlaskBase
 from canonicalwebteam.store_api.stores.charmstore import CharmStore
-from flask import redirect, render_template, request, session
+from flask import render_template
 
-from webapp import authentication, config
+from webapp import config
 from webapp.docs.views import init_docs
 from webapp.extensions import csrf
 from webapp.handlers import set_handlers
@@ -31,18 +31,6 @@ app.register_blueprint(publisher)
 
 init_docs(app, "/docs")
 init_tutorials(app, "/tutorials")
-
-
-@app.before_request
-def before_request():
-    if not authentication.is_canonical_employee_authenticated(
-        session
-    ) and not (
-        request.endpoint.startswith("login")
-        or request.endpoint.startswith("store.index")
-        or request.endpoint.startswith("static")
-    ):
-        return redirect("/login?next=" + request.path)
 
 
 @app.route("/overview")
