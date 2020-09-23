@@ -180,6 +180,10 @@ $theme-default-nav: dark;
 
 @include p-charmhub-search-box;
 
+@import "pattern_p-button";
+
+@include p-charmhub-button;
+
 .p-channel-map {
   position: absolute;
   z-index: 11;

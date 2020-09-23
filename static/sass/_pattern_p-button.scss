@@ -1,0 +1,17 @@
+@mixin p-charmhub-button {
+  .p-button--outline {
+    @extend %vf-button-base;
+
+    border-color: $color-x-light;
+    color: $color-x-light;
+
+    &:visited {
+      color: $color-x-light;
+    }
+
+    &:hover,
+    &:active:hover {
+      background-color: rgba($color-mid-x-light, 0.2);
+    }
+  }
+}
