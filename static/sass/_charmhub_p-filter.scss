@@ -161,6 +161,19 @@
     @extend %vf-list;
 
     &.has-links {
+      padding-block-start: 1rem;
+      position: relative;
+
+      &::before {
+        border-bottom: 1px solid $color-mid-light;
+        content: "";
+        height: 1px;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+
       @media screen and(max-width: $breakpoint-medium) {
         display: none;
       }
