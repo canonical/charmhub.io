@@ -20,7 +20,6 @@ class Filters {
     this.initEvents();
     this.updateUI();
     this.filterDOM();
-    this.sortDOM();
 
     window.addEventListener("popstate", (e) => {
       this._filters = e.state ? e.state.filters : null;
@@ -42,35 +41,6 @@ class Filters {
     });
 
     return count;
-  }
-
-  sortDOM() {
-    const cardContainer = document.querySelector("[data-js='card-container']");
-    if (cardContainer) {
-      const allCards = [...cardContainer.children];
-      let topicCardList = [];
-      let sortableCardList = [];
-
-      allCards.forEach((card) => {
-        if (card.getAttribute("data-js") === "topic-card") {
-          topicCardList.push(card);
-        } else {
-          sortableCardList.push(card);
-        }
-      });
-
-      if (
-        (this._filters["sort"] && this._filters["sort"][0] === "name-asc") ||
-        !this._filters["sort"]
-      ) {
-        sortableCardList.sort((a, b) => a.id.localeCompare(b.id));
-      } else if (this._filters["sort"][0] === "name-desc") {
-        sortableCardList.sort((a, b) => -a.id.localeCompare(b.id));
-      }
-
-      topicCardList.forEach((item) => cardContainer.appendChild(item));
-      sortableCardList.forEach((item) => cardContainer.appendChild(item));
-    }
   }
 
   // Check if element shold be filtered
@@ -278,7 +248,7 @@ class Filters {
 
       this.cleanFilters();
       this.updateHistory();
-      this.sortDOM();
+      location.reload();
     });
   }
 
@@ -291,10 +261,7 @@ class Filters {
 
       this.cleanFilters();
       this.updateHistory();
-      this.sortDOM();
-
-      // hide the drawer once clicked
-      el.classList.remove("is-active");
+      location.reload();
     });
   }
 
