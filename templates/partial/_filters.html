@@ -11,11 +11,17 @@
             Categories
           </li>
           {% for category in categories %}
+          {% if category["slug"] != "other" %}
           <li class="p-filter__item" data-filter-type="category" data-js="filter" data-filter-value="{{ category.slug }}">
             <input type="checkbox" id="{{ category.slug }}" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %}>
             <label for="{{ category.slug }}">{{ category.name }}</label>
           </li>
+          {% endif %}
           {% endfor %}
+          <li class="p-filter__item" data-filter-type="category" data-js="filter" data-filter-value="other">
+            <input type="checkbox" id="other" value="other" {% if active_filter('category', 'other') %}checked{% endif %}>
+            <label for="other">other</label>
+          </li>
         </ul>
         {% endif %}
       </div>
