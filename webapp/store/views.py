@@ -77,6 +77,9 @@ def index():
 
     sorted_categories = sorted(categories, key=lambda k: k["name"])
 
+    sort_order = True if sort == "name-desc" else False
+    charms = sorted(charms, key=lambda c: c["name"], reverse=sort_order)
+
     context = {
         "categories": sorted_categories,
         "sort": sort,
