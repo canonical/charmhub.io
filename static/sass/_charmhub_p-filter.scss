@@ -51,6 +51,8 @@
     }
 
     .p-filter__item {
+      @include vf-focus;
+
       padding-left: $spv-inner--small;
 
       &:hover {
@@ -83,6 +85,11 @@
         padding-bottom: $spv-inner--x-small;
         padding-top: $spv-inner--x-small;
         width: 100%;
+
+        &:focus,
+        &:active {
+          outline-style: none;
+        }
 
         @media screen and(max-width: $breakpoint-medium - 1) {
           padding-bottom: $spv-inner--small;
@@ -204,7 +211,11 @@
         rgba(151, 151, 151, 0.5),
         rgba(0, 0, 0, 0)
       ),
-      radial-gradient(farthest-side at 50% 100% rgba(151, 151, 151, 0.5), rgba(0, 0, 0, 0)) 0 100%;
+      radial-gradient(
+        farthest-side at 50% 100% rgba(151, 151, 151, 0.5),
+        rgba(0, 0, 0, 0)
+      )
+      0 100%;
     background-attachment: local, local, scroll, scroll;
     background-color: $color-x-light;
     background-repeat: no-repeat;

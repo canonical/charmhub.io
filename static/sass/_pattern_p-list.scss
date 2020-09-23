@@ -45,14 +45,12 @@
     margin-left: $spv-inner--large;
 
     li {
-      margin-bottom: $spv-inner--large;
+      margin-bottom: 2.65rem;
       max-width: 40rem;
     }
 
     &.is-h4 {
       @extend %vf-heading-4;
-
-      font-weight: 400;
 
       @media screen and (max-width: $breakpoint-medium) {
         margin-left: 1.5rem;
@@ -60,7 +58,6 @@
 
       li p {
         font-size: 1rem;
-        font-weight: 300;
       }
     }
   }

@@ -271,7 +271,7 @@ class Filters {
     el.addEventListener("click", (e) => {
       let target = e.target.closest("li");
 
-      if (target) {
+      if (target && target.classList.contains("p-filter__item")) {
         e.preventDefault();
 
         const filterType = target.dataset.filterType;
@@ -289,6 +289,30 @@ class Filters {
         this.updateHistory();
         this.updateUI();
         this.filterDOM();
+      }
+    });
+
+    el.addEventListener("keyup", (e) => {
+      let target = e.target.closest("li");
+
+      const filterType = target.dataset.filterType;
+      const filterValue = target.dataset.filterValue;
+
+      if (target && target.classList.contains("p-filter__item")) {
+        e.preventDefault();
+        if (e.key === "Enter") {
+          if (this.filterExists(filterType, filterValue)) {
+            this.removeFilter(filterType, filterValue);
+            target.firstElementChild.checked = false;
+          } else {
+            this.addFilter(filterType, filterValue);
+            target.firstElementChild.checked = true;
+          }
+          this.cleanFilters();
+          this.updateHistory();
+          this.updateUI();
+          this.filterDOM();
+        }
       }
     });
 
