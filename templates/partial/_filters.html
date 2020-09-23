@@ -1,12 +1,12 @@
 <div class="p-layout__sidenav">
-  <div class="p-filter" data-js="filter-handler">
+  <div class="p-filter">
     <div class="p-filter__title" data-filters="applied-filters">
       Filters
     </div>
     <form>
       <div class="p-filter__scroll-box">
         {% if categories %}
-        <ul class="p-filter__list">
+        <ul class="p-filter__list" data-js="filter-handler">
           <li class="p-filter__item--title">
             Categories
           </li>
