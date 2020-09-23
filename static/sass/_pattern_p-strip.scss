@@ -116,7 +116,8 @@
 
 @mixin charmhub-p-strip-slanted {
   [class*="p-strip"].is-slanted--left,
-  [class*="p-strip"].is-slanted--right {
+  [class*="p-strip"].is-slanted--right,
+  [class*="p-strip"].is-slanted--right-blue {
     overflow: hidden;
     padding-bottom: 6rem;
     position: relative;
@@ -150,6 +151,17 @@
         to top left,
         rgba(255, 255, 255, 1) 0%,
         rgba(255, 255, 255, 1) 49%,
+        rgba(255, 255, 255, 0) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+  }
+
+  .is-slanted--right-blue::before {
+    background:
+      linear-gradient(
+        to top left,
+        rgba(240, 245, 247, 1) 0%,
+        rgba(240, 245, 247, 1) 49%,
         rgba(255, 255, 255, 0) 50%,
         rgba(255, 255, 255, 0) 100%
       );
@@ -224,6 +236,8 @@
 }
 
 @mixin charmhub-p-strip {
+  $suru-accent: #3fc8f2;
+
   .p-strip--overlap {
     @extend %vf-strip;
 
@@ -261,6 +275,23 @@
     background-position: top right, bottom right;
     background-repeat: no-repeat;
     background-size: 50% 100%, 50% 50%, 100% auto;
+
+    &.has-accent {
+      position: relative;
+
+      &::after {
+        background: $suru-accent;
+        bottom: -7rem;
+        content: "";
+        display: block;
+        height: 100px;
+        left: -2rem;
+        position: absolute;
+        transform: rotate(15deg);
+        width: 500px;
+        z-index: 1;
+      }
+    }
 
     &.is-dark {
       color: $color-x-light;
@@ -319,6 +350,39 @@
     background-position: top right, bottom right, 0% 0%;
     background-repeat: no-repeat;
     background-size: 50% 100%, 8% 100%, auto;
+  }
+
+  .p-strip--overview {
+    @extend %vf-strip;
+
+    background-image:
+      linear-gradient(
+        to bottom left,
+        rgba(225, 225, 225, 0.03) 0%,
+        rgba(225, 225, 225, 0.03) 49.9%,
+        rgba(225, 225, 225, 0) 50%,
+        rgba(225, 225, 225, 0) 100%
+      ),
+      linear-gradient(
+        to bottom right,
+        rgba(225, 225, 225, 0.03) 0%,
+        rgba(225, 225, 225, 0.03) 49.9%,
+        rgba(225, 225, 225, 0) 50%,
+        rgba(225, 225, 225, 0) 100%
+      ),
+      linear-gradient(266deg, #044f66, #022935);
+    background-position: top right, top left;
+    background-repeat: no-repeat;
+    background-size: 50% 100%, 80% 75%, 100% auto;
+
+    &.is-dark {
+      color: $color-x-light;
+
+      .link--light {
+        color: $color-x-light;
+        text-decoration: underline;
+      }
+    }
   }
 
   .p-strip--main {
