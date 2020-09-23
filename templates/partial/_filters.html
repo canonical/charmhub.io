@@ -6,7 +6,7 @@
     <form>
       <div class="p-filter__scroll-box">
         {% if categories %}
-        <ul class="p-filter__list">
+        <ul class="p-filter__list" style="margin-block-end: 1rem;">
           <li class="p-filter__item--title">
             Categories
           </li>
@@ -18,20 +18,6 @@
           {% endfor %}
         </ul>
         {% endif %}
-        <ul class="p-filter__list has-links">
-          <li class="p-filter__item--title u-sv1">
-            Useful links
-          </li>
-          <li class="p-filter__item">
-            <a href="/about" class="u-sv1">What is an operator?</a>
-          </li>
-          <li class="p-filter__item">
-            <a href="/publishing" class="u-sv1">How do I publish here?</a>
-          </li>
-          <li class="p-filter__item">
-            <a href="/glossary" class="u-sv1">Glossary</a>
-          </li>
-        </ul>
       </div>
       <noscript>
         <button type="submit" class="u-hide--small">Apply Filters</button>
@@ -41,6 +27,22 @@
         <button class="p-button--positive" data-js="filter-submit">Show results ({{ results|length }})</button>
       </div>
     </form>
+  </div>
+  <div class="p-filter u-no-padding--top">
+    <ul class="p-filter__list has-links">
+      <li class="p-filter__item--title u-sv1">
+        Useful links
+      </li>
+      <li class="p-filter__item">
+        <a href="/about" class="u-sv1">What is an operator?</a>
+      </li>
+      <li class="p-filter__item">
+        <a href="/publishing" class="u-sv1">How do I publish here?</a>
+      </li>
+      <li class="p-filter__item">
+        <a href="/glossary" class="u-sv1">Glossary</a>
+      </li>
+    </ul>
   </div>
 </div>
 
