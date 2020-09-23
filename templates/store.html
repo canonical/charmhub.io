@@ -5,7 +5,14 @@
 {% block meta_description %}Canonical publishes Ubuntu, provides commercial services and solutions for Ubuntu, and works with hardware manufacturers, software vendors and public clouds to certify Ubuntu.{% endblock %}
 
 {% block content %}
-<div class="p-strip--accent u-no-padding--top u-no-padding--bottom" style="height: 100%">
+<section class="p-strip--charmhub is-slanted--right-blue has-accent is-dark" style="padding-block-end: 3rem; padding-block-start: 2rem;">
+  <div class="u-fixed-width is-wide">
+    <h1>The Open Operator Collection</h1>
+    <h2 class="p-heading--4 u-sv2">Better Kubernetes operators, and operators for legacy workloads too</h2>
+    <a href="/manifesto" class="p-button--neutral">Read our manifesto</a>
+  </div>
+</section>
+<div class="p-strip--accent u-no-padding--top u-no-padding--bottom">
   <div class="p-sort" data-js="mobile-sort-handler">
     <div class="p-sort__title">
       Sort by
@@ -22,10 +29,6 @@
     </form>
   </div>
   <section class="p-strip--main u-fixed-width is-wide">
-    <div class="u-fixed-width is-wide">
-      <h1 class="p-heading--2">The Open Operator Collection</h1>
-      <h2 class="p-heading--4 u-sv3">Better Kubernetes operators, and operators for legacy workloads too<br><a href="/manifesto">Read our manifesto</a></h2>
-    </div>
     <div class="p-layout--store">
 
       {% include "partial/_filters.html" %}
