@@ -27,6 +27,9 @@
   .p-side-navigation {
     position: sticky;
     top: 3rem;
-    z-index: 101;
+
+    &.is-at-the-top {
+      z-index: 101;
+    }
   }
 }

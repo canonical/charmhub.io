@@ -13,9 +13,29 @@
           </div>
           {% else %}
             {% if package["store_front"]["icons"] %}
-              <img src="{{ package.store_front.icons[0] }}" class="p-media-object__image" alt="" />
+              {{
+                image(
+                  url=package.store_front.icons[0],
+                  alt=package.name,
+                  width="64",
+                  height="64",
+                  hi_def=True,
+                  fill=True,
+                  attrs={"class": "p-media-object__image"},
+                ) | safe
+              }}
             {% else %}
-              <img src="https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" class="p-media-object__image" alt="" />
+              {{
+                image(
+                  url="https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg",
+                  alt=package.name,
+                  width="60",
+                  height="60",
+                  hi_def=True,
+                  fill=True,
+                  attrs={"class": "p-media-object__image"},
+                ) | safe
+              }}
             {% endif %}
           {% endif %}
           <div class="p-media-object__details">
