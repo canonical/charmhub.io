@@ -31,7 +31,7 @@
       <strong>Updates and Upgrades.</strong> Software evolves, and deployments must update to benefit from those improvements. High&dash;quality updates inspire the confidence to apply them frequently, which is essential for security. Good operator updates are independent of application upgrades, because application upgrades must be deliberate choices. A good operator distribution system has mechanisms to ensure smooth upgrades across application generations.
     </li>
     <li>
-      <strong>Purposeful config.</strong> Application software has many configurable capabilities, but most of those exist to support higher&dash;level goals or purposes. A good operator distinguishes between purpose and mechanism, offers hig&dash;-level purposeful config, and translates that to the many low&dash;level mechanism configs of the workload.
+      <strong>Purposeful config.</strong> Application software has many configurable capabilities, but most of those exist to support higher&dash;level goals or purposes. A good operator distinguishes between purpose and mechanism, offers high&dash;level purposeful config, and translates that to the many low&dash;level mechanism configs of the workload.
     </li>
     <li>
       <strong>Scale.</strong> Applications are often clustered for resilience or performance. A good operator will handle scale, guided by purposeful config and the workload nature, and respond to dynamic changes. A great operator will scale up and down equally well.
@@ -43,7 +43,7 @@
       <strong>Awareness.</strong> A good operator evaluates and presents the state of its workload in human&dash;friendly terms. The operator understands the health, availability, and dependencies of the application, assesses those and presents them to the admin. Admins should never access the underlying systems or containers to assess the state of a workload, because the operator reports it continuously and automatically.
     </li>
     <li>
-      <strong>Leadership.</strong> In distributed systems, some decisions must be taken for a whole cluster. Problems occur if different units make independent conflicting decisions. An operator should always know whether to make a decision or defer to another unit. Leader decisions should be available to all units in a reliable way. Leadership in distributed systems is a hard problem, and a well&dash;formed operator will follow proven algorithms for leader election to ensure cluster consistency.
+      <strong>Leadership.</strong> In distributed systems, some decisions must be taken for a whole cluster. Problems occur if different units make independent, conflicting decisions. An operator should always know whether to make a decision or defer to another unit. Leader decisions should be available to all units in a reliable way. Leadership in distributed systems is a hard problem, and a well&dash;formed operator will follow proven algorithms for leader election to ensure cluster consistency.
     </li>
     <li>
       <strong>Composition.</strong> It is common to integrate multiple pieces of software on the same system. For example, an intrusion detection system may need direct access to the processes on a database server. The operator framework must provide clear mechanisms to enable diverse functions to coexist in a single execution environment such as a Kubernetes pod or a machine.
@@ -61,7 +61,7 @@
       <strong>Substitution.</strong> Many applications provide services that are standard or similar. Enterprises expect to choose the actual implementation in a particular deployment, or swap implementations later. Operators should not assume specific integration counterparts, allowing their substitution.
     </li>
     <li>
-      <strong>Model driven.</strong> All applications must all work together for a successful deployment. A change in one application is often relevant for all the applications integrated with it. Operators should observe and respond to changes in a model that describes the whole deployment application topology and configuration.
+      <strong>Model&dash;driven.</strong> All applications must all work together for a successful deployment. A change in one application is often relevant for all the applications integrated with it. Operators should observe and respond to changes in a model that describes the whole deployment application topology and configuration.
     </li>
     <li>
       <strong>Resourceful.</strong> An operator should not assume a given resource allocation or scale. A user may deploy the application on a few small machines in one scenario, and many large machines in another. The model determines resources, not the operator.
