@@ -41,7 +41,7 @@
 
     {% if package["result"]["summary"] %}
       <div class="p-card__content">
-        <p><small>{{ package["result"]["summary"]|truncate(90, True) }}</small></p>
+        <p><small>{{ package["result"]["summary"].capitalize()|truncate(90, True) }}</small></p>
       </div>
     {% endif %}
     <div class="p-card__footer">
