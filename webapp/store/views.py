@@ -181,13 +181,13 @@ def details_docs(entity_name, slug=None):
 
 
 @store.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configuration'
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configure'
 )
 def details_configuration(entity_name):
     package = app.store_api.get_item_details(entity_name, fields=FIELDS)
     package = logic.add_store_front_data(package)
 
-    return render_template("details/configuration.html", package=package)
+    return render_template("details/configure.html", package=package)
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/history')

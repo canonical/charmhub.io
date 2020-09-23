@@ -1,9 +1,9 @@
-{% set current_tab = "configuration" %}
+{% set current_tab = "configure" %}
 
 {% extends '/details/details_layout.html' %}
 
 {% block tab_content %}
-<div class="row p-tabs__content" id="configuration">
+<div class="row p-tabs__content" id="configure">
   <div class="row">
     {% if package.store_front.config.options %}
     <div class="col-3">
