@@ -92,6 +92,11 @@
       display: flex;
       flex-wrap: wrap;
       margin-inline-end: -1rem;
+
+      .p-notification--information {
+        margin-inline-end: 1rem;
+        width: 100%;
+      }
     }
 
     .p-layout__card {

@@ -85,6 +85,12 @@
           {% include "partial/_entity-card.html" %}
         {% endif %}
       {% endfor %}
+    {% else %}
+      <div class="p-notification--information">
+          <p class="p-notification__response">
+            We couldn't find anything for your search "<strong>{{ q }}</strong>".
+          </p>
+      </div>
     {% endif %}
   </div>
 </div>
