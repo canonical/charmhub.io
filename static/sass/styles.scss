@@ -239,9 +239,9 @@ body {
   display: none;
 }
 
-// Fix pre width on details pages
+// Fix pre width on details pages for Desktop
 .p-tabs__content {
   pre {
-    width: 40rem;
+    max-width: 40rem;
   }
 }
