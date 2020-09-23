@@ -106,6 +106,8 @@ def format_slug(slug):
     # TODO Remove once we have category on store side
     if slug.lower() == "ai/ml":
         return slug.upper()
+    if slug.lower() == "openstack":
+        return "OpenStack"
 
     return (
         slug.title()
