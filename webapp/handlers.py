@@ -9,6 +9,8 @@ from canonicalwebteam.store_api.exceptions import (
     StoreApiTimeoutError,
 )
 
+from canonicalwebteam import image_template
+
 from webapp import authentication, helpers
 
 
@@ -32,6 +34,7 @@ def set_handlers(app):
             "remove_filter": helpers.remove_filter,
             "format_slug": helpers.format_slug,
             "publisher": publisher,
+            "image": image_template,
         }
 
     # Error handlers
