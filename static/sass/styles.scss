@@ -249,3 +249,12 @@ body {
     max-width: 40rem;
   }
 }
+
+.is-wide {
+  max-width: $grid-max-width !important;
+}
+
+.row,
+.u-fixed-width {
+  max-width: 72rem;
+}
