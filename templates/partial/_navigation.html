@@ -6,8 +6,8 @@
           <img class="p-navigation__image" src="https://assets.ubuntu.com/v1/c3b8cc72-Charmhub_white_hex.svg" width="166" height="32" alt="Charmhub" />
         </a>
       </div>
-      <a href="#navigation" class="p-navigation__toggle--open" title="menu">Menu</a>
-      <a href="#navigation-closed" class="p-navigation__toggle--close" title="close menu">Close menu</a>
+      <a href="#navigation" class="p-navigation__toggle p-navigation__toggle--open" title="menu">Menu</a>
+      <a href="#navigation-closed" class="p-navigation__toggle p-navigation__toggle--close" title="close menu">Close menu</a>
     </div>
     <nav class="p-navigation__nav">
       <span class="u-off-screen">
@@ -38,3 +38,26 @@
     </nav>
   </div>
 </header>
+
+{% block page_scripts %}
+<!-- This JS override of the Vanilla pattern with uses CSS :target to toggle visibility
+is because the Charmhub filters rely the URL string and the default CSS toggle uses
+a hash in the URL which causes a conflict -->
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    const menuToggles = document.querySelectorAll('.p-navigation__toggle');
+    const menuNav = document.querySelector('.p-navigation__nav');
+    menuToggles.forEach((menuToggle) => {
+        menuToggle.addEventListener('click', (e) => {
+         e.preventDefault();
+         menuNav.classList.toggle('nav-active');
+      })
+    })
+  });
+</script>
+<style>
+  .nav-active {
+    display: flex;
+  }
+</style>
+{% endblock %}
