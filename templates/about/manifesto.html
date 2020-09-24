@@ -13,106 +13,106 @@
   </h2>
   <ol class="p-list--ordered is-h4">
     <li>
-      Source Required.
+      Source Required
       <p>An operator is software that takes control of an enterprise system, application or service. The operator source code is essential to verify expected behavior. We make operator source available so that everybody can understand exactly what happens on their systems.</p>
     </li>
     <li>
-      Open source preferred.
+      Open source preferred
       <p>We are an open source community to enable everyone to contribute to the shared problem of common workload operations. Our frameworks and tools are open source to enable the widest benefit of our work. We know some vendors cannot use open source, so our framework license allows them to create proprietary operators while preserving interoperability.</p>
     </li>
     <li>
-      Security.
+      Security
       <p>Application security is critical to enterprise integrity. The most common cause of vulnerability in enterprise architecture is human error. Software operators ensure best practice for every deployment and every change. A good operator applies defense-in-depth to every aspect of workload operations &ndash; from data encryption and application confinement to password selection and key handling. We review all operators for security. We treat operator code just like application code, with Common Vulnerabilities and Exposures, and we distribute fixes fast and automatically.</p>
     </li>
     <li>
-      Substrate neutral.
+      Substrate neutral
       <p>An operator should not assume any particular infrastructure or Kubernetes implementation, but use common, portable primitives. Where specific application capabilities can be unlocked on a particular substrate, they should be optional.</p>
     </li>
     <li>
-      Reuse.
+      Reuse
       <p>A well&dash;behaved operator is general and not deployment-specific. The operator understands many ways to deploy the application &ndash; large or small scale, resilient or minimal &ndash; and it serves the diverse needs of multiple users equally. Reusability drives correctness and completeness, it grows the community of users and contributors, and it expands the configurations, scenarios and integrations supported by the operator.</p>
     </li>
     <li>
-      Updates and Upgrades.
+      Updates and Upgrades
       <p>Software evolves, and deployments must update to benefit from those improvements. High&dash;quality updates inspire the confidence to apply them frequently, which is essential for security. Good operator updates are independent of application upgrades, because application upgrades must be deliberate choices. A good operator distribution system has mechanisms to ensure smooth upgrades across application generations.</p>
     </li>
     <li>
-      Purposeful config.
+      Purposeful config
       <p>Application software has many configurable capabilities, but most of those exist to support higher&dash;level goals or purposes. A good operator distinguishes between purpose and mechanism, offers high&dash;level purposeful config, and translates that to the many low&dash;level mechanism configs of the workload.</p>
     </li>
     <li>
-      Scale.
+      Scale
       <p>Applications are often clustered for resilience or performance. A good operator will handle scale, guided by purposeful config and the workload nature, and respond to dynamic changes. A great operator will scale up and down equally well.</p>
     </li>
     <li>
-      Actionable.
+      Actionable
       <p>Every application has a set of actions that can be performed by administrators. A good operator declares them and facilitates reliable execution. Daily actions like backup, restore, reset, and restart should never require direct admin access to underlying systems, configuration files, tools or containers. Actions should be remote procedures driven by API or CLI, subject to permissions, and logged for audit and accountability.</p>
     </li>
     <li>
-      Awareness.
+      Awareness
       <p>A good operator evaluates and presents the state of its workload in human&dash;friendly terms. The operator understands the health, availability, and dependencies of the application, assesses those and presents them to the admin. Admins should never access the underlying systems or containers to assess the state of a workload, because the operator reports it continuously and automatically.</p>
     </li>
     <li>
-      Leadership.
+      Leadership
       <p>In distributed systems, some decisions must be taken for a whole cluster. Problems occur if different units make independent conflicting decisions. An operator should always know whether to make a decision or defer to another unit. Leader decisions should be available to all units in a reliable way. Leadership in distributed systems is a hard problem, and a well&dash;formed operator will follow proven algorithms for leader election to ensure cluster consistency.</p>
     </li>
     <li>
-      Composition.
+      Composition
       <p>It is common to integrate multiple pieces of software on the same system. For example, an intrusion detection system may need direct access to the processes on a database server. The operator framework must provide clear mechanisms to enable diverse functions to coexist in a single execution environment such as a Kubernetes pod or a machine.</p>
     </li>
     <li>
-      Topology.
+      Topology
       <p>Most of the work of enterprise software is integration. A good operator goes beyond the application lifecycle to the application graph, understanding integration with other applications, and controlling its workload appropriately.</p>
     </li>
     <li>
-      Interoperable.
+      Interoperable
       <p>Enterprises require multi&dash;vendor deployments to work well. Operators should work with operators from other vendors and publishers. Collaboration and coordination are best done in a public forum to ensure the widest perspective.</p>
     </li>
     <li>
-      Consistent.
+      Consistent
       <p>Admins work with many operators in large systems of many components. A well&dash;designed operator will reuse common patterns of naming and behavior to simplify the learning curve and increase administrator effectiveness.</p>
     </li>
     <li>
-      Substitution.
+      Substitution
       <p>Many applications provide services that are standard or similar. Enterprises expect to choose the actual implementation in a particular deployment, or swap implementations later. Operators should not assume specific integration counterparts, allowing their substitution.</p>
     </li>
     <li>
-      Model driven.
+      Model driven
       <p>All applications must all work together for a successful deployment. A change in one application is often relevant for all the applications integrated with it. Operators should observe and respond to changes in a model that describes the whole deployment application topology and configuration.</p>
     </li>
     <li>
-      Resourceful.
+      Resourceful
       <p>An operator should not assume a given resource allocation or scale. A user may deploy the application on a few small machines in one scenario, and many large machines in another. The model determines resources, not the operator.</p>
     <li>
-      Network Agnostic.
+      Network Agnostic
       <p>Different enterprises take different approaches to networking. An operator should learn what&rsquo;s intended from the model, and not hard-code specific network details. There are good reasons to separate services on different networks, and operators should support segregated network architectures.</p>
     </li>
     <li>
-      Cross platform.
+      Cross platform
       <p>Enterprises have applications on a wide range of operating systems like Windows and Linux, and many deployments integrate systems on diverse platforms. The operator framework should enable multi&dash;platform scenarios.</p>
     </li>
     <li>
-      Architecture neutral.
+      Architecture neutral
       <p>Where the underlying application provider cares to be multi&dash;arch, the operator community should care too.</p>
     </li>
     <li>
-      Tested.
+      Tested
       <p>Operators are privileged software dealing with critical functionality in sensitive environments. A good operator will have both unit and integration tests, which can be run by users to verify behaviour in their intended scenarios.</p>
     </li>
     <li>
-      Trusted builds.
+      Trusted builds
       <p>Operators are software, which is often compiled. The integrity of the build system, and the integrity of the revision control system that drives them, is central to the provenance of the operator. A trustworthy operator system must enable trusted builds of operators as much as workloads.</p>
     </li>
     <li>
-      Signed.
+      Signed
       <p>The trust placed in an operator means that it is important to know who produced it, and that it has not been modified. A trustworthy operator distribution system must enable verification of the provenance of any given revision at any time.</p>
     </li>
     <li>
-      Staged.
+      Staged
       <p>Software changes are inevitable. The more widely they can be inspected and tested, and the sooner issues can be uncovered, the better. A good operator will publish not only stable changes, but upcoming releases in beta or release candidate form, and possibly a development tip, for each major version. This enables widespread testing of changes and increases the quality of stable releases.</p>
     </li>
     <li>
-      Managed.
+      Managed
       <p>An enterprise environment must plan changes at particular times. Operator distribution mechanisms should enable fine&dash;grained control of update propagation as well as enterprise control of versions.</p>
     </li>
   </ol>
