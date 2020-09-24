@@ -1,5 +1,9 @@
 @mixin p-charmhub-navigation {
   .p-navigation {
+    @extend %vf-has-box-shadow;
+
+    font-size: 1.125rem;
+    font-weight: 400;
     position: sticky;
     top: -1px;
   }
