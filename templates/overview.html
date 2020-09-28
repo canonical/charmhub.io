@@ -11,6 +11,7 @@
     <p class="p-heading--4"><a href="/manifesto" class="p-link--inverted">Read our manifesto</a></p>
   </div>
 </section>
+
 <section class="p-strip--accent">
   <div class="row">
     <div class="col-5">
@@ -32,12 +33,7 @@
       }}
     </div>
   </div>
-  <div class="u-fixed-width">
-
-  </div>
 </section>
-
-
 
 <section class="p-strip">
   <div class="row">
@@ -53,19 +49,59 @@
   <div class="u-fixed-width">
     <ul class="p-inline-images">
       <li class="p-inline-images__item">
-        <img class="p-inline-images__logo" style="width: 80px;" src="https://assets.ubuntu.com/v1/a82add58-profile-aws.svg" alt="AWS" width="80" height="48">
+        {{
+          image(
+            url="https://assets.ubuntu.com/v1/a82add58-profile-aws.svg",
+            alt="AWS",
+            width="80",
+            height="48",
+            hi_def=True,
+          ) | safe
+        }}
       </li>
       <li class="p-inline-images__item">
-        <img class="p-inline-images__logo" style="width: 120px;" src="https://assets.ubuntu.com/v1/e3914def-partner-logo-azure.svg" alt="Azure" width="120" height="35">
+        {{
+          image(
+            url="https://assets.ubuntu.com/v1/e3914def-partner-logo-azure.svg",
+            alt="Azure",
+            width="120",
+            height="35",
+            hi_def=True,
+          ) | safe
+        }}
       </li>
       <li class="p-inline-images__item">
-        <img class="p-inline-images__logo" style="width: 144px;" src="https://assets.ubuntu.com/v1/314085ad-openstack.svg" alt="OpenStack" width="144" height="37">
+        {{
+          image(
+            url="https://assets.ubuntu.com/v1/314085ad-openstack.svg",
+            alt="OpenStack",
+            width="144",
+            height="37",
+            hi_def=True,
+          ) | safe
+        }}
       </li>
       <li class="p-inline-images__item">
-        <img class="p-inline-images__logo" style="width: 144px;" src="https://assets.ubuntu.com/v1/e795fc84-Google_Cloud_Logo.svg" alt="Google Cloud" width="144" height="23">
+        {{
+          image(
+            url="https://assets.ubuntu.com/v1/e795fc84-Google_Cloud_Logo.svg",
+            alt="Google Cloud",
+            width="144",
+            height="23",
+            hi_def=True,
+          ) | safe
+        }}
       </li>
       <li class="p-inline-images__item">
-        <img class="p-inline-images__logo" style="width: 120px;" src="https://assets.ubuntu.com/v1/038514e8-MAAS_black-orange_rgb.svg" alt="Maas" width="120" height="32">
+        {{
+          image(
+            url="https://assets.ubuntu.com/v1/038514e8-MAAS_black-orange_rgb.svg",
+            alt="Maas",
+            width="120",
+            height="32",
+            hi_def=True,
+          ) | safe
+        }}
       </li>
     </ul>
   </div>
