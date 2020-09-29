@@ -41,28 +41,52 @@ def set_handlers(app):
     # ===
     @app.errorhandler(StoreApiTimeoutError)
     def handle_store_api_timeout(e):
-        render_template("500.html", error_message=str(e)), 504
+        status_code = 504
+        return (
+            render_template(
+                "500.html", error_message=str(e), status_code=status_code
+            ),
+            status_code,
+        )
 
     @app.errorhandler(StoreApiCircuitBreaker)
     def handle_store_api_circuit_breaker_exception(e):
-        render_template("500.html", error_message=str(e)), 503
+        status_code = 503
+        return (
+            render_template(
+                "500.html", error_message=str(e), status_code=status_code
+            ),
+            status_code,
+        )
 
     @app.errorhandler(StoreApiResponseErrorList)
     def handle_store_api_error_list(e):
         if e.status_code == 404:
             return render_template("404.html", message="Entity not found"), 404
 
+        status_code = 502
         if e.errors:
-            errors = ", ".join(e.errors.key())
+            errors = ", ".join([e.get("message") for e in e.errors])
             return (
-                render_template("500.html", error_message=errors),
-                502,
+                render_template(
+                    "500.html", error_message=errors, status_code=status_code
+                ),
+                status_code,
             )
 
-        return render_template("500.html"), 502
+        return (
+            render_template("500.html", status_code=status_code),
+            status_code,
+        )
 
     @app.errorhandler(StoreApiResponseDecodeError)
     @app.errorhandler(StoreApiResponseError)
     @app.errorhandler(StoreApiError)
     def handle_store_api_error(e):
-        return render_template("500.html", error_message=str(e)), 502
+        status_code = 502
+        return (
+            render_template(
+                "500.html", error_message=str(e), status_code=status_code
+            ),
+            status_code,
+        )

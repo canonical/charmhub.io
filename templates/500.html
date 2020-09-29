@@ -1,6 +1,8 @@
 {% extends 'base_layout.html' %}
 
-{% block title %}500: Server error{% endblock %}
+{% set status_code = status_code|default("500", true) %}
+
+{% block title %}{{ status_code }}: Server error{% endblock %}
 
 {% block meta_description %}Something&rsquo;s gone wrong.{% endblock %}
 
@@ -20,7 +22,7 @@
       }}
     </div>
     <div class="col-7 col-start-large-6">
-      <h1 class="p-heading--2">500: This page isn’t working</h1>
+      <h1 class="p-heading--2">{{ status_code }}: This page isn’t working</h1>
       <p>
         <strong>We are sorry, the page you requested isn't currently available.</strong>
         Our servers may be having some issues loading this page. This could be because we are doing some maintenance and the site will be up soon. Please try again later.
