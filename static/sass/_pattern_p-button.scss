@@ -14,4 +14,14 @@
       background-color: rgba($color-mid-x-light, 0.2);
     }
   }
+
+  .pagination__link--previous {
+    @media screen and (min-width: $breakpoint-medium) {
+      margin-block-end: 0;
+    }
+  }
+
+  .pagination__link--next {
+    margin-block-end: 0;
+  }
 }

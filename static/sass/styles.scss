@@ -32,6 +32,7 @@ $theme-default-nav: dark;
 @include vf-p-links;
 @include vf-p-lists;
 @include vf-p-media-object;
+@include vf-p-modal;
 @include vf-p-muted-heading;
 @include vf-p-notification;
 @include vf-p-navigation;
@@ -183,6 +184,10 @@ $theme-default-nav: dark;
 @import "pattern_p-button";
 
 @include p-charmhub-button;
+
+@import "pattern_p-modal";
+
+@include p-charmhub-modal;
 
 .p-channel-map {
   position: absolute;
