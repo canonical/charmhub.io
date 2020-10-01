@@ -1,0 +1,8 @@
+@mixin p-charmhub-modal {
+  @media (min-width: 975px) {
+    #contact-modal.p-modal .p-modal__dialog {
+      max-width: 875px;
+      min-width: 875px;
+    }
+  }
+}

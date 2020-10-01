@@ -34,11 +34,13 @@ class Filters {
   getSelectedFiltersCount() {
     let count = 0;
 
-    Object.keys(this._filters).forEach((filterType) => {
-      if (filterType !== "sort" && filterType !== "q") {
-        count += this._filters[filterType].length;
-      }
-    });
+    if (this._filters) {
+      Object.keys(this._filters).forEach((filterType) => {
+        if (filterType !== "sort" && filterType !== "q") {
+          count += this._filters[filterType].length;
+        }
+      });
+    }
 
     return count;
   }
@@ -107,7 +109,7 @@ class Filters {
   }
 
   updateUI() {
-    if (this._filters.sort) {
+    if (this._filters && this._filters.sort) {
       this.wrapperEls.sort.value = this._filters.sort[0];
     }
 
