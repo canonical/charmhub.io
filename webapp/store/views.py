@@ -27,13 +27,12 @@ def index():
     sort = request.args.get("sort", default="sort-asc", type=str)
 
     fields = [
-        "categories",
-        "summary",
-        "media",
-        "name",
-        "publisher",
-        "revision",
-        "channel",
+        "result.categories",
+        "result.summary",
+        "result.media",
+        "result.publisher.display-name",
+        "default-release.revision.revision",
+        "default-release.channel",
     ]
 
     if query:
@@ -85,13 +84,12 @@ def index():
 
 
 FIELDS = [
-    "media",
-    "metadata-yaml",
-    "config-yaml",
-    "tags",
-    "categories",
-    "publisher",
-    "summary",
+    "result.media",
+    "default-release",
+    "result.categories",
+    "result.publisher.display-name",
+    "result.summary",
+    "channel-map",
 ]
 
 
