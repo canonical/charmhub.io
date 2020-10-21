@@ -180,6 +180,14 @@ def details_configuration(entity_name):
     return render_template("details/configure.html", package=package)
 
 
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/actions')
+def details_actions(entity_name):
+    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
+    package = logic.add_store_front_data(package)
+
+    return render_template("details/actions.html", package=package)
+
+
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/history')
 def details_history(entity_name):
     package = app.store_api.get_item_details(entity_name, fields=FIELDS)

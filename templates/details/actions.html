@@ -1,0 +1,11 @@
+{% set current_tab = "actions" %}
+
+{% extends '/details/details_layout.html' %}
+
+{% block details_content %}
+<div class="row p-tabs__content" id="actions">
+  <div class="row">
+    <pre>{{ package.store_front.actions }}</pre>
+  </div>
+</div>
+{% endblock%}
