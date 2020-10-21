@@ -5,6 +5,7 @@ from collections import OrderedDict
 import humanize
 from dateutil import parser
 from webapp.helpers import format_slug, get_yaml_loader
+from webapp.store.mock import mocked_actions
 
 yaml = get_yaml_loader()
 UBUNTU_SERIES = {
@@ -289,6 +290,9 @@ def add_store_front_data(package):
     extra["ubuntu_versions"] = convert_series_to_ubuntu_versions(
         extra["series"]
     )
+
+    # Mocked data
+    extra["actions"] = mocked_actions
 
     package["store_front"] = extra
     return package
