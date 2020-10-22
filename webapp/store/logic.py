@@ -127,6 +127,10 @@ def convert_channel_maps(channel_map):
     for channel in channel_map:
         track = channel["channel"].get("track", "latest")
         risk = channel["channel"]["risk"]
+        resources = {}
+
+        for resource in channel["revision"]["resources"]:
+            resources[resource["name"]] = resource
 
         if track not in result:
             result[track] = {}
@@ -143,6 +147,7 @@ def convert_channel_maps(channel_map):
             "platform": convert_series_to_ubuntu_versions(
                 channel["channel"]["platform"]["series"]
             ),
+            "resources": resources,
         }
 
         result[track][risk].append(info)
@@ -163,6 +168,59 @@ def convert_channel_maps(channel_map):
         )
 
     return result
+
+
+def mock_resources(package):
+    fake_resources = [
+        {
+            "name": "resource1",
+            "type": "resource-type",
+            "revision": "3",
+            "path": "resource-path",
+            "filesize": "resource-filesize",
+            "sha256": "resource-sha256",
+            "sha512": "resource-sha512",
+            "sha384": "resource-sha384",
+            "download_url": "resource-download-url",
+        },
+        {
+            "name": "resource2",
+            "type": "resource-type",
+            "revision": "4",
+            "path": "resource-path",
+            "filesize": "resource-filesize",
+            "sha256": "resource-sha256",
+            "sha512": "resource-sha512",
+            "sha384": "resource-sha384",
+            "download_url": "resource-download-url",
+        },
+    ]
+
+    for channel in package["channel-map"]:
+        channel["revision"]["resources"] = fake_resources
+
+    return package
+
+
+def extract_all_resources(channel_map):
+    """
+    Extract resources from channel map
+
+    :param channel_maps: The channel maps list returned by the API
+
+    :returns: Charm resource names
+    """
+    resources = []
+
+    for channel in channel_map:
+
+        channel_resources = channel["revision"]["resources"]
+
+        for resource in channel_resources:
+            if resource["name"] not in resources:
+                resources.append(resource["name"])
+
+    return resources
 
 
 def extract_all_series(channel_map):
@@ -265,6 +323,10 @@ def get_categories(categories_json):
 
 def add_store_front_data(package):
     extra = {}
+
+    # Mock data
+    package = mock_resources(package)
+
     extra["icons"] = get_icons(package)
     extra["metadata"] = yaml.load(
         package["default-release"]["revision"]["metadata-yaml"]
@@ -277,6 +339,7 @@ def add_store_front_data(package):
 
     # Reshape channel maps
     extra["channel_map"] = convert_channel_maps(package["channel-map"])
+    extra["resources"] = extract_all_resources(package["channel-map"])
 
     # Extract all supported series
     extra["series"] = extract_all_series(package["channel-map"])
