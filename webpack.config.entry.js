@@ -9,4 +9,5 @@ module.exports = {
   list: "./static/js/src/publisher/list-page.js",
   listing: "./static/js/src/publisher/listing-page.js",
   settings: "./static/js/src/publisher/settings.js",
+  "highlight-nav": "./static/js/src/libs/highlight-nav.js",
 };

@@ -189,6 +189,15 @@ $theme-default-nav: dark;
 
 @include p-charmhub-modal;
 
+// Remove table row borders
+.p-table--no-borders tr {
+  border-top: 0 !important;
+
+  .p-list:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
 .p-channel-map {
   position: absolute;
   z-index: 11;
@@ -268,4 +277,11 @@ body {
 .p-heading--3,
 h3 {
   font-weight: 200;
+}
+
+.vertical-separator {
+  border-right: 1px solid $color-mid-light;
+  display: inline-block;
+  margin-right: 0.5rem;
+  padding-right: 0.5rem;
 }
