@@ -42,6 +42,12 @@ module.exports = [
     use: ["expose-loader?exposes=charmhub.details.docs", "babel-loader"],
   },
   {
+    test: require.resolve(
+      __dirname + "/static/js/src/public/details/history/index.js"
+    ),
+    use: ["expose-loader?exposes=charmhub.details.history", "babel-loader"],
+  },
+  {
     test: require.resolve(__dirname + "/static/js/src/publisher/list-page.js"),
     use: ["expose-loader?exposes=charmhub.publisher.list", "babel-loader"],
   },

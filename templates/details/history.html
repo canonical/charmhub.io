@@ -5,21 +5,44 @@
 {% block details_content %}
   <div class="u-fixed-width">
     <p>Displaying release history for the <strong>‘latest/stable’</strong> channel:</p>
-    <table class="p-table--mobile-card" role="grid">
+    <table class="p-table--mobile-card" role="grid" data-js="history-table">
       <thead>
         <tr role="row">
           <th>Date</th>
-          <th class="u-align--right">Version</th>
+          <th class="u-align--right">Charm version</th>
+          <th class="u-align--right">Theme</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody data-js="table-body">
         {% for release in package.store_front.channel_map["latest"]["stable"] %}
         <tr role="row">
           <td role="rowheader" aria-label="Date">{{ release.released_at }}</td>
-          <td role="gridcell" aria-label="Version" class="u-align--right">{{ release.version }}</td>
+          <td role="gridcell" aria-label="Charm version" class="u-align--right">{{ release.version }}</td>
+          <td role="gridcell" aria-label="Theme" class="u-align--right">7</td>
         </tr>
         {% endfor %}
       </tbody>
+      <tfoot class="u-hide" data-js="table-footer">
+        <tr role="row">
+          <td role="gridcell" colspan="3">
+            <div class="u-align--right">
+              <small>
+                <span class="p-summary__text u-text--muted">Showing <span data-js="table-show-current"></span> out of <span data-js="table-show-total"></span> items.</span>
+                <button class="is-small is-dense p-button--neutral" data-js="show-more-button">Show more</button>
+              </small>
+            </div>
+          </td>
+        </tr>
+      </tfoot>
     </table>
   </div>
 {% endblock%}
+
+{% block page_scripts %}
+  <script src="{{ versioned_static('js/dist/details_history.js') }}" defer></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      charmhub.details.history.init("[data-js='history-table']");
+    });
+  </script>
+{% endblock %}
