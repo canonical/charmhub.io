@@ -97,7 +97,6 @@
       );
       var paginationContent = contactModal.querySelectorAll(".js-pagination");
       var submitButton = contactModal.querySelector(".mktoButton");
-      var inputs = contactModal.querySelectorAll("input, textarea");
       var comment = contactModal.querySelector("#Comments_from_lead__c");
       var otherContainers = document.querySelectorAll(".js-other-container");
 
@@ -109,7 +108,7 @@
       };
 
       if (submitButton) {
-        submitButton.addEventListener("click", function (e) {
+        submitButton.addEventListener("click", function () {
           ga(
             "send",
             "event",
