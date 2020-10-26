@@ -185,6 +185,10 @@ $theme-default-nav: dark;
 
 @include p-charmhub-button;
 
+@import "pattern_p-button-group";
+
+@include p-charmhub-button-group;
+
 @import "pattern_p-modal";
 
 @include p-charmhub-modal;
@@ -265,7 +269,6 @@ body {
   display: none;
 }
 
-// Fix pre width on details pages for Desktop
 .p-details-tab__content {
   p {
     max-width: unset;

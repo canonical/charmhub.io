@@ -1,0 +1,57 @@
+{% set current_tab = "libraries" %}
+
+{% extends '/details/details_layout.html' %}
+
+{% block details_content %}
+  <div class="row p-tabs__content">
+
+    {% include '/details/libraries/_libraries_side_nav.html'%}
+
+    <div class="col-9">
+      <div id="introduction">
+        <ul class="p-inline-list--stretch p-list--reversed">
+          <li class="p-inline-list__item u-no-margin--right">
+            <div class="p-button-group">
+              <div class="p-button-group__inner">
+                <div class="p-button-group__buttons">
+                  <button aria-label="view by docstrings" class="p-button-group__button is-selected" value="docstrings"><i class="p-icon--menu">Docstrings</i><span>Docstrings</span></button>
+                  <button aria-label="view by code" class="p-button-group__button" value="code"><i class="p-icon--code">Code</i><span>Source code</span></button>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="p-inline-list__item">
+            <ul class="p-inline-list has-vertical-separator u-align-right">
+              <li class="p-inline-list__item">
+                <a href="#" class="is-always-color-link has-icon"><i class="p-icon--download">Download</i><span>Download</span></a>
+              </li>
+              <li class="p-inline-list__item has-icon">
+                <i class="p-icon--revision">Last revision</i>26 June 2019
+              </li>
+              <li class="p-inline-list__item" style="display: inline-flex;">
+                <label for="revisionSelect">Library version</label>
+                <select name="revisionSelect" id="revisionSelect" class="u-no-margin--bottom">
+                  <option value="2.93">2.93</option>
+                  <option value="1.9">1.9</option>
+                  <option value="1.2">1.2</option>
+                </select>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+      {{ docstrings['html'] | safe }}
+
+      {% for group in docstrings['content'] %}
+        <h4>{{ group["name"]}} </h4>
+        {{ group["html"] | safe }}
+
+        {% for item in group['content'] %}
+          <h5>{{ item["name"]}}</h5>
+          {{ item["html"] | safe }}
+        {% endfor %}
+      {% endfor %}
+
+    </div>
+  </div>
+{% endblock%}

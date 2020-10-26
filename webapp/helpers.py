@@ -25,7 +25,7 @@ discourse_api = DiscourseAPI(
 _yaml = YAML(typ="rt")
 _yaml_safe = YAML(typ="safe")
 
-md_parser = Markdown(renderer=Renderer(), hard_wrap=True)
+md_parser = Markdown(renderer=Renderer())
 
 
 def get_yaml_loader(typ="safe"):

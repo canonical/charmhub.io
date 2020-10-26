@@ -1,0 +1,52 @@
+<div class="col-3">
+  <div class="p-side-navigation is-at-the-top" id="drawer" style="overflow: visible;">
+    <a href="#drawer" class="p-side-navigation__toggle js-drawer-toggle" aria-controls="drawer">
+      Toggle side navigation
+    </a>
+    <div class="p-side-navigation__overlay js-drawer-toggle" aria-controls="drawer"></div>
+    <nav class="p-side-navigation__drawer" aria-label="Example side navigation">
+      <div class="p-side-navigation__drawer-header">
+        <a href="#" class="p-side-navigation__toggle--in-drawer js-drawer-toggle" aria-controls="drawer">
+          Toggle side navigation
+        </a>
+      </div>
+      <ul class="p-side-navigation__list is-selected">
+        <li class="p-side-navigation__item--title">
+          <a class="p-side-navigation__link" aria-current="page" href="/{{ entity_name }}/libraries">Introduction<span class="p-side-navigation__status">
+            <div class="p-tooltip--information u-vertically-center">
+              <div class="p-tooltip__button" role="button" aria-controls="icon-tooltip-modal" tabindex="0">
+                Show information
+              </div>
+              <div class="p-tooltip__modal" aria-controls="icon-tooltip-modal" id="icon-tooltip-modal">
+                <div class="p-tooltip__dialog" role="dialog" aria-labelledby="modal-title">
+                  <div class="p-tooltip__close" role="button" aria-label="Close active modal" aria-controls="icon-tooltip-modal">Close</div>
+                  <p id="modal-title">These are libraries that the charm author has chosen to share with other developers to use in conjunction with this charm. The libraries recommended here could be from an older version than the latest.</p>
+                </div>
+              </div>
+            </div>
+          </span></a>
+        </li>
+      </ul>
+      <ul class="p-side-navigation__list">
+        <li class="p-side-navigation__item--title">
+          <span class="p-side-navigation__text">Publisher suggests</span>
+        </li>
+        {% for group in libraries.keys() %}
+        <li class="p-side-navigation__item">
+          <span class="p-side-navigation__text" style="color: #111;">{{ group }}</span>
+          <ul class="p-side-navigation__list">
+            {% for lib in libraries[group] %}
+            <li class="p-side-navigation__item">
+              <a class="p-side-navigation__link" href="/{{ entity_name }}/libraries/{{ group }}{{ lib["name"] }}">{{ lib["name"] }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+        </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+</div>
+
+
+

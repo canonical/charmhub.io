@@ -187,11 +187,17 @@ def details_libraries(entity_name):
     package = app.store_api.get_item_details(entity_name, fields=FIELDS)
     package = logic.add_store_front_data(package)
 
+    if request.args:
+        print("----->>>", request.args)
+        # core_skills = request.args["coreSkills"].split(",")
+        # context["core_skills"] = core_skills
+
     libraries = get_charm_libraries()
     docstrings = logic.process_python_docs(libraries)
 
     return render_template(
-        "details/libraries.html",
+        "details/libraries/introduction.html",
+        entity_name=entity_name,
         package=package,
         libraries=libraries,
         docstrings=docstrings,

@@ -37,4 +37,10 @@
   .u-extra-space {
     margin-block-end: 3rem !important;
   }
+
+  .is-always-color-link {
+    &:visited {
+      color: $color-link;
+    }
+  }
 }

@@ -1,0 +1,53 @@
+{% set current_tab = "libraries" %}
+
+{% extends '/details/details_layout.html' %}
+
+{% block details_content %}
+  <div class="row is-wide p-details-tab__content">
+
+    {% include '/details/libraries/_libraries_side_nav.html'%}
+
+    <div class="col-9">
+      <h4>Charm libraries</h4>
+      <p>
+        Libraries are a mechanism for charm authors to easily share and reuse logic. This is very useful for the development of charms given the two&dash;sided nature of integrations because a given interface type needs logic on the providing side and on the required side, and it&rsquo;s easier for the same person to be responsible for both.
+      </p>
+      <p>
+        Inside the charm there is a specific directory, under which there are subdirectories named as:
+      </p>
+      <pre> <code>$CHARMDIR/lib/charms/&lt;charm&gt;/v&lt;API&gt;/&lt;libname&gt;.py</code></pre>
+      <p>
+        <code>$CHARMDIR</code> is the project&rsquo;s root (contains <code>src/</code>, <code>hooks/</code>, etc), and the <code>&lt;charm&gt;</code> placeholder represents the charm responsible for the library named as <code>&lt;libname&gt;.py</code> with API version <code>&lt;API&gt;</code>. So, as a more concrete example:
+      </p>
+      <pre><code>$CHARMDIR/lib/charms/mysql/v3/db.py</code></pre>
+      <p>
+        In this case, the author of charm mysql is making available the library db with major version 3. This file may be used both by the author and by any other charm authors that are interested in the offered functionality.
+      </p>
+      <h4>Fetching libraries</h4>
+      <p>
+        The management of libraries is done through the <a href="https://github.com/canonical/charmcraft" class="p-link--external">Charmcraft</a> tool. This includes creating, publishing and fetching
+        a library.
+      </p>
+      <p>
+        The fetch&dash;lib command will download the most recent version of the library specified via the provided import path. If the library already exists on disk, it will be updated.
+      </p>
+      <pre><code>$ charmcraft fetch&dash;lib charms.mysql.v3.foo
+  Library charms.mysql.v3.foo version 3.4 downloaded.
+
+  $ charmcraft fetch&dash;lib charms.foobar.v2.plugin
+  Library charms.foobar.v2.plugin updated to version 2.7.
+
+  $ charmcraft fetch&dash;lib charms.foobar.v3.metrics
+  Library charms.mysql.v3.metris was already up to date in version 3.2.</code></pre>
+      <p>
+        If no library name is provided, all libraries already under <code>lib/charms/</code> will be updated to the most recent version available in the store, if possible, indicating what happened in each case:
+      </p>
+      <pre><code>$ charmcraft fetch-lib
+  Library charms.foobar.v2.plugin updated to version 2.7.
+  Library charms.mysql.v3.metris was already up to date in version 3.2.</code></pre>
+      <hr class="p-separator">
+      <h4>Learn how to create publish your charm&rsquo;s libraries</h4>
+      <p>Libraries facilitate other charms effectively integrating with your charm. Visit our <a href="#">documentation</a> if you&rsquo;d like to learn how to create and publish libraries.</p>
+    </div>
+  </div>
+{% endblock%}

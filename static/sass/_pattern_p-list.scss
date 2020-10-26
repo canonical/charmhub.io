@@ -38,6 +38,47 @@
     }
   }
 
+  .p-inline-list--stretch.p-list--reversed {
+    > .p-inline-list__item:last-child {
+      align-items: center;
+      display: flex;
+      justify-content: flex-end;
+
+      @media screen and (max-width: 1055px) {
+        margin-block-end: 0.5rem;
+      }
+    }
+
+    @media screen and (max-width: 1055px) {
+      flex-direction: column-reverse;
+    }
+
+    label {
+      padding-right: 0.5rem;
+    }
+
+    select {
+      min-width: unset;
+      width: 7rem;
+    }
+  }
+
+  .p-inline-list.has-vertical-separator {
+    .p-inline-list__item:not(:last-child) {
+      position: relative;
+
+      &::after {
+        background-color: $color-mid-light;
+        content: "";
+        height: 100%;
+        position: absolute;
+        right: calc(1px - 0.5rem);
+        top: 0;
+        width: 1px;
+      }
+    }
+  }
+
   .p-list--ordered {
     @extend %vf-list;
 
