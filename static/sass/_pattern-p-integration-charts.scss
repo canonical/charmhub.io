@@ -1,0 +1,97 @@
+@mixin pattern_p-integration-charts {
+  .integration-chart--small {
+    box-sizing: border-box;
+    margin-bottom: $sp-large;
+    padding-bottom: $sp-large;
+    padding-top: $sp-large;
+
+    .integration-chart__icon-wrapper {
+      background-color: $color-light;
+      border: 1px solid $color-mid-light;
+      border-radius: 50%;
+      height: 96px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 20px;
+      position: relative;
+      width: 96px;
+    }
+
+    .integration-chart__icon-wrapper--top,
+    .integration-chart__icon-wrapper--bottom {
+      @extend .integration-chart__icon-wrapper;
+    }
+
+    .integration-chart__icon-wrapper--top::before,
+    .integration-chart__icon-wrapper--bottom::before {
+      background-color: $color-mid-light;
+      border-radius: 50%;
+      content: "";
+      height: 12px;
+      left: 50%;
+      position: absolute;
+      transform: translateX(-50%);
+      width: 12px;
+    }
+
+    .integration-chart__icon-wrapper--top::before {
+      bottom: -6px;
+    }
+
+    .integration-chart__icon-wrapper--bottom::before {
+      top: -6px;
+    }
+
+    .integration-chart__icon {
+      border-radius: 50%;
+      height: 56px;
+      max-width: 56px;
+      width: 56px;
+    }
+
+    .integration-chart__list {
+      list-style: none;
+      margin: 40px 0;
+      padding-left: 0;
+    }
+
+    .integration-chart__list-item {
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .integration-chart__list-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .integration-chart__list-item::before {
+      background-color: $color-mid-light;
+      content: "";
+      height: 36px;
+      left: 50%;
+      position: absolute;
+      top: -40px;
+      width: 1px;
+    }
+
+    .integration-chart__list-item:last-child::after {
+      background-color: $color-mid-light;
+      bottom: -40px;
+      content: "";
+      height: 36px;
+      left: 50%;
+      position: absolute;
+      transform: translateX(-50%);
+      width: 1px;
+    }
+  }
+
+  .integration-list-icon {
+    color: $color-link;
+
+    &:hover {
+      background-color: $color-x-light;
+      text-decoration: underline;
+    }
+  }
+}

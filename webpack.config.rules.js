@@ -13,6 +13,14 @@ module.exports = [
       },
     },
   },
+  {
+    test: /\.s[ac]ss$/i,
+    use: ["style-loader", "css-loader", "sass-loader"],
+  },
+  {
+    test: /\.css$/i,
+    use: ["style-loader", "css-loader"],
+  },
   // loaders are evaluated from bottom to top (right to left)
   // so first transpile via babel, then expose as global
   {
@@ -60,5 +68,11 @@ module.exports = [
   {
     test: require.resolve(__dirname + "/static/js/src/publisher/settings.js"),
     use: ["expose-loader?exposes=charmhub.publisher.settings", "babel-loader"],
+  },
+  {
+    test: require.resolve(
+      __dirname + "/static/js/src/public/details/integrate/index.js"
+    ),
+    use: ["expose-loader?exposes=charmhub.details.integrate", "babel-loader"],
   },
 ];

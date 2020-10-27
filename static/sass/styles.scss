@@ -189,6 +189,14 @@ $theme-default-nav: dark;
 
 @include p-charmhub-modal;
 
+@import "pattern-p-integration-charts";
+
+@include pattern_p-integration-charts;
+
+@import "swiper-overrides";
+
+@include swiper-overrides;
+
 // Remove table row borders
 .p-table--no-borders tr {
   border-top: 0 !important;
