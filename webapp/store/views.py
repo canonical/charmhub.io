@@ -4,20 +4,14 @@ from canonicalwebteam.discourse import DocParser
 from flask import Blueprint
 from flask import current_app as app
 from flask import render_template, request
-from mistune import Markdown, Renderer
 
 from webapp.config import DETAILS_VIEW_REGEX
-from webapp.helpers import discourse_api
+from webapp.helpers import discourse_api, md_parser
 from webapp.store import logic
+from webapp.store.mock import get_charm_libraries
 
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
-)
-
-
-renderer = Renderer()
-parser = Markdown(
-    renderer=renderer,
 )
 
 
@@ -109,7 +103,7 @@ def details_overview(entity_name):
     # Remove Markdown comments
     readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
 
-    readme = parser(readme)
+    readme = md_parser(readme)
     soup = BeautifulSoup(readme, features="html.parser")
 
     # Change all the headers (value + 2, eg h1 => h3)
@@ -186,6 +180,22 @@ def details_actions(entity_name):
     package = logic.add_store_front_data(package)
 
     return render_template("details/actions.html", package=package)
+
+
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/libraries')
+def details_libraries(entity_name):
+    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
+    package = logic.add_store_front_data(package)
+
+    libraries = get_charm_libraries()
+    docstrings = logic.process_python_docs(libraries)
+
+    return render_template(
+        "details/libraries.html",
+        package=package,
+        libraries=libraries,
+        docstrings=docstrings,
+    )
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/history')
