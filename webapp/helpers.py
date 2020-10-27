@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 
+from mistune import Markdown, Renderer
 import humanize
 from canonicalwebteam.discourse import DiscourseAPI
 from dateutil import parser
@@ -23,6 +24,8 @@ discourse_api = DiscourseAPI(
 
 _yaml = YAML(typ="rt")
 _yaml_safe = YAML(typ="safe")
+
+md_parser = Markdown(renderer=Renderer(), hard_wrap=True)
 
 
 def get_yaml_loader(typ="safe"):

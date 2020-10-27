@@ -4,8 +4,9 @@ from collections import OrderedDict
 
 import humanize
 from dateutil import parser
-from webapp.helpers import format_slug, get_yaml_loader
+from webapp.helpers import format_slug, get_yaml_loader, md_parser
 from webapp.store.mock import mocked_actions
+from docstring_extractor import get_docstrings
 
 yaml = get_yaml_loader()
 UBUNTU_SERIES = {
@@ -324,8 +325,9 @@ def get_categories(categories_json):
 def add_store_front_data(package):
     extra = {}
 
-    # Mock data
+    # Mocked data
     package = mock_resources(package)
+    extra["actions"] = mocked_actions
 
     extra["icons"] = get_icons(package)
     extra["metadata"] = yaml.load(
@@ -354,8 +356,27 @@ def add_store_front_data(package):
         extra["series"]
     )
 
-    # Mocked data
-    extra["actions"] = mocked_actions
-
     package["store_front"] = extra
     return package
+
+
+def process_python_docs(libraries):
+    """Process libraries response from the API
+    to generate the HTML output"""
+    result = {}
+
+    # Iterate publisher libraries
+    for name, libraries in libraries.items():
+        for lib in libraries:
+            module = name + lib["name"]
+
+            # Obtain Python docstrings
+            docstrings = get_docstrings(lib["content"], module)
+
+            # We support markdown inside docstrings
+            for py_part in docstrings["content"]:
+                py_part["html"] = md_parser(py_part["docstring"])
+
+            result[module] = docstrings
+
+    return result
