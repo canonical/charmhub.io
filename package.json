@@ -20,16 +20,6 @@
     "test-python": "python3 -m unittest discover tests",
     "test-js": "jest"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "**/*.py": "dotrun lint-python",
-    "**/*.js": "dotrun lint-js",
-    "**/*.scss": "dotrun lint-scss"
-  },
   "dependencies": {
     "@babel/core": "7.11.5",
     "@babel/preset-env": "7.11.5",
@@ -49,7 +39,6 @@
     "eslint-plugin-jest": "23.20.0",
     "eslint-plugin-prettier": "3.1.4",
     "expose-loader": "1.0.0",
-    "husky": "4.2.5",
     "lint-staged": "10.2.13",
     "node-sass": "4.14.1",
     "postcss-cli": "7.1.2",
