@@ -2,8 +2,7 @@
   .integration-chart--small {
     box-sizing: border-box;
     margin-bottom: $sp-large;
-    padding-bottom: $sp-large;
-    padding-top: $sp-large;
+    padding: $sp-large $sp-medium;
 
     .integration-chart__icon-wrapper {
       background-color: $color-light;
@@ -92,6 +91,12 @@
     &:hover {
       background-color: $color-x-light;
       text-decoration: underline;
+    }
+  }
+
+  @media (min-width: $breakpoint-large) {
+    .integration-modal {
+      overflow: hidden;
     }
   }
 }

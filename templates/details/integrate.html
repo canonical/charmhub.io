@@ -3,10 +3,10 @@
 {% extends '/details/details_layout.html' %}
 
 {% block details_content %}
-  <div class="u-fixed-width">
+  <div class="u-fixed-width is-wide">
     <p>Charms that integrate with {{ package.name }}:</p>
   </div>
-  <div class="row">
+  <div class="row is-wide">
     <div class="col-3">
       <div class="p-media-object">
         <img src="https://api.jujucharms.com/charmstore/v5/prometheus/icon.svg" alt="" class="p-media-object__image is-round" style="height: 32px; width: 32px;">
@@ -81,9 +81,9 @@
   </div>
 
   <div class="p-modal" id="modal" style="display: none;">
-    <div class="p-modal__dialog" role="dialog" aria-labelledby="modal-title">
+    <div class="p-modal__dialog integration-modal" role="dialog" aria-labelledby="modal-title">
       <header class="p-modal__header">
-        <h3 class="p-modal__title" id="modal-title">1 of 2 integration types</h3>
+        <h3 class="p-modal__title" id="modal-title">Integration types</h3>
         <button class="p-modal__close" aria-label="Close active modal" aria-controls="modal">Close</button>
       </header>
 
@@ -95,8 +95,11 @@
         {% include 'details/_desktop-integration-chart.html' %}
       </div>
 
-      <p class="u-align--center"><a href="/docs">Learn more about integrations</a></p>
+      <p class="u-align--center" style="max-width: none;"><a href="/docs">Learn more about integrations</a></p>
     </div>
+    <!-- placed here so they bypass the modal overflow property -->
+    <div class="swiper-button-prev u-hide--large"></div>
+    <div class="swiper-button-next u-hide--large"></div>
   </div>
 {% endblock%}
 
@@ -144,7 +147,7 @@
           el.innerText = options.package;
         });
 
-        charmhub.details.integrate.init();
+        charmhub.details.integrate.init("{{ package.name }}", options.package);
       }
     }
   </script>

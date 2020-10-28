@@ -24,24 +24,22 @@
     border-radius: 3rem;
     box-sizing: content-box;
     cursor: pointer;
-    height: 3rem !important;
+    height: 2rem !important;
     margin-top: -1.5rem;
     overflow: hidden;
     padding: 0;
     position: fixed;
     text-indent: -100px;
     top: 50%;
-    width: 3rem !important;
+    width: 2rem !important;
   }
 
   .swiper-button-prev {
     background-image: url(https://assets.ubuntu.com/v1/e8d2e45f-chevron-left.svg);
-    left: 0 !important;
   }
 
   .swiper-button-next {
     background-image: url("https://assets.ubuntu.com/v1/9716bbab-chevron.svg");
-    right: 0 !important;
   }
 
   .swiper-button-disabled {
