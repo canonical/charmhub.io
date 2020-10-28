@@ -17,18 +17,21 @@
     display: flex;
   }
 
+  .col-3.has-space--right {
+    @media screen and (min-width: $breakpoint-large) {
+      margin-inline-end: 2rem;
+    }
+  }
+
+  .is-wide {
+    max-width: $grid-max-width !important;
+  }
+
   .u-position--sticky {
     background-color: $color-x-light;
     position: sticky;
     top: 0;
     z-index: 10;
-  }
-
-  // XXX Ant - 11.03.20: This can be removed once this issue is closed.
-  // https://github.com/canonical-web-and-design/vanilla-framework/issues/2922
-  .u-text--subtle {
-    color: $color-mid-dark;
-    font-size: 0.875rem;
   }
 
   .u-extra-space {

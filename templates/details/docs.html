@@ -3,10 +3,10 @@
 {% extends '/details/details_layout.html' %}
 
 {% block details_content %}
-  <div class="u-fixed-width">
+  <div class="u-fixed-width is-wide p-details-tab__content">
     {% if navigation and body_html %}
-      <div class="row u-no-padding--left u-no-padding--right">
-        <div class="col-3">
+      <div class="row is-wide u-no-padding--left u-no-padding--right">
+        <div class="col-3 has-space--right">
           <nav class="p-side-navigation--raw-html" id="drawer">
             <a href="#drawer" class="p-side-navigation__toggle js-drawer-toggle" aria-controls="drawer">
               Toggle side navigation
@@ -22,7 +22,7 @@
             </div>
           </nav>
         </div>
-        <div class="col-9">
+        <div class="col-9 col-large-6">
           {{ body_html | safe }}
           <div class="u-fixed-width">
             <hr class="p-separator--medium">

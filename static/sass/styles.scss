@@ -258,14 +258,10 @@ body {
 }
 
 // Fix pre width on details pages for Desktop
-.p-tabs__content {
-  pre {
-    max-width: 40rem;
+.p-details-tab__content {
+  p {
+    max-width: unset;
   }
-}
-
-.is-wide {
-  max-width: $grid-max-width !important;
 }
 
 .row,

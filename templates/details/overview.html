@@ -3,8 +3,8 @@
 {% extends '/details/details_layout.html' %}
 
 {% block details_content %}
-  <div class="row p-tabs__content" id="overview">
-    <div class="col-3">
+  <div class="row is-wide p-details-tab__content">
+    <div class="col-3 has-space--right">
       {% if package.result.license %}
         <p><span class="u-text--muted">License</span><br />{{ package.result.license }}</p>
       {% endif %}
@@ -37,7 +37,7 @@
       <p>Share your thoughts on this charm with the community on discourse.</p>
       <p><a class="p-button--neutral" href="https://discourse.juju.is/">Join the discussion</a></p>
     </div>
-    <div class="col-9">
+    <div class="col-9 col-large-6">
       {{ readme | safe }}
     </div>
   </div>
