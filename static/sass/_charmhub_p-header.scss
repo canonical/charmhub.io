@@ -21,6 +21,20 @@
         width: 4rem;
       }
 
+      .p-media-object__image-container {
+        border-radius: 50%;
+        height: 4rem;
+        margin-inline-end: 1rem;
+        max-height: 4rem;
+        max-width: 4rem;
+        overflow: hidden;
+        width: 4rem;
+
+        .p-media-object__image {
+          transform: scale(1.1);
+        }
+      }
+
       .p-media-object__title {
         @extend %vf-heading-2;
 
