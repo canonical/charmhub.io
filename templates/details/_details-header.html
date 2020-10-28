@@ -12,6 +12,7 @@
             {% endfor %}
           </div>
           {% else %}
+          <div class="p-media-object__image-container">
             {% if package["store_front"]["icons"] %}
               {{
                 image(
@@ -37,6 +38,7 @@
                 ) | safe
               }}
             {% endif %}
+          </div>
           {% endif %}
           <div class="p-media-object__details">
             <h1 class="p-media-object__title">
