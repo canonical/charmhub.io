@@ -3,10 +3,10 @@
 {% extends '/details/details_layout.html' %}
 
 {% block details_content %}
-<div class="row p-tabs__content" id="actions">
+<div class="row is-wide p-details-tab__content">
   {% if package.store_front.actions %}
-    <div class="row">
-      <div class="col-3">
+    <div class="row is-wide">
+      <div class="col-3 has-space--right">
         <div class="p-side-navigation">
           <ul class="p-side-navigation__list">
             {% for action in package.store_front.actions %}
@@ -19,7 +19,7 @@
           </ul>
         </div>
       </div>
-      <div class="col-9">
+      <div class="col-9 col-large-6">
         <ul class="p-list--divided has-sparator-centered">
           {% for action, action_data in package.store_front.actions.items() %}
             <li class="p-list__item action-section" id="{{ action }}">
