@@ -1,0 +1,93 @@
+{% set current_tab = "libraries" %}
+
+{% extends '/details/details_layout.html' %}
+
+{% block details_content %}
+  <div class="row is-wide p-details-tab__content">
+    <div class="col-3 has-space--right">
+      <div class="p-side-navigation is-at-the-top" id="drawer" style="overflow: visible;">
+        <a href="#drawer" class="p-side-navigation__toggle js-drawer-toggle" aria-controls="drawer">
+          Toggle side navigation
+        </a>
+        <div class="p-side-navigation__overlay js-drawer-toggle" aria-controls="drawer"></div>
+        <nav class="p-side-navigation__drawer" aria-label="Example side navigation">
+          <div class="p-side-navigation__drawer-header">
+            <a href="#" class="p-side-navigation__toggle--in-drawer js-drawer-toggle" aria-controls="drawer">
+              Toggle side navigation
+            </a>
+          </div>
+          <ul class="p-side-navigation__list">
+            <li class="p-side-navigation__item--title">
+              <a class="p-side-navigation__link" {% if request.path.endswith('libraries') %}aria-current="page"{% endif %} href="/{{ entity_name }}/libraries">Introduction</a>
+            </li>
+          </ul>
+          <ul class="p-side-navigation__list">
+            <li class="p-side-navigation__item--title">
+              <span class="p-side-navigation__text">Publisher suggests</span>
+            </li>
+            {% for group in libraries.keys() %}
+            <li class="p-side-navigation__item">
+              <span class="p-side-navigation__text" style="color: #111;">{{ group }}</span>
+              <ul class="p-side-navigation__list">
+                {% for lib in libraries[group] %}
+                <li class="p-side-navigation__item">
+                  <a class="p-side-navigation__link" {% if request.path.endswith(lib['name']) %}aria-current="page"{% endif %} href="/{{ entity_name }}/libraries/{{ group }}{{ lib['name'] }}">{{ lib["name"] }}</a>
+                </li>
+                {% endfor %}
+              </ul>
+            </li>
+            {% endfor %}
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="col-9">
+      {% if not is_introduction %}
+      <div class="u-fixed-width">
+        <h3>{{ docstrings["name"] }}</h3>
+        <ul class="p-inline-list--stretch p-list--reversed">
+          <li class="p-inline-list__item u-no-margin--right">
+            <div class="p-button-group">
+              <div class="p-button-group__inner">
+                <div class="p-button-group__buttons">
+                  <a href="#docstrings" class="p-button-group__button" data-js="tab-button" data-href="#docstrings"><i class="p-icon--menu">Docstrings</i><span>Docstrings</span></a>
+                  <a href="#source-code" class="p-button-group__button" data-js="tab-button" data-href="#source-code"><i class="p-icon--code">Code</i><span>Source code</span></a>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="p-inline-list__item">
+            <ul class="p-inline-list has-vertical-separator">
+              <li class="p-inline-list__item">
+                <a href="#" class="is-always-color-link has-icon"><i class="p-icon--download">Download</i><span>Download</span></a>
+              </li>
+              <li class="p-inline-list__item has-icon">
+                <i class="p-icon--revision">Last revision</i>26 June 2019
+              </li>
+              <li class="p-inline-list__item">
+                <form class="p-form p-form--inline">
+                  <label for="version">Library version</label>
+                  <select name="version" id="version" class="u-no-margin--bottom" onChange="this.form.submit()">
+                    <option value="2.93">2.93</option>
+                    <option value="1.9">1.9</option>
+                    <option value="1.2">1.2</option>
+                  </select>
+                  <noscript>
+                    <input type="submit" class="p-button--neutral" style="margin-inline-start: 0.5rem;">
+                  </noscript>
+                </form>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      {% endif %}
+      <div class="row">
+        <div class="col-9 col-large-6">
+          {% block libraries_content %} {% endblock %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock%}

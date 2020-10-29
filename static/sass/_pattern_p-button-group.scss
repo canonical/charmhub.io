@@ -9,6 +9,17 @@
       border-color: $color-mid-light;
     }
 
+    a:visited {
+      color: $color-dark;
+    }
+
+    a:hover {
+      @include vf-animation(#{background-color, border-color}, fast, in);
+
+      background-color: #f2f2f2;
+      text-decoration: none;
+    }
+
     &__label {
       margin-right: 0.5rem;
 
@@ -39,6 +50,7 @@
       align-items: center;
       border: none;
       border-right: 1px solid $color-mid-light;
+      color: $color-dark;
       display: flex;
       flex: 1;
       height: 100%;

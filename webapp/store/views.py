@@ -1,12 +1,11 @@
 import re
-from bs4 import BeautifulSoup
 from canonicalwebteam.discourse import DocParser
 from flask import Blueprint
 from flask import current_app as app
 from flask import render_template, request
 
 from webapp.config import DETAILS_VIEW_REGEX
-from webapp.helpers import discourse_api, md_parser
+from webapp.helpers import discourse_api, md_parser, increase_headers
 from webapp.store import logic
 from webapp.store.mock import get_charm_libraries
 
@@ -104,19 +103,12 @@ def details_overview(entity_name):
     readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
 
     readme = md_parser(readme)
-    soup = BeautifulSoup(readme, features="html.parser")
-
-    # Change all the headers (value + 2, eg h1 => h3)
-    for h in soup.find_all(re.compile("^h[1-6]$")):
-        level = int(h.name[1:]) + 2
-        if level > 6:
-            level = 6
-        h.name = f"h{str(level)}"
+    readme = increase_headers(readme)
 
     return render_template(
         "details/overview.html",
         package=package,
-        readme=soup,
+        readme=readme,
         package_type=package["type"],
     )
 
@@ -187,19 +179,43 @@ def details_libraries(entity_name):
     package = app.store_api.get_item_details(entity_name, fields=FIELDS)
     package = logic.add_store_front_data(package)
 
-    if request.args:
-        print("----->>>", request.args)
-        # core_skills = request.args["coreSkills"].split(",")
-        # context["core_skills"] = core_skills
-
     libraries = get_charm_libraries()
-    docstrings = logic.process_python_docs(libraries)
 
     return render_template(
         "details/libraries/introduction.html",
         entity_name=entity_name,
         package=package,
         libraries=libraries,
+    )
+
+
+@store.route(
+    '/<regex("'
+    + DETAILS_VIEW_REGEX
+    + '"):entity_name>/libraries/<string:library_name>'
+)
+def details_library(entity_name, library_name):
+    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
+    package = logic.add_store_front_data(package)
+
+    lib_parts = library_name.split(".")
+    lib_group = ".".join(lib_parts[:-2])
+    lib_name = "." + ".".join(lib_parts[-2:])
+
+    libraries = get_charm_libraries()
+    library = next(
+        (lib for lib in libraries[lib_group] if lib["name"] == lib_name),
+        None,
+    )
+
+    docstrings = logic.process_python_docs(library, module_name=library_name)
+
+    return render_template(
+        "details/libraries/library.html",
+        entity_name=entity_name,
+        package=package,
+        libraries=libraries,
+        library=library,
         docstrings=docstrings,
     )
 

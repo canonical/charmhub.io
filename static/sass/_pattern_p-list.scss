@@ -45,7 +45,13 @@
       justify-content: flex-end;
 
       @media screen and (max-width: 1055px) {
+        justify-content: flex-start;
         margin-block-end: 0.5rem;
+
+        .p-form {
+          display: inline-flex;
+          margin-block-start: 0.5rem;
+        }
       }
     }
 

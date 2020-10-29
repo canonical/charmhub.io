@@ -1,7 +1,9 @@
 import datetime
+import re
 import json
 import os
 
+from bs4 import BeautifulSoup
 from mistune import Markdown, Renderer
 import humanize
 from canonicalwebteam.discourse import DiscourseAPI
@@ -177,3 +179,16 @@ def get_licenses():
         licenses = []
 
     return licenses
+
+
+def increase_headers(html_content, step=2):
+    soup = BeautifulSoup(html_content, features="html.parser")
+
+    # Change all the headers (if step=2: eg h1 => h3)
+    for h in soup.find_all(re.compile("^h[1-6]$")):
+        level = int(h.name[1:]) + step
+        if level > 6:
+            level = 6
+        h.name = f"h{str(level)}"
+
+    return soup
