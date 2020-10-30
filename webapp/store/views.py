@@ -42,7 +42,7 @@ def index():
             results[i]["default-release"]["channel"]["released-at"]
         )
 
-        if results[i]["result"]["categories"]:
+        if results[i]["result"].get("categories"):
             results[i]["store_front"]["categories"] = logic.get_categories(
                 results[i]["result"]["categories"]
             )
@@ -118,14 +118,15 @@ def details_overview(entity_name):
 def details_docs(entity_name, slug=None):
     package = app.store_api.get_item_details(entity_name, fields=FIELDS)
     package = logic.add_store_front_data(package)
-    docs_url_prefix = f"/{package['name']}/docs"
 
-    # Fake package discourse topic
-    package["docs_topic"] = 3568
+    if not package["store_front"]["docs_topic"]:
+        return render_template("details/empty-docs.html", package=package)
+
+    docs_url_prefix = f"/{package['name']}/docs"
 
     docs = DocParser(
         api=discourse_api,
-        index_topic_id=package["docs_topic"],
+        index_topic_id=package["store_front"]["docs_topic"],
         url_prefix=docs_url_prefix,
     )
     docs.parse()
