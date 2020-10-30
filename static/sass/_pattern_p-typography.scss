@@ -1,0 +1,16 @@
+@mixin p-charmhub-typography {
+  // Libraries spacing page overrides
+  .p-docstring {
+    h5 {
+      margin-bottom: 0;
+    }
+
+    p:not([class*="p-heading--"]):not([class*="p-muted-heading"]) + h5 {
+      padding-top: 1rem;
+    }
+
+    h5 + pre {
+      margin-block-start: 1.1rem;
+    }
+  }
+}

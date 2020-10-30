@@ -1,0 +1,37 @@
+{% set is_introduction=False %}
+
+{% extends '/details/libraries/libraries_layout.html' %}
+
+{% block libraries_content %}
+
+  <div id="docstrings" data-js="tab-content" class="p-docstring">
+    {{ docstrings['html'] | safe }}
+
+    {% for group in docstrings['content'] %}
+      <h4>{{ group["name"]}} </h4>
+      {{ group["html"] | safe }}
+
+      {% for item in group['content'] %}
+        <h5>{{ item["name"]}}</h5>
+        {{ item["html"] | safe }}
+      {% endfor %}
+    {% endfor %}
+  </div>
+
+  <div id="source-code" data-js="tab-content">
+    <div data-js="source-code-title">
+      <hr class="p-separator--medium">
+      <h4>Source code</h4>
+    </div>
+    <pre><code>{{ library["content"] }}</code></pre>
+  </div>
+{% endblock%}
+
+{% block page_scripts %}
+<script src="{{ versioned_static('js/dist/details_libraries.js') }}" defer></script>
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    charmhub.details.libraries.init("[data-js='tab-button']", "[data-js='tab-content']");
+  });
+</script>
+{% endblock %}

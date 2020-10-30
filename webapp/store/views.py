@@ -1,12 +1,11 @@
 import re
-from bs4 import BeautifulSoup
 from canonicalwebteam.discourse import DocParser
 from flask import Blueprint
 from flask import current_app as app
 from flask import render_template, request
 
 from webapp.config import DETAILS_VIEW_REGEX
-from webapp.helpers import discourse_api, md_parser
+from webapp.helpers import discourse_api, md_parser, increase_headers
 from webapp.store import logic
 from webapp.store.mock import get_charm_libraries
 
@@ -43,7 +42,7 @@ def index():
             results[i]["default-release"]["channel"]["released-at"]
         )
 
-        if results[i]["result"].get("categories"):
+        if results[i]["result"]["categories"]:
             results[i]["store_front"]["categories"] = logic.get_categories(
                 results[i]["result"]["categories"]
             )
@@ -104,19 +103,12 @@ def details_overview(entity_name):
     readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
 
     readme = md_parser(readme)
-    soup = BeautifulSoup(readme, features="html.parser")
-
-    # Change all the headers (value + 2, eg h1 => h3)
-    for h in soup.find_all(re.compile("^h[1-6]$")):
-        level = int(h.name[1:]) + 2
-        if level > 6:
-            level = 6
-        h.name = f"h{str(level)}"
+    readme = increase_headers(readme)
 
     return render_template(
         "details/overview.html",
         package=package,
-        readme=soup,
+        readme=readme,
         package_type=package["type"],
     )
 
@@ -126,19 +118,19 @@ def details_overview(entity_name):
 def details_docs(entity_name, slug=None):
     package = app.store_api.get_item_details(entity_name, fields=FIELDS)
     package = logic.add_store_front_data(package)
-
-    if not package["store_front"]["docs_topic"]:
-        return render_template("details/empty-docs.html", package=package)
-
     docs_url_prefix = f"/{package['name']}/docs"
+
+    # Fake package discourse topic
+    package["docs_topic"] = 3568
 
     docs = DocParser(
         api=discourse_api,
-        index_topic_id=package["store_front"]["docs_topic"],
+        index_topic_id=package["docs_topic"],
         url_prefix=docs_url_prefix,
     )
     docs.parse()
     body_html = docs.index_document["body_html"]
+
     topic_path = docs.index_document["topic_path"]
 
     if slug:
@@ -188,12 +180,42 @@ def details_libraries(entity_name):
     package = logic.add_store_front_data(package)
 
     libraries = get_charm_libraries()
-    docstrings = logic.process_python_docs(libraries)
 
     return render_template(
-        "details/libraries.html",
+        "details/libraries/introduction.html",
+        entity_name=entity_name,
         package=package,
         libraries=libraries,
+    )
+
+
+@store.route(
+    '/<regex("'
+    + DETAILS_VIEW_REGEX
+    + '"):entity_name>/libraries/<string:library_name>'
+)
+def details_library(entity_name, library_name):
+    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
+    package = logic.add_store_front_data(package)
+
+    lib_parts = library_name.split(".")
+    lib_group = ".".join(lib_parts[:-2])
+    lib_name = "." + ".".join(lib_parts[-2:])
+
+    libraries = get_charm_libraries()
+    library = next(
+        (lib for lib in libraries[lib_group] if lib["name"] == lib_name),
+        None,
+    )
+
+    docstrings = logic.process_python_docs(library, module_name=library_name)
+
+    return render_template(
+        "details/libraries/library.html",
+        entity_name=entity_name,
+        package=package,
+        libraries=libraries,
+        library=library,
         docstrings=docstrings,
     )
 

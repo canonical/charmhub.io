@@ -61,4 +61,22 @@
 
     background-image: url("https://assets.ubuntu.com/v1/8e5d3c7e-contact.svg");
   }
+
+  .p-icon--download {
+    @extend %icon;
+
+    background-image: url("https://assets.ubuntu.com/v1/06b639be-Download.svg");
+  }
+
+  .p-icon--revision {
+    @extend %icon;
+
+    background-image: url("https://assets.ubuntu.com/v1/13f9805d-Revision.svg");
+  }
+
+  .p-icon--code {
+    @extend %icon;
+
+    background-image: url("https://assets.ubuntu.com/v1/2f401159-Code.svg");
+  }
 }

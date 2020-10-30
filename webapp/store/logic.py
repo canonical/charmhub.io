@@ -1,17 +1,13 @@
-import datetime
 import sys
+import datetime
 from collections import OrderedDict
 
 import humanize
 from dateutil import parser
-from docstring_extractor import get_docstrings
-from webapp.helpers import (
-    discourse_api,
-    format_slug,
-    get_yaml_loader,
-    md_parser,
-)
+from webapp.helpers import format_slug, get_yaml_loader, md_parser
 from webapp.store.mock import mocked_actions
+from docstring_extractor import get_docstrings
+from webapp.helpers import increase_headers
 
 yaml = get_yaml_loader()
 UBUNTU_SERIES = {
@@ -327,27 +323,13 @@ def get_categories(categories_json):
         i = i + 1
 
 
-def get_docs_topic_id(metadata_yaml):
-    """
-    Return discourse topic ID or None
-    """
-    base_url = discourse_api.base_url
-    docs_link = metadata_yaml.get("docs")
-
-    if docs_link and docs_link.startswith(base_url):
-        topic_id = docs_link[len(base_url) :].split("/")[3]
-        if topic_id.isnumeric():
-            return topic_id
-
-    return None
-
-
 def add_store_front_data(package):
     extra = {}
 
     # Mocked data
     package = mock_resources(package)
     extra["actions"] = mocked_actions
+    extra["has_libraries"] = True
 
     extra["icons"] = get_icons(package)
     extra["metadata"] = yaml.load(
@@ -376,30 +358,28 @@ def add_store_front_data(package):
         extra["series"]
     )
 
-    # Get charm docs
-    extra["docs_topic"] = get_docs_topic_id(extra["metadata"])
-
     package["store_front"] = extra
     return package
 
 
-def process_python_docs(libraries):
+def process_python_docs(library, module_name):
     """Process libraries response from the API
     to generate the HTML output"""
-    result = {}
 
-    # Iterate publisher libraries
-    for name, libraries in libraries.items():
-        for lib in libraries:
-            module = name + lib["name"]
+    # Obtain Python docstrings
+    docstrings = get_docstrings(library["content"], module_name)
 
-            # Obtain Python docstrings
-            docstrings = get_docstrings(lib["content"], module)
+    docstrings["html"] = increase_headers(
+        md_parser(docstrings["docstring"]), 3
+    )
 
-            # We support markdown inside docstrings
-            for py_part in docstrings["content"]:
-                py_part["html"] = md_parser(py_part["docstring"])
+    # We support markdown inside docstrings (2 levels)
+    for py_part in docstrings["content"]:
+        py_part["html"] = increase_headers(md_parser(py_part["docstring"]), 3)
 
-            result[module] = docstrings
+        for py_part_2 in py_part["content"]:
+            py_part_2["html"] = increase_headers(
+                md_parser(py_part_2["docstring"]), 3
+            )
 
-    return result
+    return docstrings
