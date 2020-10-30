@@ -201,6 +201,10 @@ $theme-default-nav: dark;
 
 @include swiper-overrides;
 
+@import "pattern_p-typography";
+
+@include p-charmhub-typography;
+
 // Remove table row borders
 .p-table--no-borders tr {
   border-top: 0 !important;

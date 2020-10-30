@@ -7,6 +7,7 @@ module.exports = {
   details_docs: "./static/js/src/public/details/docs/index.js",
   details_history: "./static/js/src/public/details/history/index.js",
   details_integrate: "./static/js/src/public/details/integrate/index.js",
+  details_libraries: "./static/js/src/public/details/libraries/index.js",
   store: "./static/js/src/public/store/index.js",
   list: "./static/js/src/publisher/list-page.js",
   listing: "./static/js/src/publisher/listing-page.js",

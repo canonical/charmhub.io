@@ -4,7 +4,7 @@
 
 {% block libraries_content %}
 
-  <div id="docstrings" data-js="tab-content">
+  <div id="docstrings" data-js="tab-content" class="p-docstring">
     {{ docstrings['html'] | safe }}
 
     {% for group in docstrings['content'] %}
