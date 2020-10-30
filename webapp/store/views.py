@@ -204,3 +204,11 @@ def details_history(entity_name):
     package = logic.add_store_front_data(package)
 
     return render_template("details/history.html", package=package)
+
+
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/integrate')
+def details_integrate(entity_name):
+    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
+    package = logic.add_store_front_data(package)
+
+    return render_template("details/integrate.html", package=package)

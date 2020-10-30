@@ -1,0 +1,163 @@
+{% set current_tab = "integration" %}
+
+{% extends '/details/details_layout.html' %}
+
+{% block details_content %}
+  <div class="u-fixed-width is-wide">
+    <p>Charms that integrate with {{ package.name }}:</p>
+  </div>
+  <div class="row is-wide">
+    <div class="col-3">
+      <div class="p-media-object">
+        <img src="https://api.jujucharms.com/charmstore/v5/prometheus/icon.svg" alt="" class="p-media-object__image is-round" style="height: 32px; width: 32px;">
+        <div class="p-media-object__details u-vertically-center">
+          <button class="p-button--base is-dense u-no-padding--left u-no-padding--right integration-list-icon" aria-controls="modal" data-package="prometheus">prometheus</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="p-media-object">
+        <img src="https://api.jujucharms.com/charmstore/v5/keystone/icon.svg" alt="" class="p-media-object__image is-round" style="height: 32px; width: 32px;">
+        <div class="p-media-object__details u-vertically-center">
+          <button class="p-button--base is-dense u-no-padding--left u-no-padding--right integration-list-icon" aria-controls="modal" data-package="keystone">keystone</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="p-media-object">
+        <img src="https://api.jujucharms.com/charmstore/v5/vault/icon.svg" alt="" class="p-media-object__image is-round" style="height: 32px; width: 32px;">
+        <div class="p-media-object__details u-vertically-center">
+          <button class="p-button--base is-dense u-no-padding--left u-no-padding--right integration-list-icon" aria-controls="modal" data-package="vault">vault</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="p-media-object">
+        <img src="https://api.jujucharms.com/charmstore/v5/mysql/icon.svg" alt="" class="p-media-object__image is-round" style="height: 32px; width: 32px;">
+        <div class="p-media-object__details u-vertically-center">
+          <button class="p-button--base is-dense u-no-padding--left u-no-padding--right integration-list-icon" aria-controls="modal" data-package="mysql">mysql</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="p-media-object">
+        <img src="https://api.jujucharms.com/charmstore/v5/hacluster/icon.svg" alt="" class="p-media-object__image is-round" style="height: 32px; width: 32px;">
+        <div class="p-media-object__details u-vertically-center">
+          <button class="p-button--base is-dense u-no-padding--left u-no-padding--right integration-list-icon" aria-controls="modal" data-package="hacluster">hacluster</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="p-media-object">
+        <img src="https://api.jujucharms.com/charmstore/v5/nrpe/icon.svg" alt="" class="p-media-object__image is-round" style="height: 32px; width: 32px;">
+        <div class="p-media-object__details u-vertically-center">
+          <button class="p-button--base is-dense u-no-padding--left u-no-padding--right integration-list-icon" aria-controls="modal" data-package="nrpe">nrpe</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="p-media-object">
+        <img src="https://api.jujucharms.com/charmstore/v5/octavia-dashboard/icon.svg" alt="" class="p-media-object__image is-round" style="height: 32px; width: 32px;">
+        <div class="p-media-object__details u-vertically-center">
+          <button class="p-button--base is-dense u-no-padding--left u-no-padding--right integration-list-icon" aria-controls="modal" data-package="octavia-dashboard">octavia-dashboard</>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="p-media-object">
+        <img src="https://api.jujucharms.com/charmstore/v5/apache2/icon.svg" alt="" class="p-media-object__image is-round" style="height: 32px; width: 32px;">
+        <div class="p-media-object__details u-vertically-center">
+          <button class="p-button--base is-dense u-no-padding--left u-no-padding--right integration-list-icon" aria-controls="modal" data-package="apache2">apache2</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-modal" id="modal" style="display: none;">
+    <div class="p-modal__dialog integration-modal" role="dialog" aria-labelledby="modal-title">
+      <header class="p-modal__header">
+        <h3 class="p-modal__title" id="modal-title">Integration types</h3>
+        <button class="p-modal__close" aria-label="Close active modal" aria-controls="modal">Close</button>
+      </header>
+
+      <div class="u-hide--large">
+        {% include 'details/_small-integration-chart.html' %}
+      </div>
+
+      <div class="u-hide--small u-hide--medium">
+        {% include 'details/_desktop-integration-chart.html' %}
+      </div>
+
+      <p class="u-align--center" style="max-width: none;"><a href="/docs">Learn more about integrations</a></p>
+    </div>
+    <!-- placed here so they bypass the modal overflow property -->
+    <div class="swiper-button-prev u-hide--large"></div>
+    <div class="swiper-button-next u-hide--large"></div>
+  </div>
+{% endblock%}
+
+{% block page_scripts %}
+  <script src="{{ versioned_static('js/dist/details_integrate.js') }}" defer></script>
+  <script>
+    /**
+      Toggles visibility of modal dialog.
+      @param {HTMLElement} modal Modal dialog to show or hide.
+    */
+    function toggleModal(modal) {
+      if (modal && modal.classList.contains('p-modal')) {
+        if (modal.style.display === 'none') {
+          modal.style.display = 'flex';
+        } else {
+          modal.style.display = 'none';
+        }
+      }
+    }
+
+    // Add click handler for clicks on elements with aria-controls
+    document.addEventListener('click', function (event) {
+      const target = event.target;
+
+      var targetControls = event.target.getAttribute('aria-controls');
+      if (targetControls) {
+        toggleModal(document.getElementById(targetControls));
+      }
+
+      if (target.dataset) {
+        setModalContent(target.dataset);
+      }
+    });
+
+    const modal = document.getElementById("modal");
+    const innerModal = document.querySelector(".integration-modal");
+
+    modal.addEventListener("click", () => {
+      toggleModal(modal);
+    });
+
+    innerModal.addEventListener("click", (e) => e.stopPropagation());
+
+    function setModalContent(options) {
+      if (options.package) {
+        const integrationPackageIcons = document.querySelectorAll('.js-integration-package-icon');
+        integrationPackageIcons.forEach(el => {
+          el.src = `https://api.jujucharms.com/charmstore/v5/${options.package}/icon.svg`
+        });
+
+        const integrationPackageLinks = document.querySelectorAll('.js-integration-package-link');
+        integrationPackageLinks.forEach(el => {
+          el.href = `/${options.package}`;
+          el.innerText = options.package;
+        });
+
+        charmhub.details.integrate.init("{{ package.name }}", options.package);
+      }
+    }
+  </script>
+{% endblock %}

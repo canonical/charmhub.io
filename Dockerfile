@@ -9,7 +9,7 @@ RUN --mount=type=cache,target=/root/.cache/pip pip3 install --user --requirement
 
 # Build stage: Install yarn dependencies
 # ===
-FROM node:13-slim AS yarn-dependencies
+FROM node:14-slim AS yarn-dependencies
 WORKDIR /srv
 ADD package.json .
 ADD yarn.lock .
