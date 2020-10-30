@@ -1,12 +1,17 @@
-import sys
 import datetime
+import sys
 from collections import OrderedDict
 
 import humanize
 from dateutil import parser
-from webapp.helpers import format_slug, get_yaml_loader, md_parser
-from webapp.store.mock import mocked_actions
 from docstring_extractor import get_docstrings
+from webapp.helpers import (
+    discourse_api,
+    format_slug,
+    get_yaml_loader,
+    md_parser,
+)
+from webapp.store.mock import mocked_actions
 
 yaml = get_yaml_loader()
 UBUNTU_SERIES = {
@@ -322,6 +327,21 @@ def get_categories(categories_json):
         i = i + 1
 
 
+def get_docs_topic_id(metadata_yaml):
+    """
+    Return discourse topic ID or None
+    """
+    base_url = discourse_api.base_url
+    docs_link = metadata_yaml.get("docs")
+
+    if docs_link and docs_link.startswith(base_url):
+        topic_id = docs_link[len(base_url) :].split("/")[3]
+        if topic_id.isnumeric():
+            return topic_id
+
+    return None
+
+
 def add_store_front_data(package):
     extra = {}
 
@@ -355,6 +375,9 @@ def add_store_front_data(package):
     extra["ubuntu_versions"] = convert_series_to_ubuntu_versions(
         extra["series"]
     )
+
+    # Get charm docs
+    extra["docs_topic"] = get_docs_topic_id(extra["metadata"])
 
     package["store_front"] = extra
     return package

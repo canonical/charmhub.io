@@ -11,7 +11,7 @@
     "build-js": "yarn run build-js-bundle",
     "build-js-bundle": "webpack",
     "format-python": "black --line-length 79 webapp",
-    "lint-python": "flake8 webapp tests && black --check --line-length 79 webapp tests",
+    "lint-python": "flake8 --extend-ignore=E203 webapp tests && black --check --line-length 79 webapp tests",
     "lint-js": "eslint static/js/src/**/*.js",
     "lint-scss": "stylelint static/**/*.scss",
     "serve": "./entrypoint 0.0.0.0:${PORT}",

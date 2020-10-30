@@ -1,0 +1,25 @@
+{% set current_tab = "docs" %}
+
+{% extends '/details/details_layout.html' %}
+
+{% block details_content %}
+  <div class="u-fixed-width is-wide p-details-tab__content">
+    <div class="u-fixed-width">
+      <h4>Add docs to your charm</h4>
+      <p>
+        Looks like you haven’t added any docs yet. Docs help your users learn how to use your charms, and encourage them to use them the way you intended.
+      </p>
+      <p>
+        <a class="p-button--positive" href="#">Learn how to add docs to your charm</a>
+      </p>
+  </div>
+{% endblock%}
+
+{% block page_scripts %}
+  <script src="{{ versioned_static('js/dist/details_docs.js') }}" defer></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      charmhub.details.docs.initSideNav();
+    });
+  </script>
+{% endblock %}
