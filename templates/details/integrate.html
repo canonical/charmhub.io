@@ -141,7 +141,13 @@
       toggleModal(modal);
     });
 
-    innerModal.addEventListener("click", (e) => e.stopPropagation());
+    innerModal.addEventListener("click", (e) => {
+      if (!e.target.getAttribute("aria-controls") === "modal") {
+        e.stopPropagation();
+      } else {
+        toggleModal(modal);
+      }
+    });
 
     function setModalContent(options) {
       if (options.package) {
