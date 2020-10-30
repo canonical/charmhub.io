@@ -1,5 +1,6 @@
 import { select } from "d3-selection";
 import Swiper, { Navigation, Pagination } from "swiper";
+import debounce from "../../../libs/debounce";
 import "swiper/swiper-bundle.css";
 
 function buildChart(data) {
@@ -53,7 +54,7 @@ function buildChart(data) {
   // left icon circle
   bounds
     .append("circle")
-    .attr("cx", iconContainerRadius)
+    .attr("cx", iconContainerRadius + 2)
     .attr("cy", chartHeight / 2)
     .attr("r", iconContainerRadius)
     .attr("fill", "#f7f7f7")
@@ -62,7 +63,7 @@ function buildChart(data) {
 
   bounds
     .append("circle")
-    .attr("cx", iconContainerRadius)
+    .attr("cx", iconContainerRadius + 2)
     .attr("cy", chartHeight / 2)
     .attr("r", iconRadius)
     .attr("fill", "url(#imageOne)")
@@ -70,7 +71,7 @@ function buildChart(data) {
     .attr("stroke-width", 1);
 
   // left icon circle nodes
-  const leftOriginX = iconContainerRadius + nodeRadius;
+  const leftOriginX = iconContainerRadius + nodeRadius + 2;
   const leftOriginY = chartHeight / 2 + nodeRadius;
 
   const leftNodeOriginX = leftOriginX + iconContainerRadius * Math.sin(0);
@@ -133,7 +134,7 @@ function buildChart(data) {
   // right icon circle
   bounds
     .append("circle")
-    .attr("cx", chartWidth - iconContainerRadius)
+    .attr("cx", chartWidth - iconContainerRadius - 2)
     .attr("cy", chartHeight / 2)
     .attr("r", iconContainerRadius)
     .attr("fill", "#f7f7f7")
@@ -142,7 +143,7 @@ function buildChart(data) {
 
   bounds
     .append("circle")
-    .attr("cx", chartWidth - iconContainerRadius)
+    .attr("cx", chartWidth - iconContainerRadius - 2)
     .attr("cy", chartHeight / 2)
     .attr("r", iconRadius)
     .attr("fill", "url(#imageTwo)")
@@ -151,7 +152,7 @@ function buildChart(data) {
 
   // right icon circle nodes
   const rightOriginX =
-    iconContainerRadius + nodeRadius + chartWidth - iconContainerRadius * 2;
+    iconContainerRadius + nodeRadius + chartWidth - iconContainerRadius * 2 - 2;
   const rightOriginY = chartHeight / 2 + nodeRadius;
 
   const rightNodeOriginX = rightOriginX + iconContainerRadius * Math.sin(0);
@@ -227,7 +228,10 @@ function buildChart(data) {
     .attr("height", 40 * data.groups.length)
     .attr("x", iconContainerRadius * 2.5)
     .attr("y", 0)
-    .attr("transform", `translate(0, -${(40 * data.groups.length) / 2 - 20})`);
+    .attr("transform", () => {
+      const yPos = (40 * data.groups.length) / 2 - 20;
+      return `translate(0, ${yPos < 0 ? yPos : -yPos})`;
+    });
 
   connectingLinesGroup
     .selectAll(".connecting-line")
@@ -248,15 +252,16 @@ function buildChart(data) {
     });
 
   // connecting lines headings
-  const headingsGroup = bounds
-    .append("g")
-    .attr("transform", `translate(0, -${21 * data.groups.length})`);
+  const headingsGroup = bounds.append("g").attr("transform", () => {
+    const yPos = 21 * data.groups.length;
+    return `translate(0, ${yPos < 0 ? yPos : -yPos})`;
+  });
 
   headingsGroup
     .append("text")
     .attr("x", iconContainerRadius * 2.5)
     .attr("y", chartHeight / 2)
-    .attr("font-family", "sans-serif")
+    .attr("font-family", "'Ubuntu', sans-serif")
     .attr("font-size", "14px")
     .attr("fill", "#666666")
     .text("Endpoint");
@@ -265,7 +270,7 @@ function buildChart(data) {
     .append("text")
     .attr("x", chartWidth / 2)
     .attr("y", chartHeight / 2)
-    .attr("font-family", "sans-serif")
+    .attr("font-family", "'Ubuntu', sans-serif")
     .attr("font-size", "14px")
     .attr("fill", "#666666")
     .attr("text-anchor", "middle")
@@ -275,7 +280,7 @@ function buildChart(data) {
     .append("text")
     .attr("x", chartWidth - iconContainerRadius * 2.5)
     .attr("y", chartHeight / 2)
-    .attr("font-family", "sans-serif")
+    .attr("font-family", "'Ubuntu', sans-serif")
     .attr("font-size", "14px")
     .attr("fill", "#666666")
     .attr("text-anchor", "end")
@@ -283,12 +288,11 @@ function buildChart(data) {
 
   // connecting lines text
   data.groups.forEach((group, i) => {
-    const textGroup = bounds
-      .append("g")
-      .attr(
-        "transform",
-        `translate(0, -${(40 * data.groups.length) / 2 - 21})`
-      );
+    const textGroup = bounds.append("g").attr("transform", () => {
+      const yPos = (40 * data.groups.length) / 2 - 21;
+
+      return `translate(0, ${yPos < 0 ? yPos : -yPos})`;
+    });
 
     // each text is duplicated with the underlayer
     // having a white stroke so the line underneath
@@ -299,7 +303,7 @@ function buildChart(data) {
       .append("text")
       .attr("x", iconContainerRadius * 2.5)
       .attr("y", chartHeight / 2 + 4)
-      .attr("font-family", "sans-serif")
+      .attr("font-family", "'Ubuntu', sans-serif")
       .attr("font-size", "16px")
       .attr("fill", "#ffffff")
       .attr("stroke", "#ffffff")
@@ -311,7 +315,7 @@ function buildChart(data) {
       .append("text")
       .attr("x", iconContainerRadius * 2.5)
       .attr("y", chartHeight / 2 + 4)
-      .attr("font-family", "sans-serif")
+      .attr("font-family", "'Ubuntu', sans-serif")
       .attr("font-size", "16px")
       .attr("fill", "#111111")
       .text(data.groups[i][0])
@@ -322,7 +326,7 @@ function buildChart(data) {
       .append("text")
       .attr("x", chartWidth / 2)
       .attr("y", chartHeight / 2 + 4)
-      .attr("font-family", "sans-serif")
+      .attr("font-family", "'Ubuntu', sans-serif")
       .attr("font-size", "16px")
       .attr("fill", "#ffffff")
       .attr("text-anchor", "middle")
@@ -335,7 +339,7 @@ function buildChart(data) {
       .append("text")
       .attr("x", chartWidth / 2)
       .attr("y", chartHeight / 2 + 4)
-      .attr("font-family", "sans-serif")
+      .attr("font-family", "'Ubuntu', sans-serif")
       .attr("font-size", "16px")
       .attr("fill", "#111111")
       .attr("text-anchor", "middle")
@@ -347,7 +351,7 @@ function buildChart(data) {
       .append("text")
       .attr("x", chartWidth - iconContainerRadius * 2.5)
       .attr("y", chartHeight / 2 + 4)
-      .attr("font-family", "sans-serif")
+      .attr("font-family", "'Ubuntu', sans-serif")
       .attr("font-size", "16px")
       .attr("fill", "#ffffff")
       .attr("text-anchor", "end")
@@ -360,7 +364,7 @@ function buildChart(data) {
       .append("text")
       .attr("x", chartWidth - iconContainerRadius * 2.5)
       .attr("y", chartHeight / 2 + 4)
-      .attr("font-family", "sans-serif")
+      .attr("font-family", "'Ubuntu', sans-serif")
       .attr("font-size", "16px")
       .attr("fill", "#111111")
       .attr("text-anchor", "end")
@@ -382,8 +386,6 @@ const init = (packageName, integrationPackage) => {
       prevEl: ".swiper-button-prev",
     },
   });
-
-  document.getElementById("integration-chart-wrapper").innerHTML = "";
 
   // TOTO: THIS IS THE DATA!!!!!!
   const data = {
@@ -448,7 +450,17 @@ const init = (packageName, integrationPackage) => {
     data.groups = groups5;
   }
 
+  document.getElementById("integration-chart-wrapper").innerHTML = "";
   buildChart(data);
+
+  const resize = debounce(() => {
+    if (window.innerWidth >= 1036) {
+      document.getElementById("integration-chart-wrapper").innerHTML = "";
+      buildChart(data);
+    }
+  }, 100);
+
+  window.addEventListener("resize", resize);
 };
 
 export { init };

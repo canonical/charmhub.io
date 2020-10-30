@@ -134,6 +134,15 @@
       }
     });
 
+    const modal = document.getElementById("modal");
+    const innerModal = document.querySelector(".integration-modal");
+
+    modal.addEventListener("click", () => {
+      toggleModal(modal);
+    });
+
+    innerModal.addEventListener("click", (e) => e.stopPropagation());
+
     function setModalContent(options) {
       if (options.package) {
         const integrationPackageIcons = document.querySelectorAll('.js-integration-package-icon');
