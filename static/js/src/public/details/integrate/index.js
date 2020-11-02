@@ -251,38 +251,6 @@ function buildChart(data) {
       return `translate(0, ${40 * i})`;
     });
 
-  // connecting lines headings
-  const headingsGroup = bounds.append("g").attr("transform", () => {
-    const yPos = 21 * data.groups.length;
-    return `translate(0, ${yPos < 0 ? yPos : -yPos})`;
-  });
-
-  headingsGroup
-    .append("text")
-    .attr("x", iconContainerRadius * 2.5)
-    .attr("y", chartHeight / 2)
-    .attr("font-family", "'Ubuntu', sans-serif")
-    .attr("font-size", "14px")
-    .attr("fill", "#666666");
-
-  headingsGroup
-    .append("text")
-    .attr("x", chartWidth / 2)
-    .attr("y", chartHeight / 2)
-    .attr("font-family", "'Ubuntu', sans-serif")
-    .attr("font-size", "14px")
-    .attr("fill", "#666666")
-    .attr("text-anchor", "middle");
-
-  headingsGroup
-    .append("text")
-    .attr("x", chartWidth - iconContainerRadius * 2.5)
-    .attr("y", chartHeight / 2)
-    .attr("font-family", "'Ubuntu', sans-serif")
-    .attr("font-size", "14px")
-    .attr("fill", "#666666")
-    .attr("text-anchor", "end");
-
   // connecting lines text
   data.groups.forEach((group, i) => {
     const textGroup = bounds.append("g").attr("transform", () => {
