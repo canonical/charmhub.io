@@ -263,8 +263,7 @@ function buildChart(data) {
     .attr("y", chartHeight / 2)
     .attr("font-family", "'Ubuntu', sans-serif")
     .attr("font-size", "14px")
-    .attr("fill", "#666666")
-    .text("Endpoint");
+    .attr("fill", "#666666");
 
   headingsGroup
     .append("text")
@@ -273,8 +272,7 @@ function buildChart(data) {
     .attr("font-family", "'Ubuntu', sans-serif")
     .attr("font-size", "14px")
     .attr("fill", "#666666")
-    .attr("text-anchor", "middle")
-    .text("Interface");
+    .attr("text-anchor", "middle");
 
   headingsGroup
     .append("text")
@@ -283,8 +281,7 @@ function buildChart(data) {
     .attr("font-family", "'Ubuntu', sans-serif")
     .attr("font-size", "14px")
     .attr("fill", "#666666")
-    .attr("text-anchor", "end")
-    .text("Endpoint");
+    .attr("text-anchor", "end");
 
   // connecting lines text
   data.groups.forEach((group, i) => {
