@@ -12,7 +12,6 @@ from webapp.helpers import (
     get_yaml_loader,
     md_parser,
 )
-from webapp.store.mock import mocked_actions
 
 yaml = get_yaml_loader()
 UBUNTU_SERIES = {
@@ -348,7 +347,6 @@ def add_store_front_data(package):
 
     # Mocked data
     package = mock_resources(package)
-    extra["actions"] = mocked_actions
     extra["has_libraries"] = True
 
     extra["icons"] = get_icons(package)
@@ -357,6 +355,9 @@ def add_store_front_data(package):
     )
     extra["config"] = yaml.load(
         package["default-release"]["revision"]["config-yaml"]
+    )
+    extra["actions"] = yaml.load(
+        package["default-release"]["revision"]["actions-yaml"]
     )
 
     extra["categories"] = get_categories(package["result"]["categories"])

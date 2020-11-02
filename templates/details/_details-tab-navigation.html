@@ -10,6 +10,9 @@
       <li class="p-tabs__item" role="presentation">
         <a href="/{{ package.name }}/configure" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'configure' %}aria-selected="true" {% endif %}>Configure</a>
       </li>
+      <li class="p-tabs__item" role="presentation">
+        <a href="/{{ package.name }}/actions" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'actions' %}aria-selected="true" {% endif %}>Actions</a>
+      </li>
     </ul>
   </nav>
 </div>
