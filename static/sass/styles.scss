@@ -9,6 +9,9 @@ $grid-max-width: 90rem;
 // navigation settings
 $theme-default-nav: dark;
 
+// import cookie policy
+@import "@canonical/cookie-policy/build/css/cookie-policy";
+
 // Import Vanilla framework
 @import "vanilla-framework/scss/vanilla";
 
