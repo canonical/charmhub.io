@@ -70,22 +70,24 @@
         <button type="reset" class="p-search-box__reset"><i class="p-icon--close">Clear</i></button>
         <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search">Search</i></button>
       </form>
-      <div class="p-layout__sort-desktop p-form__group">
-        <label for="platform" aria-label="Filter platforms" class="p-form__label">Platforms</label>
-        <select name="platform" data-js="platform-handler" class="p-form__control" value="{{ platform }}" id="platform">
-          <option value="all" {% if active_filter('platform', 'all') %}selected{% endif %}>All</option>
-          <option value="linux" {% if active_filter('platform', 'linux') %}selected{% endif %}>Linux</option>
-          <option value="kubernetes" {% if active_filter('platform', 'kubernetes') %}selected{% endif %}>Kubernetes</option>
-          <option value="windows" {% if active_filter('platform', 'windows') %}selected{% endif %}>Windows</option>
-        </select>
-      </div>
-      <div class="p-layout__sort-desktop p-form__group">
-        <label for="sort" aria-label="Sort resources" class="p-form__label">Sort by</label>
-        <select name="sort" data-js="sort-handler" class="p-form__control" value="{{ sort }}" id="sort">
-          <option value="name-asc" {% if active_filter('sort', 'name-asc') %}selected{% endif %}>Name A/Z</option>
-          <option value="name-desc" {% if active_filter('sort', 'name-desc') %}selected{% endif %}>Name Z/A</option>
-        </select>
-      </div>
+      <form class="p-form p-form--inline">
+        <div class="p-layout__sort-desktop p-form__group">
+          <label for="platform" aria-label="Filter platforms" class="p-form__label">Platforms</label>
+          <select name="platform" data-js="platform-handler" class="p-form__control" value="{{ platform }}" id="platform">
+            <option value="all" {% if active_filter('platform', 'all') %}selected{% endif %}>All</option>
+            <option value="linux" {% if active_filter('platform', 'linux') %}selected{% endif %}>Linux</option>
+            <option value="kubernetes" {% if active_filter('platform', 'kubernetes') %}selected{% endif %}>Kubernetes</option>
+            <option value="windows" {% if active_filter('platform', 'windows') %}selected{% endif %}>Windows</option>
+          </select>
+        </div>
+        <div class="p-layout__sort-desktop p-form__group">
+          <label for="sort" aria-label="Sort resources" class="p-form__label">Sort by</label>
+          <select name="sort" data-js="sort-handler" class="p-form__control" value="{{ sort }}" id="sort">
+            <option value="name-asc" {% if active_filter('sort', 'name-asc') %}selected{% endif %}>Name A/Z</option>
+            <option value="name-desc" {% if active_filter('sort', 'name-desc') %}selected{% endif %}>Name Z/A</option>
+          </select>
+        </div>
+      </form>
     </div>
   </div>
   <div class="p-layout__card-container" data-js="card-container">
