@@ -59,7 +59,7 @@
         {{ results|length }} items
       </div>
       <div class="p-layout__sort-mobile">
-        <a href="/" data-js="mobile-sort-reveal-button" class="has-icon p-store__button is-always-color-link"><i class="p-icon--filter"></i>Platforms</a>
+        <a href="/" data-js="mobile-platform-reveal-button" class="has-icon p-store__button is-always-color-link"><i class="p-icon--filter"></i>Platforms</a>
         <a href="/" data-js="mobile-sort-reveal-button" class="has-icon p-store__button is-always-color-link"><i class="p-icon--sort"></i>Sort by</a>
         <a href="/" data-js="mobile-filter-reveal-button" class="has-icon p-store__button is-always-color-link"><i class="p-icon--filter"></i>Filters</a>
       </div>
@@ -72,7 +72,7 @@
       </form>
       <div class="p-layout__sort-desktop p-form__group">
         <label for="platform" aria-label="Filter platforms" class="p-form__label">Platforms</label>
-        <select name="platform" data-js="sort-handler" class="p-form__control" value="{{ plateform }}" id="platform">
+        <select name="platform" data-js="platform-handler" class="p-form__control" value="{{ platform }}" id="platform">
           <option value="all" {% if active_filter('platform', 'all') %}selected{% endif %}>All</option>
           <option value="linux" {% if active_filter('platform', 'linux') %}selected{% endif %}>Linux</option>
           <option value="kubernetes" {% if active_filter('platform', 'kubernetes') %}selected{% endif %}>Kubernetes</option>
