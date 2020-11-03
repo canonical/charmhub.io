@@ -10,7 +10,7 @@ def init_docs(app, url_prefix):
     discourse_docs = Docs(
         parser=DocParser(
             api=DiscourseAPI(
-                base_url="https://discourse.juju.is/", session=session
+                base_url="https://discourse.charmhub.io/", session=session
             ),
             index_topic_id=discourse_index_id,
             url_prefix=url_prefix,
