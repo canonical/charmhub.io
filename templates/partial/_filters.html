@@ -59,6 +59,7 @@
         {{ results|length }} items
       </div>
       <div class="p-layout__sort-mobile">
+        <a href="/" data-js="mobile-sort-reveal-button" class="has-icon p-store__button is-always-color-link"><i class="p-icon--filter"></i>Platforms</a>
         <a href="/" data-js="mobile-sort-reveal-button" class="has-icon p-store__button is-always-color-link"><i class="p-icon--sort"></i>Sort by</a>
         <a href="/" data-js="mobile-filter-reveal-button" class="has-icon p-store__button is-always-color-link"><i class="p-icon--filter"></i>Filters</a>
       </div>
@@ -69,6 +70,15 @@
         <button type="reset" class="p-search-box__reset"><i class="p-icon--close">Clear</i></button>
         <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search">Search</i></button>
       </form>
+      <div class="p-layout__sort-desktop p-form__group">
+        <label for="platform" aria-label="Filter platforms" class="p-form__label">Platforms</label>
+        <select name="platform" data-js="sort-handler" class="p-form__control" value="{{ plateform }}" id="platform">
+          <option value="all" {% if active_filter('platform', 'all') %}selected{% endif %}>All</option>
+          <option value="linux" {% if active_filter('platform', 'linux') %}selected{% endif %}>Linux</option>
+          <option value="kubernetes" {% if active_filter('platform', 'kubernetes') %}selected{% endif %}>Kubernetes</option>
+          <option value="windows" {% if active_filter('platform', 'windows') %}selected{% endif %}>Windows</option>
+        </select>
+      </div>
       <div class="p-layout__sort-desktop p-form__group">
         <label for="sort" aria-label="Sort resources" class="p-form__label">Sort by</label>
         <select name="sort" data-js="sort-handler" class="p-form__control" value="{{ sort }}" id="sort">
@@ -81,7 +91,7 @@
   <div class="p-layout__card-container" data-js="card-container">
     {% if results %}
       {% for package in results %}
-        {% if package["type"] == "charm" %}
+        {% if package["type"] == "charm" and package["store_front"]["show"] %}
           {% include "partial/_entity-card.html" %}
         {% endif %}
       {% endfor %}

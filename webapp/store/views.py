@@ -18,6 +18,20 @@ store = Blueprint(
 def index():
     query = request.args.get("q", default=None, type=str)
     sort = request.args.get("sort", default="sort-asc", type=str)
+    platform = request.args.get("platform", default=None, type=str)
+
+    # TODO platform are not a implemented yet API side. So in the meantime
+    # we create our own filter.
+    # For the future remove this from our backend a let the API handle the
+    # filtering.
+    if platform == "linux":
+        os = ["ubuntu", "centos"]
+    elif platform == "windows":
+        os = ["windows"]
+    elif platform == "kubernetes":
+        os = ["kubernetes"]
+    else:
+        os = ["ubuntu", "centos", "windows", "kubernetes"]
 
     fields = [
         "result.categories",
@@ -37,6 +51,16 @@ def index():
     categories = []
     for i, item in enumerate(results):
         results[i]["store_front"] = {}
+
+        # TODO this section is related to the platform issue not handled
+        # yet by the API
+        if (
+            results[i]["default-release"]["channel"]["platform"]["os"]
+            not in os
+        ):
+            continue
+        results[i]["store_front"]["show"] = True
+
         results[i]["store_front"]["icons"] = logic.get_icons(results[i])
         results[i]["store_front"]["last_release"] = logic.convert_date(
             results[i]["default-release"]["channel"]["released-at"]
