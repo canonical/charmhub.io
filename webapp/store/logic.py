@@ -118,6 +118,45 @@ def get_banner_url(media):
     return None
 
 
+def get_channel_map(channel_map):
+    """
+    Reformat channel map to return a channel map
+    with unique risk
+
+    :param channel_map: the channel map from the api
+    :returns: the channel map reformatted
+    """
+    new_map = []
+    for channel in channel_map:
+        for res in new_map:
+            if channel["channel"]["name"] == res["channel"]["name"]:
+                break
+        else:
+            new_map.append(channel)
+
+    return new_map
+
+
+def get_current_channel(channel_map, channel_request):
+    """
+    Get the current channel from the channel-map
+
+    :param channel_map: The channel-map from the package
+    :param channel_request: The name of the channel requested
+    :returns: The selected channel
+    """
+    channel_selected = None
+
+    if channel_request:
+        formatted_channel_map = get_channel_map(channel_map)
+        for channel in formatted_channel_map:
+            if channel["channel"]["name"] == channel_request:
+                channel_selected = channel
+                break
+
+    return channel_selected
+
+
 def convert_channel_maps(channel_map):
     """
     Converts channel maps list to format easier to manipulate
@@ -154,6 +193,7 @@ def convert_channel_maps(channel_map):
                 channel["channel"]["platform"]["series"]
             ),
             "resources": resources,
+            "revision": channel["revision"],
         }
 
         result[track][risk].append(info)
@@ -342,7 +382,7 @@ def get_docs_topic_id(metadata_yaml):
     return None
 
 
-def add_store_front_data(package):
+def add_store_front_data(package, channel):
     extra = {}
 
     # Mocked data
@@ -350,15 +390,9 @@ def add_store_front_data(package):
     extra["has_libraries"] = True
 
     extra["icons"] = get_icons(package)
-    extra["metadata"] = yaml.load(
-        package["default-release"]["revision"]["metadata-yaml"]
-    )
-    extra["config"] = yaml.load(
-        package["default-release"]["revision"]["config-yaml"]
-    )
-    extra["actions"] = yaml.load(
-        package["default-release"]["revision"]["actions-yaml"]
-    )
+    extra["metadata"] = yaml.load(channel["revision"]["metadata-yaml"])
+    extra["config"] = yaml.load(channel["revision"]["config-yaml"])
+    extra["actions"] = yaml.load(channel["revision"]["actions-yaml"])
 
     extra["categories"] = get_categories(package["result"]["categories"])
 
@@ -371,9 +405,7 @@ def add_store_front_data(package):
 
     # Some needed fields
     extra["publisher_name"] = package["result"]["publisher"]["display-name"]
-    extra["last_release"] = convert_date(
-        package["default-release"]["channel"]["released-at"]
-    )
+    extra["last_release"] = convert_date(channel["channel"]["released-at"])
     extra["summary"] = package["result"]["summary"]
     extra["ubuntu_versions"] = convert_series_to_ubuntu_versions(
         extra["series"]
