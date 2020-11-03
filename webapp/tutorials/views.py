@@ -13,7 +13,7 @@ def init_tutorials(app, url_prefix):
     tutorials_docs = Docs(
         parser=DocParser(
             api=DiscourseAPI(
-                base_url="https://discourse.juju.is/", session=session
+                base_url="https://discourse.charmhub.io/", session=session
             ),
             index_topic_id=discourse_index_id,
             category_id=category_id,
