@@ -23,11 +23,12 @@ const init = (packageName, channelMapButton) => {
   );
 
   const selectChannel = (channel, version) => {
+    var page = window.location.pathname;
     if (channel === "stable") {
-      window.location.href = `/${packageName}`;
+      window.location.href = `${page}`;
     } else {
       let channelName = channel.replace("latest/", "");
-      window.location.href = `/${packageName}?channel=${channelName}`;
+      window.location.href = `${page}?channel=${channelName}`;
     }
   };
 
