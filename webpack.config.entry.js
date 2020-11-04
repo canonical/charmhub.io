@@ -13,4 +13,5 @@ module.exports = {
   listing: "./static/js/src/publisher/listing-page.js",
   settings: "./static/js/src/publisher/settings.js",
   "highlight-nav": "./static/js/src/libs/highlight-nav.js",
+  "highlight-js": "./static/js/src/base/highlight.js",
 };

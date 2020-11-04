@@ -23,15 +23,18 @@
       <hr class="p-separator--medium">
       <h4>Source code</h4>
     </div>
-    <pre><code>{{ library["content"] }}</code></pre>
+    <pre id="python-code"><code>{{ library["content"] }}</code></pre>
   </div>
 {% endblock%}
 
 {% block page_scripts %}
 <script src="{{ versioned_static('js/dist/details_libraries.js') }}" defer></script>
+<script src="{{ versioned_static('js/dist/highlight-js.js') }}" defer></script>
 <script>
   window.addEventListener("DOMContentLoaded", function () {
     charmhub.details.libraries.init("[data-js='tab-button']", "[data-js='tab-content']");
+
+    charmhub.highlight.hljs.highlightBlock(document.getElementById('python-code'));
   });
 </script>
 {% endblock %}
