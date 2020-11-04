@@ -103,25 +103,44 @@ def index():
 FIELDS = [
     "result.media",
     "default-release",
+    "default-release.revision.metadata-yaml",
+    "default-release.revision.readme-md",
     "result.categories",
     "result.publisher.display-name",
     "result.summary",
     "channel-map",
+    "channel-map.revision.readme-md",
 ]
 
 
-@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
-def details_overview(entity_name):
+def get_package(entity_name, channel_request):
     # Get entity info from API
     package = app.store_api.get_item_details(entity_name, fields=FIELDS)
-    package = logic.add_store_front_data(package)
+
+    channel_selected = logic.get_current_channel(
+        package["channel-map"], channel_request
+    )
+
+    if not channel_selected:
+        channel_selected = package["default-release"]
+
+    package = logic.add_store_front_data(package, channel_selected)
+    package["channel_selected"] = channel_selected
 
     for channel in package["channel-map"]:
         channel["channel"]["released-at"] = logic.convert_date(
             channel["channel"]["released-at"]
         )
 
-    readme = package["default-release"]["revision"]["readme-md"]
+    return package
+
+
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
+def details_overview(entity_name):
+    channel_request = request.args.get("channel", default=None, type=str)
+    package = get_package(entity_name, channel_request)
+
+    readme = package["channel_selected"]["revision"]["readme-md"]
 
     # Remove Markdown comments
     readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
@@ -134,17 +153,22 @@ def details_overview(entity_name):
         package=package,
         readme=readme,
         package_type=package["type"],
+        channel_requested=channel_request,
     )
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs')
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs/<slug>')
 def details_docs(entity_name, slug=None):
-    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
-    package = logic.add_store_front_data(package)
+    channel_request = request.args.get("channel", default=None, type=str)
+    package = get_package(entity_name, channel_request)
 
     if not package["store_front"]["docs_topic"]:
-        return render_template("details/empty-docs.html", package=package)
+        return render_template(
+            "details/empty-docs.html",
+            package=package,
+            channel_requested=channel_request,
+        )
 
     docs_url_prefix = f"/{package['name']}/docs"
 
@@ -178,6 +202,7 @@ def details_docs(entity_name, slug=None):
         "last_update": docs.index_document["updated"],
         "forum_url": docs.api.base_url,
         "topic_path": topic_path,
+        "channel_requested": channel_request,
     }
 
     return render_template("details/docs.html", **context)
@@ -185,24 +210,32 @@ def details_docs(entity_name, slug=None):
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configure')
 def details_configuration(entity_name):
-    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
-    package = logic.add_store_front_data(package)
+    channel_request = request.args.get("channel", default=None, type=str)
+    package = get_package(entity_name, channel_request)
 
-    return render_template("details/configure.html", package=package)
+    return render_template(
+        "details/configure.html",
+        package=package,
+        channel_requested=channel_request,
+    )
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/actions')
 def details_actions(entity_name):
-    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
-    package = logic.add_store_front_data(package)
+    channel_request = request.args.get("channel", default=None, type=str)
+    package = get_package(entity_name, channel_request)
 
-    return render_template("details/actions.html", package=package)
+    return render_template(
+        "details/actions.html",
+        package=package,
+        channel_requested=channel_request,
+    )
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/libraries')
 def details_libraries(entity_name):
-    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
-    package = logic.add_store_front_data(package)
+    channel_request = request.args.get("channel", default=None, type=str)
+    package = get_package(entity_name, channel_request)
 
     libraries = get_charm_libraries()
 
@@ -211,6 +244,7 @@ def details_libraries(entity_name):
         entity_name=entity_name,
         package=package,
         libraries=libraries,
+        channel_requested=channel_request,
     )
 
 
@@ -220,8 +254,8 @@ def details_libraries(entity_name):
     + '"):entity_name>/libraries/<string:library_name>'
 )
 def details_library(entity_name, library_name):
-    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
-    package = logic.add_store_front_data(package)
+    channel_request = request.args.get("channel", default=None, type=str)
+    package = get_package(entity_name, channel_request)
 
     lib_parts = library_name.split(".")
     lib_group = ".".join(lib_parts[:-2])
@@ -242,20 +276,29 @@ def details_library(entity_name, library_name):
         libraries=libraries,
         library=library,
         docstrings=docstrings,
+        channel_requested=channel_request,
     )
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/history')
 def details_history(entity_name):
-    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
-    package = logic.add_store_front_data(package)
+    channel_request = request.args.get("channel", default=None, type=str)
+    package = get_package(entity_name, channel_request)
 
-    return render_template("details/history.html", package=package)
+    return render_template(
+        "details/history.html",
+        package=package,
+        channel_requested=channel_request,
+    )
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/integrate')
 def details_integrate(entity_name):
-    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
-    package = logic.add_store_front_data(package)
+    channel_request = request.args.get("channel", default=None, type=str)
+    package = get_package(entity_name, channel_request)
 
-    return render_template("details/integrate.html", package=package)
+    return render_template(
+        "details/integrate.html",
+        package=package,
+        channel_requested=channel_request,
+    )

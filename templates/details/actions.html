@@ -70,5 +70,11 @@
 {% endblock%}
 
 {% block page_scripts %}
+  <script src="{{ versioned_static('js/dist/details.js') }}" defer></script>
   <script src="{{ versioned_static('js/dist/highlight-nav.js') }}" defer></script>
+  <script>
+   window.addEventListener("DOMContentLoaded", function () {
+       charmhub.details.init("{{ package.name }}");
+   });
+  </script>
 {% endblock %}

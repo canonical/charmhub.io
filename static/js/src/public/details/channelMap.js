@@ -23,27 +23,12 @@ const init = (packageName, channelMapButton) => {
   );
 
   const selectChannel = (channel, version) => {
-    const selected = document.querySelector(
-      `[data-channel-map-channel="${channelMapState.channel}"]`
-    );
-
-    selected.classList.remove("is-active");
-
-    channelMapState.channel = channel;
-    channelMapState.version = version;
-
-    const newSelected = document.querySelector(
-      `[data-channel-map-channel="${channel}"]`
-    );
-
-    newSelected.classList.add("is-active");
-
-    currentChannel.innerHTML = `${channel} ${version}`;
-
-    if (channel === "latest/stable") {
-      channelCli.innerText = packageName;
+    var page = window.location.pathname;
+    if (channel === "stable") {
+      window.location.href = `${page}`;
     } else {
-      channelCli.innerText = `${packageName} --channel=${channel}`;
+      let channelName = channel.replace("latest/", "");
+      window.location.href = `${page}?channel=${channelName}`;
     }
   };
 
