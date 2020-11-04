@@ -7,7 +7,7 @@ from canonicalwebteam.discourse import DiscourseAPI, DocParser, Docs
 
 def init_tutorials(app, url_prefix):
     discourse_index_id = 3393
-    category_id = 30
+    category_id = 22
 
     session = talisker.requests.get_session()
     tutorials_docs = Docs(
