@@ -241,6 +241,19 @@ class Filters {
     }
   }
 
+  initPlatformEvents(el) {
+    el.addEventListener("change", (e) => {
+      e.preventDefault();
+      this.removeFilter("platform");
+      this.addFilter("platform", el.value);
+      this.syncSortUI("platformMobile", el.value);
+
+      this.cleanFilters();
+      this.updateHistory();
+      location.reload();
+    });
+  }
+
   initSortEvents(el) {
     el.addEventListener("change", (e) => {
       e.preventDefault();
@@ -260,6 +273,19 @@ class Filters {
       this.removeFilter("sort");
       this.addFilter("sort", e.target.value);
       this.syncSortUI("sort", e.target.value);
+
+      this.cleanFilters();
+      this.updateHistory();
+      location.reload();
+    });
+  }
+
+  initMobilePlatformEvents(el) {
+    el.addEventListener("change", (e) => {
+      e.preventDefault();
+      this.removeFilter("platform");
+      this.addFilter("platform", e.target.value);
+      this.syncSortUI("platform", e.target.value);
 
       this.cleanFilters();
       this.updateHistory();
@@ -339,15 +365,21 @@ class Filters {
   }
 
   // Close the drawers if click anywhere outside the drawer, except the "Sort by"/"Filters" buttons
-  initClickOutside(filter, sortMobile, filterMobileButton, sortMobileButton) {
+  initClickOutside(filter, sortMobile, platformMobile, filterMobileButton, sortMobileButton, platformMobileButton) {
     document.addEventListener("click", (e) => {
       let targetElement = e.target; // clicked element
       do {
         if (targetElement == filterMobileButton) {
           sortMobile.classList.remove("is-active");
+          platformMobile.classList.remove("is-active");
           return;
         } else if (targetElement == sortMobileButton) {
           filter.classList.remove("is-active");
+          platformMobile.classList.remove("is-active");
+          return;
+        } else if (targetElement == platformMobileButton) {
+          filter.classList.remove("is-active");
+          sortMobile.classList.remove("is-active");
           return;
         } else if (targetElement == filter || targetElement == sortMobile) {
           // This is a click inside. Do nothing, just return.
@@ -360,6 +392,7 @@ class Filters {
       // This is a click outside.
       filter.classList.remove("is-active");
       sortMobile.classList.remove("is-active");
+      platformMobile.classList.remove("is-active");
     });
   }
 
@@ -391,8 +424,11 @@ class Filters {
     const {
       filter,
       sort,
+      platform,
       sortMobile,
+      platformMobile,
       sortMobileButton,
+      platformMobileButton,
       filterMobileButton,
       searchMobile,
       searchDesktop,
@@ -402,8 +438,11 @@ class Filters {
       this.initSearch(searchMobile, searchDesktop);
     filter && this.initFilterEvents(filter);
     sort && this.initSortEvents(sort);
+    platform && this.initPlatformEvents(platform);
     sortMobile && this.initMobileSortEvents(sortMobile);
+    platformMobile && this.initMobilePlatformEvents(platformMobile);
     sortMobileButton && this.initMobileButton(sortMobileButton, sortMobile);
+    platformMobileButton && this.initMobileButton(platformMobileButton, platformMobile);
     filterMobileButton && this.initMobileButton(filterMobileButton, filter);
     filter &&
       sortMobile &&
@@ -412,8 +451,10 @@ class Filters {
       this.initClickOutside(
         filter,
         sortMobile,
+        platformMobile,
         filterMobileButton,
-        sortMobileButton
+        sortMobileButton,
+        platformMobileButton
       );
   }
 }

@@ -13,6 +13,29 @@
   </div>
 </section>
 <div class="p-strip--accent u-no-padding--top u-no-padding--bottom">
+  <div class="p-sort" data-js="mobile-platform-handler">
+    <div class="p-sort__title">
+      Platform
+    </div>
+    <form class="p-sort__content">
+      <div class="p-sort__item">
+        <input type="radio" name="platformMobile" id="all" value="all" {% if active_filter('platform', 'all') %}checked{% endif %}>
+        <label for="all">All</label>
+      </div>
+      <div class="p-sort__item">
+        <input type="radio" name="platformMobile" id="linux" value="linux" {% if active_filter('platform', 'linux') %}checked{% endif %}>
+        <label for="linux">Linux</label>
+      </div>
+      <div class="p-sort__item">
+        <input type="radio" name="platformMobile" id="windows" value="windows" {% if active_filter('platform', 'windows') %}checked{% endif %}>
+        <label for="windows">Windows</label>
+      </div>
+      <div class="p-sort__item">
+        <input type="radio" name="platformMobile" id="kubernetes" value="kubernetes" {% if active_filter('platform', 'kubernetes') %}checked{% endif %}>
+        <label for="kubernetes">Kubernetes</label>
+      </div>
+    </form>
+  </div>
   <div class="p-sort" data-js="mobile-sort-handler">
     <div class="p-sort__title">
       Sort by
@@ -48,8 +71,11 @@
       filter: "[data-js='filter-handler']",
       filter: "[data-js='filter-handler']",
       sort: "[data-js='sort-handler']",
+      platform: "[data-js='platform-handler']",
       sortMobile: "[data-js='mobile-sort-handler']",
+      platformMobile: "[data-js='mobile-platform-handler']",
       sortMobileButton: "[data-js='mobile-sort-reveal-button']",
+      platformMobileButton: "[data-js='mobile-platform-reveal-button']",
       filterMobileButton: "[data-js='mobile-filter-reveal-button']",
     });
   });
