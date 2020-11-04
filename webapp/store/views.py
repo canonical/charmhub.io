@@ -14,10 +14,22 @@ store = Blueprint(
 )
 
 
+# TODO This list of featured charms is random Once the import is complete we
+# should include the actual list of charms.
+# And once the API provides featured charms then we should remove this code
+FEATURED_CHARMS = [
+    "ceph",
+    "eclipse-che",
+    "ghost",
+    "ibm-java",
+    "kafka",
+]
+
+
 @store.route("/")
 def index():
     query = request.args.get("q", default=None, type=str)
-    sort = request.args.get("sort", default="sort-asc", type=str)
+    sort = request.args.get("sort", default="featured", type=str)
     platform = request.args.get("platform", default=None, type=str)
 
     # TODO platform are not a implemented yet API side. So in the meantime
@@ -74,6 +86,11 @@ def index():
             results[i]["store_front"]["categories"] = [
                 {"name": "Other", "slug": "other"}
             ]
+
+        if results[i]["name"] in FEATURED_CHARMS:
+            results[i]["store_front"]["featured"] = True
+        else:
+            results[i]["store_front"]["featured"] = False
 
         if (
             results[i]["type"] == "charm"
