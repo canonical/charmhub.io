@@ -241,6 +241,12 @@ $theme-default-nav: dark;
     table tr.is-active td {
       font-weight: 400;
     }
+
+    tbody tr {
+      &:hover {
+        background-color: $color-light;
+      }
+    }
   }
 }
 
