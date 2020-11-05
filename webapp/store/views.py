@@ -5,6 +5,7 @@ from flask import current_app as app
 from flask import render_template, request
 
 from webapp.config import DETAILS_VIEW_REGEX
+from webapp.feature import FEATURED_CHARMS
 from webapp.helpers import discourse_api, md_parser, increase_headers
 from webapp.store import logic
 from webapp.store.mock import get_charm_libraries
@@ -12,18 +13,6 @@ from webapp.store.mock import get_charm_libraries
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
 )
-
-
-# TODO This list of featured charms is random Once the import is complete we
-# should include the actual list of charms.
-# And once the API provides featured charms then we should remove this code
-FEATURED_CHARMS = [
-    "ceph",
-    "eclipse-che",
-    "ghost",
-    "ibm-java",
-    "kafka",
-]
 
 
 @store.route("/")
