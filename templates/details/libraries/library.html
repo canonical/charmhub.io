@@ -16,9 +16,7 @@
           <span class="u-text--muted p-docstring__label">{{ group["type"].lower()}} | </span>
           {% if group["type"] == 'Function' %}
             {{ group["name"] }}
-            {% if group["signature"].strip != "None" %}
-              {{ group["signature"] }}
-            {% endif %}
+            {% if group["signature"].strip %}{{ group["signature"] }}{% else %}(){% endif %}
           {% else %}
             {{ group["name"]}}
           {% endif %}
@@ -30,7 +28,8 @@
             <h5>
               <span class="u-text--muted p-docstring__label">{{ item["type"].lower()}} | </span>
               {% if item["type"] == 'Function' %}
-                {{ item["name"] }}{{ item["signature"] }}
+                {{ item["name"] }}
+                {% if item["signature"].strip %}{{ item["signature"] }}{% else %}(){% endif %}
               {% else %}
                 {{ item["name"]}}
               {% endif %}
