@@ -5,6 +5,7 @@ from flask import current_app as app
 from flask import render_template, request
 
 from webapp.config import DETAILS_VIEW_REGEX
+from webapp.feature import FEATURED_CHARMS
 from webapp.helpers import discourse_api, md_parser, increase_headers
 from webapp.store import logic
 from webapp.store.mock import get_charm_libraries
@@ -17,7 +18,7 @@ store = Blueprint(
 @store.route("/")
 def index():
     query = request.args.get("q", default=None, type=str)
-    sort = request.args.get("sort", default="sort-asc", type=str)
+    sort = request.args.get("sort", default="featured", type=str)
     platform = request.args.get("platform", default=None, type=str)
 
     # TODO platform are not a implemented yet API side. So in the meantime
@@ -74,6 +75,11 @@ def index():
             results[i]["store_front"]["categories"] = [
                 {"name": "Other", "slug": "other"}
             ]
+
+        if results[i]["name"] in FEATURED_CHARMS:
+            results[i]["store_front"]["featured"] = True
+        else:
+            results[i]["store_front"]["featured"] = False
 
         if (
             results[i]["type"] == "charm"
