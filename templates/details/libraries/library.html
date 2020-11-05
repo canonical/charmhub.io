@@ -5,17 +5,43 @@
 {% block libraries_content %}
 
   <div id="docstrings" data-js="tab-content" class="p-docstring">
-    {{ docstrings['html'] | safe }}
+    <div class="p-docstring__intro">
+      {{ docstrings['html'] | safe }}
+    </div>
 
-    {% for group in docstrings['content'] %}
-      <h4>{{ group["name"]}} </h4>
-      {{ group["html"] | safe }}
+    <div class="p-docstring__docs">
+      {% for group in docstrings['content'] %}
+        <hr class="p-docstring__divider" />
+        <h4 class="p-docstring__heading">
+          <span class="u-text--muted p-docstring__label">{{ group["type"].lower()}} | </span>
+          {% if group["type"] == 'Function' %}
+            {{ group["name"] }}
+            {% if group["signature"].strip != "None" %}
+              {{ group["signature"] }}
+            {% endif %}
+          {% else %}
+            {{ group["name"]}}
+          {% endif %}
 
-      {% for item in group['content'] %}
-        <h5>{{ item["name"]}}</h5>
-        {{ item["html"] | safe }}
+        </h4>
+        <div class="p-docstring__definition">
+          {{ group["html"] | safe }}
+          {% for item in group['content'] %}
+            <h5>
+              <span class="u-text--muted p-docstring__label">{{ item["type"].lower()}} | </span>
+              {% if item["type"] == 'Function' %}
+                {{ item["name"] }}{{ item["signature"] }}
+              {% else %}
+                {{ item["name"]}}
+              {% endif %}
+            </h5>
+            <div class="p-docstring__definition">
+              {{ item["html"] | safe }}
+            </div>
+          {% endfor %}
+        </div>
       {% endfor %}
-    {% endfor %}
+    </div>
   </div>
 
   <div id="source-code" data-js="tab-content">
