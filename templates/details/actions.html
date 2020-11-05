@@ -20,37 +20,42 @@
         </div>
       </div>
       <div class="col-9 col-large-6">
-        <ul class="p-list--divided has-sparator-centered">
+        <ul class="p-list--divided has-separator-centered">
           {% for action, action_data in package.store_front.actions.items() %}
-            <li class="p-list__item action-section" id="{{ action }}">
+            <li class="p-list__item" style="margin-bottom: 1rem;" id="{{ action }}">
               <p class="p-heading--4">{{ action }}</p>
               {% if action_data.description %}
                 <p class="u-no-padding--top">{{ action_data.description }}</p>
               {% endif %}
               {% if action_data.params %}
-                <table class="p-table--no-borders">
-                  <tr>
-                    <td class="u-align--right u-text--muted" style="width: 25%;">Params</td>
-                    <td>
+                <dl>
+                  <dt>Params</dt>
+                  <dl>
+                    <ul class="p-list action-list" style="margin-left: 1rem;">
                       {% for param, param_data in action_data.params.items() %}
-                        <p class="u-no-padding--top"><strong class="vertical-separator">{{ param }}</strong>{{ param_data.type }}</p>
+                      <li>
+                        <p>
+                          <span class="vertical-separator">{{ param }}</span>
+                          <span class="u-text--muted">{{ param_data.type }}</span>
+                        </p>
                         <p class="u-no-padding--top">{{ param_data.description }}</p>
+                      </li>
                       {% endfor %}
+                    </ul>
+                  </dl>
+                </dl>
+                {% if action_data.required %}
+                  <tr>
+                    <td class="u-align--right u-text--muted" style="width: 25%;">Required</td>
+                    <td>
+                      <p class="u-no-padding--top u-no-margin--bottom">
+                        {% for item in action_data.required %}
+                          {{ item }}{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                      </p>
                     </td>
                   </tr>
-                  {% if action_data.required %}
-                    <tr>
-                      <td class="u-align--right u-text--muted" style="width: 25%;">Required</td>
-                      <td>
-                        <p class="u-no-padding--top u-no-margin--bottom">
-                          {% for item in action_data.required %}
-                            {{ item }}{% if not loop.last %},{% endif %}
-                          {% endfor %}
-                        </p>
-                      </td>
-                    </tr>
-                  {% endif %}
-                </table>
+                {% endif %}
               {% endif %}
             </li>
           {% endfor %}
