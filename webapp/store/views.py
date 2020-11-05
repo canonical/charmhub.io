@@ -140,7 +140,9 @@ def details_overview(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
 
-    readme = package["channel_selected"]["revision"]["readme-md"]
+    readme = package["channel_selected"]["revision"].get(
+        "readme-md", "No readme available"
+    )
 
     # Remove Markdown comments
     readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
