@@ -1,7 +1,6 @@
 import datetime
 import re
 import json
-import os
 
 from bs4 import BeautifulSoup
 from mistune import Markdown, Renderer
@@ -12,16 +11,11 @@ from flask import request
 from ruamel.yaml import YAML
 from talisker import requests
 
-DISCOURSE_API_KEY = os.getenv("DISCOURSE_API_KEY")
-DISCOURSE_API_USERNAME = os.getenv("DISCOURSE_API_USERNAME")
-
 
 session = requests.get_session()
 discourse_api = DiscourseAPI(
     base_url="https://discourse.charmhub.io/",
     session=session,
-    api_key=DISCOURSE_API_KEY,
-    api_username=DISCOURSE_API_USERNAME,
 )
 
 _yaml = YAML(typ="rt")
