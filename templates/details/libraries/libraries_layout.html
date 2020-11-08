@@ -38,6 +38,11 @@ than the latest.</span>
             </li>
             {% for group in libraries.keys() %}
             <li class="p-side-navigation__item">
+            {% if group == "others" %}
+              {% for lib in libraries[group] %}
+                <a class="p-side-navigation__link" {% if request.path.endswith(lib['name']) %}aria-current="page"{% endif %} href="/{{ entity_name }}/libraries/{{ lib['name'] }}" style="color: #111;">{{ lib["name"] }}</a>
+              {% endfor %}
+            {% else %}
               <span class="p-side-navigation__text" style="color: #111;">{{ group }}</span>
               <ul class="p-side-navigation__list">
                 {% for lib in libraries[group] %}
@@ -46,6 +51,7 @@ than the latest.</span>
                 </li>
                 {% endfor %}
               </ul>
+            {% endif %}
             </li>
             {% endfor %}
           </ul>
@@ -79,7 +85,7 @@ than the latest.</span>
                 <i class="p-icon--update">Last updated</i>26 June 2019
               </li>
               <li class="p-inline-list__item has-icon">
-                <i class="p-icon--revision">Revision</i>Library version 2.93
+                <i class="p-icon--revision">Revision</i>Library version {{ library['api'] }}
               </li>
             </ul>
           </li>

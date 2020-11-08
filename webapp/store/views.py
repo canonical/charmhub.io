@@ -1,18 +1,21 @@
 import re
-from canonicalwebteam.discourse import DocParser
+import talisker
 from flask import Blueprint
 from flask import current_app as app
-from flask import render_template, request
+from flask import render_template, request, abort
+
+from canonicalwebteam.discourse import DocParser
+from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
 
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.feature import FEATURED_CHARMS
 from webapp.helpers import discourse_api, md_parser, increase_headers
 from webapp.store import logic
-from webapp.store.mock import get_charm_libraries
 
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
 )
+publisher_api = CharmPublisher(talisker.requests.get_session())
 
 
 @store.route("/")
@@ -245,7 +248,9 @@ def details_libraries(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
 
-    libraries = get_charm_libraries()
+    libraries = logic.process_libraries(
+        publisher_api.get_charm_libraries("my-super-charm")
+    )
 
     return render_template(
         "details/libraries/introduction.html",
@@ -266,15 +271,27 @@ def details_library(entity_name, library_name):
     package = get_package(entity_name, channel_request)
 
     lib_parts = library_name.split(".")
-    lib_group = ".".join(lib_parts[:-2])
-    lib_name = "." + ".".join(lib_parts[-2:])
 
-    libraries = get_charm_libraries()
+    if len(lib_parts) > 2:
+        group_name = ".".join(lib_parts[:-2])
+        lib_name = "." + ".".join(lib_parts[-2:])
+    else:
+        group_name = "others"
+        lib_name = library_name
+
+    libraries = logic.process_libraries(
+        publisher_api.get_charm_libraries("my-super-charm")
+    )
+
     library = next(
-        (lib for lib in libraries[lib_group] if lib["name"] == lib_name),
+        (lib for lib in libraries[group_name] if lib["name"] == lib_name),
         None,
     )
 
+    if not library:
+        abort(404)
+
+    library = publisher_api.get_charm_library("my-super-charm", library["id"])
     docstrings = logic.process_python_docs(library, module_name=library_name)
 
     return render_template(
