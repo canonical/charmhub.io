@@ -25,7 +25,8 @@ describe("channelMap", () => {
     maskEl = document.createElement("div");
     maskEl.setAttribute("class", "p-channel-map__mask");
     selectedEl = document.createElement("div");
-    selectedEl.setAttribute("data-channel-map-channel", "latest/stable");
+    selectedEl.setAttribute("data-channel-map-track", "latest");
+    selectedEl.setAttribute("data-channel-map-channel", "stable");
     selectedEl.setAttribute("data-channel-map-filter", "14.04 LTS");
 
     filterEl = document.createElement("select");
@@ -83,7 +84,7 @@ describe("channelMap", () => {
 
     expect(
       document
-        .querySelector(`[data-channel-map-channel="latest/stable"]`)
+        .querySelector(`[data-channel-map-track="latest"][data-channel-map-channel="stable"]`)
         .classList.contains("is-active")
     ).toEqual(true);
   });
