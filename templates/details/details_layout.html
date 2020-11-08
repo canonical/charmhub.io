@@ -4,6 +4,27 @@
 {% block meta_description %}Deploy the latest version of {{ format_slug(package.name) }} as a Kubernetes Operator on any cloud. {{ package.result.summary }}{% endblock %}
 {% block meta_image %}{% if package["store_front"]["icons"] %}https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_200,h_200/{{ package.store_front.icons[0] }}{% else %}"https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg"{% endif %}{% endblock %}
 
+{% block structure_data_markup %}
+<script type="application/ld+json">
+ {
+     "@context": "http://schema.org",
+     "@type": "SoftwareApplication",
+     "name": "{{ format_slug(package.name) }}",
+     "image": "{{ self.meta_image() }}",
+     "url": "https://charmhub.io/{{ package.name }}",
+     "publisher": {
+         "@type": "Organization",
+         "name": "{{ package.store_front.publisher_name }}"
+     },
+     {% if package.store_front.categories %}
+       "applicationCategory": "{{ package.store_front.categories[0].name }}",
+     {% endif %}
+     "operatingSystem": "{{ package["channel_selected"]["channel"]["platform"]["os"] }}",
+     "softwareVersion": "{{ package["channel_selected"]["channel"]["name"] }}"
+ }
+</script>
+{% endblock %}
+
 {% block content %}
   {% include "details/_details-header.html" %}
   {% include "details/_details-tab-navigation.html" %}
