@@ -406,6 +406,9 @@ class Filters {
   resetSearch(mobileSearchEl, desktopSearchEl) {
     mobileSearchEl.querySelector("[type='search']").value = "";
     desktopSearchEl.querySelector("[type='search']").value = "";
+    delete this._filters['q'];
+    this.updateHistory();
+    location.reload();
   }
 
   initSearch(mobileSearchEl, desktopSearchEl) {
