@@ -11,7 +11,9 @@
 
     <meta property="og:title" content="{{ self.title() }}" />
     <meta property="og:description" content="{{ self.meta_description() }}" />
-    <meta property="og:image" content="{% block meta_image %}https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_200/https://assets.ubuntu.com/v1/3f1974e5-CH+Logo+Metadata.jpg{% endblock %}" />
+    <meta property="og:image" content="{% block meta_image %}https://assets.ubuntu.com/v1/3f1974e5-CH+Logo+Metadata.jpg{% endblock %}" />
+    <meta property="og:image:width" content="{% block meta_image_width %}1080{% endblock %}" />
+    <meta property="og:image:height" content="{% block meta_image_height %}512{% endblock %}" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://charmhub.io{{ request.path }}" />
     <meta property="twitter:title" content="{{ self.title() }}">
