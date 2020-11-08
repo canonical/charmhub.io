@@ -22,22 +22,36 @@ const init = (packageName, channelMapButton) => {
     "[data-channel-map-filter]"
   );
 
-  const selectChannel = (channel, version) => {
+  const selectChannel = (track, channel, version) => {
     var page = window.location.pathname;
-    if (channel === "stable") {
-      window.location.href = `${page}`;
+
+    if (track === "latest") {
+      if (channel === "stable") {
+        window.location.href = `${page}`;
+      } else {
+        window.location.href = `${page}?channel=${channel}`;
+      }
     } else {
-      let channelName = channel.replace("latest/", "");
-      window.location.href = `${page}?channel=${channelName}`;
+      window.location.href = `${page}?channel=${track}/${channel}`;
     }
   };
 
   const showChannelMap = () => {
     channelMap.classList.remove("u-hide");
     channelMapButton.setAttribute("aria-expanded", "true");
+
+    var track = "latest";
+    var channel = channelMapState.channel;
+
+    if (channel.includes("/")) {
+      track = channel.split("/")[0];
+      channel = channel.split("/")[1];
+    }
+
     const selected = document.querySelector(
-      `[data-channel-map-channel="${channelMapState.channel}"]`
+      `[data-channel-map-track="${track}"][data-channel-map-channel="${channel}"]`
     );
+
     selected.classList.add("is-active");
   };
 
@@ -76,6 +90,7 @@ const init = (packageName, channelMapButton) => {
 
     if (row.dataset && row.dataset.channelMapChannel) {
       selectChannel(
+        row.dataset.channelMapTrack,
         row.dataset.channelMapChannel,
         row.dataset.channelMapVersion
       );
