@@ -1,12 +1,13 @@
 /** Store page filters */
 class Filters {
-  constructor(selectors) {
+  constructor(selectors, totalItems) {
     this.filteredItems = document.querySelector("[data-js='filtered-items']");
     this.submitButtonMobile = document.querySelector(
       "[data-js='filter-submit']"
     );
     this._filters = this.initFilters();
     this.searchCache = window.location.search;
+    this.totalItems = totalItems;
 
     this.wrapperEls = {};
 
@@ -99,7 +100,7 @@ class Filters {
       }
 
       if (this.filteredItems) {
-        this.filteredItems.innerHTML = `${filteredItemsNumber} items`;
+        this.filteredItems.innerHTML = `Showing ${filteredItemsNumber} of ${this.totalItems} items`;
       }
 
       if (this.submitButtonMobile) {
@@ -115,6 +116,7 @@ class Filters {
 
     // Deselect checkboxes if there are no filters selected
     let selectedFiltersCount = this.getSelectedFiltersCount();
+      console.log(selectedFiltersCount);
 
     if (selectedFiltersCount === 0) {
       const activeFilters = this.wrapperEls.filter.querySelectorAll(
@@ -152,6 +154,10 @@ class Filters {
       for (const [filterType, filterValue] of searchParams) {
         filters[filterType] = filterValue.split(",");
       }
+    }
+
+    if (!filters["category"]) {
+      filters["category"] = ["featured"];
     }
 
     return filters;
