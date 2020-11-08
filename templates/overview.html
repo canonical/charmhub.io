@@ -1,19 +1,7 @@
 {% extends 'base_layout.html' %}
 
 {% block meta_copydoc %}https://docs.google.com/document/d/194S-ZXaWOjB2wgkmZSET1anhzXBvO7AwFoy2yH-Z2HI{% endblock meta_copydoc %}
-
-{% block meta %}
-  <meta property="og:title" content="Charmhub - The Open Operator Collection" />
-  <meta property="og:url" content="https://charmhub.io/overview" />
-  <meta property="og:description" content="Better operators for the whole estate." />
-  <meta property="og:image" content="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_200/https://assets.ubuntu.com/v1/3f1974e5-CH+Logo+Metadata.jpg" />
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:site" content="@ubuntucloud">
-  <meta name="twitter:creator" content="@ubuntucloud">
-  <meta name="twitter:title" content="Charmhub - The Open Operator Collection">
-  <meta name="twitter:image" content="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_200/https://assets.ubuntu.com/v1/3f1974e5-CH+Logo+Metadata.jpg">
-  <meta name="twitter:description" content="Better operators for the whole estate.">
-{% endblock %}
+{% block meta_description %}Better operators for the whole estate.{% endblock %}
 
 {% block content %}
 <section class="p-strip--overview is-dark is-slanted--right-blue" style="padding-block-end: 3.5rem; padding-block-start: 3rem;">

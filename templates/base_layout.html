@@ -7,13 +7,19 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    {% block meta %}
-      <meta name="description" content="{% block meta_description %}Charmhub - The Open Operator Collection{% endblock %}" />
-      <meta name="author" content="Canonical Ltd" />
-    {% endblock meta %}
-
-    <meta name="copydoc" content="{% block meta_copydoc %}https://drive.google.com/drive/u/1/folders/1gqxew2MS9-OkQF5bTStPgmyLS35JpztF{% endblock %}">
-    <meta name="og:type" content="website" />
+    <meta property="og:title" content="{{ self.title() }}" />
+    <meta property="og:description" content="{{ self.meta_description() }}" />
+    <meta property="og:image" content="{{ self.meta_image() }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://charmhub.io{{ request.path }}" />
+    <meta property="twitter:title" content="{{ self.title() }}">
+    <meta property="twitter:description" content="{{ self.meta_description() }}">
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:site" content="@ubuntucloud">
+    <meta property="twitter:creator" content="@ubuntucloud">
+    <meta property="twitter:image" content="{{ self.meta_image() }}">
+    <meta property="copydoc" content="{% block meta_copydoc %}https://drive.google.com/drive/u/1/folders/1gqxew2MS9-OkQF5bTStPgmyLS35JpztF{% endblock %}">
+    {% block extra_meta %}{% endblock %}
 
     <title>{% block title %}Charmhub - The Open Operator Collection{% endblock title %}</title>
 
