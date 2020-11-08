@@ -6,6 +6,7 @@
 {% block meta_twitter_card %}summary{% endblock %}
 {% block meta_image_width %}200{% endblock %}
 {% block meta_image_height %}200{% endblock %}
+{% block meta_image_alt %}{{ format_slug(package.name) }} charm logo{% endblock %}
 
 {% block content %}
   {% include "details/_details-header.html" %}
