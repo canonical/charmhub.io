@@ -2,7 +2,68 @@
 
 {% block title %}Deploy {{ format_slug(package.name) }} using Charmhub - The Open Operator Collection{% endblock %}
 
-{% block meta_description %}Deploy the latest version of {{ format_slug(package.name) }} as a Kubernetes Operator on any cloud. {{ package.result.summary }}{% endblock %}
+{% block meta %}
+  <meta property="og:title" content="Deploy {{ package.name }} using Charmhub - The Open Operator Collection" />
+  <meta property="og:url" content="https://charmhub.io/{{ package.name }}" />
+  <meta property="og:description" content="Deploy the latest version of {{ format_slug(package.name) }} as a Kubernetes Operator on any cloud. {{ package.result.summary }}" />
+  <meta property="og:image" content='
+    {% if package["store_front"]["icons"] %}
+      {{
+      image(
+        url=package.store_front.icons[0],
+        alt=package.title,
+        width="40",
+        height="40",
+        hi_def=True,
+        fill=True,
+      ) | safe
+      }}
+    {% else %}
+      {{
+        image(
+          url="https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg",
+          alt=package.title,
+          width="40",
+          height="40",
+          hi_def=True,
+          fill=True,
+        ) | safe
+      }}
+    {% endif %}
+  ' />
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@ubuntucloud">
+  <meta name="twitter:creator" content="@ubuntucloud">
+  <meta name="twitter:title" content="Deploy {{ package.name }} using Charmhub - The Open Operator Collection">
+  <meta name="twitter:image" content='
+    {% if package["store_front"]["icons"] %}
+      {{
+        image(
+          url=package.store_front.icons[0],
+          alt=package.title,
+          width="40",
+          height="40",
+          hi_def=True,
+          fill=True,
+          attrs={"class": "p-card__thumbnail"},
+        ) | safe
+      }}
+    {% else %}
+      {{
+        image(
+          url="https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg",
+          alt=package.title,
+          width="40",
+          height="40",
+          hi_def=True,
+          fill=True,
+          attrs={"class": "p-card__thumbnail"},
+        ) | safe
+      }}
+    {% endif %}
+  '>
+  <meta name="twitter:description" content="Deploy the latest version of {{ format_slug(package.name) }} as a Kubernetes Operator on any cloud. {{ package.result.summary }}">
+{% endblock %}
 
 {% block content %}
   {% include "details/_details-header.html" %}
