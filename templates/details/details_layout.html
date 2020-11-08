@@ -8,7 +8,7 @@
   <meta property="og:description" content="Deploy the latest version of {{ format_slug(package.name) }} as a Kubernetes Operator on any cloud. {{ package.result.summary }}" />
   <meta property="og:image" content='
     {% if package["store_front"]["icons"] %}
-      {{ package.store_front.icons[0] }}
+      https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill/{{ package.store_front.icons[0] }}
     {% else %}
       "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg",
     {% endif %}
@@ -19,7 +19,7 @@
   <meta name="twitter:title" content="Deploy {{ package.name }} using Charmhub - The Open Operator Collection">
   <meta name="twitter:image" content='
     {% if package["store_front"]["icons"] %}
-      {{ package.store_front.icons[0] }}
+      https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill/{{ package.store_front.icons[0] }}
     {% else %}
       "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg",
     {% endif %}
