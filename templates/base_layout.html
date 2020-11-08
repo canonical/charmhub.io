@@ -16,7 +16,7 @@
     <meta property="og:url" content="https://charmhub.io{{ request.path }}" />
     <meta property="twitter:title" content="{{ self.title() }}">
     <meta property="twitter:description" content="{{ self.meta_description() }}">
-    <meta property="twitter:card" content="summary">
+    <meta property="twitter:card" content="{% block meta_twitter_card %}summary_large_image{% endblock %}">
     <meta property="twitter:site" content="@ubuntucloud">
     <meta property="twitter:creator" content="@ubuntucloud">
     <meta property="twitter:image" content="{{ self.meta_image() }}">
