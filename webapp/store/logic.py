@@ -372,10 +372,18 @@ def get_docs_topic_id(metadata_yaml):
     Return discourse topic ID or None
     """
     base_url = discourse_api.base_url
+    # TODO this is a temporary fix (the only charm is mattermost)
+    old_url = "https://discourse.juju.is"
     docs_link = metadata_yaml.get("docs")
 
-    if docs_link and docs_link.startswith(base_url):
-        topic_id = docs_link[len(base_url) :].split("/")[3]
+    if docs_link:
+        if docs_link.startswith(base_url):
+            topic_id = docs_link[len(base_url) :].split("/")[3]
+        elif docs_link.startswith(old_url):
+            topic_id = docs_link[len(old_url) :].split("/")[3]
+        else:
+            return None
+
         if topic_id.isnumeric():
             return topic_id
 
