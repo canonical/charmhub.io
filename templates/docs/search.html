@@ -1,11 +1,10 @@
 {% extends "base_layout.html" %}
 
-{% block meta %}
-{{ super() }}
-<meta name="robots" content="noindex" />
-{% endblock %}
+{% block extra_meta %}<meta name="robots" content="noindex" />{% endblock %}
 
 {% block title %}Search results{% if query %} for "{{query}}"{% endif %}{% endblock %}
+
+{% block meta_description %}Documentation for Charmhub - The Open Operator Collection{% endblock %}
 
 {% block content %}
 
