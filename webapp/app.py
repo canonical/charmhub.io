@@ -2,7 +2,7 @@ import talisker.requests
 from canonicalwebteam.flask_base.app import FlaskBase
 from canonicalwebteam.store_api.stores.charmstore import CharmStore
 from dateutil import parser
-from flask import render_template
+from flask import render_template, make_response
 
 from webapp import config
 from webapp.docs.views import init_docs
@@ -107,9 +107,13 @@ def site_map():
             .strftime("%Y-%m-%d")
         )
 
-    return render_template(
+    xml_sitemap = render_template(
         "sitemap.xml",
         base_url="https://charmhub.io",
         links=links,
         charms=charms,
     )
+    response = make_response(xml_sitemap)
+    response.headers["Content-Type"] = "application/xml"
+
+    return response
