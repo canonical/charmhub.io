@@ -439,3 +439,33 @@ def process_python_docs(library, module_name):
             )
 
     return docstrings
+
+
+def process_libraries(libraries):
+    """Process the libraries response from the API"""
+
+    result = {}
+
+    for lib in libraries["libraries"]:
+        lib_parts = lib["library-name"].split(".")
+
+        if len(lib_parts) > 2:
+            group_name = ".".join(lib_parts[:-2])
+            lib_name = "." + ".".join(lib_parts[-2:])
+        else:
+            group_name = "others"
+            lib_name = lib["library-name"]
+
+        data = {
+            "id": lib["library-id"],
+            "name": lib_name,
+            "hash": lib["hash"],
+            "created_at": "2020-08-04T16:32:00.938000+00:00",  # Mocked
+        }
+
+        if group_name in result:
+            result[group_name].append(data)
+        else:
+            result[group_name] = [data]
+
+    return result

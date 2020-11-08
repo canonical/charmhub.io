@@ -31,9 +31,5 @@
   .p-side-navigation {
     position: sticky;
     top: 3rem;
-
-    &.is-at-the-top {
-      z-index: 101;
-    }
   }
 }
