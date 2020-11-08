@@ -58,6 +58,11 @@ class Filters {
           j < this._filters[Object.keys(this._filters)[i]].length;
           j++
         ) {
+          if (Object.keys(this._filters)[i] === "category") {
+            if (this._filters[Object.keys(this._filters)[i]][j] === "all") {
+              return true;
+            }
+          }
           if (
             filterText.includes(this._filters[Object.keys(this._filters)[i]][j])
           ) {
@@ -116,7 +121,6 @@ class Filters {
 
     // Deselect checkboxes if there are no filters selected
     let selectedFiltersCount = this.getSelectedFiltersCount();
-      console.log(selectedFiltersCount);
 
     if (selectedFiltersCount === 0) {
       const activeFilters = this.wrapperEls.filter.querySelectorAll(
@@ -208,6 +212,10 @@ class Filters {
     const searchParams = new URLSearchParams();
 
     Object.keys(this._filters).forEach((filterType) => {
+      if (this._filters[filterType].length > 1) {
+        this._filters[filterType] = this._filters[filterType].filter((el) => { return el != "all"; });
+      }
+
       searchParams.set(filterType, this._filters[filterType].join(","));
     });
 
