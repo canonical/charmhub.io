@@ -318,3 +318,19 @@ h3 {
     }
   }
 }
+
+.charm-empty-docs-icon {
+  border-right: 1px solid #cdcdcd;
+  padding-left: $sp-x-large;
+  padding-right: $sp-x-large;
+
+  @media screen and (max-width: $breakpoint-medium) {
+    display: none;
+  }
+}
+
+.charm-empty-docs-content {
+  @media screen and (min-width: $breakpoint-medium) {
+    padding-left: $sp-x-large;
+  }
+}

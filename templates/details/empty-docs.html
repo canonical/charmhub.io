@@ -3,15 +3,15 @@
 {% extends '/details/details_layout.html' %}
 
 {% block details_content %}
-  <div class="u-fixed-width is-wide p-details-tab__content">
-    <div class="u-fixed-width">
-      <h4>Add docs to your charm</h4>
-      <p>
-        Looks like you haven’t added any docs yet. Docs help your users learn how to use your charms, and encourage them to use them the way you intended.
-      </p>
-      <p>
-        <a class="p-button--positive" href="https://charmhub.io/tutorials/add-documentation-to-your-charm">Learn how to add docs to your charm</a>
-      </p>
+  <div class="u-fixed-width u-equal-height is-wide">
+    <div class="charm-empty-docs-icon u-vertically-center">
+      <img src="https://assets.ubuntu.com/v1/3234f995-Generic_chamhub_NoDocs.svg" alt="" width="121" height="121">
+    </div>
+    <div class="col-9 charm-empty-docs-content">
+      <h4>Docs help you learn how to use a charm</h4>
+      <p>Looks like {{ package.store_front.publisher_name }} hasn’t added any docs to this charm yet.</p>
+      <p class="u-no-margin--bottom"><a class="p-button--positive u-no-margin--bottom" href="https://charmhub.io/tutorials/add-documentation-to-your-charm">Learn how to add docs to a charm</a></p>
+    </div>
   </div>
 {% endblock%}
 
