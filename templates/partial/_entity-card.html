@@ -47,48 +47,44 @@
       </div>
     {% endif %}
     <div class="p-card__footer">
+      <div class="entity-card-icons">
       {% if package["default-release"]["channel"]["platform"]["os"] == "kubernetes" %}
-        <div>
-          {{
-            image(
-              url="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg",
-              alt=package.title,
-              width="24",
-              height="24",
-              hi_def=True,
-              fill=True,
-            ) | safe
-          }}
-        </div>
+        {{
+          image(
+            url="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg",
+            alt=package.title,
+            width="24",
+            height="24",
+            hi_def=True,
+            fill=True,
+          ) | safe
+        }}
       {% endif %}
       {% if package["default-release"]["channel"]["platform"]["os"] == "windows" %}
-        <div>
-          {{
-            image(
-              url="https://assets.ubuntu.com/v1/ff17c4fe-Windows.svg",
-              alt=package.title,
-              width="24",
-              height="24",
-              hi_def=True,
-              fill=True,
-            ) | safe
-          }}
-        </div>
+        {{
+          image(
+            url="https://assets.ubuntu.com/v1/ff17c4fe-Windows.svg",
+            alt=package.title,
+            width="24",
+            height="24",
+            hi_def=True,
+            fill=True,
+          ) | safe
+        }}
       {% endif %}
       {% if package["default-release"]["channel"]["platform"]["os"] in ["ubuntu", "centos"] %}
-        <div>
-          {{
-            image(
-              url="https://assets.ubuntu.com/v1/dc11bd39-Linux.svg",
-              alt=package.title,
-              width="24",
-              height="24",
-              hi_def=True,
-              fill=True,
-            ) | safe
-          }}
-        </div>
+        {{
+          image(
+            url="https://assets.ubuntu.com/v1/dc11bd39-Linux.svg",
+            alt=package.title,
+            width="24",
+            height="24",
+            hi_def=True,
+            fill=True,
+          ) | safe
+        }}
       {% endif %}
+      </div>
     </div>
   </a>
 </div>

@@ -305,3 +305,16 @@ h3 {
   margin-right: 0.5rem;
   padding-right: 0.5rem;
 }
+
+.entity-card-icons {
+  > * {
+    display: inline-block;
+    margin-right: 0.5rem;
+    position: relative;
+    top: 4px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
