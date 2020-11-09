@@ -1,7 +1,8 @@
 import talisker.requests
 from canonicalwebteam.flask_base.app import FlaskBase
 from canonicalwebteam.store_api.stores.charmstore import CharmStore
-from flask import render_template
+from dateutil import parser
+from flask import render_template, make_response
 
 from webapp import config
 from webapp.docs.views import init_docs
@@ -81,3 +82,38 @@ def get_in_touch():
 @app.route("/thank-you")
 def thank_you():
     return render_template("thank-you.html")
+
+
+@app.route("/sitemap.xml")
+def site_map():
+    links = [
+        "/overview",
+        "/about",
+        "/manifesto",
+        "/publishing",
+        "/governance",
+        "/glossary",
+        "/contact-us",
+    ]
+
+    charms = app.store_api.find(
+        fields=["default-release.channel.released-at"]
+    ).get("results", [])
+
+    for charm in charms:
+        charm["date"] = (
+            parser.parse(charm["default-release"]["channel"]["released-at"])
+            .replace(tzinfo=None)
+            .strftime("%Y-%m-%d")
+        )
+
+    xml_sitemap = render_template(
+        "sitemap.xml",
+        base_url="https://charmhub.io",
+        links=links,
+        charms=charms,
+    )
+    response = make_response(xml_sitemap)
+    response.headers["Content-Type"] = "application/xml"
+
+    return response
