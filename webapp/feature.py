@@ -18,5 +18,5 @@ FEATURED_CHARMS = [
     "zeppelin",
     "ubuntu",
     "jenkins",
-    "ceph"
+    "ceph",
 ]
