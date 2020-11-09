@@ -53,6 +53,9 @@
 {% endblock%}
 
 {% block page_scripts %}
+
+{{ super() }}
+
 <script src="{{ versioned_static('js/dist/details_libraries.js') }}" defer></script>
 <script src="{{ versioned_static('js/dist/highlight-js.js') }}" defer></script>
 <script>
