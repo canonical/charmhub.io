@@ -9,6 +9,11 @@ class Filters {
     this.searchCache = window.location.search;
     this.totalItems = totalItems;
 
+    if (this._filters.category.includes("featured")) {
+      let featuredCheckbox = document.getElementById("featured");
+      featuredCheckbox.checked = true;
+    }
+
     this.wrapperEls = {};
 
     Object.keys(selectors).forEach((selectorName) => {
@@ -213,7 +218,9 @@ class Filters {
 
     Object.keys(this._filters).forEach((filterType) => {
       if (this._filters[filterType].length > 1) {
-        this._filters[filterType] = this._filters[filterType].filter((el) => { return el != "all"; });
+        this._filters[filterType] = this._filters[filterType].filter((el) => {
+          return el != "all";
+        });
       }
 
       searchParams.set(filterType, this._filters[filterType].join(","));
@@ -379,7 +386,14 @@ class Filters {
   }
 
   // Close the drawers if click anywhere outside the drawer, except the "Sort by"/"Filters" buttons
-  initClickOutside(filter, sortMobile, platformMobile, filterMobileButton, sortMobileButton, platformMobileButton) {
+  initClickOutside(
+    filter,
+    sortMobile,
+    platformMobile,
+    filterMobileButton,
+    sortMobileButton,
+    platformMobileButton
+  ) {
     document.addEventListener("click", (e) => {
       let targetElement = e.target; // clicked element
       do {
@@ -420,7 +434,7 @@ class Filters {
   resetSearch(mobileSearchEl, desktopSearchEl) {
     mobileSearchEl.querySelector("[type='search']").value = "";
     desktopSearchEl.querySelector("[type='search']").value = "";
-    delete this._filters['q'];
+    delete this._filters["q"];
     this.updateHistory();
     location.reload();
   }
@@ -459,7 +473,8 @@ class Filters {
     sortMobile && this.initMobileSortEvents(sortMobile);
     platformMobile && this.initMobilePlatformEvents(platformMobile);
     sortMobileButton && this.initMobileButton(sortMobileButton, sortMobile);
-    platformMobileButton && this.initMobileButton(platformMobileButton, platformMobile);
+    platformMobileButton &&
+      this.initMobileButton(platformMobileButton, platformMobile);
     filterMobileButton && this.initMobileButton(filterMobileButton, filter);
     filter &&
       sortMobile &&
