@@ -2,9 +2,21 @@
 # should include the actual list of charms.
 # And once the API provides featured charms then we should remove this code
 FEATURED_CHARMS = [
-    "ceph",
-    "eclipse-che",
-    "ghost",
-    "ibm-java",
+    "postgresql",
+    "cassandra",
+    "prometheus",
     "kafka",
+    "mysql",
+    "kubeflow",
+    "elasticsearch",
+    "graylog",
+    "influxdb",
+    "mongodb",
+    "openvpn",
+    "mariadb",
+    "zabbix-server",
+    "zeppelin",
+    "ubuntu",
+    "jenkins",
+    "ceph",
 ]
