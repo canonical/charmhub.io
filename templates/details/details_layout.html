@@ -8,6 +8,27 @@
 {% block meta_image_height %}200{% endblock %}
 {% block meta_image_alt %}{{ format_slug(package.name) }} charm logo{% endblock %}
 
+{% block structure_data_markup %}
+<script type="application/ld+json">
+ {
+     "@context": "http://schema.org",
+     "@type": "SoftwareApplication",
+     "name": "{{ format_slug(package.name) }}",
+     "image": "{{ self.meta_image() }}",
+     "url": "https://charmhub.io/{{ package.name }}",
+     "publisher": {
+         "@type": "Organization",
+         "name": "{{ package.store_front.publisher_name }}"
+     },
+     {% if package.store_front.categories %}
+       "applicationCategory": "{{ package.store_front.categories[0].name }}",
+     {% endif %}
+     "operatingSystem": "{{ package["channel_selected"]["channel"]["platform"]["os"] }}",
+     "softwareVersion": "{{ package["channel_selected"]["channel"]["name"] }}"
+ }
+</script>
+{% endblock %}
+
 {% block content %}
   {% include "details/_details-header.html" %}
   {% include "details/_details-tab-navigation.html" %}
