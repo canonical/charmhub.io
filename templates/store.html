@@ -36,25 +36,6 @@
       </div>
     </form>
   </div>
-  <div class="p-sort" data-js="mobile-sort-handler">
-    <div class="p-sort__title">
-      Sort by
-    </div>
-    <form class="p-sort__content">
-      <div class="p-sort__item">
-        <input type="radio" name="sortMobile" id="featured" value="featured" {% if active_filter('sort', 'featured') %}checked{% endif %}>
-        <label for="featured">Featured</label>
-      </div>
-      <div class="p-sort__item">
-        <input type="radio" name="sortMobile" id="name-asc" value="name-asc" {% if active_filter('sort', 'name-asc') %}checked{% endif %}>
-        <label for="name-asc">Name A/Z</label>
-      </div>
-      <div class="p-sort__item">
-        <input type="radio" name="sortMobile" id="name-desc" value="name-desc" {% if active_filter('sort', 'name-desc') %}checked{% endif %}>
-        <label for="name-desc">Name Z/A</label>
-      </div>
-    </form>
-  </div>
   <section class="p-strip--main u-fixed-width is-wide">
     <div class="p-layout--store">
 
@@ -81,7 +62,7 @@
       sortMobileButton: "[data-js='mobile-sort-reveal-button']",
       platformMobileButton: "[data-js='mobile-platform-reveal-button']",
       filterMobileButton: "[data-js='mobile-filter-reveal-button']",
-    });
+    }, {{ results|length }});
   });
 </script>
 {% endblock %}

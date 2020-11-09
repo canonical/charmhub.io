@@ -10,8 +10,12 @@
           <li class="p-filter__item--title">
             Categories
           </li>
+          <li class="p-filter__item" data-filter-type="category" data-js="filter" data-filter-value="featured" tabindex="0">
+            <input type="checkbox" id="featured" value="featured" {% if active_filter('category', 'featured') %}checked{% endif %} tabindex="-1">
+            <label for="featured" tabindex="-1">Featured</label>
+          </li>
           {% for category in categories %}
-          {% if category["slug"] != "other" %}
+          {% if not category["slug"] in ["other", "featured"] %}
           <li class="p-filter__item" data-filter-type="category" data-js="filter" data-filter-value="{{ category.slug }}" tabindex="0">
             <input type="checkbox" id="{{ category.slug }}" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %} tabindex="-1">
             <label for="{{ category.slug }}" tabindex="-1">{{ category.name }}</label>
@@ -56,11 +60,10 @@
   <div class="p-layout__filter-container">
     <div class="p-layout__left">
       <div class="p-muted-heading" data-js="filtered-items">
-        {{ results|length }} items
+        Showing {{ show_elements }} of {{ results|length }} items
       </div>
       <div class="p-layout__sort-mobile">
         <a href="/" data-js="mobile-platform-reveal-button" class="has-icon p-store__button is-always-color-link"><i class="p-icon--filter"></i>Platforms</a>
-        <a href="/" data-js="mobile-sort-reveal-button" class="has-icon p-store__button is-always-color-link"><i class="p-icon--sort"></i>Sort by</a>
         <a href="/" data-js="mobile-filter-reveal-button" class="has-icon p-store__button is-always-color-link"><i class="p-icon--filter"></i>Filters</a>
       </div>
     </div>
@@ -80,35 +83,14 @@
             <option value="windows" {% if active_filter('platform', 'windows') %}selected{% endif %}>Windows</option>
           </select>
         </div>
-        <div class="p-layout__sort-desktop p-form__group">
-          <label for="sort" aria-label="Sort resources" class="p-form__label">Sort by</label>
-          <select name="sort" data-js="sort-handler" class="p-form__control" value="{{ sort }}" id="sort">
-            <option value="featured" {% if active_filter('sort', 'featured') %}selected{% endif %}>Featured</option>
-            <option value="name-asc" {% if active_filter('sort', 'name-asc') %}selected{% endif %}>Name A/Z</option>
-            <option value="name-desc" {% if active_filter('sort', 'name-desc') %}selected{% endif %}>Name Z/A</option>
-          </select>
-        </div>
       </form>
     </div>
   </div>
   <div class="p-layout__card-container" data-js="card-container">
     {% if results %}
-      {% if sort == "featured" %}
-        {% for package in results %}
-          {% if package["type"] == "charm" and package["store_front"]["show"] and package["store_front"]["featured"] %}
-            {% include "partial/_entity-card.html" %}
-          {% endif %}
-        {% endfor %}
-      {% endif %}
       {% for package in results %}
-        {% if package["type"] == "charm" and package["store_front"]["show"]  %}
-          {% if sort == "featured" %}
-            {% if not package["store_front"]["featured"] %}
-                    {% include "partial/_entity-card.html" %}
-            {% endif %}
-          {% else %}
-            {% include "partial/_entity-card.html" %}
-          {% endif %}
+        {% if package["type"] == "charm" %}
+          {% include "partial/_entity-card.html" %}
         {% endif %}
       {% endfor %}
     {% else %}

@@ -1,12 +1,18 @@
 /** Store page filters */
 class Filters {
-  constructor(selectors) {
+  constructor(selectors, totalItems) {
     this.filteredItems = document.querySelector("[data-js='filtered-items']");
     this.submitButtonMobile = document.querySelector(
       "[data-js='filter-submit']"
     );
     this._filters = this.initFilters();
     this.searchCache = window.location.search;
+    this.totalItems = totalItems;
+
+    if (this._filters.category.includes("featured")) {
+      let featuredCheckbox = document.getElementById("featured");
+      featuredCheckbox.checked = true;
+    }
 
     this.wrapperEls = {};
 
@@ -57,6 +63,11 @@ class Filters {
           j < this._filters[Object.keys(this._filters)[i]].length;
           j++
         ) {
+          if (Object.keys(this._filters)[i] === "category") {
+            if (this._filters[Object.keys(this._filters)[i]][j] === "all") {
+              return true;
+            }
+          }
           if (
             filterText.includes(this._filters[Object.keys(this._filters)[i]][j])
           ) {
@@ -99,7 +110,7 @@ class Filters {
       }
 
       if (this.filteredItems) {
-        this.filteredItems.innerHTML = `${filteredItemsNumber} items`;
+        this.filteredItems.innerHTML = `Showing ${filteredItemsNumber} of ${this.totalItems} items`;
       }
 
       if (this.submitButtonMobile) {
@@ -154,6 +165,10 @@ class Filters {
       }
     }
 
+    if (!filters["category"]) {
+      filters["category"] = ["featured"];
+    }
+
     return filters;
   }
 
@@ -202,6 +217,12 @@ class Filters {
     const searchParams = new URLSearchParams();
 
     Object.keys(this._filters).forEach((filterType) => {
+      if (this._filters[filterType].length > 1) {
+        this._filters[filterType] = this._filters[filterType].filter((el) => {
+          return el != "all";
+        });
+      }
+
       searchParams.set(filterType, this._filters[filterType].join(","));
     });
 
@@ -365,7 +386,14 @@ class Filters {
   }
 
   // Close the drawers if click anywhere outside the drawer, except the "Sort by"/"Filters" buttons
-  initClickOutside(filter, sortMobile, platformMobile, filterMobileButton, sortMobileButton, platformMobileButton) {
+  initClickOutside(
+    filter,
+    sortMobile,
+    platformMobile,
+    filterMobileButton,
+    sortMobileButton,
+    platformMobileButton
+  ) {
     document.addEventListener("click", (e) => {
       let targetElement = e.target; // clicked element
       do {
@@ -406,7 +434,7 @@ class Filters {
   resetSearch(mobileSearchEl, desktopSearchEl) {
     mobileSearchEl.querySelector("[type='search']").value = "";
     desktopSearchEl.querySelector("[type='search']").value = "";
-    delete this._filters['q'];
+    delete this._filters["q"];
     this.updateHistory();
     location.reload();
   }
@@ -445,7 +473,8 @@ class Filters {
     sortMobile && this.initMobileSortEvents(sortMobile);
     platformMobile && this.initMobilePlatformEvents(platformMobile);
     sortMobileButton && this.initMobileButton(sortMobileButton, sortMobile);
-    platformMobileButton && this.initMobileButton(platformMobileButton, platformMobile);
+    platformMobileButton &&
+      this.initMobileButton(platformMobileButton, platformMobile);
     filterMobileButton && this.initMobileButton(filterMobileButton, filter);
     filter &&
       sortMobile &&

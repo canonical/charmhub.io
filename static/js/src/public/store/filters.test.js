@@ -15,6 +15,10 @@ describe("Filters", () => {
                 <li class="p-filter__item--title">
                   Categories
                 </li>
+                <li class="p-filter__item" data-filter-type="category" data-js="filter" data-filter-value="featured">
+                  <input type="checkbox" id="featured" value="featured">
+                  <label for="featured">Featured</label>
+                </li>
                 <li class="p-filter__item" data-filter-type="category" data-js="filter" data-filter-value="analytics">
                   <input type="checkbox" id="analytics" value="analytics">
                   <label for="analytics">Analytics</label>
@@ -35,7 +39,6 @@ describe("Filters", () => {
 
         <select name="sort" data-js="sort-handler" value="" class="p-store__sort-desktop">
           <option disabled="disabled" value="">Sort by</option>
-          <option value="featured">Featured</option>
           <option value="name-desc">Name A/Z</option>
           <option value="name-asc">Name Z/A</option>
         </select>
@@ -53,7 +56,7 @@ describe("Filters", () => {
       document.body.removeChild(filterElements);
     });
 
-    it("should return 0 if no filters are selected", () => {
+    it("should return 1 if no filters are selected (featured selected by default)", () => {
       const testFilters = new Filters({
         filter: "[data-js='filter-handler']",
         search: "[data-js='search-handler']",
@@ -63,7 +66,7 @@ describe("Filters", () => {
         filterMobileButton: "[data-js='mobile-filter-reveal-button']",
       });
 
-      expect(testFilters.getSelectedFiltersCount()).toEqual(0);
+      expect(testFilters.getSelectedFiltersCount()).toEqual(1);
     });
 
     it("should return 2 if two filter are selected", () => {

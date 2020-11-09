@@ -82,9 +82,9 @@ def index():
             ]
 
         if results[i]["name"] in FEATURED_CHARMS:
-            results[i]["store_front"]["featured"] = True
-        else:
-            results[i]["store_front"]["featured"] = False
+            results[i]["store_front"]["categories"] = [
+                {"name": "Featured", "slug": "featured"}
+            ]
 
         if (
             results[i]["type"] == "charm"

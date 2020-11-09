@@ -84,8 +84,8 @@ def active_filter(filter_type, filter_name):
     # If there is no sorting selected fallback to the default one
     # (e.g. featured)
     if (
-        not request.args
-        and filter_type == "sort"
+        "category" not in request.args
+        and filter_type == "category"
         and filter_name == "featured"
     ):
         return True
