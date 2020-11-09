@@ -477,3 +477,27 @@ def process_libraries(libraries):
             result[group_name] = [data]
 
     return result
+
+
+def get_os_from_platform(platforms):
+    """
+    Get simplified platforms
+
+    ["linux", "windows", "kubernetes"]
+
+    :param platforms: get list of platforms
+    :returns: a list of platforms simplified
+    """
+    os = []
+    for platform in platforms:
+        if platform["os"] in ["centos", "ubuntu"]:
+            if "linux" not in os:
+                os.append("linux")
+        elif platform["os"] == "kubernetes":
+            if "kubernetes" not in os:
+                os.append("kubernetes")
+        elif platform["os"] == "windows":
+            if "windows" not in os:
+                os.append("windows")
+
+    return os

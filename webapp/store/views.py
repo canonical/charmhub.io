@@ -29,13 +29,13 @@ def index():
     # For the future remove this from our backend a let the API handle the
     # filtering.
     if platform == "linux":
-        os = ["ubuntu", "centos"]
+        os = ["linux", "ubuntu", "centos"]
     elif platform == "windows":
         os = ["windows"]
     elif platform == "kubernetes":
         os = ["kubernetes"]
     else:
-        os = ["ubuntu", "centos", "windows", "kubernetes"]
+        os = ["linux", "windows", "kubernetes"]
 
     fields = [
         "result.categories",
@@ -43,6 +43,7 @@ def index():
         "result.media",
         "result.publisher.display-name",
         "default-release.revision.revision",
+        "default-release.revision.platforms",
         "default-release.channel",
     ]
 
@@ -56,14 +57,15 @@ def index():
     for i, item in enumerate(results):
         results[i]["store_front"] = {}
 
+        results[i]["store_front"]["os"] = logic.get_os_from_platform(
+            results[i]["default-release"]["revision"]["platforms"]
+        )
+
         # TODO this section is related to the platform issue not handled
         # yet by the API
-        if (
-            results[i]["default-release"]["channel"]["platform"]["os"]
-            not in os
-        ):
-            continue
-        results[i]["store_front"]["show"] = True
+        for os_available in results[i]["store_front"]["os"]:
+            if os_available in os:
+                results[i]["store_front"]["show"] = True
 
         results[i]["store_front"]["icons"] = logic.get_icons(results[i])
         results[i]["store_front"]["last_release"] = logic.convert_date(
