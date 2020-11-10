@@ -1,7 +1,6 @@
 /** Store page filters */
 class Filters {
   constructor(selectors, totalItems) {
-    this.filteredItems = document.querySelector("[data-js='filtered-items']");
     this.submitButtonMobile = document.querySelector(
       "[data-js='filter-submit']"
     );
@@ -94,7 +93,6 @@ class Filters {
 
   filterDOM() {
     const cardElements = document.querySelectorAll("[data-filter]");
-    let filteredItemsNumber = 0;
     if (cardElements) {
       const filterArray = [];
       Object.keys(this._filters).forEach((filterType) => {
@@ -109,7 +107,6 @@ class Filters {
         cardElements.forEach((cardEl) => {
           const filterText = cardEl.getAttribute("data-filter");
           if (this.isFilterMatch(filterText)) {
-            filteredItemsNumber += 1;
             cardEl.classList.remove("u-hide");
           } else {
             cardEl.classList.add("u-hide");
@@ -118,16 +115,7 @@ class Filters {
       } else {
         cardElements.forEach((cardEl) => {
           cardEl.classList.remove("u-hide");
-          filteredItemsNumber += 1;
         });
-      }
-
-      if (this.filteredItems) {
-        this.filteredItems.innerHTML = `Showing ${filteredItemsNumber} of ${this.totalItems} items`;
-      }
-
-      if (this.submitButtonMobile) {
-        this.submitButtonMobile.innerHTML = `Show results (${filteredItemsNumber})`;
       }
     }
 
@@ -180,7 +168,7 @@ class Filters {
       }
     }
 
-    if (!filters["category"] && !filters["q"]) {
+    if (!filters["category"] && !filters["q"] && !filters["platform"]) {
       filters["category"] = ["featured"];
     }
 
@@ -228,7 +216,7 @@ class Filters {
     });
   }
 
-  updateHistory() {
+  reload() {
     const searchParams = new URLSearchParams();
 
     Object.keys(this._filters).forEach((filterType) => {
@@ -250,13 +238,7 @@ class Filters {
         searchStr = `?${searchStr}`;
       }
 
-      const newUrl = `${window.location.origin}${window.location.pathname}${searchStr}`;
-
-      history.pushState(
-        { filters: this._filters },
-        null,
-        decodeURIComponent(newUrl)
-      );
+      window.location.href = `${window.location.pathname}${searchStr}`;
     }
   }
 
@@ -285,8 +267,7 @@ class Filters {
       this.syncSortUI("platformMobile", el.value);
 
       this.cleanFilters();
-      this.updateHistory();
-      location.reload();
+      this.reload();
     });
   }
 
@@ -298,8 +279,7 @@ class Filters {
       this.syncSortUI("sortMobile", el.value);
 
       this.cleanFilters();
-      this.updateHistory();
-      location.reload();
+      this.reload();
     });
   }
 
@@ -311,8 +291,7 @@ class Filters {
       this.syncSortUI("sort", e.target.value);
 
       this.cleanFilters();
-      this.updateHistory();
-      location.reload();
+      this.reload();
     });
   }
 
@@ -324,8 +303,7 @@ class Filters {
       this.syncSortUI("platform", e.target.value);
 
       this.cleanFilters();
-      this.updateHistory();
-      location.reload();
+      this.reload();
     });
   }
 
@@ -344,15 +322,22 @@ class Filters {
         if (this.filterExists(filterType, filterValue)) {
           this.removeFilter(filterType, filterValue);
           target.firstElementChild.checked = false;
+
+          // If the user only want to uncheck featured.
+          // we can't reload the page because on an
+          // empty state it will be checked again
+          if (filterValue == "featured"
+            && this._filters.category.length === 0
+            ) {
+            window.location.href = `${window.location.pathname}?category=all`;
+          }
         } else {
           this.addFilter(filterType, filterValue);
           target.firstElementChild.checked = true;
         }
 
         this.cleanFilters();
-        this.updateHistory();
-        this.updateUI();
-        this.filterDOM();
+        this.reload();
       }
     });
 
@@ -373,9 +358,7 @@ class Filters {
             target.firstElementChild.checked = true;
           }
           this.cleanFilters();
-          this.updateHistory();
-          this.updateUI();
-          this.filterDOM();
+          this.reload();
         }
       }
     });
@@ -385,8 +368,7 @@ class Filters {
         e.preventDefault();
 
         this.resetFilters();
-        this.updateHistory();
-        this.updateUI();
+        this.reload();
       });
     }
 
@@ -450,8 +432,7 @@ class Filters {
     mobileSearchEl.querySelector("[type='search']").value = "";
     desktopSearchEl.querySelector("[type='search']").value = "";
     delete this._filters["q"];
-    this.updateHistory();
-    location.reload();
+    this.reload();
   }
 
   initSearch(mobileSearchEl, desktopSearchEl) {

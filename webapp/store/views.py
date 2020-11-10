@@ -32,8 +32,9 @@ SEARCH_FIELDS = [
 def index():
     query = request.args.get("q", default=None, type=str)
     platform_filter = request.args.get("platform", default="all", type=str)
-    category_filter = request.args.get("category", default=None, type=str)
-    category_filter = category_filter.split(",") if category_filter else None
+    category_filter = request.args.get(
+        "category", default="featured", type=str
+    ).split(",")
 
     if query:
         results = app.store_api.find(query=query, fields=SEARCH_FIELDS).get(
@@ -66,11 +67,11 @@ def index():
                 {"name": "Other", "slug": "other"}
             ]
 
-        if logic.filter_charm(charm, category_filter, platform_filter):
-            for cat in charm["store_front"]["categories"]:
-                if cat not in categories:
-                    categories.append(cat)
+        for cat in charm["store_front"]["categories"]:
+            if cat not in categories:
+                categories.append(cat)
 
+        if logic.filter_charm(charm, category_filter, platform_filter):
             charms.append(charm)
 
     context = {

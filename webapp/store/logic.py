@@ -507,17 +507,19 @@ def get_os_from_platform(platforms):
     return list(os)
 
 
-def filter_charm(charm, categories=None, platform="all"):
+def filter_charm(charm, categories=["all"], platform="all"):
     """
     This filter will be done in the API soon.
     :returns: boolean
     """
-    charm_categories = [
-        cat["slug"] for cat in charm["store_front"]["categories"]
-    ]
+    # When all is present there is no need to filter
+    if categories and "all" not in categories:
+        charm_categories = [
+            cat["slug"] for cat in charm["store_front"]["categories"]
+        ]
 
-    if categories and not any(x in categories for x in charm_categories):
-        return False
+        if not any(x in categories for x in charm_categories):
+            return False
 
     # Filter platforms
     if platform != "all" and platform not in charm["store_front"]["os"]:
