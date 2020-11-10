@@ -9,7 +9,7 @@ class Filters {
     this.searchCache = window.location.search;
     this.totalItems = totalItems;
 
-    if (this._filters.category.includes("featured")) {
+    if (this._filters.category && this._filters.category.includes("featured")) {
       let featuredCheckbox = document.getElementById("featured");
       featuredCheckbox.checked = true;
     }
@@ -165,7 +165,7 @@ class Filters {
       }
     }
 
-    if (!filters["category"]) {
+    if (!filters["category"] && !filters["q"]) {
       filters["category"] = ["featured"];
     }
 
