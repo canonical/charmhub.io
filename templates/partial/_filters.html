@@ -60,7 +60,7 @@
   <div class="p-layout__filter-container">
     <div class="p-layout__left">
       <div class="p-muted-heading" data-js="filtered-items">
-        Showing {{ show_elements }} of {{ results|length }} items
+        Showing {{ results|length }} of {{ total_charms }} items
       </div>
       <div class="p-layout__sort-mobile">
         <a href="/" data-js="mobile-platform-reveal-button" class="has-icon p-store__button is-always-color-link"><i class="p-icon--filter"></i>Platforms</a>
@@ -95,7 +95,7 @@
     {% else %}
       <div class="p-notification--information">
           <p class="p-notification__response">
-            We couldn't find anything for your search "<strong>{{ q }}</strong>".
+            We couldn't find anything for your search{% if q %} "<strong>{{ q }}</strong>"{% endif %}.
           </p>
       </div>
     {% endif %}

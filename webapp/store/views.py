@@ -17,95 +17,67 @@ store = Blueprint(
 )
 publisher_api = CharmPublisher(talisker.requests.get_session())
 
+SEARCH_FIELDS = [
+    "result.categories",
+    "result.summary",
+    "result.media",
+    "result.publisher.display-name",
+    "default-release.revision.revision",
+    "default-release.revision.platforms",
+    "default-release.channel",
+]
+
 
 @store.route("/")
 def index():
     query = request.args.get("q", default=None, type=str)
-    sort = request.args.get("sort", default="featured", type=str)
-    platform = request.args.get("platform", default=None, type=str)
-
-    # TODO platform are not a implemented yet API side. So in the meantime
-    # we create our own filter.
-    # For the future remove this from our backend a let the API handle the
-    # filtering.
-    if platform == "linux":
-        os = ["linux", "ubuntu", "centos"]
-    elif platform == "windows":
-        os = ["windows"]
-    elif platform == "kubernetes":
-        os = ["kubernetes"]
-    else:
-        os = ["linux", "windows", "kubernetes"]
-
-    fields = [
-        "result.categories",
-        "result.summary",
-        "result.media",
-        "result.publisher.display-name",
-        "default-release.revision.revision",
-        "default-release.revision.platforms",
-        "default-release.channel",
-    ]
+    platform_filter = request.args.get("platform", default="all", type=str)
+    category_filter = request.args.get("category", default=None, type=str)
+    category_filter = category_filter.split(",") if category_filter else None
 
     if query:
-        results = app.store_api.find(query=query, fields=fields).get("results")
+        results = app.store_api.find(query=query, fields=SEARCH_FIELDS).get(
+            "results"
+        )
     else:
-        results = app.store_api.find(fields=fields).get("results", [])
+        results = app.store_api.find(fields=SEARCH_FIELDS).get("results", [])
 
     charms = []
     categories = []
+    total_charms = 0
+
     for i, item in enumerate(results):
-        results[i]["store_front"] = {}
+        if item["type"] != "charm":
+            continue
 
-        results[i]["store_front"]["os"] = logic.get_os_from_platform(
-            results[i]["default-release"]["revision"]["platforms"]
+        total_charms += 1
+
+        charm = logic.add_store_front_data(
+            results[i], results[i]["default-release"]
         )
 
-        # TODO this section is related to the platform issue not handled
-        # yet by the API
-        for os_available in results[i]["store_front"]["os"]:
-            if os_available in os:
-                results[i]["store_front"]["show"] = True
-
-        results[i]["store_front"]["icons"] = logic.get_icons(results[i])
-        results[i]["store_front"]["last_release"] = logic.convert_date(
-            results[i]["default-release"]["channel"]["released-at"]
-        )
-
-        if results[i]["result"].get("categories"):
-            results[i]["store_front"]["categories"] = logic.get_categories(
-                results[i]["result"]["categories"]
-            )
-        else:
-            results[i]["store_front"]["categories"] = [
-                {"name": "Other", "slug": "other"}
-            ]
-
-        if results[i]["name"] in FEATURED_CHARMS:
-            results[i]["store_front"]["categories"] = [
+        if charm["name"] in FEATURED_CHARMS:
+            charm["store_front"]["categories"] = [
                 {"name": "Featured", "slug": "featured"}
             ]
 
-        if (
-            results[i]["type"] == "charm"
-            and results[i]["result"]["publisher"]["display-name"]
-        ):
-            for category in results[i]["store_front"]["categories"]:
-                if category not in categories:
-                    categories.append(category)
+        if not charm["store_front"]["categories"]:
+            charm["store_front"]["categories"] = [
+                {"name": "Other", "slug": "other"}
+            ]
 
-            charms.append(results[i])
+        if logic.filter_charm(charm, category_filter, platform_filter):
+            for cat in charm["store_front"]["categories"]:
+                if cat not in categories:
+                    categories.append(cat)
 
-    sorted_categories = sorted(categories, key=lambda k: k["name"])
-
-    sort_order = True if sort == "name-desc" else False
-    charms = sorted(charms, key=lambda c: c["name"], reverse=sort_order)
+            charms.append(charm)
 
     context = {
-        "categories": sorted_categories,
-        "sort": sort,
+        "categories": sorted(categories, key=lambda k: k["name"]),
         "q": query,
-        "results": charms,
+        "results": sorted(charms, key=lambda c: c["name"]),
+        "total_charms": total_charms,
     }
 
     return render_template("store.html", **context)
@@ -141,7 +113,7 @@ def get_package(entity_name, channel_request):
     if not channel_selected:
         channel_selected = package["default-release"]
 
-    package = logic.add_store_front_data(package, channel_selected)
+    package = logic.add_store_front_data(package, channel_selected, True)
     package["channel_selected"] = channel_selected
 
     if package["name"] not in CS:
