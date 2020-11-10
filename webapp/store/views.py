@@ -123,6 +123,12 @@ FIELDS = [
     "channel-map.revision.readme-md",
 ]
 
+# TODO This is a temporary fix for release
+# Store will release a field to flag if a charm needs the
+# prefix cs:
+# CS is the list of charms that don't need prefix "cs:"
+CS = []
+
 
 def get_package(entity_name, channel_request):
     # Get entity info from API
@@ -137,6 +143,9 @@ def get_package(entity_name, channel_request):
 
     package = logic.add_store_front_data(package, channel_selected)
     package["channel_selected"] = channel_selected
+
+    if package["name"] not in CS:
+        package["cs"] = True
 
     for channel in package["channel-map"]:
         channel["channel"]["released-at"] = logic.convert_date(

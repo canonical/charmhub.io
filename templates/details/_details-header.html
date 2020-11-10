@@ -65,7 +65,7 @@
           </div>
         </div>
         {% include "partial/_channel-map.html" %}
-        <p class="p-charm-header__code"><code>juju deploy <span data-js="channel-cli">{{ package.name }}</span>{% if package["channel_selected"]["channel"]["name"] and package["channel_selected"]["channel"]["name"] != "stable" %} --channel {{ package["channel_selected"]["channel"]["name"] }}{% endif %}</code></p>
+        <p class="p-charm-header__code"><code>juju deploy {% if package["cs"] %}cs:{% endif %}{{ package.name }}{% if package["channel_selected"]["channel"]["name"] and package["channel_selected"]["channel"]["name"] != "stable" %} --channel {{ package["channel_selected"]["channel"]["name"] }}{% endif %}</code></p>
       </div>
     </div>
     <div class="col-4">
