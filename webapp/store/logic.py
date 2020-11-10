@@ -103,6 +103,11 @@ CATEGORIES = {
     "database": "database",
 }
 
+PLATFORMS = {
+    "ubuntu": "linux",
+    "centos": "linux",
+}
+
 
 def get_banner_url(media):
     """
@@ -390,37 +395,43 @@ def get_docs_topic_id(metadata_yaml):
     return None
 
 
-def add_store_front_data(package, channel):
+def add_store_front_data(package, channel, details=False):
     extra = {}
 
-    # Mocked data
-    package = mock_resources(package)
-    extra["has_libraries"] = True
-
     extra["icons"] = get_icons(package)
-    extra["metadata"] = yaml.load(channel["revision"]["metadata-yaml"])
-    extra["config"] = yaml.load(channel["revision"]["config-yaml"])
-    extra["actions"] = yaml.load(channel["revision"]["actions-yaml"])
-
+    extra["os"] = get_os_from_platform(
+        package["default-release"]["revision"]["platforms"]
+    )
+    extra["last_release"] = convert_date(channel["channel"]["released-at"])
     extra["categories"] = get_categories(package["result"]["categories"])
 
-    # Reshape channel maps
-    extra["channel_map"] = convert_channel_maps(package["channel-map"])
-    extra["resources"] = extract_all_resources(package["channel-map"])
+    if details:
+        # Mocked data
+        package = mock_resources(package)
+        extra["has_libraries"] = True
 
-    # Extract all supported series
-    extra["series"] = extract_all_series(package["channel-map"])
+        extra["metadata"] = yaml.load(channel["revision"]["metadata-yaml"])
+        extra["config"] = yaml.load(channel["revision"]["config-yaml"])
+        extra["actions"] = yaml.load(channel["revision"]["actions-yaml"])
 
-    # Some needed fields
-    extra["publisher_name"] = package["result"]["publisher"]["display-name"]
-    extra["last_release"] = convert_date(channel["channel"]["released-at"])
-    extra["summary"] = package["result"]["summary"]
-    extra["ubuntu_versions"] = convert_series_to_ubuntu_versions(
-        extra["series"]
-    )
+        # Reshape channel maps
+        extra["channel_map"] = convert_channel_maps(package["channel-map"])
+        extra["resources"] = extract_all_resources(package["channel-map"])
 
-    # Get charm docs
-    extra["docs_topic"] = get_docs_topic_id(extra["metadata"])
+        # Extract all supported series
+        extra["series"] = extract_all_series(package["channel-map"])
+
+        # Some needed fields
+        extra["publisher_name"] = package["result"]["publisher"][
+            "display-name"
+        ]
+        extra["summary"] = package["result"]["summary"]
+        extra["ubuntu_versions"] = convert_series_to_ubuntu_versions(
+            extra["series"]
+        )
+
+        # Get charm docs
+        extra["docs_topic"] = get_docs_topic_id(extra["metadata"])
 
     package["store_front"] = extra
     return package
@@ -488,16 +499,28 @@ def get_os_from_platform(platforms):
     :param platforms: get list of platforms
     :returns: a list of platforms simplified
     """
-    os = []
-    for platform in platforms:
-        if platform["os"] in ["centos", "ubuntu"]:
-            if "linux" not in os:
-                os.append("linux")
-        elif platform["os"] == "kubernetes":
-            if "kubernetes" not in os:
-                os.append("kubernetes")
-        elif platform["os"] == "windows":
-            if "windows" not in os:
-                os.append("windows")
+    os = set()
 
-    return os
+    for platform in platforms:
+        os.add(PLATFORMS.get(platform["os"], platform["os"]))
+
+    return list(os)
+
+
+def filter_charm(charm, categories=None, platform="all"):
+    """
+    This filter will be done in the API soon.
+    :returns: boolean
+    """
+    charm_categories = [
+        cat["slug"] for cat in charm["store_front"]["categories"]
+    ]
+
+    if categories and not any(x in categories for x in charm_categories):
+        return False
+
+    # Filter platforms
+    if platform != "all" and platform not in charm["store_front"]["os"]:
+        return False
+
+    return True
