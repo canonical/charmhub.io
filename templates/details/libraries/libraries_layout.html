@@ -21,6 +21,7 @@
               <a class="p-side-navigation__link" {% if request.path.endswith('libraries') %}aria-current="page"{% endif %} href="/{{ entity_name }}/libraries">Introduction</a>
             </li>
           </ul>
+          {% if libraries %}
           <ul class="p-side-navigation__list">
             <li class="p-side-navigation__item--title">
               <span class="p-side-navigation__text">
@@ -55,6 +56,7 @@ than the latest.</span>
             </li>
             {% endfor %}
           </ul>
+          {% endif %}
         </nav>
       </div>
     </div>
