@@ -47,6 +47,8 @@ describe("Filters", () => {
           <a href="/store" data-js="mobile-sort-reveal-button" class="has-icon p-store__button"><i class="p-icon--sort"></i>Sort by</a>
           <a href="/store" data-js="mobile-filter-reveal-button" class="has-icon p-store__button"><i class="p-icon--filter"></i>Filters</a>
         </div>
+
+        <a href="?category=all" class="p-button--positive u-hide" id="more-operators">See more operators</a>
         `;
 
       document.body.appendChild(filterElements);

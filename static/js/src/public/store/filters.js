@@ -33,6 +33,19 @@ class Filters {
     });
   }
 
+  toggleMoreOperatorsButton() {
+    const moreOperatorsButton = document.getElementById("more-operators");
+    if (
+      this._filters.category &&
+      this._filters.category.length &&
+      !this._filters.category.includes("all")
+    ) {
+      moreOperatorsButton.classList.remove("u-hide");
+    } else {
+      moreOperatorsButton.classList.add("u-hide");
+    }
+  }
+
   /**
    * Return the number of active filters
    * without including 'sort' and `q`
@@ -117,6 +130,8 @@ class Filters {
         this.submitButtonMobile.innerHTML = `Show results (${filteredItemsNumber})`;
       }
     }
+
+    this.toggleMoreOperatorsButton();
   }
 
   updateUI() {
