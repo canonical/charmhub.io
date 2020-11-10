@@ -63,11 +63,14 @@
       </div>
     </div>
   {% else %}
-    <div class="u-fixed-width">
-      <div class="p-notification--information">
-        <p class="p-notification__response">
-          No action details have been added yet.
-        </p>
+    <div class="u-fixed-width u-equal-height is-wide">
+      <div class="charm-empty-docs-icon u-vertically-center">
+        <img src="https://assets.ubuntu.com/v1/3234f995-Generic_chamhub_NoDocs.svg" alt="" width="121" height="121">
+      </div>
+      <div class="col-9 charm-empty-docs-content">
+        <h4>No actions have been added yet</h4>
+        <p>Actions are executables associated with a charm that may be invoked by the user.</p>
+        <p class="u-no-margin--bottom"><a class="p-button--positive u-no-margin--bottom" href="https://juju.is/docs/charm-writing/actions">Learn more about working with actions</a></p>
       </div>
     </div>
   {% endif %}
