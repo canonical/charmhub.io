@@ -334,3 +334,17 @@ h3 {
     padding-left: $sp-x-large;
   }
 }
+
+.instruction-tooltip:hover .p-tooltip__modal {
+  display: block;
+}
+
+.instruction-tooltip::after {
+  content: "";
+  display: block;
+  height: 200px;
+  left: 100%;
+  position: absolute;
+  top: -50%;
+  width: 200px;
+}

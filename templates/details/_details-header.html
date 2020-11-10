@@ -65,7 +65,19 @@
           </div>
         </div>
         {% include "partial/_channel-map.html" %}
-        <p class="p-charm-header__code"><code>juju deploy {% if package["cs"] %}cs:{% endif %}{{ package.name }}{% if package["channel_selected"]["channel"]["name"] and package["channel_selected"]["channel"]["name"] != "stable" %} --channel {{ package["channel_selected"]["channel"]["name"] }}{% endif %}</code></p>
+        <div class="p-charm-header__code">
+          <code>juju deploy {% if package["cs"] %}cs:{% endif %}{{ package.name }}{% if package["channel_selected"]["channel"]["name"] and package["channel_selected"]["channel"]["name"] != "stable" %} --channel {{ package["channel_selected"]["channel"]["name"] }}{% endif %}</code>
+          <div class="p-tooltip--information u-no-margin--left instruction-tooltip" style="display: inline-block; top: -5px;">
+            <div class="p-tooltip__button" role="button" aria-controls="icon-tooltip-modal" tabindex="0">
+              Show information
+            </div>
+            <div class="p-tooltip__modal" aria-controls="icon-tooltip-modal" id="icon-tooltip-modal">
+              <div class="p-tooltip__dialog" role="dialog" aria-labelledby="modal-content">
+                <p id="modal-content" class="u-no-margin--bottom u-no-padding--top">The deployment of charms is done using Juju, our Universal Operator Lifecycle Manager. <a href="https://juju.is/docs/microk8s-cloud">Learn how to deploy a charm using MicroK8s</a>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="col-4">
