@@ -16,7 +16,7 @@ FEATURED_CHARMS = [
     "mariadb",
     "zabbix-server",
     "zeppelin",
-    "ubuntu",
+    "grafana",
     "jenkins",
     "ceph",
 ]
