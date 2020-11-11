@@ -10,10 +10,6 @@
           <li class="p-filter__item--title">
             Categories
           </li>
-          <li class="p-filter__item" data-filter-type="category" data-js="filter" data-filter-value="featured" tabindex="0">
-            <input type="checkbox" id="featured" value="featured" {% if active_filter('category', 'featured') %}checked{% endif %} tabindex="-1">
-            <label for="featured" tabindex="-1">Featured</label>
-          </li>
           {% for category in categories %}
           {% if not category["slug"] in ["other", "featured"] %}
           <li class="p-filter__item" data-filter-type="category" data-js="filter" data-filter-value="{{ category.slug }}" tabindex="0">
@@ -22,10 +18,6 @@
           </li>
           {% endif %}
           {% endfor %}
-          <li class="p-filter__item" data-filter-type="category" data-js="filter" data-filter-value="other" tabindex="0">
-            <input type="checkbox" id="other" value="other" {% if active_filter('category', 'other') %}checked{% endif %} tabindex="-1">
-            <label for="other" tabindex="-1">other</label>
-          </li>
         </ul>
         {% endif %}
       </div>

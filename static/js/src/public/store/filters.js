@@ -9,11 +9,6 @@ class Filters {
     this.searchCache = window.location.search;
     this.totalItems = totalItems;
 
-    if (this._filters.category && this._filters.category.includes("featured")) {
-      let featuredCheckbox = document.getElementById("featured");
-      featuredCheckbox.checked = true;
-    }
-
     this.wrapperEls = {};
 
     Object.keys(selectors).forEach((selectorName) => {
@@ -178,10 +173,6 @@ class Filters {
       for (const [filterType, filterValue] of searchParams) {
         filters[filterType] = filterValue.split(",");
       }
-    }
-
-    if (!filters["category"] && !filters["q"]) {
-      filters["category"] = ["featured"];
     }
 
     return filters;
