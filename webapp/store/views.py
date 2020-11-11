@@ -8,7 +8,6 @@ from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
 
 from webapp.config import DETAILS_VIEW_REGEX
-from webapp.feature import FEATURED_CHARMS
 from webapp.helpers import discourse_api, md_parser, increase_headers
 from webapp.store import logic
 
@@ -27,13 +26,34 @@ SEARCH_FIELDS = [
     "default-release.channel",
 ]
 
+CATEGORIES = [
+    {"slug": "ai/ml", "name": "AI/ML"},
+    {"slug": "big-data", "name": "Big Data"},
+    {"slug": "database", "name": "Database"},
+    {"name": "Featured", "slug": "featured"},
+    {"slug": "Kubernetes", "name": "Kubernetes"},
+    {"slug": "logging-and-tracing", "name": "Logging and Tracing"},
+    {"slug": "monitoring", "name": "Monitoring"},
+    {"slug": "networking", "name": "Networking"},
+    {"slug": "openstack", "name": "OpenStack"},
+    {"slug": "other", "name": "Other"},
+    {"slug": "security", "name": "Security"},
+    {"slug": "storage", "name": "Storage"},
+]
+
 
 @store.route("/")
 def index():
+    context = {
+        "categories": CATEGORIES,
+    }
+
+    return render_template("store.html", **context)
+
+
+@store.route("/charms.json")
+def get_charms():
     query = request.args.get("q", default=None, type=str)
-    platform_filter = request.args.get("platform", default="all", type=str)
-    category_filter = request.args.get("category", default=None, type=str)
-    category_filter = category_filter.split(",") if category_filter else None
 
     if query:
         results = app.store_api.find(query=query, fields=SEARCH_FIELDS).get(
@@ -43,7 +63,6 @@ def index():
         results = app.store_api.find(fields=SEARCH_FIELDS).get("results", [])
 
     charms = []
-    categories = []
     total_charms = 0
 
     for i, item in enumerate(results):
@@ -56,31 +75,13 @@ def index():
             results[i], results[i]["default-release"]
         )
 
-        if charm["name"] in FEATURED_CHARMS:
-            charm["store_front"]["categories"] = [
-                {"name": "Featured", "slug": "featured"}
-            ]
+        charms.append(charm)
 
-        if not charm["store_front"]["categories"]:
-            charm["store_front"]["categories"] = [
-                {"name": "Other", "slug": "other"}
-            ]
-
-        if logic.filter_charm(charm, category_filter, platform_filter):
-            for cat in charm["store_front"]["categories"]:
-                if cat not in categories:
-                    categories.append(cat)
-
-            charms.append(charm)
-
-    context = {
-        "categories": sorted(categories, key=lambda k: k["name"]),
+    return {
+        "charms": sorted(charms, key=lambda c: c["name"]),
         "q": query,
-        "results": sorted(charms, key=lambda c: c["name"]),
-        "total_charms": total_charms,
+        "size": total_charms,
     }
-
-    return render_template("store.html", **context)
 
 
 FIELDS = [
