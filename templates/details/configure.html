@@ -22,7 +22,8 @@
     <div class="col-9 col-large-6">
       <ul class="p-list--divided has-separator-centered">
         {% for key, value in package.store_front.config.options.items() %}
-        <li class="p-list__item" id="{{ key }}">
+        <li class="p-list__item doc-section">
+          <span class="section-marker" id="{{ key }}"></span>
           <p class="p-heading--4">{{ key }} <span class="u-text--muted">&VerticalLine; {{ value.type }}</span></p>
           {% if value.default %}
           <p style="overflow-wrap: break-word;"><span class="u-text--muted">Default:</span> {{ value.default }}</p>
@@ -41,4 +42,33 @@
     {% endif %}
   </div>
 </div>
+
+<style>
+  .section-marker {
+    display: block;
+    margin-top: -64px;
+    padding-bottom: 64px;
+  }
+</style>
+
+<script>
+  const sideNavigationLinks = Array.prototype.slice.call(
+    document.querySelectorAll(".p-side-navigation__link")
+  );
+
+  sideNavigationLinks.forEach((sideNavigationLink) => {
+    sideNavigationLink.addEventListener("click", (e) => {
+      const activeNavigationLink = e.target;
+      const oldActiveNavigationLink = document.querySelector(
+        ".p-side-navigation__link.is-active"
+      );
+
+      if (oldActiveNavigationLink) {
+        oldActiveNavigationLink.classList.remove("is-active");
+      }
+
+      activeNavigationLink.classList.add("is-active");
+    });
+  });
+</script>
 {% endblock%}
