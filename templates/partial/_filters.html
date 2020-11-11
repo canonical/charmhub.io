@@ -51,9 +51,7 @@
 <div class="p-layout__main">
   <div class="p-layout__filter-container">
     <div class="p-layout__left">
-      <div class="p-muted-heading" data-js="filtered-items">
-        Showing {{ results|length }} of {{ total_charms }} items
-      </div>
+      <div class="p-muted-heading" id="results-count-container" data-js="filtered-items">Show 0 of 0 items</div>
       <div class="p-layout__sort-mobile">
         <a href="/" data-js="mobile-platform-reveal-button" class="has-icon p-store__button is-always-color-link"><i class="p-icon--filter"></i>Platforms</a>
         <a href="/" data-js="mobile-filter-reveal-button" class="has-icon p-store__button is-always-color-link"><i class="p-icon--filter"></i>Filters</a>
@@ -68,7 +66,7 @@
       <form class="p-form p-form--inline">
         <div class="p-layout__sort-desktop p-form__group">
           <label for="platform" aria-label="Filter platforms" class="p-form__label">Platforms</label>
-          <select name="platform" data-js="platform-handler" class="p-form__control" value="{{ platform }}" id="platform">
+          <select name="platform" id="platform-handler" data-js="platform-handler" class="p-form__control" value="{{ platform }}" id="platform">
             <option value="all" {% if active_filter('platform', 'all') %}selected{% endif %}>All</option>
             <option value="linux" {% if active_filter('platform', 'linux') %}selected{% endif %}>Linux</option>
             <option value="kubernetes" {% if active_filter('platform', 'kubernetes') %}selected{% endif %}>Kubernetes</option>
@@ -77,23 +75,59 @@
       </form>
     </div>
   </div>
-  <div class="p-layout__card-container" data-js="card-container">
-    {% if results %}
-      {% for package in results %}
-        {% if package["type"] == "charm" %}
-          {% include "partial/_entity-card.html" %}
-        {% endif %}
-      {% endfor %}
-    {% else %}
-      <div class="p-notification--information">
-          <p class="p-notification__response">
-            We couldn't find anything for your search{% if q %} "<strong>{{ q }}</strong>"{% endif %}.
-          </p>
-      </div>
-    {% endif %}
+  <div class="p-layout__card-container" id="entity-container">
+    <div><i class="p-icon--spinner u-animation--spin"></i> Loading&hellip;</div>
   </div>
 
   <div class="u-align--center" style="margin-top: 1rem;">
     <a href="?category=all" class="p-button--positive u-hide" id="more-operators">See all operators</a>
   </div>
 </div>
+
+<template id="entity-card">
+  <div class="p-layout__card u-equal-height">
+    <a href="" class="p-card--button">
+      <div class="p-card__header">
+        <div class="p-card__thumbnail-container">
+          <img src="" alt="" width="40" height="40" class="p-card__thumbnail">
+        </div>
+        <h3 class="p-card__title p-heading--4 u-no-margin--bottom entity-card-title"></h3>
+        <p class="u-text--muted u-no-padding--top entity-card-publisher"></p>
+      </div>
+
+      <div class="p-card__content">
+        <p><small class="entity-card-summary"></small></p>
+      </div>
+
+      <div class="p-card__footer">
+        <div class="entity-card-icons"></div>
+      </div>
+    </a>
+  </div>
+</template>
+
+<template id="results-count">
+  Showing <span class="total-results"></span> of <span class="total-charms"></span> items
+</template>
+
+<template id="no-results-message">
+  <div class="p-notification--information">
+    <p class="p-notification__response">
+      We couldn't find anything for your search<span class="search-query"></span>.
+    </p>
+  </div>
+</template>
+
+<style>
+  .entity-card-title {
+    text-transform: capitalize;
+  }
+
+  .entity-card-summary {
+    display: inline-block;
+  }
+
+  .entity-card-summary::first-letter {
+    text-transform: uppercase;
+  }
+</style>

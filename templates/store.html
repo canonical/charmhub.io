@@ -49,20 +49,8 @@
 {% block page_scripts %}
 <script src="{{ versioned_static('js/dist/store.js') }}" defer></script>
 <script>
-  window.addEventListener("DOMContentLoaded", function () {
-    new charmhub.store.Filters({
-      searchMobile: "[data-js='search-handler-mobile']",
-      searchDesktop: "[data-js='search-handler-desktop']",
-      filter: "[data-js='filter-handler']",
-      filter: "[data-js='filter-handler']",
-      sort: "[data-js='sort-handler']",
-      platform: "[data-js='platform-handler']",
-      sortMobile: "[data-js='mobile-sort-handler']",
-      platformMobile: "[data-js='mobile-platform-handler']",
-      sortMobileButton: "[data-js='mobile-sort-reveal-button']",
-      platformMobileButton: "[data-js='mobile-platform-reveal-button']",
-      filterMobileButton: "[data-js='mobile-filter-reveal-button']",
-    }, {{ results|length }});
-  });
+  window.addEventListener("DOMContentLoaded", () => {
+    charmhub.store.getCharmsList();
+  })
 </script>
 {% endblock %}
