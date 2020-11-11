@@ -72,8 +72,14 @@
               Show information
             </div>
             <div class="p-tooltip__modal" aria-controls="icon-tooltip-modal" id="icon-tooltip-modal">
-              <div class="p-tooltip__dialog" role="dialog" aria-labelledby="modal-content">
-                <p id="modal-content" class="u-no-margin--bottom u-no-padding--top">The deployment of charms is done using Juju, our Universal Operator Lifecycle Manager. <a href="https://juju.is/docs/microk8s-cloud">Learn how to deploy a charm using MicroK8s</a>.</p>
+              <div class="p-tooltip__dialog" role="dialog" aria-labelledby="modal-content" style="position: relative; top: -0.9rem">
+                <span id="modal-content" class="u-no-margin--bottom u-no-padding--top">
+                  {% if "kubernetes" in package.store_front.os %}
+                    <p class="u-no-padding--top">Deploy Kubernetes operators easily with Juju, the <a href="https://juju.is/overview">Universal Operator Lifecycle Manager</a>. Need a Kubernetes cluster? Install <a href="https://microk8s.io/">MicroK8s</a> to create a full <a href="https://www.cncf.io/certification/software-conformance/">CNCF-certified</a> Kubernetes system in under 60 seconds.</p><p class="u-no-margin--bottom"><a href="https://juju.is/docs/microk8s-cloud">Deploy using our Quickstart Guide</a></p>
+                  {% else %}
+                    <p class="u-no-padding--top">Deploy universal operators easily with Juju, the <a href="https://juju.is/overview">Universal Operator Lifecycle Manager</a>.</p><p class="u-no-margin--bottom"><a href="https://juju.is/docs/deploying-applications#heading--deploying-from-the-charm-store">Learn how with our Quickstart Guide</a></p>
+                  {% endif %}
+                </span>
               </div>
             </div>
           </div>
