@@ -1,55 +1,55 @@
 function buildCharmCard(charm) {
-  const entityCard = document.getElementById('entity-card');
+  const entityCard = document.getElementById("entity-card");
   const clone = entityCard.content.cloneNode(true);
 
-  const entityCardContainer = clone.querySelector('.p-layout__card');
+  const entityCardContainer = clone.querySelector(".p-layout__card");
   entityCardContainer.id = charm.name;
 
-  const entityCardButton = clone.querySelector('.p-card--button');
+  const entityCardButton = clone.querySelector(".p-card--button");
   entityCardButton.href = `/${charm.name}`;
 
-  const entityCardThumbnail = clone.querySelector('.p-card__thumbnail');
+  const entityCardThumbnail = clone.querySelector(".p-card__thumbnail");
   entityCardThumbnail.alt = charm.name;
 
   if (charm.store_front.icons) {
     entityCardThumbnail.src = charm.store_front.icons[0];
   } else {
     entityCardThumbnail.src =
-      'https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg';
+      "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg";
   }
 
-  const entityCardTitle = clone.querySelector('.entity-card-title');
-  entityCardTitle.innerText = charm.name.replace(/-/g, ' ');
+  const entityCardTitle = clone.querySelector(".entity-card-title");
+  entityCardTitle.innerText = charm.name.replace(/-/g, " ");
 
-  const entityCardPublisher = clone.querySelector('.entity-card-publisher');
-  entityCardPublisher.innerText = charm.result.publisher['display-name'];
+  const entityCardPublisher = clone.querySelector(".entity-card-publisher");
+  entityCardPublisher.innerText = charm.result.publisher["display-name"];
 
-  const entityCardSummary = clone.querySelector('.entity-card-summary');
+  const entityCardSummary = clone.querySelector(".entity-card-summary");
 
   if (charm.result.summary) {
     entityCardSummary.innerText = charm.result.summary.substring(0, 90);
   }
 
-  const entityCardIcons = clone.querySelector('.entity-card-icons');
+  const entityCardIcons = clone.querySelector(".entity-card-icons");
 
   charm.store_front.os.forEach((os) => {
-    const image = document.createElement('img');
+    const image = document.createElement("img");
     image.width = 24;
     image.height = 24;
 
-    if (os === 'kubernetes') {
-      image.alt = 'Kubernetes';
-      image.src = 'https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg';
+    if (os === "kubernetes") {
+      image.alt = "Kubernetes";
+      image.src = "https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg";
     }
 
-    if (os === 'windows') {
-      image.alt = 'Windows';
-      image.src = 'https://assets.ubuntu.com/v1/ff17c4fe-Windows.svg';
+    if (os === "windows") {
+      image.alt = "Windows";
+      image.src = "https://assets.ubuntu.com/v1/ff17c4fe-Windows.svg";
     }
 
-    if (os === 'linux') {
-      image.alt = 'Linux';
-      image.src = 'https://assets.ubuntu.com/v1/dc11bd39-Linux.svg';
+    if (os === "linux") {
+      image.alt = "Linux";
+      image.src = "https://assets.ubuntu.com/v1/dc11bd39-Linux.svg";
     }
 
     entityCardIcons.appendChild(image);
@@ -59,10 +59,10 @@ function buildCharmCard(charm) {
 }
 
 function getCharmsList() {
-  fetch('/charms.json')
+  fetch("/charms.json")
     .then((result) => result.json())
     .then((data) => {
-      const charms = data.charms.filter((charm) => charm.type === 'charm');
+      const charms = data.charms.filter((charm) => charm.type === "charm");
 
       if (!charms) {
         renderNoResultsMessage();
@@ -70,9 +70,9 @@ function getCharmsList() {
       }
 
       const searchParams = new URLSearchParams(window.location.search);
-      const platformQuery = searchParams.get('platform');
+      const platformQuery = searchParams.get("platform");
 
-      if (!platformQuery || platformQuery === 'all') {
+      if (!platformQuery || platformQuery === "all") {
         renderResultsCount(charms.length, charms.length);
         renderCharmCards(charms);
       } else {
@@ -84,7 +84,7 @@ function getCharmsList() {
 
       handlePlatformChange(charms);
     })
-    .catch((e) => console.log('error', e));
+    .catch((e) => console.log("error", e));
 }
 
 function filterCharmsByPlatform(charmSet, platform) {
@@ -92,12 +92,12 @@ function filterCharmsByPlatform(charmSet, platform) {
 }
 
 function renderCharmCards(charms) {
-  if (!'content' in document.createElement('template')) {
+  if (!"content" in document.createElement("template")) {
     return;
   }
 
-  const entityContainer = document.getElementById('entity-container');
-  entityContainer.innerHTML = '';
+  const entityContainer = document.getElementById("entity-container");
+  entityContainer.innerHTML = "";
 
   charms.forEach((charm) => {
     entityContainer.appendChild(buildCharmCard(charm));
@@ -105,20 +105,20 @@ function renderCharmCards(charms) {
 }
 
 function renderResultsCount(results, charms) {
-  if (!'content' in document.createElement('template')) {
+  if (!"content" in document.createElement("template")) {
     return;
   }
 
   const searchParams = new URLSearchParams(window.location.search);
-  const platformQuery = searchParams.get('platform');
+  const platformQuery = searchParams.get("platform");
 
   const resultsCountContainer = document.getElementById(
-    'results-count-container'
+    "results-count-container"
   );
 
   if (!platformQuery) {
     resultsCountContainer.innerHTML = `${getFeatureCount()} featured of ${charms}`;
-  } else if (platformQuery == 'all') {
+  } else if (platformQuery == "all") {
     resultsCountContainer.innerHTML = `Showing all ${charms}`;
   } else {
     resultsCountContainer.innerHTML = `${results} of ${charms}`;
@@ -126,19 +126,19 @@ function renderResultsCount(results, charms) {
 }
 
 function getFeatureCount() {
-  const featuredContainer = document.getElementById('features-container');
-  const featuredCards = featuredContainer.querySelectorAll('.p-layout__card');
+  const featuredContainer = document.getElementById("features-container");
+  const featuredCards = featuredContainer.querySelectorAll(".p-layout__card");
   return featuredCards.length;
 }
 
 function handlePlatformChange(charms) {
-  const platformSwitcher = document.getElementById('platform-handler');
+  const platformSwitcher = document.getElementById("platform-handler");
 
-  platformSwitcher.addEventListener('change', (e) => {
+  platformSwitcher.addEventListener("change", (e) => {
     const platform = e.target.value;
-    setQueryStringParameter('platform', platform);
+    setQueryStringParameter("platform", platform);
 
-    if (platform === 'all') {
+    if (platform === "all") {
       renderResultsCount(charms.length, charms.length);
       renderCharmCards(charms);
     } else {
@@ -156,37 +156,37 @@ function setQueryStringParameter(name, value) {
   params.set(name, value);
   window.history.replaceState(
     {},
-    '',
+    "",
     decodeURIComponent(`${window.location.pathname}?${params}`)
   );
 }
 
 function hideFeatured() {
-  const featuredContainer = document.getElementById('features-container');
-  const entityContainer = document.getElementById('entity-container');
+  const featuredContainer = document.getElementById("features-container");
+  const entityContainer = document.getElementById("entity-container");
 
-  featuredContainer.classList.add('u-hide');
-  entityContainer.classList.remove('u-hide');
+  featuredContainer.classList.add("u-hide");
+  entityContainer.classList.remove("u-hide");
 }
 
 function renderNoResultsMessage() {
-  if (!'content' in document.createElement('template')) {
+  if (!"content" in document.createElement("template")) {
     return;
   }
 
-  const entityContainer = document.getElementById('entity-container');
-  const noResultsMessage = document.getElementById('no-results-message');
+  const entityContainer = document.getElementById("entity-container");
+  const noResultsMessage = document.getElementById("no-results-message");
   const clone = noResultsMessage.content.cloneNode(true);
 
   const searchParams = new URLSearchParams(window.location.search);
-  const searchQuery = searchParams.get('q');
+  const searchQuery = searchParams.get("q");
 
   if (searchParams) {
-    const searchQueryMessage = clone.querySelector('.search-query');
+    const searchQueryMessage = clone.querySelector(".search-query");
     searchQueryMessage.innerHTML = ` "<strong>${searchQuery}</strong>"`;
   }
 
-  entityContainer.innerHTML = '';
+  entityContainer.innerHTML = "";
   entityContainer.appendChild(clone);
 }
 
