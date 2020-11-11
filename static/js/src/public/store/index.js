@@ -1,3 +1,3 @@
-import { Filters } from "./filters";
+import { getCharmsList } from "./filters";
 
-export { Filters };
+export { getCharmsList };
