@@ -3,6 +3,11 @@ domain: charmhub.io
 image: prod-comms.docker-registry.canonical.com/charmhub.io
 
 env:
+  - name: MAINTENANCE
+    configMapKeyRef:
+      key: maintenance
+      name: charmhub
+
   - name: SENTRY_DSN
     value: https://6cacb25de947478faeb57f3836da1cf3@sentry.is.canonical.com//24
 
