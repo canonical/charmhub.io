@@ -10,6 +10,7 @@ from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.helpers import discourse_api, md_parser, increase_headers
 from webapp.store import logic
+from webapp.decorators import store_maintenance
 
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
@@ -43,6 +44,7 @@ CATEGORIES = [
 
 
 @store.route("/")
+@store_maintenance
 def index():
     context = {
         "categories": CATEGORIES,
@@ -129,6 +131,7 @@ def get_package(entity_name, channel_request):
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
+@store_maintenance
 def details_overview(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
@@ -154,6 +157,7 @@ def details_overview(entity_name):
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs')
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs/<slug>')
+@store_maintenance
 def details_docs(entity_name, slug=None):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
@@ -204,6 +208,7 @@ def details_docs(entity_name, slug=None):
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configure')
+@store_maintenance
 def details_configuration(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
@@ -216,6 +221,7 @@ def details_configuration(entity_name):
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/actions')
+@store_maintenance
 def details_actions(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
@@ -228,6 +234,7 @@ def details_actions(entity_name):
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/libraries')
+@store_maintenance
 def details_libraries(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
@@ -250,6 +257,7 @@ def details_libraries(entity_name):
     + DETAILS_VIEW_REGEX
     + '"):entity_name>/libraries/<string:library_name>'
 )
+@store_maintenance
 def details_library(entity_name, library_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
@@ -290,6 +298,7 @@ def details_library(entity_name, library_name):
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/history')
+@store_maintenance
 def details_history(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
@@ -302,6 +311,7 @@ def details_history(entity_name):
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/integrate')
+@store_maintenance
 def details_integrate(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
