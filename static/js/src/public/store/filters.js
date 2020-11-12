@@ -72,6 +72,10 @@ function getCharmsList() {
       const searchParams = new URLSearchParams(window.location.search);
       const platformQuery = searchParams.get("platform");
 
+      if (platformQuery) {
+        hideFeatured();
+      }
+
       if (!platformQuery || platformQuery === "all") {
         renderResultsCount(charms.length, charms.length);
         renderCharmCards(charms);
@@ -146,8 +150,6 @@ function handlePlatformChange(charms) {
       renderResultsCount(platformCharms.length, charms.length);
       renderCharmCards(platformCharms);
     }
-
-    hideFeatured();
   });
 }
 
