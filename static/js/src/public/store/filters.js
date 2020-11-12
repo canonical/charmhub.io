@@ -59,8 +59,6 @@ function buildCharmCard(charm) {
 }
 
 function getCharmsList() {
-  const entityContainer = document.getElementById("entity-container");
-
   fetch("/charms.json")
     .then((result) => result.json())
     .then((data) => {
@@ -71,28 +69,30 @@ function getCharmsList() {
         return;
       }
 
-      renderResultsCount(charms.length, charms.length);
-      renderCharmCards(charms);
-      handlePlatformChange(charms);
-
       const searchParams = new URLSearchParams(window.location.search);
       const platformQuery = searchParams.get("platform");
 
       if (platformQuery) {
-        if (platformQuery === "all") {
-          renderResultsCount(charms.length, charms.length);
-          renderCharmCards(charms);
-        } else {
-          const platformResults = charms.filter((charm) =>
-            charm.store_front.os.includes(platformQuery)
-          );
-
-          renderResultsCount(platformResults.length, charms.length);
-          renderCharmCards(platformResults);
-        }
+        hideFeatured();
       }
+
+      if (!platformQuery || platformQuery === "all") {
+        renderResultsCount(charms.length, charms.length);
+        renderCharmCards(charms);
+      } else {
+        const platformResults = filterCharmsByPlatform(charms, platformQuery);
+
+        renderResultsCount(platformResults.length, charms.length);
+        renderCharmCards(platformResults);
+      }
+
+      handlePlatformChange(charms);
     })
     .catch((e) => console.log("error", e));
+}
+
+function filterCharmsByPlatform(charmSet, platform) {
+  return charmSet.filter((charm) => charm.store_front.os.includes(platform));
 }
 
 function renderCharmCards(charms) {
@@ -113,20 +113,26 @@ function renderResultsCount(results, charms) {
     return;
   }
 
+  const searchParams = new URLSearchParams(window.location.search);
+  const platformQuery = searchParams.get("platform");
+
   const resultsCountContainer = document.getElementById(
     "results-count-container"
   );
-  const resultsCount = document.getElementById("results-count");
-  const clone = resultsCount.content.cloneNode(true);
 
-  const totalResults = clone.querySelector(".total-results");
-  totalResults.innerText = results;
+  if (!platformQuery) {
+    resultsCountContainer.innerHTML = `${getFeatureCount()} featured of ${charms}`;
+  } else if (platformQuery == "all") {
+    resultsCountContainer.innerHTML = `Showing all ${charms}`;
+  } else {
+    resultsCountContainer.innerHTML = `${results} of ${charms}`;
+  }
+}
 
-  const totalCharms = clone.querySelector(".total-charms");
-  totalCharms.innerText = charms;
-
-  resultsCountContainer.innerHTML = "";
-  resultsCountContainer.appendChild(clone);
+function getFeatureCount() {
+  const featuredContainer = document.getElementById("features-container");
+  const featuredCards = featuredContainer.querySelectorAll(".p-layout__card");
+  return featuredCards.length;
 }
 
 function handlePlatformChange(charms) {
@@ -134,23 +140,35 @@ function handlePlatformChange(charms) {
 
   platformSwitcher.addEventListener("change", (e) => {
     const platform = e.target.value;
-
-    const platformCharms = charms.filter((charm) =>
-      charm.store_front.os.includes(platform)
-    );
+    setQueryStringParameter("platform", platform);
 
     if (platform === "all") {
       renderResultsCount(charms.length, charms.length);
       renderCharmCards(charms);
     } else {
+      const platformCharms = filterCharmsByPlatform(charms, platform);
       renderResultsCount(platformCharms.length, charms.length);
       renderCharmCards(platformCharms);
     }
-
-    const searchParams = new URLSearchParams(window.location.search);
-    searchParams.set("platform", platform);
-    window.location.search = searchParams;
   });
+}
+
+function setQueryStringParameter(name, value) {
+  const params = new URLSearchParams(window.location.search);
+  params.set(name, value);
+  window.history.replaceState(
+    {},
+    "",
+    decodeURIComponent(`${window.location.pathname}?${params}`)
+  );
+}
+
+function hideFeatured() {
+  const featuredContainer = document.getElementById("features-container");
+  const entityContainer = document.getElementById("entity-container");
+
+  featuredContainer.classList.add("u-hide");
+  entityContainer.classList.remove("u-hide");
 }
 
 function renderNoResultsMessage() {

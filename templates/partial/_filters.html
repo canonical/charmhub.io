@@ -51,7 +51,7 @@
 <div class="p-layout__main">
   <div class="p-layout__filter-container">
     <div class="p-layout__left">
-      <div class="p-muted-heading" id="results-count-container" data-js="filtered-items">Show 0 of 0 items</div>
+      <div class="p-muted-heading" id="results-count-container" data-js="filtered-items">10 Featured</div>
       <div class="p-layout__sort-mobile">
         <a href="/" data-js="mobile-platform-reveal-button" class="has-icon p-store__button is-always-color-link"><i class="p-icon--filter"></i>Platforms</a>
         <a href="/" data-js="mobile-filter-reveal-button" class="has-icon p-store__button is-always-color-link"><i class="p-icon--filter"></i>Filters</a>
@@ -75,7 +75,10 @@
       </form>
     </div>
   </div>
-  <div class="p-layout__card-container" id="entity-container">
+  <div class="p-layout__card-container" id="features-container">
+    {% include "partial/_featured-charms.html" %}
+  </div>
+  <div class="p-layout__card-container u-hide" id="entity-container">
     <div><i class="p-icon--spinner u-animation--spin"></i> Loading&hellip;</div>
   </div>
 
@@ -104,10 +107,6 @@
       </div>
     </a>
   </div>
-</template>
-
-<template id="results-count">
-  Showing <span class="total-results"></span> of <span class="total-charms"></span> items
 </template>
 
 <template id="no-results-message">
