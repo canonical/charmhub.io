@@ -267,7 +267,7 @@ function handleShowAllOperators(charms) {
     });
     platformSwitcher.value = "all";
 
-    // window.scrollTo(0, 0);
+    window.scrollTo(0, 0);
   });
 }
 
