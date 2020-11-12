@@ -36,12 +36,12 @@ function buildCharmCard(charm) {
     const span = document.createElement("span");
     const image = document.createElement("img");
     const tooltip = document.createElement("span");
-    span.class = "p-tooltip";
+    span.setAttribute('class', "p-tooltip");
     span.setAttribute('aria-describedby', 'default-tooltip')
     image.width = 24;
     image.height = 24;
-    tooltip.class = "p-tooltip__message";
-    tooltip.role = "tooltip";
+    tooltip.setAttribute('class', "p-tooltip__message")
+    tooltip.setAttribute('role', "tooltip")
 
     if (os === "kubernetes") {
       image.alt = "Kubernetes";
