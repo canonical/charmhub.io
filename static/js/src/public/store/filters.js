@@ -263,6 +263,7 @@ function handleShowAllOperators(charms) {
     const platformSwitcher = document.getElementById("platform-handler");
     categoryFilters.forEach((filter) => {
       filter.checked = false;
+      filter.disabled = false;
     });
     platformSwitcher.value = "all";
 
