@@ -155,10 +155,6 @@ function renderResultsCount(results, charms) {
     return;
   }
 
-  const searchParams = new URLSearchParams(window.location.search);
-  const platformQuery = searchParams.get("platform");
-  const categoryQuery = searchParams.get("categories");
-
   const resultsCountContainer = document.getElementById(
     "results-count-container"
   );
@@ -331,7 +327,7 @@ function handleCategoryFilters(charms) {
       }
       hideFeatured();
 
-      if (categories.length) {
+      if (categories.length || platform != "all") {
         renderResultsCount(filteredCharms.length, charms.length);
         renderCharmCards(filteredCharms);
       } else {
@@ -339,7 +335,9 @@ function handleCategoryFilters(charms) {
         renderCharmCards(charms);
       }
 
-      if (!categories.length) {
+      console.log(categories.length, platform);
+      if (!categories.length && platform == "all") {
+        console.log("show featured");
         showFeatured();
       }
 
