@@ -94,41 +94,41 @@ function getCharmsList() {
       handlePlatformChange(charms);
       handleCategoryFilters(charms);
 
-      if (platformQuery || categoriesQuery) {
-        hideFeatured();
-      }
+      // if (platformQuery || categoriesQuery) {
+      //   hideFeatured();
+      // }
 
-      let platformResults = charms;
+      // let platformResults = charms;
 
-      if (platformQuery) {
-        platformResults = filterCharmsByPlatform(charms, platformQuery);
-      }
+      // if (platformQuery) {
+      //   platformResults = filterCharmsByPlatform(charms, platformQuery);
+      // }
 
-      if (platformQuery === "all") {
-        platformResults = charms;
-      }
+      // if (platformQuery === "all") {
+      //   platformResults = charms;
+      // }
 
-      let categories = [];
+      // let categories = [];
 
-      if (categoriesQuery) {
-        if (categoriesQuery.includes(",")) {
-          categories = categoriesQuery.split(",");
-        } else {
-          categories = [categoriesQuery];
-        }
-      }
+      // if (categoriesQuery) {
+      //   if (categoriesQuery.includes(",")) {
+      //     categories = categoriesQuery.split(",");
+      //   } else {
+      //     categories = [categoriesQuery];
+      //   }
+      // }
 
-      let allResults = filterCharmsByCategories(platformResults, categories);
+      // let allResults = filterCharmsByCategories(platformResults, categories);
 
-      if (categoriesQuery === "all") {
-        allResults = platformResults;
-      }
+      // if (categoriesQuery === "all") {
+      //   allResults = platformResults;
+      // }
 
-      disableFiltersByPlatform(filterCharmsByPlatform(charms, platformQuery));
-      renderResultsCount(allResults.length, charms.length);
-      renderCharmCards(allResults);
+      // disableFiltersByPlatform(filterCharmsByPlatform(charms, platformQuery));
+      // renderResultsCount(allResults.length, charms.length);
+      // renderCharmCards(allResults);
 
-      selectFilters(categories);
+      // selectFilters(categories);
     })
     .catch((e) => console.log("error", e));
 }
