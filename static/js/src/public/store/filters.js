@@ -375,8 +375,6 @@ function enableFilters() {
 
 function disableFiltersByPlatform(charms) {
   const categoryFilters = document.querySelectorAll(".category-filter");
-  console.log("charms", charms);
-
   const platformCategories = [];
 
   charms.forEach((charm) => {
