@@ -109,14 +109,6 @@ FEATURED_CHARMS = [
         "platform": "linux",
     },
     {
-        "name": "zookeeper",
-        "display_name": "Zookeeper",
-        "summary": "Zookeeper from Apache Bigtop",
-        "publisher": "narindergupta",
-        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_YKzuWQUoiRwOS6A7T2qjokoj69lJuur9_icon__56c07857177931a872c5c9b8057c80ca98824e557880a43271799758fe5432cf.png",
-        "platform": "linux",
-    },
-    {
         "name": "kafka",
         "display_name": "Kafka",
         "summary": "Kafka from Apache Bigtop",
