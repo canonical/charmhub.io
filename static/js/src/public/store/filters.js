@@ -183,7 +183,7 @@ function handlePlatformChange(charms) {
 
   platformSwitcher.addEventListener("change", (e) => {
     const platform = e.target.value;
-    setQueryStringParameter("platform", platform);
+    // setQueryStringParameter("platform", platform);
 
     if (platform === "all") {
       renderResultsCount(charms.length, charms.length);
@@ -259,7 +259,7 @@ function handleShowAllOperators(charms) {
   const showAllOperatorsButton = document.getElementById("more-operators");
   showAllOperatorsButton.addEventListener("click", (e) => {
     e.preventDefault();
-    setQueryStringParameter("platform", "all");
+    // setQueryStringParameter("platform", "all");
     renderResultsCount(charms.length, charms.length);
     renderCharmCards(charms);
     toggleShowAllOperatorsButton("all");
@@ -303,7 +303,7 @@ function handleCategoryFilters(charms) {
         categories = categories.filter((cat) => cat !== category);
       }
 
-      setQueryStringParameter("categories", categories);
+      // setQueryStringParameter("categories", categories);
 
       const filteredCharms = filterCharmsByCategories(charms, categories);
 
