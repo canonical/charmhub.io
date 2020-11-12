@@ -10,12 +10,13 @@ function buildCharmCard(charm) {
 
   const entityCardThumbnail = clone.querySelector(".p-card__thumbnail");
   entityCardThumbnail.alt = charm.name;
+  entityCardThumbnail.setAttribute('loading', "lazy")
 
   if (charm.store_front.icons && charm.store_front.icons[0]) {
-    entityCardThumbnail.src = charm.store_front.icons[0];
+    entityCardThumbnail.src = "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/" + charm.store_front.icons[0];
   } else {
     entityCardThumbnail.src =
-      "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg";
+      "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg";
   }
 
   const entityCardTitle = clone.querySelector(".entity-card-title");
