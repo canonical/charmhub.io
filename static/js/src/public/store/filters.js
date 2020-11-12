@@ -127,6 +127,8 @@ function getCharmsList() {
       renderResultsCount(allResults.length, charms.length);
       renderCharmCards(allResults);
 
+      // disableFiltersByPlatform(allResults);
+
       selectFilters(categories);
     })
     .catch((e) => console.log("error", e));
@@ -194,6 +196,13 @@ function handlePlatformChange(charms) {
       renderCharmCards(platformCharms);
       disableFiltersByPlatform(platformCharms);
     }
+
+    const categoryFilters = document.querySelectorAll(".category-filter");
+
+    categoryFilters.forEach((filter) => {
+      filter.checked = false;
+    });
+
     hideFeatured();
 
     toggleShowAllOperatorsButton(platform);
