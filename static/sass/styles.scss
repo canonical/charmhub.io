@@ -339,12 +339,13 @@ h3 {
   display: block;
 }
 
-.instruction-tooltip::after {
+.instruction-tooltip:hover::after {
   content: "";
   display: block;
-  height: 200px;
+  height: 40px;
   left: 100%;
   position: absolute;
   top: -50%;
-  width: 200px;
+  width: 40px;
+  margin-top: -20px;
 }
