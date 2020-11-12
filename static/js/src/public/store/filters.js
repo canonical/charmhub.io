@@ -98,15 +98,11 @@ function getCharmsList() {
         hideFeatured();
       }
 
-      console.log("charms", charms);
-
       let platformResults = charms;
 
       if (platformQuery) {
         platformResults = filterCharmsByPlatform(charms, platformQuery);
       }
-
-      console.log("platformResults", platformResults);
 
       if (platformQuery === "all") {
         platformResults = charms;
@@ -114,14 +110,15 @@ function getCharmsList() {
 
       let categories = [];
 
-      if (categoriesQuery.includes(",")) {
-        categories = categoriesQuery.split(",");
-      } else {
-        categories = [categoriesQuery];
+      if (categoriesQuery) {
+        if (categoriesQuery.includes(",")) {
+          categories = categoriesQuery.split(",");
+        } else {
+          categories = [categoriesQuery];
+        }
       }
 
       let allResults = filterCharmsByCategories(platformResults, categories);
-      console.log("allResults", allResults);
 
       if (categoriesQuery === "all") {
         allResults = platformResults;
@@ -323,6 +320,10 @@ function filterCharmsByCategories(charms, categoriesQuery) {
 
   if (categoriesQuery !== typeof "string" && categoriesQuery.includes("all")) {
     categoriesQuery = categoriesQuery.filter((cat) => cat !== "all");
+  }
+
+  if (!categoriesQuery.length) {
+    return charms;
   }
 
   return charms.filter((charm) => {
