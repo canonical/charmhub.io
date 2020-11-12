@@ -163,13 +163,13 @@ function renderResultsCount(results, charms) {
     "results-count-container"
   );
 
-  if (!platformQuery && !categoryQuery) {
-    resultsCountContainer.innerHTML = `${getFeatureCount()} featured of ${charms}`;
-  } else if (results === charms) {
-    resultsCountContainer.innerHTML = `Showing all ${charms}`;
-  } else {
-    resultsCountContainer.innerHTML = `${results} of ${charms}`;
-  }
+  // if (!platformQuery && !categoryQuery) {
+  //   resultsCountContainer.innerHTML = `${getFeatureCount()} featured of ${charms}`;
+  // } else if (results === charms) {
+  //   resultsCountContainer.innerHTML = `Showing all ${charms}`;
+  // } else {
+  // }
+  resultsCountContainer.innerHTML = `${results} of ${charms}`;
 }
 
 function getFeatureCount() {
