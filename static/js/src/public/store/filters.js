@@ -98,7 +98,15 @@ function getCharmsList() {
         hideFeatured();
       }
 
-      let platformResults = filterCharmsByPlatform(charms, platformQuery);
+      console.log("charms", charms);
+
+      let platformResults = charms;
+
+      if (platformQuery) {
+        platformResults = filterCharmsByPlatform(charms, platformQuery);
+      }
+
+      console.log("platformResults", platformResults);
 
       if (platformQuery === "all") {
         platformResults = charms;
@@ -113,6 +121,7 @@ function getCharmsList() {
       }
 
       let allResults = filterCharmsByCategories(platformResults, categories);
+      console.log("allResults", allResults);
 
       if (categoriesQuery === "all") {
         allResults = platformResults;
