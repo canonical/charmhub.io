@@ -10,10 +10,12 @@ function buildCharmCard(charm) {
 
   const entityCardThumbnail = clone.querySelector(".p-card__thumbnail");
   entityCardThumbnail.alt = charm.name;
-  entityCardThumbnail.setAttribute('loading', "lazy")
+  entityCardThumbnail.setAttribute("loading", "lazy");
 
   if (charm.store_front.icons && charm.store_front.icons[0]) {
-    entityCardThumbnail.src = "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/" + charm.store_front.icons[0];
+    entityCardThumbnail.src =
+      "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/" +
+      charm.store_front.icons[0];
   } else {
     entityCardThumbnail.src =
       "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg";
@@ -37,33 +39,35 @@ function buildCharmCard(charm) {
     const span = document.createElement("span");
     const image = document.createElement("img");
     const tooltip = document.createElement("span");
-    span.setAttribute('class', "p-tooltip");
-    span.setAttribute('aria-describedby', 'default-tooltip')
+    span.setAttribute("class", "p-tooltip");
+    span.setAttribute("aria-describedby", "default-tooltip");
     image.width = 24;
     image.height = 24;
-    tooltip.setAttribute('class', "p-tooltip__message")
-    tooltip.setAttribute('role', "tooltip")
+    tooltip.setAttribute("class", "p-tooltip__message");
+    tooltip.setAttribute("role", "tooltip");
 
     if (os === "kubernetes") {
       image.alt = "Kubernetes";
       image.src = "https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg";
-      tooltip.innerText = "This operator drives the application on Kubernetes"
+      tooltip.innerText = "This operator drives the application on Kubernetes";
     }
 
     if (os === "windows") {
       image.alt = "Windows";
       image.src = "https://assets.ubuntu.com/v1/ff17c4fe-Windows.svg";
-      tooltip.innerText = "This operator drives the application on Windows servers"
+      tooltip.innerText =
+        "This operator drives the application on Windows servers";
     }
 
     if (os === "linux") {
       image.alt = "Linux";
       image.src = "https://assets.ubuntu.com/v1/dc11bd39-Linux.svg";
-      tooltip.innerText = "This operator drives the application on Linux servers"
+      tooltip.innerText =
+        "This operator drives the application on Linux servers";
     }
 
-    span.appendChild(image)
-    span.appendChild(tooltip)
+    span.appendChild(image);
+    span.appendChild(tooltip);
     entityCardIcons.appendChild(span);
   });
 
@@ -83,22 +87,42 @@ function getCharmsList() {
 
       const searchParams = new URLSearchParams(window.location.search);
       const platformQuery = searchParams.get("platform");
+      const categoriesQuery = searchParams.get("categories");
 
-      if (platformQuery) {
+      toggleShowAllOperatorsButton(platformQuery);
+      handleShowAllOperators(charms);
+      handlePlatformChange(charms);
+      handleCategoryFilters(charms);
+
+      if (platformQuery || categoriesQuery) {
         hideFeatured();
       }
 
-      if (!platformQuery || platformQuery === "all") {
-        renderResultsCount(charms.length, charms.length);
-        renderCharmCards(charms);
-      } else {
-        const platformResults = filterCharmsByPlatform(charms, platformQuery);
+      let platformResults = filterCharmsByPlatform(charms, platformQuery);
 
-        renderResultsCount(platformResults.length, charms.length);
-        renderCharmCards(platformResults);
+      if (platformQuery === "all") {
+        platformResults = charms;
       }
 
-      handlePlatformChange(charms);
+      let categories = [];
+
+      if (categoriesQuery.includes(",")) {
+        categories = categoriesQuery.split(",");
+      } else {
+        categories = [categoriesQuery];
+      }
+
+      let allResults = filterCharmsByCategories(platformResults, categories);
+
+      if (categoriesQuery === "all") {
+        allResults = platformResults;
+      }
+
+      renderResultsCount(allResults.length, charms.length);
+      renderCharmCards(allResults);
+
+      selectFilters(categories);
+      disableFilters(categories);
     })
     .catch((e) => console.log("error", e));
 }
@@ -127,14 +151,15 @@ function renderResultsCount(results, charms) {
 
   const searchParams = new URLSearchParams(window.location.search);
   const platformQuery = searchParams.get("platform");
+  const categoryQuery = searchParams.get("categories");
 
   const resultsCountContainer = document.getElementById(
     "results-count-container"
   );
 
-  if (!platformQuery) {
+  if (!platformQuery && !categoryQuery) {
     resultsCountContainer.innerHTML = `${getFeatureCount()} featured of ${charms}`;
-  } else if (platformQuery == "all") {
+  } else if (results === charms) {
     resultsCountContainer.innerHTML = `Showing all ${charms}`;
   } else {
     resultsCountContainer.innerHTML = `${results} of ${charms}`;
@@ -163,6 +188,8 @@ function handlePlatformChange(charms) {
       renderCharmCards(platformCharms);
     }
     hideFeatured();
+
+    toggleShowAllOperatorsButton(platform);
   });
 }
 
@@ -203,6 +230,127 @@ function renderNoResultsMessage() {
 
   entityContainer.innerHTML = "";
   entityContainer.appendChild(clone);
+}
+
+function handleShowAllOperators(charms) {
+  const showAllOperatorsButton = document.getElementById("more-operators");
+  showAllOperatorsButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    setQueryStringParameter("platform", "all");
+    renderResultsCount(charms.length, charms.length);
+    renderCharmCards(charms);
+    toggleShowAllOperatorsButton("all");
+    window.scrollTo(0, 0);
+  });
+}
+
+function toggleShowAllOperatorsButton(platformQuery) {
+  const allOperatorsButton = document.getElementById("more-operators");
+
+  if (platformQuery === "all") {
+    allOperatorsButton.classList.add("u-hide");
+  } else {
+    allOperatorsButton.classList.remove("u-hide");
+  }
+}
+
+function handleCategoryFilters(charms) {
+  const categoryFilters = document.querySelectorAll(".category-filter");
+
+  categoryFilters.forEach((categoryFilter) => {
+    categoryFilter.addEventListener("click", (e) => {
+      const category = e.target.value;
+
+      const searchParams = new URLSearchParams(window.location.search);
+      const searchQuery = searchParams.get("categories");
+
+      let categories = [];
+
+      if (searchQuery) {
+        categories = searchQuery.split(",");
+      }
+
+      if (categories.includes("all")) {
+        categories = categories.filter((cat) => cat !== "all");
+      }
+
+      if (!categories.includes(category)) {
+        categories.push(category);
+      } else {
+        categories = categories.filter((cat) => cat !== category);
+      }
+
+      setQueryStringParameter("categories", categories);
+
+      const filteredCharms = filterCharmsByCategories(charms, categories);
+
+      hideFeatured();
+
+      renderResultsCount(filteredCharms.length, charms.length);
+      renderCharmCards(filteredCharms);
+
+      disableFilters(categories);
+
+      window.scrollTo(0, 0);
+    });
+  });
+}
+
+function filterCharmsByCategories(charms, categoriesQuery) {
+  if (!categoriesQuery || categoriesQuery === "all") {
+    return charms;
+  }
+
+  if (categoriesQuery !== typeof "string" && categoriesQuery.includes("all")) {
+    categoriesQuery = categoriesQuery.filter((cat) => cat !== "all");
+  }
+
+  return charms.filter((charm) => {
+    let charmCategories = [];
+
+    if (charm.store_front.categories) {
+      charmCategories = charm.store_front.categories.map((cat) => {
+        return cat.slug;
+      });
+    }
+
+    const cats = categoriesQuery.filter((cat) => {
+      if (charmCategories.includes(cat)) {
+        return cat;
+      }
+    });
+
+    if (cats.length) {
+      return charm;
+    }
+  });
+}
+
+function disableFilters(categories) {
+  const categoryFilters = document.querySelectorAll(".category-filter");
+
+  categoryFilters.forEach((filter) => {
+    if (!categories.length) {
+      filter.disabled = false;
+      return;
+    }
+
+    if (categories.includes(filter.value)) {
+      filter.disabled = false;
+    } else {
+      filter.disabled = true;
+    }
+  });
+}
+
+function selectFilters(categories) {
+  const categoryFilters = document.querySelectorAll(".category-filter");
+
+  categoryFilters.forEach((filter) => {
+    if (categories.includes(filter.value)) {
+      filter.checked = true;
+    }
+  });
 }
 
 export { getCharmsList };
