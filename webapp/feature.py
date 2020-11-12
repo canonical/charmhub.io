@@ -93,8 +93,8 @@ FEATURED_CHARMS = [
         "platform": "linux",
     },
     {
-        "name": "Kafka",
-        "display_name": "kafka",
+        "name": "kafka",
+        "display_name": "Kafka",
         "summary": "Kafka from Apache Bigtop",
         "publisher": "Kafka Charm",
         "icon": "https://api.snapcraft.io/api/v1/media/download/charm_WiX6gKBjDZF04gEoTMv2kSNYXvnB2xeF_icon__2618761341037f5e1700e2d6c77178276954840a02dbd62465e22bf1d9a1e904.png",
@@ -110,7 +110,7 @@ FEATURED_CHARMS = [
     },
     {
         "name": "mariadb",
-        "display_name": "",
+        "display_name": "MariaDB",
         "summary": "Popular, enhanced, drop-in replacement for MySQL",
         "publisher": "MariaDB Charm",
         "icon": "https://api.snapcraft.io/api/v1/media/download/charm_tNiFc3ACzOzO0BUJOTSxeAxVue7rUN1c_icon__62946c7f73307231d38af66f8253f86199df01fdfcaa5547b1b4f5d59b5c0d20.png",
@@ -121,7 +121,7 @@ FEATURED_CHARMS = [
         "display_name": "Jenkins Agent ",
         "summary": "jenkins-agent operator charm",
         "publisher": "jenkins",
-        "icon": "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_60,h_60/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg",
+        "icon": "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/https://api.snapcraft.io/api/v1/media/download/charm_VEHqjKc0gKDmIOacHnRYlo0HoCmO7Uws_icon__ad7306147e1bb35df0f370bddb0004ad7f25d5477b2ea3aa911a1eec807a2761.png",
         "platform": "kubernetes",
     },
     {
