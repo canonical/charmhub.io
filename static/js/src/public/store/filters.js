@@ -284,14 +284,14 @@ function handleCategoryFilters(charms) {
     categoryFilter.addEventListener("click", (e) => {
       const category = e.target.value;
 
-      const searchParams = new URLSearchParams(window.location.search);
-      const searchQuery = searchParams.get("categories");
+      // const searchParams = new URLSearchParams(window.location.search);
+      // const searchQuery = searchParams.get("categories");
 
       let categories = [];
 
-      if (searchQuery) {
-        categories = searchQuery.split(",");
-      }
+      // if (searchQuery) {
+      //   categories = searchQuery.split(",");
+      // }
 
       if (categories.includes("all")) {
         categories = categories.filter((cat) => cat !== "all");
@@ -303,14 +303,23 @@ function handleCategoryFilters(charms) {
         categories = categories.filter((cat) => cat !== category);
       }
 
+      if (!categoryFilter.checked) {
+        categories = categories.filter((cat) => cat !== category);
+      }
+
       // setQueryStringParameter("categories", categories);
 
       const filteredCharms = filterCharmsByCategories(charms, categories);
 
       hideFeatured();
 
-      renderResultsCount(filteredCharms.length, charms.length);
-      renderCharmCards(filteredCharms);
+      if (categories.length) {
+        renderResultsCount(filteredCharms.length, charms.length);
+        renderCharmCards(filteredCharms);
+      } else {
+        renderResultsCount(charms.length, charms.length);
+        renderCharmCards(charms);
+      }
 
       if (!categories.length) {
         showFeatured();
