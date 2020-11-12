@@ -122,7 +122,6 @@ function getCharmsList() {
       renderCharmCards(allResults);
 
       selectFilters(categories);
-      disableFilters(categories);
     })
     .catch((e) => console.log("error", e));
 }
@@ -201,6 +200,14 @@ function setQueryStringParameter(name, value) {
     "",
     decodeURIComponent(`${window.location.pathname}?${params}`)
   );
+}
+
+function showFeatured() {
+  const featuredContainer = document.getElementById("features-container");
+  const entityContainer = document.getElementById("entity-container");
+
+  featuredContainer.classList.remove("u-hide");
+  entityContainer.classList.add("u-hide");
 }
 
 function hideFeatured() {
@@ -289,7 +296,9 @@ function handleCategoryFilters(charms) {
       renderResultsCount(filteredCharms.length, charms.length);
       renderCharmCards(filteredCharms);
 
-      disableFilters(categories);
+      if (!categories.length) {
+        showFeatured();
+      }
 
       window.scrollTo(0, 0);
     });
@@ -322,23 +331,6 @@ function filterCharmsByCategories(charms, categoriesQuery) {
 
     if (cats.length) {
       return charm;
-    }
-  });
-}
-
-function disableFilters(categories) {
-  const categoryFilters = document.querySelectorAll(".category-filter");
-
-  categoryFilters.forEach((filter) => {
-    if (!categories.length) {
-      filter.disabled = false;
-      return;
-    }
-
-    if (categories.includes(filter.value)) {
-      filter.disabled = false;
-    } else {
-      filter.disabled = true;
     }
   });
 }
