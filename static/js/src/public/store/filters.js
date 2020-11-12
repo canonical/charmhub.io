@@ -263,7 +263,14 @@ function handleShowAllOperators(charms) {
     renderResultsCount(charms.length, charms.length);
     renderCharmCards(charms);
     toggleShowAllOperatorsButton("all");
-    window.scrollTo(0, 0);
+    const categoryFilters = document.querySelectorAll(".category-filter");
+    const platformSwitcher = document.getElementById("platform-handler");
+    categoryFilters.forEach((filter) => {
+      filter.checked = false;
+    });
+    platformSwitcher.value = "all";
+
+    // window.scrollTo(0, 0);
   });
 }
 
@@ -293,24 +300,35 @@ function handleCategoryFilters(charms) {
       //   categories = searchQuery.split(",");
       // }
 
-      if (categories.includes("all")) {
-        categories = categories.filter((cat) => cat !== "all");
-      }
+      const categoryFilters = document.querySelectorAll(".category-filter");
+      categoryFilters.forEach((categoryFilter) => {
+        if (categoryFilter.checked) {
+          categories.push(categoryFilter.value);
+        }
+      });
 
-      if (!categories.includes(category)) {
-        categories.push(category);
-      } else {
-        categories = categories.filter((cat) => cat !== category);
-      }
+      // if (categories.includes("all")) {
+      //   categories = categories.filter((cat) => cat !== "all");
+      // }
 
-      if (!categoryFilter.checked) {
-        categories = categories.filter((cat) => cat !== category);
-      }
+      // if (!categories.includes(category)) {
+      //   categories.push(category);
+      // } else {
+      //   categories = categories.filter((cat) => cat !== category);
+      // }
+
+      // if (!categoryFilter.checked) {
+      //   categories = categories.filter((cat) => cat !== category);
+      // }
 
       // setQueryStringParameter("categories", categories);
 
-      const filteredCharms = filterCharmsByCategories(charms, categories);
+      const platform = document.getElementById("platform-handler").value;
 
+      let filteredCharms = filterCharmsByCategories(charms, categories);
+      if (platform !== "all") {
+        filteredCharms = filterCharmsByPlatform(filteredCharms, platform);
+      }
       hideFeatured();
 
       if (categories.length) {
@@ -325,7 +343,7 @@ function handleCategoryFilters(charms) {
         showFeatured();
       }
 
-      window.scrollTo(0, 0);
+      // window.scrollTo(0, 0);
     });
   });
 }
