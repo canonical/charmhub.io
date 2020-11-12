@@ -47,10 +47,35 @@ CATEGORIES = [
 @store.route("/")
 @store_maintenance
 def index():
+    query = request.args.get("q", default=None, type=str)
+
     context = {
         "categories": CATEGORIES,
         "featured_charms": FEATURED_CHARMS,
     }
+
+    if query:
+        results = app.store_api.find(query=query, fields=SEARCH_FIELDS).get(
+            "results"
+        )
+
+        charms = []
+        total_charms = 0
+
+        for i, item in enumerate(results):
+            if item["type"] != "charm":
+                continue
+
+            total_charms += 1
+
+            charm = logic.add_store_front_data(
+                results[i], results[i]["default-release"]
+            )
+
+            charms.append(charm)
+
+        context["results"] = charms
+        return render_template("store-search.html", **context)
 
     return render_template("store.html", **context)
 
