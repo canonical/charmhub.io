@@ -113,5 +113,5 @@ FEATURED_CHARMS = [
         "summary": "The plugin-driven server agent for collecting & reporting metrics.",
         "publisher": "telegraf",
         "icon": "https://api.snapcraft.io/api/v1/media/download/charm_WUIj9keqJBgo29PCR0i7SKV1qXypEsOb_icon__d1ae3bdb493b3ad1bb6aeea483ff601b26cbf1915c3478bad9f5f53b79a729fd.png",
-    }
+    },
 ]
