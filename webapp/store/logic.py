@@ -479,7 +479,7 @@ def process_libraries(libraries):
             "id": lib["library-id"],
             "name": lib_name,
             "hash": lib["hash"],
-            "created_at": "2020-08-04T16:32:00.938000+00:00",  # Mocked
+            "created_at": lib["created-at"],
         }
 
         if group_name in result:
