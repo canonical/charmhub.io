@@ -1,0 +1,126 @@
+{% extends 'base_layout.html' %}
+
+{% block meta_description %}Canonical publishes Ubuntu, provides commercial services and solutions for Ubuntu, and works with hardware manufacturers, software vendors and public clouds to certify Ubuntu.{% endblock %}
+
+{% block meta_copydoc %}https://docs.google.com/document/d/1mps4SOa8_DA25fccYor3wxwV3ulQiD-uaocDHmaGmhw{% endblock meta_copydoc %}
+
+{% block content %}
+<section class="p-strip--store is-dark">
+  <div class="u-fixed-width is-wide">
+    <h1>The Open Operator Collection</h1>
+    <h2 class="p-heading--4">Universal operators for Linux, Windows and Kubernetes apps</h2>
+    <h3 class="p-heading--4"><a href="/manifesto" class="p-link--inverted">Read our manifesto</a></h3>
+  </div>
+</section>
+<div class="p-strip--accent u-no-padding--top u-no-padding--bottom">
+  <section class="p-strip--main u-fixed-width is-wide">
+    <div class="p-layout--store">
+      <div class="p-layout__main">
+        <div class="p-layout__filter-container">
+          <div class="p-layout__left">
+            <div class="p-muted-heading" id="results-count-container" data-js="filtered-items">{{ results|length }} result{% if results|length > 0 %}s{% endif %}</div>
+          </div>
+          <div class="p-layout__right">
+            <form action="/" class="p-search-box p-layout__search u-hide--medium u-hide--large" data-js="search-handler-mobile">
+              <input type="search" class="p-search-box__input" name="q" aria-label="Search Charmhub" placeholder="Search Charmhub" {% if q %}value="{{ q }}" {% endif %} required />
+              <button type="reset" class="p-search-box__reset"><i class="p-icon--close">Clear</i></button>
+              <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search">Search</i></button>
+            </form>
+          </div>
+        </div>
+        <div class="p-layout__card-container" id="features-container">
+          {% for charm in results %}
+            <div class="p-layout__card u-equal-height" id="mysql">
+              <a href="/{{ charm['name'] }}" class="p-card--button">
+                <div class="p-card__header">
+                  <div class="p-card__thumbnail-container">
+                    {% if charm.store_front.icons %}
+                    <img src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/{{ charm.store_front.icons[0] }}" alt="{{ charm.name }} icon" class="p-card__thumbnail" width="40" height="40" loading="lazy">
+                    }
+                    {% else %}
+                    <img src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_60,h_60/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" alt="icon" class="p-card__thumbnail" width="40" height="40" loading="lazy">
+                    {% endif %}
+                  </div>
+                  <h3 class="p-card__title p-heading--4 u-no-margin--bottom entity-card-title">{{ charm.name }}</h3>
+                  <p class="u-text--muted u-no-padding--top entity-card-publisher">{{ charm.result.publisher['display-name'] }}</p>
+                </div>
+
+                <div class="p-card__content">
+                  <p><small class="entity-card-summary">{{ charm.result.summary }}</small></p>
+                </div>
+
+                <div class="p-card__footer">
+                  <div class="entity-card-icons">
+                    <span class="p-tooltip" aria-describedby="default-tooltip">
+                    {% if charm.store_front.os[0]  == "kubernetes" %}
+                      <img alt="Kubernetes" src="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg" width="24" height="24">
+                      <span class="p-tooltip__message" role="tooltip">This operator drives the application on Kubernetes</span>
+                    {% elif charm.store_front.os[0] == "linux" %}
+                      <div class="entity-card-icons"><img alt="Linux" src="https://assets.ubuntu.com/v1/dc11bd39-Linux.svg" width="24" height="24"></div>
+                      <span class="p-tooltip__message" role="tooltip">This operator drives the application on Linux servers</span>
+                    {% endif %}
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="p-layout__card-container u-hide" id="entity-container">
+          <div><i class="p-icon--spinner u-animation--spin"></i> Loading&hellip;</div>
+        </div>
+
+        <div class="u-align--center" style="margin-top: 1rem;">
+          <a href="?category=all" class="p-button--positive u-hide" id="more-operators">See all operators</a>
+        </div>
+      </div>
+
+      <template id="entity-card">
+        <div class="p-layout__card u-equal-height">
+          <a href="" class="p-card--button">
+            <div class="p-card__header">
+              <div class="p-card__thumbnail-container">
+                <img src="" alt="" width="40" height="40" class="p-card__thumbnail">
+              </div>
+              <h3 class="p-card__title p-heading--4 u-no-margin--bottom entity-card-title"></h3>
+              <p class="u-text--muted u-no-padding--top entity-card-publisher"></p>
+            </div>
+
+            <div class="p-card__content">
+              <p><small class="entity-card-summary"></small></p>
+            </div>
+
+            <div class="p-card__footer">
+              <div class="entity-card-icons"></div>
+            </div>
+          </a>
+        </div>
+      </template>
+
+      <template id="no-results-message">
+        <div class="p-notification--information">
+          <p class="p-notification__response">
+            We couldn't find anything for your search<span class="search-query"></span>.
+          </p>
+        </div>
+      </template>
+
+      <style>
+        .entity-card-title {
+          text-transform: capitalize;
+        }
+
+        .entity-card-summary {
+          display: inline-block;
+        }
+
+        .entity-card-summary::first-letter {
+          text-transform: uppercase;
+        }
+      </style>
+
+
+
+  </section>
+</div>
+{% endblock %}
