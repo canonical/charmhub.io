@@ -11,7 +11,7 @@ function buildCharmCard(charm) {
   const entityCardThumbnail = clone.querySelector(".p-card__thumbnail");
   entityCardThumbnail.alt = charm.name;
 
-  if (charm.store_front.icons) {
+  if (charm.store_front.icons && charm.store_front.icons[0]) {
     entityCardThumbnail.src = charm.store_front.icons[0];
   } else {
     entityCardThumbnail.src =
