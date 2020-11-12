@@ -181,10 +181,12 @@ function handlePlatformChange(charms) {
     if (platform === "all") {
       renderResultsCount(charms.length, charms.length);
       renderCharmCards(charms);
+      enableFilters();
     } else {
       const platformCharms = filterCharmsByPlatform(charms, platform);
       renderResultsCount(platformCharms.length, charms.length);
       renderCharmCards(platformCharms);
+      disableFiltersByPlatform(platformCharms);
     }
     hideFeatured();
 
@@ -341,6 +343,38 @@ function selectFilters(categories) {
   categoryFilters.forEach((filter) => {
     if (categories.includes(filter.value)) {
       filter.checked = true;
+    }
+  });
+}
+
+function enableFilters() {
+  const categoryFilters = document.querySelectorAll(".category-filter");
+
+  categoryFilters.forEach((filter) => {
+    filter.disabled = false;
+  });
+}
+
+function disableFiltersByPlatform(charms) {
+  const categoryFilters = document.querySelectorAll(".category-filter");
+
+  const platformCategories = [];
+
+  charms.forEach((charm) => {
+    if (charm.store_front.categories) {
+      charm.store_front.categories.forEach((cat) => {
+        if (!platformCategories.includes(cat.slug)) {
+          platformCategories.push(cat.slug);
+        }
+      });
+    }
+  });
+
+  categoryFilters.forEach((filter) => {
+    if (platformCategories.includes(filter.value)) {
+      filter.disabled = false;
+    } else {
+      filter.disabled = true;
     }
   });
 }
