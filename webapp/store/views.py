@@ -11,6 +11,7 @@ from webapp.config import DETAILS_VIEW_REGEX
 from webapp.helpers import discourse_api, md_parser, increase_headers
 from webapp.store import logic
 from webapp.decorators import store_maintenance
+from webapp.feature import FEATURED_CHARMS
 
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
@@ -48,6 +49,7 @@ CATEGORIES = [
 def index():
     context = {
         "categories": CATEGORIES,
+        "featured_charms": FEATURED_CHARMS,
     }
 
     return render_template("store.html", **context)
