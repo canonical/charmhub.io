@@ -124,10 +124,9 @@ function getCharmsList() {
         allResults = platformResults;
       }
 
+      disableFiltersByPlatform(filterCharmsByPlatform(charms, platformQuery));
       renderResultsCount(allResults.length, charms.length);
       renderCharmCards(allResults);
-
-      // disableFiltersByPlatform(allResults);
 
       selectFilters(categories);
     })
@@ -376,6 +375,7 @@ function enableFilters() {
 
 function disableFiltersByPlatform(charms) {
   const categoryFilters = document.querySelectorAll(".category-filter");
+  console.log("charms", charms);
 
   const platformCategories = [];
 
