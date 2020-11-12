@@ -10,10 +10,12 @@ function buildCharmCard(charm) {
 
   const entityCardThumbnail = clone.querySelector(".p-card__thumbnail");
   entityCardThumbnail.alt = charm.name;
-  entityCardThumbnail.setAttribute('loading', "lazy")
+  entityCardThumbnail.setAttribute("loading", "lazy");
 
   if (charm.store_front.icons && charm.store_front.icons[0]) {
-    entityCardThumbnail.src = "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/" + charm.store_front.icons[0];
+    entityCardThumbnail.src =
+      "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/" +
+      charm.store_front.icons[0];
   } else {
     entityCardThumbnail.src =
       "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg";
@@ -37,33 +39,35 @@ function buildCharmCard(charm) {
     const span = document.createElement("span");
     const image = document.createElement("img");
     const tooltip = document.createElement("span");
-    span.setAttribute('class', "p-tooltip");
-    span.setAttribute('aria-describedby', 'default-tooltip')
+    span.setAttribute("class", "p-tooltip");
+    span.setAttribute("aria-describedby", "default-tooltip");
     image.width = 24;
     image.height = 24;
-    tooltip.setAttribute('class', "p-tooltip__message")
-    tooltip.setAttribute('role', "tooltip")
+    tooltip.setAttribute("class", "p-tooltip__message");
+    tooltip.setAttribute("role", "tooltip");
 
     if (os === "kubernetes") {
       image.alt = "Kubernetes";
       image.src = "https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg";
-      tooltip.innerText = "This operator drives the application on Kubernetes"
+      tooltip.innerText = "This operator drives the application on Kubernetes";
     }
 
     if (os === "windows") {
       image.alt = "Windows";
       image.src = "https://assets.ubuntu.com/v1/ff17c4fe-Windows.svg";
-      tooltip.innerText = "This operator drives the application on Windows servers"
+      tooltip.innerText =
+        "This operator drives the application on Windows servers";
     }
 
     if (os === "linux") {
       image.alt = "Linux";
       image.src = "https://assets.ubuntu.com/v1/dc11bd39-Linux.svg";
-      tooltip.innerText = "This operator drives the application on Linux servers"
+      tooltip.innerText =
+        "This operator drives the application on Linux servers";
     }
 
-    span.appendChild(image)
-    span.appendChild(tooltip)
+    span.appendChild(image);
+    span.appendChild(tooltip);
     entityCardIcons.appendChild(span);
   });
 
@@ -83,22 +87,48 @@ function getCharmsList() {
 
       const searchParams = new URLSearchParams(window.location.search);
       const platformQuery = searchParams.get("platform");
+      const categoriesQuery = searchParams.get("categories");
 
-      if (platformQuery) {
-        hideFeatured();
-      }
-
-      if (!platformQuery || platformQuery === "all") {
-        renderResultsCount(charms.length, charms.length);
-        renderCharmCards(charms);
-      } else {
-        const platformResults = filterCharmsByPlatform(charms, platformQuery);
-
-        renderResultsCount(platformResults.length, charms.length);
-        renderCharmCards(platformResults);
-      }
-
+      toggleShowAllOperatorsButton(platformQuery);
+      handleShowAllOperators(charms);
       handlePlatformChange(charms);
+      handleCategoryFilters(charms);
+
+      // if (platformQuery || categoriesQuery) {
+      //   hideFeatured();
+      // }
+
+      // let platformResults = charms;
+
+      // if (platformQuery) {
+      //   platformResults = filterCharmsByPlatform(charms, platformQuery);
+      // }
+
+      // if (platformQuery === "all") {
+      //   platformResults = charms;
+      // }
+
+      // let categories = [];
+
+      // if (categoriesQuery) {
+      //   if (categoriesQuery.includes(",")) {
+      //     categories = categoriesQuery.split(",");
+      //   } else {
+      //     categories = [categoriesQuery];
+      //   }
+      // }
+
+      // let allResults = filterCharmsByCategories(platformResults, categories);
+
+      // if (categoriesQuery === "all") {
+      //   allResults = platformResults;
+      // }
+
+      // disableFiltersByPlatform(filterCharmsByPlatform(charms, platformQuery));
+      // renderResultsCount(allResults.length, charms.length);
+      // renderCharmCards(allResults);
+
+      // selectFilters(categories);
     })
     .catch((e) => console.log("error", e));
 }
@@ -125,20 +155,17 @@ function renderResultsCount(results, charms) {
     return;
   }
 
-  const searchParams = new URLSearchParams(window.location.search);
-  const platformQuery = searchParams.get("platform");
-
   const resultsCountContainer = document.getElementById(
     "results-count-container"
   );
 
-  if (!platformQuery) {
-    resultsCountContainer.innerHTML = `${getFeatureCount()} featured of ${charms}`;
-  } else if (platformQuery == "all") {
-    resultsCountContainer.innerHTML = `Showing all ${charms}`;
-  } else {
-    resultsCountContainer.innerHTML = `${results} of ${charms}`;
-  }
+  // if (!platformQuery && !categoryQuery) {
+  //   resultsCountContainer.innerHTML = `${getFeatureCount()} featured of ${charms}`;
+  // } else if (results === charms) {
+  //   resultsCountContainer.innerHTML = `Showing all ${charms}`;
+  // } else {
+  // }
+  resultsCountContainer.innerHTML = `${results} of ${charms}`;
 }
 
 function getFeatureCount() {
@@ -152,17 +179,28 @@ function handlePlatformChange(charms) {
 
   platformSwitcher.addEventListener("change", (e) => {
     const platform = e.target.value;
-    setQueryStringParameter("platform", platform);
+    // setQueryStringParameter("platform", platform);
 
     if (platform === "all") {
       renderResultsCount(charms.length, charms.length);
       renderCharmCards(charms);
+      enableFilters();
     } else {
       const platformCharms = filterCharmsByPlatform(charms, platform);
       renderResultsCount(platformCharms.length, charms.length);
       renderCharmCards(platformCharms);
+      disableFiltersByPlatform(platformCharms);
     }
+
+    const categoryFilters = document.querySelectorAll(".category-filter");
+
+    categoryFilters.forEach((filter) => {
+      filter.checked = false;
+    });
+
     hideFeatured();
+
+    toggleShowAllOperatorsButton(platform);
   });
 }
 
@@ -174,6 +212,14 @@ function setQueryStringParameter(name, value) {
     "",
     decodeURIComponent(`${window.location.pathname}?${params}`)
   );
+}
+
+function showFeatured() {
+  const featuredContainer = document.getElementById("features-container");
+  const entityContainer = document.getElementById("entity-container");
+
+  featuredContainer.classList.remove("u-hide");
+  entityContainer.classList.add("u-hide");
 }
 
 function hideFeatured() {
@@ -203,6 +249,177 @@ function renderNoResultsMessage() {
 
   entityContainer.innerHTML = "";
   entityContainer.appendChild(clone);
+}
+
+function handleShowAllOperators(charms) {
+  const showAllOperatorsButton = document.getElementById("more-operators");
+  showAllOperatorsButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    // setQueryStringParameter("platform", "all");
+    renderResultsCount(charms.length, charms.length);
+    renderCharmCards(charms);
+    toggleShowAllOperatorsButton("all");
+    const categoryFilters = document.querySelectorAll(".category-filter");
+    const platformSwitcher = document.getElementById("platform-handler");
+    categoryFilters.forEach((filter) => {
+      filter.checked = false;
+      filter.disabled = false;
+    });
+    platformSwitcher.value = "all";
+
+    window.scrollTo(0, 0);
+  });
+}
+
+function toggleShowAllOperatorsButton(platformQuery) {
+  const allOperatorsButton = document.getElementById("more-operators");
+
+  if (platformQuery === "all") {
+    allOperatorsButton.classList.add("u-hide");
+  } else {
+    allOperatorsButton.classList.remove("u-hide");
+  }
+}
+
+function handleCategoryFilters(charms) {
+  const categoryFilters = document.querySelectorAll(".category-filter");
+
+  categoryFilters.forEach((categoryFilter) => {
+    categoryFilter.addEventListener("click", (e) => {
+      const category = e.target.value;
+
+      // const searchParams = new URLSearchParams(window.location.search);
+      // const searchQuery = searchParams.get("categories");
+
+      let categories = [];
+
+      // if (searchQuery) {
+      //   categories = searchQuery.split(",");
+      // }
+
+      const categoryFilters = document.querySelectorAll(".category-filter");
+      categoryFilters.forEach((categoryFilter) => {
+        if (categoryFilter.checked) {
+          categories.push(categoryFilter.value);
+        }
+      });
+
+      // if (categories.includes("all")) {
+      //   categories = categories.filter((cat) => cat !== "all");
+      // }
+
+      // if (!categories.includes(category)) {
+      //   categories.push(category);
+      // } else {
+      //   categories = categories.filter((cat) => cat !== category);
+      // }
+
+      // if (!categoryFilter.checked) {
+      //   categories = categories.filter((cat) => cat !== category);
+      // }
+
+      // setQueryStringParameter("categories", categories);
+
+      const platform = document.getElementById("platform-handler").value;
+
+      let filteredCharms = filterCharmsByCategories(charms, categories);
+      if (platform !== "all") {
+        filteredCharms = filterCharmsByPlatform(filteredCharms, platform);
+      }
+      hideFeatured();
+
+      if (categories.length || platform != "all") {
+        renderResultsCount(filteredCharms.length, charms.length);
+        renderCharmCards(filteredCharms);
+      } else {
+        renderResultsCount(charms.length, charms.length);
+        renderCharmCards(charms);
+      }
+
+      console.log(categories.length, platform);
+      if (!categories.length && platform == "all") {
+        console.log("show featured");
+        showFeatured();
+      }
+
+      // window.scrollTo(0, 0);
+    });
+  });
+}
+
+function filterCharmsByCategories(charms, categoriesQuery) {
+  if (!categoriesQuery || categoriesQuery === "all") {
+    return charms;
+  }
+
+  if (categoriesQuery !== typeof "string" && categoriesQuery.includes("all")) {
+    categoriesQuery = categoriesQuery.filter((cat) => cat !== "all");
+  }
+
+  if (!categoriesQuery.length) {
+    return charms;
+  }
+
+  return charms.filter((charm) => {
+    let charmCategories = [];
+
+    if (charm.store_front.categories) {
+      charmCategories = charm.store_front.categories.map((cat) => {
+        return cat.slug;
+      });
+    }
+
+    const cats = categoriesQuery.filter((cat) => {
+      if (charmCategories.includes(cat)) {
+        return cat;
+      }
+    });
+
+    if (cats.length) {
+      return charm;
+    }
+  });
+}
+
+function selectFilters(categories) {
+  const categoryFilters = document.querySelectorAll(".category-filter");
+
+  categoryFilters.forEach((filter) => {
+    if (categories.includes(filter.value)) {
+      filter.checked = true;
+    }
+  });
+}
+
+function enableFilters() {
+  const categoryFilters = document.querySelectorAll(".category-filter");
+
+  categoryFilters.forEach((filter) => {
+    filter.disabled = false;
+  });
+}
+
+function disableFiltersByPlatform(charms) {
+  const categoryFilters = document.querySelectorAll(".category-filter");
+  const platformCategories = [];
+
+  charms.forEach((charm) => {
+    if (charm.store_front.categories) {
+      charm.store_front.categories.forEach((cat) => {
+        if (!platformCategories.includes(cat.slug)) {
+          platformCategories.push(cat.slug);
+        }
+      });
+    }
+  });
+
+  categoryFilters.forEach((filter) => {
+    if (platformCategories.includes(filter.value)) {
+      filter.disabled = false;
+    } else {
+      filter.disabled = true;
+    }
+  });
 }
 
 export { getCharmsList };

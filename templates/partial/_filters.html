@@ -12,8 +12,8 @@
           </li>
           {% for category in categories %}
           {% if not category["slug"] in ["other", "featured"] %}
-          <li class="p-filter__item" data-filter-type="category" data-js="filter" data-filter-value="{{ category.slug }}" tabindex="0">
-            <input type="checkbox" id="{{ category.slug }}" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %} tabindex="-1">
+          <li class="p-filter__item" data-filter-type="category" data-js="filter" data-filter-value="{{ category.slug }}" tabindex="0" style="position: relative";>
+            <input class="category-filter" type="checkbox" id="{{ category.slug }}" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %} tabindex="-1">
             <label for="{{ category.slug }}" tabindex="-1">{{ category.name }}</label>
           </li>
           {% endif %}
@@ -83,7 +83,7 @@
   </div>
 
   <div class="u-align--center" style="margin-top: 1rem;">
-    <a href="?category=all" class="p-button--positive u-hide" id="more-operators">See all operators</a>
+    <a href="?category=all" class="p-button--positive" id="more-operators">See all operators</a>
   </div>
 </div>
 
