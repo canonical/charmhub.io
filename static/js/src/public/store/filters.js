@@ -256,6 +256,7 @@ function handleShowAllOperators(charms) {
   showAllOperatorsButton.addEventListener("click", (e) => {
     e.preventDefault();
     // setQueryStringParameter("platform", "all");
+    hideFeatured();
     renderResultsCount(charms.length, charms.length);
     renderCharmCards(charms);
     toggleShowAllOperatorsButton("all");
