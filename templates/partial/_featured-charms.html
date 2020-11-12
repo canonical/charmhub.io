@@ -3,7 +3,7 @@
   <a href="/{{ charm['name'] }}" class="p-card--button">
     <div class="p-card__header">
       <div class="p-card__thumbnail-container">
-        <img src="{{ charm['icon'] }}" alt="{{ charm['name'] }} icon" class="p-card__thumbnail" width="40" height="40">
+        <img src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/{{ charm['icon'] }}" alt="{{ charm['name'] }} icon" class="p-card__thumbnail" width="40" height="40" loading="lazy">
       </div>
       <h3 class="p-card__title p-heading--4 u-no-margin--bottom entity-card-title">{{ charm['display_name'] }}</h3>
       <p class="u-text--muted u-no-padding--top entity-card-publisher">{{ charm['publisher'] }}</p>

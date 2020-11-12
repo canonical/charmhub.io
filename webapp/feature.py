@@ -9,7 +9,7 @@ FEATURED_CHARMS = [
         "display_name": "Prometheus",
         "summary": "Prometheus for Kubernetes clusters",
         "publisher": "charmcraft",
-        "icon": "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/https://api.snapcraft.io/api/v1/media/download/charm_ZhkY5AmM2Gncryt3xMkejF4Wyn8lZMSL_icon__dba76c5b8378a96bb711093e2cf55a2dd098f938e9aff22e13403a8e28b87548.png",
+        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_ZhkY5AmM2Gncryt3xMkejF4Wyn8lZMSL_icon__dba76c5b8378a96bb711093e2cf55a2dd098f938e9aff22e13403a8e28b87548.png",
         "platform": "kubernetes",
     },
     # {
@@ -57,7 +57,7 @@ FEATURED_CHARMS = [
         "display_name": "Wordpress",
         "summary": "WordPress is a full featured web blogging tool, this charm deploys it.",
         "publisher": "charmcraft",
-        "icon": "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/https://api.snapcraft.io/api/v1/media/download/charm_gShnGJOjDv34a5pTsYaJB70YMfkfxLGh_icon__418ffcecc722f138690d719f8ea15f478a0a59a72b9c6425fea762b46c1aef4c.png",
+        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_gShnGJOjDv34a5pTsYaJB70YMfkfxLGh_icon__418ffcecc722f138690d719f8ea15f478a0a59a72b9c6425fea762b46c1aef4c.png",
         "platform": "linux",
     },
     {
@@ -73,7 +73,7 @@ FEATURED_CHARMS = [
         "display_name": "Cassandra",
         "summary": "Distributed storage system for structured data",
         "publisher": "narindergupta",
-        "icon": "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/https://api.snapcraft.io/api/v1/media/download/charm_tWJQBVwAkpEVNJQaqV01zljMjnTk3Wpl_icon__c54853d543881d105dde58c94baf1b36cb4054b836c3246a6b02bb056867a23e.png",
+        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_tWJQBVwAkpEVNJQaqV01zljMjnTk3Wpl_icon__c54853d543881d105dde58c94baf1b36cb4054b836c3246a6b02bb056867a23e.png",
         "platform": "linux",
     },
     {
