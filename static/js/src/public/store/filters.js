@@ -33,26 +33,37 @@ function buildCharmCard(charm) {
   const entityCardIcons = clone.querySelector(".entity-card-icons");
 
   charm.store_front.os.forEach((os) => {
+    const span = document.createElement("span");
     const image = document.createElement("img");
+    const tooltip = document.createElement("span");
+    span.class = "p-tooltip";
+    span.setAttribute('aria-describedby', 'default-tooltip')
     image.width = 24;
     image.height = 24;
+    tooltip.class = "p-tooltip__message";
+    tooltip.role = "tooltip";
 
     if (os === "kubernetes") {
       image.alt = "Kubernetes";
       image.src = "https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg";
+      tooltip.innerText = "This operator drives the application on Kubernetes"
     }
 
     if (os === "windows") {
       image.alt = "Windows";
       image.src = "https://assets.ubuntu.com/v1/ff17c4fe-Windows.svg";
+      tooltip.innerText = "This operator drives the application on Windows servers"
     }
 
     if (os === "linux") {
       image.alt = "Linux";
       image.src = "https://assets.ubuntu.com/v1/dc11bd39-Linux.svg";
+      tooltip.innerText = "This operator drives the application on Linux servers"
     }
 
-    entityCardIcons.appendChild(image);
+    span.appendChild(image)
+    span.appendChild(tooltip)
+    entityCardIcons.appendChild(span);
   });
 
   return clone;
