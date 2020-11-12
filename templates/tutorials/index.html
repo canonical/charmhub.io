@@ -6,26 +6,19 @@
 
 {% block meta_copydoc %}https://docs.google.com/document/d/1CfwkYsuBqDXgII02_HFMfqJNNZYkcA_XS-w5ySR09lY{% endblock meta_copydoc %}
 
-{% block extra_meta %}<meta name="robots" content="noindex, nofollow">{% endblock %}
-
 {% block content %}
-<section class="p-strip--accent is-shallow">
-  <div class="u-fixed-width">
-    <h1 class="p-heading--two u-no-margin--bottom">Tutorials</h1>
-  </div>
-</section>
-
-<section class="p-strip is-shallow" style="margin-block-end: 6rem;">
+<section class="p-strip">
   <div class="row">
     {% for item in metadata %}
     {% if loop.index <= posts_per_page * page and loop.index >= posts_per_page * page - posts_per_page + 1 %}
     <div class="col-medium-3 col-4 u-equal-height">
-      <div class="p-card">
+      <div class="p-card has-footer">
         <h2 class="p-card__title p-heading--4">{{ item.topic | safe }}</h2>
+        <hr />
         <p class="p-card__content">
           {{ item.summary | safe }}
         </p>
-        <p>Difficulty: <span class="p-tutorials-meter p-tutorials-meter--{{ item.difficulty }}">{{ item.difficulty }} out of 5</span></p>
+        <p class="p-card__footer">Difficulty: <span class="p-tutorials-meter p-tutorials-meter--{{ item.difficulty }}">{{ item.difficulty }} out of 5</span></p>
       </div>
     </div>
     {% endif %}

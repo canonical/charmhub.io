@@ -127,4 +127,15 @@
       }
     }
   }
+
+  .p-card.has-footer {
+    padding-bottom: 3rem;
+    position: relative;
+    width: 100%;
+
+    .p-card__footer {
+      bottom: 1rem;
+      position: absolute;
+    }
+  }
 }
