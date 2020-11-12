@@ -10,11 +10,24 @@
 
   .p-navigation__banner {
     background-color: $color-ubuntu-orange;
-    padding-inline-start: 1rem;
+    padding-inline-start: 0;
 
     @media screen and (min-width: 876px) {
       margin-inline-start: 0.5rem;
     }
+  }
+
+  .p-navigation__image {
+    max-height: 1.5rem;
+
+    @media screen and (min-width: $breakpoint-x-large) {
+      max-height: 1.25rem;
+      min-height: 1rem;
+    }
+  }
+
+  .p-navigation__logo {
+    margin-right: 0;
   }
 
   @media screen and (min-width: $breakpoint-navigation-threshold) {
