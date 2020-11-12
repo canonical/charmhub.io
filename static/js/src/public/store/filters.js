@@ -150,6 +150,7 @@ function handlePlatformChange(charms) {
       renderResultsCount(platformCharms.length, charms.length);
       renderCharmCards(platformCharms);
     }
+    hideFeatured();
   });
 }
 
