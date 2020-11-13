@@ -1,26 +1,24 @@
 import buildCharmCard from "./buildCharmCard";
 
-function getCharmsList() {
-  fetch("/charms.json")
-    .then((result) => result.json())
+function initCharms() {
+  getCharmsList()
     .then((data) => {
       const charms = data.charms.filter((charm) => charm.type === "charm");
 
       if (!charms) {
-        renderNoResultsMessage();
         return;
       }
 
-      const searchParams = new URLSearchParams(window.location.search);
-      const platformQuery = searchParams.get("platform");
-
-      toggleShowAllOperatorsButton(platformQuery);
-      handleShowAllOperators(charms);
+      handleShowAllCharmsButton(charms);
       handlePlatformChange(charms);
       handleCategoryFilters(charms);
       enableAllActions();
     })
-    .catch((e) => console.log("error", e));
+    .catch((e) => console.error(e));
+}
+
+function getCharmsList() {
+  return fetch("/charms.json").then((result) => result.json());
 }
 
 function filterCharmsByPlatform(charmSet, platform) {
@@ -75,13 +73,13 @@ function handlePlatformChange(charms) {
       filter.checked = false;
     });
 
-    hideFeatured();
+    hideFeaturedCharms();
 
-    toggleShowAllOperatorsButton(platform);
+    toggleShowAllCharmsButton(platform);
   });
 }
 
-function showFeatured() {
+function showFeaturedCharms() {
   const featuredContainer = document.getElementById("features-container");
   const entityContainer = document.getElementById("entity-container");
 
@@ -89,7 +87,7 @@ function showFeatured() {
   entityContainer.classList.add("u-hide");
 }
 
-function hideFeatured() {
+function hideFeaturedCharms() {
   const featuredContainer = document.getElementById("features-container");
   const entityContainer = document.getElementById("entity-container");
 
@@ -97,35 +95,14 @@ function hideFeatured() {
   entityContainer.classList.remove("u-hide");
 }
 
-function renderNoResultsMessage() {
-  if (!"content" in document.createElement("template")) {
-    return;
-  }
-
-  const entityContainer = document.getElementById("entity-container");
-  const noResultsMessage = document.getElementById("no-results-message");
-  const clone = noResultsMessage.content.cloneNode(true);
-
-  const searchParams = new URLSearchParams(window.location.search);
-  const searchQuery = searchParams.get("q");
-
-  if (searchParams) {
-    const searchQueryMessage = clone.querySelector(".search-query");
-    searchQueryMessage.innerHTML = ` "<strong>${searchQuery}</strong>"`;
-  }
-
-  entityContainer.innerHTML = "";
-  entityContainer.appendChild(clone);
-}
-
-function handleShowAllOperators(charms) {
-  const showAllOperatorsButton = document.getElementById("more-operators");
-  showAllOperatorsButton.addEventListener("click", (e) => {
+function handleShowAllCharmsButton(charms) {
+  const showAllCharmsButton = document.getElementById("show-all-charms");
+  showAllCharmsButton.addEventListener("click", (e) => {
     e.preventDefault();
-    hideFeatured();
+    hideFeaturedCharms();
     renderResultsCount(charms.length, charms.length);
     renderCharmCards(charms);
-    toggleShowAllOperatorsButton("all");
+    toggleShowAllCharmsButton("all");
     const categoryFilters = document.querySelectorAll(".category-filter");
     const platformSwitcher = document.getElementById("platform-handler");
     categoryFilters.forEach((filter) => {
@@ -138,13 +115,13 @@ function handleShowAllOperators(charms) {
   });
 }
 
-function toggleShowAllOperatorsButton(platformQuery) {
-  const allOperatorsButton = document.getElementById("more-operators");
+function toggleShowAllCharmsButton(platform) {
+  const showAllCharmsButton = document.getElementById("show-all-charms");
 
-  if (platformQuery === "all") {
-    allOperatorsButton.classList.add("u-hide");
+  if (platform === "all") {
+    showAllCharmsButton.classList.add("u-hide");
   } else {
-    allOperatorsButton.classList.remove("u-hide");
+    showAllCharmsButton.classList.remove("u-hide");
   }
 }
 
@@ -168,7 +145,7 @@ function handleCategoryFilters(charms) {
       if (platform !== "all") {
         filteredCharms = filterCharmsByPlatform(filteredCharms, platform);
       }
-      hideFeatured();
+      hideFeaturedCharms();
 
       if (categories.length || platform != "all") {
         renderResultsCount(filteredCharms.length, charms.length);
@@ -179,7 +156,7 @@ function handleCategoryFilters(charms) {
       }
 
       if (!categories.length && platform == "all") {
-        showFeatured();
+        showFeaturedCharms();
       }
     });
   });
@@ -253,7 +230,7 @@ function disableFiltersByPlatform(charms) {
 function enableAllActions() {
   const platformSwitch = document.getElementById("platform-handler");
   const categoryFilters = document.querySelectorAll(".category-filter");
-  const allOperatorsButton = document.getElementById("more-operators");
+  const allOperatorsButton = document.getElementById("show-all-charms");
 
   platformSwitch.disabled = false;
   allOperatorsButton.disabled = false;
@@ -263,4 +240,4 @@ function enableAllActions() {
   });
 }
 
-export { getCharmsList };
+export default initCharms;
