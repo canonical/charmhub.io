@@ -93,6 +93,7 @@ function getCharmsList() {
       handleShowAllOperators(charms);
       handlePlatformChange(charms);
       handleCategoryFilters(charms);
+      enableAllActions();
 
       // if (platformQuery || categoriesQuery) {
       //   hideFeatured();
@@ -420,6 +421,18 @@ function disableFiltersByPlatform(charms) {
     } else {
       filter.disabled = true;
     }
+  });
+}
+
+function enableAllActions() {
+  const platformSwitch = document.getElementById("platform-handler");
+  const categoryFilters = document.querySelectorAll(".category-filter");
+  const allOperatorsButton = document.getElementById("more-operators");
+
+  platformSwitch.disabled = false;
+  allOperatorsButton.disabled = false;
+  categoryFilters.forEach((categoryFilter) => {
+    categoryFilter.disabled = false;
   });
 }
 

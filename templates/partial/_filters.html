@@ -12,8 +12,8 @@
           </li>
           {% for category in categories %}
           {% if not category["slug"] in ["other", "featured"] %}
-          <li class="p-filter__item" data-filter-type="category" data-js="filter" data-filter-value="{{ category.slug }}" tabindex="0" style="position: relative">
-            <input class="category-filter" type="checkbox" id="{{ category.slug }}" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %} tabindex="-1">
+          <li class="p-filter__item" data-filter-type="category" data-js="filter" data-filter-value="{{ category.slug }}" tabindex="0" style="position: relative;">
+            <input class="category-filter" type="checkbox" id="{{ category.slug }}" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %} tabindex="-1" disabled>
             <label for="{{ category.slug }}" tabindex="-1">{{ category.name }}</label>
           </li>
           {% endif %}
@@ -66,7 +66,7 @@
       <form class="p-form p-form--inline">
         <div class="p-layout__sort-desktop p-form__group">
           <label for="platform" aria-label="Filter platforms" class="p-form__label">Platforms</label>
-          <select name="platform" id="platform-handler" data-js="platform-handler" class="p-form__control" value="{{ platform }}" id="platform">
+          <select name="platform" id="platform-handler" data-js="platform-handler" class="p-form__control" value="{{ platform }}" id="platform" disabled>
             <option value="all" {% if active_filter('platform', 'all') %}selected{% endif %}>All</option>
             <option value="linux" {% if active_filter('platform', 'linux') %}selected{% endif %}>Linux</option>
             <option value="kubernetes" {% if active_filter('platform', 'kubernetes') %}selected{% endif %}>Kubernetes</option>
@@ -83,7 +83,7 @@
   </div>
 
   <div class="u-align--center" style="margin-top: 1rem;">
-    <a href="?category=all" class="p-button--positive" id="more-operators">See all operators</a>
+    <button type="button" class="p-button--positive" id="more-operators" disabled>See all operators</button>
   </div>
 </div>
 
