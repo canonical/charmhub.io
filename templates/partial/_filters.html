@@ -43,13 +43,9 @@
   <div class="p-layout__filter-container">
     <div class="p-layout__left">
       <div class="p-muted-heading" id="results-count-container" data-js="filtered-items">15 Featured</div>
-      <div class="p-layout__sort-mobile">
-        <a href="/" data-js="mobile-platform-reveal-button" class="has-icon p-store__button is-always-color-link"><i class="p-icon--filter"></i>Platforms</a>
-        <a href="/" data-js="mobile-filter-reveal-button" class="has-icon p-store__button is-always-color-link"><i class="p-icon--filter"></i>Filters</a>
-      </div>
     </div>
     <div class="p-layout__right">
-      <form action="/" class="p-search-box p-layout__search u-hide--medium u-hide--large" data-js="search-handler-mobile">
+      <form action="/" class="p-search-box p-layout__search" data-js="search-handler-mobile">
         <input type="search" class="p-search-box__input" name="q" aria-label="Search Charmhub" placeholder="Search Charmhub" {% if q %}value="{{ q }}" {% endif %} required />
         <button type="reset" class="p-search-box__reset"><i class="p-icon--close">Clear</i></button>
         <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search">Search</i></button>
