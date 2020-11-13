@@ -13,7 +13,6 @@ function getCharmsList() {
 
       const searchParams = new URLSearchParams(window.location.search);
       const platformQuery = searchParams.get("platform");
-      const categoriesQuery = searchParams.get("categories");
 
       toggleShowAllOperatorsButton(platformQuery);
       handleShowAllOperators(charms);
@@ -53,12 +52,6 @@ function renderResultsCount(results, charms) {
   resultsCountContainer.innerHTML = `${results} of ${charms}`;
 }
 
-function getFeatureCount() {
-  const featuredContainer = document.getElementById("features-container");
-  const featuredCards = featuredContainer.querySelectorAll(".p-layout__card");
-  return featuredCards.length;
-}
-
 function handlePlatformChange(charms) {
   const platformSwitcher = document.getElementById("platform-handler");
 
@@ -86,16 +79,6 @@ function handlePlatformChange(charms) {
 
     toggleShowAllOperatorsButton(platform);
   });
-}
-
-function setQueryStringParameter(name, value) {
-  const params = new URLSearchParams(window.location.search);
-  params.set(name, value);
-  window.history.replaceState(
-    {},
-    "",
-    decodeURIComponent(`${window.location.pathname}?${params}`)
-  );
 }
 
 function showFeatured() {
@@ -169,8 +152,7 @@ function handleCategoryFilters(charms) {
   const categoryFilters = document.querySelectorAll(".category-filter");
 
   categoryFilters.forEach((categoryFilter) => {
-    categoryFilter.addEventListener("click", (e) => {
-      const category = e.target.value;
+    categoryFilter.addEventListener("click", () => {
       let categories = [];
 
       const categoryFilters = document.querySelectorAll(".category-filter");
@@ -196,9 +178,7 @@ function handleCategoryFilters(charms) {
         renderCharmCards(charms);
       }
 
-      console.log(categories.length, platform);
       if (!categories.length && platform == "all") {
-        console.log("show featured");
         showFeatured();
       }
     });
@@ -235,16 +215,6 @@ function filterCharmsByCategories(charms, categoriesQuery) {
 
     if (cats.length) {
       return charm;
-    }
-  });
-}
-
-function selectFilters(categories) {
-  const categoryFilters = document.querySelectorAll(".category-filter");
-
-  categoryFilters.forEach((filter) => {
-    if (categories.includes(filter.value)) {
-      filter.checked = true;
     }
   });
 }
