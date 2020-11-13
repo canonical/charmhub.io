@@ -20,42 +20,6 @@ function getCharmsList() {
       handlePlatformChange(charms);
       handleCategoryFilters(charms);
       enableAllActions();
-
-      // if (platformQuery || categoriesQuery) {
-      //   hideFeatured();
-      // }
-
-      // let platformResults = charms;
-
-      // if (platformQuery) {
-      //   platformResults = filterCharmsByPlatform(charms, platformQuery);
-      // }
-
-      // if (platformQuery === "all") {
-      //   platformResults = charms;
-      // }
-
-      // let categories = [];
-
-      // if (categoriesQuery) {
-      //   if (categoriesQuery.includes(",")) {
-      //     categories = categoriesQuery.split(",");
-      //   } else {
-      //     categories = [categoriesQuery];
-      //   }
-      // }
-
-      // let allResults = filterCharmsByCategories(platformResults, categories);
-
-      // if (categoriesQuery === "all") {
-      //   allResults = platformResults;
-      // }
-
-      // disableFiltersByPlatform(filterCharmsByPlatform(charms, platformQuery));
-      // renderResultsCount(allResults.length, charms.length);
-      // renderCharmCards(allResults);
-
-      // selectFilters(categories);
     })
     .catch((e) => console.log("error", e));
 }
@@ -86,12 +50,6 @@ function renderResultsCount(results, charms) {
     "results-count-container"
   );
 
-  // if (!platformQuery && !categoryQuery) {
-  //   resultsCountContainer.innerHTML = `${getFeatureCount()} featured of ${charms}`;
-  // } else if (results === charms) {
-  //   resultsCountContainer.innerHTML = `Showing all ${charms}`;
-  // } else {
-  // }
   resultsCountContainer.innerHTML = `${results} of ${charms}`;
 }
 
@@ -106,7 +64,6 @@ function handlePlatformChange(charms) {
 
   platformSwitcher.addEventListener("change", (e) => {
     const platform = e.target.value;
-    // setQueryStringParameter("platform", platform);
 
     if (platform === "all") {
       renderResultsCount(charms.length, charms.length);
@@ -182,7 +139,6 @@ function handleShowAllOperators(charms) {
   const showAllOperatorsButton = document.getElementById("more-operators");
   showAllOperatorsButton.addEventListener("click", (e) => {
     e.preventDefault();
-    // setQueryStringParameter("platform", "all");
     hideFeatured();
     renderResultsCount(charms.length, charms.length);
     renderCharmCards(charms);
@@ -215,15 +171,7 @@ function handleCategoryFilters(charms) {
   categoryFilters.forEach((categoryFilter) => {
     categoryFilter.addEventListener("click", (e) => {
       const category = e.target.value;
-
-      // const searchParams = new URLSearchParams(window.location.search);
-      // const searchQuery = searchParams.get("categories");
-
       let categories = [];
-
-      // if (searchQuery) {
-      //   categories = searchQuery.split(",");
-      // }
 
       const categoryFilters = document.querySelectorAll(".category-filter");
       categoryFilters.forEach((categoryFilter) => {
@@ -231,22 +179,6 @@ function handleCategoryFilters(charms) {
           categories.push(categoryFilter.value);
         }
       });
-
-      // if (categories.includes("all")) {
-      //   categories = categories.filter((cat) => cat !== "all");
-      // }
-
-      // if (!categories.includes(category)) {
-      //   categories.push(category);
-      // } else {
-      //   categories = categories.filter((cat) => cat !== category);
-      // }
-
-      // if (!categoryFilter.checked) {
-      //   categories = categories.filter((cat) => cat !== category);
-      // }
-
-      // setQueryStringParameter("categories", categories);
 
       const platform = document.getElementById("platform-handler").value;
 
@@ -269,8 +201,6 @@ function handleCategoryFilters(charms) {
         console.log("show featured");
         showFeatured();
       }
-
-      // window.scrollTo(0, 0);
     });
   });
 }
