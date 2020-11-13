@@ -258,6 +258,7 @@ function enableAllActions() {
   platformSwitch.disabled = false;
   allOperatorsButton.disabled = false;
   categoryFilters.forEach((categoryFilter) => {
+    categoryFilter.parentElement.classList.remove("is-disabled");
     categoryFilter.disabled = false;
   });
 }
