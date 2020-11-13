@@ -3,6 +3,10 @@
     display: flex;
     max-width: $grid-max-width;
 
+    @media screen and (max-width: $breakpoint-medium - 1) {
+      display: block;
+    }
+
     .p-layout__sidenav {
       @media screen and(min-width: $breakpoint-medium) {
         margin-inline-end: 2rem;
