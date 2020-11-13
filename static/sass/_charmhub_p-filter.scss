@@ -55,6 +55,10 @@
 
       padding-left: $spv-inner--small;
 
+      &.is-disabled:hover {
+        background-color: transparent;
+      }
+
       &:hover {
         cursor: pointer;
       }

@@ -12,7 +12,7 @@
           </li>
           {% for category in categories %}
           {% if not category["slug"] in ["other", "featured"] %}
-          <li class="p-filter__item" data-filter-type="category" data-js="filter" data-filter-value="{{ category.slug }}" tabindex="0" style="position: relative;">
+          <li class="p-filter__item is-disabled" data-filter-type="category" data-js="filter" data-filter-value="{{ category.slug }}" tabindex="0" style="position: relative;">
             <input class="category-filter" type="checkbox" id="{{ category.slug }}" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %} tabindex="-1" disabled>
             <label for="{{ category.slug }}" tabindex="-1">{{ category.name }}</label>
           </li>
