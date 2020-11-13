@@ -1,48 +1,39 @@
 <div class="p-layout__sidenav">
   <div class="p-filter" data-js="filter-handler">
-    <div class="p-filter__title" data-filters="applied-filters">
+    <h3 class="p-muted-heading" data-filters="applied-filters">
       Filters
-    </div>
+    </h3>
     <form>
       <div class="p-filter__scroll-box">
         {% if categories %}
-        <ul class="p-filter__list" style="margin-block-end: 1rem;">
-          <li class="p-filter__item--title">
-            Categories
-          </li>
+        <ul class="p-list">
           {% for category in categories %}
-          {% if not category["slug"] in ["other", "featured"] %}
-          <li class="p-filter__item is-disabled" data-filter-type="category" data-js="filter" data-filter-value="{{ category.slug }}" tabindex="0" style="position: relative;">
-            <input class="category-filter" type="checkbox" id="{{ category.slug }}" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %} tabindex="-1" disabled>
-            <label for="{{ category.slug }}" tabindex="-1">{{ category.name }}</label>
+          <li class="p-list__item" data-filter-type="category" data-js="filter">
+            <label class="p-checkbox">
+              <input class="category-filter" type="checkbox" id="{{ category.slug }}" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %}>
+              <span class="p-checkbox__label" id="{{ category.slug }}">{{ category.name }}</span>
+            </label>
           </li>
-          {% endif %}
           {% endfor %}
         </ul>
         {% endif %}
       </div>
-      <noscript>
-        <button type="submit" class="u-hide--small">Apply Filters</button>
-      </noscript>
-      <div class="p-filter__controls">
-        <button type="reset" class="p-button--neutral" data-js="filter-reset">Reset</button>
-        <button class="p-button--positive" data-js="filter-submit">Show results ({{ results|length }})</button>
-      </div>
     </form>
   </div>
-  <div class="p-filter u-no-padding--top">
-    <ul class="p-filter__list has-links">
-      <li class="p-filter__item--title u-sv1">
-        Useful links
+  <hr />
+  <div class="p-filter">
+    <h3 class="p-muted-heading">
+      Useful links
+    </h3>
+    <ul class="p-list">
+      <li class="p-list__item">
+        <a href="/about">What is an operator?</a>
       </li>
-      <li class="p-filter__item">
-        <a href="/about" class="u-sv1">What is an operator?</a>
+      <li class="p-list__item">
+        <a href="/publishing">How do I publish here?</a>
       </li>
-      <li class="p-filter__item">
-        <a href="/publishing" class="u-sv1">How do I publish here?</a>
-      </li>
-      <li class="p-filter__item">
-        <a href="/glossary" class="u-sv1">Glossary</a>
+      <li class="p-list__item">
+        <a href="/glossary">Glossary</a>
       </li>
     </ul>
   </div>
