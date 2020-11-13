@@ -1,78 +1,4 @@
-function buildCharmCard(charm) {
-  const entityCard = document.getElementById("entity-card");
-  const clone = entityCard.content.cloneNode(true);
-
-  const entityCardContainer = clone.querySelector(".p-layout__card");
-  entityCardContainer.id = charm.name;
-
-  const entityCardButton = clone.querySelector(".p-card--button");
-  entityCardButton.href = `/${charm.name}`;
-
-  const entityCardThumbnail = clone.querySelector(".p-card__thumbnail");
-  entityCardThumbnail.alt = charm.name;
-  entityCardThumbnail.setAttribute("loading", "lazy");
-
-  if (charm.store_front.icons && charm.store_front.icons[0]) {
-    entityCardThumbnail.src =
-      "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/" +
-      charm.store_front.icons[0];
-  } else {
-    entityCardThumbnail.src =
-      "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg";
-  }
-
-  const entityCardTitle = clone.querySelector(".entity-card-title");
-  entityCardTitle.innerText = charm.name.replace(/-/g, " ");
-
-  const entityCardPublisher = clone.querySelector(".entity-card-publisher");
-  entityCardPublisher.innerText = charm.result.publisher["display-name"];
-
-  const entityCardSummary = clone.querySelector(".entity-card-summary");
-
-  if (charm.result.summary) {
-    entityCardSummary.innerText = charm.result.summary.substring(0, 90);
-  }
-
-  const entityCardIcons = clone.querySelector(".entity-card-icons");
-
-  charm.store_front.os.forEach((os) => {
-    const span = document.createElement("span");
-    const image = document.createElement("img");
-    const tooltip = document.createElement("span");
-    span.setAttribute("class", "p-tooltip");
-    span.setAttribute("aria-describedby", "default-tooltip");
-    image.width = 24;
-    image.height = 24;
-    tooltip.setAttribute("class", "p-tooltip__message");
-    tooltip.setAttribute("role", "tooltip");
-
-    if (os === "kubernetes") {
-      image.alt = "Kubernetes";
-      image.src = "https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg";
-      tooltip.innerText = "This operator drives the application on Kubernetes";
-    }
-
-    if (os === "windows") {
-      image.alt = "Windows";
-      image.src = "https://assets.ubuntu.com/v1/ff17c4fe-Windows.svg";
-      tooltip.innerText =
-        "This operator drives the application on Windows servers";
-    }
-
-    if (os === "linux") {
-      image.alt = "Linux";
-      image.src = "https://assets.ubuntu.com/v1/dc11bd39-Linux.svg";
-      tooltip.innerText =
-        "This operator drives the application on Linux servers";
-    }
-
-    span.appendChild(image);
-    span.appendChild(tooltip);
-    entityCardIcons.appendChild(span);
-  });
-
-  return clone;
-}
+import buildCharmCard from "./buildCharmCard";
 
 function getCharmsList() {
   fetch("/charms.json")
@@ -87,49 +13,12 @@ function getCharmsList() {
 
       const searchParams = new URLSearchParams(window.location.search);
       const platformQuery = searchParams.get("platform");
-      const categoriesQuery = searchParams.get("categories");
 
       toggleShowAllOperatorsButton(platformQuery);
       handleShowAllOperators(charms);
       handlePlatformChange(charms);
       handleCategoryFilters(charms);
       enableAllActions();
-
-      // if (platformQuery || categoriesQuery) {
-      //   hideFeatured();
-      // }
-
-      // let platformResults = charms;
-
-      // if (platformQuery) {
-      //   platformResults = filterCharmsByPlatform(charms, platformQuery);
-      // }
-
-      // if (platformQuery === "all") {
-      //   platformResults = charms;
-      // }
-
-      // let categories = [];
-
-      // if (categoriesQuery) {
-      //   if (categoriesQuery.includes(",")) {
-      //     categories = categoriesQuery.split(",");
-      //   } else {
-      //     categories = [categoriesQuery];
-      //   }
-      // }
-
-      // let allResults = filterCharmsByCategories(platformResults, categories);
-
-      // if (categoriesQuery === "all") {
-      //   allResults = platformResults;
-      // }
-
-      // disableFiltersByPlatform(filterCharmsByPlatform(charms, platformQuery));
-      // renderResultsCount(allResults.length, charms.length);
-      // renderCharmCards(allResults);
-
-      // selectFilters(categories);
     })
     .catch((e) => console.log("error", e));
 }
@@ -160,19 +49,7 @@ function renderResultsCount(results, charms) {
     "results-count-container"
   );
 
-  // if (!platformQuery && !categoryQuery) {
-  //   resultsCountContainer.innerHTML = `${getFeatureCount()} featured of ${charms}`;
-  // } else if (results === charms) {
-  //   resultsCountContainer.innerHTML = `Showing all ${charms}`;
-  // } else {
-  // }
   resultsCountContainer.innerHTML = `${results} of ${charms}`;
-}
-
-function getFeatureCount() {
-  const featuredContainer = document.getElementById("features-container");
-  const featuredCards = featuredContainer.querySelectorAll(".p-layout__card");
-  return featuredCards.length;
 }
 
 function handlePlatformChange(charms) {
@@ -180,7 +57,6 @@ function handlePlatformChange(charms) {
 
   platformSwitcher.addEventListener("change", (e) => {
     const platform = e.target.value;
-    // setQueryStringParameter("platform", platform);
 
     if (platform === "all") {
       renderResultsCount(charms.length, charms.length);
@@ -203,16 +79,6 @@ function handlePlatformChange(charms) {
 
     toggleShowAllOperatorsButton(platform);
   });
-}
-
-function setQueryStringParameter(name, value) {
-  const params = new URLSearchParams(window.location.search);
-  params.set(name, value);
-  window.history.replaceState(
-    {},
-    "",
-    decodeURIComponent(`${window.location.pathname}?${params}`)
-  );
 }
 
 function showFeatured() {
@@ -256,7 +122,6 @@ function handleShowAllOperators(charms) {
   const showAllOperatorsButton = document.getElementById("more-operators");
   showAllOperatorsButton.addEventListener("click", (e) => {
     e.preventDefault();
-    // setQueryStringParameter("platform", "all");
     hideFeatured();
     renderResultsCount(charms.length, charms.length);
     renderCharmCards(charms);
@@ -287,17 +152,8 @@ function handleCategoryFilters(charms) {
   const categoryFilters = document.querySelectorAll(".category-filter");
 
   categoryFilters.forEach((categoryFilter) => {
-    categoryFilter.addEventListener("click", (e) => {
-      const category = e.target.value;
-
-      // const searchParams = new URLSearchParams(window.location.search);
-      // const searchQuery = searchParams.get("categories");
-
+    categoryFilter.addEventListener("click", () => {
       let categories = [];
-
-      // if (searchQuery) {
-      //   categories = searchQuery.split(",");
-      // }
 
       const categoryFilters = document.querySelectorAll(".category-filter");
       categoryFilters.forEach((categoryFilter) => {
@@ -305,22 +161,6 @@ function handleCategoryFilters(charms) {
           categories.push(categoryFilter.value);
         }
       });
-
-      // if (categories.includes("all")) {
-      //   categories = categories.filter((cat) => cat !== "all");
-      // }
-
-      // if (!categories.includes(category)) {
-      //   categories.push(category);
-      // } else {
-      //   categories = categories.filter((cat) => cat !== category);
-      // }
-
-      // if (!categoryFilter.checked) {
-      //   categories = categories.filter((cat) => cat !== category);
-      // }
-
-      // setQueryStringParameter("categories", categories);
 
       const platform = document.getElementById("platform-handler").value;
 
@@ -338,13 +178,9 @@ function handleCategoryFilters(charms) {
         renderCharmCards(charms);
       }
 
-      console.log(categories.length, platform);
       if (!categories.length && platform == "all") {
-        console.log("show featured");
         showFeatured();
       }
-
-      // window.scrollTo(0, 0);
     });
   });
 }
@@ -379,16 +215,6 @@ function filterCharmsByCategories(charms, categoriesQuery) {
 
     if (cats.length) {
       return charm;
-    }
-  });
-}
-
-function selectFilters(categories) {
-  const categoryFilters = document.querySelectorAll(".category-filter");
-
-  categoryFilters.forEach((filter) => {
-    if (categories.includes(filter.value)) {
-      filter.checked = true;
     }
   });
 }
