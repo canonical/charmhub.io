@@ -57,26 +57,11 @@
                 </div>
               </a>
             </div>
-          {% endfor %}
-        </div>
-        <div class="p-layout__card-container u-hide" id="entity-container">
-          <div><i class="p-icon--spinner u-animation--spin"></i> Loading&hellip;</div>
-        </div>
-
-        <div class="u-align--center" style="margin-top: 1rem;">
-          <a href="?category=all" class="p-button--positive u-hide" id="show-all-charms">See all operators</a>
-        </div>
-      </div>
-
-      <template id="entity-card">
-        <div class="p-layout__card u-equal-height">
-          <a href="" class="p-card--button">
-            <div class="p-card__header">
-              <div class="p-card__thumbnail-container">
-                <img src="" alt="" width="40" height="40" class="p-card__thumbnail">
-              </div>
-              <h3 class="p-card__title p-heading--4 u-no-margin--bottom entity-card-title"></h3>
-              <p class="u-text--muted u-no-padding--top entity-card-publisher"></p>
+          {% else %}
+            <div class="p-notification--information" style="margin-top: 1.5rem;">
+              <p class="p-notification__response">
+                We couldn't find anything for your search <strong class="search-query">{{ request.args.get('q')|safe }}</strong>.
+              </p>
             </div>
             <div class="row">
               <div class="u-align--center" style="margin-top: 1rem;">
