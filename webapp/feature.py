@@ -39,7 +39,7 @@ FEATURED_CHARMS = [
     {
         "name": "mattermost",
         "display_name": "Mattermost",
-        "summary": "Mattermost charm",
+        "summary": "This operator charm deploys Mattermost, using a custom-built image, configurable to use with a postgresql backend.",
         "publisher": "mmost",
         "icon": "https://api.snapcraft.io/api/v1/media/download/charm_sssO0EqGsQ1X4cjdpWT3eVZGsqraBj0c_icon__da58ad7ec5670e4564fc5218fba8db7bf0d9b05432247196b07b4900a71bea27.png",
         "platform": "kubernetes",
