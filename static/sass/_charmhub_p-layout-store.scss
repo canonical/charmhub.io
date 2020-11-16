@@ -1,7 +1,9 @@
 @mixin p-charmhub-layout-store {
   .p-layout--store {
-    display: flex;
-    max-width: $grid-max-width;
+    @media screen and(min-width: $breakpoint-small) {
+      display: flex;
+      max-width: $grid-max-width;
+    }
 
     @media screen and (max-width: $breakpoint-medium - 1) {
       display: block;
