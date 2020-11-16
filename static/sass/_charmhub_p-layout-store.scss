@@ -1,7 +1,13 @@
 @mixin p-charmhub-layout-store {
   .p-layout--store {
-    display: flex;
-    max-width: $grid-max-width;
+    @media screen and(min-width: $breakpoint-small) {
+      display: flex;
+      max-width: $grid-max-width;
+    }
+
+    @media screen and (max-width: $breakpoint-medium - 1) {
+      display: block;
+    }
 
     .p-layout__sidenav {
       @media screen and(min-width: $breakpoint-medium) {
@@ -27,6 +33,11 @@
         display: flex;
         justify-content: flex-end;
         width: 75%;
+
+        @media screen and (max-width: $breakpoint-medium - 1) {
+          display: block;
+          width: 100%;
+        }
       }
 
       .p-layout__search {
@@ -44,15 +55,10 @@
         .p-form__control {
           min-width: 9rem;
           width: 9rem;
-        }
-      }
 
-      .p-layout__sort-mobile {
-        display: none;
-
-        .p-store__button {
-          color: $color-link;
-          margin-inline-start: 1rem;
+          @media screen and (max-width: $breakpoint-medium - 1) {
+            width: 100%;
+          }
         }
       }
 
@@ -73,12 +79,8 @@
           margin-inline-end: 0;
         }
 
-        .p-layout__sort-mobile {
-          display: block;
-        }
-
         .p-layout__sort-desktop {
-          display: none;
+          display: block;
         }
       }
 
