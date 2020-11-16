@@ -55,9 +55,9 @@ def index():
     }
 
     if query:
-        results = app.store_api.find(query=query, fields=SEARCH_FIELDS).get(
-            "results"
-        )
+        results = app.store_api.find(
+            query=query.lower(), fields=SEARCH_FIELDS
+        ).get("results")
 
         charms = []
         total_charms = 0
