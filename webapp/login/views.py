@@ -30,7 +30,7 @@ def logout():
     return flask.redirect("/")
 
 
-@login.route("/publisher/login/")
+@login.route("/login/")
 def publisher_login():
     # Get a bakery v2 macaroon from the publisher API to be discharged
     # and save it in the session
