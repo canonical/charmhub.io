@@ -267,7 +267,7 @@ def details_libraries(entity_name):
     package = get_package(entity_name, channel_request)
 
     libraries = logic.process_libraries(
-        publisher_api.get_charm_libraries("my-super-charm")
+        publisher_api.get_charm_libraries(entity_name)
     )
 
     return render_template(
@@ -299,7 +299,7 @@ def details_library(entity_name, library_name):
         lib_name = library_name
 
     libraries = logic.process_libraries(
-        publisher_api.get_charm_libraries("my-super-charm")
+        publisher_api.get_charm_libraries(entity_name)
     )
 
     library = next(
