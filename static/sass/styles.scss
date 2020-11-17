@@ -49,6 +49,7 @@ $theme-default-nav: dark;
 @include vf-p-table-mobile-card;
 @include vf-p-tabs;
 @include vf-p-tooltips;
+@include vf-p-contextual-menu;
 
 // Vanilla utilities
 @include vf-u-align;
@@ -160,6 +161,10 @@ $theme-default-nav: dark;
 @import "charmhub_metrics";
 
 @include charmhub-metrics;
+
+@import "charmhub_p-contextual-menu";
+
+@include p-charmhub-contextual-menu;
 
 @import "pattern_form-multiselect";
 
