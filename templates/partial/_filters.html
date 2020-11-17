@@ -11,8 +11,8 @@
           {% if category.slug != "featured" and category.slug != "other" %}
           <li class="p-list__item" data-filter-type="category" data-js="filter">
             <label class="p-checkbox">
-              <input class="category-filter" type="checkbox" id="{{ category.slug }}" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %} disabled>
-              <span class="p-checkbox__label" id="{{ category.slug }}">{{ category.name }}</span>
+              <input class="p-checkbox__input category-filter" aria-labelledby="{{ category.slug }}-filter" type="checkbox" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %} disabled>
+              <span class="p-checkbox__label" id="{{ category.slug }}-filter">{{ category.name }}</span>
             </label>
           </li>
           {% endif %}
