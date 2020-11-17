@@ -81,7 +81,7 @@ FEATURED_CHARMS = [
         "display_name": "Jenkins Agent ",
         "summary": "jenkins-agent operator charm",
         "publisher": "thebutler",
-        "icon": "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg",
+        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_6NmjnZdeCSfHart3dYxjiaYc3RXb9CR4_icon__ad7306147e1bb35df0f370bddb0004ad7f25d5477b2ea3aa911a1eec807a2761.png",
         "platform": "kubernetes",
     },
     {
