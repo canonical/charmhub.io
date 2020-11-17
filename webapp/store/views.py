@@ -310,7 +310,7 @@ def details_library(entity_name, library_name):
     if not library:
         abort(404)
 
-    library = publisher_api.get_charm_library("my-super-charm", library["id"])
+    library = publisher_api.get_charm_library(entity_name, library["id"])
     docstrings = logic.process_python_docs(library, module_name=library_name)
 
     return render_template(
