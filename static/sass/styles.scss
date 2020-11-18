@@ -69,10 +69,6 @@ $theme-default-nav: dark;
 
 @include p-charmhub-card;
 
-@import "pattern_p-link";
-
-@include p-charmhub-link;
-
 @import "pattern_grid";
 
 @include p-charmhub-grid;
