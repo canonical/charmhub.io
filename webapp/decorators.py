@@ -17,9 +17,7 @@ def login_required(func):
     @functools.wraps(func)
     def is_user_logged_in(*args, **kwargs):
         if not authentication.is_authenticated(flask.session):
-            return flask.redirect(
-                "/publisher/login?next=" + flask.request.path
-            )
+            return flask.redirect("/login?next=" + flask.request.path)
 
         return func(*args, **kwargs)
 
