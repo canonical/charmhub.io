@@ -24,6 +24,7 @@ $theme-default-nav: dark;
 @include vf-p-card;
 @include vf-p-forms;
 @include vf-p-form-help-text;
+@include vf-p-form-tick-elements;
 @include vf-p-grid;
 @include vf-p-grid-modifications;
 @include vf-p-headings;
@@ -348,4 +349,10 @@ h3 {
   position: absolute;
   top: -50%;
   width: 40px;
+}
+
+// XXX Ant 17.11.2020 - This can be removed once this issue is closed
+// https://github.com/canonical-web-and-design/vanilla-framework/issues/3411
+.p-checkbox {
+  position: relative;
 }
