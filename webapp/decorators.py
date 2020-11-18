@@ -39,3 +39,23 @@ def store_maintenance(func):
         return func(*args, **kwargs)
 
     return is_store_in_maintenance
+
+
+def redirect_uppercase_to_lowercase(func):
+    """
+    Decorator that redirect package names containing upper case
+    to the lower case URL
+
+    The route must have the entity_name parameter
+    """
+
+    @functools.wraps(func)
+    def is_uppercase(*args, **kwargs):
+        name = kwargs["entity_name"]
+
+        if any(char.isupper() for char in name):
+            return flask.redirect(flask.request.url.lower())
+
+        return func(*args, **kwargs)
+
+    return is_uppercase

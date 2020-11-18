@@ -1,17 +1,20 @@
 import re
-import talisker
-from flask import Blueprint
-from flask import current_app as app
-from flask import render_template, request, abort
 
+import talisker
 from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
+from flask import Blueprint, abort
+from flask import current_app as app
+from flask import render_template, request
 
 from webapp.config import DETAILS_VIEW_REGEX
-from webapp.helpers import discourse_api, md_parser, increase_headers
-from webapp.store import logic
-from webapp.decorators import store_maintenance
+from webapp.decorators import (
+    store_maintenance,
+    redirect_uppercase_to_lowercase,
+)
 from webapp.feature import FEATURED_CHARMS
+from webapp.helpers import discourse_api, increase_headers, md_parser
+from webapp.store import logic
 
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
@@ -159,6 +162,7 @@ def get_package(entity_name, channel_request):
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
 @store_maintenance
+@redirect_uppercase_to_lowercase
 def details_overview(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
@@ -185,6 +189,7 @@ def details_overview(entity_name):
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs')
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs/<slug>')
 @store_maintenance
+@redirect_uppercase_to_lowercase
 def details_docs(entity_name, slug=None):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
@@ -236,6 +241,7 @@ def details_docs(entity_name, slug=None):
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configure')
 @store_maintenance
+@redirect_uppercase_to_lowercase
 def details_configuration(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
@@ -249,6 +255,7 @@ def details_configuration(entity_name):
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/actions')
 @store_maintenance
+@redirect_uppercase_to_lowercase
 def details_actions(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
@@ -262,6 +269,7 @@ def details_actions(entity_name):
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/libraries')
 @store_maintenance
+@redirect_uppercase_to_lowercase
 def details_libraries(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
@@ -285,6 +293,7 @@ def details_libraries(entity_name):
     + '"):entity_name>/libraries/<string:library_name>'
 )
 @store_maintenance
+@redirect_uppercase_to_lowercase
 def details_library(entity_name, library_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
@@ -326,6 +335,7 @@ def details_library(entity_name, library_name):
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/history')
 @store_maintenance
+@redirect_uppercase_to_lowercase
 def details_history(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
@@ -339,6 +349,7 @@ def details_history(entity_name):
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/integrate')
 @store_maintenance
+@redirect_uppercase_to_lowercase
 def details_integrate(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request)
