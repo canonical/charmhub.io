@@ -1,6 +1,6 @@
 {% extends 'publisher/publisher_layout.html' %}
 
-{% block title %}Listing details for {{ package_name }}{% endblock %}
+{% block title %}Listing details for {{ package.name }}{% endblock %}
 <!-- To DO - add copy and description -->
 {% block meta_copydoc %}{% endblock meta_copydoc %}
 {% block meta_description %}{% endblock %}
@@ -13,7 +13,7 @@
     <div class="row" style="padding-block-start: 1rem;">
       <div class="col-7">
         <p>
-          Updates to this information will appear immediately on the <a href="/{{ package_name }}">{{ package.type }} listing page</a>.
+          Updates to this information will appear immediately on the <a href="/{{ package.name }}">{{ package.type }} listing page</a>.
         </p>
       </div>
       <div class="col-5">
@@ -88,7 +88,7 @@
             <div class="u-flex u-vertically-center">
               <div class="p-editable-icon">
                 <div class="p-editable-icon__icon" tabindex="0">
-                  <img class="p-editable-icon__image" src="https://dashboard.snapcraft.io/site_media/appmedia/2020/04/products-hero-ubuntu.svg.png" alt="{{ package_name }} {{ package.type }}">
+                  <img class="p-editable-icon__image" src="https://dashboard.snapcraft.io/site_media/appmedia/2020/04/products-hero-ubuntu.svg.png" alt="{{ package.name }} {{ package.type }}">
                   <span class="p-editable-icon__change">Edit</span>
                   <input type="file" name="icon" id="{{ package.type }}-icon" accept="image/png,image/jpeg,image/svg+xml" hidden="">
                 </div>
@@ -118,7 +118,7 @@
       </div>
       <div class="col-8">
         <div class="p-form__control">
-          <input class="p-form-validation__input" id="{{ package.type }}-title" type="text" name="title" value="{{ package_name }}" required="" maxlength="40">
+          <input class="p-form-validation__input" id="{{ package.type }}-title" type="text" name="title" value="{{ package.title or package.name }}" required="" maxlength="40">
         </div>
       </div>
     </div>
@@ -182,7 +182,7 @@
       </div>
       <div class="col-8">
         <div class="p-form__control">
-          <input class="p-form-validation__input" type="text" id="summary" name="summary" required="" maxlength="128">
+          <input class="p-form-validation__input" type="text" id="summary" name="summary" required="" maxlength="128" value="{{ package.summary or ''}}">
         </div>
       </div>
     </div>
@@ -225,7 +225,7 @@
       </div>
       <div class="col-8">
         <div class="p-form__control">
-          <textarea class="p-form-validation__input" id="description" name="description" rows="10" required=""></textarea>
+          <textarea class="p-form-validation__input" id="description" name="description" rows="10" required="">{{ package.description }}</textarea>
         </div>
       </div>
     </div>
@@ -405,7 +405,7 @@
       </div>
       <div class="col-8">
         <div class="p-form__control">
-          <input class="p-form-validation__input" id="project-homepage" type="url" name="project-homepage" value="" maxlength="256" placeholder="https://charmhub.io">
+          <input class="p-form-validation__input" id="project-homepage" type="url" name="project-homepage" value="{{ package.website or '' }}" maxlength="256" placeholder="https://charmhub.io">
         </div>
       </div>
     </div>
@@ -438,7 +438,7 @@
       </div>
       <div class="col-8">
         <div class="p-form__control">
-          <input id="contact" class="p-form-validation__input" type="url" name="contact" value="" maxlength="256" placeholder="mailto:example@example.com">
+          <input id="contact" class="p-form-validation__input" type="text" name="contact" value="{{ package.contact or '' }}" maxlength="256" placeholder="mailto:example@example.com">
         </div>
       </div>
     </div>
