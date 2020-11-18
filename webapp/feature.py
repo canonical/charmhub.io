@@ -37,6 +37,14 @@ FEATURED_CHARMS = [
         "platform": "kubernetes",
     },
     {
+        "name": "graylog-k8s",
+        "display_name": "Graylog K8s",
+        "summary": "Kubernetes charm for Graylog.",
+        "publisher": "lmaas",
+        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_Cx3p6f5pSUhYCDBDo2vmpA3hxdPIiEof_icon__1796f2cd44163a28257fb1deb9302ea62792c87c4687f6853a58d5c706f0207d.png",
+        "platform": "kubernetes",
+    },
+    {
         "name": "mattermost",
         "display_name": "Mattermost",
         "summary": "This operator charm deploys Mattermost, using a custom-built image, configurable to use with a postgresql backend.",
