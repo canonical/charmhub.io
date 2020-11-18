@@ -11,13 +11,6 @@ env:
   - name: SENTRY_DSN
     value: https://6cacb25de947478faeb57f3836da1cf3@sentry.is.canonical.com//24
 
-  # We have to use the staging APIs temporarily
-  - name: CHARMSTORE_PUBLISHER_API_URL
-    value: https://api.staging.charmhub.io/
-
-  - name: CANDID_API_URL
-    value: https://api.staging.jujucharms.com/identity/
-
   - name: SEARCH_API_KEY
     secretKeyRef:
       key: google-custom-search-key
