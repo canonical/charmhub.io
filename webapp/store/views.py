@@ -5,7 +5,7 @@ from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
 from flask import Blueprint, abort
 from flask import current_app as app
-from flask import render_template, request
+from flask import render_template, request, Response
 
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import (
@@ -312,7 +312,11 @@ def details_library(entity_name, library_name):
     )
 
     library = next(
-        (lib for lib in libraries[group_name] if lib["name"] == lib_name),
+        (
+            lib
+            for lib in libraries.get(group_name, {})
+            if lib.get("name") == lib_name
+        ),
         None,
     )
 
@@ -330,6 +334,51 @@ def details_library(entity_name, library_name):
         library=library,
         docstrings=docstrings,
         channel_requested=channel_request,
+    )
+
+
+@store.route(
+    '/<regex("'
+    + DETAILS_VIEW_REGEX
+    + '"):entity_name>/libraries/<string:library_name>/download'
+)
+@store_maintenance
+@redirect_uppercase_to_lowercase
+def download_library(entity_name, library_name):
+    lib_parts = library_name.split(".")
+
+    if len(lib_parts) > 2:
+        group_name = ".".join(lib_parts[:-2])
+        lib_name = "." + ".".join(lib_parts[-2:])
+    else:
+        group_name = "others"
+        lib_name = library_name
+
+    libraries = logic.process_libraries(
+        publisher_api.get_charm_libraries(entity_name)
+    )
+
+    library = next(
+        (
+            lib
+            for lib in libraries.get(group_name, {})
+            if lib.get("name") == lib_name
+        ),
+        None,
+    )
+
+    if not library:
+        abort(404)
+
+    library = publisher_api.get_charm_library(entity_name, library["id"])
+
+    return Response(
+        library["content"],
+        mimetype="text/x-python",
+        headers={
+            "Content-disposition": "attachment; "
+            f"filename={library['library-name']}.py"
+        },
     )
 
 
