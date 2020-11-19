@@ -126,6 +126,7 @@ FIELDS = [
     "result.summary",
     "channel-map",
     "channel-map.revision.readme-md",
+    "channel-map.revision.actions-yaml",
 ]
 
 # TODO This is a temporary fix for release
