@@ -2,7 +2,7 @@ import talisker.requests
 from canonicalwebteam.flask_base.app import FlaskBase
 from canonicalwebteam.store_api.stores.charmstore import CharmStore
 from dateutil import parser
-from flask import render_template, make_response
+from flask import render_template, make_response, request
 
 from webapp import config
 from webapp.docs.views import init_docs
@@ -86,6 +86,18 @@ def thank_you():
 
 @app.route("/sitemap.xml")
 def site_map():
+    xml_sitemap = render_template(
+        "sitemap/sitemap.xml",
+        base_url=f"{request.scheme}://{request.host}",
+    )
+    response = make_response(xml_sitemap)
+    response.headers["Content-Type"] = "application/xml"
+
+    return response
+
+
+@app.route("/sitemap-links.xml")
+def site_map_links():
     links = [
         "/overview",
         "/about",
@@ -96,6 +108,19 @@ def site_map():
         "/contact-us",
     ]
 
+    xml_sitemap = render_template(
+        "sitemap/sitemap-links.xml",
+        base_url=f"{request.scheme}://{request.host}",
+        links=links,
+    )
+    response = make_response(xml_sitemap)
+    response.headers["Content-Type"] = "application/xml"
+
+    return response
+
+
+@app.route("/sitemap-operators.xml")
+def site_map_operators():
     charms = app.store_api.find(
         fields=["default-release.channel.released-at"]
     ).get("results", [])
@@ -108,9 +133,8 @@ def site_map():
         )
 
     xml_sitemap = render_template(
-        "sitemap.xml",
-        base_url="https://charmhub.io",
-        links=links,
+        "sitemap/sitemap-operators.xml",
+        base_url=f"{request.scheme}://{request.host}",
         charms=charms,
     )
     response = make_response(xml_sitemap)

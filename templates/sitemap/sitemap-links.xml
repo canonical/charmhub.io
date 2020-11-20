@@ -12,12 +12,4 @@
     <priority>0.7</priority>
   </url>
   {% endfor %}
-  {% for charm in charms %}
-  <url>
-    <loc>{{ base_url }}/{{ charm["name"] }}</loc>
-    <lastmod>{{ charm["date"] }}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  {% endfor %}
 </urlset>
