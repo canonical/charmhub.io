@@ -23,7 +23,7 @@
             <span class="p-tooltip__message" role="tooltip" id="preview-tooltip">Previews will only work in the same browser, locally</span>
           </button>
           <a class="p-button--neutral is-disabled" href="javascript:void(0);" style="margin-inline-end: 1rem;">Revert</a>
-          <button type="submit" class="p-button--positive" name="submit_apply" value="Save" disabled="">
+          <button type="submit" class="p-button--positive" name="submit_apply" value="Save">
             Save
           </button>
         </div>
@@ -36,6 +36,20 @@
   </div>
 
   <section class="p-strip is-shallow">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="u-fixed-width">
+      {% for category, message in messages %}
+      <div id="market-form-status" class="p-notification--{{ category }}">
+        <p class="p-notification__response">
+          {{ message }}
+        </p>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
     <div class="u-fixed-width">
       <h2 class="p-heading--4">
         Listing details
@@ -401,11 +415,11 @@
 
     <div class="row p-form__group p-form-validation ">
       <div class="col-2">
-        <label for="project-homepage" class="p-form__label">Project homepage:</label>
+        <label for="website" class="p-form__label">Project homepage:</label>
       </div>
       <div class="col-8">
         <div class="p-form__control">
-          <input class="p-form-validation__input" id="project-homepage" type="url" name="project-homepage" value="{{ package.website or '' }}" maxlength="256" placeholder="https://charmhub.io">
+          <input class="p-form-validation__input" id="website" type="url" name="website" value="{{ package.website or '' }}" maxlength="256" placeholder="https://charmhub.io">
         </div>
       </div>
     </div>
@@ -476,6 +490,7 @@
     </div>
   </section>
   <input type="hidden" name="changes" value="">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 </form>
 {% endblock %}
 

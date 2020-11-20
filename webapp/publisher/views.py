@@ -1,11 +1,17 @@
 import talisker
-from flask import Blueprint, render_template, session
-
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
-
-from webapp.helpers import get_licenses
+from flask import (
+    Blueprint,
+    flash,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+)
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import login_required
+from webapp.helpers import get_licenses
 
 publisher = Blueprint(
     "publisher",
@@ -63,6 +69,31 @@ def listing(entity_name):
         "licenses": licenses,
     }
     return render_template("publisher/listing.html", **context)
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/listing',
+    methods=["POST"],
+)
+@login_required
+def post_listing(entity_name):
+    # These are the available fields to update in API
+    data = {
+        "contact": request.form["contact"],
+        "description": request.form["description"],
+        "summary": request.form["summary"],
+        "title": request.form["title"],
+        "website": request.form["website"],
+    }
+
+    result = publisher_api.update_package_metadata(
+        session["publisher-auth"], "charm", entity_name, data
+    )
+
+    if result:
+        flash("Changes applied successfully.", "positive")
+
+    return redirect(url_for(".listing", entity_name=entity_name))
 
 
 @publisher.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/settings')

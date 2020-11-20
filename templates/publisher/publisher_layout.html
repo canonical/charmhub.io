@@ -5,32 +5,32 @@
   <div class="u-fixed-width">
     <a href="/charms">&lsaquo;&nbsp;My charms & bundles</a>
     <h1 class="p-heading--3">
-      {{package_name}}
+      {{package.name}}
     </h1>
     <nav class="p-tabs">
       <ul class="p-tabs__list u-no-margin--bottom" role="tablist">
         <li class="p-tabs__item" role="presentation">
-          <a href="/{{package_name}}/listing" class="p-tabs__link" tabindex="0" role="tab" {% if selected_tab == "listing" %}aria-selected="true"{% endif %}>
+          <a href="/{{package.name}}/listing" class="p-tabs__link" tabindex="0" role="tab" {% if selected_tab == "listing" %}aria-selected="true"{% endif %}>
             Listing
           </a>
         </li>
         <li class="p-tabs__item" role="presentation">
-          <a href="/{{package_name}}/releases" class="p-tabs__link" tabindex="0" role="tab" {% if selected_tab == "releases" %}aria-selected="true"{% endif %}>
+          <a href="/{{package.name}}/releases" class="p-tabs__link" tabindex="0" role="tab" {% if selected_tab == "releases" %}aria-selected="true"{% endif %}>
             Releases
           </a>
         </li>
         <li class="p-tabs__item" role="presentation">
-          <a href="/{{package_name}}/metrics" class="p-tabs__link" tabindex="0" role="tab" {% if selected_tab == "metrics" %}aria-selected="true"{% endif %}>
+          <a href="/{{package.name}}/metrics" class="p-tabs__link" tabindex="0" role="tab" {% if selected_tab == "metrics" %}aria-selected="true"{% endif %}>
             Metrics
           </a>
         </li>
         <li class="p-tabs__item" role="presentation">
-          <a href="/{{package_name}}/publicise" class="p-tabs__link" tabindex="0" role="tab" {% if selected_tab == "publicise" %}aria-selected="true"{% endif %}>
+          <a href="/{{package.name}}/publicise" class="p-tabs__link" tabindex="0" role="tab" {% if selected_tab == "publicise" %}aria-selected="true"{% endif %}>
             Publicise
           </a>
         </li>
         <li class="p-tabs__item" role="presentation">
-          <a href="/{{package_name}}/settings" class="p-tabs__link" tabindex="0" role="tab" {% if selected_tab == "settings" %}aria-selected="true"{% endif %}>
+          <a href="/{{package.name}}/settings" class="p-tabs__link" tabindex="0" role="tab" {% if selected_tab == "settings" %}aria-selected="true"{% endif %}>
             Settings
           </a>
         </li>
