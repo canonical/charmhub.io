@@ -93,10 +93,4 @@
       text-decoration: underline;
     }
   }
-
-  @media (min-width: $breakpoint-large) {
-    .integration-modal {
-      overflow: hidden;
-    }
-  }
 }

@@ -5,7 +5,7 @@ import "swiper/swiper-bundle.css";
 
 function buildChart(data) {
   // set dimensions
-  const chartWidth = window.innerWidth * 0.8;
+  const chartWidth = window.innerWidth > 1024 ? 960 : window.innerWidth * 0.8;
   const chartHeight = 280;
   const iconWidth = 70;
   const iconHeight = 70;
