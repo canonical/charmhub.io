@@ -1,6 +1,8 @@
 {% extends 'publisher/publisher_layout.html' %}
 
-{% block title %}Settings for {{ package_name }}{% endblock %}
+{% block title %}Settings for {{ package.name }}{% endblock %}
+{% block meta_copydoc %}{% endblock meta_copydoc %}
+{% block meta_description %}{% endblock %}
 
 {% set selected_tab='settings' %}
 
