@@ -99,9 +99,12 @@ def post_listing(entity_name):
 @publisher.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/settings')
 @login_required
 def settings(entity_name):
+    package = publisher_api.get_package_metadata(
+        session["publisher-auth"], "charm", entity_name
+    )
+
     context = {
-        "package_name": entity_name,
-        "package_type": "charm",
+        "package": package,
     }
 
     return render_template("publisher/settings.html", **context)
