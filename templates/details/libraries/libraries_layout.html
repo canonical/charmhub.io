@@ -81,7 +81,24 @@ than the latest.</span>
           <li class="p-inline-list__item">
             <ul class="p-inline-list has-vertical-separator">
               <li class="p-inline-list__item">
-                <a href="#" class="is-always-color-link"><i class="p-icon--download">Download</i> <span>Download</span></a>
+                <span class="p-contextual-menu--left">
+                  <button class="p-button--base p-contextual-menu__toggle" aria-controls="menu-3" aria-expanded="false" aria-haspopup="true">
+                    <i class="p-icon--download"></i> Download
+                  </button>
+                  <span class="p-contextual-menu__dropdown--wide" id="menu-3" aria-hidden="true">
+                    <span class="p-contextual-menu__group">
+                      <div class="p-contextual-menu__body">
+                        <p class="u-no-padding--top"><i class="p-icon--code"></i> Fetch library</p>
+                        <pre class="u-no-margin--bottom">charmcraft fetch-libs {{docstrings["name"]}}</pre>
+                      </div>
+                    </span>
+                    <span class="p-contextual-menu__group">
+                      <a class="p-contextual-menu__link--deep" href="/{{ library['charm-name'] }}/libraries/{{ docstrings['name'] }}/download" download>
+                        <i class="p-icon--download"></i> Download {{ docstrings['name'] }}.py
+                      </a>
+                    </span>
+                  </span>
+                </span>
               </li>
               <li class="p-inline-list__item">
                 <i class="p-icon--update">Last updated</i> 26 June 2019
@@ -101,4 +118,68 @@ than the latest.</span>
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block page_scripts %}
+  <script>
+    function toggleMenu(element, show, top) {
+      var target = document.getElementById(element.getAttribute('aria-controls'));
+
+      if (target) {
+        element.setAttribute('aria-expanded', show);
+        target.setAttribute('aria-hidden', !show);
+
+        if (typeof top !== 'undefined') {
+          target.style.top = top + 'px';
+        }
+      }
+    }
+
+    function setupContextualMenu(menuToggle) {
+      menuToggle.addEventListener('click', function (event) {
+        event.preventDefault();
+        var menuAlreadyOpen = menuToggle.getAttribute('aria-expanded') === 'true';
+
+        var top = menuToggle.offsetHeight;
+
+        if (window.getComputedStyle(menuToggle).display === 'inline') {
+          top += 5;
+        }
+
+        toggleMenu(menuToggle, !menuAlreadyOpen, top);
+      });
+    }
+
+    function setupAllContextualMenus(contextualMenuToggleSelector) {
+      var toggles = document.querySelectorAll(contextualMenuToggleSelector);
+
+      for (var i = 0, l = toggles.length; i < l; i++) {
+        setupContextualMenu(toggles[i]);
+      }
+
+      document.addEventListener('click', function (event) {
+        for (var i = 0, l = toggles.length; i < l; i++) {
+          var toggle = toggles[i];
+          var contextualMenu = document.getElementById(toggle.getAttribute('aria-controls'));
+          var clickOutside = !(toggle.contains(event.target) || contextualMenu.contains(event.target));
+
+          if (clickOutside) {
+            toggleMenu(toggle, false);
+          }
+        }
+      });
+
+      document.addEventListener('keydown', function (e) {
+        e = e || window.event;
+
+        if (e.keyCode === 27) {
+          for (var i = 0, l = toggles.length; i < l; i++) {
+            toggleMenu(toggles[i], false);
+          }
+        }
+      });
+    }
+
+    setupAllContextualMenus('.p-contextual-menu__toggle');
+  </script>
 {% endblock%}
