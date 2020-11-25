@@ -22,6 +22,8 @@
      },
      {% if package.store_front.categories %}
        "applicationCategory": "{{ package.store_front.categories[0].name }}",
+     {% else %}
+       "applicationCategory": "other",
      {% endif %}
      "operatingSystem": "{{ package["channel_selected"]["channel"]["platform"]["os"] }}",
      "softwareVersion": "{{ package["channel_selected"]["channel"]["name"] }}"
