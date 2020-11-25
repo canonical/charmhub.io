@@ -2,23 +2,16 @@
 
 {% set package_type = "bundle"%}
 
-<!-- To DO - add copy -->
 {% block meta_description %}{% endblock meta_description %}
 {% block meta_copydoc %}{% endblock meta_copydoc %}
 
 {% block content %}
 <section class="p-strip u-extra-space is-shallow">
-  <div class="u-fixed-width">
+  <div class="u-fixed-width is-wide">
     {% include "partial/_tabs-publisher-packages.html" %}
   </div>
   <div class="p-details-tab__content" id="bundles">
-    <div class="u-fixed-width">
-      <ul class="p-inline-list u-no-margin--bottom">
-        <li class="p-inline-list__item">
-          <h2 class="p-heading--4" style="display: inline-block;">My published bundles</h2>
-        </li>
-      </ul>
-    </div>
+    {% include "partial/_header-publisher-packages.html" %}
   </div>
 </section>
 {% endblock %}

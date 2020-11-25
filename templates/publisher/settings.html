@@ -36,12 +36,6 @@
           </label>
         </div>
         <div class="p-form__control">
-          <input type="radio" name="private" id="is-unlisted" {% if not private and unlisted %}checked="checked" {% endif %} value="unlisted">
-          <label for="is-unlisted">Unlisted
-            <span class="p-form-help-text">Does not appear in search results. Anyone can deploy using the charm name.</span>
-          </label>
-        </div>
-        <div class="p-form__control">
           <input type="radio" name="private" id="is-private" {% if private %}checked="checked" {% endif %} value="private">
           <label for="is-private">Private
             <span class="p-form-help-text">Hidden in the Charmhub. Only accessible by the publisher and collaborators.</span>

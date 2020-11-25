@@ -2,7 +2,6 @@
   @include charmhub-market;
   @include charmhub-market-screenshots;
   @include charmhub-form;
-  @include charmhub-p-dispute-list;
 }
 
 @mixin charmhub-form {
@@ -388,20 +387,6 @@
       max-width: 100%;
       pointer-events: none;
       user-select: none;
-    }
-  }
-}
-
-@mixin charmhub-p-dispute-list {
-  .p-charmhub-dispute-list__item {
-    .p-charmhub-dispute-list__link {
-      display: none;
-    }
-
-    &:hover {
-      .p-charmhub-dispute-list__link {
-        display: block;
-      }
     }
   }
 }
