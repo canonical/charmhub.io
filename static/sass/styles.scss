@@ -64,6 +64,7 @@ $theme-default-nav: dark;
 @include vf-u-vertically-center;
 @include vf-u-vertical-spacing;
 @include vf-u-text-muted;
+@include vf-u-no-max-width;
 
 // Import site specific patterns and overrides
 @import "pattern_p-card";

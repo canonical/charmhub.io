@@ -2,18 +2,17 @@
 
 {% set package_type = "charm"%}
 
-<!-- To DO - add copy -->
 {% block meta_description %}{% endblock meta_description %}
 {% block meta_copydoc %}{% endblock meta_copydoc %}
 
 {% block content %}
 <section class="p-strip u-extra-space is-shallow">
-  <div class="u-fixed-width">
+  <div class="u-fixed-width is-wide">
     {% include "partial/_tabs-publisher-packages.html" %}
   </div>
   <div class="p-details-tab__content">
     {% include "partial/_header-publisher-packages.html" %}
-    <div class="u-fixed-width">
+    <div class="u-fixed-width is-wide">
       <table class="p-table--mobile-card" role="grid">
         <thead>
           <tr role="row">
@@ -36,9 +35,9 @@
             </td>
             <td role="gridcell" aria-label="visibility">
               {% if published_charm.private %}
-                Private
+              Private
               {% else %}
-                Public
+              Public
               {% endif %}
             </td>
           </tr>
@@ -46,22 +45,41 @@
         </tbody>
       </table>
     </div>
+    {% set registered=[{"name": "My name is DD", "visibility": "Public"}]%}
     {% if registered %}
     <div class="p-strip is-shallow">
-      <div class="u-fixed-width">
-        <h4 class="p-heading--5">Registered charm names ({{ registered|length }})</h4>
+      <div class="u-fixed-width is-wide u-flex" style="align-items: center;">
+        <h4 class="p-heading--2">Registered charm names</h4>
+        <div class="p-tooltip--information instruction-tooltip">
+          <div class="p-tooltip__button" role="button" aria-controls="icon-tooltip-modal" tabindex="0">
+            Show information
+          </div>
+          <div class="p-tooltip__modal" aria-controls="icon-tooltip-modal" id="icon-tooltip-modal">
+            <div class="p-tooltip__dialog" role="dialog" aria-labelledby="modal-content" style="position: relative; top: -0.8rem; width: 14.5rem;">
+              <span id="modal-content" class="u-no-margin--bottom u-no-padding--top">
+                <a href="/tutorials/publish-on-charmhub">Learn how to publish your operator in Charmhub.</a>
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="row">
+      <div class="row is-wide">
         <div class="col-6">
-          <table>
+          <table aria-label="Registered charm names">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Visibility</th>
+              </tr>
+            </thead>
             <tbody>
               {% for registered_charm in registered %}
-              <tr class="p-charmhub-dispute-list__item">
+              <tr>
                 <td style="width: 50%;">
-                  {{ registered_charm['name'] }}
+                  <a href="/{{ registered_charm['name'] }}/listing">{{ registered_charm['name'] }}</a>
                 </td>
                 <td>
-                  <a href="/docs/releasing-your-app" target="_blank" class="p-charmhub-dispute-list__link u-float-right">Publish to this name</a>
+                  {{ registered_charm['visibility'] }}
                 </td>
               </tr>
               {% endfor %}

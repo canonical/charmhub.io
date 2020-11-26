@@ -108,3 +108,37 @@ def settings(entity_name):
     }
 
     return render_template("publisher/settings.html", **context)
+
+
+@publisher.route("/register-name")
+@login_required
+def register_name():
+
+    return render_template("publisher/register-name.html")
+
+
+@publisher.route("/register-name-dispute")
+@login_required
+def register_name_dispute():
+    entity_name = request.args.get("entity-name", type=str)
+
+    if not entity_name:
+        return redirect(url_for(".register_name", entity_name=entity_name))
+
+    return render_template(
+        "publisher/register-name-dispute/index.html", entity_name=entity_name
+    )
+
+
+@publisher.route("/register-name-dispute/thank-you")
+@login_required
+def register_name_dispute_thank_you():
+    entity_name = request.args.get("entity-name", type=str)
+
+    if not entity_name:
+        return redirect(url_for(".register_name", entity_name=entity_name))
+
+    return render_template(
+        "publisher/register-name-dispute/thank-you.html",
+        entity_name=entity_name,
+    )
