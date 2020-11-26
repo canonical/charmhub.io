@@ -1,4 +1,32 @@
 @mixin p-charmhub-media-object {
+  .p-media-object.has-separator {
+    margin-block-end: 4.75rem;
+
+    @media screen and (max-width: $breakpoint-medium) {
+      margin-block-end: 2.5rem;
+    }
+
+    .p-media-object__image {
+      height: 40px;
+      margin-inline-end: 1rem;
+      width: 40px;
+    }
+
+    .p-media-object__details {
+      border-left: 1px solid $color-mid-light;
+      display: flex;
+      max-width: 10rem;
+      padding-inline-start: 1rem;
+
+      .p-button--base {
+        font-size: 21px;
+        padding-inline-end: 0;
+        padding-inline-start: 0;
+        text-align: left;
+      }
+    }
+  }
+
   .p-media-object--medium {
     .p-bundle-icons {
       $icon-size: 3.75rem;
