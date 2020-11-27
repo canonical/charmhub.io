@@ -7,6 +7,12 @@
     }
   }
 
+  .p-image--platform {
+    @media screen and (max-width: $breakpoint-medium) {
+      transform: scale(0.75) translateX(-16.5%);
+    }
+  }
+
   .p-image--full-width {
     width: 100%;
   }

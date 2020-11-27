@@ -221,8 +221,13 @@ $theme-default-nav: dark;
 }
 
 .p-channel-map {
+  margin-inline-end: 1rem;
   position: absolute;
   z-index: 11;
+
+  @media screen and (max-width: $breakpoint-medium - 1) {
+    margin-block-start: -3rem;
+  }
 
   .p-channel-map__mask {
     bottom: 0;
