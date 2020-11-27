@@ -89,7 +89,7 @@
     </div>
   </div>
 
-  <div class="p-modal" id="modal" style="display: none;">
+  <div class="p-modal p-modal--integration" id="modal" style="display: none;">
     <div class="p-modal__dialog integration-modal" role="dialog" aria-labelledby="modal-title">
       <header class="p-modal__header">
         <h3 class="p-modal__title" id="modal-title">Integration types</h3>
@@ -100,7 +100,7 @@
         {% include 'details/_small-integration-chart.html' %}
       </div>
 
-      <div class="u-hide--small u-hide--medium">
+      <div class="u-hide--small u-hide--medium p-modal_integration-wrapper">
         {% include 'details/_desktop-integration-chart.html' %}
       </div>
 

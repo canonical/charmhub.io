@@ -5,4 +5,21 @@
       min-width: 875px;
     }
   }
+
+  .p-modal--integration {
+    .p-modal__header::after {
+      background-color: transparent;
+    }
+
+    .p-modal__dialog {
+      @media screen and (min-width: $breakpoint-large) {
+        padding-inline-end: 1rem;
+        padding-inline-start: 2rem;
+      }
+    }
+
+    .p-modal_integration-wrapper {
+      padding: 0 4.5rem 0 2.5rem;
+    }
+  }
 }
