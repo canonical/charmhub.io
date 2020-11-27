@@ -9,6 +9,26 @@
 
 @mixin p-suru-light {
   [class*="p-strip"].has-suru {
+    background-color: $color-light;
+    background-image:
+      linear-gradient(
+        to bottom left,
+        rgba(205, 205, 205, 0.2) 0%,
+        rgba(205, 205, 205, 0.2) 49.9%,
+        rgba(247, 247, 247, 0) 50%,
+        rgba(247, 247, 247, 0) 100%
+      ),
+      linear-gradient(
+        to bottom right,
+        rgba(247, 247, 247, 0) 0%,
+        rgba(247, 247, 247, 0) 49.9%,
+        rgba(229, 229, 229, 0.5) 50%,
+        rgba(229, 229, 229, 0.5) 100%
+      );
+    background-position: top right, bottom right;
+    background-repeat: no-repeat;
+    background-size: 75% 100%, 50% 50%;
+
     @media screen and (min-width: $breakpoint-medium) {
       background-color: $color-light;
       background-image:
@@ -27,7 +47,6 @@
           rgba(229, 229, 229, 0.5) 100%
         );
       background-position: top right, top right;
-      background-repeat: no-repeat;
       background-size: 25% 100%, 125% 250%;
     }
   }

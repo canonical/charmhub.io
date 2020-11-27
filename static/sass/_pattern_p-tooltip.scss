@@ -27,8 +27,6 @@
       width: $icon-size;
 
       @media screen and (max-width: $breakpoint-medium - 1px) {
-        border: 1px solid $color-mid-dark;
-        border-radius: $border-radius;
         cursor: pointer;
         line-height: map-get($line-heights, default-text);
         margin: 0 0 $spv-nudge-compensation $spv-inner--x-small;
