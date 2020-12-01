@@ -5,7 +5,7 @@ import "swiper/swiper-bundle.css";
 
 function buildChart(data) {
   // set dimensions
-  const chartWidth = window.innerWidth > 1024 ? 960 : window.innerWidth * 0.8;
+  const chartWidth = window.innerWidth > 1175 ? 960 : window.innerWidth * 0.8;
   const chartHeight = 280;
   const iconWidth = 70;
   const iconHeight = 70;
@@ -251,6 +251,37 @@ function buildChart(data) {
       return `translate(0, ${40 * i})`;
     });
 
+  // packages name text
+  const packageNameContainer = bounds.append("g");
+  // left package name
+  packageNameContainer
+    .append("text")
+    .attr("style", "font-weight: 400;")
+    .attr("x", iconContainerRadius)
+    .attr("y", chartHeight / 2 - iconContainerRadius - 16)
+    .attr("text-anchor", "middle")
+    .text(
+      data.packageOne.name.length > 13
+        ? `${data.packageOne.name.slice(0, 12)}...`
+        : data.packageOne.name
+    );
+
+  // right package name
+  packageNameContainer
+    .append("a")
+    .attr("xlink:href", "https://charmhub.io")
+    .attr("style", "font-weight: 400;")
+    .attr("fill", "#06C")
+    .append("text")
+    .attr("x", chartWidth - iconContainerRadius)
+    .attr("y", chartHeight / 2 - iconContainerRadius - 16)
+    .attr("text-anchor", "middle")
+    .text(
+      data.packageTwo.name.length > 13
+        ? `${data.packageTwo.name.slice(0, 12)}...`
+        : data.packageTwo.name
+    );
+
   // connecting lines text
   data.groups.forEach((group, i) => {
     const textGroup = bounds.append("g").attr("transform", () => {
@@ -286,6 +317,18 @@ function buildChart(data) {
       .text(data.groups[i][0])
       .attr("transform", `translate(0, ${40 * i})`);
 
+    if (i === data.groups.length - 1) {
+      textGroup
+        .append("text")
+        .attr("x", iconContainerRadius * 2.5)
+        .attr("y", chartHeight / 2 + 4)
+        .attr("font-family", "'Ubuntu', sans-serif")
+        .attr("font-size", "14px")
+        .attr("fill", "#666")
+        .text("Endpoint")
+        .attr("transform", `translate(0, ${40 * i + 30})`);
+    }
+
     // middle text
     textGroup
       .append("text")
@@ -311,6 +354,19 @@ function buildChart(data) {
       .text(data.groups[i][1])
       .attr("transform", `translate(0, ${40 * i})`);
 
+    if (i === data.groups.length - 1) {
+      textGroup
+        .append("text")
+        .attr("x", chartWidth / 2)
+        .attr("y", chartHeight / 2 + 4)
+        .attr("font-family", "'Ubuntu', sans-serif")
+        .attr("font-size", "14px")
+        .attr("fill", "#666")
+        .attr("text-anchor", "middle")
+        .text("Interface")
+        .attr("transform", `translate(0, ${40 * i + 30})`);
+    }
+
     // right text
     textGroup
       .append("text")
@@ -335,6 +391,19 @@ function buildChart(data) {
       .attr("text-anchor", "end")
       .text(data.groups[i][2])
       .attr("transform", `translate(0, ${40 * i})`);
+
+    if (i === data.groups.length - 1) {
+      textGroup
+        .append("text")
+        .attr("x", chartWidth - iconContainerRadius * 2.5)
+        .attr("y", chartHeight / 2 + 4)
+        .attr("font-family", "'Ubuntu', sans-serif")
+        .attr("font-size", "14px")
+        .attr("fill", "#666")
+        .attr("text-anchor", "end")
+        .text("Endpoint")
+        .attr("transform", `translate(0, ${40 * i + 30})`);
+    }
   });
 }
 
