@@ -45,16 +45,16 @@
                   </dl>
                 </dl>
                 {% if action_data.required %}
-                  <tr>
-                    <td class="u-align--right u-text--muted" style="width: 25%;">Required</td>
-                    <td>
-                      <p class="u-no-padding--top u-no-margin--bottom">
-                        {% for item in action_data.required %}
-                          {{ item }}{% if not loop.last %},{% endif %}
-                        {% endfor %}
-                      </p>
-                    </td>
-                  </tr>
+                <dl>
+                  <dt>Required</dt>
+                  <dl>
+                    <p style="margin-left: 1rem;">
+                      {% for item in action_data.required %}
+                      {{ item }}{% if not loop.last %},{% endif %}
+                      {% endfor %}
+                    </p>
+                  </dl>
+                </dl>
                 {% endif %}
               {% endif %}
             </li>
