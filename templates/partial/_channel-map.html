@@ -42,7 +42,7 @@
           <div class="p-form__control">
             <select data-js="channel-map-filter" value="any">
               <option value="any">Any</option>
-              {% for version in package.store_front.ubuntu_versions %}
+              {% for version in package.store_front.platforms %}
               <option value="{{ version }}">{{ version }}</option>
               {% endfor %}
             </select>
@@ -67,8 +67,10 @@
             <td>{{ channel_data[0].version }}</td>
             <td>
               <div class="series-tags u-no-margin--top">
-                {% for data in channel_data %}
-                <span class="series-tag">{{ data.platform }}</span>
+                {% set platforms = [] %}
+                {% for data in channel_data if data.platform not in platforms %}
+                  <span class="series-tag">{{ data.platform }}</span>
+                  {{ platforms.append(data.platform) or '' }}
                 {% endfor %}
               </div>
             </td>

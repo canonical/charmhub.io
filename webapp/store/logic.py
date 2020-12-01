@@ -197,6 +197,7 @@ def convert_channel_maps(channel_map):
             "platform": convert_series_to_ubuntu_versions(
                 channel["channel"]["platform"]["series"]
             ),
+            "architecture": channel["channel"]["platform"]["architecture"],
             "resources": resources,
             "revision": channel["revision"],
         }
@@ -274,7 +275,7 @@ def extract_all_resources(channel_map):
     return resources
 
 
-def extract_all_series(channel_map):
+def extract_series(channel):
     """
     Extract ubuntu series from channel map
 
@@ -284,10 +285,9 @@ def extract_all_series(channel_map):
     """
     series = []
 
-    for channel in channel_map:
-        channel_series = channel["channel"]["platform"]["series"]
-        if channel_series not in series:
-            series.append(channel_series)
+    channel_series = channel["channel"]["platform"]["series"]
+    if channel_series not in series:
+        series.append(channel_series)
 
     return series
 
@@ -419,16 +419,14 @@ def add_store_front_data(package, channel, details=False):
         extra["resources"] = extract_all_resources(package["channel-map"])
 
         # Extract all supported series
-        extra["series"] = extract_all_series(package["channel-map"])
+        extra["series"] = extract_series(channel)
 
         # Some needed fields
         extra["publisher_name"] = package["result"]["publisher"][
             "display-name"
         ]
         extra["summary"] = package["result"]["summary"]
-        extra["ubuntu_versions"] = convert_series_to_ubuntu_versions(
-            extra["series"]
-        )
+        extra["platforms"] = convert_series_to_ubuntu_versions(extra["series"])
 
         # Get charm docs
         extra["docs_topic"] = get_docs_topic_id(extra["metadata"])
