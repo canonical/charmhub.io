@@ -9,16 +9,6 @@
       <div class="col-3 has-space--right">
         <div class="p-side-navigation">
           <ul class="p-side-navigation__list">
-            <li class="p-side-navigation__item">
-              <a href="#one" class="p-side-navigation__link" role="tab" aria-controls="one">
-                some
-              </a>
-            </li>
-            <li class="p-side-navigation__item">
-              <a href="#one" class="p-side-navigation__link" role="tab" aria-controls="one">
-                some
-              </a>
-            </li>
             {% for action in package.store_front.actions %}
               <li class="p-side-navigation__item">
                 <a href="#{{ action }}" class="p-side-navigation__link" role="tab" aria-controls="{{ action }}" {% if loop.index == 1 %}aria-current="page"{% endif %}>
