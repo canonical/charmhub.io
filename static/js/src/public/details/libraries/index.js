@@ -8,7 +8,7 @@ const init = (tabSelector, tabContentSelector) => {
     new TabSwitch(tabButtonsList, tabContentList);
   } else {
     throw new Error(
-      `There are no elements containing or ${
+      `There are no elements containing ${
         tabButtonsList ? tabContentSelector : tabSelector
       } selector.`
     );

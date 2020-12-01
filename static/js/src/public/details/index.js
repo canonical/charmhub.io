@@ -1,12 +1,40 @@
 import { HistoryState } from "./historyState";
 import { TableOfContents } from "./tableOfContents";
 import { channelMap } from "./channelMap";
+import { truncateString } from "../../libs/truncate-string";
 
 if (window.location.hash) {
   setTimeout(() => {
     window.scrollTo(0, 0);
   }, 1);
 }
+
+const truncateSummary = (selector) => {
+  const summaryEl = document.querySelector(selector);
+
+  if (summaryEl) {
+    const showMoreEl = summaryEl.querySelector("[data-js='summary-read-more']");
+    const summaryContentEl = summaryEl.querySelector(
+      "[data-js='summary-content']"
+    );
+    const summary = summaryEl.getAttribute("data-summary");
+
+    if (summary.length > 103) {
+      const truncatedSummary = truncateString(summary, 103);
+      summaryContentEl.innerHTML = truncatedSummary;
+
+      showMoreEl.classList.remove("u-hide");
+
+      showMoreEl.addEventListener("click", (e) => {
+        e.preventDefault();
+        showMoreEl.classList.add("u-hide");
+        summaryContentEl.innerHTML = summary;
+      });
+    }
+  } else {
+    throw new Error(`There are no elements containing ${selector} selector.`);
+  }
+};
 
 const init = (packageName) => {
   const historyState = new HistoryState();
@@ -59,6 +87,8 @@ const init = (packageName) => {
   if (channelMapButton) {
     channelMap(packageName, channelMapButton);
   }
+
+  truncateSummary("[data-js='summary']");
 };
 
 export { init };

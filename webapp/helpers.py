@@ -175,7 +175,7 @@ def get_licenses():
     return licenses
 
 
-def increase_headers(html_content, step=2):
+def decrease_headers(html_content, step=2):
     soup = BeautifulSoup(html_content, features="html.parser")
 
     # Change all the headers (if step=2: eg h1 => h3)

@@ -13,7 +13,7 @@ from webapp.decorators import (
     redirect_uppercase_to_lowercase,
 )
 from webapp.feature import FEATURED_CHARMS
-from webapp.helpers import discourse_api, increase_headers, md_parser
+from webapp.helpers import discourse_api, decrease_headers, md_parser
 from webapp.store import logic
 
 store = Blueprint(
@@ -124,6 +124,7 @@ FIELDS = [
     "result.categories",
     "result.publisher.display-name",
     "result.summary",
+    "result.description",
     "channel-map",
     "channel-map.revision.readme-md",
     "channel-map.revision.actions-yaml",
@@ -176,7 +177,7 @@ def details_overview(entity_name):
     readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
 
     readme = md_parser(readme)
-    readme = increase_headers(readme)
+    readme = decrease_headers(readme)
 
     return render_template(
         "details/overview.html",
