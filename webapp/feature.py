@@ -16,7 +16,7 @@ FEATURED_CHARMS = [
         "name": "postgresql-k8s",
         "display_name": "PostgreSQL",
         "summary": "PostgreSQL charm for Kubernetes deployments.",
-        "publisher": "team-ion",
+        "publisher": "postgresql-charmers",
         "icon": "https://api.snapcraft.io/api/v1/media/download/charm_zDdv4KnGGAGTYSKyvZtmBleis8tLcKii_icon__58a751522b5f0849e40c39418ea99526f731997ae7720636a5881adce75742d7.png",
         "platform": "kubernetes",
     },
