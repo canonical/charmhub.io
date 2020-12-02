@@ -33,11 +33,19 @@
     max-width: $grid-max-width !important;
   }
 
-  .u-position--sticky {
+  .u-position-sticky--bottom {
     background-color: $color-x-light;
-    position: sticky;
-    top: 0;
+    position: inherit;
     z-index: 10;
+
+    &.is-sticky {
+      @media screen and (min-width: $breakpoint-x-small) {
+        bottom: 0;
+        box-shadow: 0 0 16px 1px rgba(51, 51, 51, 0.2);
+        position: fixed;
+        width: 100%;
+      }
+    }
   }
 
   .u-extra-space {

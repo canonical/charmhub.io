@@ -7,10 +7,30 @@
       column-gap: $spv-inner--large;
       display: grid;
       grid-template-columns: 1fr 1fr;
+      padding-block-end: $spv-inner--small;
+      padding-block-start: $spv-inner--small;
+      position: relative;
+
+      &:not(:last-child)::after {
+        border-bottom: 1px solid $color-mid-light;
+        bottom: 0;
+        content: "";
+        height: 1px;
+        left: 0;
+        position: absolute;
+        right: 0;
+      }
+
+      &:first-child {
+        padding-block-start: 0;
+      }
+
+      &:last-child {
+        margin-block-end: $spv-outer--medium;
+      }
 
       .p-list__key {
         color: $color-mid-dark;
-        text-align: right;
       }
     }
   }
