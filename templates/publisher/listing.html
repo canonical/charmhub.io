@@ -8,36 +8,10 @@
 
 {% block publisher_content %}
 <form id="market-form" class="p-form p-form--stacked p-strip u-no-padding--top" method="POST" enctype="multipart/form-data">
-  <div class="u-position--sticky">
-    <div class="row" style="padding-block-start: 1rem;">
-      <div class="col-7">
-        <p>
-          Updates to this information will appear immediately on the <a href="/{{ package.name }}">{{ package.type }} listing page</a>.
-        </p>
-      </div>
-      <div class="col-5">
-        <div class="u-align--right u-clearfix">
-          <button class="js-listing-preview p-button--base p-tooltip p-tooltip--btm-center" form="preview-form" area-describedby="preview-tooltip">
-            Preview
-            <span class="p-tooltip__message" role="tooltip" id="preview-tooltip">Previews will only work in the same browser, locally</span>
-          </button>
-          <a class="p-button--neutral is-disabled" href="javascript:void(0);" style="margin-inline-end: 1rem;">Revert</a>
-          <button type="submit" class="p-button--positive" name="submit_apply" value="Save">
-            Save
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <hr class="u-no-margin--bottom">
-  </div>
-
   <section class="p-strip is-shallow">
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-    <div class="u-fixed-width">
+    <div class="u-fixed-width is-wide">
       {% for category, message in messages %}
       <div id="market-form-status" class="p-notification--{{ category }}">
         <p class="p-notification__response">
@@ -49,53 +23,20 @@
     {% endif %}
     {% endwith %}
 
-    <div class="u-fixed-width">
+    <div class="u-fixed-width is-wide">
       <h2 class="p-heading--4">
         Listing details
       </h2>
     </div>
-    <div class="row p-form__group p-form__group--top">
+    <div class="row is-wide p-form__group p-form__group--top">
       <div class="col-2 u-flex">
       {% if package.type == "charm" %}
         <label class="p-form__label" for="{{ package.type }}-icon">Charm icon:</label>
-        <div class="p-tooltip--information u-vertically-center">
-          <div class="p-tooltip__button" role="button" aria-controls="icon-tooltip-modal" tabindex="0">
-            Show information
-          </div>
-          <div class="p-tooltip__modal" aria-controls="icon-tooltip-modal" id="icon-tooltip-modal">
-            <div class="p-tooltip__dialog" role="dialog" aria-labelledby="modal-title">
-              <div class="p-tooltip__close" role="button" aria-label="Close active modal" aria-controls="icon-tooltip-modal">Close</div>
-              <p id="modal-title">Charm icon restrictions</p>
-              <ul class="p-list--key-value">
-                <li class="p-list__item">
-                  <span class="p-list__key">Accepted image formats</span>
-                  <span class="p-list__value">PNG, JPEG &amp; SVG</span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Min resolution</span>
-                  <span class="p-list__value">40 x 40 pixels</span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Max resolution</span>
-                  <span class="p-list__value">512 x 512 pixels</span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Aspect ratio</span>
-                  <span class="p-list__value">1:1</span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Size limit</span>
-                  <span class="p-list__value">256kB</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
       {% elif package.type == "bundle" %}
         <p class="is-label">Bundle icon:</p>
       {% endif %}
       </div>
-      <div class="col-8">
+      <div class="col-8 col-x-large-6">
         <div class="p-form__control">
           {% if package.type == "charm" %}
             <div class="u-flex u-vertically-center">
@@ -124,25 +65,56 @@
           {% endif %}
         </div>
       </div>
+      <div class="col-12">
+        <div class="row is-wide">
+          <div class="col-6 col-x-large-4 col-start-large-3">
+            <details class="u-no-margin--bottom" style="margin-block-start: -1rem;">
+              <summary>Charm icon restrictions</summary>
+              <ul class="p-list--key-value">
+                <li class="p-list__item">
+                  <span class="p-list__key">Accepted image formats</span>
+                  <span class="p-list__value">PNG, JPEG &amp; SVG</span>
+                </li>
+                <li class="p-list__item">
+                  <span class="p-list__key">Min resolution</span>
+                  <span class="p-list__value">40 x 40 pixels</span>
+                </li>
+                <li class="p-list__item">
+                  <span class="p-list__key">Max resolution</span>
+                  <span class="p-list__value">512 x 512 pixels</span>
+                </li>
+                <li class="p-list__item">
+                  <span class="p-list__key">Aspect ratio</span>
+                  <span class="p-list__value">1:1</span>
+                </li>
+                <li class="p-list__item">
+                  <span class="p-list__key">Size limit</span>
+                  <span class="p-list__value">256kB</span>
+                </li>
+              </ul>
+            </details>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="row p-form__group p-form-validation">
+    <div class="row is-wide p-form__group p-form-validation">
       <div class="col-2">
         <label for="{{ package.type }}-title" class="p-form__label">Title:</label>
       </div>
-      <div class="col-8">
+      <div class="col-8 col-x-large-6">
         <div class="p-form__control">
           <input class="p-form-validation__input" id="{{ package.type }}-title" type="text" name="title" value="{{ package.title or package.name }}" required="" maxlength="40">
         </div>
       </div>
     </div>
-    <div class="row p-form__group">
+    <div class="row is-wide p-form__group">
       <div class="col-2">
         <label class="p-form__label" for="primary_category">Category:</label>
       </div>
-      <div class="col-4">
+      <div class="col-4 col-x-large-3">
         <div class="p-form__control">
           <select name="primary_category" id="primary_category">
-            <option value="">Select category</option>
+            <option value="" disabled="disabled" selected="">Primary category</option>
             <option value="art-and-design">Art and Design</option>
             <option value="books-and-reference">Books and Reference</option>
             <option value="development">Development</option>
@@ -166,206 +138,58 @@
           </select>
         </div>
       </div>
-      <div class="col-12">
-        <div class="row">
-          <div class="col-8 col-start-large-3">
-            <p class="p-form-help-text">
-              Include a category for better ranking within the Charmhub.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row p-form__group p-form-validation">
-      <div class="col-2">
-        <label for="video" class="p-form__label" for="video">Video:</label>
-      </div>
-      <div class="col-8">
+      <div class="col-4 col-x-large-3">
         <div class="p-form__control">
-          <input class="p-form-validation__input" type="text" name="video_urls" value="" id="video">
-          <p class="p-form-help-text">
-            Vimeo, YouTube or asciinema URL
-          </p>
+          <select name="secondary_category" id="secondary_category">
+            <option value="" disabled="disabled" selected="">Secondary category</option>
+            <option value="art-and-design">Art and Design</option>
+            <option value="books-and-reference">Books and Reference</option>
+            <option value="development">Development</option>
+            <option value="devices-and-iot">Devices and IoT</option>
+            <option value="education">Education</option>
+            <option value="entertainment">Entertainment</option>
+            <option value="finance">Finance</option>
+            <option value="games">Games</option>
+            <option value="health-and-fitness">Health and Fitness</option>
+            <option value="music-and-audio">Music and Audio</option>
+            <option value="news-and-weather">News and Weather</option>
+            <option value="personalisation">Personalisation</option>
+            <option value="photo-and-video">Photo and Video</option>
+            <option value="productivity">Productivity</option>
+            <option value="science">Science</option>
+            <option value="security">Security</option>
+            <option value="server-and-cloud">Server and Cloud</option>
+            <option value="social">Social</option>
+            <option value="utilities">Utilities</option>
+            <option value="">None</option>
+          </select>
         </div>
       </div>
     </div>
-    <div class="row p-form__group p-form-validation">
+    <div class="row is-wide p-form__group p-form-validation">
       <div class="col-2">
         <label class="p-form__label" for="summary">Summary: </label>
       </div>
-      <div class="col-8">
+      <div class="col-8 col-x-large-6">
         <div class="p-form__control">
-          <input class="p-form-validation__input" type="text" id="summary" name="summary" required="" maxlength="128" value="{{ package.summary or ''}}">
+          <input class="p-form-validation__input" type="text" id="summary" name="summary" required="" maxlength="100" value="{{ package.summary or ''}}">
         </div>
       </div>
-    </div>
-    <div class="row p-form__group p-form-validation">
-      <div class="col-2 u-flex">
-        <label class="p-form__label" for="description">Description: </label>
-        <div class="p-tooltip--information u-vertically-center">
-          <div class="p-tooltip__button" role="button" aria-controls="description-tooltip-modal" tabindex="0">
-            Show information
+      <div class="col-12">
+        <div class="row is-wide">
+          <div class="col-8 col-x-large-6 col-start-large-3">
+            <p class="p-form-help-text">Maximum length 100 characters. This will appear on your charm card on the store</p>
           </div>
-          <div class="p-tooltip__modal" aria-controls="description-tooltip-modal" id="description-tooltip-modal">
-            <div class="p-tooltip__dialog" role="dialog" aria-labelledby="modal-title">
-              <div class="p-tooltip__close" role="button" aria-label="Close active modal" aria-controls="description-tooltip-modal">Close</div>
-              <p id="modal-title">Supported markdown syntax</p>
-              <ul class="p-list--key-value">
-                <li class="p-list__item">
-                  <span class="p-list__key">Bold</span>
-                  <span class="p-list__value"><code>**Foo**</code></span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">URLs</span>
-                  <span class="p-list__value"><code>https://foo.bar</code></span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Lists</span>
-                  <span class="p-list__value"><code>* Foo</code></span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Italics</span>
-                  <span class="p-list__value"><code>_Foo_</code></span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Code</span>
-                  <span class="p-list__value">Text indented with 3 spaces or inside <code>`</code></span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-8">
-        <div class="p-form__control">
-          <textarea class="p-form-validation__input" id="description" name="description" rows="10" required="">{{ package.description }}</textarea>
-        </div>
-      </div>
-    </div>
-
-    <div class="row p-form__group p-form__group--top">
-      <div class="col-2 u-flex">
-        <p class="is-label">Images:</p>
-        <div class="p-tooltip--information u-vertically-center">
-          <div class="p-tooltip__button" role="button" aria-controls="images-tooltip-modal" tabindex="0">
-            Show information
-          </div>
-          <div class="p-tooltip__modal" aria-controls="images-tooltip-modal" id="images-tooltip-modal">
-            <div class="p-tooltip__dialog" role="dialog" aria-labelledby="modal-title">
-              <div class="p-tooltip__close" role="button" aria-label="Close active modal" aria-controls="images-tooltip-modal">Close</div>
-              <p id="modal-title">Charm image restrictions</p>
-              <ul class="p-list--key-value">
-                <li class="p-list__item">
-                  <span class="p-list__key">Accepted image formats</span>
-                  <span class="p-list__value">PNG, JPEG &amp; GIF</span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Min resolution</span>
-                  <span class="p-list__value">480 x 480 pixels</span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Max resolution</span>
-                  <span class="p-list__value">3840 x 2160 pixels</span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Aspect ratio</span>
-                  <span class="p-list__value">Between 1:2 and 2:1</span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Size limit</span>
-                  <span class="p-list__value">2MB</span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Animation min fps</span>
-                  <span class="p-list__value">1</span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Animation max fps</span>
-                  <span class="p-list__value">30</span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Animation max length</span>
-                  <span class="p-list__value">40 seconds</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-8">
-        <div class="p-form__control">
-          <div class="p-listing-images">
-            <div class="p-listing-images__image is-empty p-listing-images__add-image p-file-input" tabindex="0"><span role="button" class="u-align-text--center"><i class="p-icon--plus"></i><br>Add image</span><input type="file" name="screenshots" id="screenshot-0" accept="image/png,image/gif,image/jpeg" hidden=""></div>
-            <div class="p-listing-images__image is-empty p-file-input" tabindex="0"><input type="file" name="screenshots" id="screenshot-1" accept="image/png,image/gif,image/jpeg" hidden=""></div>
-            <div class="p-listing-images__image is-empty p-file-input" tabindex="0"><input type="file" name="screenshots" id="screenshot-2" accept="image/png,image/gif,image/jpeg" hidden=""></div>
-            <div class="p-listing-images__image is-empty p-file-input" tabindex="0"><input type="file" name="screenshots" id="screenshot-3" accept="image/png,image/gif,image/jpeg" hidden=""></div>
-            <div class="p-listing-images__image is-empty p-file-input" tabindex="0"><input type="file" name="screenshots" id="screenshot-4" accept="image/png,image/gif,image/jpeg" hidden=""></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row p-form__group p-form__group--top">
-      <div class="col-2 u-flex">
-        <label for="banner-image" class="p-form__label">Featured banner:</label>
-        <div class="p-tooltip--information u-vertically-center">
-          <div class="p-tooltip__button" role="button" aria-controls="banner-tooltip-modal" tabindex="0">
-            Show information
-          </div>
-          <div class="p-tooltip__modal" aria-controls="banner-tooltip-modal" id="banner-tooltip-modal">
-            <div class="p-tooltip__dialog" role="dialog" aria-labelledby="modal-title">
-              <div class="p-tooltip__close" role="button" aria-label="Close active modal" aria-controls="banner-tooltip-modal">Close</div>
-              <p id="modal-title">Charm banner restrictions</p>
-              <ul class="p-list--key-value">
-                <li class="p-list__item">
-                  <span class="p-list__key">Accepted image formats</span>
-                  <span class="p-list__value">PNG &amp; JPEG</span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Min resolution</span>
-                  <span class="p-list__value">720 x 240 pixels</span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Recommend resolution</span>
-                  <span class="p-list__value">1920 x 640 pixels</span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Max resolution</span>
-                  <span class="p-list__value">4320 x 1440 pixels</span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Aspect ratio</span>
-                  <span class="p-list__value">3:1</span>
-                </li>
-                <li class="p-list__item">
-                  <span class="p-list__key">Size limit</span>
-                  <span class="p-list__value">2MB</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-8">
-        <div class="p-form__control p-market-banner">
-          <div class="p-market-banner__image-holder">
-            <div class=" p-file-input">
-              <div class="p-market-banner__image is-empty" tabindex="0">
-                <div class="u-align-text--center"><i class="p-icon--plus"></i>Add banner</div>
-              </div><input type="file" name="banner-image" id="banner-image" accept="image/png,image/jpeg" hidden="">
-            </div>
-          </div>
-          <p class="p-form-help-text">Adding a banner will increase your chances of being featured within the Charmhub but does not immediately make you eligible.</p>
         </div>
       </div>
     </div>
 
     {% if package.type == "bundle" %}
-      <div class="row p-form__group p-form__group--top">
+      <div class="row is-wide p-form__group p-form__group--top">
         <div class="col-2">
           <label for="bundle-topology" class="p-form__label">Bundle topology:</label>
         </div>
-        <div class="col-8">
+        <div class="col-8 col-x-large-6">
           <div class="p-form__control p-market-banner">
             <div class="p-market-banner__image-holder">
               <div class=" p-file-input">
@@ -381,113 +205,84 @@
     {% endif %}
 
     <div class="p-strip is-shallow">
-      <div class="u-fixed-width">
+      <div class="u-fixed-width is-wide">
         <hr class="u-no-margin--bottom">
       </div>
     </div>
-    <div class="u-fixed-width">
+    <div class="u-fixed-width is-wide">
       <h2 class="p-heading--4">Additional information</h2>
     </div>
-    <div class="row p-form__group">
-      <div class="col-2">
-        <p class="is-label">Metrics:</p>
-      </div>
-      <div class="col-8">
-        <div class="p-form__control">
-          <input type="checkbox" name="public_metrics_releases" id="public-metrics-releases" checked="checked">
-          <label class="p-tooltip p-tooltip--top-left" for="public-metrics-releases">
-            Number of releases
-          </label>
-          <input type="checkbox" name="public_metrics_deployments" id="public-metrics-deployments" checked="checked">
-          <label for="public-metrics-deployments">
-            Deployments
-          </label>
-          {% if package.type == "charm" %}
-          <input type="checkbox" name="public_metrics_bundles" id="public-metrics-bundles" checked="checked">
-          <label for="public-metrics-bundles">
-            Number of bundles this charm is used within
-          </label>
-          {% endif %}
-        </div>
-      </div>
-    </div>
 
-    <div class="row p-form__group p-form-validation ">
+    <div class="row is-wide p-form__group p-form-validation ">
       <div class="col-2">
         <label for="website" class="p-form__label">Project homepage:</label>
       </div>
-      <div class="col-8">
+      <div class="col-8 col-x-large-6">
         <div class="p-form__control">
           <input class="p-form-validation__input" id="website" type="url" name="website" value="{{ package.website or '' }}" maxlength="256" placeholder="https://charmhub.io">
         </div>
       </div>
     </div>
 
-    <div class="row p-form__group p-form-validation ">
+    <div class="row is-wide p-form__group p-form-validation ">
       <div class="col-2">
         <label for="repository" class="p-form__label">Repository:</label>
       </div>
-      <div class="col-8">
+      <div class="col-8 col-x-large-6">
         <div class="p-form__control">
           <input class="p-form-validation__input" id="repository" type="url" name="repository" value="" maxlength="256" placeholder="GitHub, Launchpad, BitBucket&hellip;">
         </div>
       </div>
     </div>
 
-    <div class="row p-form__group p-form-validation ">
+    <div class="row is-wide p-form__group p-form-validation ">
       <div class="col-2">
         <label for="submit-bug" class="p-form__label">Submit bug:</label>
       </div>
-      <div class="col-8">
+      <div class="col-8 col-x-large-6">
         <div class="p-form__control">
           <input class="p-form-validation__input" id="submit-bug" type="url" name="submit-bug" value="" maxlength="256" placeholder="GitHub, Launchpad, BitBucket&hellip;">
         </div>
       </div>
     </div>
 
-    <div class="row p-form__group p-form-validation ">
+    <div class="row is-wide p-form__group p-form-validation ">
       <div class="col-2">
         <label for="contact" class="p-form__input">Contact:</label>
       </div>
-      <div class="col-8">
+      <div class="col-8 col-x-large-6">
         <div class="p-form__control">
           <input id="contact" class="p-form-validation__input" type="text" name="contact" value="{{ package.contact or '' }}" maxlength="256" placeholder="mailto:example@example.com">
         </div>
       </div>
     </div>
-
-    <div class="p-strip is-shallow">
-      <div class="row">
-        <hr class="u-no-margin--bottom">
-      </div>
-    </div>
-
-    <div class="row">
-      <h2 class="p-heading--4">Licensing</h2>
-    </div>
-
-    <div class="row p-form__group">
-      <div class="col-2">
-        <label class="p-form__input">License:</label>
-      </div>
-      <div class="col-8">
-        <div class="p-form__control">
-          <input type="hidden" name="license" value="{{ license }}" />
-          <input type="radio" name="license-type" value="simple" id="license-simple-option" {% if license_type == 'simple' %}checked="checked"{% endif %} />
-          <label for="license-simple-option">Simple</label>
-          <div class="js-license p-multiselect__wrapper" id="license-simple-input" class="{% if license_type != 'simple' %}u-hide{% endif %}">
-            <input type="text" class="js-multiselect-input" name="license-simple" value="{% if license_type == 'simple' %}{{ license }}{% endif %}" />
-            <div class="js-multiselect-holder"></div>
-            <p class="p-form-help-text u-no-margin">The license(s) under which you will release your snap.<br />Multiple licenses can be selected to indicate alternative choices.</p>
+  </section>
+  <div class="u-fixed-width is-wide">
+    <hr>
+  </div>
+  <div data-js="sticky-menu-observer">
+    <div class="u-position-sticky--bottom is-sticky" data-js="sticky-menu">
+      <div class="row is-wide" style="padding-block-start: 1rem;">
+        <div class="col-7">
+          <p>
+            Updates to this information will appear immediately on the <a href="/{{ package.name }}">{{ package.type }} listing page</a>.
+          </p>
+        </div>
+        <div class="col-5">
+          <div class="u-align--right u-clearfix">
+            <button class="js-listing-preview p-button--base p-tooltip p-tooltip--btm-center" form="preview-form" area-describedby="preview-tooltip">
+              Preview
+              <span class="p-tooltip__message" role="tooltip" id="preview-tooltip">Previews will only work in the same browser, locally</span>
+            </button>
+            <a class="p-button--neutral is-disabled" href="javascript:void(0);" style="margin-inline-end: 1rem;">Revert</a>
+            <button type="submit" class="p-button--positive" name="submit_apply" value="Save">
+              Save
+            </button>
           </div>
-          <input type="radio" name="license-type" value="custom" id="license-custom-option" {% if license_type == 'custom' %}checked="checked"{% endif %} />
-          <label for="license-custom-option" style="margin-block-end: 1.2rem;">Custom SPDX expression</label>
-          <textarea type="text" id="license-custom-input" name="license-custom" class="{% if license_type != 'custom' %}u-hide{% endif %}"">{{ license }}</textarea>
-          <p class="p-form-help-text">Visit <a class="p-link--external" href="https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60" target="_blank">SPDX Specification 21</a> for more information.</p>
         </div>
       </div>
     </div>
-  </section>
+  </div>
   <input type="hidden" name="changes" value="">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 </form>
@@ -503,6 +298,7 @@
         document.getElementById('license-simple-input'),
         document.getElementById('license-custom-input')
       ]);
+    charmhub.publisher.listing.initStickyMenu("[data-js='sticky-menu-observer']");
   });
 </script>
 {% endblock%}

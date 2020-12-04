@@ -11,6 +11,18 @@
     }
   }
 
+  .col-x-large-4 {
+    @media screen and (min-width: $breakpoint-large) {
+      grid-column-end: span 4;
+    }
+  }
+
+  .col-x-large-6 {
+    @media screen and (min-width: $breakpoint-large) {
+      grid-column-end: span 6;
+    }
+  }
+
   .col-large-6 {
     @media (min-width: 1300px) {
       grid-column-end: span 6;
