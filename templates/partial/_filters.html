@@ -1,4 +1,7 @@
-<div class="p-layout__sidenav u-hide--small">
+<div class="p-layout__sidenav">
+  <div class="p-sidenav__drawer-header">
+    <a href="/" class="p-sidenav__toggle" data-js="filter-button-mobile-close">Apply filters</a>
+  </div>
   <div class="p-filter" data-js="filter-handler">
     <h3 class="p-muted-heading" data-filters="applied-filters">
       Filters
@@ -52,16 +55,19 @@
         <button type="reset" class="p-search-box__reset"><i class="p-icon--close">Clear</i></button>
         <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search">Search</i></button>
       </form>
-      <form class="p-form p-form--inline">
-        <div class="p-layout__sort-desktop p-form__group">
-          <label for="platform" aria-label="Filter platforms" class="p-form__label">Platforms</label>
-          <select name="platform" id="platform-handler" data-js="platform-handler" class="p-form__control" value="{{ platform }}" id="platform" disabled>
-            <option value="all" {% if active_filter('platform', 'all') %}selected{% endif %}>All</option>
-            <option value="linux" {% if active_filter('platform', 'linux') %}selected{% endif %}>Linux</option>
-            <option value="kubernetes" {% if active_filter('platform', 'kubernetes') %}selected{% endif %}>Kubernetes</option>
-          </select>
-        </div>
-      </form>
+      <div class="p-container--inline">
+        <a href="#filters" class="p-button has-icon u-hide--medium u-hide--large" data-js="filter-button-mobile-open"><i class="p-icon--arrow-right"></i><span>Filters</span></a>
+        <form class="p-form p-form--inline">
+          <div class="p-layout__sort-desktop p-form__group u-no-margin--right">
+            <label for="platform" aria-label="Filter platforms" class="p-form__label u-hide--medium u-hide--small">Platforms</label>
+            <select name="platform" id="platform-handler" data-js="platform-handler" class="p-form__control" value="{{ platform }}" id="platform" disabled>
+              <option value="all" {% if active_filter('platform', 'all') %}selected{% endif %}>All</option>
+              <option value="linux" {% if active_filter('platform', 'linux') %}selected{% endif %}>Linux</option>
+              <option value="kubernetes" {% if active_filter('platform', 'kubernetes') %}selected{% endif %}>Kubernetes</option>
+            </select>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
   <div class="p-layout__card-container" id="features-container">

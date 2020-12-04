@@ -1,6 +1,12 @@
 @mixin p-charmhub-filter {
   .p-filter {
     padding-block-start: 0.625rem;
-    padding-left: 0.5rem;
+    padding-inline-start: 0.5rem;
+  }
+
+  .is-expanded {
+    .p-filter {
+      padding-inline-start: 1rem;
+    }
   }
 }

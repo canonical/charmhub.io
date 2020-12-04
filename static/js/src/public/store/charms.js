@@ -15,6 +15,36 @@ function initCharms() {
       enableAllActions();
     })
     .catch((e) => console.error(e));
+
+  initMobileFilters(
+    "[data-js='filter-button-mobile-open']",
+    "[data-js='filter-button-mobile-close']"
+  );
+}
+
+function initMobileFilters(selectorOpen, selectorClose) {
+  const openButton = document.querySelector(selectorOpen);
+  const closeButton = document.querySelector(selectorClose);
+
+  if (openButton && closeButton) {
+    const filtersEl = document.querySelector(".p-layout__sidenav");
+
+    openButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      filtersEl.classList.add("is-expanded");
+    });
+
+    closeButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      filtersEl.classList.remove("is-expanded");
+    });
+  } else {
+    throw new Error(
+      `There are no elements containing ${
+        openButton ? closeButton : openButton
+      } selector.`
+    );
+  }
 }
 
 function getCharmsList() {
