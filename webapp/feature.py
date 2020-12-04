@@ -61,6 +61,14 @@ FEATURED_CHARMS = [
         "platform": "kubernetes",
     },
     {
+        "name": "wordpress",
+        "display_name": "WordPress",
+        "summary": "Wordpress, uses official Docker Wordpress image by default",
+        "publisher": "mruffel",
+        "icon": "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg",
+        "platform": "kubernetes",
+    },
+    {
         "name": "alertmanager",
         "display_name": "AlertManager",
         "summary": "Alert management for charmed LMA stack",
@@ -77,12 +85,12 @@ FEATURED_CHARMS = [
         "platform": "linux",
     },
     {
-        "name": "mysql",
-        "display_name": "MySQL",
-        "summary": "MySQL is a fast, stable and true multi-user, multi-threaded SQL database",
-        "publisher": "team-ion",
-        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_F8CtvgcznoeRSupRrY2uEa67oQtBTF7x_icon__69ddfd46786f49d8e952d56c4809e7c08741f732bd000d6faa0970048e2a33c8.png",
-        "platform": "linux",
+        "name": "mongodb-k8s",
+        "display_name": "MongoDB",
+        "summary": "MongoDB charm for Kubernetes",
+        "publisher": "mgo",
+        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_tssr8F68XYBVUiU6QzMs4BZ7JnH5Itm1_icon__dcd4f86fe38ca430e0e2b221c6ea949af2e04778fae4b4b73658dccc09260714.png",
+        "platform": "kubernetes",
     },
     {
         "name": "jenkins-agent",
