@@ -81,8 +81,8 @@ FEATURED_CHARMS = [
         "display_name": "MariaDB",
         "summary": "Popular, enhanced, drop-in replacement for MySQL",
         "publisher": "osmeng",
-        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_tNiFc3ACzOzO0BUJOTSxeAxVue7rUN1c_icon__62946c7f73307231d38af66f8253f86199df01fdfcaa5547b1b4f5d59b5c0d20.png",
-        "platform": "linux",
+        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_tNiFc3ACzOzO0BUJOTSxeAxVue7rUN1c_icon__0d2a05f1616edbed72466b792907f6724b1823d6958bcee47f0fe66c07c46638.png",
+        "platform": "kubernetes",
     },
     {
         "name": "mongodb-k8s",
