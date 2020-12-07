@@ -61,14 +61,6 @@ FEATURED_CHARMS = [
         "platform": "kubernetes",
     },
     {
-        "name": "wordpress",
-        "display_name": "WordPress",
-        "summary": "Wordpress, uses official Docker Wordpress image by default",
-        "publisher": "mruffel",
-        "icon": "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg",
-        "platform": "kubernetes",
-    },
-    {
         "name": "alertmanager",
         "display_name": "AlertManager",
         "summary": "Alert management for charmed LMA stack",
