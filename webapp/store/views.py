@@ -12,7 +12,7 @@ from webapp.decorators import (
     store_maintenance,
     redirect_uppercase_to_lowercase,
 )
-from webapp.feature import FEATURED_CHARMS
+from webapp.feature import COMMANDS_OVERWRITE, FEATURED_CHARMS
 from webapp.helpers import discourse_api, decrease_headers, md_parser
 from webapp.store import logic
 
@@ -140,6 +140,11 @@ CS = []
 def get_package(entity_name, channel_request):
     # Get entity info from API
     package = app.store_api.get_item_details(entity_name, fields=FIELDS)
+
+    if COMMANDS_OVERWRITE.get(entity_name):
+        package["command"] = COMMANDS_OVERWRITE[entity_name]
+    else:
+        package["command"] = entity_name
 
     channel_selected = logic.get_current_channel(
         package["channel-map"], channel_request

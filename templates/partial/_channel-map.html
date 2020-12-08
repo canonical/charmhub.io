@@ -8,7 +8,7 @@
   <div class="p-charm-header__code">
     <div style="align-items: center; display: flex;">
       <div>
-        <code>juju deploy {% if package["cs"] %}cs:{% endif %}{{ package.name }}{% if package["channel_selected"]["channel"]["name"] and package["channel_selected"]["channel"]["name"] != "stable" %} --channel {{ package["channel_selected"]["channel"]["name"] }}{% endif %}</code>
+        <code>juju deploy {% if package["cs"] %}cs:{% endif %}{{ package.command }}{% if package["channel_selected"]["channel"]["name"] and package["channel_selected"]["channel"]["name"] != "stable" %} --channel {{ package["channel_selected"]["channel"]["name"] }}{% endif %}</code>
       </div>
       <div class="p-tooltip--information instruction-tooltip">
         <div class="p-tooltip__button" role="button" aria-controls="icon-tooltip-modal" tabindex="0">
