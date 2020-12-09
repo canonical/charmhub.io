@@ -90,6 +90,14 @@
   }
 
   .p-inline-list.has-vertical-separator {
+    @media screen and (min-width: $breakpoint-medium) and (max-width: 1055px) {
+      margin-inline-start: -$spv-inner--large;
+    }
+
+    @media screen and (max-width: $breakpoint-medium) {
+      margin-block-end: $spv-inner--x-small;
+    }
+
     .p-inline-list__item:not(:last-child) {
       position: relative;
 
