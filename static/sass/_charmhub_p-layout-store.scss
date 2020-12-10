@@ -10,10 +10,86 @@
     }
 
     .p-layout__sidenav {
+      @keyframes vf-p-side-navigation-expand {
+        0% {
+          transform: translate(-100%);
+        }
+
+        100% {
+          transform: translate(0);
+        }
+      }
+
+      @keyframes vf-p-side-navigation-collapse {
+        0% {
+          transform: translate(0);
+        }
+
+        100% {
+          display: none;
+          transform: translate(-100%);
+        }
+      }
+
+      animation:
+        vf-p-side-navigation-collapse
+        map-get($animation-duration, brisk);
+      display: none;
+
+      &.is-expanded {
+        animation:
+          vf-p-side-navigation-expand
+          map-get($animation-duration, brisk);
+        background-color: $color-x-light;
+        display: block;
+        left: 0;
+        max-height: 100%;
+        min-height: 100%;
+        overflow: auto;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 101;
+      }
+
       @media screen and(min-width: $breakpoint-medium) {
         margin-inline-end: 2rem;
         min-width: 13.5rem;
         width: 13.5rem;
+      }
+
+      @media screen and (min-width: $breakpoint-medium) {
+        display: block;
+      }
+
+      .p-sidenav__drawer-header {
+        border-bottom: 1px solid $color-mid-x-light;
+        display: none;
+        padding: $spv-inner--small 0 $spv-inner--small $spv-inner--small;
+
+        @media screen and (max-width: $breakpoint-medium - 1) {
+          display: block;
+        }
+
+        .p-sidenav__toggle {
+          @extend %vf-button-base;
+
+          border: none;
+          color: $color-dark;
+          margin-block-end: 0;
+          position: relative;
+          width: auto;
+
+          &::before {
+            @extend %icon;
+
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath fill='%23666' d='M8.187 11.748l6.187-6.187-1.06-1.061-5.127 5.127L3.061 4.5 2 5.561z'/%3E%3C/svg%3E");
+            content: "";
+            margin-left: -#{$sph-inner--small};
+            margin-right: $sph-inner--small;
+            transform: rotate(90deg);
+          }
+        }
       }
     }
 
@@ -33,6 +109,20 @@
         display: flex;
         justify-content: flex-end;
         width: 75%;
+
+        .p-container--inline {
+          display: flex;
+          justify-content: space-between;
+
+          .p-button {
+            margin-inline-end: 1rem;
+          }
+
+          .p-button,
+          .p-form {
+            width: 50%;
+          }
+        }
 
         @media screen and (max-width: $breakpoint-medium - 1) {
           display: block;
