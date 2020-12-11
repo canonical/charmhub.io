@@ -47,7 +47,7 @@ FEATURED_CHARMS = [
     {
         "name": "mattermost",
         "display_name": "Mattermost",
-        "summary": "This operator charm deploys Mattermost, using a custom-built image, configurable to use with a postgresql backend.",
+        "summary": "Mattermost is a flexible, open source messaging platform that enables secure team collaboration.",
         "publisher": "mmost",
         "icon": "https://api.snapcraft.io/api/v1/media/download/charm_sssO0EqGsQ1X4cjdpWT3eVZGsqraBj0c_icon__da58ad7ec5670e4564fc5218fba8db7bf0d9b05432247196b07b4900a71bea27.png",
         "platform": "kubernetes",
@@ -111,7 +111,7 @@ FEATURED_CHARMS = [
     {
         "name": "openldap",
         "display_name": "Openldap",
-        "summary": "This charm provides a basic OpenLDAP server using the SQL backend.",
+        "summary": "An OpenLDAP server using the SQL backend.",
         "publisher": "idp",
         "icon": "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg",
         "platform": "kubernetes",
