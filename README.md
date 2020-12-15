@@ -18,19 +18,13 @@ If you have found a bug on the site or have an idea for a new feature, feel free
 
 ## Local development
 
-The simplest way to run the site locally is to first [install the dotrun snap](https://snapcraft.io/dotrun):
+The simplest way to run the site locally is using the [`dotrun`](https://snapcraft.io/dotrun) snap:
 
-``` bash
-snap install dotrun
-```
-
-And then use the snap:
-
-``` bash
+```bash
 dotrun
 ```
 
-You can visit <http://127.0.0.1:8045> in your browser.
+Once the server has started, you can visit <http://127.0.0.1:8045> in your browser. You can stop the server using `<ctrl>+c`.
 
 For more detailed local development instructions, see [HACKING.md](HACKING.md).
 
