@@ -1,5 +1,5 @@
 {% for charm in featured_charms %}
-<div class="p-layout__card u-equal-height" id="mysql">
+<div class="l-flex__card u-equal-height" id="mysql">
   <a href="/{{ charm['name'] }}" class="p-card--button">
     <div class="p-card__header">
       <div class="p-card__thumbnail-container">
@@ -20,7 +20,7 @@
           <img alt="Kubernetes" src="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg" width="24" height="24">
           <span class="p-tooltip__message" role="tooltip">This operator drives the application on Kubernetes</span>
         {% elif charm["platform"] == "linux" %}
-          <div class="entity-card-icons"><img alt="Linux" src="https://assets.ubuntu.com/v1/dc11bd39-Linux.svg" width="24" height="24"></div>
+          <img alt="Linux" src="https://assets.ubuntu.com/v1/dc11bd39-Linux.svg" width="24" height="24">
           <span class="p-tooltip__message" role="tooltip">This operator drives the application on Linux servers</span>
         {% endif %}
         </span>

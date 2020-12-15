@@ -107,10 +107,6 @@ $theme-default-nav: dark;
 
 @include p-charmhub-accordion;
 
-@import "charmhub_p-layout-store";
-
-@include p-charmhub-layout-store;
-
 @import "pattern_heading-icon";
 
 @include p-charmhub-heading-icon;
@@ -211,6 +207,10 @@ $theme-default-nav: dark;
 
 @include p-charmhub-typography;
 
+@import "charmhub_l-store";
+
+@include l-charmhub-store;
+
 // Remove table row borders
 .p-table--no-borders tr {
   border-top: 0 !important;
@@ -264,12 +264,12 @@ $theme-default-nav: dark;
 
 // XXX Ovi - 04.04.20: This can be removed once this issue is closed.
 // https://github.com/canonical-web-and-design/vanilla-framework/issues/1452
-body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto auto auto 1fr auto;
-  min-height: 100vh;
-}
+// body {
+//   display: grid;
+//   grid-template-columns: minmax(0, 1fr);
+//   grid-template-rows: auto auto auto 1fr auto;
+//   min-height: 100vh;
+// }
 
 // Ovi 13.07.2020 - This can be removed once a new version of global-nav is released
 // as the issue was fixed https://github.com/canonical-web-and-design/global-nav/commit/03173d82a1f1d4b77f8e20e41ef552b90dbab798
