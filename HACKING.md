@@ -19,7 +19,7 @@ For development purposes, visit https://sentry.io/signup/, signup and setup a pr
 https://<user>:<secret>@sentry.io/<project_id>
 ```
 
-Create or update you `.env.local` file:
+Create or update your `.env.local` file:
 
 ```
 SENTRY_DSN=<DSN_FROM_ABOVE>
