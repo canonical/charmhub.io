@@ -15,7 +15,7 @@
       </span>
       <ul class="p-navigation__items" role="menu">
         <li class="p-navigation__item {% if request.path == '/overview' %}is-selected{% endif %}" role="menuitem">
-            <a href="/overview" class="p-navigation__link">
+          <a href="/overview" class="p-navigation__link">
             Overview
           </a>
         </li>
@@ -43,26 +43,3 @@
     </nav>
   </div>
 </header>
-
-{% block page_scripts %}
-<!-- This JS override of the Vanilla pattern with uses CSS :target to toggle visibility
-is because the Charmhub filters rely the URL string and the default CSS toggle uses
-a hash in the URL which causes a conflict -->
-<script>
-  window.addEventListener("DOMContentLoaded", function () {
-    const menuToggles = document.querySelectorAll('.p-navigation__toggle');
-    const menuNav = document.querySelector('.p-navigation__nav');
-    menuToggles.forEach((menuToggle) => {
-        menuToggle.addEventListener('click', (e) => {
-         e.preventDefault();
-         menuNav.classList.toggle('nav-active');
-      })
-    })
-  });
-</script>
-<style>
-  .nav-active {
-    display: flex;
-  }
-</style>
-{% endblock %}

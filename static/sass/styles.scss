@@ -107,9 +107,9 @@ $theme-default-nav: dark;
 
 @include p-charmhub-accordion;
 
-@import "charmhub_p-layout-store";
+@import "charmhub_l-store";
 
-@include p-charmhub-layout-store;
+@include l-charmhub-store;
 
 @import "pattern_heading-icon";
 

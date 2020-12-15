@@ -30,12 +30,6 @@
     margin-right: 0;
   }
 
-  @media screen and (max-width: $breakpoint-navigation-threshold - 1) {
-    .p-side-navigation__drawer {
-      margin-block-start: 5rem;
-    }
-  }
-
   @media screen and (min-width: $breakpoint-navigation-threshold) {
     .p-navigation .p-navigation__item.is-selected {
       background-color: $color-x-light;
@@ -48,7 +42,6 @@
   }
 
   .p-side-navigation {
-    position: sticky;
-    top: 3rem;
+    z-index: 100;
   }
 }
