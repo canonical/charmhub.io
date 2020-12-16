@@ -425,7 +425,8 @@ def add_store_front_data(package, channel, details=False):
         extra["publisher_name"] = package["result"]["publisher"][
             "display-name"
         ]
-        extra["summary"] = package["result"]["summary"]
+        if "summary" in package["result"]:
+            extra["summary"] = package["result"]["summary"]
         extra["platforms"] = convert_series_to_ubuntu_versions(extra["series"])
 
         # Get charm docs

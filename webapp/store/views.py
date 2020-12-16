@@ -119,15 +119,9 @@ def get_charms():
 FIELDS = [
     "result.media",
     "default-release",
-    "default-release.revision.metadata-yaml",
-    "default-release.revision.readme-md",
     "result.categories",
     "result.publisher.display-name",
-    "result.summary",
-    "result.description",
     "channel-map",
-    "channel-map.revision.readme-md",
-    "channel-map.revision.actions-yaml",
 ]
 
 # TODO This is a temporary fix for release
@@ -137,7 +131,7 @@ FIELDS = [
 CS = []
 
 
-def get_package(entity_name, channel_request):
+def get_package(entity_name, channel_request, fields):
     # Get entity info from API
     package = app.store_api.get_item_details(entity_name, fields=FIELDS)
 
@@ -172,7 +166,18 @@ def get_package(entity_name, channel_request):
 @redirect_uppercase_to_lowercase
 def details_overview(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request)
+
+    package = get_package(
+        entity_name,
+        channel_request,
+        FIELDS.extend(
+            [
+                "default-release.revision.readme-md",
+                "result.summary",
+                "channel-map.revision.readme-md",
+            ]
+        ),
+    )
 
     readme = package["channel_selected"]["revision"].get(
         "readme-md", "No readme available"
@@ -199,7 +204,16 @@ def details_overview(entity_name):
 @redirect_uppercase_to_lowercase
 def details_docs(entity_name, slug=None):
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request)
+    package = get_package(
+        entity_name,
+        channel_request,
+        FIELDS.extend(
+            [
+                "channel-map.revision.metadata-yaml",
+                "default-release.revision.metadata-yaml",
+            ]
+        ),
+    )
 
     if not package["store_front"]["docs_topic"]:
         return render_template(
@@ -251,7 +265,16 @@ def details_docs(entity_name, slug=None):
 @redirect_uppercase_to_lowercase
 def details_configuration(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request)
+    package = get_package(
+        entity_name,
+        channel_request,
+        FIELDS.extend(
+            [
+                "channel-map.revision.config-yaml",
+                "default-release.revision.config-yaml",
+            ]
+        ),
+    )
 
     return render_template(
         "details/configure.html",
@@ -265,7 +288,16 @@ def details_configuration(entity_name):
 @redirect_uppercase_to_lowercase
 def details_actions(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request)
+    package = get_package(
+        entity_name,
+        channel_request,
+        FIELDS.extend(
+            [
+                "default-release.revision.actions-yaml",
+                "channel-map.revision.actions-yaml",
+            ]
+        ),
+    )
 
     return render_template(
         "details/actions.html",
@@ -279,7 +311,7 @@ def details_actions(entity_name):
 @redirect_uppercase_to_lowercase
 def details_libraries(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request)
+    package = get_package(entity_name, channel_request, FIELDS)
 
     libraries = logic.process_libraries(
         publisher_api.get_charm_libraries(entity_name)
@@ -303,7 +335,7 @@ def details_libraries(entity_name):
 @redirect_uppercase_to_lowercase
 def details_library(entity_name, library_name):
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request)
+    package = get_package(entity_name, channel_request, FIELDS)
 
     lib_parts = library_name.split(".")
 
@@ -394,7 +426,7 @@ def download_library(entity_name, library_name):
 @redirect_uppercase_to_lowercase
 def details_history(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request)
+    package = get_package(entity_name, channel_request, FIELDS)
 
     return render_template(
         "details/history.html",
@@ -408,7 +440,7 @@ def details_history(entity_name):
 @redirect_uppercase_to_lowercase
 def details_integrate(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request)
+    package = get_package(entity_name, channel_request, FIELDS)
 
     return render_template(
         "details/integrate.html",
