@@ -23,7 +23,7 @@ FEATURED_CHARMS = [
     {
         "name": "discourse",
         "display_name": "Discourse",
-        "summary": "Discourse bundled for juju-k8s deployment",
+        "summary": "Discourse is the 100% open source discussion platform built for the next decade of the Internet.",
         "publisher": "mthaddon",
         "icon": "https://api.snapcraft.io/api/v1/media/download/charm_7uVm0DWuzZ7R2HnZs1HYNyZh4JAO9cmK_icon__4d0b75dcbd9b2876f927b89d9962d7536abc192312058b1c4d2661a88f93fa29.png",
         "platform": "kubernetes",
