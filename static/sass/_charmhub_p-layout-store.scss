@@ -31,9 +31,12 @@
         }
       }
 
-      animation:
-        vf-p-side-navigation-collapse
-        map-get($animation-duration, brisk);
+      @media screen and (max-width: $breakpoint-medium - 1) {
+        animation:
+          vf-p-side-navigation-collapse
+          map-get($animation-duration, brisk);
+      }
+
       display: none;
 
       &.is-expanded {
