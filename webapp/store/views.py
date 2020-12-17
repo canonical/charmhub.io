@@ -167,10 +167,11 @@ def get_package(entity_name, channel_request, fields):
 def details_overview(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
 
+    print(FIELDS)
     package = get_package(
         entity_name,
         channel_request,
-        FIELDS.extend(
+        FIELDS.copy().extend(
             [
                 "default-release.revision.readme-md",
                 "result.summary",
@@ -207,7 +208,7 @@ def details_docs(entity_name, slug=None):
     package = get_package(
         entity_name,
         channel_request,
-        FIELDS.extend(
+        FIELDS.copy().extend(
             [
                 "channel-map.revision.metadata-yaml",
                 "default-release.revision.metadata-yaml",
@@ -268,7 +269,7 @@ def details_configuration(entity_name):
     package = get_package(
         entity_name,
         channel_request,
-        FIELDS.extend(
+        FIELDS.copy().extend(
             [
                 "channel-map.revision.config-yaml",
                 "default-release.revision.config-yaml",
@@ -291,7 +292,7 @@ def details_actions(entity_name):
     package = get_package(
         entity_name,
         channel_request,
-        FIELDS.extend(
+        FIELDS.copy().extend(
             [
                 "default-release.revision.actions-yaml",
                 "channel-map.revision.actions-yaml",
