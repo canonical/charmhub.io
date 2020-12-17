@@ -399,9 +399,10 @@ def add_store_front_data(package, channel, details=False):
     extra = {}
 
     extra["icons"] = get_icons(package)
-    extra["os"] = get_os_from_platform(
-        package["default-release"]["revision"]["platforms"]
-    )
+    if "platforms" in package["default-release"]["revision"]:
+        extra["os"] = get_os_from_platform(
+            package["default-release"]["revision"]["platforms"]
+        )
     extra["last_release"] = convert_date(channel["channel"]["released-at"])
     extra["categories"] = get_categories(package["result"]["categories"])
 
@@ -410,9 +411,12 @@ def add_store_front_data(package, channel, details=False):
         package = mock_resources(package)
         extra["has_libraries"] = True
 
-        extra["metadata"] = yaml.load(channel["revision"]["metadata-yaml"])
-        extra["config"] = yaml.load(channel["revision"]["config-yaml"])
-        extra["actions"] = yaml.load(channel["revision"]["actions-yaml"])
+        if "metadata-yaml" in channel["revision"]:
+            extra["metadata"] = yaml.load(channel["revision"]["metadata-yaml"])
+        if "config-yaml" in channel["revision"]:
+            extra["config"] = yaml.load(channel["revision"]["config-yaml"])
+        if "actions-yaml" in channel["revision"]:
+            extra["actions"] = yaml.load(channel["revision"]["actions-yaml"])
 
         # Reshape channel maps
         extra["channel_map"] = convert_channel_maps(package["channel-map"])

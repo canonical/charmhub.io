@@ -119,6 +119,7 @@ def get_charms():
 FIELDS = [
     "result.media",
     "default-release",
+    "default-release.revision.platforms",
     "result.categories",
     "result.publisher.display-name",
     "channel-map",
