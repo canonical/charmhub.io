@@ -122,6 +122,7 @@ FEATURED_CHARMS = [
 COMMANDS_OVERWRITE = {
     "alertmanager": "~charmcraft/alertmanager",
     "bind": "~bind-charmers/bind",
+    "cassandra": "~narindergupta/k8s-cassandra",
     "charm-k8s-kafka": "~narindergupta/charm-k8s-kafka",
     "charm-k8s-zookeeper": "~narindergupta/charm-k8s-zookeeper",
     "content-cache": "~content-cache-charmers/content-cache-k8s",
