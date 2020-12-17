@@ -167,7 +167,6 @@ def get_package(entity_name, channel_request, fields):
 def details_overview(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
 
-    print(FIELDS)
     package = get_package(
         entity_name,
         channel_request,
