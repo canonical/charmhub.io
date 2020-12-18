@@ -87,7 +87,7 @@ FEATURED_CHARMS = [
     {
         "name": "jenkins-agent",
         "display_name": "Jenkins Agent ",
-        "summary": "jenkins-agent operator charm",
+        "summary": "Agent for Jenkins, the leading open source automation server. Jenkins provides hundreds of plugins to support building, deploying and automating any project.",
         "publisher": "thebutler",
         "icon": "https://api.snapcraft.io/api/v1/media/download/charm_6NmjnZdeCSfHart3dYxjiaYc3RXb9CR4_icon__ad7306147e1bb35df0f370bddb0004ad7f25d5477b2ea3aa911a1eec807a2761.png",
         "platform": "kubernetes",
@@ -113,7 +113,7 @@ FEATURED_CHARMS = [
         "display_name": "Openldap",
         "summary": "An OpenLDAP server using the SQL backend.",
         "publisher": "idp",
-        "icon": "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg",
+        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_k0USCCK3wcu748BYAVLhpRbDA0dk3Apl_icon__18df9f1ad833d37743fcb7780d074d27016b191d7bb43a7c94065c75de630d8a.png",
         "platform": "kubernetes",
     },
 ]
