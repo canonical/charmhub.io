@@ -66,9 +66,6 @@ def index():
         total_charms = 0
 
         for i, item in enumerate(results):
-            if item["type"] != "charm":
-                continue
-
             total_charms += 1
 
             charm = logic.add_store_front_data(
@@ -98,9 +95,6 @@ def get_charms():
     total_charms = 0
 
     for i, item in enumerate(results):
-        if item["type"] != "charm":
-            continue
-
         total_charms += 1
 
         charm = logic.add_store_front_data(
