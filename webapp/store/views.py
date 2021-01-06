@@ -17,6 +17,7 @@ from webapp.helpers import (
     discourse_api,
     decrease_headers,
     md_parser,
+    inject_topology_image,
 )
 from webapp.store import logic
 
@@ -67,10 +68,10 @@ def index():
         ).get("results")
 
         charms = []
-        total_charms = 0
+        total_packages = 0
 
         for i, item in enumerate(results):
-            total_charms += 1
+            total_packages += 1
 
             charm = logic.add_store_front_data(
                 results[i], results[i]["default-release"]
@@ -84,8 +85,8 @@ def index():
     return render_template("store.html", **context)
 
 
-@store.route("/charms.json")
-def get_charms():
+@store.route("/packages.json")
+def get_package_list():
     query = request.args.get("q", default=None, type=str)
 
     if query:
@@ -95,22 +96,22 @@ def get_charms():
     else:
         results = app.store_api.find(fields=SEARCH_FIELDS).get("results", [])
 
-    charms = []
-    total_charms = 0
+    packages = []
+    total_packages = 0
 
     for i, item in enumerate(results):
-        total_charms += 1
+        total_packages += 1
 
-        charm = logic.add_store_front_data(
+        package = logic.add_store_front_data(
             results[i], results[i]["default-release"]
         )
 
-        charms.append(charm)
+        packages.append(package)
 
     return {
-        "charms": sorted(charms, key=lambda c: c["name"]),
+        "packages": sorted(packages, key=lambda c: c["name"]),
         "q": query,
-        "size": total_charms,
+        "size": total_packages,
     }
 
 
@@ -186,6 +187,8 @@ def details_overview(entity_name):
 
     readme = md_parser(readme)
     readme = decrease_headers(readme)
+    if package["type"] == "bundle":
+        readme = inject_topology_image(readme, package["name"])
 
     return render_template(
         "details/overview.html",

@@ -1,3 +1,3 @@
-import { Charms } from "./charms";
+import { Packages } from "./packages";
 
-export { Charms };
+export { Packages };

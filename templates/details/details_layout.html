@@ -46,7 +46,7 @@
   window.addEventListener("DOMContentLoaded", function () {
     charmhub.details.init("{{ package.name }}");
     {% if current_tab == "overview" %}
-      charmhub.details.initOveview({% if package.type == "bundle" %}{{ package.store_front.topology_data | safe }}{% endif %});
+      charmhub.details.initOveview();
     {% endif %}
   });
 </script>

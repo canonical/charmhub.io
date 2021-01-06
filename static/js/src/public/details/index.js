@@ -2,7 +2,6 @@ import { HistoryState } from "./historyState";
 import { TableOfContents } from "./tableOfContents";
 import { channelMap } from "./channelMap";
 import { truncateString } from "../../libs/truncate-string";
-import { Topology } from "./topology";
 
 if (window.location.hash) {
   setTimeout(() => {
@@ -35,11 +34,8 @@ const truncateSummary = (selector) => {
   }
 };
 
-const initOveview = (topologyData) => {
+const initOveview = () => {
   truncateSummary("[data-js='summary']");
-  if (topologyData) {
-    new Topology(topologyData);
-  }
 };
 
 const init = (packageName) => {

@@ -186,3 +186,21 @@ def decrease_headers(html_content, step=2):
         h.name = f"h{str(level)}"
 
     return soup
+
+
+def inject_topology_image(html_content, package_name):
+    url = (
+        "https://api.jujucharms.com/charmstore/v5/bundle/"
+        f"{package_name}/diagram.svg"
+    )
+    image_container = html_content.new_tag("div")
+    image_container["class"] = "p-card--highlighted"
+    image = html_content.new_tag(
+        "object",
+        data=url,
+        type="image/svg+xml",
+    )
+    image_container.append(image)
+    html_content.h3.insert_after(image_container)
+
+    return html_content

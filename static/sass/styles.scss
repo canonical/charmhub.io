@@ -291,6 +291,10 @@ body {
 }
 
 .p-details-tab__content {
+  a {
+    overflow-wrap: break-word;
+  }
+
   p {
     max-width: unset;
   }

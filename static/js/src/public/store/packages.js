@@ -1,7 +1,7 @@
-import buildCharmCard from "./buildCharmCard";
+import buildPackageCard from "./buildPackageCard";
 
 /** Store page filters */
-class Charms {
+class Packages {
   constructor() {
     this.selectElements();
     this.searchCache = window.location.search;
@@ -15,16 +15,16 @@ class Charms {
       }, 1000);
     }
 
-    this.fetchCharmsList()
+    this.fetchPackageList()
       .then((data) => {
-        this.allCharms = data.charms.filter((charm) => charm.type === "charm");
+        this.allPackages = data.packages;
 
-        if (!this.allCharms) {
+        if (!this.allPackages) {
           return;
         }
 
-        this.filterCharms();
-        this.handleShowAllCharmsButton();
+        this.filterPackages();
+        this.handleShowAllPackagesButton();
         this.handleFilterButtonMobileOpenClick();
         this.handleFilters();
         this.handlePlatformChange();
@@ -32,18 +32,18 @@ class Charms {
         this.renderButtonMobileOpen();
 
         if (this._filters.filter || this._filters.platform[0] !== "all") {
-          this.renderCharms();
+          this.renderPackages();
           this.renderResultsCount();
-          this.toggleEntityContainer(true);
+          this.togglePackageContainer(true);
           this.togglePlaceholderContainer();
-          this.toggleShowAllCharmsButton();
+          this.toggleShowAllPackagesButton();
         }
       })
       .catch((e) => console.error(e));
   }
 
-  fetchCharmsList() {
-    return fetch("/charms.json").then((result) => result.json());
+  fetchPackageList() {
+    return fetch("/packages.json").then((result) => result.json());
   }
 
   getUrlFilters() {
@@ -71,9 +71,9 @@ class Charms {
       el: document.querySelector("[data-js='results-count-container']"),
       selector: "[data-js='results-count-container']",
     };
-    this.domEl.showAllCharmsButton = {
-      el: document.querySelector("[data-js='show-all-charms']"),
-      selector: "[data-js='show-all-charms']",
+    this.domEl.showAllPackagesButton = {
+      el: document.querySelector("[data-js='show-all-packages']"),
+      selector: "[data-js='show-all-packages']",
     };
     this.domEl.platformSwitcher = {
       el: document.querySelector("[data-js='platform-handler']"),
@@ -87,9 +87,9 @@ class Charms {
       el: document.querySelector("[data-js='placeholder-container']"),
       selector: "[data-js='placeholder-container']",
     };
-    this.domEl.entityContainer = {
-      el: document.querySelector("[data-js='entity-container']"),
-      selector: "[data-js='entity-container']",
+    this.domEl.packageContainer = {
+      el: document.querySelector("[data-js='package-container']"),
+      selector: "[data-js='package-container']",
     };
     this.domEl.featuredContainer = {
       el: document.querySelector("[data-js='featured-container']"),
@@ -105,21 +105,21 @@ class Charms {
     };
   }
 
-  handleShowAllCharmsButton() {
-    if (this.domEl.showAllCharmsButton.el) {
-      this.domEl.showAllCharmsButton.el.addEventListener("click", (e) => {
+  handleShowAllPackagesButton() {
+    if (this.domEl.showAllPackagesButton.el) {
+      this.domEl.showAllPackagesButton.el.addEventListener("click", (e) => {
         e.preventDefault();
-        this.toggleEntityContainer(true);
-        this.renderCharms();
+        this.togglePackageContainer(true);
+        this.renderPackages();
         this.renderResultsCount();
         this.renderButtonMobileOpen();
         this.toggleFeaturedContainer();
-        this.toggleShowAllCharmsButton();
+        this.toggleShowAllPackagesButton();
         window.scrollTo(0, 0);
       });
     } else {
       throw new Error(
-        `There is no element containing ${this.domEl.showAllCharmsButton.selector} selector.`
+        `There is no element containing ${this.domEl.showAllPackagesButton.selector} selector.`
       );
     }
   }
@@ -133,7 +133,7 @@ class Charms {
       if (featured) {
         this.domEl.resultsCountContainer.el.innerHTML = `${this.domEl.featuredContainer.el.children.length} Featured`;
       } else {
-        this.domEl.resultsCountContainer.el.innerHTML = `${this.charms.length} of ${this.allCharms.length}`;
+        this.domEl.resultsCountContainer.el.innerHTML = `${this.packages.length} of ${this.allPackages.length}`;
       }
     } else {
       throw new Error(
@@ -173,14 +173,14 @@ class Charms {
       this.domEl.platformSwitcher.el.addEventListener("change", (e) => {
         this._filters.platform[0] = e.target.value;
 
-        this.filterCharms();
-        this.renderCharms();
+        this.filterPackages();
+        this.renderPackages();
         this.renderResultsCount();
         this.renderButtonMobileOpen();
         this.updateHistory();
         this.toggleFeaturedContainer();
-        this.toggleShowAllCharmsButton();
-        this.toggleEntityContainer(true);
+        this.toggleShowAllPackagesButton();
+        this.togglePackageContainer(true);
       });
     } else {
       throw new Error(
@@ -219,15 +219,15 @@ class Charms {
             }
           }
 
-          this.filterCharms();
-          this.renderCharms();
+          this.filterPackages();
+          this.renderPackages();
           this.renderResultsCount();
           this.renderButtonMobileOpen();
           this.renderButtonMobileClose();
           this.updateHistory();
           this.toggleFeaturedContainer();
-          this.toggleShowAllCharmsButton();
-          this.toggleEntityContainer(true);
+          this.toggleShowAllPackagesButton();
+          this.togglePackageContainer(true);
         });
       });
     } else {
@@ -251,16 +251,16 @@ class Charms {
     }
   }
 
-  toggleEntityContainer(visibility) {
-    if (this.domEl.entityContainer.el) {
+  togglePackageContainer(visibility) {
+    if (this.domEl.packageContainer.el) {
       if (visibility) {
-        this.domEl.entityContainer.el.classList.remove("u-hide");
+        this.domEl.packageContainer.el.classList.remove("u-hide");
       } else {
-        this.domEl.entityContainer.el.classList.add("u-hide");
+        this.domEl.packageContainer.el.classList.add("u-hide");
       }
     } else {
       throw new Error(
-        `There is no element containing ${this.domEl.entityContainer.selector} selector.`
+        `There is no element containing ${this.domEl.packageContainer.selector} selector.`
       );
     }
   }
@@ -279,62 +279,62 @@ class Charms {
     }
   }
 
-  filterCharms() {
+  filterPackages() {
     if (this._filters.platform[0] === "all" && !this._filters.filter) {
-      this.charms = this.allCharms;
+      this.packages = this.allPackages;
     } else if (this._filters.platform[0] === "all" && this._filters.filter) {
-      this.charms = this.allCharms.filter((charm) =>
-        this.filterByCategory(charm)
+      this.packages = this.allPackages.filter((entity) =>
+        this.filterByCategory(entity)
       );
     } else if (this._filters.platform[0] !== "all" && !this._filters.filter) {
-      this.charms = this.allCharms.filter((charm) =>
-        charm.store_front.os.includes(this._filters.platform[0])
+      this.packages = this.allPackages.filter((entity) =>
+        entity.store_front.os.includes(this._filters.platform[0])
       );
     } else {
-      let charmsFilteredByPlatform = this.allCharms.filter((charm) =>
-        charm.store_front.os.includes(this._filters.platform[0])
+      let pakagesFilteredByPlatform = this.allPackages.filter((entity) =>
+        entity.store_front.os.includes(this._filters.platform[0])
       );
 
-      this.charms = charmsFilteredByPlatform.filter((charm) =>
-        this.filterByCategory(charm)
+      this.packages = pakagesFilteredByPlatform.filter((entity) =>
+        this.filterByCategory(entity)
       );
     }
   }
 
-  filterByCategory(charm) {
-    let charmCategories = [];
+  filterByCategory(entity) {
+    let packageCategories = [];
 
-    if (charm.store_front.categories) {
-      charmCategories = charm.store_front.categories.map((cat) => {
+    if (entity.store_front.categories) {
+      packageCategories = entity.store_front.categories.map((cat) => {
         return cat.slug;
       });
     }
 
     const cats = this._filters.filter.filter((cat) => {
-      if (charmCategories.includes(cat)) {
+      if (packageCategories.includes(cat)) {
         return cat;
       }
     });
 
     if (cats.length) {
-      return charm;
+      return entity;
     }
   }
 
-  renderCharms() {
+  renderPackages() {
     if (!"content" in document.createElement("template")) {
       return;
     }
 
-    if (this.domEl.entityContainer.el) {
-      this.domEl.entityContainer.el.innerHTML = "";
+    if (this.domEl.packageContainer.el) {
+      this.domEl.packageContainer.el.innerHTML = "";
 
-      this.charms.forEach((charm) => {
-        this.domEl.entityContainer.el.appendChild(buildCharmCard(charm));
+      this.packages.forEach((entity) => {
+        this.domEl.packageContainer.el.appendChild(buildPackageCard(entity));
       });
     } else {
       throw new Error(
-        `There is no element containing ${this.domEl.entityContainer.selector} selector.`
+        `There is no element containing ${this.domEl.packageContainer.selector} selector.`
       );
     }
   }
@@ -343,22 +343,22 @@ class Charms {
     if (
       this.domEl.platformSwitcher.el &&
       this.domEl.categoryFilters.el &&
-      this.domEl.showAllCharmsButton.el
+      this.domEl.showAllPackagesButton.el
     ) {
       this.domEl.platformSwitcher.el.disabled = false;
-      this.domEl.showAllCharmsButton.el.disabled = false;
+      this.domEl.showAllPackagesButton.el.disabled = false;
       this.domEl.categoryFilters.el.forEach((categoryFilter) => {
         categoryFilter.disabled = false;
       });
     }
   }
 
-  toggleShowAllCharmsButton() {
-    if (this.domEl.showAllCharmsButton.el) {
-      this.domEl.showAllCharmsButton.el.classList.add("u-hide");
+  toggleShowAllPackagesButton() {
+    if (this.domEl.showAllPackagesButton.el) {
+      this.domEl.showAllPackagesButton.el.classList.add("u-hide");
     } else {
       throw new Error(
-        `There is no element containing ${this.domEl.showAllCharmsButton.selector} selector.`
+        `There is no element containing ${this.domEl.showAllPackagesButton.selector} selector.`
       );
     }
   }
@@ -407,4 +407,4 @@ class Charms {
   }
 }
 
-export { Charms };
+export { Packages };

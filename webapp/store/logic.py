@@ -532,9 +532,11 @@ def filter_charm(charm, categories=["all"], platform="all"):
 def get_bundle_topology(package):
     """Retrieve and JSONifies the bundle topology data.
     :param topology_data: Bundle topology data
-    :returns: Topology JSON
+    :returns: Topology JSON or None
     """
-    if package["type"] == "bundle":
+    if package["type"] == "bundle" and package["default-release"][
+        "revision"
+    ].get("bundle-yaml"):
         result = yaml.load(
             package["default-release"]["revision"]["bundle-yaml"]
         )
