@@ -24,7 +24,7 @@
     "@babel/core": "7.11.5",
     "@babel/preset-env": "7.11.5",
     "@babel/preset-react": "7.10.4",
-    "@canonical/cookie-policy": "3.1.0",
+    "@canonical/cookie-policy": "3.1.1",
     "@canonical/global-nav": "2.4.5",
     "autoprefixer": "9.8.6",
     "babel-eslint": "10.1.0",
@@ -48,7 +48,7 @@
     "react-dom": "16.13.1",
     "sass": "1.27.0",
     "swiper": "6.3.4",
-    "vanilla-framework": "2.20.0",
+    "vanilla-framework": "2.21.0",
     "watch-cli": "0.2.3",
     "webpack": "4.44.1",
     "webpack-cli": "3.3.12"
