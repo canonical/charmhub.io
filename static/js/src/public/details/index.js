@@ -2,6 +2,7 @@ import { HistoryState } from "./historyState";
 import { TableOfContents } from "./tableOfContents";
 import { channelMap } from "./channelMap";
 import { truncateString } from "../../libs/truncate-string";
+import { Topology } from "./topology";
 
 if (window.location.hash) {
   setTimeout(() => {
@@ -31,8 +32,13 @@ const truncateSummary = (selector) => {
         summaryContentEl.innerHTML = summary;
       });
     }
-  } else {
-    throw new Error(`There are no elements containing ${selector} selector.`);
+  }
+};
+
+const initOveview = (topologyData) => {
+  truncateSummary("[data-js='summary']");
+  if (topologyData) {
+    new Topology(topologyData);
   }
 };
 
@@ -87,8 +93,6 @@ const init = (packageName) => {
   if (channelMapButton) {
     channelMap(packageName, channelMapButton);
   }
-
-  truncateSummary("[data-js='summary']");
 };
 
-export { init };
+export { init, initOveview };
