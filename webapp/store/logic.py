@@ -1,5 +1,6 @@
 import sys
 import datetime
+import json
 from collections import OrderedDict
 
 import humanize
@@ -404,6 +405,7 @@ def add_store_front_data(package, channel, details=False):
     )
     extra["last_release"] = convert_date(channel["channel"]["released-at"])
     extra["categories"] = get_categories(package["result"]["categories"])
+    extra["topology_data"] = get_bundle_topology(package)
 
     if details:
         # Mocked data
@@ -525,3 +527,20 @@ def filter_charm(charm, categories=["all"], platform="all"):
         return False
 
     return True
+
+
+def get_bundle_topology(package):
+    """Retrieve and JSONifies the bundle topology data.
+    :param topology_data: Bundle topology data
+    :returns: Topology JSON
+    """
+    if package["type"] == "bundle":
+        result = yaml.load(
+            package["default-release"]["revision"]["bundle-yaml"]
+        )
+
+        topology = json.dumps(result)
+
+        return topology
+
+    return

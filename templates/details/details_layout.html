@@ -32,12 +32,12 @@
 {% endblock %}
 
 {% block content %}
-  {% include "details/_details-header.html" %}
-  {% include "details/_details-tab-navigation.html" %}
+{% include "details/_details-header.html" %}
+{% include "details/_details-tab-navigation.html" %}
 
-  <div class="p-strip is-deep u-no-padding--top">
-    {% block details_content %} {% endblock %}
-  </div>
+<div class="p-strip is-deep u-no-padding--top">
+  {% block details_content %} {% endblock %}
+</div>
 {% endblock %}
 
 {% block page_scripts %}
@@ -45,6 +45,9 @@
 <script>
   window.addEventListener("DOMContentLoaded", function () {
     charmhub.details.init("{{ package.name }}");
+    {% if current_tab == "overview" %}
+      charmhub.details.initOveview({% if package.type == "bundle" %}{{ package.store_front.topology_data | safe }}{% endif %});
+    {% endif %}
   });
 </script>
 {% endblock %}
