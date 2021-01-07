@@ -13,7 +13,11 @@ from webapp.decorators import (
     redirect_uppercase_to_lowercase,
 )
 from webapp.feature import COMMANDS_OVERWRITE, FEATURED_CHARMS
-from webapp.helpers import discourse_api, decrease_headers, md_parser
+from webapp.helpers import (
+    discourse_api,
+    decrease_headers,
+    md_parser,
+)
 from webapp.store import logic
 
 store = Blueprint(
