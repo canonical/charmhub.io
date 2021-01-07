@@ -543,4 +543,4 @@ def get_bundle_topology(package):
 
         return topology
 
-    return
+    return None
