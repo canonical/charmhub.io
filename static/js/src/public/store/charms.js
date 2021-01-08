@@ -1,211 +1,307 @@
 import buildCharmCard from "./buildCharmCard";
 
-function initCharms() {
-  getCharmsList()
-    .then((data) => {
-      const charms = data.charms.filter((charm) => charm.type === "charm");
+/** Store page filters */
+class Charms {
+  constructor() {
+    this.selectElements();
+    this.searchCache = window.location.search;
+    this._filters = this.getUrlFilters();
 
-      if (!charms) {
-        return;
-      }
-
-      handleShowAllCharmsButton(charms);
-      handlePlatformChange(charms);
-      handleCategoryFilters(charms);
-      enableAllActions();
-    })
-    .catch((e) => console.error(e));
-
-  initMobileFilters(
-    "[data-js='filter-button-mobile-open']",
-    "[data-js='filter-button-mobile-close']"
-  );
-}
-
-function initMobileFilters(selectorOpen, selectorClose) {
-  const openButton = document.querySelector(selectorOpen);
-  const closeButton = document.querySelector(selectorClose);
-
-  if (openButton && closeButton) {
-    const filtersEl = document.querySelector(".p-layout__sidenav");
-
-    openButton.addEventListener("click", (e) => {
-      e.preventDefault();
-      filtersEl.classList.add("is-expanded");
-    });
-
-    closeButton.addEventListener("click", (e) => {
-      e.preventDefault();
-      filtersEl.classList.remove("is-expanded");
-    });
-  } else {
-    throw new Error(
-      `There are no elements containing ${
-        openButton ? closeButton : openButton
-      } selector.`
-    );
-  }
-}
-
-function getCharmsList() {
-  return fetch("/charms.json").then((result) => result.json());
-}
-
-function filterCharmsByPlatform(charmSet, platform) {
-  return charmSet.filter((charm) => charm.store_front.os.includes(platform));
-}
-
-function renderCharmCards(charms) {
-  if (!"content" in document.createElement("template")) {
-    return;
-  }
-
-  const entityContainer = document.getElementById("entity-container");
-  entityContainer.innerHTML = "";
-
-  charms.forEach((charm) => {
-    entityContainer.appendChild(buildCharmCard(charm));
-  });
-}
-
-function renderResultsCount(results, charms) {
-  if (!"content" in document.createElement("template")) {
-    return;
-  }
-
-  const resultsCountContainer = document.getElementById(
-    "results-count-container"
-  );
-
-  resultsCountContainer.innerHTML = `${results} of ${charms}`;
-}
-
-function handlePlatformChange(charms) {
-  const platformSwitcher = document.getElementById("platform-handler");
-
-  platformSwitcher.addEventListener("change", (e) => {
-    const platform = e.target.value;
-
-    if (platform === "all") {
-      renderResultsCount(charms.length, charms.length);
-      renderCharmCards(charms);
-      enableFilters();
-    } else {
-      const platformCharms = filterCharmsByPlatform(charms, platform);
-      renderResultsCount(platformCharms.length, charms.length);
-      renderCharmCards(platformCharms);
-      disableFiltersByPlatform(platformCharms);
+    if (!this._filters.filter && this._filters.platform[0] === "all") {
+      setTimeout(() => {
+        this.togglePlaceholderContainer();
+        this.toggleFeaturedContainer(true);
+        this.renderResultsCount(true);
+      }, 1000);
     }
 
-    const categoryFilters = document.querySelectorAll(".category-filter");
+    this.fetchCharmsList()
+      .then((data) => {
+        this.allCharms = data.charms.filter((charm) => charm.type === "charm");
 
-    categoryFilters.forEach((filter) => {
-      filter.checked = false;
-    });
-
-    hideFeaturedCharms();
-
-    toggleShowAllCharmsButton(platform);
-  });
-}
-
-function showFeaturedCharms() {
-  const featuredContainer = document.getElementById("features-container");
-  const entityContainer = document.getElementById("entity-container");
-
-  featuredContainer.classList.remove("u-hide");
-  entityContainer.classList.add("u-hide");
-}
-
-function hideFeaturedCharms() {
-  const featuredContainer = document.getElementById("features-container");
-  const entityContainer = document.getElementById("entity-container");
-
-  featuredContainer.classList.add("u-hide");
-  entityContainer.classList.remove("u-hide");
-}
-
-function handleShowAllCharmsButton(charms) {
-  const showAllCharmsButton = document.getElementById("show-all-charms");
-  showAllCharmsButton.addEventListener("click", (e) => {
-    e.preventDefault();
-    hideFeaturedCharms();
-    renderResultsCount(charms.length, charms.length);
-    renderCharmCards(charms);
-    toggleShowAllCharmsButton("all");
-    const categoryFilters = document.querySelectorAll(".category-filter");
-    const platformSwitcher = document.getElementById("platform-handler");
-    categoryFilters.forEach((filter) => {
-      filter.checked = false;
-      filter.disabled = false;
-    });
-    platformSwitcher.value = "all";
-
-    window.scrollTo(0, 0);
-  });
-}
-
-function toggleShowAllCharmsButton(platform) {
-  const showAllCharmsButton = document.getElementById("show-all-charms");
-
-  if (platform === "all") {
-    showAllCharmsButton.classList.add("u-hide");
-  } else {
-    showAllCharmsButton.classList.remove("u-hide");
-  }
-}
-
-function handleCategoryFilters(charms) {
-  const categoryFilters = document.querySelectorAll(".category-filter");
-
-  categoryFilters.forEach((categoryFilter) => {
-    categoryFilter.addEventListener("click", () => {
-      let categories = [];
-
-      const categoryFilters = document.querySelectorAll(".category-filter");
-      categoryFilters.forEach((categoryFilter) => {
-        if (categoryFilter.checked) {
-          categories.push(categoryFilter.value);
+        if (!this.allCharms) {
+          return;
         }
+
+        this.filterCharms();
+        this.handleShowAllCharmsButton();
+        this.handleFilterButtonMobileOpenClick();
+        this.handleFilters();
+        this.handlePlatformChange();
+        this.enableAllActions();
+        this.renderButtonMobileOpen();
+
+        if (this._filters.filter || this._filters.platform[0] !== "all") {
+          this.renderCharms();
+          this.renderResultsCount();
+          this.toggleEntityContainer(true);
+          this.togglePlaceholderContainer();
+          this.toggleShowAllCharmsButton();
+        }
+      })
+      .catch((e) => console.error(e));
+  }
+
+  fetchCharmsList() {
+    return fetch("/charms.json").then((result) => result.json());
+  }
+
+  getUrlFilters() {
+    const filters = {};
+
+    if (window.location.search) {
+      const searchParams = new URLSearchParams(window.location.search);
+      for (const [filterType, filterValue] of searchParams) {
+        filters[filterType] = filterValue.split(",");
+      }
+    }
+
+    // set the default platform
+    if (!filters.platform) {
+      filters.platform = ["all"];
+    }
+
+    return filters;
+  }
+
+  selectElements() {
+    this.domEl = {};
+
+    this.domEl.resultsCountContainer = {
+      el: document.querySelector("[data-js='results-count-container']"),
+      selector: "[data-js='results-count-container']",
+    };
+    this.domEl.showAllCharmsButton = {
+      el: document.querySelector("[data-js='show-all-charms']"),
+      selector: "[data-js='show-all-charms']",
+    };
+    this.domEl.platformSwitcher = {
+      el: document.querySelector("[data-js='platform-handler']"),
+      selector: "[data-js='platform-handler']",
+    };
+    this.domEl.categoryFilters = {
+      el: document.querySelectorAll(".category-filter"),
+      selector: ".category-filter",
+    };
+    this.domEl.placeholderContainer = {
+      el: document.querySelector("[data-js='placeholder-container']"),
+      selector: "[data-js='placeholder-container']",
+    };
+    this.domEl.entityContainer = {
+      el: document.querySelector("[data-js='entity-container']"),
+      selector: "[data-js='entity-container']",
+    };
+    this.domEl.featuredContainer = {
+      el: document.querySelector("[data-js='featured-container']"),
+      selector: "[data-js='featured-container']",
+    };
+    this.domEl.filterButtonMobileOpen = {
+      el: document.querySelector("[data-js='filter-button-mobile-open']"),
+      selector: "[data-js='filter-button-mobile-open']",
+    };
+    this.domEl.filterButtonMobileClose = {
+      el: document.querySelector("[data-js='filter-button-mobile-close']"),
+      selector: "[data-js='filter-button-mobile-close']",
+    };
+  }
+
+  handleShowAllCharmsButton() {
+    if (this.domEl.showAllCharmsButton.el) {
+      this.domEl.showAllCharmsButton.el.addEventListener("click", (e) => {
+        e.preventDefault();
+        this.toggleEntityContainer(true);
+        this.renderCharms();
+        this.renderResultsCount();
+        this.renderButtonMobileOpen();
+        this.toggleFeaturedContainer();
+        this.toggleShowAllCharmsButton();
+        window.scrollTo(0, 0);
       });
+    } else {
+      throw new Error(
+        `There is no element containing ${this.domEl.showAllCharmsButton.selector} selector.`
+      );
+    }
+  }
 
-      const platform = document.getElementById("platform-handler").value;
+  renderResultsCount(featured) {
+    if (!"content" in document.createElement("template")) {
+      return;
+    }
 
-      let filteredCharms = filterCharmsByCategories(charms, categories);
-      if (platform !== "all") {
-        filteredCharms = filterCharmsByPlatform(filteredCharms, platform);
-      }
-      hideFeaturedCharms();
-
-      if (categories.length || platform != "all") {
-        renderResultsCount(filteredCharms.length, charms.length);
-        renderCharmCards(filteredCharms);
+    if (this.domEl.resultsCountContainer.el) {
+      if (featured) {
+        this.domEl.resultsCountContainer.el.innerHTML = `${this.domEl.featuredContainer.el.children.length} Featured`;
       } else {
-        renderResultsCount(charms.length, charms.length);
-        renderCharmCards(charms);
+        this.domEl.resultsCountContainer.el.innerHTML = `${this.charms.length} of ${this.allCharms.length}`;
       }
+    } else {
+      throw new Error(
+        `There is no element containing ${this.domEl.resultsCountContainer.selector} selector.`
+      );
+    }
+  }
 
-      if (!categories.length && platform == "all") {
-        showFeaturedCharms();
-      }
+  updateHistory() {
+    const searchParams = new URLSearchParams();
+
+    Object.keys(this._filters).forEach((filterType) => {
+      searchParams.set(filterType, this._filters[filterType].join(","));
     });
-  });
-}
 
-function filterCharmsByCategories(charms, categoriesQuery) {
-  if (!categoriesQuery || categoriesQuery === "all") {
-    return charms;
+    let searchStr = searchParams.toString();
+
+    if (searchStr !== this.searchCache) {
+      this.searchCache = searchStr;
+
+      if (searchStr !== "") {
+        searchStr = `?${searchStr}`;
+      }
+
+      const newUrl = `${window.location.origin}${window.location.pathname}${searchStr}`;
+
+      history.pushState(
+        { filters: this._filters },
+        null,
+        decodeURIComponent(newUrl)
+      );
+    }
   }
 
-  if (categoriesQuery !== typeof "string" && categoriesQuery.includes("all")) {
-    categoriesQuery = categoriesQuery.filter((cat) => cat !== "all");
+  handlePlatformChange() {
+    if (this.domEl.platformSwitcher.el) {
+      this.domEl.platformSwitcher.el.addEventListener("change", (e) => {
+        this._filters.platform[0] = e.target.value;
+
+        this.filterCharms();
+        this.renderCharms();
+        this.renderResultsCount();
+        this.renderButtonMobileOpen();
+        this.updateHistory();
+        this.toggleFeaturedContainer();
+        this.toggleShowAllCharmsButton();
+        this.toggleEntityContainer(true);
+      });
+    } else {
+      throw new Error(
+        `There is no element containing ${this.domEl.platformSwitcher.selector} selector.`
+      );
+    }
   }
 
-  if (!categoriesQuery.length) {
-    return charms;
+  handleFilters() {
+    if (this.domEl.categoryFilters.el) {
+      this.domEl.categoryFilters.el.forEach((categoryFilter) => {
+        if (
+          this._filters.filter &&
+          this._filters.filter.indexOf(categoryFilter.value) !== -1
+        ) {
+          categoryFilter.checked = true;
+        } else {
+          categoryFilter.checked = false;
+        }
+
+        categoryFilter.addEventListener("click", () => {
+          if (categoryFilter.checked) {
+            if (this._filters.filter) {
+              this._filters.filter.push(categoryFilter.value);
+            } else {
+              this._filters["filter"] = [categoryFilter.value];
+            }
+          } else {
+            this._filters.filter = this._filters.filter.filter(
+              (el) => el !== categoryFilter.value
+            );
+            if (this._filters.filter.length === 0) {
+              this._filters = {
+                platform: this._filters.platform,
+              };
+            }
+          }
+
+          this.filterCharms();
+          this.renderCharms();
+          this.renderResultsCount();
+          this.renderButtonMobileOpen();
+          this.renderButtonMobileClose();
+          this.updateHistory();
+          this.toggleFeaturedContainer();
+          this.toggleShowAllCharmsButton();
+          this.toggleEntityContainer(true);
+        });
+      });
+    } else {
+      throw new Error(
+        `There are no elements containing ${this.domEl.categoryFilters.selector} selector.`
+      );
+    }
   }
 
-  return charms.filter((charm) => {
+  togglePlaceholderContainer(visibility) {
+    if (this.domEl.placeholderContainer.el) {
+      if (visibility) {
+        this.domEl.placeholderContainer.el.classList.remove("u-hide");
+      } else {
+        this.domEl.placeholderContainer.el.classList.add("u-hide");
+      }
+    } else {
+      throw new Error(
+        `There is no element containing ${this.domEl.placeholderContainer.selector} selector.`
+      );
+    }
+  }
+
+  toggleEntityContainer(visibility) {
+    if (this.domEl.entityContainer.el) {
+      if (visibility) {
+        this.domEl.entityContainer.el.classList.remove("u-hide");
+      } else {
+        this.domEl.entityContainer.el.classList.add("u-hide");
+      }
+    } else {
+      throw new Error(
+        `There is no element containing ${this.domEl.entityContainer.selector} selector.`
+      );
+    }
+  }
+
+  toggleFeaturedContainer(visibility) {
+    if (this.domEl.featuredContainer.el) {
+      if (visibility) {
+        this.domEl.featuredContainer.el.classList.remove("u-hide");
+      } else {
+        this.domEl.featuredContainer.el.classList.add("u-hide");
+      }
+    } else {
+      throw new Error(
+        `There is no element containing ${this.domEl.featuredContainer.selector} selector.`
+      );
+    }
+  }
+
+  filterCharms() {
+    if (this._filters.platform[0] === "all" && !this._filters.filter) {
+      this.charms = this.allCharms;
+    } else if (this._filters.platform[0] === "all" && this._filters.filter) {
+      this.charms = this.allCharms.filter((charm) =>
+        this.filterByCategory(charm)
+      );
+    } else if (this._filters.platform[0] !== "all" && !this._filters.filter) {
+      this.charms = this.allCharms.filter((charm) =>
+        charm.store_front.os.includes(this._filters.platform[0])
+      );
+    } else {
+      let charmsFilteredByPlatform = this.allCharms.filter((charm) =>
+        charm.store_front.os.includes(this._filters.platform[0])
+      );
+
+      this.charms = charmsFilteredByPlatform.filter((charm) =>
+        this.filterByCategory(charm)
+      );
+    }
+  }
+
+  filterByCategory(charm) {
     let charmCategories = [];
 
     if (charm.store_front.categories) {
@@ -214,7 +310,7 @@ function filterCharmsByCategories(charms, categoriesQuery) {
       });
     }
 
-    const cats = categoriesQuery.filter((cat) => {
+    const cats = this._filters.filter.filter((cat) => {
       if (charmCategories.includes(cat)) {
         return cat;
       }
@@ -223,50 +319,92 @@ function filterCharmsByCategories(charms, categoriesQuery) {
     if (cats.length) {
       return charm;
     }
-  });
-}
+  }
 
-function enableFilters() {
-  const categoryFilters = document.querySelectorAll(".category-filter");
+  renderCharms() {
+    if (!"content" in document.createElement("template")) {
+      return;
+    }
 
-  categoryFilters.forEach((filter) => {
-    filter.disabled = false;
-  });
-}
+    if (this.domEl.entityContainer.el) {
+      this.domEl.entityContainer.el.innerHTML = "";
 
-function disableFiltersByPlatform(charms) {
-  const categoryFilters = document.querySelectorAll(".category-filter");
-  const platformCategories = [];
+      this.charms.forEach((charm) => {
+        this.domEl.entityContainer.el.appendChild(buildCharmCard(charm));
+      });
+    } else {
+      throw new Error(
+        `There is no element containing ${this.domEl.entityContainer.selector} selector.`
+      );
+    }
+  }
 
-  charms.forEach((charm) => {
-    if (charm.store_front.categories) {
-      charm.store_front.categories.forEach((cat) => {
-        if (!platformCategories.includes(cat.slug)) {
-          platformCategories.push(cat.slug);
-        }
+  enableAllActions() {
+    if (
+      this.domEl.platformSwitcher.el &&
+      this.domEl.categoryFilters.el &&
+      this.domEl.showAllCharmsButton.el
+    ) {
+      this.domEl.platformSwitcher.el.disabled = false;
+      this.domEl.showAllCharmsButton.el.disabled = false;
+      this.domEl.categoryFilters.el.forEach((categoryFilter) => {
+        categoryFilter.disabled = false;
       });
     }
-  });
+  }
 
-  categoryFilters.forEach((filter) => {
-    if (platformCategories.includes(filter.value)) {
-      filter.disabled = false;
+  toggleShowAllCharmsButton() {
+    if (this.domEl.showAllCharmsButton.el) {
+      this.domEl.showAllCharmsButton.el.classList.add("u-hide");
     } else {
-      filter.disabled = true;
+      throw new Error(
+        `There is no element containing ${this.domEl.showAllCharmsButton.selector} selector.`
+      );
     }
-  });
+  }
+
+  handleFilterButtonMobileOpenClick() {
+    if (this.domEl.filterButtonMobileOpen.el) {
+      this.domEl.filterButtonMobileOpen.el.addEventListener("click", () => {
+        this.renderButtonMobileClose();
+      });
+    } else {
+      throw new Error(
+        `There is no element containing ${this.domEl.filterButtonMobileOpen.selector} selector.`
+      );
+    }
+  }
+
+  renderButtonMobileClose() {
+    if (this.domEl.filterButtonMobileClose.el) {
+      if (this._filters.filter) {
+        this.domEl.filterButtonMobileClose.el.innerHTML = "Apply filters";
+      } else {
+        this.domEl.filterButtonMobileClose.el.innerHTML = "Hide filters";
+      }
+    } else {
+      throw new Error(
+        `There is no element containing ${this.domEl.filterButtonMobileClose.selector} selector.`
+      );
+    }
+  }
+
+  renderButtonMobileOpen() {
+    if (this.domEl.filterButtonMobileOpen.el) {
+      const filterSpanEl = this.domEl.filterButtonMobileOpen.el.querySelector(
+        "span"
+      );
+      if (this._filters.filter) {
+        filterSpanEl.innerHTML = `Filters (${this._filters.filter.length})`;
+      } else {
+        filterSpanEl.innerHTML = `Filters`;
+      }
+    } else {
+      throw new Error(
+        `There is no element containing ${this.domEl.filterButtonMobileOpen.selector} selector.`
+      );
+    }
+  }
 }
 
-function enableAllActions() {
-  const platformSwitch = document.getElementById("platform-handler");
-  const categoryFilters = document.querySelectorAll(".category-filter");
-  const allOperatorsButton = document.getElementById("show-all-charms");
-
-  platformSwitch.disabled = false;
-  allOperatorsButton.disabled = false;
-  categoryFilters.forEach((categoryFilter) => {
-    categoryFilter.disabled = false;
-  });
-}
-
-export default initCharms;
+export { Charms };
