@@ -2,7 +2,7 @@ function buildCharmCard(charm) {
   const entityCard = document.getElementById("entity-card");
   const clone = entityCard.content.cloneNode(true);
 
-  const entityCardContainer = clone.querySelector(".p-layout__card");
+  const entityCardContainer = clone.querySelector(".l-flex__card");
   entityCardContainer.id = charm.name;
 
   const entityCardButton = clone.querySelector(".p-card--button");
