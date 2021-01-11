@@ -11,7 +11,7 @@
           <th>Date</th>
           <th class="u-align--right">Charm version</th>
           {% for resource in package.store_front.resources %}
-          <th class="u-align--right">{{ resource }}</th>
+          <th class="u-align--right">{{ resource.name }}</th>
           {% endfor %}
         </tr>
       </thead>
@@ -21,7 +21,7 @@
           <td role="rowheader" aria-label="Date">{{ release.released_at }}</td>
           <td role="gridcell" aria-label="Charm version" class="u-align--right">{{ release.version }}</td>
           {% for resource in package.store_front.resources %}
-          <td role="gridcell" aria-label="Charm version" class="u-align--right">{{ release.resources[resource]["revision"] }}</td>
+          <td role="gridcell" aria-label="{{ resource.name }}" class="u-align--right">{{ resource.revision }}</td>
           {% endfor %}
         </tr>
         {% endfor %}

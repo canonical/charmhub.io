@@ -2,7 +2,6 @@ const init = (packageName, channelMapButton) => {
   const currentChannel = channelMapButton.querySelector(
     "[data-js='channel-map-selected']"
   );
-  const channelCli = document.querySelector("[data-js='channel-cli']");
   const channelMapState = {
     channel: currentChannel.innerText.split(" ")[0],
     version: currentChannel.innerText.split(" ")[1],
