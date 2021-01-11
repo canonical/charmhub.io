@@ -74,7 +74,7 @@
               <a href="#drawer" class="p-button has-icon u-hide--medium u-hide--large js-drawer-toggle" data-js="filter-button-mobile-open"><i class="p-icon--arrow-right"></i><span>Filters</span></a>
               <form class="p-form p-form--inline">
                 <div class="p-form__group u-no-margin--right">
-                  <label for="platform" aria-label="Filter platforms" class="p-form__label u-hide--small">Platforms</label>
+                  <label for="platform" aria-label="Filter platforms" class="p-form__label u-no-margin--bottom u-hide--small">Platforms</label>
                   <select name="platform" data-js="platform-handler" class="p-form__control u-no-margin--bottom" value="{{ platform }}" id="platform" disabled>
                     <option value="all" {% if active_filter('platform', 'all' ) %}selected{% endif %}>All</option>
                     <option value="linux" {% if active_filter('platform', 'linux' ) %}selected{% endif %}>Linux</option>
