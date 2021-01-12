@@ -50,12 +50,10 @@
   </div>
 {% endblock%}
 
-{% block page_scripts %}
-  <script src="{{ versioned_static('js/dist/details.js') }}" defer></script>
+{% block details_scripts %}
   <script src="{{ versioned_static('js/dist/details_docs.js') }}" defer></script>
   <script>
     window.addEventListener("DOMContentLoaded", function () {
-      charmhub.details.init("{{ package.name }}");
       charmhub.details.docs.initSideNav();
     });
   </script>
