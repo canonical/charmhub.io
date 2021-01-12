@@ -194,8 +194,8 @@ def convert_channel_maps(channel_map):
             "channel": channel["channel"]["name"],
             "risk": channel["channel"]["risk"],
             "size": channel["revision"]["download"]["size"],
-            "platform": convert_series_to_ubuntu_versions(
-                channel["channel"]["platform"]["series"]
+            "platforms": convert_series_to_ubuntu_versions(
+                extract_series(channel)
             ),
             "architecture": channel["channel"]["platform"]["architecture"],
             "resources": resources,
@@ -285,9 +285,8 @@ def extract_series(channel):
     """
     series = []
 
-    channel_series = channel["channel"]["platform"]["series"]
-    if channel_series not in series:
-        series.append(channel_series)
+    for platform in channel["revision"]["platforms"]:
+        series.append(platform["series"])
 
     return series
 
