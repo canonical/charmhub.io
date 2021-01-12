@@ -120,50 +120,53 @@
           </div>
         </noscript>
 
-        <div class="l-flex__card-container u-hide" data-js="entity-container">
+        <div class="l-flex__card-container u-hide" data-js="package-container">
           <div><i class="p-icon--spinner u-animation--spin"></i> Loading&hellip;</div>
         </div>
 
         <div class="u-align--center" style="margin-top: 1rem;">
-          <button type="button" class="p-button--positive" data-js="show-all-charms" disabled>See all operators</button>
+          <button type="button" class="p-button--positive" data-js="show-all-packages" disabled>See all operators</button>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<template id="entity-card">
+<template id="package-card">
   <div class="l-flex__card u-equal-height">
     <a href="" class="p-card--button">
       <div class="p-card__header">
         <div class="p-card__thumbnail-container">
           <img src="" alt="" width="40" height="40" class="p-card__thumbnail">
         </div>
-        <h3 class="p-card__title p-heading--4 u-no-margin--bottom entity-card-title"></h3>
-        <p class="u-text--muted u-no-padding--top entity-card-publisher"></p>
+        <div class="p-bundle-icons" style="margin-block-end: 6px; margin-block-start: 6px;">
+          <img src="" alt="">
+          <img src="" alt="">
+          <span class="p-bundle-icons__count u-text--muted"></span>
+        </div>
+        <h3 class="p-card__title p-heading--4 u-no-margin--bottom package-card-title"></h3>
+        <p class="u-text--muted u-no-padding--top package-card-publisher"></p>
       </div>
-
       <div class="p-card__content">
-        <p><small class="entity-card-summary"></small></p>
+        <p><small class="package-card-summary"></small></p>
       </div>
 
       <div class="p-card__footer">
-        <div class="entity-card-icons"></div>
+        <div class="package-card-icons"></div>
       </div>
     </a>
   </div>
 </template>
-
 <style>
-  .entity-card-title {
+  .package-card-title {
     text-transform: capitalize;
   }
 
-  .entity-card-summary {
+  .package-card-summary {
     display: inline-block;
   }
 
-  .entity-card-summary::first-letter {
+  .package-card-summary::first-letter {
     text-transform: uppercase;
   }
 </style>
@@ -173,7 +176,7 @@
 <script src="{{ versioned_static('js/dist/store.js') }}" defer></script>
 <script>
   window.addEventListener("DOMContentLoaded", () => {
-    new charmhub.store.Charms();
+    new charmhub.store.initPackages();
   });
 </script>
 {% endblock %}

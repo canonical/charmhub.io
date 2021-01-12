@@ -1,24 +1,27 @@
 @mixin charmhub-p-bundle-icons {
   .p-bundle-icons {
-    $icon-size: 2.5rem;
+    $icon-size: 1.75rem;
     $padding: 0.12rem;
 
+    align-items: center;
+    background-color: $color-x-light;
+    border: 0.06rem solid $color-mid-light;
+    border-radius: (($padding * 2) + $icon-size) / 2;
+    color: #333;
     display: flex;
+    font-size: 0.875rem;
     padding: $padding 0.3rem + $padding $padding $padding;
     position: relative;
     top: -0.12rem;
-
-    @media only screen and (max-width: $breakpoint-medium) {
-      top: 0;
-    }
+    width: fit-content;
 
     &:hover {
       text-decoration: none;
     }
 
     img {
+      border: 0.06rem solid $color-mid-light;
       border-radius: $icon-size / 2;
-      box-shadow: 0 0 0 0.125rem $color-x-light;
       display: inline-block;
       height: $icon-size;
       margin-bottom: 0;
@@ -28,22 +31,12 @@
       &:first-child {
         // Set a background to handle overlapping transparent icons.
         background-color: $color-x-light;
-        position: relative;
-        z-index: 2;
-      }
-
-      &:nth-child(2) {
-        margin-left: -2rem;
-        position: relative;
         z-index: 1;
       }
 
-      &:nth-child(3) {
-        margin-left: -2rem;
-      }
-
-      &:last-of-type {
-        margin-inline-end: 1rem;
+      &:nth-child(2) {
+        margin-inline-end: 0.5rem;
+        margin-left: -1.25rem;
       }
     }
   }
