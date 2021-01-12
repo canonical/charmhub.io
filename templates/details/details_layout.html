@@ -41,10 +41,11 @@
 {% endblock %}
 
 {% block page_scripts %}
-<script src="{{ versioned_static('js/dist/details.js') }}" defer></script>
-<script>
-  window.addEventListener("DOMContentLoaded", function () {
-    charmhub.details.init("{{ package.name }}");
-  });
-</script>
+  <script src="{{ versioned_static('js/dist/details.js') }}" defer></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      charmhub.details.init("{{ package.name }}");
+    });
+  </script>
+  {% block details_scripts %}{% endblock details_scripts %}
 {% endblock %}

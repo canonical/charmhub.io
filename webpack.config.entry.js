@@ -4,6 +4,7 @@ module.exports = {
   docs: "./static/js/src/public/docs/index.js",
   base: "./static/js/src/base/base.js",
   details: "./static/js/src/public/details/index.js",
+  details_overview: "./static/js/src/public/details/overview/index.js",
   details_docs: "./static/js/src/public/details/docs/index.js",
   details_history: "./static/js/src/public/details/history/index.js",
   details_integrate: "./static/js/src/public/details/integrate/index.js",

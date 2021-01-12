@@ -50,4 +50,13 @@
       {{ readme | safe }}
     </div>
   </div>
-{% endblock%}
+{% endblock %}
+
+{% block details_scripts %}
+  <script src="{{ versioned_static('js/dist/details_overview.js') }}" defer></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      charmhub.details.overview.init();
+    });
+  </script>
+{% endblock %}
