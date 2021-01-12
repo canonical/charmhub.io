@@ -31,8 +31,38 @@ const truncateSummary = (selector) => {
         summaryContentEl.innerHTML = summary;
       });
     }
-  } else {
-    throw new Error(`There are no elements containing ${selector} selector.`);
+  }
+};
+
+const handleTopology = () => {
+  const topologyInfoPanel = document.querySelector("[data-js='topology-info']");
+  const topologyModal = document.querySelector("[data-js='topology-modal']");
+
+  if (topologyInfoPanel && topologyModal) {
+    const closeModalButton = topologyModal.querySelector(
+      "[aria-controls='modal']"
+    );
+
+    topologyInfoPanel.addEventListener("click", (e) => {
+      e.preventDefault();
+      topologyModal.classList.remove("u-hide");
+    });
+
+    closeModalButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      topologyModal.classList.add("u-hide");
+    });
+
+    closeModalButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      topologyModal.classList.add("u-hide");
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key == "Escape") {
+        topologyModal.classList.add("u-hide");
+      }
+    });
   }
 };
 
@@ -89,6 +119,7 @@ const init = (packageName) => {
   }
 
   truncateSummary("[data-js='summary']");
+  handleTopology();
 };
 
 export { init };
