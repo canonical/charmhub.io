@@ -179,7 +179,7 @@ def convert_channel_maps(channel_map):
         risk = channel["channel"]["risk"]
         resources = {}
 
-        for resource in channel["revision"]["resources"]:
+        for resource in channel["resources"]:
             resources[resource["name"]] = resource
 
         if track not in result:
@@ -222,38 +222,6 @@ def convert_channel_maps(channel_map):
     return result
 
 
-def mock_resources(package):
-    fake_resources = [
-        {
-            "name": "resource1",
-            "type": "resource-type",
-            "revision": "3",
-            "path": "resource-path",
-            "filesize": "resource-filesize",
-            "sha256": "resource-sha256",
-            "sha512": "resource-sha512",
-            "sha384": "resource-sha384",
-            "download_url": "resource-download-url",
-        },
-        {
-            "name": "resource2",
-            "type": "resource-type",
-            "revision": "4",
-            "path": "resource-path",
-            "filesize": "resource-filesize",
-            "sha256": "resource-sha256",
-            "sha512": "resource-sha512",
-            "sha384": "resource-sha384",
-            "download_url": "resource-download-url",
-        },
-    ]
-
-    for channel in package["channel-map"]:
-        channel["revision"]["resources"] = fake_resources
-
-    return package
-
-
 def extract_all_resources(channel_map):
     """
     Extract resources from channel map
@@ -265,12 +233,12 @@ def extract_all_resources(channel_map):
     resources = []
 
     for channel in channel_map:
-
-        channel_resources = channel["revision"]["resources"]
+        channel_resources = channel["resources"]
 
         for resource in channel_resources:
-            if resource["name"] not in resources:
-                resources.append(resource["name"])
+            resources.append(
+                {"name": resource["name"], "revision": resource["revision"]}
+            )
 
     return resources
 
@@ -405,10 +373,6 @@ def add_store_front_data(package, channel, details=False):
     extra["categories"] = get_categories(package["result"]["categories"])
 
     if details:
-        # Mocked data
-        package = mock_resources(package)
-        extra["has_libraries"] = True
-
         extra["metadata"] = yaml.load(channel["revision"]["metadata-yaml"])
         extra["config"] = yaml.load(channel["revision"]["config-yaml"])
         extra["actions"] = yaml.load(channel["revision"]["actions-yaml"])
