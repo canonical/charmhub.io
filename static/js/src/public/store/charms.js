@@ -8,11 +8,9 @@ class Charms {
     this._filters = this.getUrlFilters();
 
     if (!this._filters.filter && this._filters.platform[0] === "all") {
-      setTimeout(() => {
-        this.togglePlaceholderContainer();
-        this.toggleFeaturedContainer(true);
-        this.renderResultsCount(true);
-      }, 1000);
+      this.togglePlaceholderContainer();
+      this.toggleFeaturedContainer(true);
+      this.renderResultsCount(true);
     }
 
     this.fetchCharmsList()
