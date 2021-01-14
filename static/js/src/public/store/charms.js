@@ -6,8 +6,10 @@ class Charms {
     this.selectElements();
     this.searchCache = window.location.search;
     this._filters = this.getUrlFilters();
-
-    if (!this._filters.filter && this._filters.platform[0] === "all") {
+    if (
+      this._filters.filter.length === 0 &&
+      this._filters.platform[0] === "all"
+    ) {
       this.togglePlaceholderContainer();
       this.toggleFeaturedContainer(true);
       this.renderResultsCount(true);
@@ -21,15 +23,21 @@ class Charms {
           return;
         }
 
+        this.groupAllCharms();
+
         this.filterCharms();
         this.handleShowAllCharmsButton();
         this.handleFilterButtonMobileOpenClick();
-        this.handleFilters();
+        this.handleFilterClick();
         this.handlePlatformChange();
         this.enableAllActions();
+        this.renderFiltersAndPlatform();
         this.renderButtonMobileOpen();
 
-        if (this._filters.filter || this._filters.platform[0] !== "all") {
+        if (
+          this._filters.filter.length > 0 ||
+          this._filters.platform[0] !== "all"
+        ) {
           this.renderCharms();
           this.renderResultsCount();
           this.toggleEntityContainer(true);
@@ -57,6 +65,10 @@ class Charms {
     // set the default platform
     if (!filters.platform) {
       filters.platform = ["all"];
+    }
+
+    if (!filters.filter) {
+      filters.filter = [];
     }
 
     return filters;
@@ -144,7 +156,9 @@ class Charms {
     const searchParams = new URLSearchParams();
 
     Object.keys(this._filters).forEach((filterType) => {
-      searchParams.set(filterType, this._filters[filterType].join(","));
+      if (this._filters[filterType].length > 0) {
+        searchParams.set(filterType, this._filters[filterType].join(","));
+      }
     });
 
     let searchStr = searchParams.toString();
@@ -172,6 +186,7 @@ class Charms {
         this._filters.platform[0] = e.target.value;
 
         this.filterCharms();
+        this.renderFiltersAndPlatform();
         this.renderCharms();
         this.renderResultsCount();
         this.renderButtonMobileOpen();
@@ -187,11 +202,11 @@ class Charms {
     }
   }
 
-  handleFilters() {
+  handleFilterClick() {
     if (this.domEl.categoryFilters.el) {
       this.domEl.categoryFilters.el.forEach((categoryFilter) => {
         if (
-          this._filters.filter &&
+          this._filters.filter.length > 0 &&
           this._filters.filter.indexOf(categoryFilter.value) !== -1
         ) {
           categoryFilter.checked = true;
@@ -201,23 +216,15 @@ class Charms {
 
         categoryFilter.addEventListener("click", () => {
           if (categoryFilter.checked) {
-            if (this._filters.filter) {
-              this._filters.filter.push(categoryFilter.value);
-            } else {
-              this._filters["filter"] = [categoryFilter.value];
-            }
+            this._filters.filter.push(categoryFilter.value);
           } else {
             this._filters.filter = this._filters.filter.filter(
               (el) => el !== categoryFilter.value
             );
-            if (this._filters.filter.length === 0) {
-              this._filters = {
-                platform: this._filters.platform,
-              };
-            }
           }
 
           this.filterCharms();
+          this.renderFiltersAndPlatform();
           this.renderCharms();
           this.renderResultsCount();
           this.renderButtonMobileOpen();
@@ -232,6 +239,77 @@ class Charms {
       throw new Error(
         `There are no elements containing ${this.domEl.categoryFilters.selector} selector.`
       );
+    }
+  }
+
+  groupAllCharms() {
+    this.groupedCharms = {
+      categories: {},
+    };
+
+    this.allCharms.forEach((charm) => {
+      if (charm.store_front.categories) {
+        charm.store_front.categories.forEach((cat) => {
+          if (!this.groupedCharms.categories[cat.slug]) {
+            this.groupedCharms.categories[cat.slug] = {
+              linux: [],
+              kubernetes: [],
+            };
+          }
+          if (charm.store_front.os.includes("kubernetes")) {
+            this.groupedCharms.categories[cat.slug].kubernetes.push(charm);
+          } else {
+            this.groupedCharms.categories[cat.slug].linux.push(charm);
+          }
+        });
+      }
+    });
+  }
+
+  renderFiltersAndPlatform() {
+    if (this.domEl.categoryFilters.el && this.domEl.platformSwitcher.el) {
+      this.domEl.categoryFilters.el.forEach((filter) => {
+        if (this._filters.platform[0] === "all") {
+          let count = 0;
+          Object.keys(this.groupedCharms.categories[filter.value]).forEach(
+            (platform) => {
+              count += platform.length;
+            }
+          );
+          if (count === 0) {
+            filter.disabled = true;
+          } else {
+            filter.disabled = false;
+          }
+        } else {
+          if (
+            this.groupedCharms.categories[filter.value][
+              this._filters.platform[0]
+            ].length === 0
+          ) {
+            filter.disabled = true;
+          } else {
+            filter.disabled = false;
+          }
+        }
+      });
+
+      Array.from(this.domEl.platformSwitcher.el.options).forEach((option) => {
+        if (option.value !== "all" && this._filters.filter.length > 0) {
+          this._filters.filter.forEach((filter) => {
+            if (
+              this.groupedCharms.categories[filter] &&
+              this.groupedCharms.categories[filter][option.value].length > 0
+            ) {
+              option.disabled = false;
+            } else {
+              option.disabled = true;
+            }
+          });
+        } else {
+          option.disabled = false;
+        }
+      });
     }
   }
 
@@ -278,13 +356,22 @@ class Charms {
   }
 
   filterCharms() {
-    if (this._filters.platform[0] === "all" && !this._filters.filter) {
+    if (
+      this._filters.platform[0] === "all" &&
+      this._filters.filter.length === 0
+    ) {
       this.charms = this.allCharms;
-    } else if (this._filters.platform[0] === "all" && this._filters.filter) {
+    } else if (
+      this._filters.platform[0] === "all" &&
+      this._filters.filter.length > 0
+    ) {
       this.charms = this.allCharms.filter((charm) =>
         this.filterByCategory(charm)
       );
-    } else if (this._filters.platform[0] !== "all" && !this._filters.filter) {
+    } else if (
+      this._filters.platform[0] !== "all" &&
+      this._filters.filter.length === 0
+    ) {
       this.charms = this.allCharms.filter((charm) =>
         charm.store_front.os.includes(this._filters.platform[0])
       );
@@ -345,9 +432,6 @@ class Charms {
     ) {
       this.domEl.platformSwitcher.el.disabled = false;
       this.domEl.showAllCharmsButton.el.disabled = false;
-      this.domEl.categoryFilters.el.forEach((categoryFilter) => {
-        categoryFilter.disabled = false;
-      });
     }
   }
 
@@ -375,7 +459,7 @@ class Charms {
 
   renderButtonMobileClose() {
     if (this.domEl.filterButtonMobileClose.el) {
-      if (this._filters.filter) {
+      if (this._filters.filter.length > 0) {
         this.domEl.filterButtonMobileClose.el.innerHTML = "Apply filters";
       } else {
         this.domEl.filterButtonMobileClose.el.innerHTML = "Hide filters";
@@ -392,7 +476,7 @@ class Charms {
       const filterSpanEl = this.domEl.filterButtonMobileOpen.el.querySelector(
         "span"
       );
-      if (this._filters.filter) {
+      if (this._filters.filter.length > 0) {
         filterSpanEl.innerHTML = `Filters (${this._filters.filter.length})`;
       } else {
         filterSpanEl.innerHTML = `Filters`;
