@@ -28,7 +28,7 @@
           {% if value.default %}
           <p style="overflow-wrap: break-word;"><span class="u-text--muted">Default:</span> {{ value.default }}</p>
           {% endif %}
-          <p style="overflow-wrap: break-word;white-space: pre;">{{ value.description | escape }}</p>
+          <p style="overflow-wrap: break-word;white-space: pre-wrap;">{{ value.description | escape }}</p>
         </li>
         {% endfor %}
       </ul>
