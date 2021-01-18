@@ -65,6 +65,7 @@ $theme-default-nav: dark;
 @include vf-u-vertical-spacing;
 @include vf-u-text-muted;
 @include vf-u-no-max-width;
+@include vf-u-truncate;
 
 // Import site specific patterns and overrides
 @import "pattern_p-card";
@@ -293,6 +294,10 @@ body {
 .p-details-tab__content {
   p {
     max-width: unset;
+  }
+
+  .p-side-navigation__link.u-truncate {
+    display: block;
   }
 }
 

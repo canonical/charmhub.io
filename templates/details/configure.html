@@ -11,7 +11,7 @@
         <ul class="p-side-navigation__list">
           {% for config in package.store_front.config.options.keys() %}
           <li class="p-side-navigation__item">
-            <a href="#{{ config }}" class="p-side-navigation__link" role="tab" aria-controls="{{ config }}" {% if loop.index == 1 %}aria-selected="false" {% endif %}>
+            <a href="#{{ config }}" class="p-side-navigation__link u-truncate" role="tab" aria-controls="{{ config }}" {% if loop.index == 1 %}aria-selected="false" {% endif %}>
               {{ config }}
             </a>
           </li>
@@ -28,7 +28,7 @@
           {% if value.default %}
           <p style="overflow-wrap: break-word;"><span class="u-text--muted">Default:</span> {{ value.default }}</p>
           {% endif %}
-          <p style="overflow-wrap: break-word;white-space: pre-wrap;">{{ value.description | escape }}</p>
+          <p style="overflow-wrap: break-word; white-space: pre-wrap;">{{ value.description | escape }}</p>
         </li>
         {% endfor %}
       </ul>
