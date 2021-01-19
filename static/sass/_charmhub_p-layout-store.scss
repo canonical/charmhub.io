@@ -1,4 +1,61 @@
 @mixin p-charmhub-layout-store {
+  .u-fixed-width--no-margins {
+    @include vf-b-row-reset;
+  }
+  .p-layout--new {
+    display: grid;
+    grid-gap: 0 0;
+    grid-template-columns:
+      [full-start] minmax(1em, 1fr)
+      [main-start] minmax(0, 69rem) [main-end]
+      minmax(1em, 1fr) [full-end];
+  }
+
+  .p-layout--new > * {
+    grid-column: main;
+  }
+
+  .p-layout--new__full {
+    display: inherit;
+    grid-column: full;
+    grid-gap: 1.5rem;
+    grid-template-columns: inherit;
+  }
+
+  .p-layout--new__main {
+    grid-column: main / full;
+    padding-right: 1.5rem;
+  }
+
+  .p-layout-new__card-container {
+    display: grid;
+    grid-column-end: full-end;
+    grid-column-start: main-start;
+    grid-gap: 0 1.5rem;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    padding: 0;
+
+    & *:nth-child(n + 13) {
+      display: none;
+    }
+  }
+
+  .p-layout__card--new {
+    grid-column-end: span 2;
+    grid-column-start: auto;
+    margin-bottom: 1.5rem;
+    width: auto;
+  }
+
+  .p-layout--new__aside {
+    order: -1;
+  }
+
+  .p-layout--new__aside-wrapper {
+    display: flex;
+    justify-content: flex-end;
+  }
+
   .p-layout--store {
     @media screen and(min-width: $breakpoint-small) {
       display: flex;
@@ -32,16 +89,14 @@
       }
 
       @media screen and (max-width: $breakpoint-medium - 1) {
-        animation:
-          vf-p-side-navigation-collapse
+        animation: vf-p-side-navigation-collapse
           map-get($animation-duration, brisk);
       }
 
       display: none;
 
       &.is-expanded {
-        animation:
-          vf-p-side-navigation-expand
+        animation: vf-p-side-navigation-expand
           map-get($animation-duration, brisk);
         background-color: $color-x-light;
         display: block;

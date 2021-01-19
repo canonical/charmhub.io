@@ -1,10 +1,10 @@
 <footer>
-  <hr>
-  <div class="u-fixed-width is-wide">
+  <!-- <hr> -->
+  <div class="u-fixed-width is-wide p-strip is-shallow">
     {% if request.path == '/tutorials' %}
-    <p class="u-no-padding--top" style="margin-block-end: 1rem;"><strong>List your own tutorial on Charmhub.</strong><a href="/tutorials/how-to-write-a-tutorial"> Submit your tutorial&nbsp;&rsaquo;</a></p>
+    <p class="u-no-padding--top u-no-margin--bottom" style="margin-block-end: 1rem;"><strong>List your own tutorial on Charmhub.</strong><a href="/tutorials/how-to-write-a-tutorial"> Submit your tutorial&nbsp;&rsaquo;</a></p>
     {% else %}
-    <p class="u-no-padding--top" style="margin-block-end: 1rem;"><strong>List your own operator on Charmhub.</strong><a href="https://github.com/canonical/operator" class="p-link--external"> Submit your operator</a></p>
+    <p class="u-no-padding--top u-no-margin--bottom" style="margin-block-end: 1rem;"><strong>List your own operator on Charmhub.</strong><a href="https://github.com/canonical/operator" class="p-link--external"> Submit your operator</a></p>
     {% endif %}
   </div>
   <div class="p-footer">

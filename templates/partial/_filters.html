@@ -1,87 +1,79 @@
-<div class="p-layout__sidenav">
-  <div class="p-sidenav__drawer-header">
-    <a href="/" class="p-sidenav__toggle" data-js="filter-button-mobile-close">Apply filters</a>
+<div class="u-fixed-width--no-margins">
+  <div class="u-float-left">
+    <p class="-p-muted-heading" id="results-count-container" data-js="filtered-items">
+      {{ featured_charms|length }} Featured. &nbsp;
+    </p>
   </div>
-  <div class="p-filter" data-js="filter-handler">
-    <h3 class="p-muted-heading" data-filters="applied-filters">
-      Filters
-    </h3>
-    <form>
-      <div class="p-filter__scroll-box">
-        {% if categories %}
-        <ul class="p-list">
-          {% for category in categories %}
-          {% if category.slug != "featured" and category.slug != "other" %}
-          <li class="p-list__item" data-filter-type="category" data-js="filter">
-            <label class="p-checkbox">
-              <input class="p-checkbox__input category-filter" aria-labelledby="{{ category.slug }}-filter" type="checkbox" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %} disabled>
-              <span class="p-checkbox__label" id="{{ category.slug }}-filter">{{ category.name }}</span>
-            </label>
-          </li>
-          {% endif %}
-          {% endfor %}
-        </ul>
-        {% endif %}
-      </div>
+  <div class="-u-float-right">
+    <form action="/" class="p-search-box p-layout__search u-hide--medium u-hide--large" data-js="search-handler-mobile">
+      <input type="search" class="p-search-box__input" name="q" aria-label="Search Charmhub" placeholder="Search Charmhub" {% if q %}value="{{ q }}" {% endif %} required />
+      <button type="reset" class="p-search-box__reset"><i class="p-icon--close">Clear</i></button>
+      <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search">Search</i></button>
     </form>
-  </div>
-  <hr />
-  <div class="p-filter">
-    <h3 class="p-muted-heading">
-      Useful links
-    </h3>
-    <ul class="p-list">
-      <li class="p-list__item">
-        <a href="/about">What is an operator?</a>
-      </li>
-      <li class="p-list__item">
-        <a href="/publishing">How do I publish here?</a>
-      </li>
-      <li class="p-list__item">
-        <a href="/glossary">Glossary</a>
-      </li>
-    </ul>
+    <div class="p-container--inline">
+      <a href="#filters" class="p-button has-icon u-hide--medium u-hide--large" data-js="filter-button-mobile-open"><i class="p-icon--arrow-right"></i><span>Filters</span></a>
+      <form class="p-form p-form--inline">
+        <div class="p-layout__sort-desktop p-form__group u-no-margin--right">
+          <label for="platform" aria-label="Filter platforms" class="p-form__label u-hide--medium u-hide--small">Platforms</label>
+          <select name="platform" id="platform-handler" data-js="platform-handler" class="p-form__control" value="{{ platform }}" id="platform" disabled>
+            <option value="all" {% if active_filter('platform', 'all') %}selected{% endif %}>All</option>
+            <option value="linux" {% if active_filter('platform', 'linux') %}selected{% endif %}>Linux</option>
+            <option value="kubernetes" {% if active_filter('platform', 'kubernetes') %}selected{% endif %}>Kubernetes</option>
+          </select>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
-
-<div class="p-layout__main">
-  <div class="p-layout__filter-container">
-    <div class="p-layout__left">
-      <div class="p-muted-heading" id="results-count-container" data-js="filtered-items">{{ featured_charms|length }} Featured</div>
+<div class="p-layout__filter-container">
+</div>
+<div class="p-layout--new__full">
+  <div class="p-layout--new__main" style="padding-right: 1.5rem">
+    <div class="p-layout-new__card-container" id="features-container">
+      {% include "partial/_featured-charms.html" %}
     </div>
-    <div class="p-layout__right">
-      <form action="/" class="p-search-box p-layout__search u-hide--medium u-hide--large" data-js="search-handler-mobile">
-        <input type="search" class="p-search-box__input" name="q" aria-label="Search Charmhub" placeholder="Search Charmhub" {% if q %}value="{{ q }}" {% endif %} required />
-        <button type="reset" class="p-search-box__reset"><i class="p-icon--close">Clear</i></button>
-        <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search">Search</i></button>
-      </form>
-      <div class="p-container--inline">
-        <a href="#filters" class="p-button has-icon u-hide--medium u-hide--large" data-js="filter-button-mobile-open"><i class="p-icon--arrow-right"></i><span>Filters</span></a>
-        <form class="p-form p-form--inline">
-          <div class="p-layout__sort-desktop p-form__group u-no-margin--right">
-            <label for="platform" aria-label="Filter platforms" class="p-form__label u-hide--medium u-hide--small">Platforms</label>
-            <select name="platform" id="platform-handler" data-js="platform-handler" class="p-form__control" value="{{ platform }}" id="platform" disabled>
-              <option value="all" {% if active_filter('platform', 'all') %}selected{% endif %}>All</option>
-              <option value="linux" {% if active_filter('platform', 'linux') %}selected{% endif %}>Linux</option>
-              <option value="kubernetes" {% if active_filter('platform', 'kubernetes') %}selected{% endif %}>Kubernetes</option>
-            </select>
-          </div>
-        </form>
-      </div>
+    <div class="p-layout__card-container u-hide" id="entity-container">
+      <div><i class="p-icon--spinner u-animation--spin"></i> Loading&hellip;</div>
     </div>
-  </div>
-  <div class="p-layout__card-container" id="features-container">
-    {% include "partial/_featured-charms.html" %}
-  </div>
-  <div class="p-layout__card-container u-hide" id="entity-container">
-    <div><i class="p-icon--spinner u-animation--spin"></i> Loading&hellip;</div>
-  </div>
-
-  <div class="u-align--center" style="margin-top: 1rem;">
+    <hr>
     <button type="button" class="p-button--positive" id="show-all-charms" disabled>See all operators</button>
   </div>
+  <div class="p-layout--new__aside">
+    <div class="p-layout--new__aside-wrapper">
+      <div class="p-layout--new__aside-container">
+        <!-- <div class="p-sidenav__drawer-header">
+          <a href="/" class="p-sidenav__toggle" data-js="filter-button-mobile-close">Apply filters</a>
+        </div> -->
+        <div class="p-filter" data-js="filter-handler">
+          <h3 class="p-muted-heading" data-filters="applied-filters"> Filters </h3>
+          <form>
+            <div class="p-filter__scroll-box"> {% if categories %} <ul class="p-list"> {% for category in categories %} {% if category.slug != "featured" and category.slug != "other" %} <li class="p-list__item" data-filter-type="category" data-js="filter">
+                  <label class="p-checkbox">
+                    <input class="p-checkbox__input category-filter" aria-labelledby="{{ category.slug }}-filter" type="checkbox" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %} disabled>
+                    <span class="p-checkbox__label" id="{{ category.slug }}-filter">{{ category.name }}</span>
+                  </label>
+                </li> {% endif %} {% endfor %} </ul> {% endif %} </div>
+          </form>
+        </div>
+        <hr />
+        <div class="p-filter">
+          <h3 class="p-muted-heading"> Useful links </h3>
+          <ul class="p-list">
+            <li class="p-list__item">
+              <a href="/about">What is an operator?</a>
+            </li>
+            <li class="p-list__item">
+              <a href="/publishing">How do I publish here?</a>
+            </li>
+            <li class="p-list__item">
+              <a href="/glossary">Glossary</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
 <template id="entity-card">
   <div class="p-layout__card u-equal-height">
     <a href="" class="p-card--button">
@@ -92,18 +84,15 @@
         <h3 class="p-card__title p-heading--4 u-no-margin--bottom entity-card-title"></h3>
         <p class="u-text--muted u-no-padding--top entity-card-publisher"></p>
       </div>
-
       <div class="p-card__content">
         <p><small class="entity-card-summary"></small></p>
       </div>
-
       <div class="p-card__footer">
         <div class="entity-card-icons"></div>
       </div>
     </a>
   </div>
 </template>
-
 <style>
   .entity-card-title {
     text-transform: capitalize;
