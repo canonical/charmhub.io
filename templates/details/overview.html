@@ -13,6 +13,29 @@
         </p>
         <hr class="p-separator--shallow">
       {% endif %}
+      {% if package.type == "bundle" %}
+        {% if not package.result.summary %}
+          <h4 class="p-heading--5 u-sv1 u-no-margin--bottom">About</h4>
+        {% endif %}
+          <div class="p-topology-info" data-js="topology-info">
+            <div class="p-card--highlighted">
+              <object data="https://api.jujucharms.com/charmstore/v5/bundle/{{ package.name }}/diagram.svg" type="image/svg+xml" style="pointer-events: none;"></object>
+              <button class="p-button--base has-icon u-no-margin--bottom"><i class="p-icon--fullscreen">Show fullscreen</i></button>
+            </div>
+          </div>
+          <div class="p-modal p-modal--topology u-hide" data-js="topology-modal" id="modal">
+            <div class="p-modal__dialog" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-description">
+              <header class="p-modal__header">
+                <h2 class="p-modal__title" id="modal-title">{{ package.name }}</h2>
+                <button class="p-modal__close" aria-label="Close the topology modal" aria-controls="modal">Close</button>
+              </header>
+              <object class="p-modal__image" id="modal-description" data="https://api.jujucharms.com/charmstore/v5/bundle/{{ package.name }}/diagram.svg" type="image/svg+xml"></object>
+            </div>
+          </div>
+        {% if not package.result.summary %}
+          <hr class="p-separator--shallow">
+        {% endif %}
+      {% endif %}
       {% if package.result.license %}
         <p><span class="u-text--muted">License</span><br />{{ package.result.license }}</p>
         <hr class="p-separator--shallow">
