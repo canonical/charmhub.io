@@ -9,7 +9,7 @@ FEATURED_CHARMS = [
         "display_name": "Prometheus",
         "summary": "Prometheus for Kubernetes clusters",
         "publisher": "charmcraft",
-        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_ZhkY5AmM2Gncryt3xMkejF4Wyn8lZMSL_icon__e7651667979597ae818df0527b26d34e61e960bf5d165a5cac8e705cd94b5a74.png",
+        "icon": "https://api.charmhub.io/api/v1/media/download/charm_ZhkY5AmM2Gncryt3xMkejF4Wyn8lZMSL_icon__e7651667979597ae818df0527b26d34e61e960bf5d165a5cac8e705cd94b5a74.png",
         "platform": "kubernetes",
     },
     {
@@ -17,7 +17,7 @@ FEATURED_CHARMS = [
         "display_name": "PostgreSQL K8s",
         "summary": "PostgreSQL charm for Kubernetes deployments.",
         "publisher": "postgresql-charmers",
-        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_zDdv4KnGGAGTYSKyvZtmBleis8tLcKii_icon__58a751522b5f0849e40c39418ea99526f731997ae7720636a5881adce75742d7.png",
+        "icon": "https://api.charmhub.io/api/v1/media/download/charm_zDdv4KnGGAGTYSKyvZtmBleis8tLcKii_icon__58a751522b5f0849e40c39418ea99526f731997ae7720636a5881adce75742d7.png",
         "platform": "kubernetes",
     },
     {
@@ -25,7 +25,7 @@ FEATURED_CHARMS = [
         "display_name": "Discourse",
         "summary": "Discourse is the 100% open source discussion platform built for the next decade of the Internet.",
         "publisher": "discourse-charmers",
-        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_7uVm0DWuzZ7R2HnZs1HYNyZh4JAO9cmK_icon__4d0b75dcbd9b2876f927b89d9962d7536abc192312058b1c4d2661a88f93fa29.png",
+        "icon": "https://api.charmhub.io/api/v1/media/download/charm_7uVm0DWuzZ7R2HnZs1HYNyZh4JAO9cmK_icon__4d0b75dcbd9b2876f927b89d9962d7536abc192312058b1c4d2661a88f93fa29.png",
         "platform": "kubernetes",
     },
     {
@@ -33,7 +33,7 @@ FEATURED_CHARMS = [
         "display_name": "Elasticsearch",
         "summary": "Elasticsearch is the distributed search and analytics engine.",
         "publisher": "charmcraft",
-        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_pNFO27XPIpON7Ze0UiHkIHYZOqagJHRg_icon__2fc015c5b057531e50c510ac3245d27dc8d74cef97c28587f3585f6b4f8e0bab.png",
+        "icon": "https://api.charmhub.io/api/v1/media/download/charm_pNFO27XPIpON7Ze0UiHkIHYZOqagJHRg_icon__2fc015c5b057531e50c510ac3245d27dc8d74cef97c28587f3585f6b4f8e0bab.png",
         "platform": "kubernetes",
     },
     {
@@ -41,7 +41,7 @@ FEATURED_CHARMS = [
         "display_name": "Graylog K8s",
         "summary": "Kubernetes charm for Graylog.",
         "publisher": "lmaas",
-        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_Cx3p6f5pSUhYCDBDo2vmpA3hxdPIiEof_icon__1796f2cd44163a28257fb1deb9302ea62792c87c4687f6853a58d5c706f0207d.png",
+        "icon": "https://api.charmhub.io/api/v1/media/download/charm_Cx3p6f5pSUhYCDBDo2vmpA3hxdPIiEof_icon__1796f2cd44163a28257fb1deb9302ea62792c87c4687f6853a58d5c706f0207d.png",
         "platform": "kubernetes",
     },
     {
@@ -49,7 +49,7 @@ FEATURED_CHARMS = [
         "display_name": "Mattermost",
         "summary": "Mattermost is a flexible, open source messaging platform that enables secure team collaboration.",
         "publisher": "mattermost-charmers",
-        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_sssO0EqGsQ1X4cjdpWT3eVZGsqraBj0c_icon__da58ad7ec5670e4564fc5218fba8db7bf0d9b05432247196b07b4900a71bea27.png",
+        "icon": "https://api.charmhub.io/api/v1/media/download/charm_sssO0EqGsQ1X4cjdpWT3eVZGsqraBj0c_icon__da58ad7ec5670e4564fc5218fba8db7bf0d9b05432247196b07b4900a71bea27.png",
         "platform": "kubernetes",
     },
     {
@@ -57,7 +57,7 @@ FEATURED_CHARMS = [
         "display_name": "Grafana",
         "summary": "Data vizualization for the charmed LMA stack",
         "publisher": "charmcraft",
-        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_cI4vjn0XM9cr2xaAfUAKmbCEGZhferW3_icon__8bb3949045c44332989de4ffbcdf3f67799dca5861983f773a4b743794188e5f.png",
+        "icon": "https://api.charmhub.io/api/v1/media/download/charm_cI4vjn0XM9cr2xaAfUAKmbCEGZhferW3_icon__8bb3949045c44332989de4ffbcdf3f67799dca5861983f773a4b743794188e5f.png",
         "platform": "kubernetes",
     },
     {
@@ -65,7 +65,7 @@ FEATURED_CHARMS = [
         "display_name": "AlertManager",
         "summary": "Alert management for charmed LMA stack",
         "publisher": "charmcraft",
-        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_XsyeaRwHBC7YfMdP72Fjfo9wt7Wmwe6D_icon__e7651667979597ae818df0527b26d34e61e960bf5d165a5cac8e705cd94b5a74.png",
+        "icon": "https://api.charmhub.io/api/v1/media/download/charm_XsyeaRwHBC7YfMdP72Fjfo9wt7Wmwe6D_icon__e7651667979597ae818df0527b26d34e61e960bf5d165a5cac8e705cd94b5a74.png",
         "platform": "kubernetes",
     },
     {
@@ -73,7 +73,7 @@ FEATURED_CHARMS = [
         "display_name": "MariaDB",
         "summary": "Popular, enhanced, drop-in replacement for MySQL",
         "publisher": "osmeng",
-        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_tNiFc3ACzOzO0BUJOTSxeAxVue7rUN1c_icon__0d2a05f1616edbed72466b792907f6724b1823d6958bcee47f0fe66c07c46638.png",
+        "icon": "https://api.charmhub.io/api/v1/media/download/charm_tNiFc3ACzOzO0BUJOTSxeAxVue7rUN1c_icon__0d2a05f1616edbed72466b792907f6724b1823d6958bcee47f0fe66c07c46638.png",
         "platform": "kubernetes",
     },
     {
@@ -81,7 +81,7 @@ FEATURED_CHARMS = [
         "display_name": "MongoDB K8s",
         "summary": "MongoDB charm for Kubernetes",
         "publisher": "mgo",
-        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_tssr8F68XYBVUiU6QzMs4BZ7JnH5Itm1_icon__dcd4f86fe38ca430e0e2b221c6ea949af2e04778fae4b4b73658dccc09260714.png",
+        "icon": "https://api.charmhub.io/api/v1/media/download/charm_tssr8F68XYBVUiU6QzMs4BZ7JnH5Itm1_icon__dcd4f86fe38ca430e0e2b221c6ea949af2e04778fae4b4b73658dccc09260714.png",
         "platform": "kubernetes",
     },
     {
@@ -89,7 +89,7 @@ FEATURED_CHARMS = [
         "display_name": "Jenkins Agent ",
         "summary": "Agent for Jenkins, the leading open source automation server. Jenkins provides hundreds of plugins to support building, deploying and automating any project.",
         "publisher": "jenkins-ci-charmers",
-        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_6NmjnZdeCSfHart3dYxjiaYc3RXb9CR4_icon__ad7306147e1bb35df0f370bddb0004ad7f25d5477b2ea3aa911a1eec807a2761.png",
+        "icon": "https://api.charmhub.io/api/v1/media/download/charm_6NmjnZdeCSfHart3dYxjiaYc3RXb9CR4_icon__ad7306147e1bb35df0f370bddb0004ad7f25d5477b2ea3aa911a1eec807a2761.png",
         "platform": "kubernetes",
     },
     {
@@ -113,7 +113,7 @@ FEATURED_CHARMS = [
         "display_name": "Openldap",
         "summary": "An OpenLDAP server using the SQL backend.",
         "publisher": "openldap-charmers",
-        "icon": "https://api.snapcraft.io/api/v1/media/download/charm_k0USCCK3wcu748BYAVLhpRbDA0dk3Apl_icon__18df9f1ad833d37743fcb7780d074d27016b191d7bb43a7c94065c75de630d8a.png",
+        "icon": "https://api.charmhub.io/api/v1/media/download/charm_k0USCCK3wcu748BYAVLhpRbDA0dk3Apl_icon__18df9f1ad833d37743fcb7780d074d27016b191d7bb43a7c94065c75de630d8a.png",
         "platform": "kubernetes",
     },
 ]
