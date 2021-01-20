@@ -13,7 +13,11 @@ from webapp.decorators import (
     redirect_uppercase_to_lowercase,
 )
 from webapp.feature import COMMANDS_OVERWRITE, FEATURED_CHARMS
-from webapp.helpers import discourse_api, decrease_headers, md_parser
+from webapp.helpers import (
+    discourse_api,
+    decrease_headers,
+    md_parser,
+)
 from webapp.store import logic
 
 store = Blueprint(
@@ -62,29 +66,29 @@ def index():
             query=query.lower(), fields=SEARCH_FIELDS
         ).get("results")
 
-        charms = []
-        total_charms = 0
+        packages = []
+        total_packages = 0
 
         for i, item in enumerate(results):
             if item["type"] != "charm":
                 continue
 
-            total_charms += 1
+            total_packages += 1
 
-            charm = logic.add_store_front_data(
+            package = logic.add_store_front_data(
                 results[i], results[i]["default-release"]
             )
 
-            charms.append(charm)
+            packages.append(package)
 
-        context["results"] = charms
+        context["results"] = packages
         return render_template("store-search.html", **context)
 
     return render_template("store.html", **context)
 
 
-@store.route("/charms.json")
-def get_charms():
+@store.route("/packages.json")
+def get_packages():
     query = request.args.get("q", default=None, type=str)
 
     if query:
@@ -94,25 +98,25 @@ def get_charms():
     else:
         results = app.store_api.find(fields=SEARCH_FIELDS).get("results", [])
 
-    charms = []
-    total_charms = 0
+    packages = []
+    total_packages = 0
 
     for i, item in enumerate(results):
         if item["type"] != "charm":
             continue
 
-        total_charms += 1
+        total_packages += 1
 
-        charm = logic.add_store_front_data(
+        package = logic.add_store_front_data(
             results[i], results[i]["default-release"]
         )
 
-        charms.append(charm)
+        packages.append(package)
 
     return {
-        "charms": sorted(charms, key=lambda c: c["name"]),
+        "packages": sorted(packages, key=lambda c: c["name"]),
         "q": query,
-        "size": total_charms,
+        "size": total_packages,
     }
 
 

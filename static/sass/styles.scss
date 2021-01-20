@@ -30,6 +30,7 @@ $theme-default-nav: dark;
 @include vf-p-headings;
 @include vf-p-heading-icon;
 @include vf-p-icons;
+@include vf-p-icon-fullscreen;
 @include vf-p-inline-images;
 @include vf-p-image;
 @include vf-p-label;
@@ -211,6 +212,10 @@ $theme-default-nav: dark;
 @import "pattern_p-typography";
 
 @include p-charmhub-typography;
+
+@import "charmhub_p-topology";
+
+@include p-charmhub-topology;
 
 // Remove table row borders
 .p-table--no-borders tr {

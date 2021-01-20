@@ -6,6 +6,26 @@
     }
   }
 
+  .p-modal--topology {
+    .p-modal__dialog {
+      @media screen and (max-width: $breakpoint-medium) {
+        bottom: unset;
+        height: fit-content;
+        top: unset;
+      }
+    }
+
+    .p-modal__image {
+      margin-block-end: 0;
+      max-height: 750px;
+      padding: 4rem;
+
+      @media screen and (max-width: $breakpoint-medium) {
+        padding: 1rem;
+      }
+    }
+  }
+
   .p-modal--integration {
     .p-modal__header::after {
       background-color: transparent;

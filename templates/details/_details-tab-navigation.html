@@ -4,6 +4,7 @@
       <li class="p-tabs__item" role="presentation">
         <a href="/{{ package.name }}{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'overview' %}aria-selected="true" {% endif %}>Overview</a>
       </li>
+      {% if package.type == "charm" %}
       <li class="p-tabs__item" role="presentation">
         <a href="/{{ package.name }}/docs{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'docs' %}aria-selected="true" {% endif %}>Docs</a>
       </li>
@@ -13,6 +14,7 @@
       <li class="p-tabs__item" role="presentation">
         <a href="/{{ package.name }}/actions{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'actions' %}aria-selected="true" {% endif %}>Actions</a>
       </li>
+      {% endif %}
     </ul>
   </nav>
 </div>
