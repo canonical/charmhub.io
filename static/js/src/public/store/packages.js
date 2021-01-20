@@ -25,7 +25,7 @@ class initPackages {
 
         this.groupAllPackages();
         this.filterPackages();
-        this.handleShowallPackagesButton();
+        this.handleShowAllPackagesButton();
         this.handleFilterButtonMobileOpenClick();
         this.handleFilterClick();
         this.handlePlatformChange();
@@ -359,20 +359,20 @@ class initPackages {
       this._filters.platform[0] === "all" &&
       this._filters.filter.length === 0
     ) {
-      this.charms = this.allPackages;
+      this.packages = this.allPackages;
     } else if (
       this._filters.platform[0] === "all" &&
       this._filters.filter.length > 0
     ) {
-      this.charms = this.allPackages.filter((charm) =>
-        this.filterByCategory(charm)
+      this.packages = this.allPackages.filter((entity) =>
+        this.filterByCategory(entity)
       );
     } else if (
       this._filters.platform[0] !== "all" &&
       this._filters.filter.length === 0
     ) {
-      this.charms = this.allPackages.filter((charm) =>
-        charm.store_front.os.includes(this._filters.platform[0])
+      this.packages = this.allPackages.filter((entity) =>
+        entity.store_front.os.includes(this._filters.platform[0])
       );
     } else {
       let pakagesFilteredByPlatform = this.allPackages.filter((entity) =>
@@ -424,13 +424,9 @@ class initPackages {
   }
 
   enableAllActions() {
-    if (
-      this.domEl.platformSwitcher.el &&
-      this.domEl.categoryFilters.el &&
-      this.domEl.showAllPackagesButton.el
-    ) {
+    if (this.domEl.platformSwitcher.el && this.domEl.showAllPackagesButton.el) {
       this.domEl.platformSwitcher.el.disabled = false;
-      this.domEl.showallPackagesButton.el.disabled = false;
+      this.domEl.showAllPackagesButton.el.disabled = false;
     }
   }
 
