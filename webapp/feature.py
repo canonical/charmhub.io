@@ -132,7 +132,7 @@ COMMANDS_OVERWRITE = {
     "gunicorn": "~gunicorn-charmers/gunicorn",
     "jenkins-agent": "~jenkins-ci-charmers/jenkins-agent",
     "k8s-cassandra": "~narindergupta/k8s-cassandra",
-    "mariadb": "~kubeflow-charmers/mariadb",
+    "mariadb": "~charmed-osm/mariadb-k8s",
     "mattermost": "~mattermost-charmers/mattermost",
     "metallb-controller": "~containers/metallb-controller",
     "metallb-speaker": "~containers/metallb-speaker",
