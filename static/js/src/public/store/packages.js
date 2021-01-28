@@ -4,6 +4,7 @@ import buildPackageCard from "./buildPackageCard";
 class initPackages {
   constructor() {
     this.selectElements();
+    this.togglePlaceholderContainer(true);
     this.searchCache = window.location.search;
     this._filters = this.getUrlFilters();
     if (
@@ -13,6 +14,7 @@ class initPackages {
       this.togglePlaceholderContainer();
       this.toggleFeaturedContainer(true);
       this.renderResultsCount(true);
+      this.toggleShowAllPackagesButton(true);
     }
 
     this.fetchPackageList()
@@ -430,9 +432,13 @@ class initPackages {
     }
   }
 
-  toggleShowAllPackagesButton() {
+  toggleShowAllPackagesButton(visibility) {
     if (this.domEl.showAllPackagesButton.el) {
-      this.domEl.showAllPackagesButton.el.classList.add("u-hide");
+      if (visibility) {
+        this.domEl.showAllPackagesButton.el.classList.remove("u-hide");
+      } else {
+        this.domEl.showAllPackagesButton.el.classList.add("u-hide");
+      }
     } else {
       throw new Error(
         `There is no element containing ${this.domEl.showAllPackagesButton.selector} selector.`
