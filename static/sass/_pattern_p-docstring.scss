@@ -1,0 +1,47 @@
+@mixin p-charmhub-docstring {
+  .p-docstring {
+    @media (min-width: 1300px) {
+      .is-x-large-1 {
+        grid-column-end: span 1;
+      }
+
+      .is-x-large-3 {
+        grid-column-end: span 3;
+      }
+
+      .is-x-large-4 {
+        grid-column-end: span 4;
+      }
+
+      .is-x-large-5 {
+        grid-column-end: span 5;
+      }
+
+      .is-x-large-7 {
+        grid-column-end: span 7;
+      }
+    }
+
+    .u-no-horizontal-space {
+      .token + .token {
+        margin-inline-start: -0.5rem;
+      }
+    }
+
+    .p-strip {
+      .p-separator--dense.p-separator--light:first-child {
+        display: none;
+      }
+    }
+
+    .p-code--text {
+      margin-bottom: $sp-unit;
+      padding-top: $sp-unit;
+    }
+
+    .p-code {
+      font-family: "Ubuntu Mono", Consolas, Monaco, Courier, monospace;
+      font-weight: 300;
+    }
+  }
+}

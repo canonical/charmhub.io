@@ -210,9 +210,9 @@ $theme-default-nav: dark;
 
 @include swiper-overrides;
 
-@import "pattern_p-typography";
+@import "pattern_p-docstring";
 
-@include p-charmhub-typography;
+@include p-charmhub-docstring;
 
 @import "charmhub_p-topology";
 
@@ -298,10 +298,6 @@ body {
 }
 
 .p-details-tab__content {
-  p {
-    max-width: unset;
-  }
-
   .p-side-navigation__link.u-truncate {
     display: block;
   }

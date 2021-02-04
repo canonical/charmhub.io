@@ -1,4 +1,5 @@
 var origin = window.location.href;
+const { dataLayer } = window;
 
 // Main navigation
 addGANavEvents("#navigation", "charmhub.io-nav-1");
