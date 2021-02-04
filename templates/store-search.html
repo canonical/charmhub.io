@@ -36,22 +36,22 @@
                   <span class="p-bundle-icons__count u-text--muted">+1</span>
                 </div>
                 {% endif %}
-                <h3 class="p-card__title p-heading--4 u-no-margin--bottom entity-card-title">{{ package.name }}</h3>
-                <p class="u-text--muted u-no-padding--top entity-card-publisher">{{ package.result.publisher['display-name'] }}</p>
+                <h3 class="p-card__title p-heading--4 u-no-margin--bottom package-card-title">{{ package.name }}</h3>
+                <p class="u-text--muted u-no-padding--top package-card-publisher">{{ package.result.publisher['display-name'] }}</p>
               </div>
 
               <div class="p-card__content">
-                <p><small class="entity-card-summary">{{ package.result.summary }}</small></p>
+                <p><small class="package-card-summary">{{ package.result.summary }}</small></p>
               </div>
 
               <div class="p-card__footer">
-                <div class="entity-card-icons">
+                <div class="package-card-icons">
                   <span class="p-tooltip" aria-describedby="default-tooltip">
                     {% if package.store_front.os[0] == "kubernetes" %}
                     <img alt="Kubernetes" src="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg" width="24" height="24">
                     <span class="p-tooltip__message" role="tooltip">This operator drives the application on Kubernetes</span>
                     {% elif package.store_front.os[0] == "linux" %}
-                    <div class="entity-card-icons"><img alt="Linux" src="https://assets.ubuntu.com/v1/dc11bd39-Linux.svg" width="24" height="24"></div>
+                    <div class="package-card-icons"><img alt="Linux" src="https://assets.ubuntu.com/v1/dc11bd39-Linux.svg" width="24" height="24"></div>
                     <span class="p-tooltip__message" role="tooltip">This operator drives the application on Linux servers</span>
                     {% endif %}
                   </span>
@@ -74,15 +74,15 @@
         </div>
       </div>
       <style>
-        .entity-card-title {
+        .package-card-title {
           text-transform: capitalize;
         }
 
-        .entity-card-summary {
+        .package-card-summary {
           display: inline-block;
         }
 
-        .entity-card-summary::first-letter {
+        .package-card-summary::first-letter {
           text-transform: uppercase;
         }
       </style>

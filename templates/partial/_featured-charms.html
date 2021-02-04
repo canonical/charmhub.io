@@ -5,16 +5,16 @@
       <div class="p-card__thumbnail-container">
         <img src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/{{ charm['icon'] }}" alt="{{ charm['name'] }} icon" class="p-card__thumbnail" width="40" height="40" loading="lazy">
       </div>
-      <h3 class="p-card__title p-heading--4 u-no-margin--bottom entity-card-title">{{ charm['display_name'] }}</h3>
-      <p class="u-text--muted u-no-padding--top entity-card-publisher">{{ charm['publisher'] }}</p>
+      <h3 class="p-card__title p-heading--4 u-no-margin--bottom package-card-title">{{ charm['display_name'] }}</h3>
+      <p class="u-text--muted u-no-padding--top package-card-publisher">{{ charm['publisher'] }}</p>
     </div>
 
     <div class="p-card__content">
-      <p><small class="entity-card-summary">{{ charm['summary'] }}</small></p>
+      <p><small class="package-card-summary">{{ charm['summary'] }}</small></p>
     </div>
 
     <div class="p-card__footer">
-      <div class="entity-card-icons">
+      <div class="package-card-icons">
         <span class="p-tooltip" aria-describedby="default-tooltip">
         {% if charm["platform"]  == "kubernetes" %}
           <img alt="Kubernetes" src="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg" width="24" height="24">
