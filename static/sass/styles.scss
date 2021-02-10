@@ -354,7 +354,7 @@ h3 {
 }
 
 .instruction-tooltip:hover .p-tooltip__modal {
-  display: block;
+  display: flex;
 }
 
 .instruction-tooltip:hover::after {
@@ -362,10 +362,13 @@ h3 {
   display: block;
   height: 40px;
   left: 100%;
-  margin-top: -20px;
   position: absolute;
   top: -50%;
   width: 40px;
+
+  @media screen and (max-width: $breakpoint-medium - 1px) {
+    content: none;
+  }
 }
 
 // XXX Ant 17.11.2020 - This can be removed once this issue is closed
