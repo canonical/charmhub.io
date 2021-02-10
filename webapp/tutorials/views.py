@@ -2,7 +2,7 @@ import math
 
 import flask
 import talisker
-from canonicalwebteam.discourse import DiscourseAPI, DocParser, Docs
+from canonicalwebteam.discourse import DiscourseAPI, TutorialParser, Tutorials
 
 
 def init_tutorials(app, url_prefix):
@@ -10,8 +10,8 @@ def init_tutorials(app, url_prefix):
     category_id = 22
 
     session = talisker.requests.get_session()
-    tutorials_docs = Docs(
-        parser=DocParser(
+    tutorials_discourse = Tutorials(
+        parser=TutorialParser(
             api=DiscourseAPI(
                 base_url="https://discourse.charmhub.io/", session=session
             ),
@@ -30,13 +30,13 @@ def init_tutorials(app, url_prefix):
         topic = flask.request.args.get("topic", default=None, type=str)
         sort = flask.request.args.get("sort", default=None, type=str)
         posts_per_page = 15
-        tutorials_docs.parser.parse()
+        tutorials_discourse.parser.parse()
         if not topic:
-            metadata = tutorials_docs.parser.metadata
+            metadata = tutorials_discourse.parser.metadata
         else:
             metadata = [
                 doc
-                for doc in tutorials_docs.parser.metadata
+                for doc in tutorials_discourse.parser.metadata
                 if topic in doc["categories"]
             ]
 
@@ -54,8 +54,8 @@ def init_tutorials(app, url_prefix):
 
         return flask.render_template(
             "tutorials/index.html",
-            navigation=tutorials_docs.parser.navigation,
-            forum_url=tutorials_docs.parser.api.base_url,
+            navigation=tutorials_discourse.parser.navigation,
+            forum_url=tutorials_discourse.parser.api.base_url,
             metadata=metadata,
             page=page,
             topic=topic,
@@ -64,4 +64,4 @@ def init_tutorials(app, url_prefix):
             total_pages=total_pages,
         )
 
-    tutorials_docs.init_app(app)
+    tutorials_discourse.init_app(app)
