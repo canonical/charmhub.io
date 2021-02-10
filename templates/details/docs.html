@@ -3,25 +3,61 @@
 {% extends '/details/details_layout.html' %}
 
 {% block details_content %}
+
+{% macro create_navigation(nav_items) %}
+  <ul>
+    {% for element in nav_items %}
+    <li>
+      {% if element.navlink_href %}
+        <a href="{{ element.navlink_href }}"
+          {% if request.path == element.navlink_href %}aria-current="page"{% endif %}
+        >{{ element.navlink_text }}</a>
+      {% else %}
+        <strong>{{ element.navlink_text }}</strong>
+      {% endif %}
+
+      {% if element.children %}
+        {{ create_navigation(element.children) }}
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+{% endmacro %}
+
   <div class="u-fixed-width is-wide p-details-tab__content">
     {% if navigation and body_html %}
       <div class="row is-wide u-no-padding--left u-no-padding--right">
-        <div class="col-3 has-space--right">
-          <nav class="p-side-navigation--raw-html" id="drawer">
-            <a href="#drawer" class="p-side-navigation__toggle js-drawer-toggle" aria-controls="drawer">
+        <aside class="col-3 has-space--right">
+          {% if versions | length > 1 %}
+          <label for="version-select" class="u-hide">Version</label>
+          <select name="version-select" id="version-select" onChange="window.location.href=this.value">
+          {% for version in versions %}
+            {% set active = docs_version == version['path'] %}
+            <option value="{{ version_paths[version['path']] }}"{% if active %} selected{% endif %}>Version {{ version['version'] }}</option>
+          {% endfor %}
+          <select>
+          {% endif %}
+
+          <nav data-js="navigation" class="p-side-navigation--raw-html" id="{{ navigation['path'] or 'default' }}">
+            <a href="#{{ navigation['path'] or 'default' }}" class="p-side-navigation__toggle js-drawer-toggle" aria-controls="{{ navigation['path'] or 'default' }}">
               Toggle side navigation
             </a>
-            <div class="p-side-navigation__overlay js-drawer-toggle" aria-controls="drawer"></div>
+            <div class="p-side-navigation__overlay js-drawer-toggle" aria-controls="{{ navigation['path'] or 'default' }}"></div>
             <div class="p-side-navigation__drawer">
               <div class="p-side-navigation__drawer-header">
-                <a href="#" class="p-side-navigation__toggle--in-drawer js-drawer-toggle" aria-controls="drawer">
+                <a href="#" class="p-side-navigation__toggle--in-drawer js-drawer-toggle" aria-controls="{{ navigation['path'] or 'default' }}">
                   Toggle side navigation
                 </a>
               </div>
-              {{ navigation | safe }}
+              {% for nav_group in navigation.nav_items %}
+                {% if nav_group.navlink_text %}
+                <h3>{{ nav_group.navlink_text }}</h3>
+                {% endif %}
+                {{ create_navigation(nav_group.children) }}
+              {% endfor %}
             </div>
           </nav>
-        </div>
+        </aside>
         <div class="col-9 col-large-6">
           {{ body_html | safe }}
           <div class="u-fixed-width">

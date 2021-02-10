@@ -2,6 +2,7 @@ import re
 
 import talisker
 from canonicalwebteam.discourse import DocParser
+from canonicalwebteam.discourse.exceptions import PathNotFoundError
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
 from flask import Blueprint, abort
 from flask import current_app as app
@@ -203,10 +204,12 @@ def details_overview(entity_name):
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs')
-@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs/<slug>')
+@store.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs/<path:path>'
+)
 @store_maintenance
 @redirect_uppercase_to_lowercase
-def details_docs(entity_name, slug=None):
+def details_docs(entity_name, path=None):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(
         entity_name,
@@ -234,30 +237,26 @@ def details_docs(entity_name, slug=None):
         url_prefix=docs_url_prefix,
     )
     docs.parse()
-    body_html = docs.index_document["body_html"]
 
-    topic_path = docs.index_document["topic_path"]
+    if path:
+        try:
+            topic_id = docs.resolve_path(path)[0]
+        except PathNotFoundError:
+            abort(404)
 
-    if slug:
-        topic_id = docs.resolve_path(slug)
-        # topic = docs.api.get_topic(topic_id)
-        # body_html = docs.parse_topic(topic)
-        slug_docs = DocParser(
-            api=discourse_api,
-            index_topic_id=topic_id,
-            url_prefix=docs_url_prefix,
-        )
-        slug_docs.parse()
-        body_html = slug_docs.index_document["body_html"]
-        topic_path = slug_docs.index_document["topic_path"]
+        topic = docs.api.get_topic(topic_id)
+    else:
+        topic = docs.index_topic
+
+    document = docs.parse_topic(topic)
 
     context = {
         "package": package,
         "navigation": docs.navigation,
-        "body_html": body_html,
-        "last_update": docs.index_document["updated"],
+        "body_html": document["body_html"],
+        "last_update": document["updated"],
         "forum_url": docs.api.base_url,
-        "topic_path": topic_path,
+        "topic_path": document["topic_path"],
         "channel_requested": channel_request,
     }
 
