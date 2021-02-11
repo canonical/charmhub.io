@@ -142,26 +142,6 @@ def get_channel_map(channel_map):
     return new_map
 
 
-def get_current_channel(channel_map, channel_request):
-    """
-    Get the current channel from the channel-map
-
-    :param channel_map: The channel-map from the package
-    :param channel_request: The name of the channel requested
-    :returns: The selected channel
-    """
-    channel_selected = None
-
-    if channel_request:
-        formatted_channel_map = get_channel_map(channel_map)
-        for channel in formatted_channel_map:
-            if channel["channel"]["name"] == channel_request:
-                channel_selected = channel
-                break
-
-    return channel_selected
-
-
 def convert_channel_maps(channel_map):
     """
     Converts channel maps list to format easier to manipulate
@@ -177,10 +157,6 @@ def convert_channel_maps(channel_map):
     for channel in channel_map:
         track = channel["channel"].get("track", "latest")
         risk = channel["channel"]["risk"]
-        resources = {}
-
-        for resource in channel["resources"]:
-            resources[resource["name"]] = resource
 
         if track not in result:
             result[track] = {}
@@ -198,7 +174,6 @@ def convert_channel_maps(channel_map):
                 extract_series(channel)
             ),
             "architecture": channel["channel"]["platform"]["architecture"],
-            "resources": resources,
             "revision": channel["revision"],
         }
 
@@ -222,7 +197,7 @@ def convert_channel_maps(channel_map):
     return result
 
 
-def extract_all_resources(channel_map):
+def extract_resources(channel):
     """
     Extract resources from channel map
 
@@ -232,13 +207,12 @@ def extract_all_resources(channel_map):
     """
     resources = []
 
-    for channel in channel_map:
-        channel_resources = channel["resources"]
+    channel_resources = channel["resources"]
 
-        for resource in channel_resources:
-            resources.append(
-                {"name": resource["name"], "revision": resource["revision"]}
-            )
+    for resource in channel_resources:
+        resources.append(
+            {"name": resource["name"], "revision": resource["revision"]}
+        )
 
     return resources
 
@@ -362,27 +336,32 @@ def get_docs_topic_id(metadata_yaml):
     return None
 
 
-def add_store_front_data(package, channel, details=False):
+def add_store_front_data(package, details=False):
     extra = {}
 
     extra["icons"] = get_icons(package)
     extra["os"] = get_os_from_platform(
         package["default-release"]["revision"]["platforms"]
     )
-    extra["last_release"] = convert_date(channel["channel"]["released-at"])
     extra["categories"] = get_categories(package["result"]["categories"])
 
     if details:
-        extra["metadata"] = yaml.load(channel["revision"]["metadata-yaml"])
-        extra["config"] = yaml.load(channel["revision"]["config-yaml"])
-        extra["actions"] = yaml.load(channel["revision"]["actions-yaml"])
+        extra["metadata"] = yaml.load(
+            package["default-release"]["revision"]["metadata-yaml"]
+        )
+        extra["config"] = yaml.load(
+            package["default-release"]["revision"]["config-yaml"]
+        )
+        extra["actions"] = yaml.load(
+            package["default-release"]["revision"]["actions-yaml"]
+        )
 
         # Reshape channel maps
         extra["channel_map"] = convert_channel_maps(package["channel-map"])
-        extra["resources"] = extract_all_resources(package["channel-map"])
+        extra["resources"] = extract_resources(package["default-release"])
 
         # Extract all supported series
-        extra["series"] = extract_series(channel)
+        extra["series"] = extract_series(package["default-release"])
 
         # Some needed fields
         extra["publisher_name"] = package["result"]["publisher"][
