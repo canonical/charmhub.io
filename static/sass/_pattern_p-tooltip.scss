@@ -2,8 +2,12 @@
   .p-tooltip--information {
     $icon-size: map-get($icon-sizes, default);
 
-    margin-left: $spv-inner--small;
+    padding-inline-end: $spv-inner--large;
     position: relative;
+
+    @media screen and (max-width: $breakpoint-medium - 1px) {
+      padding-inline-end: 1.5rem;
+    }
 
     .p-tooltip__button {
       @include vf-animation(#{background-color}, fast, in);
@@ -19,11 +23,11 @@
       box-sizing: content-box;
       display: block;
       height: $icon-size;
-      left: 0;
       position: absolute;
+      right: 0;
       text-indent: -999rem;
-      top: 50%;
-      transform: translateY(-50%);
+      top: 0;
+      transform: translateY(25%);
       width: $icon-size;
 
       @media screen and (max-width: $breakpoint-medium - 1px) {
@@ -32,6 +36,7 @@
         margin: 0 0 $spv-nudge-compensation $spv-inner--x-small;
         padding: $spv-inner--x-small;
         text-align: center;
+        top: -0.375rem;
 
         &:hover,
         &:focus {
@@ -41,12 +46,11 @@
     }
 
     .p-tooltip__modal {
-      left: 0;
+      display: none;
+      left: 100%;
       position: absolute;
       top: 0;
-      transform:
-        translateX($spv-inner--large * 2)
-        translateY(-$spv-inner--large);
+      transform: translateX($spv-inner--large) translateY(-$spv-inner--small);
       z-index: 101;
 
       @media screen and (max-width: $breakpoint-medium - 1px) {
@@ -59,7 +63,7 @@
         position: fixed;
         right: 0;
         top: 0;
-        transform: none;
+        transform: translateX(-100%);
         width: 100%;
       }
     }
@@ -72,11 +76,15 @@
       width: 22.5rem;
 
       @media screen and (max-width: $breakpoint-medium - 1px) {
-        left: 50%;
+        left: 1.5rem;
+        margin-bottom: 0;
+        overflow: scroll;
+        padding-block-start: 2.5rem;
         position: absolute;
+        right: 1.5rem;
         top: 50%;
-        transform: translateX(-50%) translateY(-50%);
-        width: fit-content;
+        transform: translateY(-50%);
+        width: auto;
       }
     }
 
@@ -93,8 +101,8 @@
       cursor: pointer;
       display: block;
       height: $icon-size;
-      margin: $spv-inner--large $spv-inner--large 0 0;
-      padding: $spv-inner--small $sph-inner--small;
+      margin: $spv-inner--small $spv-inner--small 0 0;
+      padding: $spv-inner--small;
       position: absolute;
       right: 0;
       text-indent: -999rem;
@@ -115,13 +123,13 @@
     }
 
     .p-tooltip__button + .is-open.p-tooltip__modal {
-      display: block;
+      display: flex;
     }
 
     .p-tooltip__button:focus + .p-tooltip__modal,
     .p-tooltip__button:hover + .p-tooltip__modal {
       @media screen and (min-width: $breakpoint-medium) {
-        display: block;
+        display: flex;
       }
     }
   }

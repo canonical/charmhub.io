@@ -6,16 +6,17 @@
     &nbsp;&nbsp;<i class="p-icon--contextual-menu"></i>
   </button>
   <div class="p-charm-header__code">
-    <div style="align-items: center; display: flex;">
+    <div class="p-tooltip--information">
       <div>
         <code>juju deploy {% if package["cs"] %}cs:{% endif %}{{ package.command }}{% if package["channel_selected"]["channel"]["name"] and package["channel_selected"]["channel"]["name"] != "stable" %} --channel {{ package["channel_selected"]["channel"]["name"] }}{% endif %}</code>
       </div>
-      <div class="p-tooltip--information instruction-tooltip">
+      <div class="instruction-tooltip">
         <div class="p-tooltip__button" role="button" aria-controls="icon-tooltip-modal" tabindex="0">
           Show information
         </div>
-        <div class="p-tooltip__modal" aria-controls="icon-tooltip-modal" id="icon-tooltip-modal">
+        <div class="p-tooltip__modal" id="icon-tooltip-modal">
           <div class="p-tooltip__dialog" role="dialog" aria-labelledby="modal-content">
+            <button class="p-tooltip__close" aria-controls="icon-tooltip-modal" aria-label="Close tooltip modal">Close</button>
             <span id="modal-content" class="u-no-margin--bottom u-no-padding--top">
               {% if "kubernetes" in package.store_front.os %}
               <p class="u-no-padding--top">Deploy Kubernetes operators easily with Juju, the <a href="https://juju.is/overview">Universal Operator Lifecycle Manager</a>. Need a Kubernetes cluster? Install <a href="https://microk8s.io/">MicroK8s</a> to create a full <a href="https://www.cncf.io/certification/software-conformance/">CNCF-certified</a> Kubernetes system in under 60 seconds.</p>
