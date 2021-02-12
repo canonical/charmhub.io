@@ -138,22 +138,16 @@ CS = []
 
 def get_package(entity_name, channel_request, fields):
     # Get entity info from API
-    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
+    package = app.store_api.get_item_details(
+        entity_name, channel=channel_request, fields=FIELDS
+    )
 
     if COMMANDS_OVERWRITE.get(entity_name):
         package["command"] = COMMANDS_OVERWRITE[entity_name]
     else:
         package["command"] = entity_name
 
-    channel_selected = logic.get_current_channel(
-        package["channel-map"], channel_request
-    )
-
-    if not channel_selected:
-        channel_selected = package["default-release"]
-
-    package = logic.add_store_front_data(package, channel_selected, True)
-    package["channel_selected"] = channel_selected
+    package = logic.add_store_front_data(package, True)
 
     if package["name"] not in CS:
         package["cs"] = True
@@ -184,7 +178,7 @@ def details_overview(entity_name):
         ),
     )
 
-    readme = package["channel_selected"]["revision"].get(
+    readme = package["default-release"]["revision"].get(
         "readme-md", "No readme available"
     )
 

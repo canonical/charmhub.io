@@ -25,8 +25,8 @@
      {% else %}
        "applicationCategory": "other",
      {% endif %}
-     "operatingSystem": "{{ package["channel_selected"]["channel"]["platform"]["os"] }}",
-     "softwareVersion": "{{ package["channel_selected"]["channel"]["name"] }}"
+     "operatingSystem": "{{ package["default-release"]["channel"]["platform"]["os"] }}",
+     "softwareVersion": "{{ package["default-release"]["channel"]["name"] }}"
  }
 </script>
 {% endblock %}

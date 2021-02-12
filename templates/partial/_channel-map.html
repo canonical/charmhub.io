@@ -1,14 +1,14 @@
 <div class="p-charm-header__container">
   <button class="p-button--neutral" data-controls="channel-map-versions" aria-controls="channel-map-versions" data-js="channel-map">
     <span data-js="channel-map-selected">
-      {{ package["channel_selected"].channel.name }} {{ package["channel_selected"].revision.version }}
+      {{ package["default-release"].channel.name }} {{ package["default-release"].revision.version }}
     </span>
     &nbsp;&nbsp;<i class="p-icon--contextual-menu"></i>
   </button>
   <div class="p-charm-header__code">
     <div class="p-tooltip--information">
       <div>
-        <code>juju deploy {% if package["cs"] %}cs:{% endif %}{{ package.command }}{% if package["channel_selected"]["channel"]["name"] and package["channel_selected"]["channel"]["name"] != "stable" %} --channel {{ package["channel_selected"]["channel"]["name"] }}{% endif %}</code>
+        <code>juju deploy {% if package["cs"] %}cs:{% endif %}{{ package.command }}{% if package["default-release"]["channel"]["name"] and package["default-release"]["channel"]["name"] != "stable" %} --channel {{ package["default-release"]["channel"]["name"] }}{% endif %}</code>
       </div>
       <div class="instruction-tooltip">
         <div class="p-tooltip__button" role="button" aria-controls="icon-tooltip-modal" tabindex="0">
