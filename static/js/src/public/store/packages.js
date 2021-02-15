@@ -270,9 +270,17 @@ class initPackages {
   renderFiltersAndPlatform() {
     if (this.domEl.categoryFilters.el && this.domEl.platformSwitcher.el) {
       this.domEl.categoryFilters.el.forEach((filter) => {
+        let platforms = this.groupedPackages.categories[filter.value];
+
+        if (platforms === undefined) {
+          filter.disabled = true;
+          return;
+        }
+
         if (this._filters.platform[0] === "all") {
           let count = 0;
-          Object.keys(this.groupedPackages.categories[filter.value]).forEach(
+
+          Object.keys(platforms).forEach(
             (platform) => {
               count += platform.length;
             }
@@ -284,9 +292,7 @@ class initPackages {
           }
         } else {
           if (
-            this.groupedPackages.categories[filter.value][
-              this._filters.platform[0]
-            ].length === 0
+            platforms[this._filters.platform[0]].length === 0
           ) {
             filter.disabled = true;
           } else {
