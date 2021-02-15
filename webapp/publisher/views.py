@@ -80,7 +80,6 @@ def post_listing(entity_name):
     # These are the available fields to update in API
     data = {
         "contact": request.form["contact"],
-        "description": request.form["description"],
         "summary": request.form["summary"],
         "title": request.form["title"],
         "website": request.form["website"],
