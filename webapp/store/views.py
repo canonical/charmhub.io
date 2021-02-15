@@ -13,7 +13,7 @@ from webapp.decorators import (
     store_maintenance,
     redirect_uppercase_to_lowercase,
 )
-from webapp.feature import COMMANDS_OVERWRITE, FEATURED_CHARMS
+from webapp.feature import COMMANDS_OVERWRITE
 from webapp.helpers import (
     discourse_api,
     decrease_headers,
@@ -56,15 +56,19 @@ CATEGORIES = [
 @store_maintenance
 def index():
     query = request.args.get("q", default=None, type=str)
+    featured_charms = app.store_api.find(
+        category="featured", fields=SEARCH_FIELDS
+    )["results"]
 
     context = {
         "categories": CATEGORIES,
-        "featured_charms": FEATURED_CHARMS,
+        "featured_charms": featured_charms,
     }
 
     if query:
         results = app.store_api.find(
-            query=query.lower(), fields=SEARCH_FIELDS
+            query=query.lower(),
+            fields=SEARCH_FIELDS,
         ).get("results")
 
         packages = []
@@ -82,6 +86,14 @@ def index():
 
         context["results"] = packages
         return render_template("store-search.html", **context)
+
+    featured_packages = []
+
+    for i, item in enumerate(featured_charms):
+        charm = logic.add_store_front_data(featured_charms[i], False)
+        featured_packages.append(charm)
+
+    context["featured_charms"] = featured_packages
 
     return render_template("store.html", **context)
 
