@@ -76,9 +76,7 @@ def index():
 
             total_packages += 1
 
-            package = logic.add_store_front_data(
-                results[i], results[i]["default-release"]
-            )
+            package = logic.add_store_front_data(results[i], False)
 
             packages.append(package)
 
@@ -108,9 +106,7 @@ def get_packages():
 
         total_packages += 1
 
-        package = logic.add_store_front_data(
-            results[i], results[i]["default-release"]
-        )
+        package = logic.add_store_front_data(results[i], False)
 
         packages.append(package)
 
