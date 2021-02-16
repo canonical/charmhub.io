@@ -336,7 +336,57 @@ def details_library(entity_name, library_name):
     docstrings = logic.process_python_docs(library, module_name=library_name)
 
     return render_template(
-        "details/libraries/library.html",
+        "details/libraries/docstring.html",
+        entity_name=entity_name,
+        package=package,
+        libraries=libraries,
+        library=library,
+        docstrings=docstrings,
+        channel_requested=channel_request,
+    )
+
+
+@store.route(
+    '/<regex("'
+    + DETAILS_VIEW_REGEX
+    + '"):entity_name>/libraries/<string:library_name>/source-code'
+)
+@store_maintenance
+@redirect_uppercase_to_lowercase
+def details_library_source_code(entity_name, library_name):
+    channel_request = request.args.get("channel", default=None, type=str)
+    package = get_package(entity_name, channel_request, FIELDS)
+
+    lib_parts = library_name.split(".")
+
+    if len(lib_parts) > 2:
+        group_name = ".".join(lib_parts[:-2])
+        lib_name = "." + ".".join(lib_parts[-2:])
+    else:
+        group_name = "others"
+        lib_name = library_name
+
+    libraries = logic.process_libraries(
+        publisher_api.get_charm_libraries(entity_name)
+    )
+
+    library = next(
+        (
+            lib
+            for lib in libraries.get(group_name, {})
+            if lib.get("name") == lib_name
+        ),
+        None,
+    )
+
+    if not library:
+        abort(404)
+
+    library = publisher_api.get_charm_library(entity_name, library["id"])
+    docstrings = logic.process_python_docs(library, module_name=library_name)
+
+    return render_template(
+        "details/libraries/source-code.html",
         entity_name=entity_name,
         package=package,
         libraries=libraries,

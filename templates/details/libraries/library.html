@@ -4,16 +4,43 @@
 
 {% block libraries_content %}
 
-<div id="docstrings" data-js="tab-content" class="p-docstring">
+<div class="p-docstring">
   <div class="p-docstring__intro">
-    {{ docstrings['html'] | safe }}
+    <div class="p-strip is-shallow u-no-padding--top">
+      {{ docstrings['html'] | safe }}
+    </div>
+    <hr class="p-separator--dense">
   </div>
+  <div class="row p-strip is-shallow u-no-padding--top">
+    <div class="col-1">
+      <p class="p-label--capitals ">Index</p>
+    </div>
+    <div class="col-7">
+      <ul class="p-list">
+          {% for group in docstrings['content'] %}
+          <li class="p-list__item">
+            <a href="#{{ group['name'] }}">{% if group["type"].lower() == "function" %}def {{ group["name"] }}(){% else %}{{ group["type"].lower() }} {{ group["name"] }}{% endif %}</a>
+          </li>
+            {% for item in group["content"] %}
+            <li class="p-list__item u-no-padding">
+              <ul class="p-list u-no-margin--bottom" style="margin-inline-start: 1.5rem;">
+                <li class="p-list__item">
+                  <a href="#{{ item['name'] }}">{% if item["type"].lower() == "function" %}def {{ item["name"] }}(){% else %}{{ item["type"].lower() }} {{ item["name"] }}{% endif %}</a>
+                </li>
+              </ul>
+            </li>
+            {% endfor %}
+          {% endfor %}
+        </ul>
+    </div>
+  </div>
+  <hr class="p-separator--dense">
   <div class="p-docstring__docs">
     {% for group in docstrings['content'] %}
       {% if loop.index > 1 %}
       <hr class="p-separator--dense">
       {% endif %}
-      <div class="p-strip is-shallow{% if loop.index > 1 %} u-no-padding--top{% endif %}{% if loop.index == loop.length  %} u-no-padding--bottom{% endif %}">
+      <div class="p-strip is-shallow u-no-padding--top{% if loop.index == loop.length  %} u-no-padding--bottom{% endif %}">
         <div class="p-strip is-shallow u-no-padding--top">
           <h4 class="p-code u-no-margin--bottom">
             {% if group["type"].lower() == "function" %}

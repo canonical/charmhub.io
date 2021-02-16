@@ -3,6 +3,7 @@
 {% extends '/details/details_layout.html' %}
 
 {% block details_content %}
+
   <div class="row is-wide p-details-tab__content">
     <div class="col-3 has-space--right">
       <div class="p-side-navigation" id="drawer" style="overflow-y: visible;">
@@ -41,14 +42,14 @@ than the latest.</span>
             <li class="p-side-navigation__item">
             {% if group == "others" %}
               {% for lib in libraries[group] %}
-                <a class="p-side-navigation__link" {% if request.path.endswith(lib['name']) %}aria-current="page"{% endif %} href="/{{ entity_name }}/libraries/{{ lib['name'] }}" style="color: #111;">{{ lib["name"] }}</a>
+                <a class="p-side-navigation__link" {% if request.path.endswith(lib['name']) or request.path.endswith(lib['name'] + '/source-code') %}aria-current="page"{% endif %} href="/{{ entity_name }}/libraries/{{ lib['name'] }}" style="color: #111;">{{ lib["name"] }}</a>
               {% endfor %}
             {% else %}
               <span class="p-side-navigation__text" style="color: #111;">{{ group }}</span>
               <ul class="p-side-navigation__list">
                 {% for lib in libraries[group] %}
                 <li class="p-side-navigation__item">
-                  <a class="p-side-navigation__link" {% if request.path.endswith(lib['name']) %}aria-current="page"{% endif %} href="/{{ entity_name }}/libraries/{{ group }}{{ lib['name'] }}">{{ lib["name"] }}</a>
+                  <a class="p-side-navigation__link" {% if request.path.endswith(lib['name']) or request.path.endswith(lib['name'] + '/source-code') %}aria-current="page"{% endif %} href="/{{ entity_name }}/libraries/{{ group }}{{ lib['name'] }}">{{ lib["name"] }}</a>
                 </li>
                 {% endfor %}
               </ul>
@@ -70,10 +71,10 @@ than the latest.</span>
             <div class="p-button-group">
               <div class="p-button-group__inner">
                 <div class="p-button-group__buttons">
-                  <a href="#docstrings" class="p-button-group__button is-smaller" data-js="tab-button" data-href="#docstrings">
+                  <a href="/{{ entity_name }}/libraries/{{ docstrings['name'] }}" class="p-button-group__button is-smaller{% if not is_source_code%} is-selected{% endif %}"">
                     <i class="p-icon--docstrings">Docstrings</i><span>Docstrings</span>
                   </a>
-                  <a href="#source-code" class="p-button-group__button is-smaller" data-js="tab-button" data-href="#source-code"><i class="p-icon--code">Code</i><span>Source code</span></a>
+                  <a href="/{{ entity_name }}/libraries/{{ docstrings['name'] }}/source-code" class="p-button-group__button is-smaller{% if is_source_code%} is-selected{% endif %}"><i class="p-icon--code">Code</i><span>Source code</span></a>
                 </div>
               </div>
             </div>
