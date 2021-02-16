@@ -1,29 +1,39 @@
 {% for charm in featured_charms %}
-<div class="l-flex__card u-equal-height" id="mysql">
+<div class="l-flex__card u-equal-height" id="{{ charm['name'] }}">
   <a href="/{{ charm['name'] }}" class="p-card--button">
     <div class="p-card__header">
       <div class="p-card__thumbnail-container">
-        <img src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/{{ charm['icon'] }}" alt="{{ charm['name'] }} icon" class="p-card__thumbnail" width="40" height="40" loading="lazy">
+        {% if charm.result.media %}
+          <img src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_64,h_64/{{ charm['result']['media'][0]['url'] }}" width="64" height="64" class="p-card__thumbnail" alt="{{ charm['name'] }}">
+        {% else %}
+          <img src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_64,h_64/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" width="64" height="64" class="p-card__thumbnail" alt="{{ charm['name'] }}">
+        {% endif %}
       </div>
-      <h3 class="p-card__title p-heading--4 u-no-margin--bottom package-card-title">{{ charm['display_name'] }}</h3>
-      <p class="u-text--muted u-no-padding--top package-card-publisher">{{ charm['publisher'] }}</p>
+      <h3 class="p-card__title p-heading--4 u-no-margin--bottom package-card-title">{{ charm['name'] | replace("-", " ") }}</h3>
+      <p class="u-text--muted u-no-padding--top package-card-publisher">{{ charm.result.publisher["display-name"] }}</p>
     </div>
 
     <div class="p-card__content">
-      <p><small class="package-card-summary">{{ charm['summary'] }}</small></p>
+      <p><small class="package-card-summary">{{ charm.result.summary }}</small></p>
     </div>
 
     <div class="p-card__footer">
       <div class="package-card-icons">
-        <span class="p-tooltip" aria-describedby="default-tooltip">
-        {% if charm["platform"]  == "kubernetes" %}
-          <img alt="Kubernetes" src="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg" width="24" height="24">
-          <span class="p-tooltip__message" role="tooltip">This operator drives the application on Kubernetes</span>
-        {% elif charm["platform"] == "linux" %}
-          <img alt="Linux" src="https://assets.ubuntu.com/v1/dc11bd39-Linux.svg" width="24" height="24">
-          <span class="p-tooltip__message" role="tooltip">This operator drives the application on Linux servers</span>
-        {% endif %}
-        </span>
+        {% for os in charm.store_front.os %}
+        {% if os == "linux" %}
+          <span class="p-tooltip" aria-describedby="linux-tooltip">
+            <img alt="Linux" src="https://assets.ubuntu.com/v1/dc11bd39-Linux.svg" width="24" height="24">
+            <span class="p-tooltip__message" role="tooltip" id="linux-tooltip">This operator drives the application on Linux servers</span>
+            </span>
+          {% endif %}
+
+          {% if os == "kubernetes" %}
+          <span class="p-tooltip" aria-describedby="k8s-tooltip">
+            <img alt="Kubernetes" src="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg" width="24" height="24">
+            <span class="p-tooltip__message" role="tooltip" id="k8s-tooltip">This operator drives the application on Kubernetes</span>
+            </span>
+          {% endif %}
+        {% endfor %}
       </div>
     </div>
   </a>
