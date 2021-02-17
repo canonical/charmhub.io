@@ -141,3 +141,50 @@ def register_name_dispute_thank_you():
         "publisher/register-name-dispute/thank-you.html",
         entity_name=entity_name,
     )
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/publicise'
+)
+@login_required
+def get_publicise(entity_name):
+    package = publisher_api.get_package_metadata(
+        session["publisher-auth"], "charm", entity_name
+    )
+
+    context = {
+        "package": package,
+    }
+    return render_template("publisher/publicise/store_buttons.html", **context)
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/publicise/badges'
+)
+@login_required
+def get_publicise_badges(entity_name):
+    package = publisher_api.get_package_metadata(
+        session["publisher-auth"], "charm", entity_name
+    )
+
+    context = {
+        "package": package,
+    }
+    return render_template("publisher/publicise/github_badges.html", **context)
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/publicise/cards'
+)
+@login_required
+def get_publicise_cards(entity_name):
+    package = publisher_api.get_package_metadata(
+        session["publisher-auth"], "charm", entity_name
+    )
+
+    context = {
+        "package": package,
+    }
+    return render_template(
+        "publisher/publicise/embedded_cards.html", **context
+    )
