@@ -3,17 +3,21 @@
 const URL_REGEXP = /^(?:(?:https?|ftp):\/\/)?(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
 // Luke 07-06-2018 rather then looking for a mailto, look for 1 @ and at least 1 .
 const MAILTO_REGEXP = /[^@]+@[^@]+\.[^@]+/;
+const ALLOWED_KEYS = ["title", "summary", "website", "contact"];
 
 class ListingForm {
-  constructor(selector) {
+  constructor(selector, initialState) {
     this.formEl = document.querySelector(selector);
 
     if (this.formEl) {
       this.validation = {};
       this.prefixableFields = ["contact"];
-      this.validateInputs = Array.from(
+      this.allInputs = Array.from(
         this.formEl.querySelectorAll("input,textarea")
       );
+
+      this.initialState = JSON.parse(JSON.stringify(initialState));
+      this.currentState = JSON.parse(JSON.stringify(initialState));
 
       this.init();
     } else {
@@ -22,7 +26,9 @@ class ListingForm {
   }
 
   init() {
-    this.validateInputs.forEach((input) => {
+    this.initStickyMenu("[data-js='sticky-menu-observer']");
+
+    this.allInputs.forEach((input) => {
       const inputValidation = { isValid: true };
 
       if (input.maxLength > 0) {
@@ -53,24 +59,76 @@ class ListingForm {
     }, this);
 
     // validate inputs on change
-    this.formEl.addEventListener(
-      "input",
-      function (event) {
-        this.validateInput(event.target);
-      }.bind(this)
-    );
+    this.formEl.addEventListener("input", (event) => {
+      this.validateInput(event.target);
+      this.updateCurrentState(event.target);
+    });
 
     this.prefixableFields.forEach((inputName) => {
       const input = this.formEl[inputName];
       if (input) {
-        input.addEventListener(
-          "blur",
-          function (event) {
-            this.prefixInput(event.target);
-          }.bind(this)
-        );
+        input.addEventListener("blur", (event) => {
+          this.prefixInput(event.target);
+          this.updateCurrentState(event.target);
+        });
       }
     }, this);
+  }
+
+  diffState() {
+    const diff = {};
+
+    for (let key of ALLOWED_KEYS) {
+      if (this.prefixableFields.includes(key)) {
+        if (
+          this.initialState[key] !== this.currentState[key] &&
+          this.initialState[key] !== `mailto:${this.currentState[key]}`
+        ) {
+          diff[key] = this.currentState[key];
+        }
+      } else {
+        if (this.initialState[key] !== this.currentState[key]) {
+          diff[key] = this.currentState[key];
+        }
+      }
+    }
+
+    // only return diff when there are any changes
+    return Object.keys(diff).length > 0 ? diff : null;
+  }
+
+  updateCurrentState(target) {
+    const key = target.getAttribute("id");
+    if (key && ALLOWED_KEYS.includes(key)) {
+      this.currentState[key] = target.value;
+    }
+
+    const diff = this.diffState();
+
+    if (diff) {
+      this.stickyEl.classList.remove("u-hide");
+    } else {
+      this.stickyEl.classList.add("u-hide");
+    }
+  }
+
+  initStickyMenu(selector) {
+    this.observerEl = document.querySelector(selector);
+
+    if (this.observerEl) {
+      this.stickyEl = this.observerEl.querySelector("[data-js='sticky-menu']");
+      let observer = new IntersectionObserver((entries) => {
+        if (entries[0].intersectionRatio > 0) {
+          this.stickyEl.classList.remove("is-sticky");
+        } else {
+          this.stickyEl.classList.add("is-sticky");
+        }
+      });
+
+      observer.observe(this.observerEl);
+    } else {
+      throw new Error(`There is no element containing ${selector} selector.`);
+    }
   }
 
   // Prefix field field on blur if the user doesn't provide the protocol
@@ -159,28 +217,8 @@ class ListingForm {
   }
 }
 
-function initStickyMenu(selector) {
-  const observerEl = document.querySelector(selector);
-
-  if (observerEl) {
-    const stickyEl = observerEl.querySelector("[data-js='sticky-menu']");
-    let observer = new IntersectionObserver((entries) => {
-      if (entries[0].intersectionRatio > 0) {
-        stickyEl.classList.remove("is-sticky");
-      } else {
-        stickyEl.classList.add("is-sticky");
-      }
-    });
-
-    observer.observe(observerEl);
-  } else {
-    throw new Error(`There is no element containing ${selector} selector.`);
-  }
-}
-
-function init() {
-  new ListingForm("#market-form");
-  initStickyMenu("[data-js='sticky-menu-observer']");
+function init(initialState) {
+  new ListingForm("#market-form", initialState);
 }
 
 export { init };
