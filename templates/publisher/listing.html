@@ -29,11 +29,11 @@
       </h2>
     <div class="row is-wide p-form__group p-form-validation">
       <div class="col-2">
-        <label for="{{ package.type }}-title" class="p-form__label">Title:</label>
+        <label for="title" class="p-form__label">Title:</label>
       </div>
       <div class="col-8 col-x-large-6">
         <div class="p-form__control">
-          <input class="p-form-validation__input" id="{{ package.type }}-title" type="text" name="title" value="{{ package.title or package.name }}" required="" maxlength="40">
+          <input class="p-form-validation__input" id="title" type="text" name="title" value="{{ package.title or package.name }}" required="" maxlength="40">
         </div>
       </div>
     </div>
@@ -105,12 +105,13 @@
         </div>
       </div>
     </div>
+
   </section>
   <div class="u-fixed-width is-wide">
     <hr>
   </div>
   <div data-js="sticky-menu-observer">
-    <div class="u-position-sticky--bottom is-sticky" data-js="sticky-menu">
+    <div class="u-position-sticky--bottom is-sticky u-hide" data-js="sticky-menu">
       <div class="row is-wide" style="padding-block-start: 1rem;">
         <div class="col-7">
           <p>
@@ -119,7 +120,7 @@
         </div>
         <div class="col-5">
           <div class="u-align--right u-clearfix">
-            <a class="p-button--neutral is-disabled" href="javascript:void(0);" style="margin-inline-end: 1rem;">Revert</a>
+            <a class="p-button--neutral" href="/{{ package.name }}/listing" style="margin-inline-end: 1rem;">Revert</a>
             <button type="submit" class="p-button--positive" name="submit_apply" value="Save">
               Save
             </button>
@@ -137,7 +138,14 @@
 <script src="{{ versioned_static('js/dist/listing.js') }}" defer></script>
 <script>
   window.addEventListener("DOMContentLoaded", function () {
-    charmhub.publisher.listing.init();
+    const formFields = {
+      name: {{ package.name|tojson }},
+      title: {{ package.title|tojson }},
+      summary: {{ package.summary|tojson }},
+      website: {{ package.website|tojson }},
+      contact: {{ package.contact|tojson }},
+    };
+    charmhub.publisher.listing.init(formFields);
   });
 </script>
 {% endblock%}
