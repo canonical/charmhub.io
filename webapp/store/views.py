@@ -147,7 +147,7 @@ CS = []
 def get_package(entity_name, channel_request, fields):
     # Get entity info from API
     package = app.store_api.get_item_details(
-        entity_name, channel=channel_request, fields=FIELDS
+        entity_name, channel=channel_request, fields=fields
     )
 
     if COMMANDS_OVERWRITE.get(entity_name):
@@ -174,16 +174,15 @@ def get_package(entity_name, channel_request, fields):
 def details_overview(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
 
+    extra_fields = [
+        "default-release.revision.readme-md",
+        "result.bugs-url",
+        "result.website",
+        "result.summary",
+    ]
+
     package = get_package(
-        entity_name,
-        channel_request,
-        FIELDS.copy().extend(
-            [
-                "default-release.revision.readme-md",
-                "result.summary",
-                "channel-map.revision.readme-md",
-            ]
-        ),
+        entity_name, channel_request, FIELDS.copy() + extra_fields
     )
 
     readme = package["default-release"]["revision"].get(
@@ -195,7 +194,6 @@ def details_overview(entity_name):
 
     readme = md_parser(readme)
     readme = decrease_headers(readme)
-
     return render_template(
         "details/overview.html",
         package=package,
@@ -213,15 +211,12 @@ def details_overview(entity_name):
 @redirect_uppercase_to_lowercase
 def details_docs(entity_name, path=None):
     channel_request = request.args.get("channel", default=None, type=str)
+    extra_fields = [
+        "default-release.revision.metadata-yaml",
+    ]
+
     package = get_package(
-        entity_name,
-        channel_request,
-        FIELDS.copy().extend(
-            [
-                "channel-map.revision.metadata-yaml",
-                "default-release.revision.metadata-yaml",
-            ]
-        ),
+        entity_name, channel_request, FIELDS.copy() + extra_fields
     )
 
     if not package["store_front"]["docs_topic"]:
@@ -270,17 +265,13 @@ def details_docs(entity_name, path=None):
 @redirect_uppercase_to_lowercase
 def details_configuration(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(
-        entity_name,
-        channel_request,
-        FIELDS.copy().extend(
-            [
-                "channel-map.revision.config-yaml",
-                "default-release.revision.config-yaml",
-            ]
-        ),
-    )
+    extra_fields = [
+        "default-release.revision.config-yaml",
+    ]
 
+    package = get_package(
+        entity_name, channel_request, FIELDS.copy() + extra_fields
+    )
     return render_template(
         "details/configure.html",
         package=package,
@@ -293,17 +284,13 @@ def details_configuration(entity_name):
 @redirect_uppercase_to_lowercase
 def details_actions(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(
-        entity_name,
-        channel_request,
-        FIELDS.copy().extend(
-            [
-                "default-release.revision.actions-yaml",
-                "channel-map.revision.actions-yaml",
-            ]
-        ),
-    )
+    extra_fields = [
+        "default-release.revision.actions-yaml",
+    ]
 
+    package = get_package(
+        entity_name, channel_request, FIELDS.copy() + extra_fields
+    )
     return render_template(
         "details/actions.html",
         package=package,
