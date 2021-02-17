@@ -422,6 +422,31 @@ def process_libraries(libraries):
     return result
 
 
+def get_library(library_name, libraries):
+    lib_parts = library_name.split(".")
+
+    if len(lib_parts) > 2:
+        group_name = ".".join(lib_parts[:-2])
+        lib_name = "." + ".".join(lib_parts[-2:])
+    else:
+        group_name = "others"
+        lib_name = library_name
+
+    library = next(
+        (
+            lib
+            for lib in libraries.get(group_name, {})
+            if lib.get("name") == lib_name
+        ),
+        None,
+    )
+
+    if not library:
+        return None
+
+    return library["id"]
+
+
 def get_os_from_platform(platforms):
     """
     Get simplified platforms
