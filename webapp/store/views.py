@@ -19,6 +19,7 @@ from webapp.helpers import (
     decrease_headers,
     md_parser,
 )
+from pybadges import badge
 from webapp.store import logic
 
 store = Blueprint(
@@ -439,3 +440,53 @@ def details_integrate(entity_name):
         package=package,
         channel_requested=channel_request,
     )
+
+
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/badge.svg')
+def entity_badge(entity_name):
+    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
+
+    entity_link = request.url_root + entity_name
+    right_text = "".join(
+        [
+            package["default-release"]["channel"]["track"],
+            "/",
+            package["default-release"]["channel"]["risk"],
+            " ",
+            package["default-release"]["revision"]["version"],
+        ]
+    )
+
+    svg = badge(
+        left_text=package["name"],
+        right_text=right_text,
+        right_color="#0e8420",
+        left_link=entity_link,
+        right_link=entity_link,
+        logo=(
+            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' "
+            "viewBox='0 0 64 64'%3E%3Cg fill-rule='evenodd' "
+            "fill='none'%3E%3Cg fill-rule='nonzero'%3E%3Ccircle cy='32' "
+            "cx='32' r='32' fill='%23fff'/%3E%3Cg transform='translate(13.622"
+            " 5.6546)' fill='%23585858'%3E%3Ccircle cy='24.614' cx='20.307' "
+            "r='1.9732'/%3E%3Cpath d='m22.129 20.971h-3.643v-14.571c0-3.5154"
+            " 2.86-6.3753 6.375-6.3753 3.515-0.000025 6.375 2.8599 6.375 6."
+            "375v3.6433h-3.643v-3.6433c0-0.7297-0.284-1.4159-0.8-1.932-0.51"
+            "6-0.5159-1.202-0.8002-1.932-0.8002-1.506 0-2.732 1.2255-2.732 "
+            "2.7322v14.571z'/%3E%3Cpath d='m33.968 27.346c-3.515 0-6.375-2."
+            "859-6.375-6.375v-9.107h3.643v9.107c0 1.507 1.226 2.732 2.732 2."
+            "732 1.507 0 2.733-1.225 2.733-2.732v-9.107h3.642v9.107c0 1.703"
+            "-0.663 3.304-1.867 4.508s-2.805 1.867-4.508 1.867z'/%3E%3Ccircle"
+            " cy='46.471' cx='2.093' r='1.9732'/%3E%3Cpath d='m3.9143 42.829"
+            "h-3.6429l0.00002-20.036c0-3.515 2.86-6.375 6.3751-6.375 3.5155 0"
+            " 6.3755 2.86 6.3755 6.375v3.643h-3.6433v-3.643c0-0.73-0.284-1."
+            "416-0.8001-1.932-0.5159-0.516-1.2022-0.8-1.9319-0.8-1.5064 0-2."
+            "7322 1.225-2.7322 2.732l-0.0002 20.036z'/%3E%3Cpath d='m15.754 "
+            "43.74c-3.516 0-6.3753-2.86-6.3753-6.376v-9.107h3.6433v9.107c0 "
+            "1.506 1.225 2.732 2.732 2.732 1.506 0 2.732-1.226 2.732-2.732v-"
+            "9.107h3.643v9.107c0 1.703-0.663 3.304-1.867 4.508-1.205 1.204-2"
+            ".805 1.868-4.508 1.868z'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E"
+        ),
+    )
+
+    return svg, 200, {"Content-Type": "image/svg+xml"}
