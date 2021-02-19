@@ -1,13 +1,15 @@
-class SideNavigation {
-  constructor(selector) {
-    const sideNavigations = document.querySelectorAll(selector);
+export class SideNavigation {
+  constructor(selector: string) {
+    const sideNavigations: NodeListOf<HTMLElement> = document.querySelectorAll(
+      selector
+    );
 
     if (sideNavigations) {
       this.initEvents(sideNavigations);
     }
   }
 
-  initEvents(sideNavigations) {
+  initEvents(sideNavigations: NodeListOf<HTMLElement>) {
     // Setup all side navigations on the page.
     sideNavigations.forEach((sideNavigation) =>
       this.setupSideNavigation(sideNavigation)
@@ -18,14 +20,14 @@ class SideNavigation {
     Attaches event listeners for the side navigation toggles
     @param {HTMLElement} sideNavigation The side navigation element.
   */
-  setupSideNavigation(sideNavigation) {
+  setupSideNavigation(sideNavigation: HTMLElement) {
     const toggles = sideNavigation.querySelectorAll(".js-drawer-toggle");
 
     toggles.forEach((toggle) => {
       toggle.addEventListener("click", (event) => {
         event.preventDefault();
         const sideNav = document.getElementById(
-          toggle.getAttribute("aria-controls")
+          <string> toggle.getAttribute("aria-controls")
         );
 
         if (sideNav) {
@@ -44,7 +46,7 @@ class SideNavigation {
     @param {HTMLElement} sideNavigation The side navigation element.
     @param {Boolean} show Whether to show or hide the drawer.
   */
-  toggleDrawer(sideNavigation, show) {
+  toggleDrawer(sideNavigation: HTMLElement, show: boolean) {
     if (sideNavigation) {
       if (show) {
         sideNavigation.classList.remove("is-collapsed");
@@ -56,5 +58,3 @@ class SideNavigation {
     }
   }
 }
-
-export { SideNavigation };

@@ -1,6 +1,6 @@
 module.exports = [
   {
-    test: /\.js$/,
+    test: /\.(js|ts)$/,
     // Exclude node_modules from using babel-loader
     // except some that use ES6 modules and need to be transpiled:
     // such as swiper http://idangero.us/swiper/get-started/
@@ -9,7 +9,7 @@ module.exports = [
     use: {
       loader: "babel-loader",
       options: {
-        presets: ["@babel/preset-react"],
+        presets: ["@babel/preset-react", "@babel/preset-typescript"],
       },
     },
   },
@@ -24,7 +24,7 @@ module.exports = [
   // loaders are evaluated from bottom to top (right to left)
   // so first transpile via babel, then expose as global
   {
-    test: require.resolve(__dirname + "/static/js/src/public/about/index.js"),
+    test: require.resolve(__dirname + "/static/js/src/public/about/index.ts"),
     use: ["expose-loader?exposes=charmhub.about", "babel-loader"],
   },
   {
@@ -32,11 +32,11 @@ module.exports = [
     use: ["expose-loader?exposes=charmhub.docs", "babel-loader"],
   },
   {
-    test: require.resolve(__dirname + "/static/js/src/base/base.js"),
+    test: require.resolve(__dirname + "/static/js/src/base/base.ts"),
     use: ["expose-loader?exposes=charmhub.base", "babel-loader"],
   },
   {
-    test: require.resolve(__dirname + "/static/js/src/base/highlight.js"),
+    test: require.resolve(__dirname + "/static/js/src/base/highlight.ts"),
     use: ["expose-loader?exposes=charmhub.highlight", "babel-loader"],
   },
   {
