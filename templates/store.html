@@ -88,25 +88,21 @@
 
         <div class="l-flex__card-container u-hide" data-js="placeholder-container">
           {% for _ in range(0, 10) %}
-          <div class="l-flex__card u-equal-height" id="alertmanager">
-            <a href="/alertmanager" class="p-card--button is-placeholder">
-              <div class="p-card__header">
-                <div class="p-card__thumbnail-container">
-                  <div class="p-card__thumbnail"></div>
+            <div class="l-flex__card u-equal-height">
+              <a href="/" class="p-card--button is-placeholder">
+                <div class="p-card__header">
+                  <div class="p-card__thumbnail-container">
+                    <div class="p-card__thumbnail is-loading"></div>
+                  </div>
+                  <h3 class="p-card__title p-heading--4 u-no-margin--bottom is-loading">Lorem ipsum dolor sit</h3>
+                  <p class="u-text--muted u-no-padding--top is-loading">lorem-ipsum</p>
                 </div>
-                <div class="p-card__title"></div>
-                <div class="p-card__content-square" style="width: 25%;"></div>
-              </div>
-
-              <div class="p-card__content">
-                <div class="p-card__content-square"></div>
-                <div class="p-card__content-square"></div>
-              </div>
-
-              <div class="p-card__footer">
-              </div>
-            </a>
-          </div>
+                <div class="p-card__content">
+                  <p><small class="package-card-summary is-loading">Lorem ipsum dolor sit amet, consectetur adipisicing elit culpa consectetur porro.</small></p>
+                </div>
+                <div class="p-card__footer"></div>
+              </a>
+            </div>
           {% endfor %}
         </div>
 

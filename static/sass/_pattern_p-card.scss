@@ -112,93 +112,39 @@
     &.is-placeholder {
       @keyframes load {
         0% {
-          background:
-            linear-gradient(
-              -45deg,
-              $color-mid-x-light 0%,
-              $color-mid-x-light 50%,
-              transparent 100%
-            );
-        }
-
-        33% {
-          background:
-            linear-gradient(
-              -45deg,
-              $color-mid-x-light 0%,
-              transparent 50%,
-              $color-mid-x-light 100%
-            );
-        }
-
-        66% {
-          background:
-            linear-gradient(
-              -45deg,
-              transparent 0%,
-              $color-mid-x-light 50%,
-              $color-mid-x-light 100%
-            );
+          background-position: -220px 0;
         }
 
         100% {
-          background:
-            linear-gradient(
-              -45deg,
-              $color-mid-x-light 0%,
-              $color-mid-x-light 50%,
-              transparent 100%
-            );
+          background-position: 220px 0;
         }
       }
 
+      color: transparent;
+      font-family: "Redacted", sans-serif;
+
       .p-card__thumbnail-container {
-        border-radius: 2px;
+        border-radius: 50%;
+      }
+
+      .is-loading {
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+        animation-iteration-count: infinite;
+        animation-name: load;
+        background: linear-gradient(to right, $color-mid-x-light 8%, $color-light 18%, $color-mid-x-light 33%);
+        background-size: 600px 104px;
+        position: relative;
       }
 
       .p-card__thumbnail {
-        animation: load 1s infinite ease-in-out;
-        background:
-          linear-gradient(
-            -45deg,
-            $color-mid-x-light 0%,
-            $color-mid-x-light 50%,
-            transparent 100%
-          );
         border-radius: 0;
         height: 40px;
         width: 40px;
       }
 
-      .p-card__title {
-        animation: load 1s infinite ease-in-out;
-        background:
-          linear-gradient(
-            -45deg,
-            $color-mid-x-light 0%,
-            $color-mid-x-light 50%,
-            transparent 100%
-          );
-        border-radius: 2px;
-        height: 30px;
-      }
-
-      .p-card__content-square {
-        animation: load 1s infinite ease-in-out;
-        background:
-          linear-gradient(
-            -45deg,
-            $color-mid-x-light 0%,
-            $color-mid-x-light 50%,
-            transparent 100%
-          );
-        border-radius: 2px;
-        height: 20px;
-
-        &:not(:first-of-type) {
-          margin-block-start: 0.5rem;
-          width: 75%;
-        }
+      .u-text--muted {
+        color: transparent;
       }
     }
 

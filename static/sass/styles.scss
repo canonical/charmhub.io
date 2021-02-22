@@ -217,6 +217,13 @@ $theme-default-nav: dark;
 
 @include p-charmhub-topology;
 
+@font-face {
+  font-family: "Redacted";
+  src:
+    url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/62127/redacted-regular.woff2")
+    format("woff2");
+}
+
 // Remove table row borders
 .p-table--no-borders tr {
   border-top: 0 !important;
