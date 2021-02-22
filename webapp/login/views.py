@@ -5,7 +5,7 @@ import flask
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
 from flask_wtf.csrf import generate_csrf, validate_csrf
 
-from webapp.login.candid import CandidClient
+from canonicalwebteam.candid import CandidClient
 from webapp.helpers import is_safe_url
 from webapp import authentication
 

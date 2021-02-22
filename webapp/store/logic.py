@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 import humanize
 from dateutil import parser
-from docstring_extractor import get_docstrings
+from canonicalwebteam.docstring_extractor import get_docstrings
 from webapp.helpers import decrease_headers
 from webapp.helpers import (
     discourse_api,
@@ -386,17 +386,8 @@ def process_python_docs(library, module_name):
     docstrings = get_docstrings(library["content"], module_name)
 
     docstrings["html"] = decrease_headers(
-        md_parser(docstrings["docstring"]), 3
+        md_parser(docstrings["docstring_text"]), 3
     )
-
-    # We support markdown inside docstrings (2 levels)
-    for py_part in docstrings["content"]:
-        py_part["html"] = decrease_headers(md_parser(py_part["docstring"]), 3)
-
-        for py_part_2 in py_part["content"]:
-            py_part_2["html"] = decrease_headers(
-                md_parser(py_part_2["docstring"]), 3
-            )
 
     return docstrings
 

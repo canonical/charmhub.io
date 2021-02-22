@@ -61,7 +61,7 @@ than the latest.</span>
       </div>
     </div>
 
-    <div class="col-9">
+    <div class="col-8">
       {% if not is_introduction %}
       <div class="u-fixed-width">
         <h3>{{ docstrings["name"] }}</h3>
@@ -111,10 +111,7 @@ than the latest.</span>
         </ul>
       </div>
       {% endif %}
-      <div class="row">
-        <div class="col-9 col-large-6">
-          {% block libraries_content %} {% endblock %}
-        </div>
+      {% block libraries_content %} {% endblock %}
       </div>
     </div>
   </div>
