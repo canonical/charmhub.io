@@ -5,13 +5,15 @@
 {% block meta_copydoc %}https://docs.google.com/document/d/1mps4SOa8_DA25fccYor3wxwV3ulQiD-uaocDHmaGmhw{% endblock meta_copydoc %}
 
 {% block content %}
-<section class="p-strip--store is-dark">
-  <div class="u-fixed-width is-wide">
-    <h1>The Open Operator Collection</h1>
-    <h2 class="p-heading--4">Universal operators for Linux, Windows and Kubernetes apps</h2>
-    <p><a href="/manifesto" class="p-link--inverted">Read our manifesto&nbsp;&rsaquo;</a></p>
-  </div>
-</section>
+{% if request.args.get('q') == None %}
+  <section class="p-strip--store is-dark">
+    <div class="u-fixed-width is-wide">
+      <h1>The Open Operator Collection</h1>
+      <h2 class="p-heading--4">Universal operators for Linux, Windows and Kubernetes apps</h2>
+      <p><a href="/manifesto" class="p-link--inverted">Read our manifesto&nbsp;&rsaquo;</a></p>
+    </div>
+  </section>
+{% endif %}
 <section class="p-strip--accent u-no-padding--top u-no-padding--bottom">
   <div class="p-strip--main u-fixed-width is-wide">
     <div class="l-store">
@@ -29,14 +31,14 @@
               {% if categories %}
               <ul class="p-side-navigation__list">
                 {% for category in categories %}
-                {% if category.slug != "featured" and category.slug != "other" %}
-                <li class="p-side-navigation__item" data-filter-type="category" data-js="filter">
-                  <label class="p-checkbox">
-                    <input class="p-checkbox__input category-filter" aria-labelledby="{{ category.slug }}-filter" type="checkbox" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %} disabled>
-                    <span class="p-checkbox__label" id="{{ category.slug }}-filter">{{ category.name }}</span>
-                  </label>
-                </li>
-                {% endif %}
+                  {% if category.slug != "featured" and category.slug != "other" %}
+                    <li class="p-side-navigation__item" data-filter-type="category" data-js="filter">
+                      <label class="p-checkbox">
+                        <input class="p-checkbox__input category-filter" aria-labelledby="{{ category.slug }}-filter" type="checkbox" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %} disabled>
+                        <span class="p-checkbox__label" id="{{ category.slug }}-filter">{{ category.name }}</span>
+                      </label>
+                    </li>
+                  {% endif %}
                 {% endfor %}
               </ul>
               {% endif %}
@@ -111,7 +113,7 @@
         </div>
 
         <noscript>
-          <div class="l-flex__card-container">
+          <div class="l-flex__card-container{% if results %} u-hide{% endif %}">
             {% include "partial/_featured-charms.html" %}
           </div>
         </noscript>
@@ -146,7 +148,6 @@
       <div class="p-card__content">
         <p><small class="package-card-summary"></small></p>
       </div>
-
       <div class="p-card__footer">
         <div class="package-card-icons"></div>
       </div>
@@ -169,10 +170,10 @@
 {% endblock %}
 
 {% block page_scripts %}
-<script src="{{ versioned_static('js/dist/store.js') }}" defer></script>
-<script>
-  window.addEventListener("DOMContentLoaded", () => {
-    new charmhub.store.initPackages();
-  });
-</script>
+  <script src="{{ versioned_static('js/dist/store.js') }}" defer></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      new charmhub.store.initPackages();
+    });
+  </script>
 {% endblock %}

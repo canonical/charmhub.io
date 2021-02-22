@@ -7,6 +7,7 @@ class initPackages {
     this.togglePlaceholderContainer(true);
     this.searchCache = window.location.search;
     this._filters = this.getUrlFilters();
+
     if (
       this._filters.filter.length === 0 &&
       this._filters.platform[0] === "all"
@@ -35,8 +36,10 @@ class initPackages {
         this.renderFiltersAndPlatform();
         this.renderButtonMobileOpen();
 
+        console.log(this.groupedPackages);
         if (
           this._filters.filter.length > 0 ||
+          this._filters.q.length > 0 ||
           this._filters.platform[0] !== "all"
         ) {
           this.renderPackages();
@@ -50,7 +53,14 @@ class initPackages {
   }
 
   fetchPackageList() {
-    return fetch("/packages.json").then((result) => result.json());
+    if (this._filters.q) {
+      const queryUrl = this._filters.q.join(",");
+      return fetch(`/packages.json?q=${queryUrl}`).then((result) =>
+        result.json()
+      );
+    } else {
+      return fetch("/packages.json").then((result) => result.json());
+    }
   }
 
   getUrlFilters() {
@@ -70,6 +80,10 @@ class initPackages {
 
     if (!filters.filter) {
       filters.filter = [];
+    }
+
+    if (!filters.q) {
+      filters.q = [];
     }
 
     return filters;
@@ -136,7 +150,7 @@ class initPackages {
   }
 
   renderResultsCount(featured) {
-    if (!"content" in document.createElement("template")) {
+    if (!("content" in document.createElement("template"))) {
       return;
     }
 
@@ -280,20 +294,16 @@ class initPackages {
         if (this._filters.platform[0] === "all") {
           let count = 0;
 
-          Object.keys(platforms).forEach(
-            (platform) => {
-              count += platform.length;
-            }
-          );
+          Object.keys(platforms).forEach((platform) => {
+            count += platform.length;
+          });
           if (count === 0) {
             filter.disabled = true;
           } else {
             filter.disabled = false;
           }
         } else {
-          if (
-            platforms[this._filters.platform[0]].length === 0
-          ) {
+          if (platforms[this._filters.platform[0]].length === 0) {
             filter.disabled = true;
           } else {
             filter.disabled = false;
@@ -414,7 +424,7 @@ class initPackages {
   }
 
   renderPackages() {
-    if (!"content" in document.createElement("template")) {
+    if (!("content" in document.createElement("template"))) {
       return;
     }
 
