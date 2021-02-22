@@ -27,14 +27,13 @@ export class SideNavigation {
       toggle.addEventListener("click", (event) => {
         event.preventDefault();
         const sideNav = document.getElementById(
-          <string> toggle.getAttribute("aria-controls")
+          <string>toggle.getAttribute("aria-controls")
         );
-
         if (sideNav) {
           this.toggleDrawer(
             sideNav,
             !sideNav.classList.contains("is-expanded")
-          );
+          )
         }
       });
     });

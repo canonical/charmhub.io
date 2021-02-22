@@ -1,6 +1,6 @@
 module.exports = {
-  parser: "babel-eslint",
-  plugins: ["jest"],
+  parser: "@typescript-eslint/parser",
+  plugins: ["jest", "@typescript-eslint"],
   globals: {
     ga: "readonly",
   },
@@ -10,7 +10,11 @@ module.exports = {
     node: true,
     jest: true,
   },
-  extends: ["eslint:recommended", "plugin:prettier/recommended"],
+  extends: [
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended",
+  ],
   parserOptions: {
     sourceType: "module",
   },
