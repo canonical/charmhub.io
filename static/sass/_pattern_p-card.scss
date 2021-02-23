@@ -24,6 +24,29 @@
     }
   }
 
+  .p-card--placeholder {
+    @keyframes shine {
+      0% {
+        background-position: right;
+      }
+
+      100% {
+        background-position: left;
+      }
+    }
+
+    animation: shine 3s infinite ease-in-out;
+    background-image:
+      linear-gradient(
+        to bottom right,
+        $color-mid-x-light calc(50% - 2rem),
+        $color-light 50%,
+        $color-mid-x-light calc(50% + 2rem)
+      );
+    background-size: 300% 300%;
+    clip-path: url(#animation-mask);
+  }
+
   a.p-card--button {
     @extend %vf-has-box-shadow;
 
@@ -105,99 +128,6 @@
           margin-inline-end: $spv-inner--small;
           vertical-align: -1px;
           width: $spv-inner--medium;
-        }
-      }
-    }
-
-    &.is-placeholder {
-      @keyframes load {
-        0% {
-          background:
-            linear-gradient(
-              -45deg,
-              $color-mid-x-light 0%,
-              $color-mid-x-light 50%,
-              transparent 100%
-            );
-        }
-
-        33% {
-          background:
-            linear-gradient(
-              -45deg,
-              $color-mid-x-light 0%,
-              transparent 50%,
-              $color-mid-x-light 100%
-            );
-        }
-
-        66% {
-          background:
-            linear-gradient(
-              -45deg,
-              transparent 0%,
-              $color-mid-x-light 50%,
-              $color-mid-x-light 100%
-            );
-        }
-
-        100% {
-          background:
-            linear-gradient(
-              -45deg,
-              $color-mid-x-light 0%,
-              $color-mid-x-light 50%,
-              transparent 100%
-            );
-        }
-      }
-
-      .p-card__thumbnail-container {
-        border-radius: 2px;
-      }
-
-      .p-card__thumbnail {
-        animation: load 1s infinite ease-in-out;
-        background:
-          linear-gradient(
-            -45deg,
-            $color-mid-x-light 0%,
-            $color-mid-x-light 50%,
-            transparent 100%
-          );
-        border-radius: 0;
-        height: 40px;
-        width: 40px;
-      }
-
-      .p-card__title {
-        animation: load 1s infinite ease-in-out;
-        background:
-          linear-gradient(
-            -45deg,
-            $color-mid-x-light 0%,
-            $color-mid-x-light 50%,
-            transparent 100%
-          );
-        border-radius: 2px;
-        height: 30px;
-      }
-
-      .p-card__content-square {
-        animation: load 1s infinite ease-in-out;
-        background:
-          linear-gradient(
-            -45deg,
-            $color-mid-x-light 0%,
-            $color-mid-x-light 50%,
-            transparent 100%
-          );
-        border-radius: 2px;
-        height: 20px;
-
-        &:not(:first-of-type) {
-          margin-block-start: 0.5rem;
-          width: 75%;
         }
       }
     }
