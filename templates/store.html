@@ -68,7 +68,7 @@
           </div>
           <div class="l-main__header--right">
             <form action="/" class="p-search-box u-hide--medium u-hide--large" data-js="search-handler-mobile">
-              <input type="search" class="p-search-box__input" name="q" aria-label="Search Charmhub" placeholder="Search Charmhub" {% if q %}value="{{ q }}" {% endif %} required />
+              <input type="search" data-js="search-input-mobile" class="p-search-box__input" name="q" aria-label="Search Charmhub" placeholder="Search Charmhub" {% if q %}value="{{ q }}" {% endif %} required />
               <button type="reset" class="p-search-box__reset"><i class="p-icon--close">Clear</i></button>
               <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search">Search</i></button>
             </form>
