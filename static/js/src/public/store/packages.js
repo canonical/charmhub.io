@@ -7,7 +7,9 @@ class initPackages {
     this.togglePlaceholderContainer(true);
     this.searchCache = window.location.search;
     this._filters = this.getUrlFilters();
+
     if (
+      this._filters.q.length === 0 &&
       this._filters.filter.length === 0 &&
       this._filters.platform[0] === "all"
     ) {
@@ -15,6 +17,12 @@ class initPackages {
       this.toggleFeaturedContainer(true);
       this.renderResultsCount(true);
       this.toggleShowAllPackagesButton(true);
+    }
+
+    if (this._filters.q.length > 0) {
+      const queryString = this._filters.q.join(",");
+      this.domEl.searchInputDesktop.el.value = queryString;
+      this.domEl.searchInputMobile.el.value = queryString;
     }
 
     this.fetchPackageList()
@@ -36,6 +44,7 @@ class initPackages {
         this.renderButtonMobileOpen();
 
         if (
+          this._filters.q.length > 0 ||
           this._filters.filter.length > 0 ||
           this._filters.platform[0] !== "all"
         ) {
@@ -50,7 +59,14 @@ class initPackages {
   }
 
   fetchPackageList() {
-    return fetch("/packages.json").then((result) => result.json());
+    if (this._filters.q) {
+      const queryUrl = this._filters.q.join(",");
+      return fetch(`/packages.json?q=${queryUrl}`).then((result) =>
+        result.json()
+      );
+    } else {
+      return fetch("/packages.json").then((result) => result.json());
+    }
   }
 
   getUrlFilters() {
@@ -72,6 +88,10 @@ class initPackages {
       filters.filter = [];
     }
 
+    if (!filters.q) {
+      filters.q = [];
+    }
+
     return filters;
   }
 
@@ -81,6 +101,14 @@ class initPackages {
     this.domEl.resultsCountContainer = {
       el: document.querySelector("[data-js='results-count-container']"),
       selector: "[data-js='results-count-container']",
+    };
+    this.domEl.searchInputDesktop = {
+      el: document.querySelector("[data-js='search-input-desktop']"),
+      selector: "[data-js='search-input-desktop']",
+    };
+    this.domEl.searchInputMobile = {
+      el: document.querySelector("[data-js='search-input-mobile']"),
+      selector: "[data-js='search-input-mobile']",
     };
     this.domEl.showAllPackagesButton = {
       el: document.querySelector("[data-js='show-all-packages']"),
@@ -136,13 +164,21 @@ class initPackages {
   }
 
   renderResultsCount(featured) {
-    if (!"content" in document.createElement("template")) {
+    if (!("content" in document.createElement("template"))) {
       return;
     }
 
     if (this.domEl.resultsCountContainer.el) {
       if (featured) {
         this.domEl.resultsCountContainer.el.innerHTML = `${this.domEl.featuredContainer.el.children.length} Featured`;
+      } else if (this._filters.q.length > 0) {
+        this.domEl.resultsCountContainer.el.innerHTML = `${
+          this.packages.length
+        } of ${
+          this.allPackages.length
+        } search results for <span style='font-weight: 500;'>'${this._filters.q.join(
+          ","
+        )}'</span>`;
       } else {
         this.domEl.resultsCountContainer.el.innerHTML = `${this.packages.length} of ${this.allPackages.length}`;
       }
@@ -280,20 +316,16 @@ class initPackages {
         if (this._filters.platform[0] === "all") {
           let count = 0;
 
-          Object.keys(platforms).forEach(
-            (platform) => {
-              count += platform.length;
-            }
-          );
+          Object.keys(platforms).forEach((platform) => {
+            count += platform.length;
+          });
           if (count === 0) {
             filter.disabled = true;
           } else {
             filter.disabled = false;
           }
         } else {
-          if (
-            platforms[this._filters.platform[0]].length === 0
-          ) {
+          if (platforms[this._filters.platform[0]].length === 0) {
             filter.disabled = true;
           } else {
             filter.disabled = false;
@@ -414,7 +446,7 @@ class initPackages {
   }
 
   renderPackages() {
-    if (!"content" in document.createElement("template")) {
+    if (!("content" in document.createElement("template"))) {
       return;
     }
 

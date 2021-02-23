@@ -36,7 +36,7 @@
         </li>
       </ul>
       <form action="/" class="p-search-box is-dark u-hide--small-1" data-js="search-handler-desktop">
-        <input type="search" class="p-search-box__input" name="q" aria-label="Search Charmhub" placeholder="Search Charmhub" {% if q %}value="{{ q }}" {% endif %} required />
+        <input type="search" data-js="search-input-desktop" class="p-search-box__input" name="q" aria-label="Search Charmhub" placeholder="Search Charmhub" {% if q %}value="{{ q }}" {% endif %} required />
         <button type="reset" class="p-search-box__reset"><i class="p-icon--close is-light">Clear</i></button>
         <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search is-light">Search</i></button>
       </form>
