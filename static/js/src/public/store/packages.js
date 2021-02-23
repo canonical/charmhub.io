@@ -9,6 +9,7 @@ class initPackages {
     this._filters = this.getUrlFilters();
 
     if (
+      this._filters.q.length === 0 &&
       this._filters.filter.length === 0 &&
       this._filters.platform[0] === "all"
     ) {
@@ -36,10 +37,9 @@ class initPackages {
         this.renderFiltersAndPlatform();
         this.renderButtonMobileOpen();
 
-        console.log(this.groupedPackages);
         if (
-          this._filters.filter.length > 0 ||
           this._filters.q.length > 0 ||
+          this._filters.filter.length > 0 ||
           this._filters.platform[0] !== "all"
         ) {
           this.renderPackages();
