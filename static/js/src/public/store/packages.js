@@ -19,6 +19,12 @@ class initPackages {
       this.toggleShowAllPackagesButton(true);
     }
 
+    if (this._filters.q.length > 0) {
+      const queryString = this._filters.q.join(",");
+      this.domEl.searchInputDesktop.el.value = queryString;
+      this.domEl.searchInputMobile.el.value = queryString;
+    }
+
     this.fetchPackageList()
       .then((data) => {
         this.allPackages = data.packages;
@@ -95,6 +101,14 @@ class initPackages {
     this.domEl.resultsCountContainer = {
       el: document.querySelector("[data-js='results-count-container']"),
       selector: "[data-js='results-count-container']",
+    };
+    this.domEl.searchInputDesktop = {
+      el: document.querySelector("[data-js='search-input-desktop']"),
+      selector: "[data-js='search-input-desktop']",
+    };
+    this.domEl.searchInputMobile = {
+      el: document.querySelector("[data-js='search-input-mobile']"),
+      selector: "[data-js='search-input-mobile']",
     };
     this.domEl.showAllPackagesButton = {
       el: document.querySelector("[data-js='show-all-packages']"),
