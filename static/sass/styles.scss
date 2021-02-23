@@ -22,7 +22,6 @@ $theme-default-nav: dark;
 @include vf-p-accordion;
 @include vf-p-buttons;
 @include vf-p-card;
-@include vf-p-code-snippet;
 @include vf-p-forms;
 @include vf-p-form-help-text;
 @include vf-p-form-tick-elements;
@@ -218,13 +217,6 @@ $theme-default-nav: dark;
 @import "charmhub_p-topology";
 
 @include p-charmhub-topology;
-
-@font-face {
-  font-family: "Redacted";
-  src:
-    url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/62127/redacted-regular.woff2")
-    format("woff2");
-}
 
 // Remove table row borders
 .p-table--no-borders tr {
