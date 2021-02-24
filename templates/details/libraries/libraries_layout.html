@@ -3,6 +3,7 @@
 {% extends '/details/details_layout.html' %}
 
 {% block details_content %}
+
   <div class="row is-wide p-details-tab__content">
     <div class="col-3 has-space--right">
       <div class="p-side-navigation" id="drawer" style="overflow-y: visible;">
@@ -41,14 +42,14 @@ than the latest.</span>
             <li class="p-side-navigation__item">
             {% if group == "others" %}
               {% for lib in libraries[group] %}
-                <a class="p-side-navigation__link" {% if request.path.endswith(lib['name']) %}aria-current="page"{% endif %} href="/{{ entity_name }}/libraries/{{ lib['name'] }}" style="color: #111;">{{ lib["name"] }}</a>
+                <a class="p-side-navigation__link" {% if request.path.endswith(lib['name']) or request.path.endswith(lib['name'] + '/source-code') %}aria-current="page"{% endif %} href="/{{ entity_name }}/libraries/{{ lib['name'] }}" style="color: #111;">{{ lib["name"] }}</a>
               {% endfor %}
             {% else %}
               <span class="p-side-navigation__text" style="color: #111;">{{ group }}</span>
               <ul class="p-side-navigation__list">
                 {% for lib in libraries[group] %}
                 <li class="p-side-navigation__item">
-                  <a class="p-side-navigation__link" {% if request.path.endswith(lib['name']) %}aria-current="page"{% endif %} href="/{{ entity_name }}/libraries/{{ group }}{{ lib['name'] }}">{{ lib["name"] }}</a>
+                  <a class="p-side-navigation__link" {% if request.path.endswith(lib['name']) or request.path.endswith(lib['name'] + '/source-code') %}aria-current="page"{% endif %} href="/{{ entity_name }}/libraries/{{ group }}{{ lib['name'] }}">{{ lib["name"] }}</a>
                 </li>
                 {% endfor %}
               </ul>
@@ -64,16 +65,16 @@ than the latest.</span>
     <div class="col-8">
       {% if not is_introduction %}
       <div class="u-fixed-width">
-        <h3>{{ docstrings["name"] }}</h3>
+        <h3>{{ library_name }}</h3>
         <ul class="p-inline-list--stretch p-list--reversed">
           <li class="p-inline-list__item u-no-margin--right">
             <div class="p-button-group">
               <div class="p-button-group__inner">
                 <div class="p-button-group__buttons">
-                  <a href="#docstrings" class="p-button-group__button is-smaller" data-js="tab-button" data-href="#docstrings">
+                  <a href="/{{ entity_name }}/libraries/{{ library_name }}" class="p-button-group__button is-smaller{% if not is_source_code%} is-selected{% endif %}"">
                     <i class="p-icon--docstrings">Docstrings</i><span>Docstrings</span>
                   </a>
-                  <a href="#source-code" class="p-button-group__button is-smaller" data-js="tab-button" data-href="#source-code"><i class="p-icon--code">Code</i><span>Source code</span></a>
+                  <a href="/{{ entity_name }}/libraries/{{ library_name }}/source-code" class="p-button-group__button is-smaller{% if is_source_code%} is-selected{% endif %}"><i class="p-icon--code">Code</i><span>Source code</span></a>
                 </div>
               </div>
             </div>
@@ -89,12 +90,12 @@ than the latest.</span>
                     <span class="p-contextual-menu__group">
                       <div class="p-contextual-menu__body">
                         <p class="u-no-padding--top"><i class="p-icon--code"></i> Fetch library</p>
-                        <pre class="u-no-margin--bottom">charmcraft fetch-libs {{docstrings["name"]}}</pre>
+                        <pre class="u-no-margin--bottom">charmcraft fetch-libs {{ library_name }}</pre>
                       </div>
                     </span>
                     <span class="p-contextual-menu__group">
-                      <a class="p-contextual-menu__link--deep" href="/{{ library['charm-name'] }}/libraries/{{ docstrings['name'] }}/download" download>
-                        <i class="p-icon--download"></i> Download {{ docstrings['name'] }}.py
+                      <a class="p-contextual-menu__link--deep" href="/{{ library['charm-name'] }}/libraries/{{ library_name }}/download" download>
+                        <i class="p-icon--download"></i> Download {{ library_name }}.py
                       </a>
                     </span>
                   </span>
@@ -117,8 +118,13 @@ than the latest.</span>
   </div>
 {% endblock %}
 
-{% block page_scripts %}
+{% block details_scripts %}
   <script>
+    {% if not is_source_code %}
+      // Fix to see the content under the sticky nav when you navigate using # on the docstring page
+        window.addEventListener("hashchange", () => { scrollBy(0, -40) })
+    {% endif %}
+
     function toggleMenu(element, show, top) {
       var target = document.getElementById(element.getAttribute('aria-controls'));
 

@@ -22,6 +22,12 @@
       }
     }
 
+    .p-docstring__intro {
+      p:first-child {
+        @extend %vf-heading-4;
+      }
+    }
+
     .u-no-horizontal-space {
       .token + .token {
         margin-inline-start: -0.5rem;
