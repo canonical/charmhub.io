@@ -4,12 +4,12 @@
 {% block meta_copydoc %}{% endblock meta_copydoc %}
 {% block meta_description %}{% endblock %}
 
-{% set selected_tab='punlicise' %}
+{% set selected_tab='publicise' %}
 
 {% block publisher_content %}
 <div class="p-strip is-shallow">
-  <div class="row is-wide">
-    <div class="col-3 has-space--right">
+  <div class="row">
+    <div class="col-3">
       <div class="p-side-navigation " id="drawer">
         <a href="#drawer" class="p-side-navigation__toggle js-drawer-toggle" aria-controls="drawer">
           Toggle side navigation
@@ -26,7 +26,7 @@
               <a class="p-side-navigation__link" {% if request.path.endswith('/publicise') %}aria-current="page"{% endif %} href="/{{ package.name }}/publicise">Charmhub buttons</a>
             </li>
             <li class="p-side-navigation__item">
-              <a class="p-side-navigation__link" {% if request.path.endswith('/publicise/badges') %}aria-current="page"{% endif %} href="/{{ package.name }}/publicise/badges">Github badges</a>
+              <a class="p-side-navigation__link" {% if request.path.endswith('/publicise/badges') %}aria-current="page"{% endif %} href="/{{ package.name }}/publicise/badges">GitHub badges</a>
             </li>
             <li class="p-side-navigation__item">
               <a class="p-side-navigation__link" {% if request.path.endswith('/publicise/cards' )%}aria-current="page"{% endif %} href="/{{ package.name }}/publicise/cards">Embeddable cards</a>
@@ -35,7 +35,7 @@
         </nav>
       </div>
     </div>
-    <div class="col-8">
+    <div class="col-9">
       {% block publicise_content %}{% endblock publicise_content %}
     </div>
   </div>
