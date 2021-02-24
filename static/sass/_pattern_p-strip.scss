@@ -350,6 +350,37 @@
     }
   }
 
+  .p-strip--grey {
+    @extend %vf-strip;
+
+    background-image:
+      linear-gradient(
+        to bottom left,
+        rgba(229, 229, 229, 0.3) 0,
+        rgba(229, 229, 229, 0.3) 49.9%,
+        transparent 50%
+      ),
+      linear-gradient(
+        to top left,
+        rgba(229, 229, 229, 0.3) 0,
+        rgba(229, 229, 229, 0.3) 49.9%,
+        transparent 50%
+      ),
+      linear-gradient(0deg, $color-light, $color-light);
+    background-position: top right, bottom right;
+    background-repeat: no-repeat;
+    background-size: 35% 100%, 15% 100%, 100% auto;
+
+    &.is-dark {
+      color: $color-x-light;
+
+      .link--light {
+        color: $color-x-light;
+        text-decoration: underline;
+      }
+    }
+  }
+
   .p-strip--charmhub {
     @extend %vf-strip;
 
