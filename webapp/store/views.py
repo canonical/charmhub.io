@@ -56,7 +56,6 @@ CATEGORIES = [
 @store.route("/")
 @store_maintenance
 def index():
-    query = request.args.get("q", default=None, type=str)
     featured_charms = app.store_api.find(
         category="featured", fields=SEARCH_FIELDS
     )["results"]
@@ -65,28 +64,6 @@ def index():
         "categories": CATEGORIES,
         "featured_charms": featured_charms,
     }
-
-    if query:
-        results = app.store_api.find(
-            query=query.lower(),
-            fields=SEARCH_FIELDS,
-        ).get("results")
-
-        packages = []
-        total_packages = 0
-
-        for i, item in enumerate(results):
-            if item["type"] != "charm":
-                continue
-
-            total_packages += 1
-
-            package = logic.add_store_front_data(results[i], False)
-
-            packages.append(package)
-
-        context["results"] = packages
-        return render_template("store-search.html", **context)
 
     featured_packages = []
 
