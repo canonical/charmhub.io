@@ -1,12 +1,16 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
-<section class="p-strip is-shallow u-no-padding--bottom">
-  <div class="u-fixed-width is-wide">
+<section class="p-strip--grey is-shallow">
+  <div class="u-fixed-width">
     <a href="/charms">&lsaquo;&nbsp;My charms &amp; bundles</a>
     <h1 class="p-heading--3">
       {{package.name}}
     </h1>
+  </div>
+</section>
+<section class="p-strip is-shallow u-no-padding--bottom">
+  <div class="u-fixed-width">
     <nav class="p-tabs">
       <ul class="p-tabs__list u-no-margin--bottom" role="tablist">
         <li class="p-tabs__item" role="presentation">
