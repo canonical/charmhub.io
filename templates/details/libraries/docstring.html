@@ -4,24 +4,52 @@
 
 {% block libraries_content %}
 
-<div id="docstrings" data-js="tab-content" class="p-docstring">
+<div class="p-docstring">
   <div class="p-docstring__intro">
-    {{ docstrings['html'] | safe }}
+    <div class="p-strip is-shallow u-no-padding--top">
+      {{ docstrings['html'] | safe }}
+    </div>
+    <hr class="p-separator--dense">
+  </div>
+  <div class="row p-strip is-shallow u-no-padding--top">
+    <div class="col-1">
+      <p class="p-text--x-small-capitalized">Index</p>
+    </div>
+    <div class="col-7">
+      <ul class="p-list">
+        {% for group in docstrings['content'] %}
+          {% if not group["name"].startswith("__") %}
+            <li class="p-list__item">
+              <a href="#{{ group['name'].lower() }}">{% if group["type"].lower() == "function" %}def {{ group["name"] }}(){% else %}{{ group["type"].lower() }} {{ group["name"] }}{% endif %}</a>
+            </li>
+          {% endif %}
+          {% for item in group["content"] %}
+            <li class="p-list__item u-no-padding">
+              <ul class="p-list u-no-margin--bottom" style="margin-inline-start: 1.5rem;">
+                {% if not item["name"].startswith("__") %}
+                <li class="p-list__item">
+                  <a href="#{{ group['name'].lower() }}-{{ item['name'].lower() }}">{% if item["type"].lower() == "function" %}def {{ item["name"] }}(){% else %}{{ item["type"].lower() }} {{ item["name"] }}{% endif %}</a>
+                </li>
+                {% endif %}
+              </ul>
+            </li>
+          {% endfor %}
+        {% endfor %}
+      </ul>
+    </div>
   </div>
   <div class="p-docstring__docs">
     {% for group in docstrings['content'] %}
-      {% if loop.index > 1 %}
       <hr class="p-separator--dense">
-      {% endif %}
-      <div class="p-strip is-shallow{% if loop.index > 1 %} u-no-padding--top{% endif %}{% if loop.index == loop.length  %} u-no-padding--bottom{% endif %}">
+       <div class="p-strip is-shallow u-no-padding--top{% if loop.index == loop.length  %} u-no-padding--bottom{% endif %}">
         <div class="p-strip is-shallow u-no-padding--top">
-          <h4 class="p-code u-no-margin--bottom">
+          <h4 id="{{ group['name'].lower() }}" class="p-code u-no-margin--bottom">
             {% if group["type"].lower() == "function" %}
-            <span class="token keyword">def</span>
-            <span class="token function">{{ group["name"] }}()</span>
-            {% elif group["type"].lower() == "class" %}
-            <span class="token keyword">{{ group["type"].lower() }}</span>
-            <span class="token class-name">{{ group["name"] }}</span>
+              <span class="token keyword">def</span>
+              <span class="token function">{{ group["name"] }}()</span>
+              {% elif group["type"].lower() == "class" %}
+              <span class="token keyword">{{ group["type"].lower() }}</span>
+              <span class="token class-name">{{ group["name"] }}</span>
             {% endif %}
           </h4>
         {% if group.description.short %}
@@ -154,7 +182,7 @@
                   {% if not item["name"].startswith("__") %}
                     <div class="p-strip is-shallow u-no-padding--top{% if loop.index == loop.length  %} u-no-padding--bottom{% endif %}">
                       <div class="p-strip is-shallow u-no-padding--top">
-                        <p class="p-code u-no-margin--bottom u-no-horizontal-space">
+                        <p id="{{ group['name'].lower() }}-{{ item['name'].lower() }}" class="p-code u-no-margin--bottom u-no-horizontal-space">
                           {% if item["type"].lower() == "function" %}
                             <span class="token keyword">{{ group["name"]}}.</span>
                             <span class="token function">{{ item["name"] }}()</span>
@@ -292,26 +320,4 @@
   </div>
 </div>
 
-<div id="source-code" data-js="tab-content">
-  <div data-js="source-code-title">
-    <hr class="p-separator--medium">
-    <h4>Source code</h4>
-  </div>
-  <pre id="python-code"><code>{{ library["content"] }}</code></pre>
-</div>
 {% endblock%}
-
-{% block page_scripts %}
-
-{{ super() }}
-
-<script src="{{ versioned_static('js/dist/details_libraries.js') }}" defer></script>
-<script src="{{ versioned_static('js/dist/highlight-js.js') }}" defer></script>
-<script>
-  window.addEventListener("DOMContentLoaded", function () {
-    charmhub.details.libraries.init("[data-js='tab-button']", "[data-js='tab-content']");
-
-    charmhub.highlight.hljs.highlightBlock(document.getElementById('python-code'));
-  });
-</script>
-{% endblock %}

@@ -1,0 +1,24 @@
+{% set is_introduction=False %}
+{% set is_source_code=True %}
+
+{% extends '/details/libraries/libraries_layout.html' %}
+
+{% block libraries_content %}
+
+<div data-js="tab-content">
+  <pre id="python-code"><code>{{ library["content"] }}</code></pre>
+</div>
+
+{% endblock%}
+
+{% block details_scripts %}
+
+{{ super() }}
+
+<script src="{{ versioned_static('js/dist/highlight-js.js') }}" defer></script>
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    charmhub.highlight.hljs.highlightBlock(document.getElementById('python-code'));
+  });
+</script>
+{% endblock %}
