@@ -14,7 +14,7 @@
     </div>
 
     <div class="p-card__content">
-      <p><small class="package-card-summary">{{ charm.result.summary }}</small></p>
+      <p><small class="package-card-summary">{{ charm.result.summary|truncate(90) }}</small></p>
     </div>
 
     <div class="p-card__footer">
