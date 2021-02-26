@@ -1,3 +1,5 @@
+import { truncateString } from "../../libs/truncate-string";
+
 function buildPackageCard(entity) {
   const entityCard = document.getElementById("package-card");
   const clone = entityCard.content.cloneNode(true);
@@ -55,7 +57,11 @@ function buildPackageCard(entity) {
   const entityCardSummary = clone.querySelector(".package-card-summary");
 
   if (entity.result.summary) {
-    entityCardSummary.innerText = entity.result.summary.substring(0, 90);
+    entityCardSummary.innerHTML = truncateString(
+      entity.result.summary,
+      90,
+      "&hellip;"
+    );
   }
 
   const entityCardIcons = clone.querySelector(".package-card-icons");
