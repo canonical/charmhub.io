@@ -148,12 +148,33 @@ def register_name_dispute_thank_you():
 )
 @login_required
 def get_publicise(entity_name):
+    SUPPORTED_LANGUAGES = {
+        "ar": {"title": "العربية", "text": "احصل عليه من Charmhub"},
+        "bg": {"title": "български", "text": "Инсталирайте го от Charmhub"},
+        "bn": {"title": "বাংলা", "text": "Charmhub থেকে ইনস্টল করুন"},
+        "de": {"title": "Deutsch", "text": "Installieren vom Charmhub"},
+        "en": {"title": "English", "text": "Get it from the Charmhub"},
+        "es": {"title": "Español", "text": "Instalar desde Charmhub"},
+        "fr": {
+            "title": "Français",
+            "text": "Installer à partir du Charmhub",
+        },
+        "it": {"title": "Italiano", "text": "Scarica dallo Charmhub"},
+        "jp": {"title": "日本語", "text": "Charmhub から入手ください"},
+        "pl": {"title": "Polski", "text": "Pobierz w Charmhub"},
+        "pt": {"title": "Português", "text": "Disponível na Charmhub"},
+        "ro": {"title": "Română", "text": "Instalează din Charmhub"},
+        "ru": {"title": "русский язык", "text": "Загрузите из Charmhub"},
+        "tw": {"title": "中文（台灣）", "text": "安裝軟體敬請移駕 Charmhub"},
+        "ua": {"title": "українськa мовa", "text": "Завантажте з Charmhub"},
+    }
     package = publisher_api.get_package_metadata(
         session["publisher-auth"], "charm", entity_name
     )
 
     context = {
         "package": package,
+        "languages": SUPPORTED_LANGUAGES,
     }
     return render_template("publisher/publicise/store_buttons.html", **context)
 
