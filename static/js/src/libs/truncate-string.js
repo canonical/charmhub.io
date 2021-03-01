@@ -8,7 +8,7 @@
 function truncateString(str, len, append = "...") {
   let newLength;
 
-  if (str.indexOf(" ") + append.length > len) {
+  if (str.length < len || str.indexOf(" ") + append.length > len) {
     return str; //if the first word + the appended text is too long, the function returns the original String
   }
 
