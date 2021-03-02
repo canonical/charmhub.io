@@ -25,6 +25,8 @@ def init_docs(app, url_prefix):
         "/docs/search",
         "docs-search",
         build_search_view(
-            site="charmhub.io/docs", template_path="docs/search.html"
+            session=session,
+            site="charmhub.io/docs",
+            template_path="docs/search.html",
         ),
     )
