@@ -486,3 +486,30 @@ def entity_badge(entity_name):
     )
 
     return svg, 200, {"Content-Type": "image/svg+xml"}
+
+
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/embedded')
+def entity_embedded_card(entity_name):
+    channel_request = request.args.get("channel", default=None, type=str)
+    package = get_package(entity_name, channel_request, FIELDS)
+
+    package["default-release"]["channel"]["released-at"] = logic.convert_date(
+        package["default-release"]["channel"]["released-at"]
+    )
+
+    button = request.args.get("button")
+    if button and button not in ["black", "white"]:
+        button = None
+
+    context = {
+        "button": button,
+        "package": package,
+        "show_channels": request.args.get("channels"),
+        "show_summary": request.args.get("summary"),
+        "show_platform": request.args.get("platform"),
+    }
+
+    return render_template(
+        "embeddable-card.html",
+        **context,
+    )

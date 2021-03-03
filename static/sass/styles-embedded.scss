@@ -1,0 +1,94 @@
+// colour definitions
+$color-brand: #00302f;
+$color-accent: $color-brand;
+$color-navigation-background: #252525;
+
+// vanilla patterns
+@import 'vanilla-framework/scss/vanilla';
+
+@include vf-base;
+@include vf-p-grid;
+@include vf-p-grid-modifications;
+@include vf-p-headings;
+@include vf-p-lists;
+@include vf-p-media-object;
+@include vf-p-strip;
+@include vf-p-tooltips;
+@include vf-u-align;
+@include vf-u-floats;
+@include vf-u-margin-collapse;
+@include vf-u-text-muted;
+
+@import "charmhub_p-header";
+
+@include charmhub-p-header;
+
+@import "charmhub_p-series-tag";
+
+@include charmhub-p-series-tag;
+
+// CUSTOM STYLES FOR EMBEDDED CARD
+
+.p-strip.has-suru {
+  background-image:
+    linear-gradient(
+      to bottom left,
+      rgba(229, 229, 229, 0.3) 0,
+      rgba(229, 229, 229, 0.3) 49.9%,
+      transparent 50%
+    ),
+    linear-gradient(
+      to top left,
+      rgba(229, 229, 229, 0.3) 0,
+      rgba(229, 229, 229, 0.3) 49.9%,
+      transparent 50%
+    ),
+    linear-gradient(0deg, $color-light, $color-light);
+  background-position: top right, bottom right;
+  background-repeat: no-repeat;
+  background-size: 75% 100%, 35% 100%, 100% auto;
+
+  @media screen and (min-width: $breakpoint-medium) {
+    background-size: 45% 100%, 25% 250%;
+  }
+}
+
+// cover whole card with a link to the Store page
+.p-embedded-card-link {
+  bottom: 0;
+  display: block;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
+// utility to make ellipsis
+.u-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// make max-width of the layout smaller for embedded view
+.row {
+  max-width: 40rem;
+  padding-inline-end: 1.5rem;
+  padding-inline-start: 1.5rem;
+}
+
+.p-inline-list--stretch {
+  .p-inline-list__item {
+    margin-inline-end: 0;
+
+    &:first-child {
+      max-width: 60%;
+      min-width: 60%;
+    }
+  }
+}
+
+.u-flex {
+  display: flex;
+}

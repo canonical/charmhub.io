@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block meta_title %}Charmhub - The Open Operator Collection{% endblock %}</title>
+
+  <!-- Preconnect to establish early connections to important third-party origins -->
+  <link rel="preconnect" href="https://assets.ubuntu.com">
+
+  <link rel="stylesheet" href="{{ versioned_static('css/styles-embedded.css') }}" />
+
+
+  <meta name="description" content="{% block meta_description %}Universal operators for application lifecycle management on Linux, Windows and Kubernetes.{% endblock %}">
+  <meta name="robots" content="noindex">
+
+  <meta property="og:title" content="{{ self.meta_title() }}" />
+  <meta property="og:site_name" content="Charmhub" />
+  <meta property="og:type" content="{% block meta_type %}website{% endblock %}" />
+  <meta property="og:description" content="{{ self.meta_description() }}" />
+  <meta property="og:image" content="{% block meta_image %}https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_1080,h_512/https://assets.ubuntu.com/v1/3f1974e5-CH+Logo+Metadata.jpg{% endblock %}" />
+  <meta property="og:url" content="https://charmhub.io/{{ package.name }}" />
+
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:site" content="@ubuntucloud" />
+  <meta property="twitter:creator" content="@ubuntucloud" />
+  <meta property="twitter:url" content="https://charmhub.io/{{ package.name }}" />
+
+  <link rel="apple-touch-icon" href="https://assets.ubuntu.com/v1/905b8df0-apple-touch-icon-180x180-precomposed.png" />
+  <base target="_blank">
+</head>
+
+<body>
+  <div class="p-strip has-suru">
+    <div class="row">
+      <div class="p-charm-header">
+        <div class="p-media-object--medium u-no-margin--bottom">
+          <div class="p-media-object__image-container">
+            <img src="{% if package.store_front.icons %}{{ package.store_front.icons[0] }}{% else %}https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_64,h_64/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg{% endif %}" alt="" width="64" height="64" class="p-media-object__image">
+          </div>
+          <div class="p-media-object__details">
+            <h1 class="p-media-object__title">
+              {{ format_slug(package.name) }}
+            </h1>
+            <div class="p-media-object__content u-no-margin--bottom">
+              <ul class="p-inline-list--middot u-no-margin--bottom">
+                <li class="p-inline-list__item">
+                  By {{ package.store_front.publisher_name }}
+                  {% if developer_validation == "verified" %}
+                  <span class="p-tooltip--top-center" aria-describedby="openstack-tooltip">
+                    <img src="https://assets.ubuntu.com/v1/75654c90-rosette.svg">
+                    <span class="p-tooltip__message" role="tooltip" id="default-tooltip">Verified account</span>
+                  </span>
+                  {% endif %}
+                </li>
+                {% if package.store_front.categories %}
+                <li class="p-inline-list__item">
+                  <a href="/?filter={{ package.store_front.categories[0].slug }}">{{ package.store_front.categories[0].name }}</a>
+                </li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-strip is-shallow">
+    {% if button or show_summary %}
+    <div class="row">
+      <ul class="p-inline-list--stretch u-no-margin--bottom">
+        {% if show_summary and package.store_front.metadata.summary %}
+        <li class="p-inline-list__item">
+          <p class="u-no-margin--bottom">{{ package.store_front.metadata.summary|truncate(90) }}</p>
+        </li>
+        {% endif %}
+        {% if button %}
+        <li class="p-inline-list__item">
+          <img alt="" src="https://charmhub.io/static/images/badges/en/charmhub-{{ button }}.svg" />
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+    {% endif %}
+    <div class="row">
+      <ul class="p-inline-list--stretch">
+        {% if show_platform %}
+        <li class="p-inline-list__item u-flex">
+          <p style="margin-inline-end: 0.5rem;">
+            <small>Supports:</small>
+          </p>
+          <div class="series-tags">
+            {% for version in package.store_front.platforms %}
+            <span class="series-tag">
+              {{ version }}
+            </span>
+            {% endfor %}
+          </div>
+        </li>
+        {% endif %}
+        <li class="p-inline-list__item">
+          <p class="u-text--muted"><small>Last published {{ package["default-release"]["channel"]["released-at"] }}</small></p>
+        </li>
+      </ul>
+    </div>
+    <div class="row">
+      <table class="u-no-margin--bottom">
+        <thead>
+          <tr>
+            <th>Channel</th>
+            <th>Version</th>
+            <th>Published</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if show_channels %}
+          {% for track, track_data in package.store_front.channel_map.items() %}
+          {% for channel, channel_data in track_data.items() %}
+          <tr>
+            <td>{{ track }}/{{ channel }}</td>
+            <td>{{ channel_data[0].version }}</td>
+            <td>{{ channel_data[0].released_at }}</td>
+          </tr>
+          {% endfor %}
+          {% endfor %}
+          {% else %}
+          <tr>
+            <td>{{ package["default-release"]["channel"]["track"] }}/{{ package["default-release"]["channel"]["risk"] }}</td>
+            <td>{{ package["default-release"]["revision"]["version"] }}</td>
+            <td>{{ package["default-release"]["channel"]["released-at"] }}</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <a class="p-embedded-card-link" href="/{{ package.name }}"></a>
+
+
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org/",
+      "@id": "https://charmhub.io/#organization",
+      "@type": "Organization",
+      "name": "Charmhub",
+      "logo": "https://assets.ubuntu.com/v1/c3b8cc72-Charmhub_white_hex.svg",
+      "url": "https://charmhub.io",
+    }
+  </script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@id": "https://charmhub.io/#website",
+      "@type": "WebPage",
+      "name": "Charmhub",
+      "url": "https://charmhub.io/{{ package.name }}"
+    }
+  </script>
+</body>
+
+</html>
