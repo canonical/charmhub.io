@@ -29,9 +29,7 @@
     }
 
     .u-no-horizontal-space {
-      .token + .token {
-        margin-inline-start: -0.5rem;
-      }
+      margin-inline-start: -0.5rem;
     }
 
     .p-strip {
