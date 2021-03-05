@@ -27,9 +27,9 @@ app.store_api = CharmStore(session=talisker.requests.get_session())
 set_handlers(app)
 csrf.init_app(app)
 
+app.register_blueprint(publisher)
 app.register_blueprint(store)
 app.register_blueprint(login)
-app.register_blueprint(publisher)
 
 init_docs(app, "/docs")
 init_tutorials(app, "/tutorials")

@@ -136,4 +136,18 @@
       }
     }
   }
+
+  .p-inline-list--stretch.is-navigation {
+    .p-inline-list__item:first-child {
+      width: 70%;
+
+      @media screen and (min-width: $breakpoint-medium) and (max-width: 985px) {
+        width: 60%;
+      }
+    }
+
+    .p-tabs::after {
+      display: none;
+    }
+  }
 }

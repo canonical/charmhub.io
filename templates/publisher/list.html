@@ -1,0 +1,128 @@
+{% extends 'base_layout.html' %}
+
+{% block meta_description %}{% endblock meta_description %}
+{% block meta_copydoc %}{% endblock meta_copydoc %}
+
+{% block content %}
+<section class="p-strip is-shallow p-strip--grey">
+  <div class="u-fixed-width">
+    <h1 class="p-heading--2">My charms and bundles</h1>
+  </div>
+</section>
+<section class="p-strip u-extra-space is-shallow">
+  <div class="u-fixed-width">
+    <ul class="p-inline-list--stretch is-navigation u-no-margin--bottom">
+      <li class="p-inline-list__item">
+        <nav class="p-tabs" aria-label="Charms and bundles navigation">
+          <ul class="p-tabs__list" role="tablist">
+            <li class="p-tabs__item" role="presentation">
+              <a href="/charms" class="p-tabs__link" tabindex="0" role="tab" aria-controls="charms" {% if page_type == 'charms' %}aria-selected="true" {% endif %}>Charms</a>
+            </li>
+            <li class="p-tabs__item" role="presentation">
+              <a href="/bundles" class="p-tabs__link" role="tab" aria-controls="bundles" {% if page_type == 'bundles' %}aria-selected="true" {% endif %}>Bundles</a>
+            </li>
+          </ul>
+        </nav>
+      </li>
+      <li class="p-inline-list__item u-align--right">
+        <a href="/register-name" class="p-button--neutral">Register a new charm or bundle</a>
+      </li>
+    </ul>
+  </div>
+  <div class="u-fixed-width">
+    <h2 class="p-heading--4">Published {{ page_type }}</h2>
+  </div>
+  <div class="p-details-tab__content">
+    <div class="u-fixed-width">
+      <table class="p-table--mobile-card" role="grid">
+        <thead>
+          <tr role="row">
+            <th style="width: 30%;">Name</th>
+            <th>Visibility</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for published_charm in published %}
+          <tr role="row">
+            <td role="rowheader" class="p-table--mobile-card__header">
+              <div class="p-heading-icon--x-small">
+                <span class="p-heading-icon__header">
+                  <img src="https://dashboard.snapcraft.io/site_media/appmedia/2020/04/products-hero-ubuntu.svg.png" width="24" height="24" class="p-heading-icon__img">
+                  <p class="u-no-margin--bottom u-no-padding--top">
+                    <a href="/{{ published_charm.name }}/listing">{{ published_charm.name }}</a>
+                  </p>
+                </span>
+              </div>
+            </td>
+            <td role="gridcell" aria-label="visibility">
+              {% if published_charm.private %}
+                Private
+              {% else %}
+                Public
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if registered %}
+      <div class="p-strip is-shallow">
+        <div class="u-fixed-width u-flex">
+          <div class="p-tooltip--information">
+            <h2 class="p-heading--4" style="padding-inline-end: 0.5rem;">Registered {{ page_type[:-1] }} names</h2>
+            <div class="instruction-tooltip">
+              <div class="p-tooltip__button" style="transform: translateY(0.65rem);" role="button" aria-controls="icon-tooltip-modal" tabindex="0">
+                Show information
+              </div>
+              <div class="p-tooltip__modal" id="icon-tooltip-modal" style="top: 0.25rem; transform: translateX(1rem) translateY(-0.5rem);">
+                <div class="p-tooltip__dialog" role="dialog" aria-labelledby="modal-content">
+                  <button class="p-tooltip__close" aria-controls="icon-tooltip-modal" aria-label="Close tooltip modal">Close</button>
+                  <span id="modal-content" class="u-no-margin--bottom u-no-padding--top">
+                    <a href="/tutorials/publish-on-charmhub">Learn how to publish your operator in Charmhub.</a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-fixed-width">
+          <table aria-label="Registered charm names">
+            <thead>
+              <tr role="row">
+                <th style="width: 30%;">
+                  Name
+                </th>
+                <th>
+                  Visibility
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for registered_charm in registered %}
+              <tr role="row">
+                <td>
+                  <a href="/{{ registered_charm['name'] }}/listing">{{ registered_charm['name'] }}</a>
+                </td>
+                <td>
+                  {{ registered_charm['visibility'] }}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ versioned_static('js/dist/list.js') }}" defer></script>
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    charmhub.publisher.list.init();
+  });
+</script>
+{% endblock %}
