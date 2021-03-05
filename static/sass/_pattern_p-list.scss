@@ -150,4 +150,16 @@
       display: none;
     }
   }
+
+  .p-inline-list--stretch {
+    .show-on-hover {
+      display: none;
+    }
+
+    &:hover {
+      .show-on-hover {
+        display: block;
+      }
+    }
+  }
 }
