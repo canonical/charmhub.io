@@ -29,11 +29,14 @@ def get_account_details():
 
 
 @publisher.route("/charms")
+@publisher.route("/bundles")
 @login_required
-def charms():
+def list_page():
     publisher_charms = publisher_api.get_account_packages(
         session["publisher-auth"], "charm"
     )
+
+    page_type = request.path[1:]
 
     context = {
         "published": [
@@ -42,15 +45,10 @@ def charms():
         "registered": [
             c for c in publisher_charms if c["status"] == "registered"
         ],
+        "page_type": page_type,
     }
 
-    return render_template("publisher/charms.html", **context)
-
-
-@publisher.route("/bundles")
-@login_required
-def bundles():
-    return render_template("publisher/bundles.html")
+    return render_template("publisher/list.html", **context)
 
 
 @publisher.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/listing')

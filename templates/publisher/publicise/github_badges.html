@@ -1,36 +1,36 @@
 {% extends 'publisher/publicise/publicise_layout.html' %}
 
 {% block publicise_content %}
-  <h4>Promote your charm using an embeddable GitHub badge</h4>
-  <div class="row">
-    <div class="col-5 col-start-large-3">
-      <p>
-        <a href="/{{ package.name }}">
-          <img alt="" src="/{{ package.name }}/badge.svg" />
-        </a>
-      </p>
-    </div>
+<h4>Promote your charm using an embeddable GitHub badge</h4>
+<div class="row">
+  <div class="col-5 col-start-large-3">
+    <p>
+      <a href="/{{ package.name }}">
+        <img alt="" src="/{{ package.name }}/badge.svg" />
+      </a>
+    </p>
   </div>
-  <div class="row">
-    <div class="col-2">
-      <p>HTML:</p>
-    </div>
-    <div class="col-5">
-      <div class="p-code-snippet">
-        <pre class="p-code-snippet__block is-wrapped"><code>&lt;a href="https://charmhub.io/{{ package.name }}"&gt;
+</div>
+<div class="row">
+  <div class="col-2">
+    <p>HTML:</p>
+  </div>
+  <div class="col-5">
+    <div class="p-code-snippet">
+      <pre class="p-code-snippet__block is-wrapped"><code>&lt;a href="https://charmhub.io/{{ package.name }}"&gt;
     &lt;img alt="" src="https://charmhub.io/{{ package.name }}/badge.svg" /&gt;
 &lt;/a&gt;</code></pre>
-      </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-2">
-      <p>Markdown:</p>
-    </div>
-    <div class="col-5">
-      <div class="p-code-snippet">
-        <pre class="p-code-snippet__block is-wrapped"><code>[![{{ package.title }}](https://charmhub.io/{{ package.name }}/badge.svg)](https://charmhub.io/{{ package.name }})</code></pre>
-      </div>
+</div>
+<div class="row">
+  <div class="col-2">
+    <p>Markdown:</p>
+  </div>
+  <div class="col-5">
+    <div class="p-code-snippet">
+      <pre class="p-code-snippet__block is-wrapped"><code>[![{{ package.title }}](https://charmhub.io/{{ package.name }}/badge.svg)](https://charmhub.io/{{ package.name }})</code></pre>
     </div>
   </div>
+</div>
 {% endblock %}
