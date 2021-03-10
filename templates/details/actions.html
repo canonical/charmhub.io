@@ -79,4 +79,8 @@
 
 {% block details_scripts %}
   <script src="{{ versioned_static('js/dist/highlight-nav.js') }}" defer></script>
+  <script>
+      // Fix to see the content under the sticky nav when you navigate using #id
+      window.addEventListener("hashchange", () => { scrollBy(0, -65) })
+  </script>
 {% endblock %}
