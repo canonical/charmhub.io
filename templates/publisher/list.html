@@ -6,67 +6,138 @@
 {% block content %}
 <section class="p-strip is-shallow p-strip--grey">
   <div class="u-fixed-width">
-    <h1 class="p-heading--2">My charms and bundles</h1>
+    {% if not published and not registered %}
+      <h1 class="p-heading--2">Getting started</h1>
+      <h2 class="p-heading--4">Start with a charm or a bundle</h2>
+      <p>To upload your first charm to the store, you must first register its name.</p>
+      <ul class="p-inline-list u-no-margin--bottom">
+        <li class="p-inline-list__item">
+          <a href="/register-name" class="p-button--neutral">Register a new charm or bundle</a>
+        </li>
+        <li class="p-inline-list__item">
+          <a href="/tutorials/publish-on-charmhub">
+            Learn how to publish an operator&nbsp;&rsaquo;
+          </a>
+        </li>
+      </ul>
+    {% else %}
+      <h1 class="p-heading--2">My charms and bundles</h1>
+    {% endif %}
   </div>
 </section>
 <section class="p-strip u-extra-space is-shallow">
-  <div class="u-fixed-width">
-    <ul class="p-inline-list--stretch is-navigation u-no-margin--bottom">
-      <li class="p-inline-list__item">
-        <nav class="p-tabs" aria-label="Charms and bundles navigation">
-          <ul class="p-tabs__list" role="tablist">
-            <li class="p-tabs__item" role="presentation">
-              <a href="/charms" class="p-tabs__link" tabindex="0" role="tab" aria-controls="charms" {% if page_type == 'charms' %}aria-selected="true" {% endif %}>Charms</a>
-            </li>
-            <li class="p-tabs__item" role="presentation">
-              <a href="/bundles" class="p-tabs__link" role="tab" aria-controls="bundles" {% if page_type == 'bundles' %}aria-selected="true" {% endif %}>Bundles</a>
-            </li>
-          </ul>
-        </nav>
-      </li>
-      <li class="p-inline-list__item u-align--right">
-        <a href="/register-name" class="p-button--neutral">Register a new charm or bundle</a>
-      </li>
-    </ul>
-  </div>
-  <div class="u-fixed-width">
-    <h2 class="p-heading--4">Published {{ page_type }}</h2>
-  </div>
-  <div class="p-details-tab__content">
-    <div class="u-fixed-width">
-      <table class="p-table--mobile-card" role="grid">
-        <thead>
-          <tr role="row">
-            <th style="width: 30%;">Name</th>
-            <th>Visibility</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for published_charm in published %}
-          <tr role="row">
-            <td role="rowheader" class="p-table--mobile-card__header">
-              <div class="p-heading-icon--x-small">
-                <span class="p-heading-icon__header">
-                  <img src="https://dashboard.snapcraft.io/site_media/appmedia/2020/04/products-hero-ubuntu.svg.png" width="24" height="24" class="p-heading-icon__img">
-                  <p class="u-no-margin--bottom u-no-padding--top">
-                    <a href="/{{ published_charm.name }}/listing">{{ published_charm.name }}</a>
-                  </p>
-                </span>
-              </div>
-            </td>
-            <td role="gridcell" aria-label="visibility">
-              {% if published_charm.private %}
-                Private
-              {% else %}
-                Public
-              {% endif %}
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+  {% if not published and not registered %}
+    <div class="row">
+      <div class="col-4">
+        {{
+          image(
+          url="https://assets.ubuntu.com/v1/4e112235-Understand+the+basics.svg",
+          alt="",
+          width="84",
+          height="66",
+          hi_def=True,
+          attrs={"style": "margin-block-end: 0.75rem;"}
+          ) | safe
+        }}
+        <h3 class="p-heading--5 u-no-margin--bottom">Understand the basics</h3>
+        <p>Learn everything about charms and all the best practices of how to use them and write them.</p>
+        <p class="u-sv3">
+          <a href="/docs">Read the docs&nbsp;&rsaquo;</a>
+        </p>
+      </div>
+      <div class="col-4">
+        {{
+          image(
+          url="https://assets.ubuntu.com/v1/dcff8529-First+kubernetes+operator.svg",
+          alt="",
+          width="74",
+          height="65",
+          hi_def=True,
+          attrs={"style": "margin-block-end: 0.75rem;"}
+          ) | safe
+        }}
+        <h3 class="p-heading--5 u-no-margin--bottom">Your first Kubernetes operator</h3>
+        <p>Create a minimal charmed operator with the Python Operator Framework.</p>
+        <p class="u-sv3">
+          <a href="/tutorials/build-a-minimal-operator">Complete this tutorial&nbsp;&rsaquo;</a>
+        </p>
+      </div>
+      <div class="col-4">
+        {{
+          image(
+          url="https://assets.ubuntu.com/v1/2d09f636-Community.svg",
+          alt="",
+          width="76",
+          height="66",
+          hi_def=True,
+          attrs={"style": "margin-block-end: 0.75rem;"}
+          ) | safe
+        }}
+        <h3 class="p-heading--5 u-no-margin--bottom">Join the community</h3>
+        <p>Request features, troubleshoot and generally find all the latest talk about the world of charms.</p>
+        <p class="u-sv3">
+          <a href="https://discourse.charmhub.io/">Join the discussion&nbsp;&rsaquo;</a>
+        </p>
+      </div>
     </div>
-    {% if registered %}
+  {% else %}
+    <div class="u-fixed-width">
+      <ul class="p-inline-list--stretch is-navigation u-no-margin--bottom">
+        <li class="p-inline-list__item">
+          <nav class="p-tabs" aria-label="Charms and bundles navigation">
+            <ul class="p-tabs__list" role="tablist">
+              <li class="p-tabs__item" role="presentation">
+                <a href="/charms" class="p-tabs__link" tabindex="0" role="tab" aria-controls="charms" {% if page_type=='charms' %}aria-selected="true" {% endif %}>Charms</a>
+              </li>
+              <li class="p-tabs__item" role="presentation">
+                <a href="/bundles" class="p-tabs__link" role="tab" aria-controls="bundles" {% if page_type=='bundles' %}aria-selected="true" {% endif %}>Bundles</a>
+              </li>
+            </ul>
+          </nav>
+        </li>
+        <li class="p-inline-list__item u-align--right">
+          <a href="/register-name" class="p-button--neutral">Register a new charm or bundle</a>
+        </li>
+      </ul>
+    </div>
+    <div class="u-fixed-width">
+      <h2 class="p-heading--4">Published {{ page_type }}</h2>
+    </div>
+    <div class="p-details-tab__content">
+      <div class="u-fixed-width">
+        <table class="p-table--mobile-card" role="grid">
+          <thead>
+            <tr role="row">
+              <th style="width: 30%;">Name</th>
+              <th>Visibility</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for published_charm in published %}
+            <tr role="row">
+              <td role="rowheader" class="p-table--mobile-card__header">
+                <div class="p-heading-icon--x-small">
+                  <span class="p-heading-icon__header">
+                    <img src="https://dashboard.snapcraft.io/site_media/appmedia/2020/04/products-hero-ubuntu.svg.png" width="24" height="24" class="p-heading-icon__img">
+                    <p class="u-no-margin--bottom u-no-padding--top">
+                      <a href="/{{ published_charm.name }}/listing">{{ published_charm.name }}</a>
+                    </p>
+                  </span>
+                </div>
+              </td>
+              <td role="gridcell" aria-label="visibility">
+                {% if published_charm.private %}
+                Private
+                {% else %}
+                Public
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% if registered %}
       <div class="p-strip is-shallow">
         <div class="u-fixed-width u-flex">
           <div class="p-tooltip--information">
@@ -113,8 +184,9 @@
           </table>
         </div>
       </div>
-    {% endif %}
-  </div>
+      {% endif %}
+    </div>
+  {% endif %}
 </section>
 {% endblock %}
 
