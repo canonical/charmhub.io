@@ -9,119 +9,35 @@
 {% block publisher_content %}
 <form id="settings-form" class="p-form p-form--stacked p-strip u-no-padding--top" data-js="settings-form" method="POST" enctype='multipart/form-data'>
   <section class="p-strip is-shallow">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <div class="u-fixed-width">
+        {% for category, message in messages %}
+        <div id="market-form-status" class="p-notification--{{ category }}">
+          <p class="p-notification__response">
+            {{ message }}
+          </p>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% endwith %}
     <div class="row p-form__group">
       <div class="col-2">
         <p class="is-label">Visibility:</p>
       </div>
       <div class="col-8">
         <div class="p-form__control">
-          <input type="radio" name="private" id="is-public" {% if not private and not unlisted %}checked="checked" {% endif %} value="public">
+          <input type="radio" name="private" id="is-public" {% if not package.private %}checked="checked"{% endif %} value="public">
           <label for="is-public">Public
           </label>
           <p class="p-form-help-text">Anyone can find your charm in the Charmhub</p>
         </div>
         <div class="p-form__control">
-          <input type="radio" name="private" id="is-private" {% if private %}checked="checked" {% endif %} value="private">
+          <input type="radio" name="private" id="is-private" {% if package.private %}checked="checked"{% endif %} value="private">
           <label for="is-private">Private
           </label>
           <p class="p-form-help-text u-no-margin--bottom">Hidden in the Charmhub. Only accessible by the publisher and collaborators.</p>
-        </div>
-      </div>
-    </div>
-    <div class="u-fixed-width">
-      <hr class="p-separator--2rem">
-    </div>
-    <div class="row p-form__group">
-      <div class="col-2">
-        <p class="is-label">Collaborators:</p>
-      </div>
-      <div class="col-5">
-        <table aria-label="{{ package.name }} collaborators table">
-          <thead>
-            <tr>
-              <th style="width: 25%;">Status</th>
-              <th>User</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Accepted</td>
-              <td class="u-no-padding--top u-no-padding--bottom u-no-padding--right">
-                <ul class="p-list--divided has-padding u-no-margin--bottom">
-                  <li class="p-list__item">
-                    <ul class="p-inline-list--stretch u-no-margin--bottom">
-                      <li class="p-inline-list__item">test@collaborator.one</li>
-                      <li class="p-inline-list__item u-align--right show-on-hover">
-                        <a href="#"><i class="p-icon--delete">Delete</i></a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="p-list__item">
-                    <ul class="p-inline-list--stretch u-no-margin--bottom">
-                      <li class="p-inline-list__item">test@collaborator.one</li>
-                      <li class="p-inline-list__item u-align--right show-on-hover">
-                        <a href="#"><i class="p-icon--delete">Delete</i></a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="p-list__item">
-                    <ul class="p-inline-list--stretch u-no-margin--bottom">
-                      <li class="p-inline-list__item">test@collaborator.one</li>
-                      <li class="p-inline-list__item u-align--right show-on-hover">
-                        <a href="#"><i class="p-icon--delete">Delete</i></a>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <td>Pending</td>
-              <td class="u-no-padding--top u-no-padding--bottom u-no-padding--right">
-                <ul class="p-list--divided has-padding u-no-margin--bottom">
-                  <li class="p-list__item">
-                    <ul class="p-inline-list--stretch u-no-margin--bottom">
-                      <li class="p-inline-list__item">test@collaborator.one</li>
-                      <li class="p-inline-list__item u-align--right show-on-hover">
-                        <a href="#"><i class="p-icon--delete">Delete</i></a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="p-list__item">
-                    <ul class="p-inline-list--stretch u-no-margin--bottom">
-                      <li class="p-inline-list__item">test@collaborator.one</li>
-                      <li class="p-inline-list__item u-align--right show-on-hover">
-                        <a href="#"><i class="p-icon--delete">Delete</i></a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="p-list__item">
-                    <ul class="p-inline-list--stretch u-no-margin--bottom">
-                      <li class="p-inline-list__item">test@collaborator.one</li>
-                      <li class="p-inline-list__item u-align--right show-on-hover">
-                        <a href="#"><i class="p-icon--delete">Delete</i></a>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-2">
-        <label for="new-collaborator">Add collaborator:</label>
-      </div>
-      <div class="col-10">
-        <div class="row">
-          <div class="col-4">
-            <input id="new-collaborator" placeholder="example@example.com" type="email">
-          </div>
-          <div class="col-1">
-            <a href="#" class="p-button--neutral u-no-margin--bottom">Add</a>
-          </div>
         </div>
       </div>
     </div>
@@ -134,13 +50,13 @@
       </div>
       <div class="col-8">
         <p class="is-label">
-          Published
+          {{ package.status | capitalize }}
         </p>
       </div>
     </div>
   </section>
   <div data-js="sticky-menu-observer">
-    <div class="u-position-sticky--bottom" data-js="sticky-menu">
+    <div class="u-position-sticky--bottom is-sticky u-hide" data-js="sticky-menu">
       <div class="u-fixed-width">
         <hr>
       </div>
@@ -161,6 +77,8 @@
       </div>
     </div>
   </div>
+  <input type="hidden" name="changes" value="">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 </form>
 {% endblock %}
 
@@ -168,7 +86,10 @@
 <script src="{{ versioned_static('js/dist/settings.js') }}" defer></script>
 <script>
   window.addEventListener("DOMContentLoaded", function () {
-    charmhub.publisher.settings.initStickyMenu("[data-js='sticky-menu-observer']")
+    const formFields = {
+      private: {{ package.private | tojson }},
+      };
+    charmhub.publisher.settings.init(formFields);
   });
 </script>
 {% endblock %}
