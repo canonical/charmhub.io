@@ -10,17 +10,17 @@
 <form id="market-form" class="p-form p-form--stacked p-strip u-no-padding--top" method="POST" enctype="multipart/form-data">
   <section class="p-strip is-shallow">
     {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <div class="u-fixed-width">
-      {% for category, message in messages %}
-      <div id="market-form-status" class="p-notification--{{ category }}">
-        <p class="p-notification__response">
-          {{ message }}
-        </p>
+      {% if messages %}
+      <div class="u-fixed-width">
+        {% for category, message in messages %}
+        <div id="market-form-status" class="p-notification--{{ category }}">
+          <p class="p-notification__response">
+            {{ message }}
+          </p>
+        </div>
+        {% endfor %}
       </div>
-      {% endfor %}
-    </div>
-    {% endif %}
+      {% endif %}
     {% endwith %}
 
     <div class="u-fixed-width">
