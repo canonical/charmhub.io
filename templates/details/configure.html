@@ -4,52 +4,41 @@
 
 {% block details_content %}
 <div class="row is-wide p-details-tab__content">
-  <div class="row is-wide">
-    {% if package.store_front.config.options %}
-    <div class="col-3 has-space--right">
-      <div class="p-side-navigation" data-js="{{ section_slug }}">
-        <ul class="p-side-navigation__list">
-          {% for config in package.store_front.config.options.keys() %}
-          <li class="p-side-navigation__item">
-            <a href="#{{ config }}" class="p-side-navigation__link u-truncate" role="tab" aria-controls="{{ config }}" {% if loop.index == 1 %}aria-selected="false" {% endif %}>
-              {{ config }}
-            </a>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-    <div class="col-9 col-large-6">
-      <ul class="p-list--divided has-separator-centered">
-        {% for key, value in package.store_front.config.options.items() %}
-        <li class="p-list__item doc-section">
-          <span class="section-marker" id="{{ key }}"></span>
-          <p class="p-heading--4">{{ key }} <span class="u-text--muted">&VerticalLine; {{ value.type }}</span></p>
-          {% if value.default %}
-          <p style="overflow-wrap: break-word;"><span class="u-text--muted">Default:</span> {{ value.default }}</p>
-          {% endif %}
-          <p style="overflow-wrap: break-word; white-space: pre-wrap;">{{ value.description | escape }}</p>
+  {% if package.store_front.config.options %}
+  <div class="col-3 has-space--right">
+    <div class="p-side-navigation" data-js="{{ section_slug }}">
+      <ul class="p-side-navigation__list">
+        {% for config in package.store_front.config.options.keys() %}
+        <li class="p-side-navigation__item">
+          <a href="#{{ config }}" class="p-side-navigation__link u-truncate" role="tab" aria-controls="{{ config }}" {% if loop.index == 1 %}aria-selected="false" {% endif %}>
+            {{ config }}
+          </a>
         </li>
         {% endfor %}
       </ul>
     </div>
-    {% else %}
-    <div class="p-notification--information">
-      <p class="p-notification__response">
-        No configuration details have been added yet.
-      </p>
-    </div>
-    {% endif %}
   </div>
+  <div class="col-9 col-large-6">
+    <ul class="p-list--divided has-separator-centered">
+      {% for key, value in package.store_front.config.options.items() %}
+      <li class="p-list__item" id="{{ key }}">
+        <p class="p-heading--4">{{ key }} <span class="u-text--muted">&VerticalLine; {{ value.type }}</span></p>
+        {% if value.default %}
+        <p style="overflow-wrap: break-word;"><span class="u-text--muted">Default:</span> {{ value.default }}</p>
+        {% endif %}
+        <p style="overflow-wrap: break-word; white-space: pre-wrap;">{{ value.description | escape }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% else %}
+  <div class="p-notification--information">
+    <p class="p-notification__response">
+      No configuration details have been added yet.
+    </p>
+  </div>
+  {% endif %}
 </div>
-
-<style>
-  .section-marker {
-    display: block;
-    margin-top: -64px;
-    padding-bottom: 64px;
-  }
-</style>
 
 <script>
   const sideNavigationLinks = Array.prototype.slice.call(
@@ -70,5 +59,8 @@
       activeNavigationLink.classList.add("is-active");
     });
   });
+
+  // Fix to see the content under the sticky nav when you navigate using # on the docstring page
+  window.addEventListener("hashchange", () => { scrollBy(0, -55) })
 </script>
 {% endblock%}
