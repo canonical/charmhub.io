@@ -20,7 +20,7 @@ app = FlaskBase(
     static_folder="../static",
     template_404="404.html",
     template_500="500.html",
-    favicon_url="https://assets.ubuntu.com/v1/751b08fb-favicon.ico",
+    favicon_url="https://assets.ubuntu.com/v1/5d4edefd-jaas-favicon.png",
 )
 app.store_api = CharmStore(session=talisker.requests.get_session())
 
