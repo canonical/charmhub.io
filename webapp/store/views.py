@@ -38,16 +38,14 @@ SEARCH_FIELDS = [
 ]
 
 CATEGORIES = [
-    {"slug": "ai/ml", "name": "AI/ML"},
+    {"slug": "ai-ml", "name": "AI/ML"},
     {"slug": "big-data", "name": "Big Data"},
-    {"slug": "database", "name": "Database"},
     {"slug": "cloud", "name": "Cloud"},
     {"slug": "containers", "name": "Containers"},
-    {"slug": "featured", "name": "Featured"},
-    {"slug": "logging-and-tracing", "name": "Logging and Tracing"},
+    {"slug": "databases", "name": "Databases"},
+    {"slug": "logging-tracing", "name": "Logging and Tracing"},
     {"slug": "monitoring", "name": "Monitoring"},
     {"slug": "networking", "name": "Networking"},
-    {"slug": "other", "name": "Other"},
     {"slug": "security", "name": "Security"},
     {"slug": "storage", "name": "Storage"},
 ]

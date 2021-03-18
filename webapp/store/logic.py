@@ -8,7 +8,6 @@ from canonicalwebteam.docstring_extractor import get_docstrings
 from webapp.helpers import decrease_headers
 from webapp.helpers import (
     discourse_api,
-    format_slug,
     get_yaml_loader,
     md_parser,
 )
@@ -48,59 +47,6 @@ UBUNTU_SERIES = {
     "eoan": "19.10",
     "focal": "20.04 LTS",
     "groovy": "20.10",
-}
-
-CATEGORIES = {
-    "ai_ml": "ai/ml",
-    "ai": "ai/ml",
-    "machine_learning": "ai/ml",
-    "fortran": "logging-and-tracing",
-    "ldap": "logging-and-tracing",
-    "nginx": "logging-and-tracing",
-    "telemetry": "logging-and-tracing",
-    "system": "logging-and-tracing",
-    "lsf_server": "logging-and-tracing",
-    "ops": "monitoring",
-    "monitoring": "monitoring",
-    "reporting": "monitoring",
-    "cpu": "monitoring",
-    "deploy": "monitoring",
-    "prometheus": "monitoring",
-    "workload_management": "monitoring",
-    "ops, monitoring": "monitoring",
-    "job_scheduler": "monitoring",
-    "network": "networking",
-    "content_cache": "networking",
-    "networking": "networking",
-    "dns": "networking",
-    "cache_proxy": "networking",
-    "reverse_proxy": "networking",
-    "big_data": "big-data",
-    "bigdata": "big-data",
-    "tensorflow": "big-data",
-    "hadoop": "big-data",
-    "ampq": "big-data",
-    "analytics": "big-data",
-    "social": "big-data",
-    "kubernetes": "containers",
-    "controllers": "containers",
-    "kubeflow": "containers",
-    "containers": "containers",
-    "authentication": "security",
-    "identity": "security",
-    "security": "security",
-    "app-servers": "storage",
-    "web-server": "storage",
-    "file-servers": "storage",
-    "storage": "storage",
-    "ftp": "storage",
-    "file-server": "storage",
-    "capacity-planning": "storage",
-    "openstack": "cloud",
-    "infrastructure": "cloud",
-    "keystore": "cloud",
-    "databases": "database",
-    "database": "database",
 }
 
 PLATFORMS = {
@@ -280,39 +226,6 @@ def get_icons(package):
     return [m["url"] for m in media if m["type"] == "icon"]
 
 
-def get_categories(categories_json):
-    """Retrieve and flatten the nested array from the legacy API response.
-    :param categories_json: The returned json
-    :returns: A list of categories
-    """
-
-    categories = []
-    i = 0
-
-    for category in categories_json:
-        mapped_catgory = CATEGORIES.get(category["name"], "other")
-        # This is a hack to show only one category that is different
-        # than other if it exists. Otherwise show other.
-        if i < len(categories_json) - 1:
-            if not mapped_catgory == "other":
-                categories.append(
-                    {
-                        "slug": mapped_catgory,
-                        "name": format_slug(mapped_catgory),
-                    }
-                )
-                return categories
-        else:
-            categories.append(
-                {
-                    "slug": mapped_catgory,
-                    "name": format_slug(mapped_catgory),
-                }
-            )
-            return categories
-        i = i + 1
-
-
 def get_docs_topic_id(metadata_yaml):
     """
     Return discourse topic ID or None
@@ -343,7 +256,7 @@ def add_store_front_data(package, details=False):
     extra["os"] = get_os_from_platform(
         package["default-release"]["revision"]["platforms"]
     )
-    extra["categories"] = get_categories(package["result"]["categories"])
+    extra["categories"] = package["result"]["categories"]
 
     if details:
         extra["metadata"] = yaml.load(
