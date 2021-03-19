@@ -47,19 +47,37 @@
     }
   }
 
+  %docstring-block-common {
+    @extend %bottom-section-padding--default;
+  }
+
+  %p-code {
+    font-family: unquote($font-monospace);
+    font-weight: $font-weight-regular-text;
+  }
+
   .p-docstring__intro {
     @extend %bottom-section-padding--shallow;
 
     overflow: auto; // prevent child margins overflowing
   }
 
-  %docstring-block-common {
-    @extend %bottom-section-padding--default;
-  }
-
   .p-docstring-block {
     @extend %docstring-block-common;
     @extend %vf-pseudo-border--top; // do not add padding on nested blocks
+
+    &__header {
+      @extend %bottom-section-padding--x-shallow;
+      @extend %top-section-padding--x-shallow;
+    }
+
+    &__group + &__group {
+      @extend %vf-pseudo-border--top-light;
+    }
+
+    &__arg-block + &__arg-block {
+      @extend %vf-pseudo-border--top-light;
+    }
 
     &--nested {
       @extend %docstring-block-common;
@@ -74,25 +92,11 @@
       &:last-child {
         padding-bottom: 0;
       }
-    }
 
-    &__header {
-      @extend %bottom-section-padding--x-shallow;
-      @extend %top-section-padding--x-shallow;
+      &__header {
+        padding-top: 0;
+      }
     }
-
-    &__group + &__group {
-      @extend %vf-pseudo-border--top-light;
-    }
-
-    .p-docstring-block__arg-block + .p-docstring-block__arg-block {
-      @extend %vf-pseudo-border--top-light;
-    }
-  }
-
-  %p-code {
-    font-family: unquote($font-monospace);
-    font-weight: $font-weight-regular-text;
   }
 
   .p-code {
