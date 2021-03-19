@@ -64,10 +64,6 @@
       @extend %bottom-section-padding--x-shallow;
     }
 
-    // &__group:not(:last-child) {
-    //   @extend %bottom-section-padding--shallow;
-    // }
-
     &__group + &__group {
       @extend %vf-pseudo-border--top-light;
     }
@@ -148,12 +144,6 @@
 
     .p-separator--x-dense {
       margin-block-end: -1px;
-    }
-
-    .p-strip {
-      .p-separator--dense.p-separator--light:first-child {
-        display: none;
-      }
     }
   }
 
