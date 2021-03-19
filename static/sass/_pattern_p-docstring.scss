@@ -1,24 +1,151 @@
 @mixin p-charmhub-docstring {
+  %vf-pseudo-border--top-light {
+    @extend %vf-pseudo-border--top;
+
+    position: relative;
+
+    &::after {
+      background-color: $colors--light-theme--border-low-contrast;
+    }
+  }
+
+  %bottom-section-padding--default {
+    padding-bottom: $spv-outer--regular-scaleable * 0.5;
+
+    @media (min-width: $breakpoint-large) {
+      padding-bottom: $spv-outer--regular-scaleable;
+    }
+  }
+
+  %bottom-section-padding--shallow {
+    @media only screen and (max-width: $breakpoint-large) {
+      padding-bottom: $spv-outer--medium;
+    }
+
+    @media only screen and (min-width: $breakpoint-large) {
+      padding-bottom: $spv-outer--medium;
+    }
+  }
+
+  %bottom-section-padding--x-shallow {
+    @media only screen and (max-width: $breakpoint-large) {
+      padding-bottom: $spv-outer--small;
+    }
+
+    @media only screen and (min-width: $breakpoint-large) {
+      padding-bottom: $spv-outer--small;
+    }
+  }
+
+  %top-section-padding--x-shallow {
+    @media only screen and (max-width: $breakpoint-large) {
+      padding-top: $spv-outer--small;
+    }
+
+    @media only screen and (min-width: $breakpoint-large) {
+      padding-top: $spv-outer--small;
+    }
+  }
+
+  %docstring-block-common {
+    @extend %bottom-section-padding--default;
+  }
+
+  %p-code {
+    font-family: unquote($font-monospace);
+    font-weight: $font-weight-regular-text;
+  }
+
+  .p-docstring__intro {
+    @extend %bottom-section-padding--shallow;
+
+    overflow: auto; // prevent child margins overflowing
+  }
+
+  .p-docstring-block {
+    @extend %docstring-block-common;
+    @extend %vf-pseudo-border--top; // do not add padding on nested blocks
+
+    &__header {
+      @extend %bottom-section-padding--x-shallow;
+      @extend %top-section-padding--x-shallow;
+    }
+
+    &__group + &__group {
+      @extend %vf-pseudo-border--top-light;
+    }
+
+    &__arg-block + &__arg-block {
+      @extend %vf-pseudo-border--top-light;
+    }
+
+    &--nested {
+      @extend %docstring-block-common;
+      @extend %bottom-section-padding--shallow;
+
+      & + & {
+        @extend %vf-pseudo-border--top; // do not add padding on nested blocks
+
+        margin-top: $spv-outer--shallow-scaleable;
+      }
+
+      &:last-child {
+        padding-bottom: 0;
+      }
+
+      &__header {
+        padding-top: 0;
+      }
+    }
+  }
+
+  .p-code {
+    @extend %p-code;
+  }
+
+  $nudge-h4-mono: 0.4rem;
+  $nudge-h4-mono--large: 0.1rem;
+
+  .p-docstring-block__heading {
+    @extend %p-code;
+
+    @media (max-width: $breakpoint-heading-threshold) {
+      margin-bottom: -$nudge-h4-mono;
+      padding-top: $nudge-h4-mono;
+    }
+
+    @media (min-width: $breakpoint-heading-threshold) {
+      margin-bottom: -$nudge-h4-mono--large;
+      padding-top: $nudge-h4-mono--large;
+    }
+
+    @if ($increase-font-size-on-larger-screens) {
+      @media (min-width: $breakpoint-x-large) {
+        margin-bottom: -$nudge-h4-mono--large;
+        padding-top: $nudge-h4-mono--large;
+      }
+    }
+  }
+
+  .p-docstring-block__heading + .p-docstring-block__short-description {
+    @media (min-width: $breakpoint-heading-threshold) {
+      margin-top: -$sp-unit;
+    }
+  }
+
   .p-docstring {
-    @media (min-width: 1300px) {
-      .is-x-large-1 {
-        grid-column-end: span 1;
-      }
+    $grid-x-large-col-prefix: "#{$grid-column-prefix}x-large-" !default;
 
-      .is-x-large-3 {
-        grid-column-end: span 3;
-      }
+    @media (min-width: $breakpoint-large) {
+      @for $i from $grid-columns through 1 {
+        // set col-* to span respective number of columns on desktop
+        .#{$grid-x-large-col-prefix}#{$i} {
+          // on large screens provide flex box column implementation for IE
+          // on smaller screens let them display full width one under another
 
-      .is-x-large-4 {
-        grid-column-end: span 4;
-      }
-
-      .is-x-large-5 {
-        grid-column-end: span 5;
-      }
-
-      .is-x-large-7 {
-        grid-column-end: span 7;
+          @include vf-grid-flex-column($i);
+          @include vf-grid-column($i);
+        }
       }
     }
 
@@ -31,21 +158,22 @@
     .u-no-horizontal-space {
       margin-inline-start: -0.5rem;
     }
+  }
 
-    .p-strip {
-      .p-separator--dense.p-separator--light:first-child {
-        display: none;
-      }
+  .p-text--dense {
+    @extend %default-text;
+
+    margin-bottom: 2 * $sp-unit - map-get($nudges, nudge--p);
+    margin-top: 0;
+
+    @media (min-width: $breakpoint-large) {
+      margin-bottom: 2 * $sp-unit - map-get($nudges, nudge--p);
     }
+  }
 
-    .p-code--text {
-      margin-bottom: $sp-unit;
-      padding-top: $sp-unit;
-    }
-
-    .p-code {
-      font-family: "Ubuntu Mono", Consolas, Monaco, Courier, monospace;
-      font-weight: 300;
+  .p-text--dense + .p-text--dense {
+    @media (max-width: $breakpoint-medium) {
+      margin-top: -2 * $sp-unit;
     }
   }
 }
