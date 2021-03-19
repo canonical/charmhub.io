@@ -1,4 +1,14 @@
 @mixin p-charmhub-docstring {
+  %vf-pseudo-border--top-light {
+    @extend %vf-pseudo-border--top;
+
+    position: relative;
+
+    &::after {
+      background-color: $colors--light-theme--border-low-contrast;
+    }
+  }
+
   %bottom-section-padding--default {
     padding-bottom: $spv-outer--regular-scaleable * 0.5;
 
@@ -27,41 +37,48 @@
     }
   }
 
+  %top-section-padding--x-shallow {
+    @media only screen and (max-width: $breakpoint-large) {
+      padding-top: $spv-outer--small;
+    }
+
+    @media only screen and (min-width: $breakpoint-large) {
+      padding-top: $spv-outer--small;
+    }
+  }
+
   .p-docstring__intro {
     @extend %bottom-section-padding--shallow;
 
     overflow: auto; // prevent child margins overflowing
   }
 
-  .p-docstring-block {
+  %docstring-block-common {
     @extend %bottom-section-padding--default;
+  }
 
-    %vf-pseudo-border--top-light {
-      @extend %vf-pseudo-border--top;
+  .p-docstring-block {
+    @extend %docstring-block-common;
+    @extend %vf-pseudo-border--top; // do not add padding on nested blocks
 
-      position: relative;
-
-      &::after {
-        background-color: $colors--light-theme--border-low-contrast;
-      }
-    }
-
-    & + & {
-      @extend %vf-pseudo-border--top; // do not add padding on nested blocks
-
-      margin-top: $spv-outer--shallow-scaleable;
-    }
-
-    & & {
+    &--nested {
+      @extend %docstring-block-common;
       @extend %bottom-section-padding--shallow;
-    }
 
-    & &:last-child {
-      padding-bottom: 0;
+      & + & {
+        @extend %vf-pseudo-border--top; // do not add padding on nested blocks
+
+        margin-top: $spv-outer--shallow-scaleable;
+      }
+
+      &:last-child {
+        padding-bottom: 0;
+      }
     }
 
     &__header {
       @extend %bottom-section-padding--x-shallow;
+      @extend %top-section-padding--x-shallow;
     }
 
     &__group + &__group {

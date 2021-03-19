@@ -40,10 +40,8 @@
       </ul>
     </div>
   </div>
-
   <div class="p-docstring__docs">
     {% for group in docstrings['content'] %}
-      <hr>
       <div class="p-docstring-block">
         <div class="p-docstring-block__header">
           <h4 id="{{ group['name'].lower() }}" class="p-docstring-block__heading">
@@ -162,10 +160,9 @@
                 <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Methods</p>
               </div>
               <div class="col-medium-5 col-6 col-x-large-7">
-              {% set count = namespace(value=1) %}
               {% for item in group["content"] %}
                 {% if not item["name"].startswith("__") %}
-                <div class="p-docstring-block">
+                <div class="p-docstring-block--nested">
                   <div class="p-docstring-block__header">
                     <p id="{{ group['name'].lower() }}-{{ item['name'].lower() }}" class="p-code u-no-margin--bottom">
                       {% if item["type"].lower() == "function" %}
@@ -290,7 +287,6 @@
                   </div>
                   {% endif %}
                 </div>
-                {% set count.value = count.value + 1 %}
                 {% endif %}
               {% endfor %}
               </div>
