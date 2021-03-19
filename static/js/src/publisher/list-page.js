@@ -1,5 +1,6 @@
 import { WeeklyActiveDevicesTrend } from "./graphs/activeDevices";
 import debounce from "../libs/debounce";
+import initCloseButton from "../libs/notification-close";
 
 const init = () => {
   // To DO - replace dummy data with API data
@@ -101,6 +102,8 @@ const init = () => {
   }, 100);
 
   window.addEventListener("resize", resize);
+
+  initCloseButton();
 };
 
 export { init };

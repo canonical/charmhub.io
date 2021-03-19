@@ -12,11 +12,56 @@
       Register a new charm or bundle
     </h1>
     <p>You must register a name before you publish a new charm or bundle to the store.</p>
-    <form class="p-form" action="">
-      <div>
+  </div>
+
+  {% if invalid_name %}
+    <div class="row is-wide">
+      <div class="col-8">
+        <div class="p-notification--negative">
+          <p class="p-notification__response" role="status">
+            <span class="p-notification__status">The name '{{ entity_name }}' is not valid.</span> It should only have ASCII lowercase letters, numbers, and hyphens, and must have at least one letter.
+          </p>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if already_registered %}
+    <div class="row is-wide">
+      <div class="col-8">
+        <div class="p-notification--negative">
+          <p class="p-notification__response" role="status">
+            <span class="p-notification__status">Another publisher already registered {{ entity_name }}.</span> You can email <a href="mailto:concierge@canonical.com">concierge@canonical.com</a> to file a dispute.
+          </p>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if already_owned %}
+    <div class="row is-wide">
+      <div class="col-8">
+        <div class="p-notification--negative">
+          <p class="p-notification__response" role="status">
+            You already own '<a href="/{{ entity_name }}/listing"><strong>{{ entity_name }}</strong></a>'.
+          </p>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="u-fixed-width is-wide">
+    <form class="p-form" method="POST">
+      <div class="p-form-validation{% if entity_name %} is-error{% endif %}">
         <label for="name">Name:</label>
-        <input class="is-input--narrow" id="name" name="name" type="text" autocomplete="name">
-        <p class="p-form-help-text u-no-max-width">It should only have ASCII lowercase letters, numbers, and hyphens, and must have at least one letter</p>
+        <input class="p-form-validation__input is-input--narrow" id="name" name="name" type="text" autocomplete="name" {% if entity_name %}value="{{ entity_name }}"{% endif %}>
+        <p class="p-form-help-text u-no-max-width{% if entity_name %} u-hide{% endif %}">It should only have ASCII lowercase letters, numbers, and hyphens, and must have at least one letter</p>
+        <p class="p-form-validation__message u-no-max-width" role="alert">
+          <strong>Error:</strong>
+          {% if invalid_name %}The name should only have ASCII lowercase letters, numbers, and hyphens, and must have at least one letter.{% endif %}
+          {% if already_registered %}This name is already taken.{% endif %}
+          {% if already_owned %}You already own this name.{% endif %}
+        </p>
       </div>
       <div>
         <label class="p-radio">
@@ -34,13 +79,13 @@
         <label class="p-radio">
           <p class="is-label">Visibility:</p>
           <p class="p-form-help-text">This can be changed at any time after the initial upload</p>
-          <input type="radio" class="p-radio__input" name="visibility" checked="" aria-labelledby="public" value="pubic">
-          <span class="p-radio__label" id="public">Public</span>
+          <input type="radio" class="p-radio__input" name="private" checked="" aria-labelledby="is-public" value="public">
+          <span class="p-radio__label" id="is-public">Public</span>
         </label>
         <p class="p-form-help-text" style="padding-inline-start: 2rem;">Anyone can find your charm in the Charmhub</p>
         <label class="p-radio">
-          <input type="radio" class="p-radio__input" name="visibility" aria-labelledby="private" value="private">
-          <span class="p-radio__label" id="private">Private</span>
+          <input type="radio" class="p-radio__input" name="private" aria-labelledby="is-private" value="private">
+          <span class="p-radio__label" id="is-private">Private</span>
         </label>
         <p class="p-form-help-text" style="padding-inline-start: 2rem;">Charm is hidden in the store and only accessible by the publisher and collaborators</p>
       </div>
@@ -51,6 +96,7 @@
           Register
         </button>
       </div>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
     </form>
   </div>
 </section>

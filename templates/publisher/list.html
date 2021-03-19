@@ -26,6 +26,20 @@
   </div>
 </section>
 <section class="p-strip u-extra-space is-shallow">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="u-fixed-width">
+      {% for category, message in messages %}
+      <div id="notification" class="p-notification p-notification--{{ category }}">
+        <p class="p-notification__response">
+          {{ message }}
+        </p>
+        <button class="p-icon--close" aria-label="Close notification" aria-controls="notification">Close</button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  {% endwith %}
   {% if not published and not registered %}
     <div class="row">
       <div class="col-4">
@@ -87,10 +101,10 @@
           <nav class="p-tabs" aria-label="Charms and bundles navigation">
             <ul class="p-tabs__list" role="tablist">
               <li class="p-tabs__item" role="presentation">
-                <a href="/charms" class="p-tabs__link" tabindex="0" role="tab" aria-controls="charms" {% if page_type=='charms' %}aria-selected="true" {% endif %}>Charms</a>
+                <a href="/charms" class="p-tabs__link" tabindex="0" role="tab" aria-controls="charms" {% if page_type=='charm' %}aria-selected="true" {% endif %}>Charms</a>
               </li>
               <li class="p-tabs__item" role="presentation">
-                <a href="/bundles" class="p-tabs__link" role="tab" aria-controls="bundles" {% if page_type=='bundles' %}aria-selected="true" {% endif %}>Bundles</a>
+                <a href="/bundles" class="p-tabs__link" role="tab" aria-controls="bundles" {% if page_type=='bundle' %}aria-selected="true" {% endif %}>Bundles</a>
               </li>
             </ul>
           </nav>
@@ -101,7 +115,7 @@
       </ul>
     </div>
     <div class="u-fixed-width">
-      <h2 class="p-heading--4">Published {{ page_type }}</h2>
+      <h2 class="p-heading--4">Published {{ page_type }}s</h2>
     </div>
     <div class="p-details-tab__content">
       <div class="u-fixed-width">
@@ -141,7 +155,7 @@
       <div class="p-strip is-shallow">
         <div class="u-fixed-width u-flex">
           <div class="p-tooltip--information">
-            <h2 class="p-heading--4" style="padding-inline-end: 0.5rem;">Registered {{ page_type[:-1] }} names</h2>
+            <h2 class="p-heading--4" style="padding-inline-end: 0.5rem;">Registered {{ page_type }} names</h2>
             <div class="instruction-tooltip">
               <div class="p-tooltip__button" style="transform: translateY(0.65rem);" role="button" aria-controls="icon-tooltip-modal" tabindex="0">
                 Show information
