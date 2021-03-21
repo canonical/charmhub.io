@@ -329,6 +329,7 @@ def details_library(entity_name, library_name):
         docstrings=docstrings,
         channel_requested=channel_request,
         library_name=library_name,
+        creation_date=logic.convert_date(library["created-at"]),
     )
 
 
