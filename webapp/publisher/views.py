@@ -1,5 +1,6 @@
 import talisker
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
+from canonicalwebteam.store_api.exceptions import StoreApiResponseErrorList
 from flask import (
     Blueprint,
     flash,
@@ -36,14 +37,16 @@ def list_page():
         session["publisher-auth"], "charm"
     )
 
-    page_type = request.path[1:]
+    page_type = request.path[1:-1]
 
     context = {
         "published": [
             c for c in publisher_charms if c["status"] == "published"
         ],
         "registered": [
-            c for c in publisher_charms if c["status"] == "registered"
+            c
+            for c in publisher_charms
+            if c["status"] == "registered" and c["type"] == page_type
         ],
         "page_type": page_type,
     }
@@ -131,8 +134,78 @@ def post_settings(entity_name):
 @publisher.route("/register-name")
 @login_required
 def register_name():
+    entity_name = request.args.get("entity_name", default="", type=str)
 
-    return render_template("publisher/register-name.html")
+    invalid_name_str = request.args.get(
+        "invalid_name", default="False", type=str
+    )
+    invalid_name = invalid_name_str == "True"
+
+    already_registered_str = request.args.get(
+        "already_registered", default="False", type=str
+    )
+    already_registered = already_registered_str == "True"
+
+    already_owned_str = request.args.get(
+        "already_owned", default="False", type=str
+    )
+    already_owned = already_owned_str == "True"
+
+    context = {
+        "entity_name": entity_name,
+        "invalid_name": invalid_name,
+        "already_owned": already_owned,
+        "already_registered": already_registered,
+    }
+    return render_template("publisher/register-name.html", **context)
+
+
+@publisher.route("/register-name", methods=["POST"])
+@login_required
+def post_register_name():
+    data = {
+        "name": request.form["name"],
+        "type": request.form["type"],
+        "private": True if request.form["private"] == "private" else False,
+    }
+
+    try:
+        result = publisher_api.register_package_name(
+            session["publisher-auth"], data
+        )
+        if result:
+            flash(
+                f"Your {data['type']} name has been successfully registered.",
+                "positive",
+            )
+    except StoreApiResponseErrorList as api_response_error_list:
+        for error in api_response_error_list.errors:
+            if error["code"] == "api-error":
+                return redirect(
+                    url_for(
+                        ".register_name",
+                        entity_name=data["name"],
+                        invalid_name=True,
+                    )
+                )
+            elif error["code"] == "already-registered":
+                return redirect(
+                    url_for(
+                        ".register_name",
+                        entity_name=data["name"],
+                        already_registered=True,
+                    )
+                )
+            elif error["code"] == "already-owned":
+                return redirect(
+                    url_for(
+                        ".register_name",
+                        entity_name=data["name"],
+                        already_owned=True,
+                    )
+                )
+
+    return redirect(f"/{data['type']}s")
 
 
 @publisher.route("/register-name-dispute")
