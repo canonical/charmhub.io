@@ -301,6 +301,11 @@ def details_libraries(entity_name):
     + DETAILS_VIEW_REGEX
     + '"):entity_name>/libraries/<string:library_name>'
 )
+@store.route(
+    '/<regex("'
+    + DETAILS_VIEW_REGEX
+    + '"):entity_name>/libraries/<string:library_name>/source-code'
+)
 @store_maintenance
 @redirect_uppercase_to_lowercase
 def details_library(entity_name, library_name):
@@ -320,8 +325,13 @@ def details_library(entity_name, library_name):
 
     docstrings = logic.process_python_docs(library, module_name=library_name)
 
+    if "source-code" in request.path[1:]:
+        template = "details/libraries/source-code.html"
+    else:
+        template = "details/libraries/docstring.html"
+
     return render_template(
-        "details/libraries/docstring.html",
+        template,
         entity_name=entity_name,
         package=package,
         libraries=libraries,
@@ -330,39 +340,6 @@ def details_library(entity_name, library_name):
         channel_requested=channel_request,
         library_name=library_name,
         creation_date=logic.convert_date(library["created-at"]),
-    )
-
-
-@store.route(
-    '/<regex("'
-    + DETAILS_VIEW_REGEX
-    + '"):entity_name>/libraries/<string:library_name>/source-code'
-)
-@store_maintenance
-@redirect_uppercase_to_lowercase
-def details_library_source_code(entity_name, library_name):
-    channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request, FIELDS)
-
-    libraries = logic.process_libraries(
-        publisher_api.get_charm_libraries(entity_name)
-    )
-
-    library_id = logic.get_library(library_name, libraries)
-
-    if not library_id:
-        abort(404)
-
-    library = publisher_api.get_charm_library(entity_name, library_id)
-
-    return render_template(
-        "details/libraries/source-code.html",
-        entity_name=entity_name,
-        package=package,
-        libraries=libraries,
-        library=library,
-        channel_requested=channel_request,
-        library_name=library_name,
     )
 
 
