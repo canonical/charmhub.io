@@ -41,7 +41,9 @@ def list_page():
 
     context = {
         "published": [
-            c for c in publisher_charms if c["status"] == "published"
+            c
+            for c in publisher_charms
+            if c["status"] == "published" and c["type"] == page_type
         ],
         "registered": [
             c
