@@ -177,7 +177,8 @@ def convert_channel_maps(channel_map):
             "revision": channel["revision"],
         }
 
-        result[track][risk].append(info)
+        if not result[track][risk]:
+            result[track][risk].append(info)
 
     # Order tracks and risks
     result = OrderedDict(
