@@ -266,6 +266,11 @@ def get_publicise(entity_name):
         session["publisher-auth"], "charm", entity_name
     )
 
+    if not package["status"] == "published":
+        return render_template(
+            "publisher/publicise/publicise_empty.html", package=package
+        )
+
     context = {
         "package": package,
         "languages": SUPPORTED_LANGUAGES,
@@ -282,6 +287,11 @@ def get_publicise_badges(entity_name):
         session["publisher-auth"], "charm", entity_name
     )
 
+    if not package["status"] == "published":
+        return render_template(
+            "publisher/publicise/publicise_empty.html", package=package
+        )
+
     context = {
         "package": package,
     }
@@ -296,6 +306,11 @@ def get_publicise_cards(entity_name):
     package = publisher_api.get_package_metadata(
         session["publisher-auth"], "charm", entity_name
     )
+
+    if not package["status"] == "published":
+        return render_template(
+            "publisher/publicise/publicise_empty.html", package=package
+        )
 
     context = {
         "package": package,

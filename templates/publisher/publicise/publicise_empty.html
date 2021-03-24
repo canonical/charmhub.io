@@ -1,0 +1,30 @@
+{% extends 'publisher/publisher_layout.html' %}
+
+{% block title %}Publicise {{ package.name }}{% endblock %}
+{% block meta_copydoc %}{% endblock meta_copydoc %}
+{% block meta_description %}{% endblock %}
+
+{% set selected_tab='publicise' %}
+
+{% block publisher_content %}
+<div class="p-strip is-shallow u-extra-space">
+  <div class="u-fixed-width u-equal-height">
+    <div class="charm-empty-docs-icon u-vertically-center">
+      {{
+        image(
+        url="https://assets.ubuntu.com/v1/52579016-JAAS+diagram-update.svg",
+        alt="",
+        width="140",
+        height="130",
+        hi_def=True,
+        ) | safe
+      }}
+    </div>
+    <div class="col-9 charm-empty-docs-content">
+      <h4>Here you will find ways of sharing your {{ package.type }}</h4>
+      <p>This section will only be available once you have published your {{ package.type }}</p>
+      <p class="u-no-margin--bottom"><a class="p-button--positive u-no-margin--bottom" href="https://discourse.charmhub.io/t/creating-and-using-charm-libraries/4058">Learn how to publish an operator</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

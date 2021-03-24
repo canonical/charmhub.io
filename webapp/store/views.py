@@ -128,6 +128,10 @@ def get_package(entity_name, channel_request, fields):
         entity_name, channel=channel_request, fields=fields
     )
 
+    # If the package is not published, return a 404
+    if not package["default-release"]:
+        abort(404)
+
     if COMMANDS_OVERWRITE.get(entity_name):
         package["command"] = COMMANDS_OVERWRITE[entity_name]
     else:
@@ -419,6 +423,9 @@ def details_integrate(entity_name):
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/badge.svg')
 def entity_badge(entity_name):
     package = app.store_api.get_item_details(entity_name, fields=FIELDS)
+
+    if not package["default-release"]:
+        abort(404)
 
     entity_link = request.url_root + entity_name
     right_text = "".join(
