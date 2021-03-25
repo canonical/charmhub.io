@@ -1,5 +1,5 @@
 {% for charm in featured_charms %}
-<div class="l-flex__card u-equal-height" id="{{ charm['name'] }}">
+<div class="l-flex__card u-equal-height" id="{% if noscript %}noscript-{% endif %}{{ charm['name'] }}">
   <a href="/{{ charm['name'] }}" class="p-card--button">
     <div class="p-card__header">
       <div class="p-card__thumbnail-container">
