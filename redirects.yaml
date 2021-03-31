@@ -1,0 +1,1 @@
+tutorials(?P<page>.*)/?: https://juju.is/tutorials{page}
