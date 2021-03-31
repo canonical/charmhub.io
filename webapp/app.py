@@ -11,7 +11,6 @@ from webapp.handlers import set_handlers
 from webapp.login.views import login
 from webapp.publisher.views import publisher
 from webapp.store.views import store
-from webapp.tutorials.views import init_tutorials
 
 app = FlaskBase(
     __name__,
@@ -32,7 +31,6 @@ app.register_blueprint(store)
 app.register_blueprint(login)
 
 init_docs(app, "/docs")
-init_tutorials(app, "/tutorials")
 
 
 @app.route("/overview")
