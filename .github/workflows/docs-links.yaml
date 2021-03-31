@@ -15,7 +15,7 @@ jobs:
         run: sudo pip install LinkChecker
 
       - name: Run linkchecker
-        run: linkchecker --threads 2 --ignore-url "https://res.cloudinary.com" --ignore-url "https://www.gstatic.com" --ignore-url "https://assets.ubuntu.com$" --check-extern --no-warnings https://charmhub.io/docs
+        run: linkchecker --no-follow-url '!https:\/\/charmhub.io\/docs\/' --ignore-url "https://res.cloudinary.com" --ignore-url "https://www.gstatic.com" --ignore-url "https://assets.ubuntu.com$" --check-extern --no-warnings https://charmhub.io/docs
 
       - name: Send message on failure
         if: failure()
