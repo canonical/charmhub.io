@@ -33,6 +33,9 @@ class initPackages {
           return;
         }
 
+        // Temporary hack to get bundle icons, as the API does not have it
+        this.addBundleApps();
+
         this.groupAllPackages();
         this.filterPackages();
         this.handleShowAllPackagesButton();
@@ -56,6 +59,26 @@ class initPackages {
         }
       })
       .catch((e) => console.error(e));
+  }
+
+  addBundleApps() {
+    this.allPackages.forEach((entity, count) => {
+      if (entity.type === "bundle") {
+        fetch(`/${entity.name}/charms.json`)
+          .then((response) => {
+            if (response.ok) {
+              response.json().then((res) => {
+                this.allPackages[count]["apps"] = res.charms;
+              });
+            } else {
+              throw new Error(
+                "There was a problem comunicating with the server."
+              );
+            }
+          })
+          .catch((e) => console.error(e));
+      }
+    });
   }
 
   fetchPackageList() {

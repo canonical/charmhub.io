@@ -40,11 +40,16 @@ function buildPackageCard(entity) {
       ".p-bundle-icons__count"
     );
 
-    bundleIconsCount.innerText = `+${Math.floor(Math.random() * 10 + 1)}`;
-
-    bundleThumbnails.forEach((thumbnail) => {
-      thumbnail.src =
-        "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg";
+    if (entity.apps && entity.apps.length > 2) {
+      bundleIconsCount.innerText = `+${entity.apps.length - 2}`;
+    }
+    bundleThumbnails.forEach((thumbnail, count) => {
+      if (entity.apps && entity.apps[count]) {
+        thumbnail.src = `/${entity.apps[count]}/icon`;
+      } else {
+        thumbnail.src =
+          "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg";
+      }
     });
   }
 
