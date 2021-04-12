@@ -4,7 +4,7 @@ import talisker
 from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.discourse.exceptions import PathNotFoundError
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
-from flask import Blueprint, abort
+from flask import Blueprint, abort, redirect
 from flask import current_app as app
 from flask import render_template, request, Response
 
@@ -495,4 +495,26 @@ def entity_embedded_card(entity_name):
     return render_template(
         "embeddable-card.html",
         **context,
+    )
+
+
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/icon.png')
+def entity_icon(entity_name):
+    package = app.store_api.get_item_details(
+        entity_name,
+        fields=[
+            "result.media",
+        ],
+    )
+
+    icon_url = package["result"]["media"][0]["url"]
+
+    if not icon_url:
+        icon_url = (
+            "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg"
+        )
+
+    return redirect(
+        "https://res.cloudinary.com/canonical/image/fetch/f_auto"
+        f",q_auto,fl_sanitize,w_64,h_64/{icon_url}"
     )
