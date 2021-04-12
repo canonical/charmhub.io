@@ -270,6 +270,11 @@ def add_store_front_data(package, details=False):
             package["default-release"]["revision"]["actions-yaml"]
         )
 
+        if package["type"] == "bundle":
+            extra["bundle"] = yaml.load(
+                package["default-release"]["revision"]["bundle-yaml"]
+            )
+
         # Reshape channel maps
         extra["channel_map"] = convert_channel_maps(package["channel-map"])
         extra["resources"] = extract_resources(package["default-release"])
