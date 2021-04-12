@@ -5,7 +5,7 @@
  * @param {string} append This is optional.
  * @returns {string} The truncated string.
  */
-function truncateString(str, len, append = "...") {
+function truncateString(str, len, append = "…") {
   let newLength;
 
   if (str.length < len || str.indexOf(" ") + append.length > len) {
