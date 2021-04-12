@@ -31,6 +31,7 @@ SEARCH_FIELDS = [
     "result.categories",
     "result.summary",
     "result.media",
+    "result.title",
     "result.publisher.display-name",
     "default-release.revision.revision",
     "default-release.revision.platforms",

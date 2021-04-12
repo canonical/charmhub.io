@@ -9,7 +9,7 @@
           <img src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_64,h_64/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" width="64" height="64" class="p-card__thumbnail" alt="{{ charm['name'] }}">
         {% endif %}
       </div>
-      <h3 class="p-card__title p-heading--4 u-no-margin--bottom package-card-title">{{ charm['name'] | replace("-", " ") }}</h3>
+      <h3 class="p-card__title p-heading--4 u-no-margin--bottom package-card-title">{{ charm['store_front']['display-name'] | replace("-", " ") }}</h3>
       <p class="u-text--muted u-no-padding--top package-card-publisher">{{ charm.result.publisher["display-name"] }}</p>
     </div>
 

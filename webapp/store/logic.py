@@ -258,6 +258,10 @@ def add_store_front_data(package, details=False):
         package["default-release"]["revision"]["platforms"]
     )
     extra["categories"] = package["result"]["categories"]
+    if "title" in package["result"] and package["result"]["title"]:
+        extra["display-name"] = package["result"]["title"]
+    else:
+        extra["display-name"] = package["name"]
 
     if details:
         extra["metadata"] = yaml.load(
