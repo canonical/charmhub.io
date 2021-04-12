@@ -498,7 +498,7 @@ def entity_embedded_card(entity_name):
     )
 
 
-@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/icon.png')
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/icon')
 def entity_icon(entity_name):
     package = app.store_api.get_item_details(
         entity_name,
