@@ -111,6 +111,7 @@ FIELDS = [
     "default-release",
     "result.categories",
     "result.publisher.display-name",
+    "result.title",
     "channel-map",
 ]
 
