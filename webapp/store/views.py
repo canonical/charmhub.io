@@ -4,7 +4,7 @@ import talisker
 from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.discourse.exceptions import PathNotFoundError
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
-from flask import Blueprint, abort, redirect
+from flask import Blueprint, abort, redirect, jsonify
 from flask import current_app as app
 from flask import render_template, request, Response
 
@@ -520,3 +520,23 @@ def entity_icon(entity_name):
         "https://res.cloudinary.com/canonical/image/fetch/f_auto"
         f",q_auto,fl_sanitize,w_64,h_64/{icon_url}"
     )
+
+
+# This method is a temporary hack to show bundle icons on the
+# homepage, and should be removed once the icons are available via the api
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/charms.json')
+def get_charms_from_bundle(entity_name):
+    channel_request = request.args.get("channel", default=None, type=str)
+
+    package = get_package(entity_name, channel_request, FIELDS)
+
+    if package["type"] == "charm":
+        return "Requested object should be a bundle", 400
+
+    charms = []
+
+    if package["store_front"]["bundle"].get("applications"):
+        for charm in package["store_front"]["bundle"]["applications"].keys():
+            charms.append(charm)
+
+    return jsonify({"charms": charms})
