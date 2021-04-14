@@ -13,6 +13,8 @@
         </p>
         <hr class="p-separator--shallow">
       {% endif %}
+      <!-- Once there is a topology image available, uncomment the section below -->
+      {#
       {% if package.type == "bundle" %}
         {% if not package.result.summary %}
           <h4 class="p-heading--5 u-sv1 u-no-margin--bottom">About</h4>
@@ -36,6 +38,7 @@
           <hr class="p-separator--shallow">
         {% endif %}
       {% endif %}
+      #}
       {% if package.result.license %}
         <p><span class="u-text--muted">License</span><br />{{ package.result.license }}</p>
         <hr class="p-separator--shallow">
