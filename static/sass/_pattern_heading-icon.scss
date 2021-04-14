@@ -3,7 +3,9 @@
     @extend .p-heading-icon--small;
 
     .p-heading-icon__img {
+      border-radius: 50%;
       height: 1.5rem;
+      margin-inline-end: 0.5rem;
       width: 1.5rem;
 
       @media screen and (max-width: $breakpoint-medium) {
