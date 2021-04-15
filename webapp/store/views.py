@@ -34,8 +34,8 @@ SEARCH_FIELDS = [
     "result.title",
     "result.publisher.display-name",
     "default-release.revision.revision",
-    "default-release.revision.platforms",
     "default-release.channel",
+    "default-release.channel.base",
 ]
 
 CATEGORIES = [
@@ -486,7 +486,7 @@ def entity_embedded_card(entity_name):
         "package": package,
         "show_channels": request.args.get("channels"),
         "show_summary": request.args.get("summary"),
-        "show_platform": request.args.get("platform"),
+        "show_base": request.args.get("base"),
     }
 
     return render_template(

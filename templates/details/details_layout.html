@@ -25,7 +25,7 @@
      {% else %}
        "applicationCategory": "other",
      {% endif %}
-     "operatingSystem": "{{ package["default-release"]["channel"]["platform"]["os"] }}",
+     "operatingSystem": "{{ package["store_front"]["base"] }}",
      "softwareVersion": "{{ package["default-release"]["channel"]["name"] }}"
  }
 </script>
