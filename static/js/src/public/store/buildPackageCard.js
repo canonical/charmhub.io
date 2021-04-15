@@ -1,5 +1,25 @@
 import { truncateString } from "../../libs/truncate-string";
 
+function buildPlatformIcons(entityCardIcons, altText, srcText, text) {
+  const span = document.createElement("span");
+  const image = document.createElement("img");
+  const tooltip = document.createElement("span");
+  span.setAttribute("class", "p-tooltip");
+  span.setAttribute("aria-describedby", "default-tooltip");
+  image.width = 24;
+  image.height = 24;
+  tooltip.setAttribute("class", "p-tooltip__message");
+  tooltip.setAttribute("role", "tooltip");
+
+  image.alt = altText;
+  image.src = srcText;
+  tooltip.innerText = text;
+
+  span.appendChild(image);
+  span.appendChild(tooltip);
+  entityCardIcons.appendChild(span);
+}
+
 function buildPackageCard(entity) {
   const entityCard = document.getElementById("package-card");
   const clone = entityCard.content.cloneNode(true);
@@ -43,7 +63,7 @@ function buildPackageCard(entity) {
     if (entity.apps && entity.apps.length > 2) {
       bundleIconsCount.innerText = `+${entity.apps.length - 2}`;
     }
-    bundleThumbnails.forEach((thumbnail, count) => {
+    Array.from(bundleThumbnails).forEach((thumbnail, count) => {
       if (entity.apps && entity.apps[count]) {
         thumbnail.src = `/${entity.apps[count]}/icon`;
       } else {
@@ -72,39 +92,47 @@ function buildPackageCard(entity) {
   const entityCardIcons = clone.querySelector(".package-card-icons");
 
   entity.store_front.os.forEach((os) => {
-    const span = document.createElement("span");
-    const image = document.createElement("img");
-    const tooltip = document.createElement("span");
-    span.setAttribute("class", "p-tooltip");
-    span.setAttribute("aria-describedby", "default-tooltip");
-    image.width = 24;
-    image.height = 24;
-    tooltip.setAttribute("class", "p-tooltip__message");
-    tooltip.setAttribute("role", "tooltip");
-
     if (os === "kubernetes") {
-      image.alt = "Kubernetes";
-      image.src = "https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg";
-      tooltip.innerText = "This operator drives the application on Kubernetes";
+      buildPlatformIcons(
+        entityCardIcons,
+        "Kubernetes",
+        "https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg",
+        "This operator drives the application on Kubernetes"
+      );
     }
 
     if (os === "windows") {
-      image.alt = "Windows";
-      image.src = "https://assets.ubuntu.com/v1/ff17c4fe-Windows.svg";
-      tooltip.innerText =
-        "This operator drives the application on Windows servers";
+      buildPlatformIcons(
+        entityCardIcons,
+        "Windows",
+        "https://assets.ubuntu.com/v1/ff17c4fe-Windows.svg",
+        "This operator drives the application on Windows servers"
+      );
     }
 
     if (os === "linux") {
-      image.alt = "Linux";
-      image.src = "https://assets.ubuntu.com/v1/dc11bd39-Linux.svg";
-      tooltip.innerText =
-        "This operator drives the application on Linux servers";
+      buildPlatformIcons(
+        entityCardIcons,
+        "Linux",
+        "https://assets.ubuntu.com/v1/dc11bd39-Linux.svg",
+        "This operator drives the application on Linux servers"
+      );
     }
 
-    span.appendChild(image);
-    span.appendChild(tooltip);
-    entityCardIcons.appendChild(span);
+    if (os === "all") {
+      buildPlatformIcons(
+        entityCardIcons,
+        "Linux",
+        "https://assets.ubuntu.com/v1/dc11bd39-Linux.svg",
+        "This operator drives the application on Linux servers"
+      );
+      buildPlatformIcons(
+        entityCardIcons,
+        "Kubernetes",
+        "https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg",
+        "This operator drives the application on Kubernetes"
+      );
+    }
   });
 
   return clone;

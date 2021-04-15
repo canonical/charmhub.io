@@ -90,13 +90,8 @@ def get_packages():
     total_packages = 0
 
     for i, item in enumerate(results):
-        if item["type"] != "charm":
-            continue
-
         total_packages += 1
-
         package = logic.add_store_front_data(results[i], False)
-
         packages.append(package)
 
     return {

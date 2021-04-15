@@ -35,6 +35,11 @@ class initPackages {
 
         // Temporary hack to get bundle icons, as the API does not have it
         this.addBundleApps();
+        if (this._filters.q.length > 0) {
+          setTimeout(() => {
+            this.renderPackages();
+          }, 1000);
+        }
 
         this.groupAllPackages();
         this.filterPackages();
