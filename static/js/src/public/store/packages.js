@@ -11,7 +11,7 @@ class initPackages {
     if (
       this._filters.q.length === 0 &&
       this._filters.filter.length === 0 &&
-      this._filters.platform[0] === "all"
+      this._filters.base[0] === "all"
     ) {
       this.togglePlaceholderContainer();
       this.toggleFeaturedContainer(true);
@@ -54,7 +54,7 @@ class initPackages {
         if (
           this._filters.q.length > 0 ||
           this._filters.filter.length > 0 ||
-          this._filters.platform[0] !== "all"
+          this._filters.base[0] !== "all"
         ) {
           this.renderPackages();
           this.renderResultsCount();
@@ -107,9 +107,9 @@ class initPackages {
       }
     }
 
-    // set the default platform
-    if (!filters.platform) {
-      filters.platform = ["all"];
+    // set the default base
+    if (!filters.base) {
+      filters.base = ["all"];
     }
 
     if (!filters.filter) {
@@ -142,9 +142,9 @@ class initPackages {
       el: document.querySelector("[data-js='show-all-packages']"),
       selector: "[data-js='show-all-packages']",
     };
-    this.domEl.platformSwitcher = {
-      el: document.querySelector("[data-js='platform-handler']"),
-      selector: "[data-js='platform-handler']",
+    this.domEl.baseSwitcher = {
+      el: document.querySelector("[data-js='base-handler']"),
+      selector: "[data-js='base-handler']",
     };
     this.domEl.categoryFilters = {
       el: document.querySelectorAll(".category-filter"),
@@ -246,9 +246,9 @@ class initPackages {
   }
 
   handlePlatformChange() {
-    if (this.domEl.platformSwitcher.el) {
-      this.domEl.platformSwitcher.el.addEventListener("change", (e) => {
-        this._filters.platform[0] = e.target.value;
+    if (this.domEl.baseSwitcher.el) {
+      this.domEl.baseSwitcher.el.addEventListener("change", (e) => {
+        this._filters.base[0] = e.target.value;
 
         this.filterPackages();
         this.renderFiltersAndPlatform();
@@ -262,7 +262,7 @@ class initPackages {
       });
     } else {
       throw new Error(
-        `There is no element containing ${this.domEl.platformSwitcher.selector} selector.`
+        `There is no element containing ${this.domEl.baseSwitcher.selector} selector.`
       );
     }
   }
@@ -321,7 +321,7 @@ class initPackages {
               kubernetes: [],
             };
           }
-          if (entity.store_front.os.includes("kubernetes")) {
+          if (entity.store_front.base === "kubernetes") {
             this.groupedPackages.categories[cat.name].kubernetes.push(entity);
           } else {
             this.groupedPackages.categories[cat.name].linux.push(entity);
@@ -332,20 +332,20 @@ class initPackages {
   }
 
   renderFiltersAndPlatform() {
-    if (this.domEl.categoryFilters.el && this.domEl.platformSwitcher.el) {
+    if (this.domEl.categoryFilters.el && this.domEl.baseSwitcher.el) {
       this.domEl.categoryFilters.el.forEach((filter) => {
-        let platforms = this.groupedPackages.categories[filter.value];
+        let bases = this.groupedPackages.categories[filter.value];
 
-        if (platforms === undefined) {
+        if (bases === undefined) {
           filter.disabled = true;
           return;
         }
 
-        if (this._filters.platform[0] === "all") {
+        if (this._filters.base[0] === "all") {
           let count = 0;
 
-          Object.keys(platforms).forEach((platform) => {
-            count += platform.length;
+          Object.keys(bases).forEach((base) => {
+            count += base.length;
           });
           if (count === 0) {
             filter.disabled = true;
@@ -353,7 +353,7 @@ class initPackages {
             filter.disabled = false;
           }
         } else {
-          if (platforms[this._filters.platform[0]].length === 0) {
+          if (bases[this._filters.base[0]].length === 0) {
             filter.disabled = true;
           } else {
             filter.disabled = false;
@@ -361,7 +361,7 @@ class initPackages {
         }
       });
 
-      Array.from(this.domEl.platformSwitcher.el.options).forEach((option) => {
+      Array.from(this.domEl.baseSwitcher.el.options).forEach((option) => {
         if (option.value !== "all" && this._filters.filter.length > 0) {
           this._filters.filter.forEach((filter) => {
             if (
@@ -424,27 +424,27 @@ class initPackages {
 
   filterPackages() {
     if (
-      this._filters.platform[0] === "all" &&
+      this._filters.base[0] === "all" &&
       this._filters.filter.length === 0
     ) {
       this.packages = this.allPackages;
     } else if (
-      this._filters.platform[0] === "all" &&
+      this._filters.base[0] === "all" &&
       this._filters.filter.length > 0
     ) {
       this.packages = this.allPackages.filter((entity) =>
         this.filterByCategory(entity)
       );
     } else if (
-      this._filters.platform[0] !== "all" &&
+      this._filters.base[0] !== "all" &&
       this._filters.filter.length === 0
     ) {
       this.packages = this.allPackages.filter((entity) =>
-        entity.store_front.os.includes(this._filters.platform[0])
+        entity.store_front.base === this._filters.base[0]
       );
     } else {
       let pakagesFilteredByPlatform = this.allPackages.filter((entity) =>
-        entity.store_front.os.includes(this._filters.platform[0])
+        entity.store_front.base === this._filters.base[0]
       );
 
       this.packages = pakagesFilteredByPlatform.filter((entity) =>
@@ -492,8 +492,8 @@ class initPackages {
   }
 
   enableAllActions() {
-    if (this.domEl.platformSwitcher.el && this.domEl.showAllPackagesButton.el) {
-      this.domEl.platformSwitcher.el.disabled = false;
+    if (this.domEl.baseSwitcher.el && this.domEl.showAllPackagesButton.el) {
+      this.domEl.baseSwitcher.el.disabled = false;
       this.domEl.showAllPackagesButton.el.disabled = false;
     }
   }

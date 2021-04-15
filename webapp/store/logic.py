@@ -116,10 +116,8 @@ def convert_channel_maps(channel_map):
             "channel": channel["channel"]["name"],
             "risk": channel["channel"]["risk"],
             "size": channel["revision"]["download"]["size"],
-            "platforms": convert_series_to_ubuntu_versions(
-                extract_series(channel)
-            ),
-            "architecture": channel["channel"]["platform"]["architecture"],
+            "bases": extract_series(channel),
+            "architecture": channel["channel"]["base"]["architecture"],
             "revision": channel["revision"],
         }
 
@@ -170,36 +168,14 @@ def extract_series(channel):
 
     :param channel_maps: The channel maps list returned by the API
 
-    :returns: Ubuntu series
+    :returns: Ubuntu series number
     """
     series = []
 
-    for platform in channel["revision"]["platforms"]:
-        series.append(platform["series"])
+    for base in channel["revision"]["bases"]:
+        series.append(base["channel"])
 
     return series
-
-
-def convert_series_to_ubuntu_versions(series):
-    """Return Ubuntu version based on code name series
-
-    Args:
-        series (str|list): Ubuntu series
-
-    Returns:
-        str|list: Ubuntu version
-    """
-    if isinstance(series, str):
-        return UBUNTU_SERIES.get(series, series.capitalize())
-    elif isinstance(series, list):
-        result = []
-        for s in series:
-            result.append(convert_series_to_ubuntu_versions(s))
-    else:
-        raise TypeError("Invalid series object")
-
-    # Order from greater to lower version
-    return sorted(result, reverse=True)
 
 
 def convert_date(date_to_convert):
@@ -254,8 +230,9 @@ def add_store_front_data(package, details=False):
     extra = {}
 
     extra["icons"] = get_icons(package)
-    extra["os"] = get_os_from_platform(
-        package["default-release"]["revision"]["platforms"]
+    extra["base"] = PLATFORMS.get(
+        package["default-release"]["channel"]["base"]["name"],
+        package["default-release"]["channel"]["base"]["name"],
     )
     extra["categories"] = package["result"]["categories"]
     if "title" in package["result"] and package["result"]["title"]:
@@ -292,7 +269,6 @@ def add_store_front_data(package, details=False):
         ]
         if "summary" in package["result"]:
             extra["summary"] = package["result"]["summary"]
-        extra["platforms"] = convert_series_to_ubuntu_versions(extra["series"])
 
         # Get charm docs
         extra["docs_topic"] = get_docs_topic_id(extra["metadata"])
@@ -370,24 +346,7 @@ def get_library(library_name, libraries):
     return library["id"]
 
 
-def get_os_from_platform(platforms):
-    """
-    Get simplified platforms
-
-    ["linux", "windows", "kubernetes"]
-
-    :param platforms: get list of platforms
-    :returns: a list of platforms simplified
-    """
-    os = set()
-
-    for platform in platforms:
-        os.add(PLATFORMS.get(platform["os"], platform["os"]))
-
-    return list(os)
-
-
-def filter_charm(charm, categories=["all"], platform="all"):
+def filter_charm(charm, categories=["all"], base="all"):
     """
     This filter will be done in the API soon.
     :returns: boolean
@@ -402,7 +361,7 @@ def filter_charm(charm, categories=["all"], platform="all"):
             return False
 
     # Filter platforms
-    if platform != "all" and platform not in charm["store_front"]["os"]:
+    if base != "all" and base not in charm["store_front"]["base"]:
         return False
 
     return True

@@ -54,8 +54,8 @@ const getCardPath = (packageName, options = {}) => {
     params.push(`summary=true`);
   }
 
-  if (options["show-platform"]) {
-    params.push(`platform=true`);
+  if (options["show-base"]) {
+    params.push(`base=true`);
   }
 
   if (params.length) {

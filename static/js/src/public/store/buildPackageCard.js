@@ -90,50 +90,47 @@ function buildPackageCard(entity) {
   }
 
   const entityCardIcons = clone.querySelector(".package-card-icons");
+  if (entity.store_front.base === "kubernetes") {
+    buildPlatformIcons(
+      entityCardIcons,
+      "Kubernetes",
+      "https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg",
+      "This operator drives the application on Kubernetes"
+    );
+  }
 
-  entity.store_front.os.forEach((os) => {
-    if (os === "kubernetes") {
-      buildPlatformIcons(
-        entityCardIcons,
-        "Kubernetes",
-        "https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg",
-        "This operator drives the application on Kubernetes"
-      );
-    }
+  if (entity.store_front.base === "windows") {
+    buildPlatformIcons(
+      entityCardIcons,
+      "Windows",
+      "https://assets.ubuntu.com/v1/ff17c4fe-Windows.svg",
+      "This operator drives the application on Windows servers"
+    );
+  }
 
-    if (os === "windows") {
-      buildPlatformIcons(
-        entityCardIcons,
-        "Windows",
-        "https://assets.ubuntu.com/v1/ff17c4fe-Windows.svg",
-        "This operator drives the application on Windows servers"
-      );
-    }
+  if (entity.store_front.base === "linux") {
+    buildPlatformIcons(
+      entityCardIcons,
+      "Linux",
+      "https://assets.ubuntu.com/v1/dc11bd39-Linux.svg",
+      "This operator drives the application on Linux servers"
+    );
+  }
 
-    if (os === "linux") {
-      buildPlatformIcons(
-        entityCardIcons,
-        "Linux",
-        "https://assets.ubuntu.com/v1/dc11bd39-Linux.svg",
-        "This operator drives the application on Linux servers"
-      );
-    }
-
-    if (os === "all") {
-      buildPlatformIcons(
-        entityCardIcons,
-        "Linux",
-        "https://assets.ubuntu.com/v1/dc11bd39-Linux.svg",
-        "This operator drives the application on Linux servers"
-      );
-      buildPlatformIcons(
-        entityCardIcons,
-        "Kubernetes",
-        "https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg",
-        "This operator drives the application on Kubernetes"
-      );
-    }
-  });
+  if (entity.store_front.base === "all") {
+    buildPlatformIcons(
+      entityCardIcons,
+      "Linux",
+      "https://assets.ubuntu.com/v1/dc11bd39-Linux.svg",
+      "This operator drives the application on Linux servers"
+    );
+    buildPlatformIcons(
+      entityCardIcons,
+      "Kubernetes",
+      "https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg",
+      "This operator drives the application on Kubernetes"
+    );
+  }
 
   return clone;
 }
