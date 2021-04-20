@@ -49,14 +49,15 @@
 
   a.p-card--button {
     @extend %vf-has-box-shadow;
+    @extend %vf-has-round-corners;
 
     background-color: $color-x-light;
-    border-radius: $spv-inner--x-small;
     color: $color-dark;
     display: grid;
     grid-template-rows: 9.5rem auto 2.25rem;
     // Force obey parent's border-radius
     height: 16.75rem;
+    margin-bottom: $spv-outer--scaleable;
     width: 100%;
 
     &:hover {

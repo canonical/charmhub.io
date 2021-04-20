@@ -5,34 +5,27 @@
 {% block meta_copydoc %}https://docs.google.com/document/d/1mps4SOa8_DA25fccYor3wxwV3ulQiD-uaocDHmaGmhw{% endblock meta_copydoc %}
 
 {% block content %}
-<section class="p-strip--store is-dark">
-  <div class="u-fixed-width is-wide">
-    <h1>The Open Operator Collection</h1>
-    <h2 class="p-heading--4">Universal operators for Linux, Windows and Kubernetes apps</h2>
-    <p><a href="/manifesto" class="p-link--inverted">Read our manifesto&nbsp;&rsaquo;</a></p>
-  </div>
-</section>
-<div class="p-strip--accent u-no-padding--top u-no-padding--bottom">
-  <section class="p-strip--main u-fixed-width is-wide">
-    <div class="p-layout--store">
-      <div class="p-strip">
-        <div class="row">
-          <div class="col-6 col-start-large-4">
-            <div class="p-card--outline">
-              <div class="row u-equal-height">
-                <div class="u-vertically-center">
-                  <img src="https://assets.ubuntu.com/v1/05dad221-info.svg" alt="" style="width: 70px;">
-                </div>
-                <div class="u-vertically-center">
-                  <h1 class="p-heading--three">Maintenance</h1>
-                  <p class="p-heading--four">Store in maintenance, we'll be back soon.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+  {% include "partial/_header-strip.html" %}
+
+  <section class="p-strip">
+    <div class="u-fixed-width">
+      <div class="u-flex" style="justify-content: center;">
+        <div class="u-vertically-center" style="margin-right: 2rem;">
+          {{
+            image(
+              url="https://assets.ubuntu.com/v1/05dad221-info.svg",
+              alt="",
+              width="70",
+              height="70",
+              hi_def=True,
+            ) | safe
+          }}
+        </div>
+        <div>
+          <h1 class="p-heading--three">Maintenance</h1>
+          <p class="p-heading--four u-no-max-width">Store in maintenance, we'll be back soon.</p>
         </div>
       </div>
     </div>
   </section>
-</div>
 {% endblock %}

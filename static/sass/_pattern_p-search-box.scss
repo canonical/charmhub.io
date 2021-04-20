@@ -1,5 +1,11 @@
 @mixin p-charmhub-search-box {
   .p-search-box.is-dark {
+    display: flex;
+
+    @media (max-width: $breakpoint-large - 1px) {
+      display: none;
+    }
+
     .p-search-box__input {
       background-color: $color-mid-dark !important;
       border: none;

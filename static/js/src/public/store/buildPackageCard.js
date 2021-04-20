@@ -24,7 +24,7 @@ function buildPackageCard(entity) {
   const entityCard = document.getElementById("package-card");
   const clone = entityCard.content.cloneNode(true);
 
-  const entityCardContainer = clone.querySelector(".l-flex__card");
+  const entityCardContainer = clone.querySelector("[data-js='card-container']");
   entityCardContainer.id = entity.name;
 
   const entityCardButton = clone.querySelector(".p-card--button");

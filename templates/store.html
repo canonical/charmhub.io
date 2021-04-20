@@ -5,26 +5,47 @@
 {% block meta_copydoc %}https://docs.google.com/document/d/1mps4SOa8_DA25fccYor3wxwV3ulQiD-uaocDHmaGmhw{% endblock meta_copydoc %}
 
 {% block content %}
-{% if request.args.get('q') == None %}
-  <section class="p-strip--store is-dark">
-    <div class="u-fixed-width is-wide">
-      <h1>The Open Operator Collection</h1>
-      <h2 class="p-heading--4">Universal operators for Linux, Windows and Kubernetes apps</h2>
-      <p><a href="/manifesto" class="p-link--inverted">Read our manifesto&nbsp;&rsaquo;</a></p>
-    </div>
-  </section>
-{% endif %}
-<section class="p-strip--accent u-no-padding--top u-no-padding--bottom">
-  <div class="p-strip--main u-fixed-width is-wide">
-    <div class="l-store">
-      <div class="l-navigation">
+  {% if request.args.get('q') == None %}
+    {% include "partial/_header-strip.html" %}
+  {% endif %}
+
+  <section class="p-strip is-shallow">
+    <div class="l-fluid-breakout u-extra-space">
+      <div class="l-fluid-breakout__toolbar">
+        <div class="l-fluid-breakout__toolbar-items">
+          <div class="l-fluid-breakout__toolbar-item" data-js="results-count-container">
+          </div>
+          <div class="l-fluid-breakout__toolbar-item">
+            <form action="/" class="p-search-box u-hide--large" data-js="search-handler-mobile">
+              <input type="search" data-js="search-input-mobile" class="p-search-box__input" name="q" aria-label="Search Charmhub" placeholder="Search Charmhub" {% if q %}value="{{ q }}" {% endif %} required />
+              <button type="reset" class="p-search-box__reset"><i class="p-icon--close">Clear</i></button>
+              <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search">Search</i></button>
+            </form>
+            <div class="p-container--inline">
+              <a href="#drawer" class="p-button has-icon u-hide--large js-drawer-toggle" data-js="filter-button-mobile-open"><i class="p-icon--arrow-right"></i><span>Filters</span></a>
+              <form class="p-form p-form--inline">
+                <div class="p-form__group u-no-margin--right">
+                  <label for="base" aria-label="Filter platforms" class="p-form__label u-no-margin--bottom u-hide--small">Bases</label>
+                  <select name="base" data-js="base-handler" class="p-form__control u-no-margin--bottom" value="{{ base }}" id="base" disabled>
+                    <option value="all" {% if active_filter('base', 'all' ) %}selected{% endif %}>All</option>
+                    <option value="linux" {% if active_filter('base', 'linux' ) %}selected{% endif %}>Linux</option>
+                    <option value="kubernetes" {% if active_filter('base', 'kubernetes' ) %}selected{% endif %}>Kubernetes</option>
+                  </select>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="l-fluid-breakout__aside">
         <div class="p-side-navigation" id="drawer">
           <div class="p-side-navigation__overlay" aria-controls="drawer"></div>
           <nav class="p-side-navigation__drawer" aria-label="Filters drawer">
             <div class="p-side-navigation__drawer-header">
               <a href="#" class="p-side-navigation__toggle--in-drawer js-drawer-toggle" data-js="filter-button-mobile-close" aria-controls="drawer">Hide filters</a>
             </div>
-            <h3 class="p-muted-heading u-hide--small" data-filters="applied-filters">
+            <h3 class="p-muted-heading" data-filters="applied-filters">
               Filters
             </h3>
             <form>
@@ -32,12 +53,12 @@
               <ul class="p-side-navigation__list">
                 {% for category in categories %}
                   {% if category.slug != "featured" and category.slug != "other" %}
-                    <li class="p-side-navigation__item" data-filter-type="category" data-js="filter">
-                      <label class="p-checkbox">
-                        <input class="p-checkbox__input category-filter" aria-labelledby="{{ category.slug }}-filter" type="checkbox" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %} disabled>
-                        <span class="p-checkbox__label" id="{{ category.slug }}-filter">{{ category.name }}</span>
-                      </label>
-                    </li>
+                  <li class="p-side-navigation__item" data-filter-type="category" data-js="filter">
+                    <label class="p-checkbox">
+                      <input class="p-checkbox__input category-filter" aria-labelledby="{{ category.slug }}-filter" type="checkbox" value="{{ category.slug }}" {% if active_filter('category', category.slug) %}checked{% endif %} disabled>
+                      <span class="p-checkbox__label" id="{{ category.slug }}-filter">{{ category.name }}</span>
+                    </label>
+                  </li>
                   {% endif %}
                 {% endfor %}
               </ul>
@@ -61,113 +82,84 @@
           </nav>
         </div>
       </div>
-      <div class="l-main">
-        <div class="l-main__header">
-          <div class="l-main__header--left">
-            <div data-js="results-count-container"></div>
-          </div>
-          <div class="l-main__header--right">
-            <form action="/" class="p-search-box u-hide--medium u-hide--large" data-js="search-handler-mobile">
-              <input type="search" data-js="search-input-mobile" class="p-search-box__input" name="q" aria-label="Search Charmhub" placeholder="Search Charmhub" {% if q %}value="{{ q }}" {% endif %} required />
-              <button type="reset" class="p-search-box__reset"><i class="p-icon--close">Clear</i></button>
-              <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search">Search</i></button>
-            </form>
-            <div class="p-container--inline">
-              <a href="#drawer" class="p-button has-icon u-hide--medium u-hide--large js-drawer-toggle" data-js="filter-button-mobile-open"><i class="p-icon--arrow-right"></i><span>Filters</span></a>
-              <form class="p-form p-form--inline">
-                <div class="p-form__group u-no-margin--right">
-                  <label for="base" aria-label="Filter platforms" class="p-form__label u-no-margin--bottom u-hide--small">Bases</label>
-                  <select name="base" data-js="base-handler" class="p-form__control u-no-margin--bottom" value="{{ base }}" id="base" disabled>
-                    <option value="all" {% if active_filter('base', 'all' ) %}selected{% endif %}>All</option>
-                    <option value="linux" {% if active_filter('base', 'linux' ) %}selected{% endif %}>Linux</option>
-                    <option value="kubernetes" {% if active_filter('base', 'kubernetes' ) %}selected{% endif %}>Kubernetes</option>
-                  </select>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
 
-        <div class="l-flex__card-container u-hide" data-js="placeholder-container">
-          {% for _ in range(0, 10) %}
-            <div class="l-flex__card u-equal-height">
-              <a href="/" class="p-card--button" style="display: block;">
-                <svg width="100%" height="100%" class="p-card--placeholder">
-                  <defs>
-                    <clipPath id="animation-mask">
-                      <circle cx="36" cy="36" r="20" />
-                      <rect x="16" y="69.5" width="60%" height="18" />
-                      <rect x="16" y="95" width="25%" height="18" />
-                      <rect x="16" y="153" width="70%" height="16" />
-                      <rect x="16" y="170" width="20%" height="16" />
-                    </clipPath>
-                  </defs>
-                </svg>
-              </a>
-            </div>
-          {% endfor %}
-        </div>
+      <div class="l-fluid-breakout__main u-hide" data-js="placeholder-container">
+        {% for _ in range(0, 10) %}
+          <div class="l-fluid-breakout__item">
+            <a href="/" class="p-card--button" style="display: block;">
+              <svg width="100%" height="100%" class="p-card--placeholder">
+                <defs>
+                  <clipPath id="animation-mask">
+                    <circle cx="36" cy="36" r="20" />
+                    <rect x="16" y="69.5" width="60%" height="18" />
+                    <rect x="16" y="95" width="25%" height="18" />
+                    <rect x="16" y="153" width="70%" height="16" />
+                    <rect x="16" y="170" width="20%" height="16" />
+                  </clipPath>
+                </defs>
+              </svg>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="l-fluid-breakout__main u-hide" data-js="featured-container">
+        {% set noscript=True %}
+        {% include "partial/_featured-charms.html" %}
+      </div>
 
-        <div class="l-flex__card-container u-hide" data-js="featured-container">
-          {% set noscript=True %}
+      <noscript>
+        <div class="l-fluid-breakout__main{% if results %} u-hide{% endif %}">
           {% include "partial/_featured-charms.html" %}
         </div>
+      </noscript>
 
-        <noscript>
-          <div class="l-flex__card-container{% if results %} u-hide{% endif %}">
-            {% include "partial/_featured-charms.html" %}
-          </div>
-        </noscript>
+      <div class="l-fluid-breakout__main u-hide" data-js="package-container">
+        <div><i class="p-icon--spinner u-animation--spin"></i> Loading&hellip;</div>
+      </div>
 
-        <div class="l-flex__card-container u-hide" data-js="package-container">
-          <div><i class="p-icon--spinner u-animation--spin"></i> Loading&hellip;</div>
-        </div>
-
-        <div class="u-align--center" style="margin-top: 1rem;">
-          <button type="button" class="p-button--positive u-hide" data-js="show-all-packages" disabled>See all operators</button>
-        </div>
+      <div class="u-align--center" style="margin-top: 1rem;">
+        <button type="button" class="p-button--positive u-hide" data-js="show-all-packages" disabled>See all operators</button>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<template id="package-card">
-  <div class="l-flex__card u-equal-height">
-    <a href="" class="p-card--button">
-      <div class="p-card__header">
-        <div class="p-card__thumbnail-container">
-          <img src="" alt="" width="40" height="40" class="p-card__thumbnail">
+  <template id="package-card">
+    <div class="l-fluid-breakout__item" data-js="card-container">
+      <a href="" class="p-card--button">
+        <div class="p-card__header">
+          <div class="p-card__thumbnail-container">
+            <img src="" alt="" width="40" height="40" class="p-card__thumbnail">
+          </div>
+          <div class="p-bundle-icons" style="margin-block-end: 6px; margin-block-start: 6px;">
+            <img src="" alt="">
+            <img src="" alt="">
+            <span class="p-bundle-icons__count u-text--muted"></span>
+          </div>
+          <h3 class="p-card__title p-heading--4 u-no-margin--bottom package-card-title"></h3>
+          <p class="u-text--muted u-no-padding--top package-card-publisher" style="white-space: nowrap;"></p>
         </div>
-        <div class="p-bundle-icons" style="margin-block-end: 6px; margin-block-start: 6px;">
-          <img src="" alt="">
-          <img src="" alt="">
-          <span class="p-bundle-icons__count u-text--muted"></span>
+        <div class="p-card__content">
+          <p><small class="package-card-summary"></small></p>
         </div>
-        <h3 class="p-card__title p-heading--4 u-no-margin--bottom package-card-title"></h3>
-        <p class="u-text--muted u-no-padding--top package-card-publisher" style="white-space: nowrap;"></p>
-      </div>
-      <div class="p-card__content">
-        <p><small class="package-card-summary"></small></p>
-      </div>
-      <div class="p-card__footer">
-        <div class="package-card-icons"></div>
-      </div>
-    </a>
-  </div>
-</template>
-<style>
-  .package-card-title {
-    text-transform: capitalize;
-  }
+        <div class="p-card__footer">
+          <div class="package-card-icons"></div>
+        </div>
+      </a>
+    </div>
+  </template>
+  <style>
+    .package-card-title {
+      text-transform: capitalize;
+    }
 
-  .package-card-summary {
-    display: inline-block;
-  }
+    .package-card-summary {
+      display: inline-block;
+    }
 
-  .package-card-summary::first-letter {
-    text-transform: uppercase;
-  }
-</style>
+    .package-card-summary::first-letter {
+      text-transform: uppercase;
+    }
+  </style>
 {% endblock %}
 
 {% block page_scripts %}

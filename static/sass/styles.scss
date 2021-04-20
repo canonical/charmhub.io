@@ -2,7 +2,7 @@
 
 $brand-color: #772953;
 $color-ubuntu-orange: #e95420;
-$color-accent: #f7f7f7;
+$color-accent: #00365c;
 
 $grid-max-width: 90rem;
 
@@ -53,6 +53,7 @@ $theme-default-nav: dark;
 @include vf-p-tabs;
 @include vf-p-tooltips;
 @include vf-p-contextual-menu;
+@include vf-l-fluid-breakout;
 
 // Vanilla utilities
 @include vf-u-align;
@@ -111,10 +112,6 @@ $theme-default-nav: dark;
 @import "pattern_p-accordion";
 
 @include p-charmhub-accordion;
-
-@import "charmhub_l-store";
-
-@include l-charmhub-store;
 
 @import "pattern_heading-icon";
 
@@ -219,6 +216,10 @@ $theme-default-nav: dark;
 @import "charmhub_p-topology";
 
 @include p-charmhub-topology;
+
+@import "pattern_l-fluid-breakout";
+
+@include l-charmhub-fluid-breakout;
 
 // Remove table row borders
 .p-table--no-borders tr {

@@ -1,0 +1,106 @@
+@mixin l-charmhub-fluid-breakout {
+  .l-fluid-breakout {
+    .l-fluid-breakout__aside {
+      .p-muted-heading,
+      .p-side-navigation__list {
+        @media (max-width: $breakpoint-large - 1px) {
+          padding-inline-start: map-get($grid-margin-widths, small);
+        }
+      }
+
+      .p-side-navigation__drawer {
+        position: fixed;
+        transform: translateX(-100%);
+
+        @media (min-width: $breakpoint-large) {
+          position: static;
+          transform: translateX(0);
+        }
+      }
+
+      .p-side-navigation:target .p-side-navigation__drawer {
+        @media (max-width: $breakpoint-large - 1px) {
+          position: fixed;
+          transform: translateX(0);
+        }
+
+        @media (min-width: $breakpoint-x-small) {
+          max-width: 20rem;
+        }
+      }
+
+      .p-side-navigation__overlay {
+        display: block;
+
+        @media (min-width: $breakpoint-large) {
+          display: none;
+        }
+      }
+
+      .p-side-navigation__drawer-header {
+        display: block;
+        margin-block-end: 0.5rem;
+        position: static;
+
+        @media (min-width: $breakpoint-large) {
+          display: none;
+        }
+      }
+
+      .p-side-navigation__toggle--in-drawer {
+        display: inline-block;
+
+        @media (min-width: $breakpoint-large) {
+          display: none;
+        }
+      }
+
+      label.p-checkbox {
+        @media (min-width: $breakpoint-large) {
+          margin-block-end: 0;
+        }
+      }
+    }
+
+    .l-fluid-breakout__toolbar-items {
+      @media (max-width: $breakpoint-large - 1px) {
+        grid-template-columns: minmax(0, 1fr);
+        width: auto;
+      }
+
+      .l-fluid-breakout__toolbar-item:first-child {
+        @media (max-width: $breakpoint-large - 1px) {
+          grid-row-start: 2;
+        }
+      }
+
+      .l-fluid-breakout__toolbar-item:nth-child(2) {
+        .p-container--inline {
+          display: flex;
+          justify-content: space-between;
+
+          .p-button {
+            margin-inline-end: 1rem;
+          }
+
+          .p-button,
+          .p-form {
+            @media (max-width: $breakpoint-medium) {
+              width: 50%;
+            }
+          }
+
+          .p-form__group {
+            @media screen and (min-width: $breakpoint-medium) and(max-width: $breakpoint-large - 1px) {
+              width: 100%;
+            }
+          }
+        }
+
+        @media (max-width: $breakpoint-large - 1px) {
+          display: block;
+        }
+      }
+    }
+  }
+}
