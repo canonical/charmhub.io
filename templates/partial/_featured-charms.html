@@ -1,39 +1,38 @@
 {% for charm in featured_charms %}
-<div class="l-flex__card u-equal-height" id="{% if noscript %}noscript-{% endif %}{{ charm['name'] }}">
-  <a href="/{{ charm['name'] }}" class="p-card--button">
-    <div class="p-card__header">
-      <div class="p-card__thumbnail-container">
-        {% if charm.result.media %}
-          <img src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_64,h_64/{{ charm['result']['media'][0]['url'] }}" width="64" height="64" class="p-card__thumbnail" alt="{{ charm['name'] }}">
-        {% else %}
-          <img src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_64,h_64/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" width="64" height="64" class="p-card__thumbnail" alt="{{ charm['name'] }}">
-        {% endif %}
+  <div class="l-flex__card u-equal-height" id="{% if noscript %}noscript-{% endif %}{{ charm['name'] }}">
+    <a href="/{{ charm['name'] }}" class="p-card--button">
+      <div class="p-card__header">
+        <div class="p-card__thumbnail-container">
+          {% if charm.result.media %}
+            <img src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_64,h_64/{{ charm['result']['media'][0]['url'] }}" width="64" height="64" class="p-card__thumbnail" alt="{{ charm['name'] }}">
+            {% else %}
+            <img src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_64,h_64/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" width="64" height="64" class="p-card__thumbnail" alt="{{ charm['name'] }}">
+          {% endif %}
+        </div>
+        <h3 class="p-card__title p-heading--4 u-no-margin--bottom package-card-title">{{ charm['store_front']['display-name'] | replace("-", " ") }}</h3>
+        <p class="u-text--muted u-no-padding--top package-card-publisher" style="white-space: nowrap;" {% if charm.result.publisher['display-name']|length > 20 %}title="{{ charm.result.publisher['display-name'] }}"{% endif %}>{{ charm.result.publisher["display-name"]|truncate(20, true) }}</p>
       </div>
-      <h3 class="p-card__title p-heading--4 u-no-margin--bottom package-card-title">{{ charm['store_front']['display-name'] | replace("-", " ") }}</h3>
-      <p class="u-text--muted u-no-padding--top package-card-publisher">{{ charm.result.publisher["display-name"] }}</p>
-    </div>
+      <div class="p-card__content">
+        <p><small class="package-card-summary">{{ charm.result.summary|truncate(85) }}</small></p>
+      </div>
 
-    <div class="p-card__content">
-      <p><small class="package-card-summary">{{ charm.result.summary|truncate(90) }}</small></p>
-    </div>
-
-    <div class="p-card__footer">
-      <div class="package-card-icons">
-        {% if charm.store_front.base == "linux" %}
-          <span class="p-tooltip" aria-describedby="linux-tooltip">
-            <img alt="Linux" src="https://assets.ubuntu.com/v1/dc11bd39-Linux.svg" width="24" height="24">
-            <span class="p-tooltip__message" role="tooltip" id="linux-tooltip">This operator drives the application on Linux servers</span>
+      <div class="p-card__footer">
+        <div class="package-card-icons">
+          {% if charm.store_front.base == "linux" %}
+            <span class="p-tooltip" aria-describedby="linux-tooltip">
+              <img alt="Linux" src="https://assets.ubuntu.com/v1/dc11bd39-Linux.svg" width="24" height="24">
+              <span class="p-tooltip__message" role="tooltip" id="linux-tooltip">This operator drives the application on Linux servers</span>
             </span>
           {% endif %}
 
           {% if charm.store_front.base == "kubernetes" %}
-          <span class="p-tooltip" aria-describedby="k8s-tooltip">
-            <img alt="Kubernetes" src="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg" width="24" height="24">
-            <span class="p-tooltip__message" role="tooltip" id="k8s-tooltip">This operator drives the application on Kubernetes</span>
+            <span class="p-tooltip" aria-describedby="k8s-tooltip">
+              <img alt="Kubernetes" src="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg" width="24" height="24">
+              <span class="p-tooltip__message" role="tooltip" id="k8s-tooltip">This operator drives the application on Kubernetes</span>
             </span>
           {% endif %}
+        </div>
       </div>
-    </div>
-  </a>
-</div>
+    </a>
+  </div>
 {% endfor %}

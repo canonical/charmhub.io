@@ -77,16 +77,22 @@ function buildPackageCard(entity) {
   entityCardTitle.innerText = entity.name.replace(/-/g, " ");
 
   const entityCardPublisher = clone.querySelector(".package-card-publisher");
-  entityCardPublisher.innerText = entity.result.publisher["display-name"];
+  let newCardPublisherText = truncateString(
+    entity.result.publisher["display-name"],
+    22
+  );
+  entityCardPublisher.innerText = newCardPublisherText;
+  if (newCardPublisherText !== entity.result.publisher["display-name"]) {
+    entityCardPublisher.setAttribute(
+      "title",
+      entity.result.publisher["display-name"]
+    );
+  }
 
   const entityCardSummary = clone.querySelector(".package-card-summary");
 
   if (entity.result.summary) {
-    entityCardSummary.innerHTML = truncateString(
-      entity.result.summary,
-      90,
-      "&hellip;"
-    );
+    entityCardSummary.innerHTML = truncateString(entity.result.summary, 90);
   }
 
   const entityCardIcons = clone.querySelector(".package-card-icons");
