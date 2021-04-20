@@ -81,7 +81,31 @@
                 <td role="rowheader" class="p-table--mobile-card__header">
                   <div class="p-heading-icon--x-small">
                     <span class="p-heading-icon__header">
-                      <img src="https://dashboard.snapcraft.io/site_media/appmedia/2020/04/products-hero-ubuntu.svg.png" width="24" height="24" class="p-heading-icon__img">
+                      {% if published_charm.media %}
+                        {{
+                          image(
+                            url=published_charm.media[0].url,
+                            alt=published_charm.name,
+                            width="24",
+                            height="24",
+                            hi_def=True,
+                            fill=True,
+                            attrs={"class": "p-heading-icon__img"},
+                          ) | safe
+                        }}
+                      {% else %}
+                        {{
+                          image(
+                            url="https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg",
+                            alt=published_charm.name,
+                            width="24",
+                            height="24",
+                            hi_def=True,
+                            fill=True,
+                            attrs={"class": "p-heading-icon__img"},
+                          ) | safe
+                        }}
+                      {% endif %}
                       <p class="u-no-margin--bottom u-no-padding--top">
                         <a href="/{{ published_charm.name }}/listing">{{ published_charm.name }}</a>
                       </p>
@@ -90,9 +114,9 @@
                 </td>
                 <td role="gridcell" aria-label="visibility">
                   {% if published_charm.private %}
-                  Private
+                    Private
                   {% else %}
-                  Public
+                    Public
                   {% endif %}
                 </td>
               </tr>
@@ -142,7 +166,11 @@
                   <a href="/{{ registered_charm['name'] }}/listing">{{ registered_charm['name'] }}</a>
                 </td>
                 <td>
-                  {{ registered_charm['visibility'] }}
+                  {% if registered_charm.private %}
+                    Private
+                  {% else %}
+                    Public
+                  {% endif %}
                 </td>
               </tr>
               {% endfor %}

@@ -29,6 +29,40 @@
       </h2>
     <div class="row p-form__group p-form-validation">
       <div class="col-2">
+        <p class="is-label">{{ package.type|capitalize }} icon:</p>
+      </div>
+      <div class="col-8 col-x-large-6 u-sv2">
+        <div class="p-form__control">
+          {% if package.media %}
+            {{
+              image(
+                url=package.media[0].url,
+                alt=package.name,
+                width="64",
+                height="64",
+                hi_def=True,
+                fill=True,
+                attrs={"class": "p-media-object__image", "style": "border-radius: 50%;"},
+              ) | safe
+            }}
+          {% else %}
+            {{
+              image(
+                url="https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg",
+                alt=package.name,
+                width="64",
+                height="64",
+                hi_def=True,
+                fill=True,
+                attrs={"class": "p-media-object__image", "style": "border-radius: 50%;"},
+              ) | safe
+            }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="row p-form__group p-form-validation">
+      <div class="col-2">
         <label for="title" class="p-form__label">Title:</label>
       </div>
       <div class="col-8 col-x-large-6">
