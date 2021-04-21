@@ -117,9 +117,11 @@ def convert_channel_maps(channel_map):
             "risk": channel["channel"]["risk"],
             "size": channel["revision"]["download"]["size"],
             "bases": extract_series(channel),
-            "architecture": channel["channel"]["base"]["architecture"],
             "revision": channel["revision"],
         }
+
+        if channel["channel"]["base"]:
+            info["architecture"] = channel["channel"]["base"]["architecture"]
 
         if not result[track][risk]:
             result[track][risk].append(info)
@@ -173,6 +175,8 @@ def extract_series(channel):
     series = []
 
     for base in channel["revision"]["bases"]:
+        if not base:
+            continue
         series.append(base["channel"])
 
     return series
@@ -230,10 +234,15 @@ def add_store_front_data(package, details=False):
     extra = {}
 
     extra["icons"] = get_icons(package)
-    extra["base"] = PLATFORMS.get(
-        package["default-release"]["channel"]["base"]["name"],
-        package["default-release"]["channel"]["base"]["name"],
-    )
+
+    if package["default-release"]["channel"]["base"]:
+        extra["base"] = PLATFORMS.get(
+            package["default-release"]["channel"]["base"]["name"],
+            package["default-release"]["channel"]["base"]["name"],
+        )
+    else:
+        extra["base"] = "all"
+
     extra["categories"] = package["result"]["categories"]
     if "title" in package["result"] and package["result"]["title"]:
         extra["display-name"] = package["result"]["title"]

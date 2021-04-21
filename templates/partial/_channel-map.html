@@ -69,7 +69,7 @@
             <td>
               <div class="series-tags u-no-margin--top">
                 {% for base in channel_data[0].revision.bases %}
-                  <span class="series-tag">{{ base.channel }}</span>
+                  <span class="series-tag">{{ base.channel or "All" }}</span>
                 {% endfor %}
               </div>
             </td>
