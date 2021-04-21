@@ -238,7 +238,7 @@ def add_store_front_data(package, details=False):
     if "title" in package["result"] and package["result"]["title"]:
         extra["display-name"] = package["result"]["title"]
     else:
-        extra["display-name"] = package["name"]
+        extra["display-name"] = format_slug(package["name"])
 
     if details:
         extra["metadata"] = yaml.load(
@@ -365,3 +365,18 @@ def filter_charm(charm, categories=["all"], base="all"):
         return False
 
     return True
+
+
+def format_slug(slug):
+    """Format slug name into a standard title format
+    :param slug: The hypen spaced, lowercase slug to be formatted
+    :return: The formatted string
+    """
+
+    return (
+        slug.title()
+        .replace("-", " ")
+        .replace("_", " ")
+        .replace("And", "and")
+        .replace("Iot", "IoT")
+    )

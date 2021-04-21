@@ -1,19 +1,19 @@
 {% extends 'base_layout.html' %}
 
-{% block title %}Deploy {{ format_slug(package.name) }} using Charmhub - The Open Operator Collection{% endblock %}
-{% block meta_description %}Deploy the latest version of {{ format_slug(package.name) }} as a Kubernetes Operator on any cloud. {{ package.result.summary }}{% endblock %}
+{% block title %}Deploy {{ package.store_front["display-name"] }} using Charmhub - The Open Operator Collection{% endblock %}
+{% block meta_description %}Deploy the latest version of {{ package.store_front["display-name"] }} as a Kubernetes Operator on any cloud. {{ package.result.summary }}{% endblock %}
 {% block meta_image %}{% if package["store_front"]["icons"] %}https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_200,h_200/{{ package.store_front.icons[0] }}{% else %}https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg{% endif %}{% endblock %}
 {% block meta_twitter_card %}summary{% endblock %}
 {% block meta_image_width %}200{% endblock %}
 {% block meta_image_height %}200{% endblock %}
-{% block meta_image_alt %}{{ format_slug(package.name) }} charm logo{% endblock %}
+{% block meta_image_alt %}{{ package.store_front["display-name"] }} charm logo{% endblock %}
 
 {% block structure_data_markup %}
 <script type="application/ld+json">
  {
      "@context": "http://schema.org",
      "@type": "SoftwareApplication",
-     "name": "{{ format_slug(package.name) }}",
+     "name": "{{ package.store_front["display-name"] }}",
      "image": "{{ self.meta_image() }}",
      "url": "https://charmhub.io/{{ package.name }}",
      "publisher": {
