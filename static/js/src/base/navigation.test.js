@@ -6,16 +6,30 @@ describe("toggleSubnav", () => {
   beforeEach(() => {
     navItem = document.createElement("ul");
     navItem.innerHTML = `
-      <li class="p-navigation__item p-subnav" role="menuitem" id="link-1">
-        <a class="p-subnav__toggle p-navigation__link" aria-controls="account-menu">
-          test@account.com
-        </a>
-        <ul class="p-subnav__items--right" id="account-menu" aria-hidden="false">
+      <li class="p-navigation__item p-subnav" id="contribute-link">
+        <a href="#contribute-link-menu" aria-controls="contribute-link-menu" class="p-subnav__toggle p-navigation__link">Contribute</a>
+        <ul class="p-subnav__items" id="contribute-link-menu" aria-hidden="true">
           <li>
-            <a href="/test-route" class="p-subnav__item">Test route</a>
+            <p class="p-subnav__item is-title">Create a charmed operator</p>
           </li>
           <li>
-            <a href="/logout" class="p-subnav__item">Logout</a>
+            <a href="https://juju.is/docs/sdk/publishing" class="p-subnav__item">Publish an operator</a>
+            <hr>
+          </li>
+          <li>
+            <p class="p-subnav__item is-title">Join the comunity</p>
+          </li>
+          <li>
+            <a href="http://discourse.charmhub.io" class="p-subnav__item">Forum</a>
+          </li>
+          <li>
+            <a href="https://chat.charmhub.io/charmhub/channels/juju" class="p-subnav__item">Chat</a>
+          </li>
+          <li>
+            <a href="http://bugs.launchpad.net/juju" class="p-subnav__item">Report a bug</a>
+          </li>
+          <li>
+            <a href="https://juju.is/careers" class="p-subnav__item">Careers</a>
           </li>
         </ul>
       </li>`;
@@ -29,15 +43,15 @@ describe("toggleSubnav", () => {
 
   it("should have the subnav inactive", () => {
     const subnav = document.querySelector(".p-subnav");
-    const dropdown = document.getElementById("account-menu");
+    const dropdown = document.getElementById("contribute-link-menu");
 
     expect(subnav.classList.contains("is-active")).toBeFalsy();
-    expect(dropdown.getAttribute("aria-hidden")).toEqual("false");
+    expect(dropdown.getAttribute("aria-hidden")).toEqual("true");
   });
 
   it("should set the subnav to active", () => {
     const subnav = document.querySelector(".p-subnav");
-    const dropdown = document.getElementById("account-menu");
+    const dropdown = document.getElementById("contribute-link-menu");
     toggleSubnav(subnav, true);
 
     expect(subnav.classList.contains("is-active")).toBeTruthy();
