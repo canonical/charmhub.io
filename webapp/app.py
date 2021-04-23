@@ -5,7 +5,6 @@ from dateutil import parser
 from flask import render_template, make_response, request
 
 from webapp import config
-from webapp.docs.views import init_docs
 from webapp.extensions import csrf
 from webapp.handlers import set_handlers
 from webapp.login.views import login
@@ -29,8 +28,6 @@ csrf.init_app(app)
 app.register_blueprint(publisher)
 app.register_blueprint(store)
 app.register_blueprint(login)
-
-init_docs(app, "/docs")
 
 
 @app.route("/overview")
