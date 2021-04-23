@@ -1,47 +1,183 @@
-<footer>
-  <hr>
-  <div class="u-fixed-width is-wide">
-    {% if request.path == '/tutorials' %}
-    <p class="u-no-padding--top" style="margin-block-end: 0.5rem;"><strong>List your own tutorial on Charmhub.</strong><a href="/tutorials/how-to-write-a-tutorial"> Submit your tutorial&nbsp;&rsaquo;</a></p>
-    {% else %}
-    <p class="u-no-padding--top" style="margin-block-end: 0.5rem;"><strong>List your own operator on Charmhub.</strong><a href="https://github.com/canonical/operator" class="p-link--external"> Submit your operator</a></p>
-    {% endif %}
+<hr />
+
+<footer class="p-strip">
+  <div class="row">
+    <div class="col-3">
+      <h2 class="p-heading--5">Charmed Operator Framework</h2>
+
+      <ul class="p-list">
+        <li class="p-list__item">
+          <a class="p-link--soft" href="https://juju.is"><small>What is Juju?</small></a>
+        </li>
+
+        <li class="p-list__item">
+          <a class="p-link--soft" href="https://charmhub.io"><small>What is Charmhub?</small></a>
+        </li>
+
+        <li class="p-list__item">
+          <a class="p-link--soft" href="https://jaas.ai"><small>What are Charmed Operators?</small></a>
+        </li>
+
+        <li class="p-list__item">
+          <a class="p-link--soft" href="#"><small>What is Model Driven Operations?</small></a>
+        </li>
+
+        <li class="p-list__item">
+          <a class="p-link--soft" href="#"><small>Charmed Operator SDK</small></a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-3">
+      <h2 class="p-heading--5">Charmed Operators</h2>
+
+      <ul class="p-list">
+        <li class="p-list__item">
+          <a class="p-link--soft" href="#"><small>Data</small></a>
+        </li>
+
+        <li class="p-list__item">
+          <a class="p-link--soft" href="#"><small>Observability</small></a>
+        </li>
+
+        <li class="p-list__item">
+          <a class="p-link--soft" href="#"><small>Identity</small></a>
+        </li>
+
+        <li class="p-list__item">
+          <a class="p-link--soft" href="#"><small>Charmed Kubernetes</small></a>
+        </li>
+
+        <li class="p-list__item">
+          <a class="p-link--soft" href="#"><small>Charmed OpenStack</small></a>
+        </li>
+
+        <li class="p-list__item">
+          <a class="p-list__item u-hide--medium u-hide--large" href="https://charmhub.io"><small>All operators</small></a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-3">
+      <h2 class="p-heading--5">Compare</h2>
+      <ul class="p-list">
+        <li class="p-list__item">
+          <a class="p-link--soft" href="#"><small>Operators & Charmed Operators</small></a>
+        </li>
+        <li class="p-list__item">
+          <a class="p-link--soft" href="#"><small>Helm alternative</small></a>
+        </li>
+        <li class="p-list__item">
+          <a class="p-link--soft" href="#"><small>Kustomize alternative</small></a>
+        </li>
+        <li class="p-list__item">
+          <a class="p-link--soft" href="#"><small>Ansible alternative</small></a>
+        </li>
+        <li class="p-list__item">
+          <a class="p-link--soft" href="#"><small>Terraform alternative</small></a>
+        </li>
+        <li class="p-list__item u-hide--medium u-hide--large">
+          <a class="p-heading--5 p-link--soft" href="#"><small>More comparisons</small></a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-3">
+      <h2 class="p-heading--5">Blog</h2>
+      <ul class="p-list">
+        <li class="p-list__item">
+          <a class="p-link--soft" href="#"><small>Best Practices for creating charms</small></a>
+        </li>
+        <li class="p-list__item">
+          <a class="p-link--soft" href="#"><small>Model Driven Operations Manifesto</small></a>
+        </li>
+        <li class="p-list__item">
+          <a class="p-link--soft" href="#"><small>Why Helm and Kustomize Aren’t Enough: the Future</small> of Kubernetes Apps</a>
+        </li>
+        <li class="p-list__item">
+          <a class="p-link--soft" href="#"><small>Comparing Operators to Charmed Operators</small></a>
+        </li>
+        <li class="p-list__item u-hide--medium u-hide--large">
+          <a class="p-heading--5 p-link--soft" href="https://juju.is/blog"><small>Read all of our blogs</small></a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-9 col-start-large-4 u-hide--small">
+      <div class="u-sv2">
+        <hr class="is-fixed-width">
+      </div>
+
+      <div class="row u-sv3">
+        <div class="col-3">
+          <a class="p-heading--5 p-link--soft" href="https://charmhub.io "><small>All operators</small></a>
+        </div>
+        <div class="col-3">
+          <a class="p-heading--5 p-link--soft" href="#"><small>More comparisons</small></a>
+        </div>
+        <div class="col-3">
+          <a class="p-heading--5 p-link--soft" href="https://juju.is/blog"><small>Read all of our blogs</small></a>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="p-footer">
-    <div class="row is-wide">
-      <div class="col-8">
-        <h3>The Operator Framework</h3>
-        <p>The Operator Framework provides a simple, lightweight, and powerful way of writing Juju charms, the best way to encapsulate operational experience in code.</p>
-        <ul class="p-inline-list u-sv3">
-          <li class="p-inline-list__item"><a href="https://github.com/canonical/operator/" class="p-button--neutral">Get involved</a></li>
-          <li class="p-inline-list__item"><a href="/contact-us" class="p-button--outline js-invoke-modal">Contact us</a></li>
-        </ul>
-        <p>&copy; {{ now('%Y') }} Canonical Ltd. Ubuntu and Canonical are registered trademarks of Canonical Ltd.</p>
-        <ul class="p-inline-list--middot">
-          <li class="p-inline-list__item"><a href="https://ubuntu.com/legal" class="p-footer__link">Legal information</a></li>
-          <li class="p-inline-list__item"><a class="js-revoke-cookie-manager" href="" style="color:#cdcdcd;">Manage your tracker settings</a></li>
-          <li class="p-inline-list__item"><a href="https://github.com/canonical-web-and-design/charmhub.io/issues/new" class="p-footer__link">Report a bug on this website</a></li>
+
+  <div class="row">
+    <div class="u-sv2 u-fixed-width">
+      <hr>
+    </div>
+  </div>
+
+  <div class="p-strip is-shallow">
+    <div class="row u-vertically-center">
+      <div class="col-6">
+        <h2>Join the community</h2>
+      </div>
+
+      <div class="col-6">
+        <ul class="p-inline-list u-no-margin--bottom u-float-right--medium u-float-right--large"> 
+          <li class="p-inline-list__item">
+            <a href="https://chat.charmhub.io/charmhub/channels/juju" class="p-icon--chat"></a>
+          </li>
+          <li class="p-inline-list__item">
+            <a href="http://discourse.charmhub.io/" class="p-icon--forum"></a>
+          </li>
+          <li class="p-inline-list__item">
+            <a href="https://juju.is/careers" class="p-icon--careers"></a>
+          </li>
+          <li class="p-inline-list__item">
+            <a href="https://github.com/canonical/operator/" class="p-icon--github"></a>
+          </li>
+          <li class="p-inline-list__item">
+            <a href="http://www.twitter.com/juju_devops" class="p-icon--twitter"></a>
+          </li>
+          <li class="p-inline-list__item">
+            <a href="http://youtube.com/jujucharms" class="p-icon--youtube"></a>
+          </li>
         </ul>
       </div>
-      <div class="col-2 col-start-large-11 u-align--left">
-        <ul class="p-inline-list">
-          <li class="p-inline-list__item">
-            <a href="https://www.facebook.com/ubuntulinux" class="p-icon--facebook">Facebook</a>
-          </li>
-          <li class="p-inline-list__item">
-            <a href="https://twitter.com/ubuntu" class="p-icon--twitter">Twitter</a>
-          </li>
-          <li class="p-inline-list__item">
-            <a href="https://www.youtube.com/user/celebrateubuntu" class="p-icon--youtube">Youtube</a>
-          </li>
-        </ul>
-        <ul class="p-list">
-          <li class="p-list__item"><a href="/" class="p-footer__link" style="color: #fff; font-weight: 400;">Charmhub.io</a></li>
-          <li class="p-list__item"><a href="/overview" class="p-footer__link" style="color: #fff;">Overview</a></li>
-          <li class="p-list__item"><a href="/about" class="p-footer__link" style="color: #fff;">About Charmhub</a></li>
-          <li class="p-list__item"><a href="https://discourse.charmhub.io/" class="p-footer__link" style="color: #fff;">Community</a></li>
-        </ul>
-      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="u-sv2 u-fixed-width">
+      <hr>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <ul class="p-list">
+        <li class="p-list__item">
+          <a class="p-link--soft js-revoke-cookie-manager" href=""><small>Manage your tracker settings</small></a>
+        </li>
+        <li class="p-list__item">
+          <a class="p-link--soft" href="https://github.com/canonical-web-and-design/charmhub.io/issues/new"><small>Report a bug on this site</small></a>
+        </li>
+        <li class="p-list__item">
+          <a class="p-link--soft" href="https://www.ubuntu.com/legal"><small>Legal Information</small></a>
+        </li>
+      </ul>
     </div>
   </div>
 </footer>
