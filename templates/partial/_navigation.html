@@ -14,16 +14,6 @@
         <a href="#main-content">Jump to main content</a>
       </span>
       <ul class="p-navigation__items" role="menu">
-        <li class="p-navigation__item {% if request.path == '/overview' %}is-selected{% endif %}" role="menuitem">
-          <a href="/overview" class="p-navigation__link">
-            Overview
-          </a>
-        </li>
-        <li class="p-navigation__item {% if request.path in ['/about', '/manifesto', '/publishing', '/governance', '/glossary'] %}is-selected{% endif %}" role="menuitem">
-          <a href="/about" class="p-navigation__link">
-            About
-          </a>
-        </li>
         <li class="p-navigation__item" role="menuitem">
           <a href="https://discourse.charmhub.io" class="p-navigation__link">
             Community
