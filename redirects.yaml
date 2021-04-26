@@ -1,1 +1,2 @@
 tutorials(?P<page>.*)/?: https://juju.is/tutorials{page}
+mattermost: mattermost-charmers-mattermost
