@@ -504,9 +504,9 @@ def entity_icon(entity_name):
         ],
     )
 
-    icon_url = package["result"]["media"][0]["url"]
-
-    if not icon_url:
+    if package["result"]["media"]:
+        icon_url = package["result"]["media"][0]["url"]
+    else:
         icon_url = (
             "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg"
         )
