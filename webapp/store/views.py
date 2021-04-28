@@ -13,7 +13,6 @@ from webapp.decorators import (
     store_maintenance,
     redirect_uppercase_to_lowercase,
 )
-from webapp.feature import COMMANDS_OVERWRITE
 from webapp.helpers import (
     discourse_api,
     decrease_headers,
@@ -110,12 +109,6 @@ FIELDS = [
     "channel-map",
 ]
 
-# TODO This is a temporary fix for release
-# Store will release a field to flag if a charm needs the
-# prefix cs:
-# CS is the list of charms that don't need prefix "cs:"
-CS = []
-
 
 def get_package(entity_name, channel_request, fields):
     # Get entity info from API
@@ -127,15 +120,7 @@ def get_package(entity_name, channel_request, fields):
     if not package["default-release"]:
         abort(404)
 
-    if COMMANDS_OVERWRITE.get(entity_name):
-        package["command"] = COMMANDS_OVERWRITE[entity_name]
-    else:
-        package["command"] = entity_name
-
     package = logic.add_store_front_data(package, True)
-
-    if package["name"] not in CS:
-        package["cs"] = True
 
     for channel in package["channel-map"]:
         channel["channel"]["released-at"] = logic.convert_date(
