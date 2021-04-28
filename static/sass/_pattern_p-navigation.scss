@@ -28,9 +28,7 @@
 
     .p-navigation__item {
       .p-navigation__link,
-      .p-navigation__link > a,
-      .p-navigation__toggle--open,
-      .p-navigation__toggle--close {
+      .p-navigation__link > a {
         padding-block-end: 1rem;
         padding-block-start: 1rem;
       }
@@ -85,14 +83,24 @@
     }
 
     .p-search-box {
+      display: none;
       margin: 0 0 0 0.5rem;
       min-width: 16.625rem;
+
+      @media (min-width: $breakpoint-large) {
+        display: flex;
+      }
     }
   }
 
   .p-navigation__banner {
     @media (max-width: $breakpoint-medium - 1px) {
       padding-inline-start: 0;
+    }
+
+    .p-navigation__toggle--open,
+    .p-navigation__toggle--close {
+      margin: auto 0;
     }
 
     .p-navigation__logo {
