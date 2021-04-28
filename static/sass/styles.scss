@@ -3,11 +3,7 @@
 $brand-color: #772953;
 $color-ubuntu-orange: #e95420;
 $color-accent: #00365c;
-
-$grid-max-width: 90rem;
-
-// navigation settings
-$theme-default-nav: dark;
+$color-text-orange: #d54110;
 
 // import cookie policy
 @import "@canonical/cookie-policy/build/css/cookie-policy";
@@ -185,10 +181,6 @@ $theme-default-nav: dark;
 
 @include p-charmhub-separator;
 
-@import "pattern_p-search-box";
-
-@include p-charmhub-search-box;
-
 @import "pattern_p-button";
 
 @include p-charmhub-button;
@@ -220,6 +212,10 @@ $theme-default-nav: dark;
 @import "pattern_l-fluid-breakout";
 
 @include l-charmhub-fluid-breakout;
+
+@import "pattern_p-subnav";
+
+@include p-charmhub-subnav;
 
 // Remove table row borders
 .p-table--no-borders tr {

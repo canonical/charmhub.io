@@ -1,5 +1,4 @@
 module.exports = {
-  "global-nav": "./static/js/src/base/global-nav.js",
   about: "./static/js/src/public/about/index.js",
   docs: "./static/js/src/public/docs/index.js",
   base: "./static/js/src/base/base.js",

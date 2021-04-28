@@ -18,7 +18,7 @@ function toggleSubnav(subnav, open) {
     );
 
     if (dropdown) {
-      dropdown.setAttribute("aria-hidden", open ? "true" : false);
+      dropdown.setAttribute("aria-hidden", open ? "true" : "false");
     }
   }
 }
@@ -48,6 +48,19 @@ function setupSubnavToggle(subnavToggle) {
     closeAllSubnavs();
     if (!isActive) {
       toggleSubnav(subnav, true);
+    }
+  });
+
+  // Close the subnav on Esc key press
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      var subnav = subnavToggle.parentElement;
+      var isActive = subnav.classList.contains("is-active");
+
+      if (isActive) {
+        toggleSubnav(subnav, false);
+      }
     }
   });
 }
@@ -86,5 +99,41 @@ document.addEventListener("click", function (event) {
     closeAllSubnavs();
   }
 });
+
+// Enable sticky navigation
+function enableStickyNav() {
+  document.addEventListener("DOMContentLoaded", function () {
+    var selector = "[data-js='sticky-nav-observer']";
+    // select the observer element
+    var observerEl = document.querySelector(selector);
+    // select the navigation element
+    var nav = document.getElementById("navigation");
+
+    if (observerEl && nav) {
+      // create a new observer
+      var observer = new IntersectionObserver(
+        function (entries) {
+          // add "sticky" class if the observerEl is not on the screen
+          if (entries[0].intersectionRatio === 0) {
+            nav.classList.add("is-sticky");
+            // remove "sticky" class if the observerEl is on the screen - i.e. you scrolled all the way to the top of the page
+          } else if (entries[0].intersectionRatio === 1)
+            nav.classList.remove("is-sticky");
+        },
+        { threshold: [0, 1] }
+      );
+      // ask the observer to observe the position of the observerEl - i.e. if it's on/off screen
+      observer.observe(observerEl);
+    } else {
+      if (selector) {
+        throw new Error(selector + " is not a valid element!");
+      } else {
+        throw new Error("#navigation is not a valid element!");
+      }
+    }
+  });
+}
+
+enableStickyNav();
 
 export { toggleSubnav };
