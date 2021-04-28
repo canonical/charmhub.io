@@ -96,7 +96,7 @@ function buildPackageCard(entity) {
   }
 
   const entityCardIcons = clone.querySelector(".package-card-icons");
-  if (entity.store_front.base === "kubernetes") {
+  if (entity.store_front['deployable-on'].includes("kubernetes")) {
     buildPlatformIcons(
       entityCardIcons,
       "Kubernetes",
@@ -105,7 +105,7 @@ function buildPackageCard(entity) {
     );
   }
 
-  if (entity.store_front.base === "windows") {
+  if (entity.store_front['deployable-on'].includes("windows")) {
     buildPlatformIcons(
       entityCardIcons,
       "Windows",
@@ -114,7 +114,7 @@ function buildPackageCard(entity) {
     );
   }
 
-  if (entity.store_front.base === "linux") {
+  if (entity.store_front['deployable-on'].includes("linux")) {
     buildPlatformIcons(
       entityCardIcons,
       "Linux",
@@ -123,7 +123,7 @@ function buildPackageCard(entity) {
     );
   }
 
-  if (entity.store_front.base === "all") {
+  if (entity.store_front['deployable-on'].includes("all")) {
     buildPlatformIcons(
       entityCardIcons,
       "Linux",

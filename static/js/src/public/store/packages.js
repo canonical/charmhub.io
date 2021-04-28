@@ -321,7 +321,7 @@ class initPackages {
               kubernetes: [],
             };
           }
-          if (entity.store_front.base === "kubernetes") {
+          if (entity.store_front['deployable-on'].includes("kubernetes")) {
             this.groupedPackages.categories[cat.name].kubernetes.push(entity);
           } else {
             this.groupedPackages.categories[cat.name].linux.push(entity);
@@ -440,11 +440,11 @@ class initPackages {
       this._filters.filter.length === 0
     ) {
       this.packages = this.allPackages.filter((entity) =>
-        entity.store_front.base === this._filters.base[0]
+        entity.store_front['deployable-on'].includes(this._filters.base[0])
       );
     } else {
       let pakagesFilteredByPlatform = this.allPackages.filter((entity) =>
-        entity.store_front.base === this._filters.base[0]
+        entity.store_front['deployable-on'].includes(this._filters.base[0])
       );
 
       this.packages = pakagesFilteredByPlatform.filter((entity) =>
