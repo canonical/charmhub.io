@@ -235,13 +235,10 @@ def add_store_front_data(package, details=False):
 
     extra["icons"] = get_icons(package)
 
-    if package["default-release"]["channel"]["base"]:
-        extra["base"] = PLATFORMS.get(
-            package["default-release"]["channel"]["base"]["name"],
-            package["default-release"]["channel"]["base"]["name"],
-        )
+    if package["result"]["deployable-on"]:
+        extra["deployable-on"] = package["result"]["deployable-on"]
     else:
-        extra["base"] = "all"
+        extra["deployable-on"] = ["linux"]
 
     extra["categories"] = package["result"]["categories"]
     if "title" in package["result"] and package["result"]["title"]:

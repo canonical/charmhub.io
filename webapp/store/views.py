@@ -34,7 +34,7 @@ SEARCH_FIELDS = [
     "result.publisher.display-name",
     "default-release.revision.revision",
     "default-release.channel",
-    "default-release.channel.base",
+    "result.deployable-on",
 ]
 
 CATEGORIES = [
@@ -107,6 +107,7 @@ FIELDS = [
     "result.publisher.display-name",
     "result.title",
     "channel-map",
+    "result.deployable-on",
 ]
 
 

@@ -78,14 +78,13 @@
       </div>
     </div>
     <div class="col-4">
-      <p style="margin-bottom: 0.5rem;"><small class="u-no-padding--top u-text--muted">Base:</small></p>
-      {% if package.store_front.series|length == 1 and package.store_front.series[0] == "kubernetes" %}
+      <p style="margin-bottom: 0.5rem;"><small class="u-no-padding--top u-text--muted">Platform:</small></p>
+      {% if package.store_front["deployable-on"]|length == 1 and package.store_front["deployable-on"][0] == "kubernetes" %}
       <img src="https://assets.ubuntu.com/v1/9f8a8273-2018-logo-kubernetes+%282%29.svg" alt="" width="160" height="27" class="p-image--base">
       {% else %}
       <img src="https://assets.ubuntu.com/v1/adac6928-ubuntu.svg" alt="" width="89" height="20" class="p-image--base">
-      {% endif %}
       <div class="series-tags">
-        {% for version in package.store_front.platforms %}
+        {% for version in package.store_front.series %}
         {% if version != "Kubernetes" %}
         <span class="series-tag">
           {{ version }}
@@ -93,6 +92,7 @@
         {% endif %}
         {% endfor %}
       </div>
+      {% endif %}
     </div>
   </div>
 </div>

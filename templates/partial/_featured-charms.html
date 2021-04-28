@@ -18,14 +18,14 @@
 
       <div class="p-card__footer">
         <div class="package-card-icons">
-          {% if charm.store_front.base == "linux" %}
+          {% if "linux" in charm.store_front["deployable-on"] %}
             <span class="p-tooltip" aria-describedby="linux-tooltip">
               <img alt="Linux" src="https://assets.ubuntu.com/v1/dc11bd39-Linux.svg" width="24" height="24">
               <span class="p-tooltip__message" role="tooltip" id="linux-tooltip">This operator drives the application on Linux servers</span>
             </span>
           {% endif %}
 
-          {% if charm.store_front.base == "kubernetes" %}
+          {% if "kubernetes" in charm.store_front["deployable-on"] %}
             <span class="p-tooltip" aria-describedby="k8s-tooltip">
               <img alt="Kubernetes" src="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg" width="24" height="24">
               <span class="p-tooltip__message" role="tooltip" id="k8s-tooltip">This operator drives the application on Kubernetes</span>
