@@ -100,6 +100,20 @@ document.addEventListener("click", function (event) {
   }
 });
 
+const enableResetSearchClick = (selector) => {
+  const resetIconList = document.querySelectorAll(selector);
+
+  if (resetIconList) {
+    resetIconList.forEach((resetIcon) => {
+      resetIcon.addEventListener("click", () => {
+        window.location.href = "/";
+      });
+    });
+  } else {
+    console.error(`${selector} is not a valida element!`);
+  }
+};
+
 // Enable sticky navigation
 function enableStickyNav() {
   document.addEventListener("DOMContentLoaded", function () {
@@ -126,14 +140,15 @@ function enableStickyNav() {
       observer.observe(observerEl);
     } else {
       if (selector) {
-        throw new Error(selector + " is not a valid element!");
-      } else {
-        throw new Error("#navigation is not a valid element!");
+        console.error(
+          `${selector ? selector : "#navigation"} is not a valid element!`
+        );
       }
     }
   });
 }
 
 enableStickyNav();
+enableResetSearchClick("[data-js='reset-search']");
 
 export { toggleSubnav };

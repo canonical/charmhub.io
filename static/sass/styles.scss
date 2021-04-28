@@ -367,8 +367,10 @@ h3 {
   }
 }
 
-// XXX Ant 17.11.2020 - This can be removed once this issue is closed
-// https://github.com/canonical-web-and-design/vanilla-framework/issues/3411
-.p-checkbox {
-  position: relative;
+// XXX Ovi 28.04.2021 - This can be removed once this issue is closed
+// https://github.com/canonical-web-and-design/vanilla-framework/issues/3723
+.l-fluid-breakout__item {
+  @media (min-width: $breakpoint-small) {
+    max-width: 30rem;
+  }
 }
