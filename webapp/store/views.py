@@ -155,6 +155,18 @@ def details_overview(entity_name):
     # Remove Markdown comments
     readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
 
+    show_notification = True
+
+    excluded_packages = [
+        "mattermost-charmers-mattermost",
+        "prometheus",
+        "hello-kubecon",
+        "nginx-ingress-integrator",
+    ]
+
+    if entity_name in excluded_packages:
+        show_notification = False
+
     readme = md_parser(readme)
     readme = decrease_headers(readme)
     return render_template(
@@ -163,6 +175,7 @@ def details_overview(entity_name):
         readme=readme,
         package_type=package["type"],
         channel_requested=channel_request,
+        show_notification=show_notification,
     )
 
 
