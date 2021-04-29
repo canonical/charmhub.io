@@ -159,7 +159,7 @@ def details_overview(entity_name):
 
     excluded_packages = [
         "mattermost-charmers-mattermost",
-        "prometheus",
+        "charmcraft-prometheus",
         "hello-kubecon",
         "nginx-ingress-integrator",
     ]
