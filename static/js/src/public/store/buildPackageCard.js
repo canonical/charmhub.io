@@ -118,7 +118,7 @@ function buildPackageCard(entity) {
     buildPlatformIcons(
       entityCardIcons,
       "Linux",
-      "https://assets.ubuntu.com/v1/dc11bd39-Linux.svg",
+      "https://assets.ubuntu.com/v1/a911ecf6-vm-badge.svg",
       "This operator drives the application on Linux servers"
     );
   }
@@ -127,7 +127,7 @@ function buildPackageCard(entity) {
     buildPlatformIcons(
       entityCardIcons,
       "Linux",
-      "https://assets.ubuntu.com/v1/dc11bd39-Linux.svg",
+      "https://assets.ubuntu.com/v1/a911ecf6-vm-badge.svg",
       "This operator drives the application on Linux servers"
     );
     buildPlatformIcons(
