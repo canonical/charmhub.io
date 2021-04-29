@@ -1,7 +1,7 @@
 tutorials(?P<page>.*)/?: https://juju.is/tutorials{page}
 mattermost: mattermost-charmers-mattermost
 about: https://juju.is/about
-manifesto: https://juju.is/about
+manifesto: https://juju.is/model-driven-operations-manifesto
 publishing: https://juju.is/docs/sdk
 governance: https://juju.is/about
 glossary: https://juju.is/about
