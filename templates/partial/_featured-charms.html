@@ -16,6 +16,23 @@
         <p><small class="package-card-summary">{{ charm.result.summary|truncate(85) }}</small></p>
       </div>
 
+      <div class="charm-framework-type">
+        <small>
+          {% if charm["name"] == "mattermost-charmers-mattermost" or charm["name"] == "prometheus" or charm["name"] == "hello-kubecon" or charm["name"] == "nginx-ingress-integrator" %}
+            <i class="p-icon--success"></i>
+            Operator framework
+          {% else %}
+            <span class="p-tooltip--btm-center">
+              <i class="p-icon--information"></i>
+              <span class="p-tooltip__message">While many Reactive Framework charms work
+on machines today, it is recommended to
+create new charms with the Operator Framework.</span>
+            </span>
+            Reactive
+          {% endif %}
+        </small>
+      </div>
+
       <div class="p-card__footer">
         <div class="package-card-icons">
           {% if "linux" in charm.store_front["deployable-on"] %}
