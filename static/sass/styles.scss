@@ -374,3 +374,11 @@ h3 {
     max-width: 30rem;
   }
 }
+
+.juju-notification {
+  margin: 0.5rem 0;
+
+  @media (min-width: $breakpoint-medium) {
+    margin: 1rem 0 0;
+  }
+}
