@@ -89,6 +89,41 @@ function buildPackageCard(entity) {
     );
   }
 
+  const charmFrameworkTypeIcon = clone.querySelector(
+    "[data-js-charm-framework-type-icon]"
+  );
+
+  const charmFrameworkTypeText = clone.querySelector(
+    "[data-js-charm-framework-type-text]"
+  );
+
+  const charmFrameworkTypeTooltipWrapper = clone.querySelector(
+    "[data-js-tooltip-wrapper]"
+  );
+
+  const excludedPackages = [
+    "mattermost-charmers-mattermost",
+    "charmhub-prometheus",
+    "hello-kubecon",
+    "nginx-ingress-integrator",
+  ];
+
+  const tooltip = document.createElement("span");
+  tooltip.classList.add("p-tooltip__message");
+  tooltip.innerText = `While many Reactive Framework charms work
+on machines today, it is recommended to
+create new charms with the Operator Framework.`;
+
+  if (excludedPackages.includes(entity.name)) {
+    charmFrameworkTypeIcon.classList.add("p-icon--success");
+    charmFrameworkTypeText.innerText = "Operator framework";
+  } else {
+    charmFrameworkTypeIcon.classList.add("p-icon--information");
+    charmFrameworkTypeText.innerText = "Reactive";
+    charmFrameworkTypeTooltipWrapper.classList.add("p-tooltip--btm-center");
+    charmFrameworkTypeTooltipWrapper.appendChild(tooltip);
+  }
+
   const entityCardSummary = clone.querySelector(".package-card-summary");
 
   if (entity.result.summary) {
@@ -96,7 +131,7 @@ function buildPackageCard(entity) {
   }
 
   const entityCardIcons = clone.querySelector(".package-card-icons");
-  if (entity.store_front['deployable-on'].includes("kubernetes")) {
+  if (entity.store_front["deployable-on"].includes("kubernetes")) {
     buildPlatformIcons(
       entityCardIcons,
       "Kubernetes",
@@ -105,7 +140,7 @@ function buildPackageCard(entity) {
     );
   }
 
-  if (entity.store_front['deployable-on'].includes("windows")) {
+  if (entity.store_front["deployable-on"].includes("windows")) {
     buildPlatformIcons(
       entityCardIcons,
       "Windows",
@@ -114,7 +149,7 @@ function buildPackageCard(entity) {
     );
   }
 
-  if (entity.store_front['deployable-on'].includes("linux")) {
+  if (entity.store_front["deployable-on"].includes("linux")) {
     buildPlatformIcons(
       entityCardIcons,
       "Linux",
@@ -123,7 +158,7 @@ function buildPackageCard(entity) {
     );
   }
 
-  if (entity.store_front['deployable-on'].includes("all")) {
+  if (entity.store_front["deployable-on"].includes("all")) {
     buildPlatformIcons(
       entityCardIcons,
       "Linux",

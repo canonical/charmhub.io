@@ -54,9 +54,9 @@
     background-color: $color-x-light;
     color: $color-dark;
     display: grid;
-    grid-template-rows: 9.5rem auto 2.25rem;
+    grid-template-rows: 9.5rem auto auto 2.25rem;
     // Force obey parent's border-radius
-    height: 16.75rem;
+    height: 17.75rem;
     margin-bottom: $spv-outer--scaleable;
     width: 100%;
 

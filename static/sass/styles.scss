@@ -382,3 +382,19 @@ h3 {
     margin: 1rem 0 0;
   }
 }
+
+.charm-framework-type {
+  border-top: 1px solid $color-mid-x-light;
+  margin-top: 1rem;
+  padding: 0.25rem 1rem 0.3rem;
+
+  @media (min-width: $breakpoint-large) {
+    padding-top: 0.1rem;
+  }
+
+  i {
+    margin-right: 4px;
+    position: relative;
+    top: 1px;
+  }
+}
