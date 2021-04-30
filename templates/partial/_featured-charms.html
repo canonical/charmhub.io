@@ -18,7 +18,7 @@
 
       <div class="charm-framework-type">
         <small>
-          {% if charm["name"] == "mattermost-charmers-mattermost" or charm["name"] == "prometheus" or charm["name"] == "hello-kubecon" or charm["name"] == "nginx-ingress-integrator" %}
+          {% if ops_badges[charm["name"]] %}
             <i class="p-icon--success"></i>
             Operator framework
           {% else %}
@@ -49,6 +49,80 @@ create new charms with the Operator Framework.</span>
             </span>
           {% endif %}
         </div>
+
+        {% if ops_badges[charm["name"]] %}
+          <button type="button" class="p-button--neutral is-small is-inline p-tooltip--btm-center" style=" margin-left: 10px; position: relative; top: 7px;">
+            Functionality
+            <span class="p-tooltip__message--list">
+              <ul class="p-list u-no-margin--bottom u-no-margin--left">
+                <li>
+                  {% if ops_badges[charm["name"]]["detailed-documentation"] == True %}
+                    <i class="p-icon--success"></i>
+                  {% else %}
+                    <i class="p-icon--error"></i>
+                  {% endif %}
+                  Detailed documentation
+                </li>
+                <li>
+                  {% if ops_badges[charm["name"]]["guaranteed-getting-started"] == True %}
+                    <i class="p-icon--success"></i>
+                  {% else %}
+                    <i class="p-icon--error"></i>
+                  {% endif %}
+                  Guaranteed getting started
+                </li>
+                <li>
+                  {% if ops_badges[charm["name"]]["secrets-management"] == True %}
+                    <i class="p-icon--success"></i>
+                  {% else %}
+                    <i class="p-icon--error"></i>
+                  {% endif %}
+                  Secrets management
+                </li>
+                <li>
+                  {% if ops_badges[charm["name"]]["implements-sidecar-pattern"] == True %}
+                    <i class="p-icon--success"></i>
+                  {% else %}
+                    <i class="p-icon--error"></i>
+                  {% endif %}
+                  Implements sidecar pattern
+                </li>
+                <li>
+                  {% if ops_badges[charm["name"]]["seamless-upgrades"] == True %}
+                    <i class="p-icon--success"></i>
+                  {% else %}
+                    <i class="p-icon--error"></i>
+                  {% endif %}
+                  Seamless upgrades
+                </li>
+                <li>
+                  {% if ops_badges[charm["name"]]["charm-library"] == True %}
+                    <i class="p-icon--success"></i>
+                  {% else %}
+                    <i class="p-icon--error"></i>
+                  {% endif %}
+                  Charm library
+                </li>
+                <li>
+                  {% if ops_badges[charm["name"]]["unit-testing"] == True %}
+                    <i class="p-icon--success"></i>
+                  {% else %}
+                    <i class="p-icon--error"></i>
+                  {% endif %}
+                  Unit testing
+                </li>
+                <li>
+                  {% if ops_badges[charm["name"]]["high-availability"] == True %}
+                    <i class="p-icon--success"></i>
+                  {% else %}
+                    <i class="p-icon--error"></i>
+                  {% endif %}
+                  High availability
+                </li>
+              </ul>
+            </span>
+          </button>
+        {% endif %}
       </div>
     </a>
   </div>

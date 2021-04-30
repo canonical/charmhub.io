@@ -133,4 +133,15 @@
       }
     }
   }
+
+  .p-tooltip__message--list {
+    @extend .p-tooltip__message;
+
+    min-width: 320px;
+    white-space: initial;
+
+    li i {
+      margin-right: 4px;
+    }
+  }
 }
