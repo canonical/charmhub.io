@@ -160,7 +160,7 @@ def details_overview(entity_name):
 
     show_notification = True
 
-    if OPS_BADGES[entity_name] is not None:
+    if entity_name not in OPS_BADGES:
         show_notification = False
 
     readme = md_parser(readme)
