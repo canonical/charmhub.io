@@ -158,10 +158,7 @@ def details_overview(entity_name):
     # Remove Markdown comments
     readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
 
-    show_notification = True
-
-    if entity_name not in OPS_BADGES:
-        show_notification = False
+    show_notification = entity_name not in OPS_BADGES
 
     readme = md_parser(readme)
     readme = decrease_headers(readme)
