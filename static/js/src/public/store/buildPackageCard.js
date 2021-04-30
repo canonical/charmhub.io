@@ -119,7 +119,7 @@ create new charms with the Operator Framework.`;
       if (badge[icon.dataset.jsFunction] === true) {
         icon.classList.add("p-icon--success");
       } else {
-        icon.classList.add("p-icon--error");
+        icon.classList.add("p-icon--cross-grey");
       }
     });
   } else {
