@@ -2,11 +2,12 @@ import buildPackageCard from "./buildPackageCard";
 
 /** Store page filters */
 class initPackages {
-  constructor() {
+  constructor(opsBadges) {
     this.selectElements();
     this.togglePlaceholderContainer(true);
     this.searchCache = window.location.search;
     this._filters = this.getUrlFilters();
+    this.opsBadges = opsBadges;
 
     if (
       this._filters.q.length === 0 &&
@@ -321,7 +322,7 @@ class initPackages {
               kubernetes: [],
             };
           }
-          if (entity.store_front['deployable-on'].includes("kubernetes")) {
+          if (entity.store_front["deployable-on"].includes("kubernetes")) {
             this.groupedPackages.categories[cat.name].kubernetes.push(entity);
           } else {
             this.groupedPackages.categories[cat.name].linux.push(entity);
@@ -423,10 +424,7 @@ class initPackages {
   }
 
   filterPackages() {
-    if (
-      this._filters.base[0] === "all" &&
-      this._filters.filter.length === 0
-    ) {
+    if (this._filters.base[0] === "all" && this._filters.filter.length === 0) {
       this.packages = this.allPackages;
     } else if (
       this._filters.base[0] === "all" &&
@@ -440,11 +438,11 @@ class initPackages {
       this._filters.filter.length === 0
     ) {
       this.packages = this.allPackages.filter((entity) =>
-        entity.store_front['deployable-on'].includes(this._filters.base[0])
+        entity.store_front["deployable-on"].includes(this._filters.base[0])
       );
     } else {
       let pakagesFilteredByPlatform = this.allPackages.filter((entity) =>
-        entity.store_front['deployable-on'].includes(this._filters.base[0])
+        entity.store_front["deployable-on"].includes(this._filters.base[0])
       );
 
       this.packages = pakagesFilteredByPlatform.filter((entity) =>
@@ -482,7 +480,9 @@ class initPackages {
       this.domEl.packageContainer.el.innerHTML = "";
 
       this.packages.forEach((entity) => {
-        this.domEl.packageContainer.el.appendChild(buildPackageCard(entity));
+        this.domEl.packageContainer.el.appendChild(
+          buildPackageCard(entity, this.opsBadges)
+        );
       });
     } else {
       throw new Error(

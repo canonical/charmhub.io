@@ -4,7 +4,7 @@ import talisker
 from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.discourse.exceptions import PathNotFoundError
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
-from flask import Blueprint, abort, redirect, jsonify
+from flask import Blueprint, abort, redirect, jsonify, json
 from flask import current_app as app
 from flask import render_template, request, Response
 
@@ -20,6 +20,7 @@ from webapp.helpers import (
 )
 from pybadges import badge
 from webapp.store import logic
+from webapp.store.badges import OPS_BADGES
 
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
@@ -61,6 +62,8 @@ def index():
     context = {
         "categories": CATEGORIES,
         "featured_charms": featured_charms,
+        "ops_badges": OPS_BADGES,
+        "ops_badges_json": json.dumps(OPS_BADGES),
     }
 
     featured_packages = []
@@ -157,14 +160,7 @@ def details_overview(entity_name):
 
     show_notification = True
 
-    excluded_packages = [
-        "mattermost-charmers-mattermost",
-        "charmcraft-prometheus",
-        "hello-kubecon",
-        "nginx-ingress-integrator",
-    ]
-
-    if entity_name in excluded_packages:
+    if OPS_BADGES[entity_name] is not None:
         show_notification = False
 
     readme = md_parser(readme)
@@ -176,6 +172,7 @@ def details_overview(entity_name):
         package_type=package["type"],
         channel_requested=channel_request,
         show_notification=show_notification,
+        ops_badges=OPS_BADGES,
     )
 
 

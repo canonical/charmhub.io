@@ -20,7 +20,7 @@ function buildPlatformIcons(entityCardIcons, altText, srcText, text) {
   entityCardIcons.appendChild(span);
 }
 
-function buildPackageCard(entity) {
+function buildPackageCard(entity, opsBadges) {
   const entityCard = document.getElementById("package-card");
   const clone = entityCard.content.cloneNode(true);
 
@@ -101,23 +101,34 @@ function buildPackageCard(entity) {
     "[data-js-tooltip-wrapper]"
   );
 
-  const excludedPackages = [
-    "mattermost-charmers-mattermost",
-    "charmhub-prometheus",
-    "hello-kubecon",
-    "nginx-ingress-integrator",
-  ];
-
   const tooltip = document.createElement("span");
   tooltip.classList.add("p-tooltip__message");
   tooltip.innerText = `While many Reactive Framework charms work
 on machines today, it is recommended to
 create new charms with the Operator Framework.`;
 
-  if (excludedPackages.includes(entity.name)) {
+  const badge = opsBadges[entity.name];
+
+  if (badge) {
     charmFrameworkTypeIcon.classList.add("p-icon--success");
     charmFrameworkTypeText.innerText = "Operator framework";
+
+    const functionIcons = clone.querySelectorAll("[data-js-function]");
+
+    functionIcons.forEach((icon) => {
+      if (badge[icon.dataset.function] === true) {
+        icon.classList.add("p-icon--success");
+      } else {
+        icon.classList.remove("p-icon--error");
+      }
+    });
   } else {
+    const cardFooter = clone.querySelector("[data-js-card-footer]");
+    const functionalityButton = clone.querySelector(
+      "[data-js-functionality-button]"
+    );
+    cardFooter.removeChild(functionalityButton);
+
     charmFrameworkTypeIcon.classList.add("p-icon--information");
     charmFrameworkTypeText.innerText = "Reactive";
     charmFrameworkTypeTooltipWrapper.classList.add("p-tooltip--btm-center");
