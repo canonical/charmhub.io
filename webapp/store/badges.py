@@ -176,7 +176,7 @@ OPS_BADGES = {
         "secrets-management": False,
         "implements-sidecar-pattern": True,
         "seamless-upgrades": False,
-        "unit-testing": False,
+        "unit-testing": True,
         "high-availability": False,
     },
     "nginx-ingress-integrator": {
