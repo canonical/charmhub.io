@@ -65,6 +65,8 @@ class initPackages {
         }
       })
       .catch((e) => console.error(e));
+
+    this.captureTooltipButtonClick();
   }
 
   addBundleApps() {
@@ -484,6 +486,8 @@ class initPackages {
           buildPackageCard(entity, this.opsBadges)
         );
       });
+
+      this.captureTooltipButtonClick();
     } else {
       throw new Error(
         `There is no element containing ${this.domEl.packageContainer.selector} selector.`
@@ -553,6 +557,19 @@ class initPackages {
         `There is no element containing ${this.domEl.filterButtonMobileOpen.selector} selector.`
       );
     }
+  }
+
+  captureTooltipButtonClick() {
+    const charmCardButtons = document.querySelectorAll(
+      "[data-js-functionality-button]"
+    );
+
+    charmCardButtons.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    });
   }
 }
 

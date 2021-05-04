@@ -133,6 +133,14 @@
       }
     }
 
+    .charm-card-button .p-tooltip__message--list {
+      display: none !important;
+    }
+
+    .charm-card-button:hover .p-tooltip__message--list {
+      display: inline !important;
+    }
+
     &.is-topic-card {
       grid-template-rows: 9rem auto;
 
