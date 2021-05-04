@@ -1,3 +1,6 @@
+// Copied from this project:
+// https://steven.codes/typerjs/docs/index.html
+
 var Typer = function (element) {
   this.element = element;
   var delim = element.dataset.delim || ",";
