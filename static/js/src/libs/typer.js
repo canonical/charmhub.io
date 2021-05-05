@@ -79,13 +79,19 @@ Typer.prototype.doTyping = function () {
     this.typing = false;
   }
 
+  var randomDelay = this.delay;
+  if (p.building) {
+    randomDelay =
+      parseInt(this.delay) + parseInt(Math.random() * 2 * this.delay);
+  }
+
   setTimeout(
     () => {
       if (this.typing) {
         this.doTyping();
       }
     },
-    atWordEnd ? this.deleteDelay : this.delay
+    atWordEnd ? this.deleteDelay : randomDelay
   );
 };
 
