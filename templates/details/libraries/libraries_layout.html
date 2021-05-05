@@ -4,8 +4,8 @@
 
 {% block details_content %}
 
-  <div class="row is-wide p-details-tab__content">
-    <div class="col-3 has-space--right">
+  <div class="row p-details-tab__content">
+    <div class="col-3">
       <div class="p-side-navigation" id="drawer" style="overflow-y: visible; position: relative;">
         <a href="#drawer" class="p-side-navigation__toggle js-drawer-toggle" aria-controls="drawer">
           Toggle side navigation
@@ -62,7 +62,7 @@ than the latest.</span>
       </div>
     </div>
 
-    <div class="col-8">
+    <div class="col-9">
       {% if not is_introduction %}
       <div class="u-fixed-width">
         <h2>{{ library_name }}</h2>

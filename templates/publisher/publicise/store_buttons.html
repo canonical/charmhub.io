@@ -6,7 +6,7 @@
     <div class="col-2">
       <label>Language:</label>
     </div>
-    <div class="col-5">
+    <div class="col-7">
       <form class="p-form--inline">
         <select name="language" data-js="language-select">
 
@@ -80,7 +80,7 @@
     <div id="{{ lang }}-content" class="{% if loop.index > 1 %} u-hide{% endif %}" data-js="language-content">
       <p class="p-heading--4">Dark version</p>
       <div class="row">
-        <div class="col-5 col-start-large-3">
+        <div class="col-7 col-start-large-3">
           <p>
             {% set url="images/badges/"+ lang + "/charmhub-black.svg" %}
             <a href="/{{ package.name }}">
@@ -93,7 +93,7 @@
         <div class="col-2">
           <p>HTML:</p>
         </div>
-        <div class="col-5">
+        <div class="col-7">
           <div class="p-code-snippet">
             <pre class="p-code-snippet__block is-wrapped"><code>&lt;a href="https://charmhub.io/{{ package.name }}"&gt;
   &lt;img alt="" src="https://charmhub.io/static/images/badges/{{ lang }}/charmhub-black.svg" /&gt;
@@ -105,7 +105,7 @@
         <div class="col-2">
           <p>Markdown:</p>
         </div>
-        <div class="col-5">
+        <div class="col-7">
           <div class="p-code-snippet">
             <pre class="p-code-snippet__block is-wrapped"><code>[![{{ data.text }}](https://charmhub.io/{{ package.name }}/badge.svg)](https://charmhub.io/{{ package.name }})</code></pre>
           </div>
@@ -114,7 +114,7 @@
       <hr class="p-separator--shallower">
       <p class="p-heading--4">Light version</p>
       <div class="row">
-        <div class="col-5 col-start-large-3">
+        <div class="col-7 col-start-large-3">
           <p>
             {% set url="images/badges/"+ lang + "/charmhub-white.svg" %}
             <a href="/{{ package.name }}">
@@ -127,7 +127,7 @@
         <div class="col-2">
           <p>HTML:</p>
         </div>
-        <div class="col-5">
+        <div class="col-7">
           <div class="p-code-snippet">
             <pre class="p-code-snippet__block is-wrapped"><code>&lt;a href="https://charmhub.io/{{ package.name }}"&gt;
   &lt;img alt="" src="https://charmhub.io/{{ package.name }}/badge.svg" /&gt;
@@ -139,7 +139,7 @@
         <div class="col-2">
           <p>Markdown:</p>
         </div>
-        <div class="col-5">
+        <div class="col-7">
           <div class="p-code-snippet">
             <pre class="p-code-snippet__block is-wrapped"><code>[![{{ data.text }}](https://charmhub.io/{{ package.name }}/badge.svg)](https://charmhub.io/{{ package.name }})</code></pre>
           </div>

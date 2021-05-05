@@ -23,12 +23,6 @@
     }
   }
 
-  .col-large-6 {
-    @media (min-width: 1300px) {
-      grid-column-end: span 6;
-    }
-  }
-
   .row.has-small-gap {
     grid-gap: 1rem;
     margin-bottom: 1.2rem;
