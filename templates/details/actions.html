@@ -5,8 +5,8 @@
 {% block details_content %}
 <div class="p-details-tab__content">
   {% if package.store_front.actions %}
-    <div class="row is-wide">
-      <div class="col-3 has-space--right">
+    <div class="row">
+      <div class="col-3">
         <div class="p-side-navigation">
           <ul class="p-side-navigation__list">
             {% for action in package.store_front.actions %}
@@ -19,7 +19,7 @@
           </ul>
         </div>
       </div>
-      <div class="col-9 col-large-6">
+      <div class="col-9">
         <ul class="p-list--divided has-separator-centered">
           {% for action, action_data in package.store_front.actions.items() %}
             <li class="p-list__item" style="margin-bottom: 1rem;" id="{{ action }}">
@@ -50,7 +50,7 @@
                   <dl>
                     <p style="margin-left: 1rem;">
                       {% for item in action_data.required %}
-                      {{ item }}{% if not loop.last %},{% endif %}
+                        {{ item }}{% if not loop.last %},{% endif %}
                       {% endfor %}
                     </p>
                   </dl>
@@ -64,7 +64,7 @@
     </div>
   {% else %}
     <div class="p-strip u-no-padding--top">
-      <div class="u-fixed-width u-equal-height is-wide">
+      <div class="u-fixed-width u-equal-height">
         <div class="charm-empty-docs-icon u-vertically-center">
           <img src="https://assets.ubuntu.com/v1/3234f995-Generic_chamhub_NoDocs.svg" alt="" width="121" height="121">
         </div>

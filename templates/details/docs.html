@@ -24,10 +24,10 @@
   </ul>
 {% endmacro %}
 
-  <div class="u-fixed-width is-wide p-details-tab__content">
+  <div class="u-fixed-width p-details-tab__content">
     {% if navigation and body_html %}
-      <div class="row is-wide u-no-padding--left u-no-padding--right">
-        <aside class="col-3 has-space--right">
+      <div class="row u-no-padding--left u-no-padding--right">
+        <aside class="col-3">
           {% if versions | length > 1 %}
           <label for="version-select" class="u-hide">Version</label>
           <select name="version-select" id="version-select" onChange="window.location.href=this.value">
@@ -58,7 +58,7 @@
             </div>
           </nav>
         </aside>
-        <div class="col-9 col-large-6">
+        <div class="col-9">
           {{ body_html | safe }}
           <div class="u-fixed-width">
             <hr class="p-separator--medium">

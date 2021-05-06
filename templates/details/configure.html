@@ -3,9 +3,9 @@
 {% extends '/details/details_layout.html' %}
 
 {% block details_content %}
-<div class="row is-wide p-details-tab__content">
+<div class="row p-details-tab__content">
   {% if package.store_front.config.options %}
-  <div class="col-3 has-space--right">
+  <div class="col-3">
     <div class="p-side-navigation" data-js="{{ section_slug }}">
       <ul class="p-side-navigation__list">
         {% for config in package.store_front.config.options.keys() %}
@@ -18,7 +18,7 @@
       </ul>
     </div>
   </div>
-  <div class="col-9 col-large-6">
+  <div class="col-9">
     <ul class="p-list--divided has-separator-centered">
       {% for key, value in package.store_front.config.options.items() %}
       <li class="p-list__item" id="{{ key }}">

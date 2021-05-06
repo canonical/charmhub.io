@@ -17,20 +17,10 @@
     display: flex;
   }
 
-  .col-3.has-space--right {
-    @media screen and (min-width: $breakpoint-large) {
-      margin-inline-end: 1rem;
-    }
-  }
-
   .is-input--narrow {
     @media screen and (min-width: $breakpoint-medium) {
       max-width: 18.25rem;
     }
-  }
-
-  .is-wide {
-    max-width: $grid-max-width !important;
   }
 
   .u-position-sticky--bottom {
