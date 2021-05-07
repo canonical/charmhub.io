@@ -85,6 +85,10 @@ Typer.prototype.doTyping = function () {
       parseInt(this.delay) + parseInt(Math.random() * 2 * this.delay);
   }
 
+  if (this.words[w][c] === "") {
+    randomDelay = 0;
+  }
+
   setTimeout(
     () => {
       if (this.typing) {
