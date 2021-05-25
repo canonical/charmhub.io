@@ -152,11 +152,11 @@ OPS_BADGES = {
         "unit-testing": True,
         "high-availability": False,
     },
-    "mattermost-charmers-mattermost": {
+    "mattermost-k8s": {
         "detailed-documentation": True,
         "guaranteed-getting-started": True,
         "secrets-management": True,
-        "implements-sidecar-pattern": False,
+        "implements-sidecar-pattern": True,
         "seamless-upgrades": True,
         "unit-testing": True,
         "high-availability": True,

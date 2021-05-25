@@ -1,5 +1,6 @@
 tutorials(?P<page>.*)/?: https://juju.is/tutorials{page}
-mattermost: mattermost-charmers-mattermost
+mattermost: mattermost-k8s
+mattermost-charmers-mattermost: mattermost-k8s
 about: https://juju.is/about
 manifesto: https://juju.is/model-driven-operations-manifesto
 publishing: https://juju.is/docs/sdk
