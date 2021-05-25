@@ -6,7 +6,7 @@
 <div class="row p-details-tab__content">
   {% if package.store_front.config.options %}
   <div class="col-3">
-    <div class="p-side-navigation" data-js="{{ section_slug }}">
+    <div class="p-side-navigation is-sticky" data-js="{{ section_slug }}">
       <ul class="p-side-navigation__list">
         {% for config in package.store_front.config.options.keys() %}
         <li class="p-side-navigation__item">

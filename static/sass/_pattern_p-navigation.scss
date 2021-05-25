@@ -156,6 +156,10 @@
     }
   }
 
+  .p-navigation .p-navigation__item.is-selected > .p-navigation__link::before {
+    display: none;
+  }
+
   .p-navigation__row:nth-child(2) .p-navigation__nav {
     @media (max-width: $breakpoint-medium - 1px) {
       &::after {
