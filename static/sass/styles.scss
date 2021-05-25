@@ -297,6 +297,12 @@ body {
 }
 
 .p-details-tab__content {
+  .p-side-navigation {
+    @media (min-width: $breakpoint-medium) {
+      top: 56px;
+    }
+  }
+
   .p-side-navigation__link.u-truncate {
     display: block;
   }
