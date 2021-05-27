@@ -197,4 +197,13 @@ OPS_BADGES = {
         "unit-testing": True,
         "high-availability": False,
     },
+    "jenkins-agent-k8s": {
+        "detailed-documentation": True,
+        "guaranteed-getting-started": True,
+        "secrets-management": True,
+        "implements-sidecar-pattern": False,
+        "seamless-upgrades": False,
+        "unit-testing": True,
+        "high-availability": False,
+    },
 }
