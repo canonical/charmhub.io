@@ -124,6 +124,13 @@ def get_package(entity_name, channel_request, fields):
     if not package["default-release"]:
         abort(404)
 
+    # Fix issue #1010
+    if channel_request:
+        channel_map = app.store_api.get_item_details(
+            entity_name, fields=["channel-map"]
+        )
+        package["channel-map"] = channel_map["channel-map"]
+
     package = logic.add_store_front_data(package, True)
 
     for channel in package["channel-map"]:
