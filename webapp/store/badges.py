@@ -296,4 +296,13 @@ OPS_BADGES = {
         "unit-testing": True,
         "high-availability": False,
     },
+    "kube-state-metrics": {
+        "detailed-documentation": False,
+        "guaranteed-getting-started": True,
+        "secrets-management": False,
+        "implements-sidecar-pattern": True,
+        "seamless-upgrades": True,
+        "unit-testing": True,
+        "high-availability": False,
+    },
 }
