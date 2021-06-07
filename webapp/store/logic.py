@@ -227,6 +227,24 @@ def get_docs_topic_id(metadata_yaml):
     return None
 
 
+def convert_categories(api_categories):
+    """
+    The name property in the API response has a slug
+    like format, e.g., big-data
+
+    This method will return the desired name and an
+    extra slug property with the value from the API
+    """
+    result = []
+
+    for category in api_categories:
+        category["slug"] = category["name"]
+        category["name"] = format_slug(category["slug"])
+        result.append(category)
+
+    return result
+
+
 def add_store_front_data(package, details=False):
     extra = {}
 
@@ -237,7 +255,8 @@ def add_store_front_data(package, details=False):
     else:
         extra["deployable-on"] = ["linux"]
 
-    extra["categories"] = package["result"]["categories"]
+    extra["categories"] = convert_categories(package["result"]["categories"])
+
     if "title" in package["result"] and package["result"]["title"]:
         extra["display-name"] = package["result"]["title"]
     else:
