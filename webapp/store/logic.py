@@ -123,22 +123,28 @@ def convert_channel_maps(channel_map):
         if channel["channel"]["base"]:
             info["architecture"] = channel["channel"]["base"]["architecture"]
 
-        if not result[track][risk]:
-            result[track][risk].append(info)
+        result[track][risk].append(info)
 
-    # Order tracks and risks
+    # Order tracks (latest track first)
     result = OrderedDict(
         sorted(
             result.items(), key=lambda x: track_order.get(x[0], sys.maxsize)
         )
     )
 
+    # Order risks (stable, candidate, beta, edge)
     for track, track_data in result.items():
         result[track] = OrderedDict(
             sorted(
                 track_data.items(),
                 key=lambda x: risk_order.get(x[0], sys.maxsize),
             )
+        )
+
+    # Order releases by version
+    for risk, releases in result[track].items():
+        result[track][risk] = sorted(
+            releases, key=lambda k: int(k["version"]), reverse=True
         )
 
     return result
