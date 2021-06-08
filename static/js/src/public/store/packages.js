@@ -318,16 +318,16 @@ class initPackages {
     this.allPackages.forEach((entity) => {
       if (entity.store_front.categories) {
         entity.store_front.categories.forEach((cat) => {
-          if (!this.groupedPackages.categories[cat.name]) {
-            this.groupedPackages.categories[cat.name] = {
+          if (!this.groupedPackages.categories[cat.slug]) {
+            this.groupedPackages.categories[cat.slug] = {
               linux: [],
               kubernetes: [],
             };
           }
           if (entity.store_front["deployable-on"].includes("kubernetes")) {
-            this.groupedPackages.categories[cat.name].kubernetes.push(entity);
+            this.groupedPackages.categories[cat.slug].kubernetes.push(entity);
           } else {
-            this.groupedPackages.categories[cat.name].linux.push(entity);
+            this.groupedPackages.categories[cat.slug].linux.push(entity);
           }
         });
       }
@@ -458,7 +458,7 @@ class initPackages {
 
     if (entity.store_front.categories) {
       packageCategories = entity.store_front.categories.map((cat) => {
-        return cat.name;
+        return cat.slug;
       });
     }
 
