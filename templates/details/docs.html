@@ -9,7 +9,7 @@
     {% for element in nav_items %}
     <li>
       {% if element.navlink_href %}
-        <a href="{{ element.navlink_href }}"
+        <a href="{{ element.navlink_href }}{% if channel_requested %}?channel={{ channel_requested }}{% endif %}"
           {% if request.path == element.navlink_href %}aria-current="page"{% endif %}
         >{{ element.navlink_text }}</a>
       {% else %}
