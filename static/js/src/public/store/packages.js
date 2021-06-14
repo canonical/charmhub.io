@@ -2,12 +2,11 @@ import buildPackageCard from "./buildPackageCard";
 
 /** Store page filters */
 class initPackages {
-  constructor(opsBadges) {
+  constructor() {
     this.selectElements();
     this.togglePlaceholderContainer(true);
     this.searchCache = window.location.search;
     this._filters = this.getUrlFilters();
-    this.opsBadges = opsBadges;
 
     if (
       this._filters.q.length === 0 &&
@@ -483,7 +482,7 @@ class initPackages {
 
       this.packages.forEach((entity) => {
         this.domEl.packageContainer.el.appendChild(
-          buildPackageCard(entity, this.opsBadges)
+          buildPackageCard(entity)
         );
       });
 
