@@ -20,7 +20,7 @@ function buildPlatformIcons(entityCardIcons, altText, srcText, text) {
   entityCardIcons.appendChild(span);
 }
 
-function buildPackageCard(entity, opsBadges) {
+function buildPackageCard(entity) {
   const entityCard = document.getElementById("package-card");
   const clone = entityCard.content.cloneNode(true);
 
@@ -87,52 +87,6 @@ function buildPackageCard(entity, opsBadges) {
       "title",
       entity.result.publisher["display-name"]
     );
-  }
-
-  const charmFrameworkTypeIcon = clone.querySelector(
-    "[data-js-charm-framework-type-icon]"
-  );
-
-  const charmFrameworkTypeText = clone.querySelector(
-    "[data-js-charm-framework-type-text]"
-  );
-
-  const charmFrameworkTypeTooltipWrapper = clone.querySelector(
-    "[data-js-tooltip-wrapper]"
-  );
-
-  const tooltip = document.createElement("span");
-  tooltip.classList.add("p-tooltip__message");
-  tooltip.innerText = `While many Reactive Framework charms work
-on machines today, it is recommended to
-create new charms with the Operator Framework.`;
-
-  const badge = opsBadges[entity.name];
-
-  if (badge) {
-    charmFrameworkTypeIcon.classList.add("p-icon--success");
-    charmFrameworkTypeText.innerText = "Operator framework";
-
-    const functionIcons = clone.querySelectorAll("[data-js-function]");
-
-    functionIcons.forEach((icon) => {
-      if (badge[icon.dataset.jsFunction] === true) {
-        icon.classList.add("p-icon--success");
-      } else {
-        icon.classList.add("p-icon--cross-grey");
-      }
-    });
-  } else {
-    const cardFooter = clone.querySelector("[data-js-card-footer]");
-    const functionalityButton = clone.querySelector(
-      "[data-js-functionality-button]"
-    );
-    cardFooter.removeChild(functionalityButton);
-
-    charmFrameworkTypeIcon.classList.add("p-icon--information");
-    charmFrameworkTypeText.innerText = "Reactive";
-    charmFrameworkTypeTooltipWrapper.classList.add("p-tooltip--btm-center");
-    charmFrameworkTypeTooltipWrapper.appendChild(tooltip);
   }
 
   const entityCardSummary = clone.querySelector(".package-card-summary");

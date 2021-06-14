@@ -126,51 +126,8 @@
         <div class="p-card__content">
           <p><small class="package-card-summary"></small></p>
         </div>
-        <div class="charm-framework-type">
-          <small>
-            <span data-js-tooltip-wrapper>
-              <i data-js-charm-framework-type-icon></i>
-            </span>
-            <span data-js-charm-framework-type-text></span>
-          </small>
-        </div>
         <div class="p-card__footer" data-js-card-footer>
           <div class="package-card-icons"></div>
-          <button type="button" class="p-button--neutral is-small is-inline p-tooltip--btm-center charm-card-button" style=" margin-left: 10px; position: relative; top: 7px;" data-js-functionality-button>
-            Functionality
-            <span class="p-tooltip__message--list">
-              <ul class="p-list u-no-margin--bottom u-no-margin--left">
-                <li>
-                  <i data-js-function="detailed-documentation"></i>
-                  Detailed documentation
-                </li>
-                <li>
-                  <i data-js-function="guaranteed-getting-started"></i>
-                  Guaranteed getting started
-                </li>
-                <li>
-                  <i data-js-function="secrets-management"></i>
-                  Secrets management
-                </li>
-                <li>
-                  <i data-js-function="implements-sidecar-pattern"></i>
-                  Implements sidecar pattern
-                </li>
-                <li>
-                  <i data-js-function="seamless-upgrades"></i>
-                  Seamless upgrades
-                </li>
-                <li>
-                  <i data-js-function="unit-testing"></i>
-                  Unit testing
-                </li>
-                <li>
-                  <i data-js-function="high-availability"></i>
-                  High availability
-                </li>
-              </ul>
-            </span>
-          </button>
         </div>
       </a>
     </div>
@@ -194,7 +151,7 @@
   <script src="{{ versioned_static('js/dist/store.js') }}" defer></script>
   <script>
     window.addEventListener("DOMContentLoaded", () => {
-      new charmhub.store.initPackages({{ ops_badges_json | safe }});
+      new charmhub.store.initPackages();
     });
   </script>
 {% endblock %}
