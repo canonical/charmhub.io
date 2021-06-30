@@ -76,6 +76,10 @@ function buildPackageCard(entity) {
   const entityCardTitle = clone.querySelector(".package-card-title");
   entityCardTitle.innerText = entity.name.replace(/-/g, " ");
 
+  if (entity.result.publisher["display-name"] === null) {
+    entity.result.publisher["display-name"] = "";
+  }
+
   const entityCardPublisher = clone.querySelector(".package-card-publisher");
   let newCardPublisherText = truncateString(
     entity.result.publisher["display-name"],
