@@ -57,7 +57,9 @@
             <div class="p-media-object__content u-no-margin--bottom">
               <ul class="p-inline-list--middot">
                 <li class="p-inline-list__item">
-                  By {{ package.store_front.publisher_name }}
+                  {% if package.store_front.publisher_name != None %}
+                    By {{ package.store_front.publisher_name }}
+                  {% endif %}
                   {% if developer_validation == "verified" %}
                   <span class="p-tooltip--top-center" aria-describedby="openstack-tooltip">
                     <img src="https://assets.ubuntu.com/v1/75654c90-rosette.svg">
