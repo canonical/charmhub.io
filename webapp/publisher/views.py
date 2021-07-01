@@ -34,7 +34,7 @@ def get_account_details():
 @login_required
 def list_page():
     publisher_charms = publisher_api.get_account_packages(
-        session["publisher-auth"], "charm"
+        session["publisher-auth"], "charm", include_collaborations=True
     )
 
     page_type = request.path[1:-1]
