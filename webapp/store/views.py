@@ -317,6 +317,11 @@ def details_library(entity_name, library_name):
 
     docstrings = logic.process_python_docs(library, module_name=library_name)
 
+    # Charmcraft string to fetch the library
+    fetch_charm = entity_name.replace("-", "_")
+    fetch_api = library["api"]
+    fetch_string = f"charms.{fetch_charm}.v{fetch_api}.{library_name}"
+
     if "source-code" in request.path[1:]:
         template = "details/libraries/source-code.html"
     else:
@@ -331,6 +336,7 @@ def details_library(entity_name, library_name):
         docstrings=docstrings,
         channel_requested=channel_request,
         library_name=library_name,
+        fetch_string=fetch_string,
         creation_date=logic.convert_date(library["created-at"]),
     )
 
