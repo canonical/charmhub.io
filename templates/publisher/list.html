@@ -73,6 +73,7 @@
               <tr role="row">
                 <th style="width: 30%;">Name</th>
                 <th>Visibility</th>
+                <th>Owner</th>
               </tr>
             </thead>
             <tbody>
@@ -118,6 +119,9 @@
                   {% else %}
                     Public
                   {% endif %}
+                </td>
+                <td role="gridcell" aria-label="owner">
+                  {{ published_charm['publisher']['display-name'] }}
                 </td>
               </tr>
               {% endfor %}
