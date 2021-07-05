@@ -218,6 +218,10 @@ $color-text-orange: #d54110;
 
 @include p-charmhub-subnav;
 
+@import "pattern_p-tabs-large";
+
+@include p-tabs-large;
+
 // Remove table row borders
 .p-table--no-borders tr {
   border-top: 0 !important;
