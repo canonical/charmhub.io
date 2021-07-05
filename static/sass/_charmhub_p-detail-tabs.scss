@@ -1,0 +1,40 @@
+@mixin p-detail-tabs {
+  .p-detail-tabs {
+    @extend .p-tabs;
+
+    .p-tabs__list::after {
+      display: none;
+    }
+
+    .p-tabs__link {
+      color: $color-mid-dark;
+      font-size: 21px;
+      padding-bottom: 0;
+      padding-top: 0;
+
+      &[aria-selected="true"] {
+        color: $color-dark;
+
+        &::before {
+          display: none;
+        }
+      }
+
+      &:hover {
+        background-color: transparent !important;
+      }
+    }
+
+    .p-tabs__item {
+      border-right: 1px solid $color-mid-light;
+
+      &:first-child .p-tabs__link {
+        padding-left: 0;
+      }
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
+}

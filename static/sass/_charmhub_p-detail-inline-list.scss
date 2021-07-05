@@ -1,0 +1,59 @@
+@mixin p-detail-inline-list {
+  .p-detail-inline-list {
+    @extend .p-inline-list;
+
+    .p-inline-list__item {
+      border-right: 1px solid $color-mid-light;
+      display: inline-block;
+      margin-right: 0;
+      padding: 0.25rem 1rem;
+
+      &:first-child {
+        padding-left: 0;
+      }
+
+      &:last-child {
+        border-right: 0;
+      }
+
+      &.has-panel {
+        position: relative;
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        .p-inline-list__panel {
+          background-color: $color-x-light;
+          box-shadow: 0 0 3px rgba(51, 51, 51, 0.2);
+          display: none;
+          left: 0;
+          max-width: 340px;
+          padding: 0.5rem 1rem;
+          position: absolute;
+          top: 100%;
+          word-wrap: break-word;
+        }
+
+        &.is-open {
+          background-color: $color-light;
+
+          .p-inline-list__panel {
+            display: block;
+          }
+        }
+      }
+
+      i {
+        margin-right: 0.25rem;
+      }
+
+      @media (max-width: $breakpoint-medium) {
+        border-right: 0;
+        display: block;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+  }
+}
