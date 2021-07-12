@@ -51,6 +51,7 @@ $color-text-orange: #d54110;
 @include vf-p-tooltips;
 @include vf-p-contextual-menu;
 @include vf-l-fluid-breakout;
+@include vf-p-icon-change-version;
 
 // Vanilla utilities
 @include vf-u-align;
@@ -68,7 +69,6 @@ $color-text-orange: #d54110;
 @include vf-u-no-max-width;
 @include vf-u-truncate;
 
-// Import site specific patterns and overrides
 @import "pattern_p-card";
 
 @include p-charmhub-card;
@@ -217,6 +217,14 @@ $color-text-orange: #d54110;
 @import "pattern_p-subnav";
 
 @include p-charmhub-subnav;
+
+@import "charmhub_p-detail-tabs";
+
+@include p-detail-tabs;
+
+@import "charmhub_p-detail-inline-list";
+
+@include p-detail-inline-list;
 
 // Remove table row borders
 .p-table--no-borders tr {
@@ -403,5 +411,16 @@ h3 {
     margin-right: 4px;
     position: relative;
     top: 1px;
+  }
+}
+
+.detail-resource-footer {
+  small {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+
+    @media (min-width: $breakpoint-medium) {
+      margin-right: 1rem;
+    }
   }
 }

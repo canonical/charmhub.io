@@ -1,0 +1,372 @@
+{% set current_tab = "resources" %}
+
+{% extends '/details/details_layout.html' %}
+
+{% block details_content %}
+<div class="row p-details-tab__content">
+  <div class="col-3">
+    <div class="p-side-navigation">
+      <ul class="p-side-navigation__list">
+        <li class="p-side-navigation__item">
+          <a href="#" class="p-side-navigation__link is-active">ckd-addons</a>
+        </li>
+        <li class="p-side-navigation__item">
+          <a href="#" class="p-side-navigation__link">core</a>
+        </li>
+        <li class="p-side-navigation__item">
+          <a href="#" class="p-side-navigation__link">kube-apiserver</a>
+        </li>
+        <li class="p-side-navigation__item">
+          <a href="#" class="p-side-navigation__link">kube-controller-manager</a>
+        </li>
+        <li class="p-side-navigation__item">
+          <a href="#" class="p-side-navigation__link">kube-proxy</a>
+        </li>
+        <li class="p-side-navigation__item">
+          <a href="#" class="p-side-navigation__link">kube-scheduler</a>
+        </li>
+        <li class="p-side-navigation__item">
+          <a href="#" class="p-side-navigation__link">kubectl</a>
+        </li>
+        <li class="p-side-navigation__item">
+          <a href="#" class="p-side-navigation__link">redis-image</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-9">
+    <div class="p-detail-tabs">
+      <div class="p-tabs__list" role="tablist">
+        <div class="p-tabs__item">
+          <button class="p-tabs__link" role="tab" aria-selected="true" aria-controls="resource-image-tab" id="resource-image">
+            Redis Image
+          </button>
+        </div>
+        <div class="p-tabs__item">
+          <button class="p-tabs__link" role="tab" aria-selected="false" aria-controls="oci-image-tab" id="oci-image" tabindex="-1">
+            OCI Image
+          </button>
+        </div>
+      </div>
+
+      <div tabindex="0" role="tabpanel" id="resource-image-tab" aria-labelledby="resource-image">
+        <ul class="p-detail-inline-list">
+          <li class="p-inline-list__item">
+            <i class="p-icon--revisions"></i> Revision: 12345
+          </li>
+          <li class="p-inline-list__item">
+            <i class="p-icon--change-version"></i> Updated: 26 May 2021
+          </li>
+          <li class="p-inline-list__item has-panel js-panel-toggle">
+            <i class="p-icon--docstrings"></i> Digest: c1afde725e2c
+            <div class="p-inline-list__panel">
+              sha256:c1afde725e2cfb627136a299b4d4bd35ae30a31fae1297dd2b3c3c951d9c7240
+            </div>
+          </li>
+        </ul>
+        <pre><code>juju download --include-resources</code></pre>
+        <p>Vestibulum facilisis eu sapien nec malesuada. Suspendisse varius lectus convallis, venenatis velit vel, rutrum urna. Donec posuere nibh eu arcu auctor molestie. Aenean sed ultrices arcu, ullamcorper feugiat mi. Nullam erat elit, luctus at risus volutpat, placerat pellentesque nulla.</p>
+        <h3 class="p-heading--5">Release history</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Revision</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="u-align--right detail-resource-footer">
+          <small class="u-text--muted">Showing 10 of 25 Versions</small>
+          <button>Show 10 more</button>
+        </div>
+      </div>
+
+      <div tabindex="0" role="tabpanel" id="oci-image-tab" aria-labelledby="oci-image" hidden="hidden">
+        <ul class="p-detail-inline-list">
+          <li class="p-inline-list__item">
+            <i class="p-icon--revisions"></i> Revision: 12345
+          </li>
+          <li class="p-inline-list__item">
+            <i class="p-icon--change-version"></i> Updated: 26 May 2021
+          </li>
+          <li class="p-inline-list__item">
+            <i class="p-icon--docstrings"></i> Size: 67.0 MB
+          </li>
+        </ul>
+        <pre><code>sudo snap install kube-controller-manager</code></pre>
+        <p>The Kubernetes controller manager is a daemon that embeds the core control loops shipped with Kubernetes. In Kubernetes, a controller is a control loop that watches the shared state of the cluster through the apiserver and makes changes attempting to move the current state towards the desired state.</p>
+        <p>Examples of controllers that ship with Kubernetes today are the replication controller, endpoints controller, namespace controller, and serviceaccounts controller.</p>
+        <h3 class="p-heading--5">Release history</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Revision</th>
+              <th>Date</th>
+              <th class="u-align--right">Size (MB)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+              <td class="u-align--right">67.1</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+              <td class="u-align--right">67.1</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+              <td class="u-align--right">67.1</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+              <td class="u-align--right">67.1</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+              <td class="u-align--right">67.1</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+              <td class="u-align--right">67.1</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+              <td class="u-align--right">67.1</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+              <td class="u-align--right">67.1</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+              <td class="u-align--right">67.1</td>
+            </tr>
+            <tr>
+              <td>12345</td>
+              <td>14 May 2021</td>
+              <td class="u-align--right">67.1</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="u-align--right detail-resource-footer">
+          <small class="u-text--muted">Showing 10 of 200 Versions</small>
+          <button>Show 10 more</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var keys = {
+    left: 'ArrowLeft',
+    right: 'ArrowRight',
+  };
+
+  var direction = {
+    ArrowLeft: -1,
+    ArrowRight: 1,
+  };
+
+  // IE11 doesn't support event.code, but event.keyCode is
+  // deprecated in most modern browsers, so we should support
+  // both for the time being.
+  var IEKeys = {
+    left: 37,
+    right: 39,
+  };
+
+  var IEDirection = {
+    37: direction['ArrowLeft'],
+    39: direction['ArrowRight'],
+  };
+
+  /**
+    Attaches a number of events that each trigger
+    the reveal of the chosen tab content
+    @param {Array} tabs an array of tabs within a container
+  */
+  function attachEvents(tabs) {
+    tabs.forEach(function (tab, index) {
+      tab.addEventListener('keyup', function (e) {
+        var compatibleKeys = IEKeys;
+        var key = e.keyCode;
+
+        if (e.code) {
+          compatibleKeys = keys;
+          key = e.code;
+        }
+
+        if (key === compatibleKeys.left || key === compatibleKeys.right) {
+          switchTabOnArrowPress(e, tabs);
+        }
+      });
+
+      tab.addEventListener('click', function (e) {
+        e.preventDefault();
+        setActiveTab(tab, tabs);
+      });
+
+      tab.addEventListener('focus', function () {
+        setActiveTab(tab, tabs);
+      });
+
+      tab.index = index;
+    });
+  }
+
+  /**
+    Determine which tab to show when an arrow key is pressed
+    @param {KeyboardEvent} event
+    @param {Array} tabs an array of tabs within a container
+  */
+  function switchTabOnArrowPress(event, tabs) {
+    var compatibleKeys = IEKeys;
+    var compatibleDirection = IEDirection;
+    var pressed = event.keyCode;
+
+    if (event.code) {
+      compatibleKeys = keys;
+      compatibleDirection = direction;
+      pressed = event.code;
+    }
+
+    if (compatibleDirection[pressed]) {
+      var target = event.target;
+      if (target.index !== undefined) {
+        if (tabs[target.index + compatibleDirection[pressed]]) {
+          tabs[target.index + compatibleDirection[pressed]].focus();
+        } else if (pressed === compatibleKeys.left) {
+          tabs[tabs.length - 1].focus();
+        } else if (pressed === compatibleKeys.right) {
+          tabs[0].focus();
+        }
+      }
+    }
+  }
+
+  /**
+    Cycles through an array of tab elements and ensures
+    only the target tab and its content are selected
+    @param {HTMLElement} tab the tab whose content will be shown
+    @param {Array} tabs an array of tabs within a container
+  */
+  function setActiveTab(tab, tabs) {
+    tabs.forEach(function (tabElement) {
+      var tabContent = document.getElementById(tabElement.getAttribute('aria-controls'));
+
+      if (tabElement === tab) {
+        tabElement.setAttribute('aria-selected', true);
+        tabContent.removeAttribute('hidden');
+      } else {
+        tabElement.setAttribute('aria-selected', false);
+        tabContent.setAttribute('hidden', true);
+      }
+    });
+  }
+
+  /**
+    Attaches events to tab links within a given parent element,
+    and sets the active tab if the current hash matches the id
+    of an element controlled by a tab link
+    @param {String} selector class name of the element
+    containing the tabs we want to attach events to
+  */
+  function initTabs(selector) {
+    var tabContainers = [].slice.call(document.querySelectorAll(selector));
+
+    tabContainers.forEach(function (tabContainer) {
+      var tabs = [].slice.call(tabContainer.querySelectorAll('[aria-controls]'));
+      attachEvents(tabs);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    initTabs('[role="tablist"]');
+  });
+})();
+
+(function() {
+  var panelToggleButtons = Array.prototype.slice.call(
+    document.querySelectorAll(".js-panel-toggle")
+  );
+
+  panelToggleButtons.forEach(function(panelToggleButton) {
+    panelToggleButton.addEventListener("click", function(e) {
+      var target = e.target;
+      var panel = panelToggleButton.querySelector(".p-inline-list__panel");
+
+      if (target !== panel) {
+        panelToggleButton.classList.toggle("is-open");
+      }
+    });
+  });
+
+  document.addEventListener("click", function(e) {
+    var target = e.target;
+    var openPanelToggle = document.querySelector(".js-panel-toggle.is-open");
+
+    if (openPanelToggle) {
+      var openPanel = openPanelToggle.querySelector(".p-inline-list__panel");
+
+      if (target !== openPanel && target !== openPanelToggle) {
+        openPanelToggle.classList.remove("is-open");
+      }
+    }
+  });
+})();
+</script>
+{% endblock %}

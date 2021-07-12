@@ -400,6 +400,20 @@ def details_history(entity_name):
     )
 
 
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/resources')
+@store_maintenance
+@redirect_uppercase_to_lowercase
+def details_resources(entity_name):
+    channel_request = request.args.get("channel", default=None, type=str)
+    package = get_package(entity_name, channel_request, FIELDS)
+
+    return render_template(
+        "details/resources.html",
+        package=package,
+        channel_requested=channel_request,
+    )
+
+
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/integrate')
 @store_maintenance
 @redirect_uppercase_to_lowercase
