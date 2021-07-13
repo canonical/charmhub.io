@@ -481,9 +481,7 @@ class initPackages {
       this.domEl.packageContainer.el.innerHTML = "";
 
       this.packages.forEach((entity) => {
-        this.domEl.packageContainer.el.appendChild(
-          buildPackageCard(entity)
-        );
+        this.domEl.packageContainer.el.appendChild(buildPackageCard(entity));
       });
 
       this.captureTooltipButtonClick();

@@ -293,7 +293,7 @@ class MultiSelect extends React.Component {
   renderClear() {
     if (this.state.selected.length > 3 && this.state.showSearch) {
       return (
-        <a className='p-multiselect__clear' onClick={this.clearAll}>
+        <a className="p-multiselect__clear" onClick={this.clearAll}>
           Clear all
         </a>
       );
@@ -304,7 +304,7 @@ class MultiSelect extends React.Component {
   renderSearch() {
     if (this.state.showSearch) {
       return (
-        <ul className='p-multiselect__options'>
+        <ul className="p-multiselect__options">
           {this.state.searchResults.map((item, i) => (
             <li
               className={`p-multiselect__option${
@@ -312,7 +312,8 @@ class MultiSelect extends React.Component {
               }`}
               data-key={item.key}
               key={item.key}
-              onClick={this.clickItem.bind(this, item.key)}>
+              onClick={this.clickItem.bind(this, item.key)}
+            >
               {item.name}
             </li>
           ))}
@@ -325,12 +326,13 @@ class MultiSelect extends React.Component {
   renderItems() {
     const items = this.state.selected.map((value) => (
       <span
-        className='p-multiselect__item'
+        className="p-multiselect__item"
         data-key={value.key}
-        key={value.key}>
+        key={value.key}
+      >
         {value.name}
         <i
-          className='p-icon--close p-multiselect__item-remove'
+          className="p-icon--close p-multiselect__item-remove"
           onClick={this.removeItem.bind(this, value.key)}
         />
       </span>
@@ -342,8 +344,8 @@ class MultiSelect extends React.Component {
   renderInput() {
     return (
       <input
-        type='text'
-        className='p-multiselect__input'
+        type="text"
+        className="p-multiselect__input"
         onKeyUp={this.search}
         ref={(input) => {
           this.searchInput = input;
@@ -357,14 +359,16 @@ class MultiSelect extends React.Component {
       <div
         ref={(el) => {
           this.wrapperEl = el;
-        }}>
+        }}
+      >
         {this.renderClear()}
         <div
           className={`p-multiselect${
             this.state.showSearch ? " is-focused" : ""
           }`}
           onClick={this.focusInput}
-          onKeyDown={this.handleKeypress}>
+          onKeyDown={this.handleKeypress}
+        >
           {this.renderItems()}
           {this.renderInput()}
           {this.renderSearch()}
