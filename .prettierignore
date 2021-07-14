@@ -1,2 +1,7 @@
 node_modules
 static/js/libs
+**/*.html
+**/*.md
+**/*.yaml
+**/*.json
+**/*.scss

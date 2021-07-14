@@ -18,7 +18,8 @@
     "start": "yarn run build && concurrently --raw 'yarn run watch' 'yarn run serve'",
     "test": "yarn run lint-scss && yarn run lint-js && yarn run test-js && yarn run lint-python && yarn run test-python",
     "test-python": "python3 -m unittest discover tests",
-    "test-js": "jest"
+    "test-js": "jest",
+    "check-prettier": "prettier -c '**/*.js'"
   },
   "dependencies": {
     "@babel/core": "7.11.5",

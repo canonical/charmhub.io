@@ -84,7 +84,9 @@ describe("channelMap", () => {
 
     expect(
       document
-        .querySelector(`[data-channel-map-track="latest"][data-channel-map-channel="stable"]`)
+        .querySelector(
+          `[data-channel-map-track="latest"][data-channel-map-channel="stable"]`
+        )
         .classList.contains("is-active")
     ).toEqual(true);
   });
