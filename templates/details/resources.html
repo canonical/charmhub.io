@@ -1,4 +1,6 @@
 {% set current_tab = "resources" %}
+{% set revisions_limit = 10 %}
+{% set total_revisions = revisions|length %}
 
 {% extends '/details/details_layout.html' %}
 
@@ -16,312 +18,192 @@
     </div>
   </div>
   <div class="col-9">
-    <div class="p-detail-tabs">
-      <div class="p-tabs__list" role="tablist">
-        <div class="p-tabs__item">
-          <button class="p-tabs__link" role="tab" aria-selected="true" aria-controls="resource-image-tab" id="resource-image">
-            {{ resource.name }}
-          </button>
-        </div>
-        <div class="p-tabs__item">
-          <button class="p-tabs__link" role="tab" aria-selected="false" aria-controls="oci-image-tab" id="oci-image" tabindex="-1">
-            {% if resource.type == "oci-image" %}
-            OCI Image
-            {% else %}
-            File
-            {% endif %}
-          </button>
-        </div>
-      </div>
+    <h2 class="p-heading--4">
+      {{ resource.name }}
+      <span class="u-text--muted">
+        |
+        {% if resource.type == "oci-image" %}
+          OCI Image
+        {% else %}
+          File
+        {% endif %}
+      </span>
+    </h2>
 
-      <div tabindex="0" role="tabpanel" id="resource-image-tab" aria-labelledby="resource-image">
-        <ul class="p-detail-inline-list">
-          <li class="p-inline-list__item">
-            <i class="p-icon--revisions"></i> Revision: {{ resource.revision }}
-          </li>
-          <li class="p-inline-list__item">
-            <i class="p-icon--change-version"></i> Updated: -
-          </li>
-          <li class="p-inline-list__item has-panel js-panel-toggle">
-            {% if resource.type == "oci-image" %}
-            <i class="p-icon--docstrings"></i> Digest: {{ resource.short_digest }}
-            <div class="p-inline-list__panel">
-              {{ resource.digest }}
-            </div>
-            {% else %}
-            <i class="p-icon--docstrings"></i> Size: {{ resource.size }}
-            {% endif %}
-          </li>
-        </ul>
-        <pre><code>juju download --include-resources</code></pre>
-        <p>{{ resource.description }}</p>
-        <h3 class="p-heading--5">Release history</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Revision</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for revision in revisions %}
-            <tr>
-              <td>{{ revision.revision }}</td>
-              <td>-</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        <div class="u-align--right detail-resource-footer">
-          <small class="u-text--muted">Showing 10 of 25 Versions</small>
-          <button>Show 10 more</button>
-        </div>
-      </div>
+    <ul class="p-detail-inline-list">
+      <li class="p-inline-list__item">
+        <i class="p-icon--revisions" style="margin-right: 5px;"></i> Revision: {{ resource.revision }}
+      </li>
+      <li class="p-inline-list__item">
+        <i class="p-icon--change-version" style="margin-right: 5px;"></i> Updated: -
+      </li>
+      {% if resource.type == "oci-image" %}
+        <li class="p-inline-list__item has-panel js-panel-toggle">
+          <i class="p-icon--docstrings" style="margin-right: 5px;"></i>
+          Digest: {{ resource.short_digest }}
+          <div class="p-inline-list__panel">{{ resource.digest }}</div>
+        </li>
+      {% else %}
+      <li class="p-inline-list__item">
+        <i class="p-icon--docstrings" style="margin-right: 5px;"></i> Size: {{ resource.size }}
+        {% endif %}
+      </li>
+    </ul>
 
-      <div tabindex="0" role="tabpanel" id="oci-image-tab" aria-labelledby="oci-image" hidden="hidden">
-        <ul class="p-detail-inline-list">
-          <li class="p-inline-list__item">
-            <i class="p-icon--revisions"></i> Revision: 12345
-          </li>
-          <li class="p-inline-list__item">
-            <i class="p-icon--change-version"></i> Updated: 26 May 2021
-          </li>
-          <li class="p-inline-list__item">
-            <i class="p-icon--docstrings"></i> Size: 67.0 MB
-          </li>
-        </ul>
-        <pre><code>sudo snap install kube-controller-manager</code></pre>
-        <p>The Kubernetes controller manager is a daemon that embeds the core control loops shipped with Kubernetes. In Kubernetes, a controller is a control loop that watches the shared state of the cluster through the apiserver and makes changes attempting to move the current state towards the desired state.</p>
-        <p>Examples of controllers that ship with Kubernetes today are the replication controller, endpoints controller, namespace controller, and serviceaccounts controller.</p>
-        <h3 class="p-heading--5">Release history</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Revision</th>
-              <th>Date</th>
-              <th class="u-align--right">Size (MB)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-              <td class="u-align--right">67.1</td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-              <td class="u-align--right">67.1</td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-              <td class="u-align--right">67.1</td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-              <td class="u-align--right">67.1</td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-              <td class="u-align--right">67.1</td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-              <td class="u-align--right">67.1</td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-              <td class="u-align--right">67.1</td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-              <td class="u-align--right">67.1</td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-              <td class="u-align--right">67.1</td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-              <td class="u-align--right">67.1</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="u-align--right detail-resource-footer">
-          <small class="u-text--muted">Showing 10 of 200 Versions</small>
-          <button>Show 10 more</button>
-        </div>
-      </div>
+    <pre><code>juju download --include-resources</code></pre>
+
+    <p>{{ resource.description }}</p>
+
+    <h3 class="p-heading--5">Release history</h3>
+
+    <table class="js-revisions-table">
+      <thead>
+        <tr>
+          <th>Revision</th>
+          <th>Date</th>
+          {% if resource.type == "file" %}
+            <th>Size (MB)</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for revision in revisions[0:revisions_limit] %}
+          <tr>
+            <td>{{ revision.revision }}</td>
+            <td>-</td> <!-- update this in JS also once date field is available -->
+            {% if resource.type == "file" %}
+              <td>{{ revision.download.size * 1000 * 1000 }}</td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="u-align--right detail-resource-footer">
+      <small class="u-text--muted">
+        Showing
+        <span class="js-revisions-count">
+          {% if total_revisions < revisions_limit %}
+            {{ total_revisions }}
+          {% else %}
+            {{ revisions_limit }}
+          {% endif %}
+        </span>
+        of {{ total_revisions }} versions
+      </small>
+
+      {% if total_revisions > revisions_limit %}
+        <button class="js-show-more-revisions">
+          {% if total_revisions - revisions_limit < revisions_limit %}
+            Show {{total_revisions - revisions_limit }} more
+          {% else %}
+            Show {{ revisions_limit }} more
+          {% endif %}
+        </button>
+      {% endif %}
     </div>
   </div>
 </div>
 
 <script>
-(function () {
-  var keys = {
-    left: 'ArrowLeft',
-    right: 'ArrowRight',
-  };
+  function handleTogglePanels() {
+    var panelToggleButtons = Array.prototype.slice.call(
+      document.querySelectorAll(".js-panel-toggle")
+    );
 
-  var direction = {
-    ArrowLeft: -1,
-    ArrowRight: 1,
-  };
+    panelToggleButtons.forEach(function(panelToggleButton) {
+      panelToggleButton.addEventListener("click", function(e) {
+        var target = e.target;
+        var panel = panelToggleButton.querySelector(".p-inline-list__panel");
 
-  // IE11 doesn't support event.code, but event.keyCode is
-  // deprecated in most modern browsers, so we should support
-  // both for the time being.
-  var IEKeys = {
-    left: 37,
-    right: 39,
-  };
-
-  var IEDirection = {
-    37: direction['ArrowLeft'],
-    39: direction['ArrowRight'],
-  };
-
-  /**
-    Attaches a number of events that each trigger
-    the reveal of the chosen tab content
-    @param {Array} tabs an array of tabs within a container
-  */
-  function attachEvents(tabs) {
-    tabs.forEach(function (tab, index) {
-      tab.addEventListener('keyup', function (e) {
-        var compatibleKeys = IEKeys;
-        var key = e.keyCode;
-
-        if (e.code) {
-          compatibleKeys = keys;
-          key = e.code;
-        }
-
-        if (key === compatibleKeys.left || key === compatibleKeys.right) {
-          switchTabOnArrowPress(e, tabs);
+        if (target !== panel) {
+          panelToggleButton.classList.toggle("is-open");
         }
       });
-
-      tab.addEventListener('click', function (e) {
-        e.preventDefault();
-        setActiveTab(tab, tabs);
-      });
-
-      tab.addEventListener('focus', function () {
-        setActiveTab(tab, tabs);
-      });
-
-      tab.index = index;
     });
-  }
 
-  /**
-    Determine which tab to show when an arrow key is pressed
-    @param {KeyboardEvent} event
-    @param {Array} tabs an array of tabs within a container
-  */
-  function switchTabOnArrowPress(event, tabs) {
-    var compatibleKeys = IEKeys;
-    var compatibleDirection = IEDirection;
-    var pressed = event.keyCode;
-
-    if (event.code) {
-      compatibleKeys = keys;
-      compatibleDirection = direction;
-      pressed = event.code;
-    }
-
-    if (compatibleDirection[pressed]) {
-      var target = event.target;
-      if (target.index !== undefined) {
-        if (tabs[target.index + compatibleDirection[pressed]]) {
-          tabs[target.index + compatibleDirection[pressed]].focus();
-        } else if (pressed === compatibleKeys.left) {
-          tabs[tabs.length - 1].focus();
-        } else if (pressed === compatibleKeys.right) {
-          tabs[0].focus();
-        }
-      }
-    }
-  }
-
-  /**
-    Cycles through an array of tab elements and ensures
-    only the target tab and its content are selected
-    @param {HTMLElement} tab the tab whose content will be shown
-    @param {Array} tabs an array of tabs within a container
-  */
-  function setActiveTab(tab, tabs) {
-    tabs.forEach(function (tabElement) {
-      var tabContent = document.getElementById(tabElement.getAttribute('aria-controls'));
-
-      if (tabElement === tab) {
-        tabElement.setAttribute('aria-selected', true);
-        tabContent.removeAttribute('hidden');
-      } else {
-        tabElement.setAttribute('aria-selected', false);
-        tabContent.setAttribute('hidden', true);
-      }
-    });
-  }
-
-  /**
-    Attaches events to tab links within a given parent element,
-    and sets the active tab if the current hash matches the id
-    of an element controlled by a tab link
-    @param {String} selector class name of the element
-    containing the tabs we want to attach events to
-  */
-  function initTabs(selector) {
-    var tabContainers = [].slice.call(document.querySelectorAll(selector));
-
-    tabContainers.forEach(function (tabContainer) {
-      var tabs = [].slice.call(tabContainer.querySelectorAll('[aria-controls]'));
-      attachEvents(tabs);
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', function () {
-    initTabs('[role="tablist"]');
-  });
-})();
-
-(function() {
-  var panelToggleButtons = Array.prototype.slice.call(
-    document.querySelectorAll(".js-panel-toggle")
-  );
-
-  panelToggleButtons.forEach(function(panelToggleButton) {
-    panelToggleButton.addEventListener("click", function(e) {
+    document.addEventListener("click", function(e) {
       var target = e.target;
-      var panel = panelToggleButton.querySelector(".p-inline-list__panel");
+      var openPanelToggle = document.querySelector(".js-panel-toggle.is-open");
 
-      if (target !== panel) {
-        panelToggleButton.classList.toggle("is-open");
+      if (openPanelToggle) {
+        var openPanel = openPanelToggle.querySelector(".p-inline-list__panel");
+
+        if (target !== openPanel && target !== openPanelToggle) {
+          openPanelToggle.classList.remove("is-open");
+        }
       }
     });
-  });
+  }
 
-  document.addEventListener("click", function(e) {
-    var target = e.target;
-    var openPanelToggle = document.querySelector(".js-panel-toggle.is-open");
+  handleTogglePanels();
 
-    if (openPanelToggle) {
-      var openPanel = openPanelToggle.querySelector(".p-inline-list__panel");
+  function handleShowMoreRevisions(resourceType, revisions) {
+    var revisionsCountContainer = document.querySelector(
+      ".js-revisions-count"
+    );
 
-      if (target !== openPanel && target !== openPanelToggle) {
-        openPanelToggle.classList.remove("is-open");
-      }
+    var showMoreRevisionsButton = document.querySelector(
+      ".js-show-more-revisions"
+    );
+
+    if (showMoreRevisionsButton) {
+      var revisionsLimit = {{ revisions_limit }};
+      var currentRevisionsCount = revisionsLimit;
+      var totalRevisions = revisions.length;
+
+      showMoreRevisionsButton.addEventListener("click", function() {
+        if (revisions.length > currentRevisionsCount) {
+          addReleasesRows(
+            resourceType,
+            revisions.slice(
+              currentRevisionsCount,
+              currentRevisionsCount + revisionsLimit
+            )
+          );
+
+          if (totalRevisions - currentRevisionsCount >= revisionsLimit) {
+            currentRevisionsCount += revisionsLimit;
+          } else {
+            currentRevisionsCount += (totalRevisions - currentRevisionsCount);
+          }
+
+          if (totalRevisions - currentRevisionsCount > -1) {
+            revisionsCountContainer.innerText = currentRevisionsCount;
+          } else {
+            showMoreRevisionsButton.parentNode.removeChild(showMoreRevisionsButton);
+          }
+        }
+      });
     }
-  });
-})();
+  }
+
+  function addReleasesRows(resourceType, revisions) {
+    var revisionsTableBody = document.querySelector(
+      ".js-revisions-table tbody"
+    );
+
+    revisions.forEach(function(release) {
+      var tableRow = document.createElement("tr");
+
+      var revisionCell = document.createElement("td");
+      revisionCell.innerText = release.revision;
+      tableRow.appendChild(revisionCell);
+
+      var dateCell = document.createElement("td");
+      dateCell.innerText = "-"; // currently no date field available
+      tableRow.appendChild(dateCell);
+
+      if (resourceType === "file") {
+        var fileCell = document.createElement("td");
+        fileCell.innerText = release.download.size * 1000 * 1000;
+        tableRow.appendChild(fileCell);
+      }
+
+      revisionsTableBody.appendChild(tableRow);
+    });
+  }
+
+  handleShowMoreRevisions("{{ resource.type }}", {{ revisions | safe }});
 </script>
 {% endblock %}
