@@ -7,30 +7,11 @@
   <div class="col-3">
     <div class="p-side-navigation">
       <ul class="p-side-navigation__list">
+        {% for resource in package['default-release']['resources'] %}
         <li class="p-side-navigation__item">
-          <a href="#" class="p-side-navigation__link is-active">ckd-addons</a>
+          <a href="#" class="p-side-navigation__link is-active">{{ resource.name }}</a>
         </li>
-        <li class="p-side-navigation__item">
-          <a href="#" class="p-side-navigation__link">core</a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#" class="p-side-navigation__link">kube-apiserver</a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#" class="p-side-navigation__link">kube-controller-manager</a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#" class="p-side-navigation__link">kube-proxy</a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#" class="p-side-navigation__link">kube-scheduler</a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#" class="p-side-navigation__link">kubectl</a>
-        </li>
-        <li class="p-side-navigation__item">
-          <a href="#" class="p-side-navigation__link">redis-image</a>
-        </li>
+        {% endfor %}
       </ul>
     </div>
   </div>
@@ -39,12 +20,16 @@
       <div class="p-tabs__list" role="tablist">
         <div class="p-tabs__item">
           <button class="p-tabs__link" role="tab" aria-selected="true" aria-controls="resource-image-tab" id="resource-image">
-            Redis Image
+            {{ resource.name }}
           </button>
         </div>
         <div class="p-tabs__item">
           <button class="p-tabs__link" role="tab" aria-selected="false" aria-controls="oci-image-tab" id="oci-image" tabindex="-1">
+            {% if resource.type == "oci-image" %}
             OCI Image
+            {% else %}
+            File
+            {% endif %}
           </button>
         </div>
       </div>
@@ -52,20 +37,24 @@
       <div tabindex="0" role="tabpanel" id="resource-image-tab" aria-labelledby="resource-image">
         <ul class="p-detail-inline-list">
           <li class="p-inline-list__item">
-            <i class="p-icon--revisions"></i> Revision: 12345
+            <i class="p-icon--revisions"></i> Revision: {{ resource.revision }}
           </li>
           <li class="p-inline-list__item">
-            <i class="p-icon--change-version"></i> Updated: 26 May 2021
+            <i class="p-icon--change-version"></i> Updated: -
           </li>
           <li class="p-inline-list__item has-panel js-panel-toggle">
-            <i class="p-icon--docstrings"></i> Digest: c1afde725e2c
+            {% if resource.type == "oci-image" %}
+            <i class="p-icon--docstrings"></i> Digest: {{ resource.short_digest }}
             <div class="p-inline-list__panel">
-              sha256:c1afde725e2cfb627136a299b4d4bd35ae30a31fae1297dd2b3c3c951d9c7240
+              {{ resource.digest }}
             </div>
+            {% else %}
+            <i class="p-icon--docstrings"></i> Size: {{ resource.size }}
+            {% endif %}
           </li>
         </ul>
         <pre><code>juju download --include-resources</code></pre>
-        <p>Vestibulum facilisis eu sapien nec malesuada. Suspendisse varius lectus convallis, venenatis velit vel, rutrum urna. Donec posuere nibh eu arcu auctor molestie. Aenean sed ultrices arcu, ullamcorper feugiat mi. Nullam erat elit, luctus at risus volutpat, placerat pellentesque nulla.</p>
+        <p>{{ resource.description }}</p>
         <h3 class="p-heading--5">Release history</h3>
         <table>
           <thead>
@@ -75,46 +64,12 @@
             </tr>
           </thead>
           <tbody>
+            {% for revision in revisions %}
             <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
+              <td>{{ revision.revision }}</td>
+              <td>-</td>
             </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-            </tr>
-            <tr>
-              <td>12345</td>
-              <td>14 May 2021</td>
-            </tr>
+            {% endfor %}
           </tbody>
         </table>
         <div class="u-align--right detail-resource-footer">

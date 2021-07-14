@@ -1,24 +1,20 @@
 import re
 
+import humanize
 import talisker
 from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.discourse.exceptions import PathNotFoundError
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
-from flask import Blueprint, abort, redirect, jsonify
+from flask import Blueprint, Response, abort
 from flask import current_app as app
-from flask import render_template, request, Response
-
+from flask import jsonify, redirect, render_template, request
+from pybadges import badge
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import (
-    store_maintenance,
     redirect_uppercase_to_lowercase,
+    store_maintenance,
 )
-from webapp.helpers import (
-    discourse_api,
-    decrease_headers,
-    md_parser,
-)
-from pybadges import badge
+from webapp.helpers import decrease_headers, discourse_api, md_parser
 from webapp.store import logic
 
 store = Blueprint(
@@ -407,10 +403,58 @@ def details_resources(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request, FIELDS)
 
+    # /resources redirect to the first resource
+    if package["default-release"]["resources"]:
+        name = package["default-release"]["resources"][0]["name"]
+        return redirect(f"/{entity_name}/resources/{name}")
+    else:
+        abort(404)
+
+
+@store.route(
+    '/<regex("'
+    + DETAILS_VIEW_REGEX
+    + '"):entity_name>/resources/<string:resource_name>'
+)
+@store_maintenance
+@redirect_uppercase_to_lowercase
+def details_resource(entity_name, resource_name):
+    channel_request = request.args.get("channel", default=None, type=str)
+    package = get_package(entity_name, channel_request, FIELDS)
+    resources = package["default-release"]["resources"]
+
+    if not resources:
+        abort(404)
+
+    resource = next(
+        (item for item in resources if item["name"] == resource_name), None
+    )
+
+    if not resource:
+        abort(404)
+
+    # Get OCI image details
+    if resource["type"] == "oci-image":
+        oci_details = app.store_api.process_response(
+            app.store_api.session.get(resource["download"]["url"])
+        )
+        resource["image_name"], resource["digest"] = oci_details[
+            "ImageName"
+        ].split("@")
+        resource["short_digest"] = resource["digest"].split(":")[1][:12]
+
+    revisions = app.store_api.get_resource_revisions(
+        entity_name, resource_name
+    )
+    revisions = sorted(revisions, key=lambda k: k["revision"], reverse=True)
+    resource["size"] = humanize.naturalsize(resource["download"]["size"])
+
     return render_template(
         "details/resources.html",
         package=package,
         channel_requested=channel_request,
+        resource=resource,
+        revisions=revisions,
     )
 
 
