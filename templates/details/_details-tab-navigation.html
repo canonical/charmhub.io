@@ -8,11 +8,6 @@
       <li class="p-tabs__item" role="presentation">
         <a href="/{{ package.name }}/docs{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'docs' %}aria-selected="true" {% endif %}>Docs</a>
       </li>
-      {% if package['default-release']['resources'] %}
-      <li class="p-tabs__item" role="presentation">
-        <a href="/{{ package.name }}/resources{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'resources' %}aria-selected="true" {% endif %}>Resources</a>
-      </li>
-      {% endif %}
       <li class="p-tabs__item" role="presentation">
         <a href="/{{ package.name }}/libraries{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'libraries' %}aria-selected="true" {% endif %}>Libraries</a>
       </li>
