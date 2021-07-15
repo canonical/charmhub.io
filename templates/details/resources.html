@@ -62,7 +62,7 @@
           <th>Revision</th>
           <th>Date</th>
           {% if resource.type == "file" %}
-            <th>Size (MB)</th>
+            <th>Size</th>
           {% endif %}
         </tr>
       </thead>
@@ -72,7 +72,7 @@
             <td>{{ revision.revision }}</td>
             <td>-</td> <!-- update this in JS also once date field is available -->
             {% if resource.type == "file" %}
-              <td>{{ revision.download.size * 1000 * 1000 }}</td>
+              <td>{{ revision.size }}</td>
             {% endif %}
           </tr>
         {% endfor %}
