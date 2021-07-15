@@ -3,40 +3,67 @@
     @extend .p-inline-list;
 
     .p-inline-list__item {
-      border-right: 1px solid $color-mid-light;
       display: inline-block;
+      margin-left: -0.25rem;
       margin-right: 0;
       padding: 0.25rem 1rem;
+      position: relative;
 
-      &:first-child {
-        padding-left: 0;
+      &::before {
+        border-left: 1px solid $color-mid-light;
+        content: "";
+        height: 1rem;
+        left: 0;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
       }
 
-      &:last-child {
-        border-right: 0;
+      &:first-child {
+        margin-left: 0;
+        padding-left: 0;
+
+        &::before {
+          border-left: 0;
+        }
       }
 
       &.has-panel {
         position: relative;
 
         &:hover {
-          cursor: pointer;
+          @media (min-width: $breakpoint-medium) {
+            background-color: $color-light;
+            cursor: pointer;
+          }
         }
 
         .p-inline-list__panel {
-          background-color: $color-x-light;
-          box-shadow: 0 0 3px rgba(51, 51, 51, 0.2);
-          display: none;
-          left: 0;
-          max-width: 340px;
-          padding: 0.5rem 1rem;
-          position: absolute;
-          top: 100%;
+          @extend %vf-has-box-shadow;
+
+          margin-top: 0.5rem;
           word-wrap: break-word;
+
+          @media (min-width: $breakpoint-medium) {
+            background-color: $color-x-light;
+            display: none;
+            left: 0;
+            margin-top: 0;
+            max-width: 340px;
+            padding: 0.5rem 1rem;
+            position: absolute;
+            top: 100%;
+          }
+
+          @media (max-width: $breakpoint-medium - 1) {
+            box-shadow: none;
+          }
         }
 
         &.is-open {
-          background-color: $color-light;
+          @media (min-width: $breakpoint-medium) {
+            background-color: $color-light;
+          }
 
           .p-inline-list__panel {
             display: block;
@@ -49,10 +76,14 @@
       }
 
       @media (max-width: $breakpoint-medium) {
-        border-right: 0;
         display: block;
+        margin-left: 0;
         padding-left: 0;
         padding-right: 0;
+
+        &::before {
+          border-left: 0;
+        }
       }
     }
   }

@@ -218,10 +218,6 @@ $color-text-orange: #d54110;
 
 @include p-charmhub-subnav;
 
-@import "charmhub_p-detail-tabs";
-
-@include p-detail-tabs;
-
 @import "charmhub_p-detail-inline-list";
 
 @include p-detail-inline-list;
@@ -415,6 +411,8 @@ h3 {
 }
 
 .detail-resource-footer {
+  margin-bottom: 2rem;
+
   small {
     display: inline-block;
     margin-bottom: 0.5rem;

@@ -447,7 +447,12 @@ def details_resource(entity_name, resource_name):
         entity_name, resource_name
     )
     revisions = sorted(revisions, key=lambda k: k["revision"], reverse=True)
+
+    # Humanize sizes
     resource["size"] = humanize.naturalsize(resource["download"]["size"])
+
+    for revision in revisions:
+        revision["size"] = humanize.naturalsize(revision["download"]["size"])
 
     return render_template(
         "details/resources.html",
