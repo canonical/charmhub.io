@@ -207,7 +207,7 @@ def convert_date(date_to_convert):
     if delta < date_parsed:
         return humanize.naturalday(date_parsed).title()
     else:
-        return date_parsed.strftime("%-d %B %Y")
+        return date_parsed.strftime("%d %b %Y")
 
 
 def get_icons(package):
