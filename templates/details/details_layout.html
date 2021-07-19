@@ -46,7 +46,7 @@
       var codeblocks = Array.prototype.slice.call(document.querySelectorAll("pre"));
 
       codeblocks.forEach(function(block) {
-        charmhub.highlight.hljs.highlightBlock(block);
+        charmhub.highlight.hljs.highlightBlock(block.querySelector("code"));
       });
 
       charmhub.details.init("{{ package.name }}");
