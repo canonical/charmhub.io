@@ -124,7 +124,46 @@
 
         target.classList.toggle("is-active");
         panel.classList.toggle("is-open");
+
+        if (panel.classList.contains("is-open")) {
+          panel.querySelector("[readonly]").focus();
+        }
       });
+    });
+
+
+    document.addEventListener("keydown", function(e) {
+      var escKeyCode = 27;
+      var tabKeyCode = 9;
+
+      var openPanelToggle = document.querySelector(
+        ".js-panel-toggle.is-active"
+      );
+
+      var openPanel = document.querySelector("[readonly]");
+
+      if (e.keyCode === escKeyCode) {
+
+        if (openPanelToggle) {
+          openPanelToggle.focus();
+          openPanelToggle.classList.remove("is-active");
+        }
+
+        if (openPanel) {
+          openPanel.parentElement.classList.remove("is-open");
+        }
+      }
+
+      if (e.keyCode === tabKeyCode) {
+        if (openPanelToggle) {
+          openPanelToggle.focus();
+          openPanelToggle.classList.remove("is-active");
+        }
+
+        if (openPanel) {
+          openPanel.parentElement.classList.remove("is-open");
+        }
+      }
     });
 
     document.addEventListener("click", function(e) {
