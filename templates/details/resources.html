@@ -109,80 +109,8 @@
   </div>
 </div>
 
+<script src="{{ versioned_static('js/dist/details_resources.js') }}" defer></script>
 <script>
-  function handleTogglePanels() {
-    var panelToggleButtons = Array.prototype.slice.call(
-      document.querySelectorAll(".js-panel-toggle")
-    );
-
-    panelToggleButtons.forEach(function(panelToggleButton) {
-      panelToggleButton.addEventListener("click", function(e) {
-        var target = e.target;
-        var panel = document.getElementById(
-          target.getAttribute("aria-controls")
-        );
-
-        target.classList.toggle("is-active");
-        panel.classList.toggle("is-open");
-
-        if (panel.classList.contains("is-open")) {
-          panel.querySelector("[readonly]").focus();
-        }
-      });
-    });
-
-
-    document.addEventListener("keydown", function(e) {
-      var escKeyCode = 27;
-      var tabKeyCode = 9;
-
-      var openPanelToggle = document.querySelector(
-        ".js-panel-toggle.is-active"
-      );
-
-      var openPanel = document.querySelector("[readonly]");
-
-      if (e.keyCode === escKeyCode) {
-
-        if (openPanelToggle) {
-          openPanelToggle.focus();
-          openPanelToggle.classList.remove("is-active");
-        }
-
-        if (openPanel) {
-          openPanel.parentElement.classList.remove("is-open");
-        }
-      }
-
-      if (e.keyCode === tabKeyCode) {
-        if (openPanelToggle) {
-          openPanelToggle.focus();
-          openPanelToggle.classList.remove("is-active");
-        }
-
-        if (openPanel) {
-          openPanel.parentElement.classList.remove("is-open");
-        }
-      }
-    });
-
-    document.addEventListener("click", function(e) {
-      var target = e.target;
-      var openPanelToggle = document.querySelector(".js-panel-toggle.is-active");
-      var openPanel = document.querySelector(".p-inline-list__panel.is-open");
-      var openPanelInput = document.querySelector("[readonly]");
-
-      if (openPanel) {
-        if (target !== openPanelToggle && target !== openPanelInput) {
-          openPanelToggle.classList.remove("is-active");
-          openPanel.classList.remove("is-open");
-        }
-      }
-    });
-  }
-
-  handleTogglePanels();
-
   function handleShowMoreRevisions(resourceType, revisions) {
     var revisionsCountContainer = document.querySelector(
       ".js-revisions-count"
@@ -249,6 +177,9 @@
     });
   }
 
-  handleShowMoreRevisions("{{ resource.type }}", {{ revisions | safe }});
+  window.addEventListener("DOMContentLoaded", function () {
+    charmhub.resources.init();
+    handleShowMoreRevisions("{{ resource.type }}", {{ revisions | safe }});
+  });
 </script>
 {% endblock %}
