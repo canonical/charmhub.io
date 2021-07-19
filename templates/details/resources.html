@@ -38,11 +38,15 @@
         <i class="p-icon--change-version" style="margin-right: 5px;"></i> Updated: -
       </li>
       {% if resource.type == "oci-image" %}
-        <li class="p-inline-list__item has-panel js-panel-toggle">
+      <li class="p-inline-list__item has-button">
+        <button class="p-button--link p-link--soft u-no-margin--bottom u-no-padding--top js-panel-toggle p-inline-list__panel-button" aria-label="Digest key" aria-controls="digest-key-panel">
           <i class="p-icon--docstrings" style="margin-right: 5px;"></i>
           Digest: {{ resource.short_digest }}
-          <div class="p-inline-list__panel">{{ resource.digest }}</div>
-        </li>
+        </button>
+        <div class="p-inline-list__panel" id="digest-key-panel">
+          <textarea class="u-no-margin--bottom" readonly>{{ resource.digest }}</textarea>
+        </div>
+      </li>
       {% else %}
       <li class="p-inline-list__item">
         <i class="p-icon--docstrings" style="margin-right: 5px;"></i> Size: {{ resource.size }}
@@ -105,39 +109,8 @@
   </div>
 </div>
 
+<script src="{{ versioned_static('js/dist/details_resources.js') }}" defer></script>
 <script>
-  function handleTogglePanels() {
-    var panelToggleButtons = Array.prototype.slice.call(
-      document.querySelectorAll(".js-panel-toggle")
-    );
-
-    panelToggleButtons.forEach(function(panelToggleButton) {
-      panelToggleButton.addEventListener("click", function(e) {
-        var target = e.target;
-        var panel = panelToggleButton.querySelector(".p-inline-list__panel");
-
-        if (target !== panel) {
-          panelToggleButton.classList.toggle("is-open");
-        }
-      });
-    });
-
-    document.addEventListener("click", function(e) {
-      var target = e.target;
-      var openPanelToggle = document.querySelector(".js-panel-toggle.is-open");
-
-      if (openPanelToggle) {
-        var openPanel = openPanelToggle.querySelector(".p-inline-list__panel");
-
-        if (target !== openPanel && target !== openPanelToggle) {
-          openPanelToggle.classList.remove("is-open");
-        }
-      }
-    });
-  }
-
-  handleTogglePanels();
-
   function handleShowMoreRevisions(resourceType, revisions) {
     var revisionsCountContainer = document.querySelector(
       ".js-revisions-count"
@@ -204,6 +177,9 @@
     });
   }
 
-  handleShowMoreRevisions("{{ resource.type }}", {{ revisions | safe }});
+  window.addEventListener("DOMContentLoaded", function () {
+    charmhub.resources.init();
+    handleShowMoreRevisions("{{ resource.type }}", {{ revisions | safe }});
+  });
 </script>
 {% endblock %}

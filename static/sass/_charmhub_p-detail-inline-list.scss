@@ -9,6 +9,10 @@
       padding: 0.25rem 1rem;
       position: relative;
 
+      &.has-button {
+        padding: 0;
+      }
+
       &::before {
         border-left: 1px solid $color-mid-light;
         content: "";
@@ -28,49 +32,6 @@
         }
       }
 
-      &.has-panel {
-        position: relative;
-
-        &:hover {
-          @media (min-width: $breakpoint-medium) {
-            background-color: $color-light;
-            cursor: pointer;
-          }
-        }
-
-        .p-inline-list__panel {
-          @extend %vf-has-box-shadow;
-
-          margin-top: 0.5rem;
-          word-wrap: break-word;
-
-          @media (min-width: $breakpoint-medium) {
-            background-color: $color-x-light;
-            display: none;
-            left: 0;
-            margin-top: 0;
-            max-width: 360px;
-            padding: 0.5rem 1rem;
-            position: absolute;
-            top: 100%;
-          }
-
-          @media (max-width: $breakpoint-medium - 1) {
-            box-shadow: none;
-          }
-        }
-
-        &.is-open {
-          @media (min-width: $breakpoint-medium) {
-            background-color: $color-light;
-          }
-
-          .p-inline-list__panel {
-            display: block;
-          }
-        }
-      }
-
       i {
         margin-right: 0.25rem;
       }
@@ -83,6 +44,60 @@
 
         &::before {
           border-left: 0;
+        }
+      }
+
+      .p-inline-list__panel-button {
+        padding: 0.25rem 1rem;
+        width: auto;
+
+        &.is-active {
+          background-color: $color-mid-x-light;
+        }
+
+        &:hover {
+          background-color: $color-mid-x-light;
+          color: inherit;
+          text-decoration: none;
+        }
+
+        @media (max-width: $breakpoint-medium) {
+          padding-left: 0;
+          padding-right: 0;
+        }
+      }
+
+      .p-inline-list__panel {
+        @extend %vf-has-box-shadow;
+
+        margin-top: 0.5rem;
+        word-wrap: break-word;
+
+        @media (min-width: $breakpoint-medium) {
+          background-color: $color-x-light;
+          display: none;
+          left: 0;
+          margin-top: 0;
+          min-width: 360px;
+          padding: 0.5rem 1rem;
+          position: absolute;
+          top: 100%;
+
+          &.is-open {
+            display: block;
+          }
+        }
+
+        @media (max-width: $breakpoint-medium - 1) {
+          box-shadow: none;
+        }
+
+        [readonly] {
+          border: 0;
+          box-shadow: none;
+          color: inherit;
+          padding: 0;
+          resize: none;
         }
       }
     }

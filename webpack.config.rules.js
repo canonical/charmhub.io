@@ -89,4 +89,10 @@ module.exports = [
     ),
     use: ["expose-loader?exposes=charmhub.details.integrate", "babel-loader"],
   },
+  {
+    test: require.resolve(
+      __dirname + "/static/js/src/public/details/resources/index.js"
+    ),
+    use: ["expose-loader?exposes=charmhub.resources", "babel-loader"],
+  },
 ];
