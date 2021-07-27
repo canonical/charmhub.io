@@ -34,7 +34,7 @@ def logout():
 def publisher_login():
     # Get a bakery v2 macaroon from the publisher API to be discharged
     # and save it in the session
-    flask.session["publisher-macaroon"] = publisher_api.get_macaroon()
+    flask.session["publisher-macaroon"] = publisher_api.issue_macaroon()
 
     login_url = candid.get_login_url(
         macaroon=flask.session["publisher-macaroon"],
@@ -67,8 +67,12 @@ def login_callback():
     )
 
     # Store bakery authentication
-    flask.session["publisher-auth"] = candid.get_serialized_bakery_macaroon(
+    issued_macaroon = candid.get_serialized_bakery_macaroon(
         flask.session["publisher-macaroon"], candid_macaroon
+    )
+
+    flask.session["publisher-auth"] = publisher_api.exchange_macaroons(
+        issued_macaroon
     )
 
     flask.session["publisher"] = publisher_api.whoami(
