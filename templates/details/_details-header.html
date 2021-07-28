@@ -7,8 +7,8 @@
             {% if package.store_front.bundle.applications %}
               {% set charms = package.store_front.bundle.applications.keys() | list %}
               <div class="p-bundle-icons">
-                <img src="/{{ charms[0] }}/icon" alt="" />
-                <img src="/{{ charms[1] }}/icon" alt="" />
+                <img src="/{{ package.store_front.bundle.applications[charms[0]]["charm"] }}/icon" alt="" />
+                <img src="/{{ package.store_front.bundle.applications[charms[1]]["charm"] }}/icon" alt="" />
                 {% if charms | length > 2 %}
                 <span class="p-bundle-icons__count u-text--muted">
                   +{{ charms | length - 2 }}
