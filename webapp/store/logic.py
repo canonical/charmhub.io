@@ -183,11 +183,11 @@ def extract_series(channel):
     series = []
 
     for base in channel["revision"]["bases"]:
-        if not base:
+        if not base or base["channel"] in series:
             continue
         series.append(base["channel"])
 
-    return series
+    return sorted(series, reverse=True)
 
 
 def convert_date(date_to_convert):
