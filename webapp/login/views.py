@@ -30,11 +30,18 @@ def logout():
     return flask.redirect("/")
 
 
-@login.route("/login/")
+@login.route("/login")
 def publisher_login():
     # Get a bakery v2 macaroon from the publisher API to be discharged
     # and save it in the session
-    flask.session["publisher-macaroon"] = publisher_api.issue_macaroon()
+    flask.session["publisher-macaroon"] = publisher_api.issue_macaroon(
+        [
+            "account-register-package",
+            "account-view-packages",
+            "package-manage",
+            "package-view",
+        ]
+    )
 
     login_url = candid.get_login_url(
         macaroon=flask.session["publisher-macaroon"],
