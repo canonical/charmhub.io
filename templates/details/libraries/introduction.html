@@ -24,15 +24,15 @@
       a library.
     </p>
     <p>
-      The fetch&dash;lib command will download the most recent version of the library specified via the provided import path. If the library already exists on disk, it will be updated.
+      The fetch-lib command will download the most recent version of the library specified via the provided import path. If the library already exists on disk, it will be updated.
     </p>
-    <pre><code>$ charmcraft fetch&dash;lib charms.mysql.v3.foo
+    <pre><code>$ charmcraft fetch-lib charms.mysql.v3.foo
 Library charms.mysql.v3.foo version 3.4 downloaded.
 
-$ charmcraft fetch&dash;lib charms.foobar.v2.plugin
+$ charmcraft fetch-lib charms.foobar.v2.plugin
 Library charms.foobar.v2.plugin updated to version 2.7.
 
-$ charmcraft fetch&dash;lib charms.foobar.v3.metrics
+$ charmcraft fetch-lib charms.foobar.v3.metrics
 Library charms.mysql.v3.metris was already up to date in version 3.2.</code></pre>
     <p>
       If no library name is provided, all libraries already under <code>lib/charms/</code> will be updated to the most recent version available in the store, if possible, indicating what happened in each case:
