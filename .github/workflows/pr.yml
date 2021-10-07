@@ -2,7 +2,7 @@ name: PR checks
 on:
   pull_request:
   push:
-    branches: master
+    branches: main
 
 env:
   SECRET_KEY: insecure_test_key
