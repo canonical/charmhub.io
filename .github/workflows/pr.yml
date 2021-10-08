@@ -2,7 +2,7 @@ name: PR checks
 on:
   pull_request:
   push:
-    branches: master
+    branches: main
 
 env:
   SECRET_KEY: insecure_test_key
@@ -126,3 +126,17 @@ jobs:
         run: |
           yarn test-js
           bash <(curl -s https://codecov.io/bash) -cF javascript
+
+  check-inclusive-naming:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Check inclusive naming
+        uses: canonical-web-and-design/inclusive-naming@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          fail-on-error: true
