@@ -13,45 +13,10 @@ from webapp.helpers import (
 )
 
 yaml = get_yaml_loader()
-UBUNTU_SERIES = {
-    "warty": "4.10",
-    "hoary": "5.04",
-    "breezy": "5.10",
-    "dapper": "6.06 LTS",
-    "edgy": "6.10",
-    "feisty": "7.04",
-    "gutsy": "7.10",
-    "hardy": "8.04 LTS",
-    "intrepid": "8.10",
-    "jaunty": "9.04",
-    "karmic": "9.10",
-    "lucid": "10.04 LTS",
-    "maverick": "10.10",
-    "natty": "11.04",
-    "oneiric": "11.10",
-    "precise": "12.04 LTS",
-    "quantal": "12.10",
-    "raring": "13.04",
-    "saucy": "13.10",
-    "trusty": "14.04 LTS",
-    "utopic": "14.10",
-    "vivid": "15.04",
-    "wily": "15.10",
-    "xenial": "16.04 LTS",
-    "yakkety": "16.10",
-    "zesty": "17.04",
-    "artful": "17.10",
-    "bionic": "18.04 LTS",
-    "cosmic": "18.10",
-    "disco": "19.04",
-    "eoan": "19.10",
-    "focal": "20.04 LTS",
-    "groovy": "20.10",
-}
 
 PLATFORMS = {
-    "ubuntu": "linux",
-    "centos": "linux",
+    "ubuntu": "Ubuntu",
+    "centos": "CentOS",
 }
 
 
@@ -116,7 +81,7 @@ def convert_channel_maps(channel_map):
             "channel": channel["channel"]["name"],
             "risk": channel["channel"]["risk"],
             "size": channel["revision"]["download"]["size"],
-            "bases": extract_series(channel),
+            "bases": extract_series(channel, True),
             "revision": channel["revision"],
         }
 
@@ -172,7 +137,7 @@ def extract_resources(channel):
     return resources
 
 
-def extract_series(channel):
+def extract_series(channel, long_name=False):
     """
     Extract ubuntu series from channel map
 
@@ -185,7 +150,10 @@ def extract_series(channel):
     for base in channel["revision"]["bases"]:
         if not base or base["channel"] in series:
             continue
-        series.append(base["channel"])
+        platform = PLATFORMS.get(base["name"], base["name"])
+        series.append(
+            f"{platform} {base['channel']}" if long_name else base["channel"]
+        )
 
     return sorted(series, reverse=True)
 
