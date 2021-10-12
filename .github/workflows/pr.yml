@@ -29,10 +29,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install dotrun
-        run: |
-          sudo snap install dotrun
-          sudo chown root:root /
+      - name: Install Dotrun
+        uses: canonical/install-dotrun@main
+
       - name: Install dependencies
         run: dotrun install
 
@@ -94,10 +93,8 @@ jobs:
           sudo apt-get update && sudo apt-get install --yes python3-setuptools
           sudo pip3 install -r requirements.txt
 
-      - name: Install dotrun
-        run: |
-          sudo snap install dotrun
-          sudo chown root:root /
+      - name: Install Dotrun
+        uses: canonical/install-dotrun@main
 
       - name: Install dependencies
         run: sudo pip3 install coverage
