@@ -149,7 +149,7 @@
       }
     }
 
-    .p-docstring__intro {
+    .p-docstring__intro > {
       p:first-child {
         @extend %vf-heading-4;
       }
