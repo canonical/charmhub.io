@@ -587,13 +587,7 @@ def get_charms_from_bundle(entity_name):
 
     package = get_package(entity_name, channel_request, FIELDS)
 
-    if package["type"] == "charm":
+    if package["type"] != "bundle":
         return "Requested object should be a bundle", 400
 
-    charms = []
-
-    if package["store_front"]["bundle"].get("applications"):
-        for charm in package["store_front"]["bundle"]["applications"].keys():
-            charms.append(charm)
-
-    return jsonify({"charms": charms})
+    return jsonify({"charms": package["store_front"]["bundle"]["charms"]})

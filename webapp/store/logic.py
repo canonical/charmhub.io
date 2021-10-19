@@ -254,6 +254,12 @@ def add_store_front_data(package, details=False):
                 package["default-release"]["revision"]["bundle-yaml"]
             )
 
+            # List charms
+            extra["bundle"]["charms"] = []
+            if extra["bundle"].get("applications"):
+                for charm in extra["bundle"]["applications"].keys():
+                    extra["bundle"]["charms"].append(charm)
+
         # Reshape channel maps
         extra["channel_map"] = convert_channel_maps(package["channel-map"])
         extra["resources"] = extract_resources(package["default-release"])
