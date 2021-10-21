@@ -16,9 +16,11 @@
       <li class="p-tabs__item" role="presentation">
         <a href="/{{ package.name }}/libraries{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'libraries' %}aria-selected="true" {% endif %}>Libraries</a>
       </li>
+      {% endif %}
       <li class="p-tabs__item" role="presentation">
         <a href="/{{ package.name }}/configure{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'configure' %}aria-selected="true" {% endif %}>Configure</a>
       </li>
+      {% if package.type == "charm" %}
       <li class="p-tabs__item" role="presentation">
         <a href="/{{ package.name }}/actions{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'actions' %}aria-selected="true" {% endif %}>Actions</a>
       </li>

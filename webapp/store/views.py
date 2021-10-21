@@ -5,6 +5,7 @@ import talisker
 from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.discourse.exceptions import PathNotFoundError
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
+from canonicalwebteam.store_api.exceptions import StoreApiResponseErrorList
 from flask import Blueprint, Response, abort
 from flask import current_app as app
 from flask import jsonify, redirect, render_template, request
@@ -241,6 +242,7 @@ def details_configuration(entity_name, path=None):
     package = get_package(
         entity_name, channel_request, FIELDS.copy() + extra_fields
     )
+    subpackage = None
 
     if package["type"] == "bundle":
         if not path:
@@ -249,7 +251,10 @@ def details_configuration(entity_name, path=None):
                 f"/{entity_name}/configure/{default_charm['name']}"
             )
 
-        subpackage = get_package(path)
+        try:
+            subpackage = get_package(path)
+        except StoreApiResponseErrorList:
+            subpackage = None
 
     return render_template(
         f"details/configure-{package['type']}.html",
@@ -573,19 +578,23 @@ def entity_embedded_card(entity_name):
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/icon')
 def entity_icon(entity_name):
-    package = app.store_api.get_item_details(
-        entity_name,
-        fields=[
-            "result.media",
-        ],
+    icon_url = (
+        "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg"
     )
+    package = None
 
-    if package["result"]["media"]:
-        icon_url = package["result"]["media"][0]["url"]
-    else:
-        icon_url = (
-            "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg"
+    try:
+        package = app.store_api.get_item_details(
+            entity_name,
+            fields=[
+                "result.media",
+            ],
         )
+    except StoreApiResponseErrorList:
+        pass
+
+    if package and package["result"]["media"]:
+        icon_url = package["result"]["media"][0]["url"]
 
     return redirect(
         "https://res.cloudinary.com/canonical/image/fetch/f_auto"

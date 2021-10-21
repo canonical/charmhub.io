@@ -311,6 +311,23 @@ body {
   .p-side-navigation__link.u-truncate {
     display: block;
   }
+
+  &.bundle-config {
+    .p-side-navigation__link {
+      padding-left: 1rem;
+
+      .p-side-navigation__icon {
+        margin-right: 16px;
+      }
+    }
+
+    // Second level navigation
+    .p-side-navigation__item > .p-side-navigation__list {
+      .p-side-navigation__link {
+        padding-left: 3.5rem;
+      }
+    }
+  }
 }
 
 .row,
