@@ -65,7 +65,7 @@ function buildPackageCard(entity) {
     }
     Array.from(bundleThumbnails).forEach((thumbnail, count) => {
       if (entity.apps && entity.apps[count]) {
-        thumbnail.src = `/${entity.apps[count]}/icon`;
+        thumbnail.src = `/${entity.apps[count]["name"]}/icon`;
       } else {
         thumbnail.src =
           "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg";
