@@ -107,7 +107,7 @@ FIELDS = [
 ]
 
 
-def get_package(entity_name, channel_request, fields):
+def get_package(entity_name, channel_request=None, fields=FIELDS):
     # Get entity info from API
     package = app.store_api.get_item_details(
         entity_name, channel=channel_request, fields=fields
@@ -227,9 +227,12 @@ def details_docs(entity_name, path=None):
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configure')
+@store.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configure/<path:path>'
+)
 @store_maintenance
 @redirect_uppercase_to_lowercase
-def details_configuration(entity_name):
+def details_configuration(entity_name, path=None):
     channel_request = request.args.get("channel", default=None, type=str)
     extra_fields = [
         "default-release.revision.config-yaml",
@@ -238,9 +241,20 @@ def details_configuration(entity_name):
     package = get_package(
         entity_name, channel_request, FIELDS.copy() + extra_fields
     )
+
+    if package["type"] == "bundle":
+        if not path:
+            default_charm = package["store_front"]["bundle"]["charms"][0]
+            return redirect(
+                f"/{entity_name}/configure/{default_charm['name']}"
+            )
+
+        subpackage = get_package(path)
+
     return render_template(
-        "details/configure.html",
+        f"details/configure-{package['type']}.html",
         package=package,
+        subpackage=subpackage,
         channel_requested=channel_request,
     )
 
@@ -583,9 +597,7 @@ def entity_icon(entity_name):
 # homepage, and should be removed once the icons are available via the api
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/charms.json')
 def get_charms_from_bundle(entity_name):
-    channel_request = request.args.get("channel", default=None, type=str)
-
-    package = get_package(entity_name, channel_request, FIELDS)
+    package = get_package(entity_name)
 
     if package["type"] != "bundle":
         return "Requested object should be a bundle", 400

@@ -1,7 +1,7 @@
 import sys
 import datetime
 from collections import OrderedDict
-
+import re
 import humanize
 from dateutil import parser
 from canonicalwebteam.docstring_extractor import get_docstrings
@@ -255,10 +255,9 @@ def add_store_front_data(package, details=False):
             )
 
             # List charms
-            extra["bundle"]["charms"] = []
-            if extra["bundle"].get("applications"):
-                for charm in extra["bundle"]["applications"].keys():
-                    extra["bundle"]["charms"].append(charm)
+            extra["bundle"]["charms"] = get_bundle_charms(
+                extra["bundle"].get("applications")
+            )
 
         # Reshape channel maps
         extra["channel_map"] = convert_channel_maps(package["channel-map"])
@@ -279,6 +278,24 @@ def add_store_front_data(package, details=False):
 
     package["store_front"] = extra
     return package
+
+
+def get_bundle_charms(charm_apps):
+    result = []
+
+    if charm_apps:
+        for app_name, data in charm_apps.items():
+            # Charm names could be with the old prefix/suffix
+            # Like: cs:~charmed-osm/mariadb-k8s-35
+            name = data["charm"]
+            if name.startswith("cs:"):
+                name = re.match(r"(?:cs:)(?:~.+/)?(\S*?)(?:-\d+)?$", name)[1]
+
+            charm = {"title": format_slug(name), "name": name}
+
+            result.append(charm)
+
+    return result
 
 
 def process_python_docs(library, module_name):
