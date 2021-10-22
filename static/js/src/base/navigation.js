@@ -152,3 +152,11 @@ enableStickyNav();
 enableResetSearchClick("[data-js='reset-search']");
 
 export { toggleSubnav };
+
+// Login
+var accountContainer = document.querySelector(".js-account");
+
+if (accountContainer && accountContainerSmall) {
+  fetch("/account.json")
+    .then((response) => response.json())
+    .then((data) => {
