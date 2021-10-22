@@ -2,7 +2,7 @@ import talisker.requests
 from canonicalwebteam.flask_base.app import FlaskBase
 from canonicalwebteam.store_api.stores.charmstore import CharmStore
 from dateutil import parser
-from flask import render_template, make_response, request
+from flask import render_template, make_response, request, session
 
 from webapp import config
 from webapp.extensions import csrf
@@ -28,6 +28,23 @@ csrf.init_app(app)
 app.register_blueprint(publisher)
 app.register_blueprint(store)
 app.register_blueprint(login)
+
+
+@app.route("/account.json")
+def get_account_json():
+    """
+    A JSON endpoint to request login status
+    """
+    account = None
+
+    if "publisher" in session:
+        account = session["publisher"]
+
+    response = {"account": account}
+    response = make_response(response)
+    response.headers["Cache-Control"] = "no-store"
+
+    return response
 
 
 @app.route("/overview")
