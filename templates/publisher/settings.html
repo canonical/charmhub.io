@@ -24,28 +24,6 @@
     {% endwith %}
     <div class="row p-form__group">
       <div class="col-2">
-        <p class="is-label">Visibility:</p>
-      </div>
-      <div class="col-8">
-        <div class="p-form__control">
-          <input type="radio" name="private" id="is-public" {% if not package.private %}checked="checked"{% endif %} value="public">
-          <label for="is-public">Public
-          </label>
-          <p class="p-form-help-text">Anyone can find your charm in the Charmhub</p>
-        </div>
-        <div class="p-form__control">
-          <input type="radio" name="private" id="is-private" {% if package.private %}checked="checked"{% endif %} value="private">
-          <label for="is-private">Private
-          </label>
-          <p class="p-form-help-text u-no-margin--bottom">Hidden in the Charmhub. Only accessible by the publisher and collaborators.</p>
-        </div>
-      </div>
-    </div>
-    <div class="u-fixed-width">
-      <hr class="p-separator--2rem">
-    </div>
-    <div class="row p-form__group">
-      <div class="col-2">
         <p class="is-label">Status:</p>
       </div>
       <div class="col-8">
