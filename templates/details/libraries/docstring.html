@@ -16,23 +16,19 @@
     <div class="col-medium-5 col-7">
       <ul class="p-list">
         {% for group in docstrings['content'] %}
-          {% if not group["name"].startswith("__") %}
             <li class="p-list__item u-no-padding">
               <p class="u-no-margin--bottom">
                 <a href="#{{ group['name'].lower() }}">{% if group["type"].lower() == "function" %}def {{ group["name"] }}({% if group["arguments"] %}{{ group["arguments"] | join(", ") }}{% endif %}){% else %}{{ group["type"].lower() }} {{ group["name"] }}{% endif %}</a>
               </p>
             </li>
-          {% endif %}
           {% for item in group["content"] %}
             <li class="p-list__item u-no-padding">
               <ul class="p-list u-no-margin--bottom" style="margin-inline-start: 1.5rem;">
-                {% if not item["name"].startswith("__") %}
                 <li class="p-list__item u-no-padding">
                   <p class="u-no-margin--bottom">
                     <a href="#{{ group['name'].lower() }}-{{ item['name'].lower() }}">{% if item["type"].lower() == "function" %}def {{ item["name"] }}({% if item["arguments"] %}{{ item["arguments"] | join(", ") }}{% endif %}){% else %}{{ item["type"].lower() }} {{ item["name"] }}{% endif %}</a>
                   </p>
                 </li>
-                {% endif %}
               </ul>
             </li>
           {% endfor %}
@@ -158,7 +154,6 @@
               </div>
               <div class="col-medium-5 col-6 col-x-large-7">
               {% for item in group["content"] %}
-                {% if not item["name"].startswith("__") %}
                 <div class="p-docstring-block--nested">
                   <div class="p-docstring-block__header">
                     <p id="{{ group['name'].lower() }}-{{ item['name'].lower() }}" class="p-code u-no-margin--bottom">
@@ -179,7 +174,7 @@
                         <span class="token function">{{ item["name"] }}</span>
                       {% endif %}
                     </p>
-                    {% if group.description.short %}
+                    {% if item.description.short %}
                       <p class="u-no-margin--bottom">{{ item.description.short }}</p>
                     {% endif %}
                   </div>
@@ -257,12 +252,12 @@
                           </div>
                           {% endif %}
                           {% if item.params.returns.type_name %}
-                          <div class="col-1 p-code p-text--dense">
+                          <div class="col-2 col-x-large-2 p-code p-text--dense">
                               <span class="token string">{{ item.params.returns.type_name }}</span>
                           </div>
                           {% endif %}
                           {% if item.params.returns.description %}
-                          <div class="col-2 col-x-large-3 p-text--dense">
+                          <div class="col-2 col-x-large-4 p-text--dense">
                             {{ item.params.returns.description }}
                           </div>
                           {% endif %}
@@ -284,7 +279,6 @@
                   </div>
                   {% endif %}
                 </div>
-                {% endif %}
               {% endfor %}
               </div>
             </div>
