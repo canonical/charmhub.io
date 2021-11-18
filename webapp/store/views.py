@@ -245,22 +245,29 @@ def details_configuration(entity_name, path=None):
     subpackage = None
 
     if package["type"] == "bundle":
-        if not path:
-            default_charm = package["store_front"]["bundle"]["charms"][0]
+        bundle_charms = package["store_front"]["bundle"]["charms"]
+
+        if not path and bundle_charms:
+            default_charm = bundle_charms[0]
             return redirect(
                 f"/{entity_name}/configure/{default_charm['name']}"
             )
 
-        try:
-            subpackage = get_package(path)
-        except StoreApiResponseErrorList:
-            subpackage = None
+        if path:
+            if not any(d["name"] == path for d in bundle_charms):
+                abort(404)
+
+            try:
+                subpackage = get_package(path)
+            except StoreApiResponseErrorList:
+                subpackage = None
 
     return render_template(
         f"details/configure-{package['type']}.html",
         package=package,
         subpackage=subpackage,
         channel_requested=channel_request,
+        subpackage_path=path,
     )
 
 
