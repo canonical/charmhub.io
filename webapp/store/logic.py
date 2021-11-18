@@ -256,7 +256,9 @@ def add_store_front_data(package, details=False):
 
             # List charms
             extra["bundle"]["charms"] = get_bundle_charms(
-                extra["bundle"].get("applications")
+                extra["bundle"].get(
+                    "applications", extra["bundle"].get("services")
+                )
             )
 
         # Reshape channel maps
@@ -288,8 +290,10 @@ def get_bundle_charms(charm_apps):
             # Charm names could be with the old prefix/suffix
             # Like: cs:~charmed-osm/mariadb-k8s-35
             name = data["charm"]
-            if name.startswith("cs:"):
-                name = re.match(r"(?:cs:)(?:~.+/)?(\S*?)(?:-\d+)?$", name)[1]
+            if name.startswith("cs:") or name.startswith("ch:"):
+                name = re.match(r"(?:cs:|ch:)(?:.+/)?(\S*?)(?:-\d+)?$", name)[
+                    1
+                ]
 
             charm = {"title": format_slug(name), "name": name}
 

@@ -4,11 +4,11 @@
       <div class="p-charm-header">
         <div class="p-media-object--medium u-no-margin--bottom">
           {% if package.type == "bundle" %}
-            {% if package.store_front.bundle.applications %}
-              {% set charms = package.store_front.bundle.applications.keys() | list %}
+            {% if package.store_front.bundle.charms %}
+              {% set charms = package.store_front.bundle.charms %}
               <div class="p-bundle-icons">
-                <img src="/{{ package.store_front.bundle.charms[0].name }}/icon" alt="" />
-                <img src="/{{ package.store_front.bundle.charms[1].name }}/icon" alt="" />
+                <img src="/{{ charms[0].name }}/icon" alt="" />
+                <img src="/{{ charms[1].name }}/icon" alt="" />
                 {% if charms | length > 2 %}
                 <span class="p-bundle-icons__count u-text--muted">
                   +{{ charms | length - 2 }}
