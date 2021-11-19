@@ -254,12 +254,18 @@ def add_store_front_data(package, details=False):
                 package["default-release"]["revision"]["bundle-yaml"]
             )
 
+            # Get bundle docs
+            extra["docs_topic"] = get_docs_topic_id(extra["bundle"])
+
             # List charms
             extra["bundle"]["charms"] = get_bundle_charms(
                 extra["bundle"].get(
                     "applications", extra["bundle"].get("services")
                 )
             )
+        else:
+            # Get charm docs
+            extra["docs_topic"] = get_docs_topic_id(extra["metadata"])
 
         # Reshape channel maps
         extra["channel_map"] = convert_channel_maps(package["channel-map"])
@@ -272,11 +278,9 @@ def add_store_front_data(package, details=False):
         extra["publisher_name"] = package["result"]["publisher"][
             "display-name"
         ]
+
         if "summary" in package["result"]:
             extra["summary"] = package["result"]["summary"]
-
-        # Get charm docs
-        extra["docs_topic"] = get_docs_topic_id(extra["metadata"])
 
     package["store_front"] = extra
     return package
