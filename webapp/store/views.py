@@ -158,6 +158,7 @@ def details_overview(entity_name):
 
     # Remove Markdown comments
     readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
+
     readme = md_parser(readme)
     readme = decrease_headers(readme)
     return render_template(
