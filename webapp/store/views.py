@@ -158,30 +158,6 @@ def details_overview(entity_name):
 
     # Remove Markdown comments
     readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
-
-    bases = package["default-release"]["revision"]["bases"]
-    channel_bases = []
-
-    for i in bases:
-        has_base = False
-
-        for b in channel_bases:
-            if b["name"] == i["name"]:
-                has_base = True
-
-        if not has_base:
-            channel_bases.append(
-                {
-                    "name": i["name"],
-                    "channels": [],
-                }
-            )
-
-    for i in channel_bases:
-        for b in bases:
-            if b["name"] == i["name"]:
-                i["channels"].append(b["channel"])
-
     readme = md_parser(readme)
     readme = decrease_headers(readme)
     return render_template(
@@ -190,7 +166,6 @@ def details_overview(entity_name):
         readme=readme,
         package_type=package["type"],
         channel_requested=channel_request,
-        channel_bases=channel_bases,
     )
 
 

@@ -82,6 +82,7 @@ def convert_channel_maps(channel_map):
             "risk": channel["channel"]["risk"],
             "size": channel["revision"]["download"]["size"],
             "bases": extract_series(channel, True),
+            "channel_bases": extract_bases(channel),
             "revision": channel["revision"],
         }
 
@@ -156,6 +157,33 @@ def extract_series(channel, long_name=False):
         )
 
     return sorted(series, reverse=True)
+
+
+def extract_bases(channel):
+    bases = channel["revision"]["bases"]
+    channel_bases = []
+
+    for i in bases:
+        has_base = False
+
+        for b in channel_bases:
+            if b["name"] == i["name"]:
+                has_base = True
+
+        if not has_base:
+            channel_bases.append(
+                {
+                    "name": i["name"],
+                    "channels": [],
+                }
+            )
+
+    for i in channel_bases:
+        for b in bases:
+            if b["name"] == i["name"]:
+                i["channels"].append(b["channel"])
+
+    return channel_bases
 
 
 def convert_date(date_to_convert):
@@ -273,6 +301,7 @@ def add_store_front_data(package, details=False):
 
         # Extract all supported series
         extra["series"] = extract_series(package["default-release"])
+        extra["channel_bases"] = extract_bases(package["default-release"])
 
         # Some needed fields
         extra["publisher_name"] = package["result"]["publisher"][
