@@ -86,30 +86,36 @@
         </small>
       </p>
 
-      {% for base in channel_bases %}
+      {% if package.store_front["deployable-on"]|length == 1 and package.store_front["deployable-on"][0] == "kubernetes" %}
         <div class="series-base">
           <div class="series-base__title">
-            {% if base["name"] == "ubuntu" %}
-              <img src="https://assets.ubuntu.com/v1/adac6928-ubuntu.svg" alt="Ubuntu" width="89" height="20" class="p-image--base">
-            {% elif base["name"] == "kubernetes" %}
-              <img src="https://assets.ubuntu.com/v1/9f8a8273-2018-logo-kubernetes+%282%29.svg" alt="kubernetes" width="160" height="27" class="p-image--base">
-            {% elif base["name"] == "centos" %}
-              <img src="https://assets.ubuntu.com/v1/fd5cc5d8-CentOS.svg" alt="CentOS" width="85" height="24" class="p-image--base">
-            {% else %}
-              {{ base["name"] }}
-            {% endif %}
-          </div>
-          <div>
-            {% if base["name"] != "kubernetes" %}
-              {% for channel in base["channels"] %}
-                <span class="series-tag">
-                  {{ channel }}
-                </span>
-              {% endfor %}
-            {% endif %}
+            <img src="https://assets.ubuntu.com/v1/9f8a8273-2018-logo-kubernetes+%282%29.svg" alt="" width="160" height="27" class="p-image--base">
           </div>
         </div>
-      {% endfor %}
+      {% else %}
+        {% for base in channel_bases %}
+          <div class="series-base">
+            <div class="series-base__title">
+              {% if base["name"] == "ubuntu" %}
+                <img src="https://assets.ubuntu.com/v1/adac6928-ubuntu.svg" alt="Ubuntu" width="89" height="20" class="p-image--base">
+              {% elif base["name"] == "centos" %}
+                <img src="https://assets.ubuntu.com/v1/fd5cc5d8-CentOS.svg" alt="CentOS" width="85" height="24" class="p-image--base">
+              {% else %}
+                {{ base["name"] }}
+              {% endif %}
+            </div>
+            <div>
+              {% if base["name"] != "kubernetes" %}
+                {% for channel in base["channels"] %}
+                  <span class="series-tag">
+                    {{ channel }}
+                  </span>
+                {% endfor %}
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
     </div>
   </div>
 </div>
