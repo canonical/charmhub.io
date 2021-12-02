@@ -168,7 +168,7 @@ def post_register_name():
     data = {
         "name": request.form["name"],
         "type": request.form["type"],
-        "private": True if request.form["private"] == "private" else False,
+        "private": True if request.form.get("private") == "private" else False,
     }
 
     try:
@@ -182,7 +182,7 @@ def post_register_name():
             )
     except StoreApiResponseErrorList as api_response_error_list:
         for error in api_response_error_list.errors:
-            if error["code"] == "api-error":
+            if error["code"] in ["api-error", "reserved-name"]:
                 return redirect(
                     url_for(
                         ".register_name",
