@@ -24,20 +24,6 @@
           </ul>
           {% if libraries %}
           <ul class="p-side-navigation__list">
-            <li class="p-side-navigation__item--title">
-              <span class="p-side-navigation__text">
-                Publisher suggests
-                <div class="p-side-navigation__status u-no-margin--left u-hide--small">
-                  <span class="p-tooltip--right" aria-describedby="rght">
-                    <i class="p-icon--information" class="p-tooltip--right" aria-describedby="publisher-suggests-info"></i>
-                    <span class="p-tooltip__message" role="tooltip" id="publisher-suggests-info">These are libraries that the charm author has chosen to share
-with other developers to use in conjunction with this charm.
-The libraries recommended here could be from an older version
-than the latest.</span>
-                  </a>
-                </div>
-              </span>
-            </li>
             {% for group in libraries.keys() %}
             <li class="p-side-navigation__item">
             {% if group == "others" %}
