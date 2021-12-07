@@ -34,7 +34,7 @@ def logout():
 def publisher_login():
     # Get a bakery v2 macaroon from the publisher API to be discharged
     # and save it in the session
-    flask.session["publisher-macaroon"] = publisher_api.issue_macaroon(
+    flask.session["account-macaroon"] = publisher_api.issue_macaroon(
         [
             "account-register-package",
             "account-view-packages",
@@ -44,7 +44,7 @@ def publisher_login():
     )
 
     login_url = candid.get_login_url(
-        macaroon=flask.session["publisher-macaroon"],
+        macaroon=flask.session["account-macaroon"],
         callback_url=flask.url_for("login.login_callback", _external=True),
         state=generate_csrf(),
     )
@@ -70,20 +70,21 @@ def login_callback():
 
     discharged_token = candid.discharge_token(code)
     candid_macaroon = candid.discharge_macaroon(
-        flask.session["publisher-macaroon"], discharged_token
+        flask.session["account-macaroon"], discharged_token
     )
 
     # Store bakery authentication
     issued_macaroon = candid.get_serialized_bakery_macaroon(
-        flask.session["publisher-macaroon"], candid_macaroon
+        flask.session["account-macaroon"], candid_macaroon
     )
 
-    flask.session["publisher-auth"] = publisher_api.exchange_macaroons(
+    flask.session["account-auth"] = publisher_api.exchange_macaroons(
         issued_macaroon
     )
 
-    flask.session["publisher"] = publisher_api.whoami(
-        flask.session["publisher-auth"]
+    # Set "account", "permissions" and other properties from the API response
+    flask.session.update(
+        publisher_api.macaroon_info(flask.session["account-auth"])
     )
 
     return flask.redirect(

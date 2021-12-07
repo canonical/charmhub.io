@@ -34,7 +34,7 @@ def get_account_details():
 @login_required
 def list_page():
     publisher_charms = publisher_api.get_account_packages(
-        session["publisher-auth"], "charm", include_collaborations=True
+        session["account-auth"], "charm", include_collaborations=True
     )
 
     page_type = request.path[1:-1]
@@ -60,7 +60,7 @@ def list_page():
 @login_required
 def listing(entity_name):
     package = publisher_api.get_package_metadata(
-        session["publisher-auth"], "charm", entity_name
+        session["account-auth"], "charm", entity_name
     )
 
     licenses = []
@@ -89,7 +89,7 @@ def post_listing(entity_name):
     }
 
     result = publisher_api.update_package_metadata(
-        session["publisher-auth"], "charm", entity_name, data
+        session["account-auth"], "charm", entity_name, data
     )
 
     if result:
@@ -102,7 +102,7 @@ def post_listing(entity_name):
 @login_required
 def settings(entity_name):
     package = publisher_api.get_package_metadata(
-        session["publisher-auth"], "charm", entity_name
+        session["account-auth"], "charm", entity_name
     )
 
     context = {
@@ -124,7 +124,7 @@ def post_settings(entity_name):
     }
 
     result = publisher_api.update_package_metadata(
-        session["publisher-auth"], "charm", entity_name, data
+        session["account-auth"], "charm", entity_name, data
     )
 
     if result:
@@ -173,7 +173,7 @@ def post_register_name():
 
     try:
         result = publisher_api.register_package_name(
-            session["publisher-auth"], data
+            session["account-auth"], data
         )
         if result:
             flash(
@@ -263,7 +263,7 @@ def get_publicise(entity_name):
         "ua": {"title": "українськa мовa", "text": "Завантажте з Charmhub"},
     }
     package = publisher_api.get_package_metadata(
-        session["publisher-auth"], "charm", entity_name
+        session["account-auth"], "charm", entity_name
     )
 
     if not package["status"] == "published":
@@ -284,7 +284,7 @@ def get_publicise(entity_name):
 @login_required
 def get_publicise_badges(entity_name):
     package = publisher_api.get_package_metadata(
-        session["publisher-auth"], "charm", entity_name
+        session["account-auth"], "charm", entity_name
     )
 
     if not package["status"] == "published":
@@ -304,7 +304,7 @@ def get_publicise_badges(entity_name):
 @login_required
 def get_publicise_cards(entity_name):
     package = publisher_api.get_package_metadata(
-        session["publisher-auth"], "charm", entity_name
+        session["account-auth"], "charm", entity_name
     )
 
     if not package["status"] == "published":
