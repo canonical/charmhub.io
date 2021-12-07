@@ -32,6 +32,8 @@ def logout():
 
 @login.route("/login")
 def publisher_login():
+    user_agent = flask.request.headers.get("User-Agent")
+
     # Get a bakery v2 macaroon from the publisher API to be discharged
     # and save it in the session
     flask.session["account-macaroon"] = publisher_api.issue_macaroon(
@@ -40,7 +42,8 @@ def publisher_login():
             "account-view-packages",
             "package-manage",
             "package-view",
-        ]
+        ],
+        description=f"charmhub.io - {user_agent}",
     )
 
     login_url = candid.get_login_url(
