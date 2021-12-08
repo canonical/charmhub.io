@@ -37,8 +37,8 @@ def get_account_json():
     """
     account = None
 
-    if "publisher" in session:
-        account = session["publisher"]
+    if "account" in session:
+        account = session["account"]
 
     response = {"account": account}
     response = make_response(response)
