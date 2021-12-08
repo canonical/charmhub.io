@@ -8,6 +8,25 @@
 
 {% block publisher_content %}
 <form id="market-form" class="p-form p-form--stacked p-strip u-no-padding--top" method="POST" enctype="multipart/form-data">
+  <div class="row" style="padding-top: 1rem">
+    <div class="col-7">
+      <p style="margin-bottom: 1rem;">
+        Updates to this information will appear immediately on the <a href="/{{ package.name }}">{{ package.type }} listing page</a>.
+      </p>
+    </div>
+    <div class="col-5">
+      <div class="u-align--right u-clearfix">
+        <a class="p-button--neutral is-disabled js-action-button" style="margin-bottom: 1rem;" href="/{{ package.name }}/listing">Revert</a>
+        <button type="submit" class="p-button--positive js-action-button" name="submit_apply" style="margin-bottom: 1rem;" value="Save" disabled>
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="u-fixed-width">
+    <hr class="u-no-margin--bottom">
+  </div>
+
   <section class="p-strip is-shallow">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -139,30 +158,7 @@
         </div>
       </div>
     </div>
-
   </section>
-  <div data-js="sticky-menu-observer">
-    <div class="u-position-sticky--bottom is-sticky u-hide" data-js="sticky-menu">
-      <div class="u-fixed-width">
-        <hr>
-      </div>
-      <div class="row" style="padding-block-start: 1rem;">
-        <div class="col-7">
-          <p>
-            Updates to this information will appear immediately on the <a href="/{{ package.name }}">{{ package.type }} listing page</a>.
-          </p>
-        </div>
-        <div class="col-5">
-          <div class="u-align--right u-clearfix">
-            <a class="p-button--neutral" href="/{{ package.name }}/listing" style="margin-inline-end: 1rem;">Revert</a>
-            <button type="submit" class="p-button--positive" name="submit_apply" value="Save">
-              Save
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   <input type="hidden" name="changes" value="">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 </form>
