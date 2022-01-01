@@ -32,16 +32,16 @@
     "css-loader": "5.0.0",
     "d3": "6.1.1",
     "d3-array": "2.7.1",
-    "d3-scale": "3.2.2",
+    "d3-scale": "4.0.2",
     "d3-selection": "2.0.0",
     "d3-shape": "2.0.0",
-    "d3-time-format": "3.0.0",
+    "d3-time-format": "4.1.0",
     "deep-copy": "1.4.2",
     "deep-equal": "2.0.5",
     "eslint": "7.8.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-plugin-jest": "23.20.0",
-    "eslint-plugin-prettier": "3.1.4",
+    "eslint-plugin-prettier": "4.0.0",
     "expose-loader": "1.0.0",
     "highlight.js": "10.4.1",
     "postcss-cli": "7.1.2",
@@ -54,7 +54,7 @@
     "vanilla-framework": "2.37.1",
     "watch-cli": "0.2.3",
     "webpack": "4.44.1",
-    "webpack-cli": "3.3.12"
+    "webpack-cli": "4.9.1"
   },
   "devDependencies": {
     "babel-jest": "26.3.0",
