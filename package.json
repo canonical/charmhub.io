@@ -42,7 +42,7 @@
     "eslint-config-prettier": "6.11.0",
     "eslint-plugin-jest": "23.20.0",
     "eslint-plugin-prettier": "3.1.4",
-    "expose-loader": "1.0.0",
+    "expose-loader": "2.0.0",
     "highlight.js": "10.4.1",
     "postcss-cli": "7.1.2",
     "prettier": "2.1.1",

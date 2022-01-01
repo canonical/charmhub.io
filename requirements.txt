@@ -8,7 +8,7 @@ canonicalwebteam.store-api==3.2.7
 canonicalwebteam.docstring-extractor==1.0.0
 Flask-WTF==0.14.3
 humanize==2.6.0
-mistune==0.8.4
+mistune==2.0.1
 pybadges==2.2.1
 pymacaroons==0.13.0
 ruamel.yaml==0.16.12
