@@ -2312,9 +2312,12 @@ cyclist@^1.0.1:
   version "2.8.0"
   resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-2.8.0.tgz#f76e10ad47f1f4f75f33db5fc322eb9ffde5ef23"
 
-d3-array@2.7.1:
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-2.7.1.tgz#b1f56065e9aba1ef6f0d0c8c9390b65421593352"
+d3-array@3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-3.1.1.tgz#7797eb53ead6b9083c75a45a681e93fc41bc468c"
+  integrity sha512-33qQ+ZoZlli19IFiQx4QEpf2CBEayMRzhlisJHSCsSUbDXv6ZishqS1x7uFVClKG4Wr7rZVHvaAttoLow6GqdQ==
+  dependencies:
+    internmap "1 - 2"
 
 d3-axis@2:
   version "2.0.0"
@@ -2413,6 +2416,11 @@ d3-hierarchy@2:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/d3-path/-/d3-path-2.0.0.tgz#55d86ac131a0548adae241eebfb56b4582dd09d8"
 
+"d3-path@1 - 3":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/d3-path/-/d3-path-3.0.1.tgz#f09dec0aaffd770b7995f1a399152bf93052321e"
+  integrity sha512-gq6gZom9AFZby0YLduxT1qmrp4xpBA1YZr19OI717WIdKE2OM5ETq5qrHLb301IgxhLwcuxvGZVLeeWc/k1I6w==
+
 d3-polygon@2:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/d3-polygon/-/d3-polygon-2.0.0.tgz#13608ef042fbec625ba1598327564f03c0396d8e"
@@ -2452,15 +2460,27 @@ d3-scale@3.2.2:
     d3-time "1 - 2"
     d3-time-format "2 - 3"
 
-d3-selection@2, d3-selection@2.0.0:
+d3-selection@2:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/d3-selection/-/d3-selection-2.0.0.tgz#94a11638ea2141b7565f883780dabc7ef6a61066"
 
-d3-shape@2, d3-shape@2.0.0:
+d3-selection@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/d3-selection/-/d3-selection-3.0.0.tgz#c25338207efa72cc5b9bd1458a1a41901f1e1b31"
+  integrity sha512-fmTRWbNMmsmWq6xJV8D19U/gw/bwrHfNXxrIN+HfZgnzqTHp9jOmKMhsTUjXOJnZOdZY9Q28y4yebKzqDKlxlQ==
+
+d3-shape@2:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/d3-shape/-/d3-shape-2.0.0.tgz#2331b62fa784a2a1daac47a7233cfd69301381fd"
   dependencies:
     d3-path "1 - 2"
+
+d3-shape@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/d3-shape/-/d3-shape-3.0.1.tgz#9ccdfb28fd9b0d12f2d8aec234cd5c4a9ea27931"
+  integrity sha512-HNZNEQoDhuCrDWEc/BMbF/hKtzMZVoe64TvisFLDp2Iyj0UShB/E6/lBsLlJTfBMbYgftHj90cXJ0SEitlE6Xw==
+  dependencies:
+    d3-path "1 - 3"
 
 "d3-time-format@2 - 3", d3-time-format@3, d3-time-format@3.0.0:
   version "3.0.0"
@@ -3115,12 +3135,10 @@ expect@^26.6.1:
     jest-message-util "^26.6.1"
     jest-regex-util "^26.0.0"
 
-expose-loader@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/expose-loader/-/expose-loader-1.0.0.tgz#1676dde8fce6662584e17f8531e24d2afe8dae11"
-  dependencies:
-    loader-utils "^2.0.0"
-    schema-utils "^2.6.6"
+expose-loader@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/expose-loader/-/expose-loader-3.1.0.tgz#7a0bdecb345b921ca238a8c4715a4ea7e227213f"
+  integrity sha512-2RExSo0yJiqP+xiUue13jQa2IHE8kLDzTI7b6kn+vUlBVvlzNSiLDzo4e5Pp5J039usvTUnxZ8sUOhv0Kg15NA==
 
 extend-shallow@^2.0.1:
   version "2.0.1"
@@ -3828,6 +3846,11 @@ internal-slot@^1.0.3:
     get-intrinsic "^1.1.0"
     has "^1.0.3"
     side-channel "^1.0.4"
+
+"internmap@1 - 2":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/internmap/-/internmap-2.0.3.tgz#6685f23755e43c524e251d29cbc97248e3061009"
+  integrity sha512-5Hh7Y1wQbvY5ooGgPbDaL5iYLAPzMTUrjMulskHLH6wnv/A+1q5rgEaiuqEjB+oxGXIVZs1FF+R/KPN3ZSQYYg==
 
 interpret@^1.4.0:
   version "1.4.0"
@@ -6240,7 +6263,7 @@ schema-utils@^1.0.0:
     ajv-errors "^1.0.0"
     ajv-keywords "^3.1.0"
 
-schema-utils@^2.6.5, schema-utils@^2.6.6:
+schema-utils@^2.6.5:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/schema-utils/-/schema-utils-2.7.1.tgz#1ca4f32d1b24c590c203b8e7a50bf0ea4cd394d7"
   dependencies:
@@ -6671,12 +6694,10 @@ strip-json-comments@^3.1.0, strip-json-comments@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-3.1.1.tgz#31f1281b3832630434831c310c01cccda8cbe006"
 
-style-loader@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-2.0.0.tgz#9669602fd4690740eaaec137799a03addbbc393c"
-  dependencies:
-    loader-utils "^2.0.0"
-    schema-utils "^3.0.0"
+style-loader@3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-3.3.1.tgz#057dfa6b3d4d7c7064462830f9113ed417d38575"
+  integrity sha512-GPcQ+LDJbrcxHORTRes6Jy2sfvK2kS6hpSfI/fXhPt+spVzxF6LJ1dHLN9zIGmVaaP044YKaIatFaufENRiDoQ==
 
 style-search@^0.1.0:
   version "0.1.0"
