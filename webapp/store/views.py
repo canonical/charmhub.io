@@ -4,12 +4,16 @@ import humanize
 import talisker
 from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.discourse.exceptions import PathNotFoundError
-from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
+from canonicalwebteam.flask_base.decorators import (
+    exclude_xframe_options_header,
+)
 from canonicalwebteam.store_api.exceptions import StoreApiResponseErrorList
+from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
 from flask import Blueprint, Response, abort
 from flask import current_app as app
 from flask import jsonify, redirect, render_template, request
 from pybadges import badge
+
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import (
     redirect_uppercase_to_lowercase,
@@ -557,7 +561,9 @@ def entity_badge(entity_name):
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/embedded')
+@exclude_xframe_options_header
 def entity_embedded_card(entity_name):
+    store_design = request.args.get("store_design", default=False, type=bool)
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request, FIELDS)
 
@@ -570,6 +576,7 @@ def entity_embedded_card(entity_name):
         button = None
 
     context = {
+        "store_design": store_design,
         "button": button,
         "package": package,
         "show_channels": request.args.get("channels"),

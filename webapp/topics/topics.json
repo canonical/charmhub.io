@@ -1,0 +1,23 @@
+[
+    {
+        "name": "Kubeflow",
+        "slug": "kubeflow",
+        "topic_id": 5532,
+        "description": "Charms wrap the 30+ apps that make up Kubeflow with ops code.",
+        "categories": ["featured"]
+    },
+    {
+        "name": "Kubernetes",
+        "slug": "kubernetes",
+        "topic_id": 5534,
+        "description": "Kubernetes, or k8s for short, is an open source platform pioneered by Google, which started as a simple container orchestration tool but has grown into a cloud native platform.",
+        "categories": ["featured"]
+    },
+    {
+        "name": "OpenStack",
+        "slug": "openstack",
+        "topic_id": 5533,
+        "description": "OpenStack Charms are a collection of Charmed Operators used to deploy and manage enterprise grade OpenStack clouds using MAAS and Juju, simplifying the deployment and operations of OpenStack.",
+        "categories": ["featured"]
+    }
+]
