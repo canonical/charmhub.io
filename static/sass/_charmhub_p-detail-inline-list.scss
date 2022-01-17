@@ -36,7 +36,7 @@
         margin-right: 0.25rem;
       }
 
-      @media (max-width: $breakpoint-medium) {
+      @media (max-width: $breakpoint-large - 1) {
         display: block;
         margin-left: 0;
         padding-left: 0;
@@ -61,7 +61,7 @@
           text-decoration: none;
         }
 
-        @media (max-width: $breakpoint-medium) {
+        @media (max-width: $breakpoint-large - 1) {
           padding-left: 0;
           padding-right: 0;
         }
@@ -73,7 +73,7 @@
         margin-top: 0.5rem;
         word-wrap: break-word;
 
-        @media (min-width: $breakpoint-medium) {
+        @media (min-width: $breakpoint-small) {
           background-color: $color-x-light;
           display: none;
           left: 0;
@@ -88,7 +88,7 @@
           }
         }
 
-        @media (max-width: $breakpoint-medium - 1) {
+        @media (max-width: $breakpoint-large - 1) {
           box-shadow: none;
         }
 

@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @mixin charmhub-p-bundle-icons {
   .p-bundle-icons {
     $icon-size: 1.75rem;
@@ -6,7 +8,7 @@
     align-items: center;
     background-color: $color-x-light;
     border: 0.06rem solid $color-mid-light;
-    border-radius: (($padding * 2) + $icon-size) / 2;
+    border-radius: math.div(($padding * 2) + $icon-size, 2);
     color: #333;
     display: flex;
     font-size: 0.875rem;
@@ -21,7 +23,7 @@
 
     img {
       border: 0.06rem solid $color-mid-light;
-      border-radius: $icon-size / 2;
+      border-radius: math.div($icon-size, 2);
       display: inline-block;
       height: $icon-size;
       margin-bottom: 0;

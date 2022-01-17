@@ -2,7 +2,7 @@
   .p-contextual-menu__dropdown--wide {
     @extend .p-contextual-menu__dropdown;
 
-    @media only screen and (min-width: $breakpoint-medium) {
+    @media only screen and (min-width: $breakpoint-small) {
       max-width: 26rem;
     }
   }

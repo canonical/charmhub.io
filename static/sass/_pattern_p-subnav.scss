@@ -1,5 +1,5 @@
 @mixin p-charmhub-subnav {
-  .p-navigation__item.p-subnav.is-active > .p-subnav__toggle {
+  .p-navigation__item--dropdown-toggle.is-active > .p-subnav__toggle {
     color: $color-text-orange;
   }
 
@@ -15,7 +15,7 @@
     padding-block-start: 0;
     right: 0;
 
-    @media (min-width: $breakpoint-medium) {
+    @media (min-width: $breakpoint-small) {
       padding-block-end: 0.5rem;
       padding-block-start: 0.5rem;
     }
@@ -26,7 +26,7 @@
       margin: 0.5rem 0;
       width: calc(100% - 2rem);
 
-      @media (max-width: $breakpoint-medium - 1px) {
+      @media (max-width: $breakpoint-large - 1) {
         left: 2rem;
       }
     }
@@ -35,7 +35,7 @@
   .p-subnav__item {
     padding: 0.25rem 2rem;
 
-    @media (min-width: $breakpoint-medium) {
+    @media (min-width: $breakpoint-small) {
       padding: 0.25rem 1rem;
     }
 

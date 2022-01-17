@@ -19,7 +19,7 @@
         .p-list__item {
           font-style: italic;
           font-weight: 300;
-          padding-left: $spv-inner--large;
+          padding-left: $spv--large;
 
           &::after {
             border: none;
@@ -27,7 +27,7 @@
 
           .p-list__item {
             font-style: normal;
-            padding-left: 2 * $spv-inner--large;
+            padding-left: 2 * $spv--large;
           }
         }
       }

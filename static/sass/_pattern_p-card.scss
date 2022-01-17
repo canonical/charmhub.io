@@ -5,7 +5,7 @@
     padding: 1rem 0 0 0;
 
     .p-card__title {
-      padding-bottom: $spv-inner--small;
+      padding-bottom: $spv--small;
 
       .p-card__title-text {
         display: inline;
@@ -14,13 +14,13 @@
 
     .p-card__subtitle {
       .series-tags {
-        margin-top: $spv-inner--large;
+        margin-top: $spv--large;
       }
     }
 
     .p-card__content {
-      padding-bottom: $spv-inner--large;
-      padding-top: $spv-inner--large;
+      padding-bottom: $spv--large;
+      padding-top: $spv--large;
     }
   }
 
@@ -58,7 +58,7 @@
 
     // Force obey parent's border-radius
     height: 16rem;
-    margin-bottom: $spv-outer--scaleable;
+    margin-bottom: $spv--x-large;
     width: 100%;
 
     &:hover {
@@ -71,7 +71,7 @@
 
     .p-card__header {
       border: none;
-      padding: $spv-inner--large;
+      padding: $spv--large;
 
       .p-card__title {
         max-height: 4rem;
@@ -101,7 +101,7 @@
     .p-card__content {
       max-height: 4.25rem;
       overflow: hidden;
-      padding: 0 $spv-inner--large $spv-inner--large $spv-inner--large;
+      padding: 0 $spv--large $spv--large $spv--large;
     }
 
     .p-card__footer {
@@ -112,12 +112,12 @@
       font-size: 0.875rem;
       justify-content: space-between;
       min-width: 10rem;
-      padding: $spv-inner--x-small $spv-inner--large;
+      padding: $spv--x-small $spv--large;
 
       .p-item--left {
         flex: 1;
         overflow: hidden;
-        padding-inline-end: $spv-inner--x-small;
+        padding-inline-end: $spv--x-small;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
@@ -126,10 +126,10 @@
         white-space: nowrap;
 
         .p-icon--revisions {
-          height: $spv-inner--medium;
-          margin-inline-end: $spv-inner--small;
+          height: $spv--medium;
+          margin-inline-end: $spv--small;
           vertical-align: -1px;
-          width: $spv-inner--medium;
+          width: $spv--medium;
         }
       }
     }
