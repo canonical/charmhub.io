@@ -10,7 +10,7 @@ $color-text-orange: #d54110;
 @import "@canonical/cookie-policy/build/css/cookie-policy";
 
 // Import Vanilla framework
-@import "vanilla-framework/scss/vanilla";
+@import "vanilla-framework";
 
 // Base Vanilla styles
 @include vf-base;
@@ -25,12 +25,10 @@ $color-text-orange: #d54110;
 @include vf-p-form-tick-elements;
 @include vf-p-form-validation;
 @include vf-p-grid;
-@include vf-p-grid-modifications;
 @include vf-p-headings;
 @include vf-p-heading-icon;
 @include vf-p-icons;
 @include vf-p-icon-fullscreen;
-@include vf-p-inline-images;
 @include vf-p-image;
 @include vf-p-label;
 @include vf-p-links;
@@ -41,7 +39,6 @@ $color-text-orange: #d54110;
 @include vf-p-notification;
 @include vf-p-navigation;
 @include vf-p-pagination;
-@include vf-p-subnav;
 @include vf-p-search-box;
 @include vf-p-strip;
 @include vf-p-side-navigation;
@@ -113,10 +110,6 @@ $color-text-orange: #d54110;
 @import "pattern_heading-icon";
 
 @include p-charmhub-heading-icon;
-
-@import "pattern_p-inline-images";
-
-@include p-charmhub-inline-images;
 
 @import "pattern_p-table-of-contents";
 
@@ -236,7 +229,7 @@ $color-text-orange: #d54110;
   position: absolute;
   z-index: 11;
 
-  @media screen and (max-width: $breakpoint-medium - 1) {
+  @media screen and (max-width: $breakpoint-large - 1) {
     margin-block-start: -3rem;
   }
 
@@ -303,7 +296,7 @@ body {
 
 .p-details-tab__content {
   .p-side-navigation {
-    @media (min-width: $breakpoint-medium) {
+    @media (min-width: $breakpoint-small) {
       top: 56px;
     }
   }
@@ -366,13 +359,13 @@ h3 {
   padding-left: $sp-x-large;
   padding-right: $sp-x-large;
 
-  @media screen and (max-width: $breakpoint-medium) {
+  @media screen and (max-width: $breakpoint-large - 1) {
     display: none;
   }
 }
 
 .charm-empty-docs-content {
-  @media screen and (min-width: $breakpoint-medium) {
+  @media screen and (min-width: $breakpoint-small) {
     padding-left: $sp-x-large;
   }
 }
@@ -390,7 +383,7 @@ h3 {
   top: -50%;
   width: 40px;
 
-  @media screen and (max-width: $breakpoint-medium - 1px) {
+  @media screen and (max-width: $breakpoint-large - 1) {
     content: none;
   }
 }
@@ -406,7 +399,7 @@ h3 {
 .juju-notification {
   margin: 0.5rem 0;
 
-  @media (min-width: $breakpoint-medium) {
+  @media (min-width: $breakpoint-small) {
     margin: 1rem 0 0;
   }
 }
@@ -434,7 +427,7 @@ h3 {
     display: inline-block;
     margin-bottom: 0.5rem;
 
-    @media (min-width: $breakpoint-medium) {
+    @media (min-width: $breakpoint-small) {
       margin-right: 1rem;
     }
   }

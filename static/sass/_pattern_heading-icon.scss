@@ -8,7 +8,7 @@
       margin-inline-end: 0.5rem;
       width: 1.5rem;
 
-      @media screen and (max-width: $breakpoint-medium) {
+      @media screen and (max-width: $breakpoint-large - 1) {
         margin-block-start: 0;
       }
     }

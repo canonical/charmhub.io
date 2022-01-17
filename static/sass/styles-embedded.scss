@@ -4,11 +4,10 @@ $color-accent: $color-brand;
 $color-navigation-background: #252525;
 
 // vanilla patterns
-@import 'vanilla-framework/scss/vanilla';
+@import "vanilla-framework";
 
 @include vf-base;
 @include vf-p-grid;
-@include vf-p-grid-modifications;
 @include vf-p-headings;
 @include vf-p-lists;
 @include vf-p-media-object;
@@ -48,7 +47,7 @@ $color-navigation-background: #252525;
   background-repeat: no-repeat;
   background-size: 75% 100%, 35% 100%, 100% auto;
 
-  @media screen and (min-width: $breakpoint-medium) {
+  @media screen and (min-width: $breakpoint-small) {
     background-size: 45% 100%, 25% 250%;
   }
 }

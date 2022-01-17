@@ -5,7 +5,7 @@
     top: 0;
 
     &.is-sticky {
-      @media screen and (min-width: $breakpoint-medium) {
+      @media screen and (min-width: $breakpoint-small) {
         box-shadow: 0 1px 5px 1px rgba(51, 51, 51, 0.2);
 
         .p-navigation__row:first-child {
@@ -75,7 +75,7 @@
           width: 100%;
           z-index: 1;
 
-          @media (max-width: $breakpoint-medium - 1px) {
+          @media (max-width: $breakpoint-large - 1) {
             bottom: -1px;
           }
         }
@@ -94,7 +94,7 @@
   }
 
   .p-navigation__banner {
-    @media (max-width: $breakpoint-medium - 1px) {
+    @media (max-width: $breakpoint-large - 1) {
       padding-inline-start: 0;
     }
 
@@ -112,7 +112,7 @@
   }
 
   .p-navigation__row:first-child {
-    @media (max-width: $breakpoint-medium - 1px) {
+    @media (max-width: $breakpoint-large - 1) {
       &::after {
         background-color: $color-mid-light;
         content: "";
@@ -127,7 +127,7 @@
     .p-navigation__nav {
       margin-inline-start: 1rem;
 
-      @media (min-width: $breakpoint-medium) {
+      @media (min-width: $breakpoint-small) {
         margin-inline-start: 1.5rem;
         position: relative;
 
@@ -142,7 +142,7 @@
         }
       }
 
-      @media (max-width: $breakpoint-medium - 1px) {
+      @media (max-width: $breakpoint-large - 1) {
         display: flex;
         left: 4.5rem;
         margin-inline-start: 0;
@@ -161,7 +161,7 @@
   }
 
   .p-navigation__row:nth-child(2) .p-navigation__nav {
-    @media (max-width: $breakpoint-medium - 1px) {
+    @media (max-width: $breakpoint-large - 1) {
       &::after {
         background-color: $color-mid-x-light;
         bottom: 0;
@@ -177,13 +177,13 @@
       content: none;
     }
 
-    @media (min-width: $breakpoint-medium) {
+    @media (min-width: $breakpoint-small) {
       justify-content: flex-end;
     }
   }
 
   .p-navigation .p-navigation__item.is-logo {
-    @media (max-width: $breakpoint-medium - 1px) {
+    @media (max-width: $breakpoint-large - 1) {
       display: none;
     }
   }

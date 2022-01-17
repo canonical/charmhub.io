@@ -13,7 +13,7 @@
     //set this to 10 to match the stick nav - it has to be greater than 2 (bundle icons use 2)
     z-index: 10;
 
-    @media screen and(min-width: $breakpoint-medium) {
+    @media screen and(min-width: $breakpoint-small) {
       display: none;
     }
 
@@ -28,7 +28,7 @@
       margin-bottom: 0;
       padding:
         map-get($sp-after, small) - map-get($nudges, nudge--small)
-        $spv-inner--large;
+        $spv--large;
       position: sticky;
       top: 0;
       z-index: 10;
@@ -46,12 +46,12 @@
 
     .p-sort__content {
       &:not(:last-child) {
-        padding-bottom: $spv-inner--small;
+        padding-bottom: $spv--small;
       }
 
       .p-sort__item {
-        padding-left: $spv-outer--small-scaleable;
-        padding-right: $spv-outer--small-scaleable;
+        padding-left: $spv--large;
+        padding-right: $spv--large;
         position: relative;
 
         &:not(:last-child)::after {
@@ -66,7 +66,7 @@
 
         label {
           margin-bottom: 0;
-          padding-bottom: $spv-inner--small;
+          padding-bottom: $spv--small;
           width: 100%;
         }
       }

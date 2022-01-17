@@ -11,4 +11,4 @@ humanize==2.6.0
 mistune==0.8.4
 pybadges==2.2.1
 pymacaroons==0.13.0
-ruamel.yaml==0.17.20
+ruamel.yaml==0.16.12

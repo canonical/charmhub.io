@@ -1,16 +1,16 @@
 @mixin charmhub-p-series-tag {
   .series-base {
-    margin-bottom: $spv-inner--medium;
+    margin-bottom: $spv--medium;
 
     @media only screen and (min-width: $breakpoint-x-small) {
       align-items: flex-start;
       display: flex;
-      margin-bottom: $spv-inner--small;
+      margin-bottom: $spv--small;
     }
   }
 
   .series-base__title {
-    margin-bottom: $spv-inner--small;
+    margin-bottom: $spv--small;
 
     @media only screen and (min-width: $breakpoint-x-small) {
       margin-bottom: 0;
@@ -26,9 +26,9 @@
     display: inline-block;
     font-size: 0.875rem;
     font-weight: 500;
-    margin-bottom: $spv-inner--small;
-    margin-right: $spv-inner--x-small;
-    padding: 0 $spv-inner--small;
+    margin-bottom: $spv--small;
+    margin-right: $spv--x-small;
+    padding: 0 $spv--small;
     text-transform: capitalize;
 
     &:hover {
