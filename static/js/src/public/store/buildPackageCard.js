@@ -37,9 +37,8 @@ function buildPackageCard(entity) {
 
   if (entity.type === "charm") {
     bundleCardThumbnailContainer.remove();
-    const charmThumbnail = charmCardThumbnailContainer.querySelector(
-      ".p-card__thumbnail"
-    );
+    const charmThumbnail =
+      charmCardThumbnailContainer.querySelector(".p-card__thumbnail");
     charmThumbnail.alt = entity.name;
     charmThumbnail.setAttribute("loading", "lazy");
 
@@ -53,9 +52,8 @@ function buildPackageCard(entity) {
     }
   } else {
     charmCardThumbnailContainer.remove();
-    const bundleThumbnails = bundleCardThumbnailContainer.querySelectorAll(
-      "img"
-    );
+    const bundleThumbnails =
+      bundleCardThumbnailContainer.querySelectorAll("img");
     const bundleIconsCount = bundleCardThumbnailContainer.querySelector(
       ".p-bundle-icons__count"
     );

@@ -92,9 +92,8 @@
       var contactModal = document.getElementById("contact-modal");
       var closeModal = document.querySelector(".p-modal__close");
       var closeModalButton = document.querySelector(".js-close");
-      var modalPaginationButtons = contactModal.querySelectorAll(
-        ".pagination a"
-      );
+      var modalPaginationButtons =
+        contactModal.querySelectorAll(".pagination a");
       var paginationContent = contactModal.querySelectorAll(".js-pagination");
       var submitButton = contactModal.querySelector(".mktoButton");
       var comment = contactModal.querySelector("#Comments_from_lead__c");
