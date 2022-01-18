@@ -10,40 +10,40 @@
   }
 
   %bottom-section-padding--default {
-    padding-bottom: $spv-outer--regular-scaleable * 0.5;
+    padding-bottom: $spv--strip-regular * 0.5;
 
     @media (min-width: $breakpoint-large) {
-      padding-bottom: $spv-outer--regular-scaleable;
+      padding-bottom: $spv--strip-regular;
     }
   }
 
   %bottom-section-padding--shallow {
     @media only screen and (max-width: $breakpoint-large) {
-      padding-bottom: $spv-outer--medium;
+      padding-bottom: $spv--large;
     }
 
     @media only screen and (min-width: $breakpoint-large) {
-      padding-bottom: $spv-outer--medium;
+      padding-bottom: $spv--large;
     }
   }
 
   %bottom-section-padding--x-shallow {
     @media only screen and (max-width: $breakpoint-large) {
-      padding-bottom: $spv-outer--small;
+      padding-bottom: $spv--small;
     }
 
     @media only screen and (min-width: $breakpoint-large) {
-      padding-bottom: $spv-outer--small;
+      padding-bottom: $spv--small;
     }
   }
 
   %top-section-padding--x-shallow {
     @media only screen and (max-width: $breakpoint-large) {
-      padding-top: $spv-outer--small;
+      padding-top: $spv--small;
     }
 
     @media only screen and (min-width: $breakpoint-large) {
-      padding-top: $spv-outer--small;
+      padding-top: $spv--small;
     }
   }
 
@@ -86,7 +86,7 @@
       & + & {
         @extend %vf-pseudo-border--top; // do not add padding on nested blocks
 
-        margin-top: $spv-outer--shallow-scaleable;
+        margin-top: $spv--x-large;
       }
 
       &:last-child {
@@ -119,7 +119,7 @@
       padding-top: $nudge-h4-mono--large;
     }
 
-    @if ($increase-font-size-on-larger-screens) {
+    @if $increase-font-size-on-larger-screens {
       @media (min-width: $breakpoint-x-large) {
         margin-bottom: -$nudge-h4-mono--large;
         padding-top: $nudge-h4-mono--large;
@@ -142,8 +142,6 @@
         .#{$grid-x-large-col-prefix}#{$i} {
           // on large screens provide flex box column implementation for IE
           // on smaller screens let them display full width one under another
-
-          @include vf-grid-flex-column($i);
           @include vf-grid-column($i);
         }
       }
@@ -172,7 +170,7 @@
   }
 
   .p-text--dense + .p-text--dense {
-    @media (max-width: $breakpoint-medium) {
+    @media (max-width: $breakpoint-large - 1) {
       margin-top: -2 * $sp-unit;
     }
   }
