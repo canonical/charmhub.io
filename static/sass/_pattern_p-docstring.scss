@@ -119,7 +119,7 @@
       padding-top: $nudge-h4-mono--large;
     }
 
-    @if ($increase-font-size-on-larger-screens) {
+    @if $increase-font-size-on-larger-screens {
       @media (min-width: $breakpoint-x-large) {
         margin-bottom: -$nudge-h4-mono--large;
         padding-top: $nudge-h4-mono--large;

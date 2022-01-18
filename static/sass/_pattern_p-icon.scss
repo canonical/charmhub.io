@@ -44,6 +44,7 @@
 
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cg fill='none' fill-rule='evenodd' stroke='%2306C' stroke-width='1.5' transform='translate(2 2.5)'%3E%3Cline x2='12' y1='.5' y2='.5'/%3E%3Cline x1='4' x2='8' y1='10.5' y2='10.5'/%3E%3Cline x1='2' x2='10' y1='5.5' y2='5.5'/%3E%3C/g%3E%3C/svg%3E");
   }
+
   // XXX Ovi - 12.05.20: This can be removed once the new icon set is implemented in vanilla
   .p-icon--sort {
     @extend %icon;
@@ -111,7 +112,6 @@
 
   .p-icon--cross-grey {
     @extend %icon;
-
     @include vf-icon-error($color-mid-dark);
   }
 }

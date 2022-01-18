@@ -5,7 +5,6 @@ $color-navigation-background: #252525;
 
 // vanilla patterns
 @import "vanilla-framework";
-
 @include vf-base;
 @include vf-p-grid;
 @include vf-p-headings;
@@ -17,13 +16,9 @@ $color-navigation-background: #252525;
 @include vf-u-floats;
 @include vf-u-margin-collapse;
 @include vf-u-text-muted;
-
 @import "charmhub_p-header";
-
 @include charmhub-p-header;
-
 @import "charmhub_p-series-tag";
-
 @include charmhub-p-series-tag;
 
 // CUSTOM STYLES FOR EMBEDDED CARD

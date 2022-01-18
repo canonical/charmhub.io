@@ -2,7 +2,7 @@
   .p-card--bundle {
     @extend %vf-card;
 
-    padding: 1rem 0 0 0;
+    padding: 1rem 0 0;
 
     .p-card__title {
       padding-bottom: $spv--small;
@@ -44,7 +44,7 @@
         $color-mid-x-light calc(50% + 2rem)
       );
     background-size: 300% 300%;
-    clip-path: url(#animation-mask);
+    clip-path: url("#animation-mask");
   }
 
   a.p-card--button {

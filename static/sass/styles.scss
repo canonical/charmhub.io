@@ -65,154 +65,80 @@ $color-text-orange: #d54110;
 @include vf-u-text-muted;
 @include vf-u-no-max-width;
 @include vf-u-truncate;
-
 @import "pattern_p-card";
-
 @include p-charmhub-card;
-
 @import "pattern_grid";
-
 @include p-charmhub-grid;
-
 @import "pattern_p-navigation";
-
 @include p-charmhub-navigation;
-
 @import "pattern_p-media-object";
-
 @include p-charmhub-media-object;
-
 @import "pattern_p-image";
-
 @include p-charmhub-image;
-
 @import "pattern_p-table";
-
 @include p-charmhub-table;
-
 @import "pattern_p-icon";
-
 @include p-charmhub-icon;
 @include p-charmhub-social-icons;
-
 @import "pattern_p-strip";
-
 @include p-charmhub-strip;
-
 @import "pattern_p-list";
-
 @include p-charmhub-list;
-
 @import "pattern_p-accordion";
-
 @include p-charmhub-accordion;
-
 @import "pattern_heading-icon";
-
 @include p-charmhub-heading-icon;
-
 @import "pattern_p-table-of-contents";
-
 @include p-charmhub-table-of-contents;
-
 @import "charmhub_p-bundle-icons";
-
 @include charmhub-p-bundle-icons;
-
 @import "charmhub_footer";
-
 @include charmhub-p-footer;
-
 @import "charmhub_p-header";
-
 @include charmhub-p-header;
-
 @import "charmhub_p-series-tag";
-
 @include charmhub-p-series-tag;
-
 @import "charmhub_p-filter";
-
 @include p-charmhub-filter;
-
 @import "charmhub_p-sort";
-
 @include p-charmhub-sort;
-
 @import "charmhub_p-tutorial";
-
 @include charmhub-p-tutorial;
-
 @import "charmhub_utils";
-
 @include charmhub-utils;
-
 @import "charmhub_publisher";
-
 @include charmhub-publisher;
-
 @import "charmhub_metrics";
-
 @include charmhub-metrics;
-
 @import "charmhub_p-contextual-menu";
-
 @include p-charmhub-contextual-menu;
-
 @import "pattern_form-multiselect";
-
 @include p-charmhub-multiselect;
-
 @import "pattern_p-form";
-
 @include p-charmhub-form;
-
 @import "pattern_p-tooltip";
-
 @include p-charmhub-tooltip;
-
 @import "pattern_p-separator";
-
 @include p-charmhub-separator;
-
 @import "pattern_p-button";
-
 @include p-charmhub-button;
-
 @import "pattern_p-button-group";
-
 @include p-charmhub-button-group;
-
 @import "pattern_p-modal";
-
 @include p-charmhub-modal;
-
 @import "pattern-p-integration-charts";
-
 @include pattern_p-integration-charts;
-
 @import "swiper-overrides";
-
 @include swiper-overrides;
-
 @import "pattern_p-docstring";
-
 @include p-charmhub-docstring;
-
 @import "charmhub_p-topology";
-
 @include p-charmhub-topology;
-
 @import "pattern_l-fluid-breakout";
-
 @include l-charmhub-fluid-breakout;
-
 @import "pattern_p-subnav";
-
 @include p-charmhub-subnav;
-
 @import "charmhub_p-detail-inline-list";
-
 @include p-detail-inline-list;
 
 // Remove table row borders
@@ -276,7 +202,8 @@ body {
 }
 
 // Ovi 13.07.2020 - This can be removed once a new version of global-nav is released
-// as the issue was fixed https://github.com/canonical-web-and-design/global-nav/commit/03173d82a1f1d4b77f8e20e41ef552b90dbab798
+// as the issue was fixed
+// https://github.com/canonical-web-and-design/global-nav/commit/03173d82a1f1d4b77f8e20e41ef552b90dbab798
 
 @media (max-width: 875px) {
   body {

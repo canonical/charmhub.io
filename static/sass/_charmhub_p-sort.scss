@@ -10,7 +10,8 @@
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     transition-delay: 200ms;
     width: 100%;
-    //set this to 10 to match the stick nav - it has to be greater than 2 (bundle icons use 2)
+
+    // set this to 10 to match the stick nav - it has to be greater than 2 (bundle icons use 2)
     z-index: 10;
 
     @media screen and(min-width: $breakpoint-small) {

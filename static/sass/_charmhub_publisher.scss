@@ -196,7 +196,7 @@
       color: $color-link;
       cursor: pointer;
       margin-bottom: $spv--large;
-      padding-top: 33.33333%;
+      padding-top: 33.3333%;
       position: relative;
       text-align: center;
 
@@ -299,8 +299,9 @@
 }
 
 @mixin charmhub-market-screenshots {
-  $screenshot-thumb-size: 132px; // make it fit exactly on full screen width
+  $screenshot-thumb-size: 132px;
 
+  // make it fit exactly on full screen width
   .p-listing-images {
     align-items: center;
     background-color: $color-x-light;
