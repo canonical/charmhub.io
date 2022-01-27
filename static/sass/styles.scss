@@ -150,13 +150,20 @@ $color-text-orange: #d54110;
   }
 }
 
+.p-channel-map__button {
+  @media screen and (min-width: $breakpoint-small) {
+    margin-bottom: 0 !important;
+  }
+}
+
 .p-channel-map {
   margin-inline-end: 1rem;
   position: absolute;
+  width: calc(100vw - 6rem);
   z-index: 11;
 
   @media screen and (max-width: $breakpoint-large - 1) {
-    margin-block-start: -3rem;
+    top: 2.4rem;
   }
 
   .p-channel-map__mask {

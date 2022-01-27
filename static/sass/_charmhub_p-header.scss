@@ -3,7 +3,7 @@
     align-items: center;
     display: flex;
 
-    @media screen and (max-width: $breakpoint-large - 1) {
+    @media screen and (max-width: $breakpoint-small - 1) {
       align-items: flex-start;
       flex-direction: column;
     }
