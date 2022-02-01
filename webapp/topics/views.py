@@ -3,7 +3,7 @@ from os import getenv
 
 from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.discourse.exceptions import PathNotFoundError
-from flask import Blueprint, abort, render_template, request
+from flask import Blueprint, abort, render_template, request, jsonify
 from webapp.helpers import discourse_api
 from jinja2 import Template
 from bs4 import BeautifulSoup
@@ -97,6 +97,23 @@ class TopicParser(DocParser):
             table["soup_table"].replace_with(
                 BeautifulSoup(card, features="html.parser")
             )
+
+
+@topics.route("/topics.json")
+def topics_json():
+    query = request.args.get("q", default=None, type=str)
+
+    if query:
+        query = query.lower()
+        results = []
+
+        for t in topic_list:
+            if query in t["name"].lower() or query in t["categories"]:
+                results.append(t)
+    else:
+        results = topic_list
+
+    return jsonify(results)
 
 
 @topics.route("/topics/<string:topic_slug>")
