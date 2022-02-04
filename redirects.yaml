@@ -13,3 +13,5 @@ containers-etcd: etcd
 canonical-kubernetes: charmed-kubernetes
 
 jaas: https://jaas.ai/jaas
+docs/stable/about-juju: https://juju.is/about
+q/(?P<search>.*)/?: /?q={search}
