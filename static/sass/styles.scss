@@ -366,3 +366,33 @@ h3 {
     }
   }
 }
+
+.has-top-color {
+  border-top: 3px solid $color-accent;
+}
+
+.l-fluid-section {
+  grid-column: 1/-1;
+  margin-bottom: 1rem;
+  padding: 0;
+
+  .l-fluid-breakout__main {
+    grid-column: 1/-1;
+    padding: 0;
+  }
+
+  .l-fluid-breakout__toolbar-items {
+    grid-column: 1/-1;
+  }
+}
+
+#topics .u-equal-height {
+  @media (min-width: $breakpoint-small) {
+    gap: 1.3rem;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(1, 1fr);
+}

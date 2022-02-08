@@ -3,7 +3,7 @@ from os import getenv
 
 from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.discourse.exceptions import PathNotFoundError
-from flask import Blueprint, abort, render_template, request, jsonify
+from flask import Blueprint, abort, render_template, request
 from webapp.helpers import discourse_api
 from jinja2 import Template
 from bs4 import BeautifulSoup
@@ -113,7 +113,11 @@ def topics_json():
     else:
         results = topic_list
 
-    return jsonify(results)
+    return {
+        "topics": results,
+        "q": query,
+        "size": len(results),
+    }
 
 
 @topics.route("/topics/<string:topic_slug>")
