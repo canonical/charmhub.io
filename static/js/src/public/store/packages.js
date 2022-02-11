@@ -153,8 +153,8 @@ class initPackages {
       selector: ".category-filter",
     };
     this.domEl.placeholderContainer = {
-      el: document.querySelector("[data-js='placeholder-container']"),
-      selector: "[data-js='placeholder-container']",
+      el: document.querySelector("[data-js='packages-placeholder-container']"),
+      selector: "[data-js='packages-placeholder-container']",
     };
     this.domEl.packageContainer = {
       el: document.querySelector("[data-js='package-container']"),

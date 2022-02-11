@@ -21,6 +21,7 @@ from webapp.decorators import (
 )
 from webapp.helpers import decrease_headers, discourse_api, md_parser
 from webapp.store import logic
+from webapp.topics.views import topic_list
 
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
@@ -58,10 +59,11 @@ def index():
     featured_charms = app.store_api.find(
         category="featured", fields=SEARCH_FIELDS
     )["results"]
+    featured_topics = [t for t in topic_list if "featured" in t["categories"]]
 
     context = {
         "categories": CATEGORIES,
-        "featured_charms": featured_charms,
+        "featured_topics": featured_topics,
     }
 
     featured_packages = []

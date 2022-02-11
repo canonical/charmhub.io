@@ -171,4 +171,15 @@
       position: absolute;
     }
   }
+
+  a.p-card--href {
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+
+    &:visited {
+      color: $color-dark;
+    }
+  }
 }
