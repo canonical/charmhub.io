@@ -234,7 +234,7 @@ class initTopics {
     if (this.domEl.topicsContainer.el) {
       this.domEl.topicsContainer.el.innerHTML = "";
 
-      this.topics.forEach((entity) => {
+      this.topics.slice(0, 3).forEach((entity) => {
         this.domEl.topicsContainer.el.appendChild(buildTopicCard(entity));
       });
     } else {
