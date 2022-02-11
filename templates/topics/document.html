@@ -1,7 +1,7 @@
 {% extends 'base_layout.html' %}
 
-{% block title %}{% if document %}{{ document.title }}{% else %}Docs{% endif %}{% endblock %}
-{% block meta_description %}Test{% endblock %}
+{% block title %}{% if document %}{{ document.title }}{% else %}Topic page{% endif %}{% endblock %}
+{% block meta_description %}{{ document.body_html | striptags | truncate(155) }}{% endblock %}
 
 {% macro create_navigation(nav_items) %}
   <ul>
