@@ -14,7 +14,7 @@ from flask import current_app as app
 from flask import jsonify, redirect, render_template, request
 from pybadges import badge
 
-from webapp.config import DETAILS_VIEW_REGEX
+from webapp.config import DETAILS_VIEW_REGEX, CATEGORIES
 from webapp.decorators import (
     redirect_uppercase_to_lowercase,
     store_maintenance,
@@ -37,19 +37,6 @@ SEARCH_FIELDS = [
     "default-release.revision.revision",
     "default-release.channel",
     "result.deployable-on",
-]
-
-CATEGORIES = [
-    {"slug": "ai-ml", "name": "AI/ML"},
-    {"slug": "big-data", "name": "Big Data"},
-    {"slug": "cloud", "name": "Cloud"},
-    {"slug": "containers", "name": "Containers"},
-    {"slug": "databases", "name": "Databases"},
-    {"slug": "logging-tracing", "name": "Logging and Tracing"},
-    {"slug": "monitoring", "name": "Monitoring"},
-    {"slug": "networking", "name": "Networking"},
-    {"slug": "security", "name": "Security"},
-    {"slug": "storage", "name": "Storage"},
 ]
 
 

@@ -8,6 +8,8 @@ from webapp.helpers import discourse_api
 from jinja2 import Template
 from bs4 import BeautifulSoup
 
+from webapp.config import CATEGORIES
+
 DISCOURSE_API_KEY = getenv("DISCOURSE_API_KEY")
 DISCOURSE_API_USERNAME = getenv("DISCOURSE_API_USERNAME")
 
@@ -118,6 +120,14 @@ def topics_json():
         "q": query,
         "size": len(results),
     }
+
+
+@topics.route("/topics")
+def all_topics():
+    context = {}
+    context["topics"] = topic_list
+    context["categories"] = CATEGORIES
+    return render_template("topics/index.html", **context)
 
 
 @topics.route("/topics/<string:topic_slug>")

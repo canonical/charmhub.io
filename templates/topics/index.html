@@ -1,0 +1,71 @@
+{% extends 'base_layout.html' %}
+
+{% block title %}Topic pages{% endblock %}
+{% block meta_description %}-{% endblock %}
+
+{% block content %}
+
+<section class="p-strip--light is-shallow u-no-padding--bottom">
+  <div class="row">
+    <div class="col-4">
+      <h1>Topics pages</h1>
+    </div>
+    <div class="col-8">
+      <p>Topic pages provide a rich list of solutions for Charmhub users. These pages include a range of content relevant to that subject, from charms and bundles to tutorials and documentation. Looking to explore a topic that you are interested in? See the list below to get started. Are you a publisher wanting to improve the visibility of your charms, or see a topic that is missing? Click the button below to contribute and feature your favourite charms and bundles.</p>
+      <p>
+        <a href="https://juju.is/tutorials/how-to-write-a-topic-page" class="p-button--positive">Contribute a Topic</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="topics" class="p-strip">
+  <div class="l-fluid-breakout">
+    <div class="l-fluid-breakout__aside">
+      <div class="p-side-navigation" id="drawer">
+        <a href="#drawer" class="p-side-navigation__toggle js-drawer-toggle" aria-controls="drawer">
+          Filters
+        </a>
+
+        <div class="p-side-navigation__overlay js-drawer-toggle" aria-controls="drawer"></div>
+        <nav class="p-side-navigation__drawer" aria-label="Filters drawer">
+          <div class="p-side-navigation__drawer-header">
+            <a href="#" class="p-side-navigation__toggle--in-drawer js-drawer-toggle" data-js="filter-button-mobile-close" aria-controls="drawer">Hide filters</a>
+          </div>
+          <h3 class="p-heading--5" style="color: #111;">Categories</h3>
+          <form>
+            <ul class="p-side-navigation__list">
+              {% for cat in categories %}
+                <li class="p-side-navigation__item">
+                  <label class="p-checkbox">
+                    <input class="p-checkbox__input" aria-labelledby="{{ cat.slug }}-filter" type="checkbox" value="{{ cat.slug }}" data-js="filter">
+                    <span class="p-checkbox__label" id="{{ cat.slug }}-filter">{{ cat.name }}</span>
+                  </label>
+                </li>
+              {% endfor %}
+            </ul>
+          </form>
+        </nav>
+      </div>
+    </div>
+    <div class="l-fluid-breakout__main u-equal-height">
+      {% for item in topics %}
+        <a class="p-card--highlighted p-card--href has-top-color" href="/topics/{{ item.slug }}" data-filter="{{ item.categories | join(',') }}" data-js="item">
+            <h3 class="p-muted-heading">{{ item.name }}</h3>
+            <hr>
+            <p class="p-card__content">{{ item.description }}</p>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block page_scripts %}
+  <script src="{{ versioned_static('js/dist/topics.js') }}" defer></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      new charmhub.topics.initTopicFilters();
+    });
+  </script>
+{% endblock %}
