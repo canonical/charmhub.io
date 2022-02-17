@@ -107,13 +107,13 @@ def convert_channel_maps(channel_map):
             )
         )
 
-    # Order releases by revision
-    for risk, releases in result[track].items():
-        result[track][risk] = sorted(
-            releases,
-            key=lambda k: int(k["revision"]["revision"]),
-            reverse=True,
-        )
+        # Order releases by revision
+        for risk, releases in result[track].items():
+            result[track][risk] = sorted(
+                releases,
+                key=lambda k: int(k["revision"]["revision"]),
+                reverse=True,
+            )
 
     return result
 
