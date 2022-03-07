@@ -170,8 +170,8 @@
           {% for channel, channel_data in track_data.items() %}
           <tr>
             <td>{{ track }}/{{ channel }}</td>
-            <td>{{ channel_data[0].version }}</td>
-            <td>{{ channel_data[0].released_at }}</td>
+            <td>{{ channel_data.latest.version }}</td>
+            <td>{{ channel_data.latest.released_at }}</td>
           </tr>
           {% endfor %}
           {% endfor %}
