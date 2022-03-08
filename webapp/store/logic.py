@@ -68,12 +68,20 @@ def convert_channel_maps(channel_map):
     for channel in channel_map:
         track = channel["channel"].get("track", "latest")
         risk = channel["channel"]["risk"]
+        revision_number = channel["revision"]["revision"]
 
         if track not in result:
             result[track] = {}
 
         if risk not in result[track]:
-            result[track][risk] = []
+            result[track][risk] = {"latest": None, "releases": {}}
+
+        # same revision but for a different arch
+        if revision_number in result[track][risk]["releases"]:
+            result[track][risk]["releases"][revision_number][
+                "architectures"
+            ].add(channel["channel"]["base"]["architecture"])
+            continue
 
         info = {
             "released_at": convert_date(channel["channel"]["released-at"]),
@@ -84,12 +92,15 @@ def convert_channel_maps(channel_map):
             "bases": extract_series(channel, True),
             "channel_bases": extract_bases(channel),
             "revision": channel["revision"],
+            "architectures": set(),
         }
 
         if channel["channel"]["base"]:
-            info["architecture"] = channel["channel"]["base"]["architecture"]
+            info["architectures"].add(
+                channel["channel"]["base"]["architecture"]
+            )
 
-        result[track][risk].append(info)
+        result[track][risk]["releases"][revision_number] = info
 
     # Order tracks (latest track first)
     result = OrderedDict(
@@ -108,12 +119,14 @@ def convert_channel_maps(channel_map):
         )
 
         # Order releases by revision
-        for risk, releases in result[track].items():
-            result[track][risk] = sorted(
-                releases,
-                key=lambda k: int(k["revision"]["revision"]),
-                reverse=True,
+        for risk, data in result[track].items():
+            result[track][risk]["releases"] = OrderedDict(
+                sorted(result[track][risk]["releases"].items(), reverse=True)
             )
+
+            result[track][risk]["latest"] = result[track][risk]["releases"][
+                max(result[track][risk]["releases"].keys())
+            ]
 
     return result
 
@@ -138,6 +151,18 @@ def extract_resources(channel):
     return resources
 
 
+def extract_architectures(channel):
+    architectures = set()
+
+    for base in channel["revision"]["bases"]:
+        if not base or base["architecture"] in architectures:
+            continue
+
+        architectures.add(base["architecture"])
+
+    return sorted(architectures)
+
+
 def extract_series(channel, long_name=False):
     """
     Extract ubuntu series from channel map
@@ -146,13 +171,13 @@ def extract_series(channel, long_name=False):
 
     :returns: Ubuntu series number
     """
-    series = []
+    series = set()
 
     for base in channel["revision"]["bases"]:
         if not base or base["channel"] in series:
             continue
         platform = PLATFORMS.get(base["name"], base["name"])
-        series.append(
+        series.add(
             f"{platform} {base['channel']}" if long_name else base["channel"]
         )
 
@@ -177,14 +202,16 @@ def extract_bases(channel):
             channel_bases.append(
                 {
                     "name": i["name"],
-                    "channels": [],
+                    "channels": set(),
                 }
             )
 
     for i in channel_bases:
         for b in bases:
             if b["name"] == i["name"]:
-                i["channels"].append(b["channel"])
+                i["channels"].add(b["channel"])
+
+        i["channels"] = sorted(i["channels"], reverse=True)
 
     return channel_bases
 
@@ -303,6 +330,9 @@ def add_store_front_data(package, details=False):
         extra["resources"] = extract_resources(package["default-release"])
 
         # Extract all supported series
+        extra["architectures"] = extract_architectures(
+            package["default-release"]
+        )
         extra["series"] = extract_series(package["default-release"])
         extra["channel_bases"] = extract_bases(package["default-release"])
 
