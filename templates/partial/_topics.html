@@ -21,19 +21,23 @@
 
       <div class="u-equal-height u-hide" data-js="featured-topics-container">
         {% for topic in featured_topics[:3] %}
-          <a id="{{ topic.slug }}" class="p-card--highlighted p-card--href has-top-color" href="/topics/{{ topic.slug }}" data-js="topic-card">
+          <a
+            id="{{ topic.slug }}"
+            class="p-card--highlighted p-card--href has-top-color"
+            href="/topics/{{ topic.slug }}"
+            data-js="topic-card"
+          >
             <h3 class="p-muted-heading">{{ topic.name }}</h3>
-            <hr>
+            <hr />
             <p class="p-card__content">{{ topic.description }}</p>
           </a>
         {% endfor %}
       </div>
-      <div class="u-equal-height u-hide" data-js="topics-container">
-      </div>
-      {% if featured_topics|length > 2 %}
-      <div>
-        <a href="/topics">See all topics&nbsp;&rsaquo;</a>
-      </div>
+      <div class="u-equal-height u-hide" data-js="topics-container"></div>
+      {% if featured_topics|length > 3 %}
+        <div>
+          <a href="/topics">See all topics&nbsp;&rsaquo;</a>
+        </div>
       {% endif %}
     </div>
   </div>
@@ -41,9 +45,12 @@
 {% endif %}
 
 <template id="topic-card-template">
-  <a class="p-card--highlighted p-card--href has-top-color" data-js="topic-card">
+  <a
+    class="p-card--highlighted p-card--href has-top-color"
+    data-js="topic-card"
+  >
     <h3 class="p-muted-heading"></h3>
-    <hr>
+    <hr />
     <p class="p-card__content"></p>
-  </div>
+  </a>
 </template>
