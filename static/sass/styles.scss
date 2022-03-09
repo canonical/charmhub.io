@@ -228,6 +228,19 @@ body {
   display: none;
 }
 
+.package-card-icons {
+  > * {
+    display: inline-block;
+    margin-right: 0.5rem;
+    position: relative;
+    top: 4px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
 .p-details-tab__content {
   .p-side-navigation {
     @media (min-width: $breakpoint-small) {
@@ -255,10 +268,10 @@ body {
       }
     }
   }
-
-	.p-details-tab__content__body * {
-	  text-align: left;
-	}
+	
+  .p-details-tab__content__body * {
+    text-align: left;
+  }
 }
 
 .row,
@@ -277,19 +290,6 @@ h3 {
   display: inline-block;
   margin-right: 0.5rem;
   padding-right: 0.5rem;
-}
-
-.package-card-icons {
-  > * {
-    display: inline-block;
-    margin-right: 0.5rem;
-    position: relative;
-    top: 4px;
-
-    &:last-child {
-      margin-right: 0;
-    }
-  }
 }
 
 .charm-empty-docs-icon {
