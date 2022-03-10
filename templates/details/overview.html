@@ -4,7 +4,7 @@
 
 {% block details_content %}
   <div class="row p-details-tab__content">
-    <div class="col-3">
+    <div class="col-3 p-details-tab__content__sidebar">
       {% if package.result.summary %}
         <h4 class="p-heading--5 u-no-margin--bottom">About</h4>
         <p data-js="summary" data-summary="{{ package.result.summary }}">
@@ -73,7 +73,7 @@
       <p>Share your thoughts on this charm with the community on discourse.</p>
       <p><a class="p-button--base" href="https://discourse.charmhub.io/">Join the discussion</a></p>
     </div>
-    <div class="col-9">
+    <div class="col-9 p-details-tab__content__body">
       {{ readme | safe }}
     </div>
   </div>
