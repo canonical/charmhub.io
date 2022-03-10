@@ -29,7 +29,7 @@
         >
           <h3 class="p-muted-heading">{{ topic.name }}</h3>
           <hr />
-          <p class="p-card__content">{{ topic.description }}</p>
+          <p class="p-card__content">{{ topic.description | truncate(202) }}</p>
         </a>
         {% endfor %}
       </div>
