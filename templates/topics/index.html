@@ -53,7 +53,7 @@
         <a class="p-card--highlighted p-card--href has-top-color" href="/topics/{{ item.slug }}" data-filter="{{ item.categories | join(',') }}" data-js="item">
             <h3 class="p-muted-heading">{{ item.name }}</h3>
             <hr>
-            <p class="p-card__content">{{ item.description }}</p>
+            <p class="p-card__content">{{ item.description | truncate(202) }}</p>
         </a>
       {% endfor %}
     </div>
