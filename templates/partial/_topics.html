@@ -5,40 +5,38 @@
       <p>Top related topics</p>
       <div class="u-equal-height u-hide" data-js="topics-placeholder-container">
         {% for _ in range(0, 2) %}
-          <a class="p-card--highlighted p-card--href has-top-color">
-            <svg width="100%" height="80%" class="p-card--placeholder">
-              <defs>
-                <clipPath id="animation-mask">
-                  <rect x="16" y="15" width="40%" height="18" />
-                  <rect x="16" y="69.5" width="60%" height="18" />
-                  <rect x="16" y="95" width="25%" height="18" />
-                </clipPath>
-              </defs>
-            </svg>
-          </a>
+        <a class="p-card--highlighted p-card--href has-top-color">
+          <svg width="100%" height="80%" class="p-card--placeholder">
+            <defs>
+              <clipPath id="animation-mask">
+                <rect x="16" y="15" width="40%" height="18" />
+                <rect x="16" y="69.5" width="60%" height="18" />
+                <rect x="16" y="95" width="25%" height="18" />
+              </clipPath>
+            </defs>
+          </svg>
+        </a>
         {% endfor %}
       </div>
 
       <div class="u-equal-height u-hide" data-js="featured-topics-container">
         {% for topic in featured_topics[:3] %}
-          <a
-            id="{{ topic.slug }}"
-            class="p-card--highlighted p-card--href has-top-color"
-            href="/topics/{{ topic.slug }}"
-            data-js="topic-card"
-          >
-            <h3 class="p-muted-heading">{{ topic.name }}</h3>
-            <hr />
-            <p class="p-card__content">{{ topic.description }}</p>
-          </a>
+        <a
+          id="{{ topic.slug }}"
+          class="p-card--highlighted p-card--href has-top-color"
+          href="/topics/{{ topic.slug }}"
+          data-js="topic-card"
+        >
+          <h3 class="p-muted-heading">{{ topic.name }}</h3>
+          <hr />
+          <p class="p-card__content">{{ topic.description }}</p>
+        </a>
         {% endfor %}
       </div>
       <div class="u-equal-height u-hide" data-js="topics-container"></div>
-      {% if featured_topics|length > 3 %}
-        <div>
-          <a href="/topics">See all topics&nbsp;&rsaquo;</a>
-        </div>
-      {% endif %}
+      <div>
+        <a href="/topics">See all topics&nbsp;&rsaquo;</a>
+      </div>
     </div>
   </div>
 </div>
