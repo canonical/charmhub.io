@@ -8,7 +8,7 @@
 
   .p-modal--topology {
     .p-modal__dialog {
-      @media screen and (max-width: $breakpoint-medium) {
+      @media screen and (max-width: $breakpoint-large - 1) {
         bottom: unset;
         height: fit-content;
         top: unset;
@@ -20,7 +20,7 @@
       max-height: 750px;
       padding: 4rem;
 
-      @media screen and (max-width: $breakpoint-medium) {
+      @media screen and (max-width: $breakpoint-large - 1) {
         padding: 1rem;
       }
     }

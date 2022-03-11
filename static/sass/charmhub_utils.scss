@@ -8,7 +8,7 @@
   }
 
   .u-hide--small-1 {
-    @media screen and(max-width: $breakpoint-medium - 1) {
+    @media screen and(max-width: $breakpoint-large - 1) {
       display: none !important;
     }
   }
@@ -18,7 +18,7 @@
   }
 
   .is-input--narrow {
-    @media screen and (min-width: $breakpoint-medium) {
+    @media screen and (min-width: $breakpoint-small) {
       max-width: 18.25rem;
     }
   }

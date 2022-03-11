@@ -85,13 +85,13 @@
 
           .p-button,
           .p-form {
-            @media (max-width: $breakpoint-medium) {
+            @media (max-width: $breakpoint-large - 1) {
               width: 50%;
             }
           }
 
           .p-form__group {
-            @media screen and (min-width: $breakpoint-medium) and(max-width: $breakpoint-large - 1px) {
+            @media screen and (min-width: $breakpoint-small) and(max-width: $breakpoint-large - 1px) {
               width: 100%;
             }
           }

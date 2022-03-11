@@ -4,10 +4,10 @@
       <li class="p-tabs__item" role="presentation">
         <a href="/{{ package.name }}{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'overview' %}aria-selected="true" {% endif %}>Overview</a>
       </li>
-      {% if package.type == "charm" %}
       <li class="p-tabs__item" role="presentation">
         <a href="/{{ package.name }}/docs{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'docs' %}aria-selected="true" {% endif %}>Docs</a>
       </li>
+      {% if package.type == "charm" %}
       {% if package['default-release']['resources'] %}
       <li class="p-tabs__item" role="presentation">
         <a href="/{{ package.name }}/resources{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'resources' %}aria-selected="true" {% endif %}>Resources</a>

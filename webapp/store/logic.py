@@ -68,12 +68,20 @@ def convert_channel_maps(channel_map):
     for channel in channel_map:
         track = channel["channel"].get("track", "latest")
         risk = channel["channel"]["risk"]
+        revision_number = channel["revision"]["revision"]
 
         if track not in result:
             result[track] = {}
 
         if risk not in result[track]:
-            result[track][risk] = []
+            result[track][risk] = {"latest": None, "releases": {}}
+
+        # same revision but for a different arch
+        if revision_number in result[track][risk]["releases"]:
+            result[track][risk]["releases"][revision_number][
+                "architectures"
+            ].add(channel["channel"]["base"]["architecture"])
+            continue
 
         info = {
             "released_at": convert_date(channel["channel"]["released-at"]),
@@ -82,13 +90,17 @@ def convert_channel_maps(channel_map):
             "risk": channel["channel"]["risk"],
             "size": channel["revision"]["download"]["size"],
             "bases": extract_series(channel, True),
+            "channel_bases": extract_bases(channel),
             "revision": channel["revision"],
+            "architectures": set(),
         }
 
         if channel["channel"]["base"]:
-            info["architecture"] = channel["channel"]["base"]["architecture"]
+            info["architectures"].add(
+                channel["channel"]["base"]["architecture"]
+            )
 
-        result[track][risk].append(info)
+        result[track][risk]["releases"][revision_number] = info
 
     # Order tracks (latest track first)
     result = OrderedDict(
@@ -106,13 +118,15 @@ def convert_channel_maps(channel_map):
             )
         )
 
-    # Order releases by revision
-    for risk, releases in result[track].items():
-        result[track][risk] = sorted(
-            releases,
-            key=lambda k: int(k["revision"]["revision"]),
-            reverse=True,
-        )
+        # Order releases by revision
+        for risk, data in result[track].items():
+            result[track][risk]["releases"] = OrderedDict(
+                sorted(result[track][risk]["releases"].items(), reverse=True)
+            )
+
+            result[track][risk]["latest"] = result[track][risk]["releases"][
+                max(result[track][risk]["releases"].keys())
+            ]
 
     return result
 
@@ -137,6 +151,18 @@ def extract_resources(channel):
     return resources
 
 
+def extract_architectures(channel):
+    architectures = set()
+
+    for base in channel["revision"]["bases"]:
+        if not base or base["architecture"] in architectures:
+            continue
+
+        architectures.add(base["architecture"])
+
+    return sorted(architectures)
+
+
 def extract_series(channel, long_name=False):
     """
     Extract ubuntu series from channel map
@@ -145,17 +171,49 @@ def extract_series(channel, long_name=False):
 
     :returns: Ubuntu series number
     """
-    series = []
+    series = set()
 
     for base in channel["revision"]["bases"]:
         if not base or base["channel"] in series:
             continue
         platform = PLATFORMS.get(base["name"], base["name"])
-        series.append(
+        series.add(
             f"{platform} {base['channel']}" if long_name else base["channel"]
         )
 
     return sorted(series, reverse=True)
+
+
+def extract_bases(channel):
+    bases = channel["revision"]["bases"]
+    channel_bases = []
+
+    for i in bases:
+        if i is None:
+            return
+
+        has_base = False
+
+        for b in channel_bases:
+            if b["name"] == i["name"]:
+                has_base = True
+
+        if not has_base:
+            channel_bases.append(
+                {
+                    "name": i["name"],
+                    "channels": set(),
+                }
+            )
+
+    for i in channel_bases:
+        for b in bases:
+            if b["name"] == i["name"]:
+                i["channels"].add(b["channel"])
+
+        i["channels"] = sorted(i["channels"], reverse=True)
+
+    return channel_bases
 
 
 def convert_date(date_to_convert):
@@ -254,27 +312,37 @@ def add_store_front_data(package, details=False):
                 package["default-release"]["revision"]["bundle-yaml"]
             )
 
+            # Get bundle docs
+            extra["docs_topic"] = get_docs_topic_id(extra["bundle"])
+
             # List charms
             extra["bundle"]["charms"] = get_bundle_charms(
-                extra["bundle"].get("applications")
+                extra["bundle"].get(
+                    "applications", extra["bundle"].get("services")
+                )
             )
+        else:
+            # Get charm docs
+            extra["docs_topic"] = get_docs_topic_id(extra["metadata"])
 
         # Reshape channel maps
         extra["channel_map"] = convert_channel_maps(package["channel-map"])
         extra["resources"] = extract_resources(package["default-release"])
 
         # Extract all supported series
+        extra["architectures"] = extract_architectures(
+            package["default-release"]
+        )
         extra["series"] = extract_series(package["default-release"])
+        extra["channel_bases"] = extract_bases(package["default-release"])
 
         # Some needed fields
         extra["publisher_name"] = package["result"]["publisher"][
             "display-name"
         ]
+
         if "summary" in package["result"]:
             extra["summary"] = package["result"]["summary"]
-
-        # Get charm docs
-        extra["docs_topic"] = get_docs_topic_id(extra["metadata"])
 
     package["store_front"] = extra
     return package
@@ -288,8 +356,10 @@ def get_bundle_charms(charm_apps):
             # Charm names could be with the old prefix/suffix
             # Like: cs:~charmed-osm/mariadb-k8s-35
             name = data["charm"]
-            if name.startswith("cs:"):
-                name = re.match(r"(?:cs:)(?:~.+/)?(\S*?)(?:-\d+)?$", name)[1]
+            if name.startswith("cs:") or name.startswith("ch:"):
+                name = re.match(r"(?:cs:|ch:)(?:.+/)?(\S*?)(?:-\d+)?$", name)[
+                    1
+                ]
 
             charm = {"title": format_slug(name), "name": name}
 

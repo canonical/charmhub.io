@@ -3,7 +3,7 @@
     align-items: center;
     display: flex;
 
-    @media screen and (max-width: $breakpoint-medium - 1) {
+    @media screen and (max-width: $breakpoint-small - 1) {
       align-items: flex-start;
       flex-direction: column;
     }
@@ -14,27 +14,27 @@
       display: inline-block;
       margin-block-end: 1rem;
 
-      @media screen and (min-width: $breakpoint-medium) {
+      @media screen and (min-width: $breakpoint-small) {
         margin-block-end: 0;
-        padding-inline-start: $spv-outer--small;
+        padding-inline-start: $spv--small;
       }
 
       code {
         background-color: transparent;
         box-shadow: none;
 
-        @media screen and (max-width: $breakpoint-medium - 1) {
+        @media screen and (max-width: $breakpoint-large - 1) {
           margin-block-end: 1rem;
           margin-inline-start: 0;
         }
       }
     }
 
-    .p-button--neutral {
+    .p-button--base {
       margin-block-end: 0;
       width: fit-content;
 
-      @media screen and (max-width: $breakpoint-medium - 1) {
+      @media screen and (max-width: $breakpoint-large - 1) {
         margin-block-end: 0.5rem;
       }
     }
@@ -67,7 +67,7 @@
       .p-media-object__title {
         @extend %vf-heading-2;
 
-        padding-bottom: $spv-inner--x-small;
+        padding-bottom: $spv--x-small;
       }
     }
   }

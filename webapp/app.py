@@ -8,6 +8,7 @@ from webapp import config
 from webapp.extensions import csrf
 from webapp.handlers import set_handlers
 from webapp.login.views import login
+from webapp.topics.views import topics
 from webapp.publisher.views import publisher
 from webapp.store.views import store
 
@@ -28,6 +29,7 @@ csrf.init_app(app)
 app.register_blueprint(publisher)
 app.register_blueprint(store)
 app.register_blueprint(login)
+app.register_blueprint(topics)
 
 
 @app.route("/account.json")
@@ -37,8 +39,8 @@ def get_account_json():
     """
     account = None
 
-    if "publisher" in session:
-        account = session["publisher"]
+    if "account" in session:
+        account = session["account"]
 
     response = {"account": account}
     response = make_response(response)
@@ -50,11 +52,6 @@ def get_account_json():
 @app.route("/overview")
 def overview():
     return render_template("overview.html")
-
-
-@app.route("/topics/kubernetes")
-def kubernetes():
-    return render_template("topics/kubernetes.html")
 
 
 @app.route("/about")

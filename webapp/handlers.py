@@ -24,15 +24,15 @@ def set_handlers(app):
         """
 
         if authentication.is_authenticated(session):
-            publisher = session["publisher"]
+            account = session["account"]
         else:
-            publisher = None
+            account = None
 
         return {
             "add_filter": helpers.add_filter,
             "active_filter": helpers.active_filter,
             "remove_filter": helpers.remove_filter,
-            "publisher": publisher,
+            "account": account,
             "image": image_template,
         }
 

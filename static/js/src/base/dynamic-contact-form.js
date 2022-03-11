@@ -92,9 +92,8 @@
       var contactModal = document.getElementById("contact-modal");
       var closeModal = document.querySelector(".p-modal__close");
       var closeModalButton = document.querySelector(".js-close");
-      var modalPaginationButtons = contactModal.querySelectorAll(
-        ".pagination a"
-      );
+      var modalPaginationButtons =
+        contactModal.querySelectorAll(".pagination a");
       var paginationContent = contactModal.querySelectorAll(".js-pagination");
       var submitButton = contactModal.querySelector(".mktoButton");
       var comment = contactModal.querySelector("#Comments_from_lead__c");
@@ -239,7 +238,7 @@
         var formFields = contactModal.querySelectorAll(".js-formfield");
         formFields.forEach(function (formField) {
           var comma = "";
-          var fieldTitle = formField.querySelector(".p-heading--five");
+          var fieldTitle = formField.querySelector(".p-heading--5");
           var inputs = formField.querySelectorAll("input, textarea");
           message += fieldTitle.innerText + "\r\n";
 

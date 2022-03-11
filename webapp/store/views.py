@@ -4,19 +4,24 @@ import humanize
 import talisker
 from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.discourse.exceptions import PathNotFoundError
-from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
+from canonicalwebteam.flask_base.decorators import (
+    exclude_xframe_options_header,
+)
 from canonicalwebteam.store_api.exceptions import StoreApiResponseErrorList
+from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
 from flask import Blueprint, Response, abort
 from flask import current_app as app
 from flask import jsonify, redirect, render_template, request
 from pybadges import badge
-from webapp.config import DETAILS_VIEW_REGEX
+
+from webapp.config import DETAILS_VIEW_REGEX, CATEGORIES
 from webapp.decorators import (
     redirect_uppercase_to_lowercase,
     store_maintenance,
 )
 from webapp.helpers import decrease_headers, discourse_api, md_parser
 from webapp.store import logic
+from webapp.topics.views import topic_list
 
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
@@ -34,19 +39,6 @@ SEARCH_FIELDS = [
     "result.deployable-on",
 ]
 
-CATEGORIES = [
-    {"slug": "ai-ml", "name": "AI/ML"},
-    {"slug": "big-data", "name": "Big Data"},
-    {"slug": "cloud", "name": "Cloud"},
-    {"slug": "containers", "name": "Containers"},
-    {"slug": "databases", "name": "Databases"},
-    {"slug": "logging-tracing", "name": "Logging and Tracing"},
-    {"slug": "monitoring", "name": "Monitoring"},
-    {"slug": "networking", "name": "Networking"},
-    {"slug": "security", "name": "Security"},
-    {"slug": "storage", "name": "Storage"},
-]
-
 
 @store.route("/")
 @store_maintenance
@@ -54,10 +46,11 @@ def index():
     featured_charms = app.store_api.find(
         category="featured", fields=SEARCH_FIELDS
     )["results"]
+    featured_topics = [t for t in topic_list if "featured" in t["categories"]]
 
     context = {
         "categories": CATEGORIES,
-        "featured_charms": featured_charms,
+        "featured_topics": featured_topics,
     }
 
     featured_packages = []
@@ -245,22 +238,29 @@ def details_configuration(entity_name, path=None):
     subpackage = None
 
     if package["type"] == "bundle":
-        if not path:
-            default_charm = package["store_front"]["bundle"]["charms"][0]
+        bundle_charms = package["store_front"]["bundle"]["charms"]
+
+        if not path and bundle_charms:
+            default_charm = bundle_charms[0]
             return redirect(
                 f"/{entity_name}/configure/{default_charm['name']}"
             )
 
-        try:
-            subpackage = get_package(path)
-        except StoreApiResponseErrorList:
-            subpackage = None
+        if path:
+            if not any(d["name"] == path for d in bundle_charms):
+                abort(404)
+
+            try:
+                subpackage = get_package(path)
+            except StoreApiResponseErrorList:
+                subpackage = None
 
     return render_template(
         f"details/configure-{package['type']}.html",
         package=package,
         subpackage=subpackage,
         channel_requested=channel_request,
+        subpackage_path=path,
     )
 
 
@@ -550,7 +550,9 @@ def entity_badge(entity_name):
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/embedded')
+@exclude_xframe_options_header
 def entity_embedded_card(entity_name):
+    store_design = request.args.get("store_design", default=False, type=bool)
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request, FIELDS)
 
@@ -563,6 +565,7 @@ def entity_embedded_card(entity_name):
         button = None
 
     context = {
+        "store_design": store_design,
         "button": button,
         "package": package,
         "show_channels": request.args.get("channels"),

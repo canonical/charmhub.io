@@ -24,7 +24,7 @@
     <meta property="twitter:site" content="@ubuntucloud">
     <meta property="twitter:creator" content="@ubuntucloud">
     <meta property="twitter:image" content="{{ self.meta_image() }}">
-    <meta property="copydoc" content="{% block meta_copydoc %}https://drive.google.com/drive/u/1/folders/1gqxew2MS9-OkQF5bTStPgmyLS35JpztF{% endblock %}">
+    <meta name="copydoc" content="{% block meta_copydoc %}https://drive.google.com/drive/u/1/folders/1gqxew2MS9-OkQF5bTStPgmyLS35JpztF{% endblock %}">
     {% block extra_meta %}{% endblock %}
     {% block structure_data_markup %}{% endblock %}
     <link rel="canonical" href="https://charmhub.io{{ request.path }}" />
@@ -49,6 +49,7 @@
     <link rel="preload" as="font" type="font/woff2" href="https://assets.ubuntu.com/v1/7f100985-Ubuntu-Th_W.woff2" crossorigin>
     <link rel="preload" as="font" type="font/woff2" href="https://assets.ubuntu.com/v1/f8097dea-Ubuntu-LI_W.woff2" crossorigin>
     <link rel="preload" as="font" type="font/woff2" href="https://assets.ubuntu.com/v1/fff37993-Ubuntu-R_W.woff2" crossorigin>
+    <link rel="search" type="application/opensearchdescription+xml" title="Charmhub" href="/static/opensearch.xml" />
   </head>
 
   <body>

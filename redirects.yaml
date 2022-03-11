@@ -7,3 +7,11 @@ publishing: https://juju.is/docs/sdk
 governance: https://juju.is/about
 glossary: https://juju.is/about
 overview: https://juju.is/about
+kubeflow-charmers-kubeflow-edge: kubeflow-edge
+openstack-charmers-keystone-saml-mellon: keystone-saml-mellon
+containers-etcd: etcd
+canonical-kubernetes: charmed-kubernetes
+
+jaas: https://jaas.ai/jaas
+docs/stable/about-juju: https://juju.is/about
+q/(?P<search>.*)/?: /?q={search}

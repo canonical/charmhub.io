@@ -153,8 +153,8 @@ class initPackages {
       selector: ".category-filter",
     };
     this.domEl.placeholderContainer = {
-      el: document.querySelector("[data-js='placeholder-container']"),
-      selector: "[data-js='placeholder-container']",
+      el: document.querySelector("[data-js='packages-placeholder-container']"),
+      selector: "[data-js='packages-placeholder-container']",
     };
     this.domEl.packageContainer = {
       el: document.querySelector("[data-js='package-container']"),
@@ -541,9 +541,8 @@ class initPackages {
 
   renderButtonMobileOpen() {
     if (this.domEl.filterButtonMobileOpen.el) {
-      const filterSpanEl = this.domEl.filterButtonMobileOpen.el.querySelector(
-        "span"
-      );
+      const filterSpanEl =
+        this.domEl.filterButtonMobileOpen.el.querySelector("span");
       if (this._filters.filter.length > 0) {
         filterSpanEl.innerHTML = `Filters (${this._filters.filter.length})`;
       } else {

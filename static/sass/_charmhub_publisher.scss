@@ -195,8 +195,8 @@
       border-radius: $border-radius;
       color: $color-link;
       cursor: pointer;
-      margin-bottom: $spv-outer--medium;
-      padding-top: 33.33333%;
+      margin-bottom: $spv--large;
+      padding-top: 33.3333%;
       position: relative;
       text-align: center;
 
@@ -299,16 +299,17 @@
 }
 
 @mixin charmhub-market-screenshots {
-  $screenshot-thumb-size: 132px; // make it fit exactly on full screen width
+  $screenshot-thumb-size: 132px;
 
+  // make it fit exactly on full screen width
   .p-listing-images {
     align-items: center;
     background-color: $color-x-light;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    margin-bottom: $spv-outer--small;
-    margin-right: -$spv-outer--medium;
+    margin-bottom: $spv--small;
+    margin-right: -$spv--large;
     min-height: $screenshot-thumb-size;
     position: relative;
   }
@@ -330,8 +331,8 @@
     flex-grow: 0;
     height: $screenshot-thumb-size;
     justify-content: center;
-    margin-bottom: $spv-outer--medium;
-    margin-right: $spv-outer--medium;
+    margin-bottom: $spv--large;
+    margin-right: $spv--large;
     min-width: auto;
     position: relative;
     width: $screenshot-thumb-size;
@@ -351,7 +352,7 @@
     }
 
     &.p-file-input.is-dragging::after {
-      right: $spv-inner--small;
+      right: $spv--small;
     }
 
     .p-listing-images__delete-image .p-icon--delete {

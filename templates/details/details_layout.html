@@ -43,10 +43,10 @@
   <script src="{{ versioned_static('js/dist/highlight-js.js') }}" defer></script>
   <script>
     window.addEventListener("DOMContentLoaded", function () {
-      var codeblocks = Array.prototype.slice.call(document.querySelectorAll("pre"));
+      var codeblocks = Array.prototype.slice.call(document.querySelectorAll("pre code"));
 
       codeblocks.forEach(function(block) {
-        charmhub.highlight.hljs.highlightBlock(block.querySelector("code"));
+        charmhub.highlight.hljs.highlightBlock(block);
       });
 
       charmhub.details.init("{{ package.name }}");

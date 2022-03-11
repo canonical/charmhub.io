@@ -1,6 +1,10 @@
+import deepCopy from "deep-copy";
+import deepEqual from "deep-equal";
+
 // https://gist.github.com/dperini/729294
 // Luke 07-06-2018 made the protocol optional
-const URL_REGEXP = /^(?:(?:https?|ftp):\/\/)?(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+const URL_REGEXP =
+  /^(?:(?:https?|ftp):\/\/)?(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
 // Luke 07-06-2018 rather then looking for a mailto, look for 1 @ and at least 1 .
 const MAILTO_REGEXP = /[^@]+@[^@]+\.[^@]+/;
 const ALLOWED_KEYS = ["title", "summary", "website", "contact"];
@@ -26,8 +30,6 @@ class ListingForm {
   }
 
   init() {
-    this.initStickyMenu("[data-js='sticky-menu-observer']");
-
     this.allInputs.forEach((input) => {
       const inputValidation = { isValid: true };
 
@@ -76,7 +78,11 @@ class ListingForm {
   }
 
   diffState() {
-    const diff = {};
+    const diff = deepCopy(this.initialState);
+
+    for (let key of ALLOWED_KEYS) {
+      diff[key] = this.initialState[key];
+    }
 
     for (let key of ALLOWED_KEYS) {
       if (this.prefixableFields.includes(key)) {
@@ -88,47 +94,34 @@ class ListingForm {
         }
       } else {
         if (this.initialState[key] !== this.currentState[key]) {
+          console.log("hello");
           diff[key] = this.currentState[key];
         }
       }
     }
 
     // only return diff when there are any changes
-    return Object.keys(diff).length > 0 ? diff : null;
+    return !deepEqual(diff, this.initialState);
   }
 
   updateCurrentState(target) {
     const key = target.getAttribute("id");
     if (key && ALLOWED_KEYS.includes(key)) {
-      this.currentState[key] = target.value;
+      this.currentState[key] = target.value || null;
     }
 
     const diff = this.diffState();
+    const actionButtons = document.querySelectorAll(".js-action-button");
 
-    if (diff) {
-      this.stickyEl.classList.remove("u-hide");
-    } else {
-      this.stickyEl.classList.add("u-hide");
-    }
-  }
-
-  initStickyMenu(selector) {
-    this.observerEl = document.querySelector(selector);
-
-    if (this.observerEl) {
-      this.stickyEl = this.observerEl.querySelector("[data-js='sticky-menu']");
-      let observer = new IntersectionObserver((entries) => {
-        if (entries[0].intersectionRatio > 0) {
-          this.stickyEl.classList.remove("is-sticky");
-        } else {
-          this.stickyEl.classList.add("is-sticky");
-        }
-      });
-
-      observer.observe(this.observerEl);
-    } else {
-      throw new Error(`There is no element containing ${selector} selector.`);
-    }
+    actionButtons.forEach((button) => {
+      if (diff) {
+        button.disabled = false;
+        button.classList.remove("is-disabled");
+      } else {
+        button.disabled = true;
+        button.classList.add("is-disabled");
+      }
+    });
   }
 
   // Prefix field field on blur if the user doesn't provide the protocol

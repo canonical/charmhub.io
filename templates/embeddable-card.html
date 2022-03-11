@@ -10,8 +10,11 @@
   <!-- Preconnect to establish early connections to important third-party origins -->
   <link rel="preconnect" href="https://assets.ubuntu.com">
 
-  <link rel="stylesheet" href="{{ versioned_static('css/styles-embedded.css') }}" />
-
+  {% if store_design %}
+  <link rel="stylesheet" type="text/css" media="screen" href="/static/css/styles.css" />
+  {% else %}
+  <link rel="stylesheet" type="text/css" media="screen" href="{{ versioned_static('css/styles-embedded.css') }}" />
+  {% endif %}
 
   <meta name="description" content="{% block meta_description %}Universal operators for application lifecycle management on Linux, Windows and Kubernetes.{% endblock %}">
   <meta name="robots" content="noindex">
@@ -33,6 +36,52 @@
 </head>
 
 <body>
+{% if store_design %}
+  <div id="{{ package.name }}" style="padding: 2px;">
+    <a href="/{{ package.name }}" class="p-card--button" style="display: block; margin-bottom: 0;">
+      <div class="p-card__header">
+        {% if package.type == "bundle" %}
+          <div class="p-bundle-icons" style="margin-block-end: 6px; margin-block-start: 6px;">
+          {% if package.store_front.bundle.charms %}
+            {% set charms = package.store_front.bundle.charms %}
+              <img src="/{{ charms[0].name }}/icon" alt="" />
+              <img src="/{{ charms[1].name }}/icon" alt="" />
+              {% if charms | length > 2 %}
+              <span class="p-bundle-icons__count u-text--muted">
+                +{{ charms | length - 2 }}
+              </span>
+              {% endif %}
+          {% else %}
+              <img src="https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" alt="" />
+              <img src="https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" alt="" />
+          {% endif %}
+          </div>
+        {% else %}
+        <div class="p-card__thumbnail-container">
+          <img src="{% if package.store_front.icons %}{{ package.store_front.icons[0] }}{% else %}https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_64,h_64/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg{% endif %}" alt="{{ package.name }}" class="p-card__thumbnail" loading="lazy" width="40" height="40">
+        </div>
+        {% endif %}
+
+        <h3 class="p-card__title p-heading--4 u-no-margin--bottom package-card-title" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ package.store_front["display-name"] }}</h3>
+        <p class="u-text--muted u-no-padding--top package-card-publisher" style="white-space: nowrap;">{{ package.store_front.publisher_name }}</p>
+      </div>
+      <div class="p-card__content" style="height: 5rem; max-height: 5rem;">
+        <p><small class="package-card-summary">{{ package.store_front.metadata.summary|truncate(90) }}</small></p>
+      </div>
+      <div class="p-card__footer" data-js-card-footer="">
+        {% if "kubernetes" in package.store_front["deployable-on"] %}
+          <div class="package-card-icons"><img alt="Kubernetes" src="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg" width="24" height="24"></div>
+        {% endif %}
+        {% if "windows" in package.store_front["deployable-on"] %}
+          <div class="package-card-icons"><img alt="Kubernetes" src="https://assets.ubuntu.com/v1/ff17c4fe-Windows.svg" width="24" height="24"></div>
+        {% endif %}
+        {% if "linux" in package.store_front["deployable-on"] %}
+          <div class="package-card-icons"><img alt="Kubernetes" src="https://assets.ubuntu.com/v1/a911ecf6-vm-badge.svg" width="24" height="24"></div>
+        {% endif %}
+      </div>
+    </a>
+  </div>
+{% else %}
   <div class="p-strip has-suru">
     <div class="row">
       <div class="p-charm-header">
@@ -121,8 +170,8 @@
           {% for channel, channel_data in track_data.items() %}
           <tr>
             <td>{{ track }}/{{ channel }}</td>
-            <td>{{ channel_data[0].version }}</td>
-            <td>{{ channel_data[0].released_at }}</td>
+            <td>{{ channel_data.latest.version }}</td>
+            <td>{{ channel_data.latest.released_at }}</td>
           </tr>
           {% endfor %}
           {% endfor %}
@@ -161,6 +210,7 @@
       "url": "https://charmhub.io/{{ package.name }}"
     }
   </script>
+{% endif %}
 </body>
 
 </html>

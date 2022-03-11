@@ -29,7 +29,7 @@
     background-repeat: no-repeat;
     background-size: 75% 100%, 50% 50%;
 
-    @media screen and (min-width: $breakpoint-medium) {
+    @media screen and (min-width: $breakpoint-small) {
       background-color: $color-light;
       background-image:
         linear-gradient(
@@ -245,7 +245,7 @@
     background-repeat: no-repeat;
     background-size: 50% 100%, 20% 100%, 100% 100%, cover;
 
-    @media (max-width: $breakpoint-medium) {
+    @media (max-width: $breakpoint-large - 1) {
       background: #f0f5f7;
     }
   }
@@ -275,7 +275,7 @@
     background-repeat: no-repeat;
     background-size: 40% 100%, 80% 60%, 100% 100%;
 
-    @media (max-width: $breakpoint-medium) {
+    @media (max-width: $breakpoint-large - 1) {
       background: rgb(255, 255, 255);
     }
   }
@@ -436,7 +436,7 @@
     background-size: 75% 85%, 15% 100%, auto;
     color: $color-x-light;
 
-    @media screen and (max-width: $breakpoint-medium) {
+    @media screen and (max-width: $breakpoint-large - 1) {
       background-size: 75% 85%, 35% 100%, auto;
     }
   }
@@ -477,7 +477,7 @@
   .p-strip--main {
     @extend %vf-strip;
 
-    padding-bottom: $spv-outer--regular-scaleable * 2;
-    padding-top: $spv-outer--scaleable;
+    padding-bottom: $spv--strip-regular * 2;
+    padding-top: $spv--x-large;
   }
 }
