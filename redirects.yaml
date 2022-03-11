@@ -14,4 +14,8 @@ canonical-kubernetes: charmed-kubernetes
 
 jaas: https://jaas.ai/jaas
 docs/stable/about-juju: https://juju.is/about
+
+# jujucharms.com redirections
 q/(?P<search>.*)/?: /?q={search}
+u/(?P<author>.*)/(?P<charm>.*)/?: /{author}-{charm}
+u/(?P<author>.*)/?: /?q={author}
