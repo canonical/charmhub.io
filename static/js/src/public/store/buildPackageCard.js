@@ -116,10 +116,10 @@ function buildPackageCard(entity) {
     );
   }
 
-  if (entity.store_front["deployable-on"].includes("linux")) {
+  if (entity.store_front["deployable-on"].includes("vm")) {
     buildPlatformIcons(
       entityCardIcons,
-      "Linux",
+      "VM",
       "https://assets.ubuntu.com/v1/a911ecf6-vm-badge.svg",
       "This operator drives the application on Linux servers"
     );
@@ -128,7 +128,7 @@ function buildPackageCard(entity) {
   if (entity.store_front["deployable-on"].includes("all")) {
     buildPlatformIcons(
       entityCardIcons,
-      "Linux",
+      "VM",
       "https://assets.ubuntu.com/v1/a911ecf6-vm-badge.svg",
       "This operator drives the application on Linux servers"
     );

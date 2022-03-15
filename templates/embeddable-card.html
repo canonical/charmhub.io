@@ -75,8 +75,8 @@
         {% if "windows" in package.store_front["deployable-on"] %}
           <div class="package-card-icons"><img alt="Kubernetes" src="https://assets.ubuntu.com/v1/ff17c4fe-Windows.svg" width="24" height="24"></div>
         {% endif %}
-        {% if "linux" in package.store_front["deployable-on"] %}
-          <div class="package-card-icons"><img alt="Kubernetes" src="https://assets.ubuntu.com/v1/a911ecf6-vm-badge.svg" width="24" height="24"></div>
+        {% if "vm" in package.store_front["deployable-on"] %}
+          <div class="package-card-icons"><img alt="VM" src="https://assets.ubuntu.com/v1/a911ecf6-vm-badge.svg" width="24" height="24"></div>
         {% endif %}
       </div>
     </a>
