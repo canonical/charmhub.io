@@ -287,7 +287,7 @@ def add_store_front_data(package, details=False):
     if package["result"]["deployable-on"]:
         extra["deployable-on"] = package["result"]["deployable-on"]
     else:
-        extra["deployable-on"] = ["linux"]
+        extra["deployable-on"] = ["vm"]
 
     extra["categories"] = convert_categories(package["result"]["categories"])
 

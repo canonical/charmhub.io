@@ -319,14 +319,14 @@ class initPackages {
         entity.store_front.categories.forEach((cat) => {
           if (!this.groupedPackages.categories[cat.slug]) {
             this.groupedPackages.categories[cat.slug] = {
-              linux: [],
+              vm: [],
               kubernetes: [],
             };
           }
           if (entity.store_front["deployable-on"].includes("kubernetes")) {
             this.groupedPackages.categories[cat.slug].kubernetes.push(entity);
           } else {
-            this.groupedPackages.categories[cat.slug].linux.push(entity);
+            this.groupedPackages.categories[cat.slug].vm.push(entity);
           }
         });
       }

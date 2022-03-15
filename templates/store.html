@@ -61,7 +61,7 @@
                     <label for="base" aria-label="Filter platforms" class="p-form__label u-no-margin--bottom u-hide--small">Platform</label>
                     <select name="base" data-js="base-handler" class="p-form__control u-no-margin--bottom" value="{{ base }}" id="base" disabled>
                       <option value="all" {% if active_filter('base', 'all' ) %}selected{% endif %}>All</option>
-                      <option value="linux" {% if active_filter('base', 'linux' ) %}selected{% endif %}>Linux</option>
+                      <option value="vm" {% if active_filter('base', 'vm' ) %}selected{% endif %}>VM</option>
                       <option value="kubernetes" {% if active_filter('base', 'kubernetes' ) %}selected{% endif %}>Kubernetes</option>
                     </select>
                   </div>
