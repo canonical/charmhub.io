@@ -84,7 +84,7 @@ def get_packages():
         packages.append(package)
 
     return {
-        "packages": sorted(packages, key=lambda c: c["name"]),
+        "packages": packages,
         "q": query,
         "size": total_packages,
     }
