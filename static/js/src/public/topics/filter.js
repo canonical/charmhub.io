@@ -61,6 +61,9 @@ function initTopicFilters() {
     var closeFiltersButtonMobile = document.querySelector(
       "[data-js='filter-button-mobile-close']"
     );
+    var noTopicsMessage = document.querySelector(
+      "[data-js='no-topics-message']"
+    );
     var filters = [];
 
     if (urlParams.get("filters")) {
@@ -105,15 +108,21 @@ function initTopicFilters() {
         topics.forEach(function (topic) {
           topic.classList.remove("u-hide");
         });
+        noTopicsMessage.classList.add("u-hide");
       } else if (topics) {
         closeFiltersButtonMobile.innerHTML = "Apply filters";
+        var visibleTopics = 0;
         topics.forEach(function (topic) {
           if (filterCheck(topic.getAttribute("data-filter"))) {
             topic.classList.remove("u-hide");
+            visibleTopics += 1;
           } else {
             topic.classList.add("u-hide");
           }
         });
+        if (visibleTopics === 0) {
+          noTopicsMessage.classList.remove("u-hide");
+        }
       }
     }
 
