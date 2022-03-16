@@ -2,8 +2,11 @@ import json
 from os import getenv
 
 from canonicalwebteam.discourse import DocParser
-from canonicalwebteam.discourse.exceptions import PathNotFoundError
-from flask import Blueprint, abort, render_template, request
+from canonicalwebteam.discourse.exceptions import (
+    PathNotFoundError,
+    RedirectFoundError,
+)
+from flask import Blueprint, abort, render_template, request, redirect
 from webapp.helpers import discourse_api
 from jinja2 import Template
 from bs4 import BeautifulSoup
@@ -155,6 +158,8 @@ def topic_page(topic_slug, path=None):
             topic_id = docs.resolve_path(path)[0]
         except PathNotFoundError:
             abort(404)
+        except RedirectFoundError as path_redirect:
+            return redirect(path_redirect.target_url)
 
         topic = docs.api.get_topic(topic_id)
     else:
