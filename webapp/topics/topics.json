@@ -14,10 +14,10 @@
         "categories": ["featured", "ai-ml", "big-data", "containers", "networking"]
     },
     {
-        "name": "FinOS Charmed Operators",
+        "name": "FINOS Charmed Operators",
         "slug": "finos",
         "topic_id": 5832,
-        "description": "The Fintech Open Source Foundation (FINOS) is an independent nonprofit organization whose purpose is to accelerate collaboration and innovation in financial services through the adoption of open source software, standards and best practices. FINOS projects have used Juju and Charmed Operators (also known, more simply, as a “charm”) to deliver an enterprise-grade experience hen deploying, integrating and operating application stacks in a multi-hybrid-cloud environment.",
-        "categories": ["featured", "cloud"]
+        "description": "Juju and Charms are the easiest way to quickly try FINOS projects in your laptop. Here you can also find information about enterprise-grade deployment options that covers day-2 operations.",
+        "categories": ["featured", "cloud", "big-data"]
     }
 ]
