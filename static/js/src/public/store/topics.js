@@ -234,9 +234,14 @@ class initTopics {
     if (this.domEl.topicsContainer.el) {
       this.domEl.topicsContainer.el.innerHTML = "";
 
-      this.topics.slice(0, 3).forEach((entity) => {
-        this.domEl.topicsContainer.el.appendChild(buildTopicCard(entity));
-      });
+      if (this.topics.length === 0) {
+        this.domEl.topicsSection.el.classList.add("u-hide");
+      } else {
+        this.topics.slice(0, 3).forEach((entity) => {
+          this.domEl.topicsContainer.el.appendChild(buildTopicCard(entity));
+        });
+        this.domEl.topicsSection.el.classList.remove("u-hide");
+      }
     } else {
       throw new Error(
         `There is no element containing ${this.domEl.topicsContainer.selector} selector.`
