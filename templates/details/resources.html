@@ -50,7 +50,12 @@
       {% else %}
       <li class="p-inline-list__item">
         <i class="p-icon--docstrings" style="margin-right: 5px;"></i> Size: {{ resource.size }}
-        {% endif %}
+      </li>
+      {% endif %}
+      <li class="p-inline-list__item has-button">
+        <a class="p-button--link p-link--soft u-no-margin--bottom u-no-padding--top p-inline-list__panel-button" href="{{ resource.download.url }}" download>
+          <i class="p-icon--download"></i> Download
+        </a>
       </li>
     </ul>
 
