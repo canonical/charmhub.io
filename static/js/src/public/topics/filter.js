@@ -61,9 +61,6 @@ function initTopicFilters() {
     var closeFiltersButtonMobile = document.querySelector(
       "[data-js='filter-button-mobile-close']"
     );
-    var noTopicsMessage = document.querySelector(
-      "[data-js='no-topics-message']"
-    );
     var filters = [];
 
     if (urlParams.get("filters")) {
@@ -79,27 +76,45 @@ function initTopicFilters() {
 
     // Check any checkboxes that match URL filters query
     function populateCheckboxes() {
+      // Create a list of topics values
+      // Dedupe with a set and convert back to an array
+      var topicValues = Array.from(
+        new Set(
+          topics.flatMap(function (topic) {
+            return topic.dataset.filter.split(",");
+          })
+        )
+      );
+      checkboxes.forEach(function (checkbox) {
+        var value = checkbox.value;
+        if (!topicValues.includes(value)) {
+          checkbox.setAttribute("disabled", "disabled");
+        }
+      });
+
       if (filters) {
         filters.forEach(function (filter) {
           var selector = "[aria-labelledby='" + filter + "-filter']";
           var checkboxObject = document.querySelector(selector);
           if (checkboxObject) {
-            checkboxObject.checked = true;
+            var checkboxDisabled = checkboxObject.getAttribute("disabled");
+            if (checkboxDisabled) {
+              removeFilter(filter);
+            } else {
+              checkboxObject.checked = true;
+            }
           }
         });
       }
     }
 
-    // Check if element shold be filtered
+    // Check if element should be filtered
     function filterCheck(filterText) {
       var match = false;
 
-      filters.forEach(function (filter) {
-        if (filterText.includes(filter) && !match) {
-          match = true;
-        }
+      return !!filters.find(function (filter) {
+        return filterText.includes(filter) && !match;
       });
-      return match;
     }
 
     function filterDom() {
@@ -108,21 +123,15 @@ function initTopicFilters() {
         topics.forEach(function (topic) {
           topic.classList.remove("u-hide");
         });
-        noTopicsMessage.classList.add("u-hide");
       } else if (topics) {
         closeFiltersButtonMobile.innerHTML = "Apply filters";
-        var visibleTopics = 0;
         topics.forEach(function (topic) {
           if (filterCheck(topic.getAttribute("data-filter"))) {
             topic.classList.remove("u-hide");
-            visibleTopics += 1;
           } else {
             topic.classList.add("u-hide");
           }
         });
-        if (visibleTopics === 0) {
-          noTopicsMessage.classList.remove("u-hide");
-        }
       }
     }
 
@@ -147,14 +156,26 @@ function initTopicFilters() {
       }
     }
 
-    function filterHandler(e) {
-      if (e.target.checked) {
-        filters.push(e.target.value);
-      } else {
-        filters.splice(filters.indexOf(e.target.value), 1);
-      }
+    function addFilter(filter) {
+      filters.push(filter);
+
       filterDom();
       updateUrl();
+    }
+
+    function removeFilter(filter) {
+      filters.splice(filters.indexOf(filter), 1);
+
+      filterDom();
+      updateUrl();
+    }
+
+    function filterHandler(e) {
+      if (e.target.checked) {
+        addFilter(e.target.value);
+      } else {
+        removeFilter(e.target.value);
+      }
     }
   }
 
