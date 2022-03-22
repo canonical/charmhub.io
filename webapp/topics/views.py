@@ -110,11 +110,15 @@ def topics_json():
 
     if query:
         query = query.lower()
-        results = []
+        matched = []
+        unmatched = []
 
         for t in topic_list:
             if query in t["name"].lower() or query in t["categories"]:
-                results.append(t)
+                matched.append(t)
+            else:
+                unmatched.append(t)
+        results = matched + unmatched
     else:
         results = topic_list
 
