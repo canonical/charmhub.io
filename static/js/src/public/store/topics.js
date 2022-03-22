@@ -15,7 +15,7 @@ class initTopics {
 
     this.fetchTopicList()
       .then((data) => {
-        this.allTopics = data.topics;
+        this.allTopics = data;
 
         if (!this.allTopics) {
           return;
@@ -42,14 +42,30 @@ class initTopics {
   }
 
   fetchTopicList() {
-    if (this._filters.q) {
-      const queryUrl = this._filters.q.join(",");
-      return fetch(`/topics.json?q=${queryUrl}`).then((result) =>
-        result.json()
-      );
-    } else {
-      return fetch("/topics.json").then((result) => result.json());
-    }
+    return fetch("/topics.json")
+      .then((res) => res.json())
+      .then((result) => {
+        if (this._filters.q) {
+          const query = this._filters.q.join(",").toLowerCase().split(",");
+          const matched = [];
+          const unmatched = [];
+          for (const topicIndex in result.topics) {
+            const topic = result.topics[topicIndex];
+            const match =
+              query.filter(
+                (q) => topic.name.includes(q) || topic.categories.includes(q)
+              ).length > 0;
+            if (match) {
+              matched.push(topic);
+            } else {
+              unmatched.push(topic);
+            }
+          }
+          return matched.concat(unmatched);
+        }
+
+        return result.topics;
+      });
   }
 
   getUrlFilters() {
