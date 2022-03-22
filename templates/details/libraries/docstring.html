@@ -43,8 +43,15 @@
           <h4 id="{{ group['name'].lower() }}" class="p-docstring-block__heading">
             {% if group["type"].lower() == "function" %}
               <span class="token keyword">def</span>
-              <span class="token function">{{ group["name"] }}(</span>{% for arg in group["arguments"] %}<span class="token string">{{ arg }}</span>{% endfor %}
-              <span class="token function u-no-horizontal-space">)</span>
+              <span class="token function">{{ group["name"] }}(</span>
+              {% if group["arguments"]|length > 0 %}
+                <br />
+                {% for arg in group["arguments"] %}
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span class="token string">{{ arg }}{{ ", " if not loop.last else "" }}</span>
+                  <br />
+                {% endfor %}
+              {% endif %}
+              <span class="token function">)</span>
               {% elif group["type"].lower() == "class" %}
               <span class="token keyword">{{ group["type"].lower() }}</span>
               <span class="token class-name">{{ group["name"] }}</span>
