@@ -1,10 +1,10 @@
 @mixin charmhub-p-series-tag {
   .series-base {
     margin-bottom: $spv--medium;
+    display: flex;
+    align-items: center;
 
     @media only screen and (min-width: $breakpoint-x-small) {
-      align-items: flex-start;
-      display: flex;
       margin-bottom: $spv--small;
     }
   }
