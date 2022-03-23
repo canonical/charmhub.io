@@ -1,8 +1,8 @@
 @mixin charmhub-p-series-tag {
   .series-base {
-    margin-bottom: $spv--medium;
-    display: flex;
     align-items: center;
+    display: flex;
+    margin-bottom: $spv--medium;
 
     @media only screen and (min-width: $breakpoint-x-small) {
       margin-bottom: $spv--small;
