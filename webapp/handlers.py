@@ -1,8 +1,8 @@
 from flask import render_template, session
 
 from canonicalwebteam.store_api.exceptions import (
-    StoreApiCircuitBreaker,
     StoreApiError,
+    StoreApiResourceNotFound,
     StoreApiResponseDecodeError,
     StoreApiResponseError,
     StoreApiResponseErrorList,
@@ -48,15 +48,9 @@ def set_handlers(app):
             status_code,
         )
 
-    @app.errorhandler(StoreApiCircuitBreaker)
+    @app.errorhandler(StoreApiResourceNotFound)
     def handle_store_api_circuit_breaker_exception(e):
-        status_code = 503
-        return (
-            render_template(
-                "500.html", error_message=str(e), status_code=status_code
-            ),
-            status_code,
-        )
+        return render_template("404.html", message=str(e)), 404
 
     @app.errorhandler(StoreApiResponseErrorList)
     def handle_store_api_error_list(e):
