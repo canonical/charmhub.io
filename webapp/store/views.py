@@ -64,6 +64,14 @@ def index():
     return render_template("store.html", **context)
 
 
+@store.route("/search")
+def search():
+    query = request.args.get("q", default=None, type=str)
+    if query:
+        return redirect(f"/?q={query}")
+    return redirect("/")
+
+
 @store.route("/packages.json")
 def get_packages():
     query = request.args.get("q", default=None, type=str)
