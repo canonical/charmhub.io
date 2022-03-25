@@ -18,6 +18,7 @@ env:
 
 extraHosts:
   - domain: jujucharms.com
+  - domain: openoperatorcollection.io
 
 # Overrides for production
 production:
