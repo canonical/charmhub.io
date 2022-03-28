@@ -18,7 +18,11 @@
         {% for group in docstrings['content'] %}
             <li class="p-list__item u-no-padding">
               <p class="u-no-margin--bottom">
-                <a href="#{{ group['name'].lower() }}">{% if group["type"].lower() == "function" %}def {{ group["name"] }}({% if group["arguments"] %}{{ group["arguments"] | join(", ") }}{% endif %}){% else %}{{ group["type"].lower() }} {{ group["name"] }}{% endif %}</a>
+                <a href="#{{ group['name'].lower() }}">{% if group["type"].lower() == "function" %}def {{ group["name"] }}(
+                  {%- for arg in group["arguments"] -%}
+                    {{ arg.name }}{{ ", " if not loop.last else "" }}
+                  {%- endfor -%}
+                ){% else %}{{ group["type"].lower() }} {{ group["name"] }}{% endif %}</a>
               </p>
             </li>
           {% for item in group["content"] %}
@@ -26,7 +30,11 @@
               <ul class="p-list u-no-margin--bottom" style="margin-inline-start: 1.5rem;">
                 <li class="p-list__item u-no-padding">
                   <p class="u-no-margin--bottom">
-                    <a href="#{{ group['name'].lower() }}-{{ item['name'].lower() }}">{% if item["type"].lower() == "function" %}def {{ item["name"] }}({% if item["arguments"] %}{{ item["arguments"] | join(", ") }}{% endif %}){% else %}{{ item["type"].lower() }} {{ item["name"] }}{% endif %}</a>
+                    <a href="#{{ group['name'].lower() }}-{{ item['name'].lower() }}">{% if item["type"].lower() == "function" %}def {{ item["name"] }}(
+                      {%- for arg in item["arguments"] -%}
+                        {{ arg.name }}{{ ", " if not loop.last else "" }}
+                      {%- endfor -%}
+                    ){% else %}{{ item["type"].lower() }} {{ item["name"] }}{% endif %}</a>
                   </p>
                 </li>
               </ul>
@@ -44,13 +52,19 @@
             {% if group["type"].lower() == "function" %}
               <span class="token keyword">def</span>
               <span class="token function">{{ group["name"] }}(</span>
-              {% if group["arguments"]|length > 0 %}
-                <br />
-                {% for arg in group["arguments"] %}
-                  &nbsp;&nbsp;&nbsp;&nbsp;<span class="token string">{{ arg }}{{ ", " if not loop.last else "" }}</span>
+              {%- if group["arguments"] -%}
+                {%- if group["arguments"]|length < 2 -%}
+                  {%- for arg in group["arguments"] -%}
+                    <span class="token string">{{ arg.name }}{% if arg.type %}: {{ arg.type }}{% endif %}{{ ", " if not loop.last else "" }}</span>
+                  {%- endfor -%}
+                {% else %}
                   <br />
-                {% endfor %}
-              {% endif %}
+                  {%- for arg in group["arguments"] -%}
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="token string">{{ arg.name }}{% if arg.type %}: {{ arg.type }}{% endif %}{{ ", " if not loop.last else "" }}</span>
+                    <br />
+                  {%- endfor -%}
+                {%- endif -%}
+              {%- endif -%}
               <span class="token function">)</span>
               {% elif group["type"].lower() == "class" %}
               <span class="token keyword">{{ group["type"].lower() }}</span>
@@ -70,11 +84,9 @@
                 <div class="col-medium-5 col-6 col-x-large-7">
                   {% for argument in group.params.arguments %}
                   <div class="row p-docstring-block__arg-block">
-                    {% if argument.name or argument.type_name %}
+                    {% if argument.name %}
                     <div class="col-3 col-x-large-3 p-code p-text--dense">
-                        {% if argument.name %}
                         <span class="token string">{{ argument.name }}</span>
-                        {% endif %}
                         {% if argument.type_name %}
                         <span class="token comment">({{ argument.type_name }})</span>
                         {% endif %}
@@ -169,10 +181,10 @@
                         <span class="token function u-no-horizontal-space">{{ item["name"] }}(</span>
                         {% for arg in item["arguments"] %}
                           <span class="token string u-no-horizontal-space">
-                            {% if arg == "self" %}<em>{% endif %}
-                            {% if loop. index <= loop.length and loop.index > 1 %},{% endif %}
-                            {{ arg }}
-                            {% if arg == "self" %}</em>{% endif %}
+                            {% if arg.name == "self" %}<em>{% endif %}
+                            {% if loop.index <= loop.length and loop.index > 1 %},{% endif %}
+                            {{ arg.name }}{% if arg.type %}: {{ arg.type }}{% endif %}
+                            {% if arg.name == "self" %}</em>{% endif %}
                           </span>
                         {% endfor %}
                         <span class="token function u-no-horizontal-space">)</span>
