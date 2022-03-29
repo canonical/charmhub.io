@@ -1,4 +1,4 @@
-canonicalwebteam.flask-base==1.0.2
+canonicalwebteam.flask-base==1.0.3
 beautifulsoup4==4.10.0
 canonicalwebteam.candid==0.9.0
 canonicalwebteam.discourse==4.0.8
@@ -9,7 +9,7 @@ canonicalwebteam.docstring-extractor==1.1.0
 Flask-WTF==0.15.1
 humanize==2.6.0
 mistune==0.8.4
-pybadges==2.2.1
+pybadges==3.0.0
 pymacaroons==0.13.0
 ruamel.yaml.clib==0.2.2
 ruamel.yaml==0.16.12
