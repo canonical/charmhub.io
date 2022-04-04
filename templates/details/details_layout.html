@@ -8,6 +8,12 @@
 {% block meta_image_height %}200{% endblock %}
 {% block meta_image_alt %}{{ package.store_front["display-name"] }} charm logo{% endblock %}
 
+{% block extra_meta %}
+  {% if package.result.unlisted %}
+    <meta name="robots" content="noindex" />
+  {% endif %}
+{% endblock %}
+
 {% block structure_data_markup %}
 <script type="application/ld+json">
  {

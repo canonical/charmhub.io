@@ -96,6 +96,7 @@ FIELDS = [
     "result.categories",
     "result.publisher.display-name",
     "result.title",
+    "result.unlisted",
     "channel-map",
     "result.deployable-on",
 ]
