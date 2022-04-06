@@ -35,7 +35,7 @@
         <i class="p-icon--revisions" style="margin-right: 5px;"></i> Revision: {{ resource.revision }}
       </li>
       <li class="p-inline-list__item">
-        <i class="p-icon--change-version" style="margin-right: 5px;"></i> Updated: -
+        <i class="p-icon--change-version" style="margin-right: 5px;"></i> Updated: {{ resource.updated }}
       </li>
       {% if resource.type == "oci-image" %}
       <li class="p-inline-list__item has-button">
@@ -77,7 +77,7 @@
         {% for revision in revisions[0:revisions_limit] %}
           <tr>
             <td>{{ revision.revision }}</td>
-            <td>-</td> <!-- update this in JS also once date field is available -->
+            <td>{{ revision.updated }}</td>
             {% if resource.type == "file" %}
               <td>{{ revision.size }}</td>
             {% endif %}
@@ -167,7 +167,7 @@
       tableRow.appendChild(revisionCell);
 
       var dateCell = document.createElement("td");
-      dateCell.innerText = "-"; // currently no date field available
+      dateCell.innerText = release.updated;
       tableRow.appendChild(dateCell);
 
       if (resourceType === "file") {
