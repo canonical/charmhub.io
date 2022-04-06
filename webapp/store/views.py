@@ -470,9 +470,11 @@ def details_resource(entity_name, resource_name):
 
     # Humanize sizes
     resource["size"] = humanize.naturalsize(resource["download"]["size"])
+    resource["updated"] = logic.convert_date(resource["created-at"])
 
     for revision in revisions:
         revision["size"] = humanize.naturalsize(revision["download"]["size"])
+        revision["updated"] = logic.convert_date(revision["created-at"])
 
     return render_template(
         "details/resources.html",
