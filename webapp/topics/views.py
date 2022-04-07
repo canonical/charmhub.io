@@ -87,7 +87,7 @@ class TopicParser(DocParser):
                 "{% for package in packages %}"
                 '<div class="col-small-5 col-medium-3 col-3">'
                 '<iframe src="{{ package }}/embedded?store_design=true" '
-                'frameborder="0" width="266px" height="266px" '
+                'frameborder="0" width="100%" height="266px" '
                 'style="border: 0"></iframe>'
                 "</div>"
                 "{% endfor %}"
