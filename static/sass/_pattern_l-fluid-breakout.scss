@@ -18,7 +18,8 @@
         }
       }
 
-      .p-side-navigation:target .p-side-navigation__drawer {
+      .p-side-navigation:target .p-side-navigation__drawer,
+      .p-side-navigation.is-expanded .p-side-navigation__drawer {
         @media (max-width: $breakpoint-large - 1px) {
           position: fixed;
           transform: translateX(0);
