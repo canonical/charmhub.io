@@ -400,3 +400,9 @@ h3 {
   gap: 1rem;
   grid-template-columns: repeat(1, 1fr);
 }
+
+.p-topics-contribute__button {
+  @media (min-width: $breakpoint-large) {
+    margin-left: $sp-large;
+  }
+}
