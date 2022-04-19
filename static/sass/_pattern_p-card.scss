@@ -47,7 +47,7 @@
     clip-path: url("#animation-mask");
   }
 
-  a.p-card--button {
+  .p-card--button {
     @extend %vf-has-box-shadow;
     @extend %vf-has-round-corners;
 
@@ -181,5 +181,10 @@
     &:visited {
       color: $color-dark;
     }
+  }
+
+  #not-found .p-card__thumbnail,
+  #not-found .p-card__thumbnail-container {
+    border-radius: 0;
   }
 }
