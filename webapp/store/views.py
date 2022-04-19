@@ -588,7 +588,7 @@ def entity_embedded_card(entity_name):
             "embeddable-404.html",
             store_design=store_design,
             entity_name=entity_name,
-        )
+        ), 404
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/icon')
