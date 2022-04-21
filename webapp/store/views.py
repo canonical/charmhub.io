@@ -557,29 +557,41 @@ def entity_badge(entity_name):
 def entity_embedded_card(entity_name):
     store_design = request.args.get("store_design", default=False, type=bool)
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request, FIELDS)
+    try:
+        package = get_package(entity_name, channel_request, FIELDS)
 
-    package["default-release"]["channel"]["released-at"] = logic.convert_date(
-        package["default-release"]["channel"]["released-at"]
-    )
+        package["default-release"]["channel"][
+            "released-at"
+        ] = logic.convert_date(
+            package["default-release"]["channel"]["released-at"]
+        )
 
-    button = request.args.get("button")
-    if button and button not in ["black", "white"]:
-        button = None
+        button = request.args.get("button")
+        if button and button not in ["black", "white"]:
+            button = None
 
-    context = {
-        "store_design": store_design,
-        "button": button,
-        "package": package,
-        "show_channels": request.args.get("channels"),
-        "show_summary": request.args.get("summary"),
-        "show_base": request.args.get("base"),
-    }
+        context = {
+            "store_design": store_design,
+            "button": button,
+            "package": package,
+            "show_channels": request.args.get("channels"),
+            "show_summary": request.args.get("summary"),
+            "show_base": request.args.get("base"),
+        }
 
-    return render_template(
-        "embeddable-card.html",
-        **context,
-    )
+        return render_template(
+            "embeddable-card.html",
+            **context,
+        )
+    except Exception:
+        return (
+            render_template(
+                "embeddable-404.html",
+                store_design=store_design,
+                entity_name=entity_name,
+            ),
+            404,
+        )
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/icon')
