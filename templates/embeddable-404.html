@@ -53,23 +53,17 @@
     </span>
   </div>
   {% else %}
-  <div  style="padding: 2px;">
-    <div class="p-card--button" style="display: block; margin-bottom: 0;">
-    </div>
-  </div>
-  <caption>
     <div class="p-strip">
       <div class="row">
-        <div class="u-align--right col-4 col-medium-2 col-small-1">
+        <div class="u-align--right col-small-1 col-medium-1 col-2">
           <img src="https://assets.ubuntu.com/v1/4de1c56c-404_v1.svg" alt="Charm not found">
         </div>
-        <div class="u-align--left col-8 col-medium-4 col-small-3">
+        <div class="u-align--left col-small-3 col-medium-5 col-10">
           <p class="p-heading--4 u-no-margin--bottom">"{{ entity_name }}" not found</p>
-          <p class="u-hide--small">The requested charm or bundle could not be found, sorry.</p>
+          <p>The requested charm or bundle could not be found, sorry.</p>
         </div>
       </div>
     </div>
-  </caption>
   {% endif %}
 </body>
 
