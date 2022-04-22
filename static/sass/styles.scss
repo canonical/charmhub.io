@@ -334,14 +334,6 @@ h3 {
   }
 }
 
-.juju-notification {
-  margin: 0.5rem 0;
-
-  @media (min-width: $breakpoint-small) {
-    margin: 1rem 0 0;
-  }
-}
-
 .charm-framework-type {
   border-top: 1px solid $color-mid-x-light;
   margin-top: 1rem;
