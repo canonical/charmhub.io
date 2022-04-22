@@ -52,7 +52,7 @@
     @extend %vf-has-round-corners;
 
     background-color: $color-x-light;
-    color: $color-dark;
+    color: $color-dark !important;
     display: grid;
     grid-template-rows: 9.5rem 3.9rem;
 
