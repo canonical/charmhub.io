@@ -19,7 +19,12 @@ from webapp.decorators import (
     redirect_uppercase_to_lowercase,
     store_maintenance,
 )
-from webapp.helpers import decrease_headers, discourse_api, md_parser
+from webapp.helpers import (
+    add_header_ids,
+    decrease_headers,
+    discourse_api,
+    md_parser,
+)
 from webapp.store import logic
 from webapp.topics.views import topic_list
 
@@ -155,6 +160,7 @@ def details_overview(entity_name):
 
     readme = md_parser(readme)
     readme = decrease_headers(readme)
+    readme = add_header_ids(readme)
     return render_template(
         "details/overview.html",
         package=package,
