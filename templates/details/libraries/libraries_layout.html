@@ -17,39 +17,25 @@
               Toggle side navigation
             </a>
           </div>
-          <ul class="p-side-navigation__list">
-            <li class="p-side-navigation__item--title">
-              <a class="p-side-navigation__link" {% if request.path.endswith('libraries') %}aria-current="page"{% endif %} href="/{{ entity_name }}/libraries">Introduction</a>
-            </li>
-          </ul>
           {% if libraries %}
           <ul class="p-side-navigation__list">
-            {% for group in libraries.keys() %}
+            {% for lib in libraries %}
             <li class="p-side-navigation__item">
-            {% if group == "others" %}
-              {% for lib in libraries[group] %}
                 <a class="p-side-navigation__link" {% if request.path.endswith(lib['name']) or request.path.endswith(lib['name'] + '/source-code') %}aria-current="page"{% endif %} href="/{{ entity_name }}/libraries/{{ lib['name'] }}" style="color: #111;">{{ lib["name"] }}</a>
-              {% endfor %}
-            {% else %}
-              <span class="p-side-navigation__text" style="color: #111;">{{ group }}</span>
-              <ul class="p-side-navigation__list">
-                {% for lib in libraries[group] %}
-                <li class="p-side-navigation__item">
-                  <a class="p-side-navigation__link" {% if request.path.endswith(lib['name']) or request.path.endswith(lib['name'] + '/source-code') %}aria-current="page"{% endif %} href="/{{ entity_name }}/libraries/{{ group }}{{ lib['name'] }}">{{ lib["name"] }}</a>
-                </li>
-                {% endfor %}
-              </ul>
-            {% endif %}
             </li>
             {% endfor %}
           </ul>
           {% endif %}
+          <ul class="p-side-navigation__list">
+            <li class="p-side-navigation__item--title">
+              <a href="https://juju.is/docs/sdk/libraries">Learn more about libraries</a>
+            </li>
+          </ul>
         </nav>
       </div>
     </div>
 
     <div class="col-9">
-      {% if not is_introduction %}
       <div class="u-fixed-width">
         <h2>{{ fetch_string }}</h2>
         <ul class="p-inline-list--stretch p-list--reversed u-no-margin--bottom">
@@ -97,7 +83,6 @@
           </li>
         </ul>
       </div>
-      {% endif %}
       {% block libraries_content %} {% endblock %}
       </div>
     </div>

@@ -295,8 +295,12 @@ def details_libraries(entity_name):
         publisher_api.get_charm_libraries(entity_name)
     )
 
+    if libraries:
+        first_lib = libraries[0]["name"]
+        return redirect(f"/{entity_name}/libraries/{first_lib}")
+
     return render_template(
-        "details/libraries/introduction.html",
+        "details/libraries/no-libraries.html",
         entity_name=entity_name,
         package=package,
         libraries=libraries,
