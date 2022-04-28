@@ -6,6 +6,7 @@ from mistune import Markdown, Renderer
 from canonicalwebteam.discourse import DiscourseAPI
 from flask import request
 from ruamel.yaml import YAML
+from slugify import slugify
 from talisker import requests
 
 
@@ -145,5 +146,34 @@ def decrease_headers(html_content, step=2):
         if level > 6:
             level = 6
         h.name = f"h{str(level)}"
+
+    return soup
+
+
+def add_header_ids(soup):
+    levels = []
+    # Add id to all headings that don't have one
+    for h in soup.find_all(re.compile("^h[1-6]$")):
+        id = slugify(h.get_text())
+        level = int(h.name[1:])
+
+        # Go through previous headings and find any that are lower
+        levels.append((level, id))
+        reversed_levels = list(reversed(levels))
+        parents = []
+        level_cache = None
+        for i in reversed_levels:
+            if i[0] < level and not level_cache:
+                parents.append(i)
+                level_cache = i[0]
+            elif i[0] < level and i[0] < level_cache:
+                parents.append(i)
+                level_cache = i[0]
+        parents.reverse()
+        if "id" not in h.attrs:
+            parent_path_id = ""
+            if len(parents) > 0:
+                parent_path_id = "--".join([i[1] for i in parents]) + "--"
+            h["id"] = parent_path_id + id
 
     return soup

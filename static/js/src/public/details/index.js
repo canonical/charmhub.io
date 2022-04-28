@@ -2,12 +2,6 @@ import { HistoryState } from "./historyState";
 import { TableOfContents } from "./tableOfContents";
 import { channelMap } from "./channelMap";
 
-if (window.location.hash) {
-  setTimeout(() => {
-    window.scrollTo(0, 0);
-  }, 1);
-}
-
 const init = (packageName) => {
   const historyState = new HistoryState();
 
