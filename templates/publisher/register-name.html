@@ -18,7 +18,7 @@
   {% if invalid_name %}
     <div class="u-fixed-width">
       <div class="p-notification--negative">
-        <p class="p-notification__response" role="status">
+        <p class="p-notification__content" role="status">
           <span class="p-notification__status">The name '{{ entity_name }}' is not valid.</span> It should only have ASCII lowercase letters, numbers, and hyphens, and must have at least one letter.
         </p>
       </div>
@@ -28,7 +28,7 @@
   {% if reserved_name %}
     <div class="u-fixed-width">
       <div class="p-notification--negative">
-        <p class="p-notification__response" role="status">
+        <p class="p-notification__content" role="status">
           <span class="p-notification__status">{{ entity_name }} is a reserved name.</span> You can register a new name below or email <a href="mailto:concierge@canonical.com">concierge@canonical.com</a> to request the reserved name.
         </p>
       </div>
@@ -38,7 +38,7 @@
   {% if already_registered %}
     <div class="u-fixed-width">
       <div class="p-notification--negative">
-        <p class="p-notification__response" role="status">
+        <p class="p-notification__content" role="status">
           <span class="p-notification__status">Another publisher already registered {{ entity_name }}.</span> You can email <a href="mailto:concierge@canonical.com">concierge@canonical.com</a> to file a dispute.
         </p>
       </div>
@@ -48,7 +48,7 @@
   {% if already_owned %}
     <div class="u-fixed-width">
       <div class="p-notification--negative">
-        <p class="p-notification__response" role="status">
+        <p class="p-notification__content" role="status">
           You already own '<a href="/{{ entity_name }}/listing"><strong>{{ entity_name }}</strong></a>'.
         </p>
       </div>
