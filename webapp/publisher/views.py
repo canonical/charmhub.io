@@ -143,6 +143,11 @@ def register_name():
     )
     invalid_name = invalid_name_str == "True"
 
+    reserved_name_str = request.args.get(
+        "reserved_name", default="False", type=str
+    )
+    reserved_name = reserved_name_str == "True"
+
     already_registered_str = request.args.get(
         "already_registered", default="False", type=str
     )
@@ -155,6 +160,7 @@ def register_name():
 
     context = {
         "entity_name": entity_name,
+        "reserved_name": reserved_name,
         "invalid_name": invalid_name,
         "already_owned": already_owned,
         "already_registered": already_registered,
@@ -182,12 +188,20 @@ def post_register_name():
             )
     except StoreApiResponseErrorList as api_response_error_list:
         for error in api_response_error_list.errors:
-            if error["code"] in ["api-error", "reserved-name"]:
+            if error["code"] == "api-error":
                 return redirect(
                     url_for(
                         ".register_name",
                         entity_name=data["name"],
                         invalid_name=True,
+                    )
+                )
+            elif error["code"] == "reserved-name":
+                return redirect(
+                    url_for(
+                        ".register_name",
+                        entity_name=data["name"],
+                        reserved_name=True,
                     )
                 )
             elif error["code"] == "already-registered":
