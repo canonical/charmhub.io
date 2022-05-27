@@ -155,10 +155,9 @@ def details_overview(entity_name):
         "readme-md", "No readme available"
     )
 
-    # Remove Markdown comments
-    readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
-
     readme = md_parser(readme)
+    # Remove Markdown/HTML comments
+    readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
     readme = decrease_headers(readme)
     readme = add_header_ids(readme)
     return render_template(
