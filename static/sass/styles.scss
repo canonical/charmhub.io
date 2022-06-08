@@ -167,7 +167,7 @@ $color-text-orange: #d54110;
   }
 
   @media screen and (max-width: $breakpoint-small - 1) {
-    width: calc(100vw - 1rem);
+    width: calc(100vw - 2rem);
   }
 
   .p-channel-map__mask {
