@@ -58,7 +58,7 @@
                 <a href="#drawer" class="p-button has-icon u-hide--large js-drawer-toggle" data-js="filter-button-mobile-open"><i class="p-icon--arrow-right"></i><span>Filters</span></a>
                 <form class="p-form p-form--inline">
                   <div class="p-form__group u-no-margin--right">
-                    <label for="base" aria-label="Filter platforms" class="p-form__label u-no-margin--bottom u-hide--small">Platform</label>
+                    <label for="base" aria-label="Filter platforms" class="p-form__label u-no-margin--bottom u-hide--small u-hide--medium">Platform</label>
                     <select name="base" data-js="base-handler" class="p-form__control u-no-margin--bottom" value="{{ base }}" id="base" disabled>
                       <option value="all" {% if active_filter('base', 'all' ) %}selected{% endif %}>All</option>
                       <option value="vm" {% if active_filter('base', 'vm' ) %}selected{% endif %}>VM</option>
