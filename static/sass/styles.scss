@@ -406,7 +406,7 @@ h3 {
 }
 
 #topics {
-  @media (max-width: $breakpoint-navigation-threshold) {
+  @media (max-width: $breakpoint-large - 1) {
     grid-row: 2;
   }
 
@@ -416,7 +416,7 @@ h3 {
       grid-template-columns: repeat(3, 1fr);
     }
 
-    @media (max-width: $breakpoint-large) {
+    @media (max-width: $breakpoint-large - 1) {
       .p-muted-heading {
         margin-bottom: 0;
         padding-top: 0;
