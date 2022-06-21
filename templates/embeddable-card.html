@@ -174,14 +174,14 @@
             <td>{{ channel_data.latest.version }}</td>
             <td>{{ channel_data.latest.released_at }}</td>
             {% if show_base %}
-	      <td>
+              <td>
                 <div class="series-tags u-no-margin--top">
                   {% for base in channel_data.latest.bases %}
                     <span class="series-tag">{{ base }}</span>
                   {% endfor %}
                 </div>
               </td>
-	    {% endif %}
+            {% endif %}
           </tr>
           {% endfor %}
           {% endfor %}
@@ -190,15 +190,15 @@
             <td>{{ package["default-release"]["channel"]["track"] }}/{{ package["default-release"]["channel"]["risk"] }}</td>
             <td>{{ package["default-release"]["revision"]["version"] }}</td>
             <td>{{ package["default-release"]["channel"]["released-at"] }}</td>
-	    {% if show_base %}
-	      <td>
-		<div class="series-tags u-no-margin--top">
+            {% if show_base %}
+              <td>
+                <div class="series-tags u-no-margin--top">
                 {% for base in package["default-release"]["revision"]["bases"] %}
                   <span class="series-tag">{{ base.name }} {{ base.channel }}</span>
                 {% endfor %}
-              </div>
-	      </td>
-	     {% endif %}
+                </div>
+              </td>
+            {% endif %}
           </tr>
           {% endif %}
         </tbody>
