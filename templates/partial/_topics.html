@@ -28,8 +28,8 @@
           data-js="topic-card"
         >
           <h3 class="p-muted-heading">{{ topic.name }}</h3>
-          <hr />
-          <p class="p-card__content">{{ topic.description | truncate(202) }}</p>
+          <hr class="u-hide--medium u-hide--small" />
+          <p class="p-card__content u-hide--medium u-hide--small">{{ topic.description | truncate(202) }}</p>
         </a>
         {% endfor %}
       </div>
