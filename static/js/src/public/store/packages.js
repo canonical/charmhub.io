@@ -11,7 +11,8 @@ class initPackages {
     if (
       this._filters.q.length === 0 &&
       this._filters.filter.length === 0 &&
-      this._filters.base[0] === "all"
+      this._filters.base[0] === "all" &&
+      this._filters.type[0] === "all"
     ) {
       this.togglePlaceholderContainer();
       this.toggleFeaturedContainer(true);
@@ -41,20 +42,21 @@ class initPackages {
           }, 1000);
         }
 
-        this.groupAllPackages();
         this.filterPackages();
         this.handleShowAllPackagesButton();
         this.handleFilterButtonMobileOpenClick();
         this.handleFilterClick();
         this.handlePlatformChange();
+        this.handlePackageTypeChange();
         this.enableAllActions();
-        this.renderFiltersAndPlatform();
+        this.updateEnabledCategories();
         this.renderButtonMobileOpen();
 
         if (
           this._filters.q.length > 0 ||
           this._filters.filter.length > 0 ||
-          this._filters.base[0] !== "all"
+          this._filters.base[0] !== "all" ||
+          this._filters.type[0] !== "all"
         ) {
           this.renderPackages();
           this.renderResultsCount();
@@ -114,6 +116,10 @@ class initPackages {
       filters.base = ["all"];
     }
 
+    if (!filters.type) {
+      filters.type = ["all"];
+    }
+
     if (!filters.filter) {
       filters.filter = [];
     }
@@ -147,6 +153,10 @@ class initPackages {
     this.domEl.baseSwitcher = {
       el: document.querySelector("[data-js='base-handler']"),
       selector: "[data-js='base-handler']",
+    };
+    this.domEl.packageTypeSwitcher = {
+      el: document.querySelector("[data-js='package-type-handler']"),
+      selector: "[data-js='package-type-handler']",
     };
     this.domEl.categoryFilters = {
       el: document.querySelectorAll(".category-filter"),
@@ -253,7 +263,7 @@ class initPackages {
         this._filters.base[0] = e.target.value;
 
         this.filterPackages();
-        this.renderFiltersAndPlatform();
+        this.updateEnabledCategories();
         this.renderPackages();
         this.renderResultsCount();
         this.renderButtonMobileOpen();
@@ -265,6 +275,28 @@ class initPackages {
     } else {
       throw new Error(
         `There is no element containing ${this.domEl.baseSwitcher.selector} selector.`
+      );
+    }
+  }
+
+  handlePackageTypeChange() {
+    if (this.domEl.packageTypeSwitcher.el) {
+      this.domEl.packageTypeSwitcher.el.addEventListener("change", (e) => {
+        this._filters.type[0] = e.target.value;
+
+        this.filterPackages();
+        this.updateEnabledCategories();
+        this.renderPackages();
+        this.renderResultsCount();
+        this.renderButtonMobileOpen();
+        this.updateHistory();
+        this.toggleFeaturedContainer();
+        this.toggleShowAllPackagesButton();
+        this.togglePackageContainer(true);
+      });
+    } else {
+      throw new Error(
+        `There is no element containing ${this.domEl.packageTypeSwitcher.selector} selector.`
       );
     }
   }
@@ -291,7 +323,7 @@ class initPackages {
           }
 
           this.filterPackages();
-          this.renderFiltersAndPlatform();
+          this.updateEnabledCategories();
           this.renderPackages();
           this.renderResultsCount();
           this.renderButtonMobileOpen();
@@ -309,74 +341,32 @@ class initPackages {
     }
   }
 
-  groupAllPackages() {
-    this.groupedPackages = {
-      categories: {},
-    };
-
-    this.allPackages.forEach((entity) => {
-      if (entity.store_front.categories) {
-        entity.store_front.categories.forEach((cat) => {
-          if (!this.groupedPackages.categories[cat.slug]) {
-            this.groupedPackages.categories[cat.slug] = {
-              vm: [],
-              kubernetes: [],
-            };
-          }
-          if (entity.store_front["deployable-on"].includes("kubernetes")) {
-            this.groupedPackages.categories[cat.slug].kubernetes.push(entity);
-          } else {
-            this.groupedPackages.categories[cat.slug].vm.push(entity);
-          }
-        });
-      }
+  updateEnabledCategories() {
+    // Enable all categories by default
+    this.domEl.categoryFilters.el.forEach((filter) => {
+      filter.disabled = false;
     });
-  }
 
-  renderFiltersAndPlatform() {
-    if (this.domEl.categoryFilters.el && this.domEl.baseSwitcher.el) {
-      this.domEl.categoryFilters.el.forEach((filter) => {
-        let bases = this.groupedPackages.categories[filter.value];
+    // If the user is using the patform or type filters
+    if (this._filters.base[0] !== "all" || this._filters.type[0] !== "all") {
+      const categories = [];
 
-        if (bases === undefined) {
-          filter.disabled = true;
-          return;
-        }
-
-        if (this._filters.base[0] === "all") {
-          let count = 0;
-
-          Object.keys(bases).forEach((base) => {
-            count += base.length;
+      this.packages.forEach((entity) => {
+        if (entity.store_front.categories) {
+          entity.store_front.categories.forEach((cat) => {
+            if (!categories.includes(cat.slug)) {
+              categories.push(cat.slug);
+            }
           });
-          if (count === 0) {
-            filter.disabled = true;
-          } else {
-            filter.disabled = false;
-          }
-        } else {
-          if (bases[this._filters.base[0]].length === 0) {
-            filter.disabled = true;
-          } else {
-            filter.disabled = false;
-          }
         }
       });
 
-      Array.from(this.domEl.baseSwitcher.el.options).forEach((option) => {
-        if (option.value !== "all" && this._filters.filter.length > 0) {
-          this._filters.filter.forEach((filter) => {
-            if (
-              this.groupedPackages.categories[filter] &&
-              this.groupedPackages.categories[filter][option.value].length > 0
-            ) {
-              option.disabled = false;
-            } else {
-              option.disabled = true;
-            }
-          });
+      // We hide categories without results
+      this.domEl.categoryFilters.el.forEach((filter) => {
+        if (categories.includes(filter.value)) {
+          filter.disabled = false;
         } else {
-          option.disabled = false;
+          filter.disabled = true;
         }
       });
     }
@@ -425,28 +415,22 @@ class initPackages {
   }
 
   filterPackages() {
-    if (this._filters.base[0] === "all" && this._filters.filter.length === 0) {
-      this.packages = this.allPackages;
-    } else if (
-      this._filters.base[0] === "all" &&
-      this._filters.filter.length > 0
-    ) {
-      this.packages = this.allPackages.filter((entity) =>
-        this.filterByCategory(entity)
-      );
-    } else if (
-      this._filters.base[0] !== "all" &&
-      this._filters.filter.length === 0
-    ) {
-      this.packages = this.allPackages.filter((entity) =>
-        entity.store_front["deployable-on"].includes(this._filters.base[0])
-      );
-    } else {
-      let pakagesFilteredByPlatform = this.allPackages.filter((entity) =>
-        entity.store_front["deployable-on"].includes(this._filters.base[0])
-      );
+    this.packages = this.allPackages;
 
-      this.packages = pakagesFilteredByPlatform.filter((entity) =>
+    if (this._filters.base[0] !== "all") {
+      this.packages = this.packages.filter((entity) =>
+        entity.store_front["deployable-on"].includes(this._filters.base[0])
+      );
+    }
+
+    if (this._filters.type[0] !== "all") {
+      this.packages = this.packages.filter((entity) =>
+        entity["type"].includes(this._filters.type[0])
+      );
+    }
+
+    if (this._filters.filter.length > 0) {
+      this.packages = this.packages.filter((entity) =>
         this.filterByCategory(entity)
       );
     }
@@ -493,8 +477,13 @@ class initPackages {
   }
 
   enableAllActions() {
-    if (this.domEl.baseSwitcher.el && this.domEl.showAllPackagesButton.el) {
+    if (
+      this.domEl.baseSwitcher.el &&
+      this.domEl.showAllPackagesButton.el &&
+      this.domEl.packageTypeSwitcher.el
+    ) {
       this.domEl.baseSwitcher.el.disabled = false;
+      this.domEl.packageTypeSwitcher.el.disabled = false;
       this.domEl.showAllPackagesButton.el.disabled = false;
     }
   }

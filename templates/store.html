@@ -37,6 +37,37 @@
               </ul>
               {% endif %}
             </form>
+
+            <div class="p-side-navigation__form">
+              <div class="p-container--inline">
+                <form class="p-form p-form--inline u-flex">
+                  <div class="p-form__group u-no-margin--right" style="flex-grow: 1;">
+                    <label for="base" aria-label="Filter platforms" class="p-form__label u-no-margin--bottom">Platform</label>
+                    <select name="base" data-js="base-handler" class="p-form__control u-no-margin--bottom" value="{{ base }}" id="base" disabled style="min-width: unset;">
+                      <option value="all" {% if active_filter('base', 'all' ) %}selected{% endif %}>All</option>
+                      <option value="vm" {% if active_filter('base', 'vm' ) %}selected{% endif %}>VM</option>
+                      <option value="kubernetes" {% if active_filter('base', 'kubernetes' ) %}selected{% endif %}>Kubernetes</option>
+                    </select>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="p-side-navigation__form">
+              <div class="p-container--inline">
+                <form class="p-form p-form--inline u-flex">
+                  <div class="p-form__group u-no-margin--right" style="flex-grow: 1;">
+                    <label for="type" aria-label="Filter type" class="p-form__label u-no-margin--bottom">Filter by</label>
+                    <select name="type" data-js="package-type-handler" class="p-form__control u-no-margin--bottom" value="{{ type }}" id="type" disabled style="min-width: unset;">
+                      <option value="all" {% if active_filter('type', 'all' ) %}selected{% endif %}>All</option>
+                      <option value="charm" {% if active_filter('type', 'charm' ) %}selected{% endif %}>Charms</option>
+                      <option value="bundle" {% if active_filter('type', 'bundle' ) %}selected{% endif %}>Bundles</option>
+                    </select>
+                  </div>
+                </form>
+              </div>
+            </div>
+
           </nav>
         </div>
       </div>
@@ -56,16 +87,6 @@
               </form>
               <div class="p-container--inline">
                 <a href="#drawer" class="p-button has-icon u-hide--large js-drawer-toggle u-align--left" data-js="filter-button-mobile-open"><i class="p-icon--arrow-right"></i><span>Filters</span></a>
-                <form class="p-form p-form--inline">
-                  <div class="p-form__group u-no-margin--right">
-                    <label for="base" aria-label="Filter platforms" class="p-form__label u-no-margin--bottom u-hide--small u-hide--medium">Platform</label>
-                    <select name="base" data-js="base-handler" class="p-form__control u-no-margin--bottom" value="{{ base }}" id="base" disabled>
-                      <option value="all" {% if active_filter('base', 'all' ) %}selected{% endif %}>All</option>
-                      <option value="vm" {% if active_filter('base', 'vm' ) %}selected{% endif %}>VM</option>
-                      <option value="kubernetes" {% if active_filter('base', 'kubernetes' ) %}selected{% endif %}>Kubernetes</option>
-                    </select>
-                  </div>
-                </form>
               </div>
             </div>
           </div>
