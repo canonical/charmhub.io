@@ -390,6 +390,19 @@ h3 {
   border-top: 3px solid $color-accent;
 }
 
+.l-fluid-breakout__aside .p-side-navigation__form {
+  margin-bottom: 1rem;
+
+  @media (max-width: $breakpoint-large - 1) {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .p-form__label {
+    min-width: 5rem;
+  }
+}
+
 .l-fluid-section {
   grid-column: 1/-1;
   margin-bottom: 1rem;
