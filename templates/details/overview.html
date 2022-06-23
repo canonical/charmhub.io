@@ -11,6 +11,9 @@
           <span data-js="summary-content" style="overflow-wrap: break-word;">{{ package.result.summary }}</span>
           <a href="/{{ package.name }}" class="is-always-color-link u-hide" data-js="summary-read-more">Read more</a>
         </p>
+        {% if package["default-release"].revision.subordinate %}
+          <div class="p-status-label--information">Subordinate</div>
+        {% endif %}
         <hr class="p-separator--shallow">
       {% endif %}
       <!-- Once there is a topology image available, uncomment the section below -->
