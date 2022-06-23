@@ -347,11 +347,15 @@ class initPackages {
       filter.disabled = false;
     });
 
-    // If the user is using the patform or type filters
-    if (this._filters.base[0] !== "all" || this._filters.type[0] !== "all") {
+    // If the user is searching or using filters
+    if (
+      this._filters.q.length > 0 ||
+      this._filters.base[0] !== "all" ||
+      this._filters.type[0] !== "all"
+    ) {
       const categories = [];
 
-      this.packages.forEach((entity) => {
+      this.filteredPackagesAllCategories.forEach((entity) => {
         if (entity.store_front.categories) {
           entity.store_front.categories.forEach((cat) => {
             if (!categories.includes(cat.slug)) {
@@ -428,6 +432,8 @@ class initPackages {
         entity["type"].includes(this._filters.type[0])
       );
     }
+
+    this.filteredPackagesAllCategories = this.packages;
 
     if (this._filters.filter.length > 0) {
       this.packages = this.packages.filter((entity) =>
