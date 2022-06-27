@@ -69,18 +69,22 @@
               Most of this documentation can be collaboratively discussed and changed on the respective topic in the doc category of the <a href="{{ forum_url }}" class="p-link--external">Charmhub forum</a>. See the <a href="https://discourse.charmhub.io/t/how-to-write-docs-our-documentation-guidelines-for-contributors/1245" class="p-link--external">documentation guidelines</a> if you’d like to contribute.
             </p>
             <div class="p-notification--information">
-              <p class="p-notification__response">
-                Last updated {{ last_update }}. <a href="{{ forum_url }}{{ topic_path }}" class="p-link--external">Help improve this document in the forum</a>.
-              </p>
+              <div class="p-notification__content">
+                <p class="p-notification__message">
+                  Last updated {{ last_update }}. <a href="{{ forum_url }}{{ topic_path }}" class="p-link--external">Help improve this document in the forum</a>.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     {% else %}
       <div class="p-notification--information">
-        <p class="p-notification__response">
-          No documentation has been added yet.
-        </p>
+        <div class="p-notification__content">
+          <p class="p-notification__message">
+            No documentation has been added yet.
+          </p>
+        </div>
       </div>
     {% endif %}
   </div>

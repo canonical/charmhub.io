@@ -31,10 +31,12 @@
     <div class="u-fixed-width">
       {% for category, message in messages %}
       <div id="notification" class="p-notification p-notification--{{ category }}">
-        <p class="p-notification__response">
-          {{ message }}
-        </p>
-        <button class="p-icon--close" aria-label="Close notification" aria-controls="notification">Close</button>
+        <div class="p-notification__content">
+          <p class="p-notification__message">
+            {{ message }}
+          </p>
+        </div>
+        <button class="p-notification__close" aria-label="Close notification" aria-controls="notification">Close</button>
       </div>
       {% endfor %}
     </div>

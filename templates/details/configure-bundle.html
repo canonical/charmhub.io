@@ -36,18 +36,22 @@
     {% else %}
       <h3>{{ subpackage.name }}</h3>
       <div class="p-notification--information">
-        <p class="p-notification__response">
-          No configuration details have been added for this charm yet.
-        </p>
+        <div class="p-notification__content">
+          <p class="p-notification__message">
+            No configuration details have been added for this charm yet.
+          </p>
+        </div>
       </div>
     {% endif %}
   </div>
   {% else %}
   <div class="col-12">
     <div class="p-notification--information">
-      <p class="p-notification__response">
-        No configuration details have been added for this bundle yet.
-      </p>
+      <div class="p-notification__content">
+        <p class="p-notification__message">
+          No configuration details have been added for this bundle yet.
+        </p>
+      </div>
     </div>
   </div>
   {% endif %}
