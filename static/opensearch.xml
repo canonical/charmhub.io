@@ -3,5 +3,5 @@
 	<Description>Charmhub - The Open Operator Collection</Description>
 	<InputEncoding>UTF-8</InputEncoding>
 	<Image width="64" height="64" type="image/png">https://assets.ubuntu.com/v1/93dc475c-jaas-favicon.png</Image>
-	<Url type="text/html" method="get" template="https://charmhub-io/?q={searchTerms}"/>
+	<Url type="text/html" method="get" template="https://charmhub.io/?q={searchTerms}"/>
 </OpenSearchDescription>
