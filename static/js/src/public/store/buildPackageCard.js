@@ -21,7 +21,7 @@ function buildPlatformIcons(entityCardIcons, altText, srcText, text) {
 }
 
 function buildPackageCard(entity) {
-  const entityCard = document.getElementById("package-card");
+  const entityCard = document.getElementById(`package-card-${entity.type}`);
   const clone = entityCard.content.cloneNode(true);
 
   const entityCardContainer = clone.querySelector("[data-js='card-container']");
@@ -30,45 +30,62 @@ function buildPackageCard(entity) {
   const entityCardButton = clone.querySelector(".p-card--button");
   entityCardButton.href = `/${entity.name}`;
 
-  const charmCardThumbnailContainer = clone.querySelector(
-    ".p-card__thumbnail-container"
-  );
-  const bundleCardThumbnailContainer = clone.querySelector(".p-bundle-icons");
+  const iconContainer = clone.querySelector(".p-card__thumbnail-container");
 
   if (entity.type === "charm") {
-    bundleCardThumbnailContainer.remove();
-    const charmThumbnail =
-      charmCardThumbnailContainer.querySelector(".p-card__thumbnail");
-    charmThumbnail.alt = entity.name;
-    charmThumbnail.setAttribute("loading", "lazy");
+    const charmIcon = iconContainer.querySelector(".p-card__thumbnail");
+    charmIcon.alt = entity.name;
+    charmIcon.setAttribute("loading", "lazy");
 
     if (entity.store_front.icons && entity.store_front.icons[0]) {
-      charmThumbnail.src =
-        "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/" +
+      charmIcon.src =
+        "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/" +
         entity.store_front.icons[0];
     } else {
-      charmThumbnail.src =
-        "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg";
+      charmIcon.src =
+        "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg";
     }
   } else {
-    charmCardThumbnailContainer.remove();
-    const bundleThumbnails =
-      bundleCardThumbnailContainer.querySelectorAll("img");
-    const bundleIconsCount = bundleCardThumbnailContainer.querySelector(
+    const bundleIconsWrapper = clone.querySelector(".p-bundle-icons");
+    const bundleIcons = bundleIconsWrapper.querySelector("img");
+    const bundleIconsCount = bundleIconsWrapper.querySelector(
       ".p-bundle-icons__count"
     );
 
-    if (entity.apps && entity.apps.length > 2) {
-      bundleIconsCount.innerText = `+${entity.apps.length - 2}`;
+    // if (entity.apps && entity.apps.length > 17) {
+    //   bundleIconsCount.innerText = `+${entity.apps.length - 17}`;
+    // } else {
+    //   bundleIconsWrapper.removeChild(bundleIconsCount);
+    // }
+
+    if (!entity.apps || entity.apps.length === 0) {
+      const icon = new Image();
+      icon.alt = entity.name;
+      icon.setAttribute("loading", "lazy");
+      icon.src =
+        "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg";
+      bundleIcons.replaceWith(icon);
+    } else {
+      const icons = [];
+      entity.apps.forEach((app) => {
+        const icon = new Image();
+        icon.alt = app.name;
+        icon.setAttribute("loading", "lazy");
+        icon.addEventListener("error", () => {
+          icon.src =
+            "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg";
+        });
+        icon.src = `/${app.name}/icon`;
+
+        icons.push(icon);
+      });
+
+      bundleIconsWrapper.removeChild(bundleIcons);
+
+      icons.forEach((icon) => {
+        bundleIconsWrapper.prepend(icon);
+      });
     }
-    Array.from(bundleThumbnails).forEach((thumbnail, count) => {
-      if (entity.apps && entity.apps[count]) {
-        thumbnail.src = `/${entity.apps[count]["name"]}/icon`;
-      } else {
-        thumbnail.src =
-          "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_64,h_64/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg";
-      }
-    });
   }
 
   const entityCardTitle = clone.querySelector(".package-card-title");
@@ -79,7 +96,7 @@ function buildPackageCard(entity) {
   }
 
   const entityCardPublisher = clone.querySelector(".package-card-publisher");
-  let newCardPublisherText = truncateString(
+  const newCardPublisherText = truncateString(
     entity.result.publisher["display-name"],
     22
   );
@@ -93,7 +110,7 @@ function buildPackageCard(entity) {
 
   const entityCardSummary = clone.querySelector(".package-card-summary");
 
-  if (entity.result.summary) {
+  if (entityCardSummary && entity.result.summary) {
     entityCardSummary.innerHTML = truncateString(entity.result.summary, 90);
   }
 

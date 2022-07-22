@@ -1,20 +1,13 @@
 @use "sass:math";
 
 @mixin charmhub-p-bundle-icons {
-  .p-bundle-icons {
-    $icon-size: 1.75rem;
-    $padding: 0.12rem;
+  $icon-size: 1.5rem;
 
+  .p-bundle-icons {
     align-items: center;
-    background-color: $color-x-light;
-    border: 0.06rem solid $color-mid-light;
-    border-radius: math.div(($padding * 2) + $icon-size, 2);
     color: #333;
-    display: flex;
     font-size: 0.875rem;
-    padding: $padding 0.3rem + $padding $padding $padding;
     position: relative;
-    top: -0.12rem;
     width: fit-content;
 
     &:hover {
@@ -26,21 +19,17 @@
       border-radius: math.div($icon-size, 2);
       display: inline-block;
       height: $icon-size;
-      margin-bottom: 0;
+      margin-bottom: 0.5rem;
+      margin-right: 0.5rem;
       vertical-align: bottom;
       width: $icon-size;
-
-      &:first-child {
-        // Set a background to handle overlapping transparent icons.
-        background-color: $color-x-light;
-        z-index: 1;
-      }
-
-      &:nth-child(2) {
-        margin-inline-end: 0.5rem;
-        margin-left: -1.25rem;
-      }
     }
+  }
+
+  .p-bundle-icons__count {
+    display: inline-block;
+    height: $icon-size;
+    margin-bottom: 0.5rem;
   }
 
   .p-heading-icon--x-small > .p-bundle-icons {

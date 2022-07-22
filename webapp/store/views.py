@@ -633,7 +633,9 @@ def entity_icon(entity_name):
 # homepage, and should be removed once the icons are available via the api
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/charms.json')
 def get_charms_from_bundle(entity_name):
-    package = get_package(entity_name)
+    package = get_package(
+        entity_name
+    )
 
     if package["type"] != "bundle":
         return "Requested object should be a bundle", 400
