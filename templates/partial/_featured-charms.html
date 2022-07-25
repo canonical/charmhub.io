@@ -4,9 +4,9 @@
       <div class="p-card__header">
         <div class="p-card__thumbnail-container">
           {% if charm.result.media %}
-            <img src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_64,h_64/{{ charm['result']['media'][0]['url'] }}" width="64" height="64" class="p-card__thumbnail" alt="{{ charm['name'] }}">
+            <img src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_24,h_24/{{ charm['result']['media'][0]['url'] }}" width="24" height="24" class="p-card__thumbnail" alt="{{ charm['name'] }}">
             {% else %}
-            <img src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_64,h_64/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" width="64" height="64" class="p-card__thumbnail" alt="{{ charm['name'] }}">
+            <img src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" width="24" height="24" class="p-card__thumbnail" alt="{{ charm['name'] }}">
           {% endif %}
         </div>
         <h3 class="p-card__title p-heading--4 u-no-margin--bottom package-card-title">{{ charm['store_front']['display-name'] | replace("-", " ") }}</h3>
