@@ -36,13 +36,12 @@
     }
 
     animation: shine 3s infinite ease-in-out;
-    background-image:
-      linear-gradient(
-        to bottom right,
-        $color-mid-x-light calc(50% - 2rem),
-        $color-light 50%,
-        $color-mid-x-light calc(50% + 2rem)
-      );
+    background-image: linear-gradient(
+      to bottom right,
+      $color-mid-x-light calc(50% - 2rem),
+      $color-light 50%,
+      $color-mid-x-light calc(50% + 2rem)
+    );
     background-size: 300% 300%;
     clip-path: url("#animation-mask");
   }
@@ -54,7 +53,7 @@
     background-color: $color-x-light;
     color: $color-dark !important;
     display: grid;
-    grid-template-rows: auto auto 2.5rem;
+    grid-template-rows: 9rem auto 2.5rem;
 
     // Force obey parent's border-radius
     height: 16rem;
