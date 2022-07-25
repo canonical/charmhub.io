@@ -4,12 +4,6 @@
   $icon-size: 1.5rem;
 
   .p-bundle-icons {
-    align-items: center;
-    color: #333;
-    font-size: 0.875rem;
-    position: relative;
-    width: fit-content;
-
     &:hover {
       text-decoration: none;
     }
@@ -27,9 +21,14 @@
   }
 
   .p-bundle-icons__count {
+    width: $icon-size;
+    overflow: hidden;
+    color: #333;
+    font-size: 0.875rem;
     display: inline-block;
     height: $icon-size;
     margin-bottom: 0.5rem;
+    vertical-align: middle;
   }
 
   .p-heading-icon--x-small > .p-bundle-icons {

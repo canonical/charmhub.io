@@ -474,7 +474,7 @@ class initPackages {
         this.domEl.packageContainer.el.appendChild(buildPackageCard(entity));
       });
 
-      this.handlePackageClick(this.domEl.packageContainer.el);
+      handleBundleIcons(this.domEl.packageContainer.el);
       this.captureTooltipButtonClick();
     } else {
       throw new Error(
@@ -564,88 +564,128 @@ class initPackages {
       });
     });
   }
+}
 
-  static handleBundleIcons(container) {
-    const contents = container.querySelectorAll(".p-card__content");
+/**
+ * Bundles have multiple icons, sometimes those icons don't fit
+ * in the container. This function hides icons that don't fit and
+ * adds a count of "missing" icons.
+ */
+function handleBundleIcons(container) {
+  const contents = container.querySelectorAll(".p-card__content");
 
-    const ensureBundleCharmsFit = () => {
-      const contentStyles = window.getComputedStyle(contents[0], null);
-      const paddingX = Math.round(
-        parseInt(contentStyles.getPropertyValue("padding-left")) +
-          parseInt(contentStyles.getPropertyValue("padding-right")) +
-          parseInt(contentStyles.getPropertyValue("border-left-width")) +
-          parseInt(contentStyles.getPropertyValue("border-right-width"))
-      );
-      const paddingY = Math.round(
-        parseInt(contentStyles.getPropertyValue("padding-top")) +
-          parseInt(contentStyles.getPropertyValue("padding-bottom")) +
-          parseInt(contentStyles.getPropertyValue("border-top-width")) +
-          parseInt(contentStyles.getPropertyValue("border-bottom-width"))
-      );
+  const ensureBundleCharmsFit = () => {
+    // First work out the size of a content area.
+    // this only needs doing once as all the cards are the same size.
 
-      const contentsBox = contents[0].getBoundingClientRect();
-      const innerWidth = contentsBox.width - paddingX;
-      const innerHeight = contentsBox.height - paddingY;
+    // Get computed styles from CSS
+    const contentStyles = window.getComputedStyle(contents[0], null);
 
-      contents.forEach((content) => {
-        const icons = Array.from(content.querySelectorAll("img"));
-        const icon = icons[0];
-        if (icon) {
-          const container = icon.parentNode;
-          const iconBox = icon.getBoundingClientRect();
-          const iconStyles = window.getComputedStyle(icon, null);
-          const iconWidth = Math.round(
-            iconBox.width +
-              parseInt(iconStyles.getPropertyValue("border-left-width")) +
-              parseInt(iconStyles.getPropertyValue("border-right-width")) +
-              parseInt(iconStyles.getPropertyValue("margin-left")) +
-              parseInt(iconStyles.getPropertyValue("margin-right"))
-          );
-          const iconHeight = Math.round(
-            iconBox.height +
-              parseInt(iconStyles.getPropertyValue("border-top-width")) +
-              parseInt(iconStyles.getPropertyValue("border-bottom-width")) +
-              parseInt(iconStyles.getPropertyValue("margin-top")) +
-              parseInt(iconStyles.getPropertyValue("margin-bottom"))
-          );
-          if (iconWidth && innerWidth && iconHeight && innerHeight) {
-            const maxIconsX = Math.floor(innerWidth / iconWidth);
-            const maxIconsY = Math.floor(innerHeight / iconHeight);
-            const maxIcons = maxIconsX * maxIconsY - 1;
-            const removedIcons = icons.length - maxIcons;
-            icons.forEach((icon, index) => {
-              if (index >= maxIcons) {
-                icon.classList.add("u-hide");
-              } else {
-                icon.classList.remove("u-hide");
-              }
-            });
-            if (removedIcons > 0) {
-              let extraCount = container.querySelector(
-                ".p-bundle-icons__count"
+    // We want the inner-size so make sure we know what the padding is,
+    // as the getBoundingClientRect doesn't take padding into account.
+    const paddingX =
+      parseInt(contentStyles.getPropertyValue("padding-left")) +
+      parseInt(contentStyles.getPropertyValue("padding-right"));
+    const paddingY =
+      parseInt(contentStyles.getPropertyValue("padding-top")) +
+      parseInt(contentStyles.getPropertyValue("padding-bottom"));
+    const contentsBox = contents[0].getBoundingClientRect();
+    const innerWidth = contentsBox.width - paddingX;
+    const innerHeight = contentsBox.height - paddingY;
+
+    // For each content area in the container (each card)
+    contents.forEach((content) => {
+      // Ensure there is an icon available
+      const icons = Array.from(content.querySelectorAll("img"));
+      const icon = icons[0];
+      if (icon) {
+        // Again, all the icons are the same size so we just need the first one
+        // to work out sizes.
+        const container = icon.parentNode;
+        const iconBox = icon.getBoundingClientRect();
+        const iconStyles = window.getComputedStyle(icon, null);
+
+        // Because we need the outer size, including margin, add
+        // everything from the box model.
+        const iconWidth =
+          iconBox.width +
+          parseInt(iconStyles.getPropertyValue("padding-left")) +
+          parseInt(iconStyles.getPropertyValue("padding-right")) +
+          parseInt(iconStyles.getPropertyValue("border-left-width")) +
+          parseInt(iconStyles.getPropertyValue("border-right-width")) +
+          parseInt(iconStyles.getPropertyValue("margin-left")) +
+          parseInt(iconStyles.getPropertyValue("margin-right"));
+        const iconHeight =
+          iconBox.height +
+          parseInt(iconStyles.getPropertyValue("padding-top")) +
+          parseInt(iconStyles.getPropertyValue("padding-bottom")) +
+          parseInt(iconStyles.getPropertyValue("border-top-width")) +
+          parseInt(iconStyles.getPropertyValue("border-bottom-width")) +
+          parseInt(iconStyles.getPropertyValue("margin-top")) +
+          parseInt(iconStyles.getPropertyValue("margin-bottom"));
+
+        // Only if all of these numbers exist as numbers...
+        if (iconWidth && innerWidth && iconHeight && innerHeight) {
+          // To take into account JavaScript rounding errors we need to remove some
+          // icons from each row... Specifically 1.5. 1 is too small and 2 is too big.
+          // This ensures that the "extra count" doesn't get pushed to the next line
+          // and out of the content box.
+
+          const maxIconsX = Math.floor(innerWidth / iconWidth) - 1.5;
+          const maxIconsY = Math.floor(innerHeight / iconHeight);
+          const maxIcons = Math.round(maxIconsX * maxIconsY);
+
+          // The number of icon's we've "removed"
+          const removedIcons = icons.length - maxIcons;
+
+          // Show/hide the icons
+          icons.forEach((icon, index) => {
+            if (index >= maxIcons) {
+              icon.classList.add("u-hide");
+            } else {
+              icon.classList.remove("u-hide");
+            }
+          });
+
+          // Get the extra count container
+          let extraCount = container.querySelector(".p-bundle-icons__count");
+          if (removedIcons > 0) {
+            // If the container doesn't work, create it
+            if (!extraCount) {
+              extraCount = document.createElement("span");
+              extraCount.setAttribute(
+                "class",
+                "p-bundle-icons__count u-text--muted"
               );
-              if (!extraCount) {
-                extraCount = document.createElement("span");
-                extraCount.setAttribute(
-                  "class",
-                  "p-bundle-icons__count u-text--muted"
-                );
-                container.appendChild(extraCount);
-              }
-              extraCount.innerHTML = `+${removedIcons}`;
+
+              // Add the element
+              container.appendChild(extraCount);
+            }
+
+            // Set the count of missing icons
+            extraCount.innerHTML = `+${removedIcons}`;
+          } else {
+            // If there aren't any missing icons, remove the container
+            if (extraCount) {
+              extraCount.parentNode.removeChild(extraCount);
             }
           }
         }
-      });
-    };
+      }
+    });
+  };
 
-    if (contents.length > 0) {
-      ensureBundleCharmsFit();
+  // If there are content areas
+  if (contents.length > 0) {
+    // Initialize all the icons
+    ensureBundleCharmsFit();
 
-      window.removeEventListener("resize", ensureBundleCharmsFit);
-      window.addEventListener("resize", ensureBundleCharmsFit);
-    }
+    // Remove the resize listener (to avoid duplicate events on subsequent runs)
+    window.removeEventListener("resize", ensureBundleCharmsFit);
+
+    // Add it again
+    window.addEventListener("resize", ensureBundleCharmsFit);
   }
 }
 
-export { initPackages };
+export { initPackages, handleBundleIcons };

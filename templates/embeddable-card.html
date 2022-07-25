@@ -92,10 +92,10 @@
     </a>
   </div>
   {% if package.type == "bundle" %}
-    <script src="{{ versioned_static('js/dist/store.js') }}" defer></script>
+    <script src="{{ versioned_static('js/dist/store.js') }}"></script>
     <script>
       window.addEventListener("DOMContentLoaded", () => {
-        charmhub.store.initPackages.handleBundleIcons(document.querySelector("body"));
+        charmhub.store.handleBundleIcons(document.querySelector(".p-card--button"));
       });
     </script>
   {% endif %}
