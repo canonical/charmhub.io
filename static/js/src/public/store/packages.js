@@ -549,10 +549,12 @@ class initPackages {
         });
       };
 
-      ensureBundleCharmsFit();
+      if (contents.length > 0) {
+        ensureBundleCharmsFit();
 
-      window.removeEventListener("resize", ensureBundleCharmsFit);
-      window.addEventListener("resize", ensureBundleCharmsFit);
+        window.removeEventListener("resize", ensureBundleCharmsFit);
+        window.addEventListener("resize", ensureBundleCharmsFit);
+      }
 
       this.captureTooltipButtonClick();
     } else {

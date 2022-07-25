@@ -52,12 +52,6 @@ function buildPackageCard(entity) {
       ".p-bundle-icons__count"
     );
 
-    // if (entity.apps && entity.apps.length > 17) {
-    //   bundleIconsCount.innerText = `+${entity.apps.length - 17}`;
-    // } else {
-    //   bundleIconsWrapper.removeChild(bundleIconsCount);
-    // }
-
     if (!entity.apps || entity.apps.length === 0) {
       const icon = new Image();
       icon.alt = entity.name;
