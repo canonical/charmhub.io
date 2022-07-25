@@ -474,88 +474,7 @@ class initPackages {
         this.domEl.packageContainer.el.appendChild(buildPackageCard(entity));
       });
 
-      const contents = this.domEl.packageContainer.el.querySelectorAll(
-        ".p-card__content"
-      );
-
-      const ensureBundleCharmsFit = () => {
-        const contentStyles = window.getComputedStyle(contents[0], null);
-        const paddingX = Math.round(
-          parseInt(contentStyles.getPropertyValue("padding-left")) +
-            parseInt(contentStyles.getPropertyValue("padding-right")) +
-            parseInt(contentStyles.getPropertyValue("border-left-width")) +
-            parseInt(contentStyles.getPropertyValue("border-right-width"))
-        );
-        const paddingY = Math.round(
-          parseInt(contentStyles.getPropertyValue("padding-top")) +
-            parseInt(contentStyles.getPropertyValue("padding-bottom")) +
-            parseInt(contentStyles.getPropertyValue("border-top-width")) +
-            parseInt(contentStyles.getPropertyValue("border-bottom-width"))
-        );
-
-        const contentsBox = contents[0].getBoundingClientRect();
-        const innerWidth = contentsBox.width - paddingX;
-        const innerHeight = contentsBox.height - paddingY;
-
-        contents.forEach((content) => {
-          const icons = Array.from(content.querySelectorAll("img"));
-          const icon = icons[0];
-          if (icon) {
-            const container = icon.parentNode;
-            const iconBox = icon.getBoundingClientRect();
-            const iconStyles = window.getComputedStyle(icon, null);
-            const iconWidth = Math.round(
-              iconBox.width +
-                parseInt(iconStyles.getPropertyValue("border-left-width")) +
-                parseInt(iconStyles.getPropertyValue("border-right-width")) +
-                parseInt(iconStyles.getPropertyValue("margin-left")) +
-                parseInt(iconStyles.getPropertyValue("margin-right"))
-            );
-            const iconHeight = Math.round(
-              iconBox.height +
-                parseInt(iconStyles.getPropertyValue("border-top-width")) +
-                parseInt(iconStyles.getPropertyValue("border-bottom-width")) +
-                parseInt(iconStyles.getPropertyValue("margin-top")) +
-                parseInt(iconStyles.getPropertyValue("margin-bottom"))
-            );
-            if (iconWidth && innerWidth && iconHeight && innerHeight) {
-              const maxIconsX = Math.floor(innerWidth / iconWidth);
-              const maxIconsY = Math.floor(innerHeight / iconHeight);
-              const maxIcons = maxIconsX * maxIconsY - 1;
-              const removedIcons = icons.length - maxIcons;
-              icons.forEach((icon, index) => {
-                if (index >= maxIcons) {
-                  icon.classList.add("u-hide");
-                } else {
-                  icon.classList.remove("u-hide");
-                }
-              });
-              if (removedIcons > 0) {
-                let extraCount = container.querySelector(
-                  ".p-bundle-icons__count"
-                );
-                if (!extraCount) {
-                  extraCount = document.createElement("span");
-                  extraCount.setAttribute(
-                    "class",
-                    "p-bundle-icons__count u-text--muted"
-                  );
-                  container.appendChild(extraCount);
-                }
-                extraCount.innerHTML = `+${removedIcons}`;
-              }
-            }
-          }
-        });
-      };
-
-      if (contents.length > 0) {
-        ensureBundleCharmsFit();
-
-        window.removeEventListener("resize", ensureBundleCharmsFit);
-        window.addEventListener("resize", ensureBundleCharmsFit);
-      }
-
+      this.handlePackageClick(this.domEl.packageContainer.el);
       this.captureTooltipButtonClick();
     } else {
       throw new Error(
@@ -644,6 +563,88 @@ class initPackages {
         e.stopPropagation();
       });
     });
+  }
+
+  static handleBundleIcons(container) {
+    const contents = container.querySelectorAll(".p-card__content");
+
+    const ensureBundleCharmsFit = () => {
+      const contentStyles = window.getComputedStyle(contents[0], null);
+      const paddingX = Math.round(
+        parseInt(contentStyles.getPropertyValue("padding-left")) +
+          parseInt(contentStyles.getPropertyValue("padding-right")) +
+          parseInt(contentStyles.getPropertyValue("border-left-width")) +
+          parseInt(contentStyles.getPropertyValue("border-right-width"))
+      );
+      const paddingY = Math.round(
+        parseInt(contentStyles.getPropertyValue("padding-top")) +
+          parseInt(contentStyles.getPropertyValue("padding-bottom")) +
+          parseInt(contentStyles.getPropertyValue("border-top-width")) +
+          parseInt(contentStyles.getPropertyValue("border-bottom-width"))
+      );
+
+      const contentsBox = contents[0].getBoundingClientRect();
+      const innerWidth = contentsBox.width - paddingX;
+      const innerHeight = contentsBox.height - paddingY;
+
+      contents.forEach((content) => {
+        const icons = Array.from(content.querySelectorAll("img"));
+        const icon = icons[0];
+        if (icon) {
+          const container = icon.parentNode;
+          const iconBox = icon.getBoundingClientRect();
+          const iconStyles = window.getComputedStyle(icon, null);
+          const iconWidth = Math.round(
+            iconBox.width +
+              parseInt(iconStyles.getPropertyValue("border-left-width")) +
+              parseInt(iconStyles.getPropertyValue("border-right-width")) +
+              parseInt(iconStyles.getPropertyValue("margin-left")) +
+              parseInt(iconStyles.getPropertyValue("margin-right"))
+          );
+          const iconHeight = Math.round(
+            iconBox.height +
+              parseInt(iconStyles.getPropertyValue("border-top-width")) +
+              parseInt(iconStyles.getPropertyValue("border-bottom-width")) +
+              parseInt(iconStyles.getPropertyValue("margin-top")) +
+              parseInt(iconStyles.getPropertyValue("margin-bottom"))
+          );
+          if (iconWidth && innerWidth && iconHeight && innerHeight) {
+            const maxIconsX = Math.floor(innerWidth / iconWidth);
+            const maxIconsY = Math.floor(innerHeight / iconHeight);
+            const maxIcons = maxIconsX * maxIconsY - 1;
+            const removedIcons = icons.length - maxIcons;
+            icons.forEach((icon, index) => {
+              if (index >= maxIcons) {
+                icon.classList.add("u-hide");
+              } else {
+                icon.classList.remove("u-hide");
+              }
+            });
+            if (removedIcons > 0) {
+              let extraCount = container.querySelector(
+                ".p-bundle-icons__count"
+              );
+              if (!extraCount) {
+                extraCount = document.createElement("span");
+                extraCount.setAttribute(
+                  "class",
+                  "p-bundle-icons__count u-text--muted"
+                );
+                container.appendChild(extraCount);
+              }
+              extraCount.innerHTML = `+${removedIcons}`;
+            }
+          }
+        }
+      });
+    };
+
+    if (contents.length > 0) {
+      ensureBundleCharmsFit();
+
+      window.removeEventListener("resize", ensureBundleCharmsFit);
+      window.addEventListener("resize", ensureBundleCharmsFit);
+    }
   }
 }
 
