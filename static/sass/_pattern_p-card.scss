@@ -99,6 +99,16 @@
       overflow: hidden;
       padding: 0 $spv--large 0 $spv--large;
       position: relative;
+
+      p {
+        height: 100%;
+
+        .package-card-summary {
+          height: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
     }
 
     .p-card__footer {
