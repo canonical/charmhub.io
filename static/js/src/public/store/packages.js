@@ -3,106 +3,15 @@ import debounce from "../../libs/debounce";
 
 /** Store page filters */
 class initPackages {
-  constructor() {
-    this.selectElements();
-    this.togglePlaceholderContainer(true);
-    this.searchCache = window.location.search;
-    this._filters = this.getUrlFilters();
+  static async initialize() {
+    const packageData = await initPackages.fetchPackageList();
 
-    if (
-      this._filters.q.length === 0 &&
-      this._filters.filter.length === 0 &&
-      this._filters.base[0] === "all" &&
-      this._filters.type[0] === "all"
-    ) {
-      this.togglePlaceholderContainer();
-      this.toggleFeaturedContainer(true);
-      this.renderResultsCount(true);
-      this.toggleShowAllPackagesButton(true);
-    }
+    const allPackages = await initPackages.addBundleApps(packageData.packages);
 
-    if (this._filters.q.length > 0) {
-      const queryString = this._filters.q.join(",");
-      this.domEl.searchInputDesktop.el.value = queryString;
-      this.domEl.searchInputMobile.el.value = queryString;
-    }
-
-    this.fetchPackageList()
-      .then((data) => {
-        this.allPackages = data.packages;
-
-        if (!this.allPackages) {
-          return;
-        }
-
-        // Temporary hack to get bundle icons, as the API does not have it
-        this.addBundleApps();
-        if (this._filters.q.length > 0) {
-          setTimeout(() => {
-            this.renderPackages();
-          }, 1000);
-        }
-
-        this.filterPackages();
-        this.handleShowAllPackagesButton();
-        this.handleFilterButtonMobileOpenClick();
-        this.handleFilterClick();
-        this.handlePlatformChange();
-        this.handlePackageTypeChange();
-        this.enableAllActions();
-        this.updateEnabledCategories();
-        this.renderButtonMobileOpen();
-
-        if (
-          this._filters.q.length > 0 ||
-          this._filters.filter.length > 0 ||
-          this._filters.base[0] !== "all" ||
-          this._filters.type[0] !== "all"
-        ) {
-          this.renderPackages();
-          this.renderResultsCount();
-          this.togglePackageContainer(true);
-          this.togglePlaceholderContainer();
-          this.toggleShowAllPackagesButton();
-        }
-      })
-      .catch((e) => console.error(e));
-
-    this.captureTooltipButtonClick();
+    const _class = new initPackages(allPackages);
   }
 
-  addBundleApps() {
-    this.allPackages.forEach((entity, count) => {
-      if (entity.type === "bundle") {
-        fetch(`/${entity.name}/charms.json`)
-          .then((response) => {
-            if (response.ok) {
-              response.json().then((res) => {
-                this.allPackages[count]["apps"] = res.charms;
-              });
-            } else {
-              throw new Error(
-                "There was a problem comunicating with the server."
-              );
-            }
-          })
-          .catch((e) => console.error(e));
-      }
-    });
-  }
-
-  fetchPackageList() {
-    if (this._filters.q) {
-      const queryUrl = this._filters.q.join(",");
-      return fetch(`/packages.json?q=${queryUrl}`).then((result) =>
-        result.json()
-      );
-    } else {
-      return fetch("/packages.json").then((result) => result.json());
-    }
-  }
-
-  getUrlFilters() {
+  static getUrlFilters() {
     const filters = {};
 
     if (window.location.search) {
@@ -130,6 +39,92 @@ class initPackages {
     }
 
     return filters;
+  }
+
+  static async fetchPackageList() {
+    const filters = initPackages.getUrlFilters();
+    if (filters.q.length > 0) {
+      const queryUrl = filters.q.join(",");
+      const result = await fetch(`/packages.json?q=${queryUrl}`);
+      return await result.json();
+    } else {
+      const result = await fetch("/packages.json");
+      return await result.json();
+    }
+  }
+
+  static async getBundleApps(bundleName) {
+    const response = await fetch(`/${bundleName}/charms.json`);
+
+    if (response.ok) {
+      return await response.json();
+    } else {
+      throw new Error("There was a problem communicating with the server.");
+    }
+  }
+
+  static async addBundleApps(packages) {
+    return Promise.all(
+      packages.map(async (entity) => {
+        if (entity.type === "bundle") {
+          const charms = await initPackages.getBundleApps(entity.name);
+          entity.apps = charms.charms;
+        }
+        return entity;
+      })
+    );
+  }
+
+  constructor(packages) {
+    this.allPackages = packages;
+    this.selectElements();
+    this.togglePlaceholderContainer(true);
+    this.searchCache = window.location.search;
+    this._filters = initPackages.getUrlFilters();
+
+    if (
+      this._filters.q.length === 0 &&
+      this._filters.filter.length === 0 &&
+      this._filters.base[0] === "all" &&
+      this._filters.type[0] === "all"
+    ) {
+      this.togglePlaceholderContainer();
+      this.toggleFeaturedContainer(true);
+      this.renderResultsCount(true);
+      this.toggleShowAllPackagesButton(true);
+    }
+
+    if (this._filters.q.length > 0) {
+      const queryString = this._filters.q.join(",");
+      this.domEl.searchInputDesktop.el.value = queryString;
+      this.domEl.searchInputMobile.el.value = queryString;
+    }
+
+    this.filterPackages();
+    this.handleShowAllPackagesButton();
+    this.handleFilterButtonMobileOpenClick();
+    this.handleFilterClick();
+    this.handlePlatformChange();
+    this.handlePackageTypeChange();
+    this.enableAllActions();
+    this.updateEnabledCategories();
+    this.renderButtonMobileOpen();
+
+    if (
+      this._filters.q.length > 0 ||
+      this._filters.filter.length > 0 ||
+      this._filters.base[0] !== "all" ||
+      this._filters.type[0] !== "all"
+    ) {
+      this.renderPackages();
+      this.renderResultsCount();
+      this.togglePackageContainer(true);
+      this.togglePlaceholderContainer();
+      this.toggleShowAllPackagesButton();
+      handleBundleIcons(this.domEl.packageContainer.el);
+    }
+
+    this.captureTooltipButtonClick();
   }
 
   selectElements() {
@@ -479,7 +474,6 @@ class initPackages {
         this.domEl.packageContainer.el.appendChild(buildPackageCard(entity));
       });
 
-      handleBundleIcons(this.domEl.packageContainer.el);
       this.captureTooltipButtonClick();
     } else {
       throw new Error(
@@ -542,8 +536,9 @@ class initPackages {
 
   renderButtonMobileOpen() {
     if (this.domEl.filterButtonMobileOpen.el) {
-      const filterSpanEl =
-        this.domEl.filterButtonMobileOpen.el.querySelector("span");
+      const filterSpanEl = this.domEl.filterButtonMobileOpen.el.querySelector(
+        "span"
+      );
       if (this._filters.filter.length > 0) {
         filterSpanEl.innerHTML = `Filters (${this._filters.filter.length})`;
       } else {

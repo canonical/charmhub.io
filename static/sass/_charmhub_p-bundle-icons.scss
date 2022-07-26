@@ -15,13 +15,13 @@
 
     img,
     .p-bundle-icon {
+      align-items: center;
       border: 0.06rem solid $color-mid-light;
       border-radius: math.div($icon-size, 2);
-      display: inline-block;
+      display: inline-flex;
       font-size: 0.875rem;
       height: $icon-size;
-      text-align: center;
-      vertical-align: bottom;
+      justify-content: center;
       width: $icon-size;
     }
   }

@@ -93,7 +93,7 @@
         </div>
 
         <div id="packages" class="l-fluid-section">
-          <div class="l-fluid-breakout__main u-hide" data-js="packages-placeholder-container">
+          <div class="l-fluid-breakout__main" data-js="packages-placeholder-container">
             {% for _ in range(0, 10) %}
               <div class="l-fluid-breakout__item">
                 <a class="p-card--button" style="display: block;">
@@ -187,8 +187,8 @@
 {% block page_scripts %}
   <script src="{{ versioned_static('js/dist/store.js') }}" defer></script>
   <script>
-    window.addEventListener("DOMContentLoaded", () => {
-      new charmhub.store.initPackages();
+    window.addEventListener("DOMContentLoaded", async () => {
+      await new charmhub.store.initPackages.initialize();
       new charmhub.store.initTopics();
     });
   </script>
