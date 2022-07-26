@@ -21,14 +21,14 @@
   }
 
   .p-bundle-icons__count {
-    width: $icon-size;
-    overflow: hidden;
     color: #333;
-    font-size: 0.875rem;
     display: inline-block;
+    font-size: 0.875rem;
     height: $icon-size;
     margin-bottom: 0.5rem;
+    overflow: hidden;
     vertical-align: middle;
+    width: $icon-size;
   }
 
   .p-heading-icon--x-small > .p-bundle-icons {
