@@ -537,9 +537,8 @@ class initPackages {
 
   renderButtonMobileOpen() {
     if (this.domEl.filterButtonMobileOpen.el) {
-      const filterSpanEl = this.domEl.filterButtonMobileOpen.el.querySelector(
-        "span"
-      );
+      const filterSpanEl =
+        this.domEl.filterButtonMobileOpen.el.querySelector("span");
       if (this._filters.filter.length > 0) {
         filterSpanEl.innerHTML = `Filters (${this._filters.filter.length})`;
       } else {
