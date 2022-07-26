@@ -628,7 +628,12 @@ def entity_icon(entity_name):
         f",q_auto,fl_sanitize,w_64,h_64/{icon_url}"
     )
 
-@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/icon-no-default')
+
+@store.route(
+    '/<regex("'
+    + DETAILS_VIEW_REGEX
+    + '"):entity_name>/icon-no-default'
+)
 def entity_icon_missing(entity_name):
     package = None
 
