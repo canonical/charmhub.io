@@ -194,6 +194,7 @@ class initPackages {
         this.renderButtonMobileOpen();
         this.toggleFeaturedContainer();
         this.toggleShowAllPackagesButton();
+        handleBundleIcons(this.domEl.packageContainer.el);
         window.scrollTo(0, 0);
       });
     } else {
@@ -271,6 +272,7 @@ class initPackages {
         this.toggleFeaturedContainer();
         this.toggleShowAllPackagesButton();
         this.togglePackageContainer(true);
+        handleBundleIcons(this.domEl.packageContainer.el);
       });
     } else {
       throw new Error(
@@ -293,6 +295,7 @@ class initPackages {
         this.toggleFeaturedContainer();
         this.toggleShowAllPackagesButton();
         this.togglePackageContainer(true);
+        handleBundleIcons(this.domEl.packageContainer.el);
       });
     } else {
       throw new Error(
@@ -332,6 +335,7 @@ class initPackages {
           this.toggleFeaturedContainer();
           this.toggleShowAllPackagesButton();
           this.togglePackageContainer(true);
+          handleBundleIcons(this.domEl.packageContainer.el);
         });
       });
     } else {

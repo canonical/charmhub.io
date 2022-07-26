@@ -54,10 +54,10 @@
     background-color: $color-x-light;
     color: $color-dark !important;
     display: grid;
-    grid-template-rows: 9rem auto 2.5rem;
+    grid-template-rows: 9rem 4rem 2.5rem;
 
     // Force obey parent's border-radius
-    height: 16rem;
+    height: 15.5rem;
     margin-bottom: $spv--x-large;
     width: 100%;
 
