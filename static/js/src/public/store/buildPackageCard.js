@@ -64,12 +64,17 @@ function buildPackageCard(entity) {
       entity.apps.forEach((app) => {
         const icon = new Image();
         icon.alt = app.name;
+        icon.title = app.title;
         icon.setAttribute("loading", "lazy");
         icon.addEventListener("error", () => {
-          icon.src =
-            "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg";
+          const spanIcon = document.createElement("span");
+          spanIcon.title = app.title;
+          spanIcon.setAttribute("class", "p-bundle-icon");
+          spanIcon.style.backgroundImage = `url("https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg")`;
+          spanIcon.innerText = app.title.substring(0, 2);
+          icon.replaceWith(spanIcon);
         });
-        icon.src = `/${app.name}/icon`;
+        icon.src = `/${app.name}/icon-no-default`;
 
         icons.push(icon);
       });

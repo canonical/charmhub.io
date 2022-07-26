@@ -628,6 +628,30 @@ def entity_icon(entity_name):
         f",q_auto,fl_sanitize,w_64,h_64/{icon_url}"
     )
 
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/icon-no-default')
+def entity_icon_missing(entity_name):
+    package = None
+
+    try:
+        package = app.store_api.get_item_details(
+            entity_name,
+            fields=[
+                "result.media",
+            ],
+        )
+    except StoreApiResponseErrorList:
+        pass
+
+    if package and package["result"]["media"]:
+        icon_url = package["result"]["media"][0]["url"]
+
+        return redirect(
+            "https://res.cloudinary.com/canonical/image/fetch/f_auto"
+            f",q_auto,fl_sanitize,w_64,h_64/{icon_url}"
+        )
+
+    abort(404)
+
 
 # This method is a temporary hack to show bundle icons on the
 # homepage, and should be removed once the icons are available via the api
