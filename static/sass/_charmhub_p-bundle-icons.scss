@@ -4,6 +4,11 @@
   $icon-size: 1.5rem;
 
   .p-bundle-icons {
+    display: grid;
+    grid-gap: 0.5rem;
+    grid-template-columns: repeat(auto-fit, 1.5rem);
+    grid-template-rows: 1.5rem;
+
     &:hover {
       text-decoration: none;
     }
@@ -15,8 +20,6 @@
       display: inline-block;
       font-size: 0.875rem;
       height: $icon-size;
-      margin-bottom: 0.5rem;
-      margin-right: 0.5rem;
       text-align: center;
       vertical-align: bottom;
       width: $icon-size;

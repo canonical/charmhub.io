@@ -1,4 +1,5 @@
 import buildPackageCard from "./buildPackageCard";
+import debounce from "../../libs/debounce";
 
 /** Store page filters */
 class initPackages {
@@ -578,101 +579,72 @@ function handleBundleIcons(container) {
   const contents = container.querySelectorAll(".p-card__content");
 
   const ensureBundleCharmsFit = () => {
-    // First work out the size of a content area.
-    // this only needs doing once as all the cards are the same size.
-
-    // Get computed styles from CSS
-    const contentStyles = window.getComputedStyle(contents[0], null);
-
-    // We want the inner-size so make sure we know what the padding is,
-    // as the getBoundingClientRect doesn't take padding into account.
-    const paddingX =
-      parseInt(contentStyles.getPropertyValue("padding-left")) +
-      parseInt(contentStyles.getPropertyValue("padding-right"));
-    const paddingY =
-      parseInt(contentStyles.getPropertyValue("padding-top")) +
-      parseInt(contentStyles.getPropertyValue("padding-bottom"));
-    const contentsBox = contents[0].getBoundingClientRect();
-    const innerWidth = contentsBox.width - paddingX;
-    const innerHeight = contentsBox.height - paddingY;
-
-    // For each content area in the container (each card)
+    // For each contents
     contents.forEach((content) => {
-      // Ensure there is an icon available
+      // Get the height of the visible area
+      const clientHeight = content.clientHeight;
+
+      // Get all the icons
       const icons = Array.from(content.querySelectorAll("img"));
-      const icon = icons[0];
-      if (icon) {
-        // Again, all the icons are the same size so we just need the first one
-        // to work out sizes.
-        const container = icon.parentNode;
-        const iconBox = icon.getBoundingClientRect();
-        const iconStyles = window.getComputedStyle(icon, null);
 
-        // Because we need the outer size, including margin, add
-        // everything from the box model.
-        const iconWidth =
-          iconBox.width +
-          parseInt(iconStyles.getPropertyValue("padding-left")) +
-          parseInt(iconStyles.getPropertyValue("padding-right")) +
-          parseInt(iconStyles.getPropertyValue("border-left-width")) +
-          parseInt(iconStyles.getPropertyValue("border-right-width")) +
-          parseInt(iconStyles.getPropertyValue("margin-left")) +
-          parseInt(iconStyles.getPropertyValue("margin-right"));
-        const iconHeight =
-          iconBox.height +
-          parseInt(iconStyles.getPropertyValue("padding-top")) +
-          parseInt(iconStyles.getPropertyValue("padding-bottom")) +
-          parseInt(iconStyles.getPropertyValue("border-top-width")) +
-          parseInt(iconStyles.getPropertyValue("border-bottom-width")) +
-          parseInt(iconStyles.getPropertyValue("margin-top")) +
-          parseInt(iconStyles.getPropertyValue("margin-bottom"));
+      // If there aren't any icons, skip to the next content area
+      if (!icons[0]) {
+        return;
+      }
 
-        // Only if all of these numbers exist as numbers...
-        if (iconWidth && innerWidth && iconHeight && innerHeight) {
-          // To take into account JavaScript rounding errors we need to remove some
-          // icons from each row... Specifically 1.5. 1 is too small and 2 is too big.
-          // This ensures that the "extra count" doesn't get pushed to the next line
-          // and out of the content box.
+      // What's the height of an icon? They're all the same
+      // so just use the first one.
+      const iconHeight = icons[0].offsetHeight;
 
-          const maxIconsX = Math.floor(innerWidth / iconWidth) - 1.5;
-          const maxIconsY = Math.floor(innerHeight / iconHeight);
-          const maxIcons = Math.round(maxIconsX * maxIconsY);
+      // Keep track of how many icons we've hidden
+      let hiddenIcons = 0;
 
-          // The number of icon's we've "removed"
-          const removedIcons = icons.length - maxIcons;
+      icons.forEach((icon) => {
+        // First of all make sure the icon is visible
+        // If an icon has previously been hidden we won't be able
+        // to get it's offset (it'll be 0).
+        icon.classList.remove("u-hide");
 
-          // Show/hide the icons
-          icons.forEach((icon, index) => {
-            if (index >= maxIcons) {
-              icon.classList.add("u-hide");
-            } else {
-              icon.classList.remove("u-hide");
-            }
-          });
+        // Once it's visible, get the offset
+        // Doing it like this isn't very performant but should be fine.
+        const offsetTop = icon.offsetTop;
 
-          // Get the extra count container
-          let extraCount = container.querySelector(".p-bundle-icons__count");
-          if (removedIcons > 0) {
-            // If the container doesn't work, create it
-            if (!extraCount) {
-              extraCount = document.createElement("span");
-              extraCount.setAttribute(
-                "class",
-                "p-bundle-icons__count u-text--muted"
-              );
+        // If the bottom of the icon is below the bottom of the visible area
+        if (offsetTop + iconHeight > clientHeight) {
+          // Add the icon as hidden and add the class
+          hiddenIcons += 1;
+          icon.classList.add("u-hide");
+        }
+      });
 
-              // Add the element
-              container.appendChild(extraCount);
-            }
+      // If there are hidden icons, and there is a final icon
+      if (hiddenIcons > 0 && icons.length - hiddenIcons - 1 > 0) {
+        // Get the last visible icon, hide it and update the hiddenIcons count.
+        icons[icons.length - hiddenIcons - 1].classList.add("u-hide");
+        hiddenIcons += 1;
+      }
 
-            // Set the count of missing icons
-            extraCount.innerHTML = `+${removedIcons}`;
-          } else {
-            // If there aren't any missing icons, remove the container
-            if (extraCount) {
-              extraCount.parentNode.removeChild(extraCount);
-            }
-          }
+      // Get the extra count container
+      let hiddenCount = content.querySelector(".p-bundle-icons__count");
+      if (hiddenIcons > 0) {
+        // If the container doesn't work, create it
+        if (!hiddenCount) {
+          hiddenCount = document.createElement("span");
+          hiddenCount.setAttribute(
+            "class",
+            "p-bundle-icons__count u-text--muted"
+          );
+
+          // Add the element
+          icons[0].parentNode.appendChild(hiddenCount);
+        }
+
+        // Set the count of missing icons
+        hiddenCount.innerHTML = `+${hiddenIcons}`;
+      } else {
+        // If there aren't any missing icons, remove the container
+        if (hiddenCount) {
+          hiddenCount.parentNode.removeChild(hiddenCount);
         }
       }
     });
@@ -683,11 +655,14 @@ function handleBundleIcons(container) {
     // Initialize all the icons
     ensureBundleCharmsFit();
 
+    // We don't need to do this on every single window resize event, just every so often.
+    const debounced = debounce(ensureBundleCharmsFit, 50);
+
     // Remove the resize listener (to avoid duplicate events on subsequent runs)
-    window.removeEventListener("resize", ensureBundleCharmsFit);
+    window.removeEventListener("resize", debounced);
 
     // Add it again
-    window.addEventListener("resize", ensureBundleCharmsFit);
+    window.addEventListener("resize", debounced);
   }
 }
 
