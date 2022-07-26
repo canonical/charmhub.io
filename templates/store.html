@@ -188,7 +188,7 @@
   <script src="{{ versioned_static('js/dist/store.js') }}" defer></script>
   <script>
     window.addEventListener("DOMContentLoaded", async () => {
-      await new charmhub.store.initPackages.initialize();
+      await charmhub.store.initPackages.initialize();
       new charmhub.store.initTopics();
     });
   </script>
