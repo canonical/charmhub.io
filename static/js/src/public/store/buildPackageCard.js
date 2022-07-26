@@ -110,7 +110,7 @@ function buildPackageCard(entity) {
   const entityCardSummary = clone.querySelector(".package-card-summary");
 
   if (entityCardSummary && entity.result.summary) {
-    entityCardSummary.innerHTML = truncateString(entity.result.summary, 90);
+    entityCardSummary.innerHTML = truncateString(entity.result.summary, 60);
   }
 
   const entityCardIcons = clone.querySelector(".package-card-icons");
