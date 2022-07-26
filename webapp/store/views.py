@@ -630,9 +630,7 @@ def entity_icon(entity_name):
 
 
 @store.route(
-    '/<regex("'
-    + DETAILS_VIEW_REGEX
-    + '"):entity_name>/icon-no-default'
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/icon-no-default'
 )
 def entity_icon_missing(entity_name):
     package = None
