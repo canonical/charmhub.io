@@ -54,7 +54,7 @@
     background-color: $color-x-light;
     color: $color-dark !important;
     display: grid;
-    grid-template-rows: 9.5rem 3.9rem;
+    grid-template-rows: 9rem 4.5rem 2.5rem;
 
     // Force obey parent's border-radius
     height: 16rem;
@@ -95,9 +95,20 @@
     }
 
     .p-card__content {
-      max-height: 4.25rem;
+      margin-bottom: 0;
       overflow: hidden;
-      padding: 0 $spv--large $spv--large $spv--large;
+      padding: 0 $spv--large 0 $spv--large;
+      position: relative;
+
+      p {
+        height: 100%;
+
+        .package-card-summary {
+          height: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
     }
 
     .p-card__footer {

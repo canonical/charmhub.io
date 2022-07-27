@@ -1,4 +1,4 @@
-import { initPackages } from "./packages";
+import { initPackages, handleBundleIcons } from "./packages";
 import { initTopics } from "./topics";
 
-export { initPackages, initTopics };
+export { initPackages, initTopics, handleBundleIcons };

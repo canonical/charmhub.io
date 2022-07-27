@@ -1,46 +1,47 @@
 @use "sass:math";
 
 @mixin charmhub-p-bundle-icons {
-  .p-bundle-icons {
-    $icon-size: 1.75rem;
-    $padding: 0.12rem;
+  $icon-size: 1.5rem;
 
-    align-items: center;
-    background-color: $color-x-light;
-    border: 0.06rem solid $color-mid-light;
-    border-radius: math.div(($padding * 2) + $icon-size, 2);
-    color: #333;
-    display: flex;
-    font-size: 0.875rem;
-    padding: $padding 0.3rem + $padding $padding $padding;
-    position: relative;
-    top: -0.12rem;
-    width: fit-content;
+  .p-bundle-icons {
+    display: grid;
+    grid-gap: 0.5rem;
+    grid-template-columns: repeat(auto-fit, 1.5rem);
+    grid-template-rows: 1.5rem;
 
     &:hover {
       text-decoration: none;
     }
 
-    img {
+    .p-bundle-icon {
+      align-items: center;
+      background-size: cover;
       border: 0.06rem solid $color-mid-light;
       border-radius: math.div($icon-size, 2);
-      display: inline-block;
+      box-sizing: content-box;
+      display: inline-flex;
+      font-size: 0.875rem;
       height: $icon-size;
-      margin-bottom: 0;
-      vertical-align: bottom;
+      justify-content: center;
+      overflow: hidden;
       width: $icon-size;
 
-      &:first-child {
-        // Set a background to handle overlapping transparent icons.
-        background-color: $color-x-light;
-        z-index: 1;
-      }
-
-      &:nth-child(2) {
-        margin-inline-end: 0.5rem;
-        margin-left: -1.25rem;
+      img {
+        border-radius: 100%;
+        overflow: hidden;
       }
     }
+  }
+
+  .p-bundle-icons__count {
+    color: #333;
+    display: inline-block;
+    font-size: 0.875rem;
+    height: $icon-size;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+    vertical-align: middle;
+    width: $icon-size;
   }
 
   .p-heading-icon--x-small > .p-bundle-icons {
