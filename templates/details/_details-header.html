@@ -3,25 +3,7 @@
     <div class="col-8">
       <div class="p-charm-header">
         <div class="p-media-object--medium u-no-margin--bottom">
-          {% if package.type == "bundle" %}
-            {% if package.store_front.bundle.charms %}
-              {% set charms = package.store_front.bundle.charms %}
-              <div class="p-bundle-icons">
-                <img src="/{{ charms[0].name }}/icon" alt="" />
-                <img src="/{{ charms[1].name }}/icon" alt="" />
-                {% if charms | length > 2 %}
-                <span class="p-bundle-icons__count u-text--muted">
-                  +{{ charms | length - 2 }}
-                </span>
-                {% endif %}
-              </div>
-            {% else %}
-              <div class="p-bundle-icons">
-                <img src="https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" alt="" />
-                <img src="https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" alt="" />
-              </div>
-            {% endif %}
-          {% else %}
+          {% if package.type == "charm" %}
           <div class="p-media-object__image-container">
             {% if package["store_front"]["icons"] %}
               {{
@@ -60,6 +42,7 @@
                   {% if package.store_front.publisher_name != None %}
                     By {{ package.store_front.publisher_name }}
                   {% endif %}
+		  {% if package.type == "bundle" %}<span class="p-muted-heading u-no-padding" style="font-size: .9rem;"> | bundle</span>{% endif %}
                   {% if developer_validation == "verified" %}
                   <span class="p-tooltip--top-center" aria-describedby="openstack-tooltip">
                     <img src="https://assets.ubuntu.com/v1/75654c90-rosette.svg">

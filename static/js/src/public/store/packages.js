@@ -536,8 +536,9 @@ class initPackages {
 
   renderButtonMobileOpen() {
     if (this.domEl.filterButtonMobileOpen.el) {
-      const filterSpanEl =
-        this.domEl.filterButtonMobileOpen.el.querySelector("span");
+      const filterSpanEl = this.domEl.filterButtonMobileOpen.el.querySelector(
+        "span"
+      );
       if (this._filters.filter.length > 0) {
         filterSpanEl.innerHTML = `Filters (${this._filters.filter.length})`;
       } else {
@@ -660,4 +661,31 @@ function handleBundleIcons(container) {
   }
 }
 
-export { initPackages, handleBundleIcons };
+function loadBundleIcons() {
+  const bundleIcons = document.querySelectorAll(".p-bundle-icon");
+  console.log(bundleIcons);
+  if (bundleIcons.length > 0) {
+    bundleIcons.forEach((bundleIcon) => {
+      const title = bundleIcon.getAttribute("title");
+      const initials = bundleIcon.innerHTML;
+      const name = bundleIcon.getAttribute("alt");
+
+      const icon = new Image();
+      icon.alt = name;
+      icon.title = title;
+      icon.setAttribute("loading", "lazy");
+      icon.addEventListener("error", () => {
+        bundleIcon.removeChild(icon);
+        bundleIcon.innerText = initials;
+        bundleIcon.style.backgroundImage = `url("https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg")`;
+      });
+      bundleIcon.innerHTML = "";
+      bundleIcon.style.backgroundImage = "none";
+      icon.src = `/${name}/icon-no-default`;
+
+      bundleIcon.appendChild(icon);
+    });
+  }
+}
+
+export { initPackages, handleBundleIcons, loadBundleIcons };
