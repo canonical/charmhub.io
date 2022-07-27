@@ -53,30 +53,31 @@ function buildPackageCard(entity) {
     );
 
     if (!entity.apps || entity.apps.length === 0) {
-      const icon = new Image();
-      icon.alt = entity.name;
-      icon.setAttribute("loading", "lazy");
-      icon.src =
-        "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg";
+      const icon = document.createElement("span");
+      icon.setAttribute("class", "p-bundle-icon");
+      icon.style.backgroundImage =
+        "url(https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg)";
       bundleIcons.replaceWith(icon);
     } else {
       const icons = [];
       entity.apps.forEach((app) => {
+        const iconWrapper = document.createElement("span");
+        iconWrapper.title = app.title;
+        iconWrapper.setAttribute("class", "p-bundle-icon");
+
         const icon = new Image();
         icon.alt = app.name;
         icon.title = app.title;
         icon.setAttribute("loading", "lazy");
         icon.addEventListener("error", () => {
-          const spanIcon = document.createElement("span");
-          spanIcon.title = app.title;
-          spanIcon.setAttribute("class", "p-bundle-icon");
-          spanIcon.style.backgroundImage = `url("https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg")`;
-          spanIcon.innerText = app.title.substring(0, 2);
-          icon.replaceWith(spanIcon);
+          iconWrapper.removeChild(icon);
+          iconWrapper.innerText = app.title.substring(0, 2);
+          iconWrapper.style.backgroundImage = `url("https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg")`;
         });
         icon.src = `/${app.name}/icon-no-default`;
 
-        icons.push(icon);
+        iconWrapper.appendChild(icon);
+        icons.push(iconWrapper);
       });
 
       bundleIconsWrapper.removeChild(bundleIcons);

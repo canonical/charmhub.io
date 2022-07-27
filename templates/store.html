@@ -94,7 +94,7 @@
 
         <div id="packages" class="l-fluid-section">
           <div class="l-fluid-breakout__main" data-js="packages-placeholder-container">
-            {% for _ in range(0, 10) %}
+            {% for _ in range(0, featured_charms|length) %}
               <div class="l-fluid-breakout__item">
                 <a class="p-card--button" style="display: block;">
                   <svg width="100%" height="100%" class="p-card--placeholder">

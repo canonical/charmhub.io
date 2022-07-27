@@ -536,8 +536,9 @@ class initPackages {
 
   renderButtonMobileOpen() {
     if (this.domEl.filterButtonMobileOpen.el) {
-      const filterSpanEl =
-        this.domEl.filterButtonMobileOpen.el.querySelector("span");
+      const filterSpanEl = this.domEl.filterButtonMobileOpen.el.querySelector(
+        "span"
+      );
       if (this._filters.filter.length > 0) {
         filterSpanEl.innerHTML = `Filters (${this._filters.filter.length})`;
       } else {
@@ -579,7 +580,7 @@ function handleBundleIcons(container) {
       const clientHeight = content.clientHeight;
 
       // Get all the icons
-      const icons = Array.from(content.querySelectorAll("img"));
+      const icons = Array.from(content.querySelectorAll(".p-bundle-icon"));
 
       // If there aren't any icons, skip to the next content area
       if (!icons[0]) {

@@ -13,16 +13,23 @@
       text-decoration: none;
     }
 
-    img,
     .p-bundle-icon {
       align-items: center;
+      background-size: cover;
       border: 0.06rem solid $color-mid-light;
       border-radius: math.div($icon-size, 2);
+      box-sizing: content-box;
       display: inline-flex;
       font-size: 0.875rem;
       height: $icon-size;
       justify-content: center;
+      overflow: hidden;
       width: $icon-size;
+
+      img {
+        border-radius: 100%;
+        overflow: hidden;
+      }
     }
   }
 
