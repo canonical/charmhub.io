@@ -8,6 +8,8 @@
     grid-gap: 0.5rem;
     grid-template-columns: repeat(auto-fit, 1.5rem);
     grid-template-rows: 1.5rem;
+    margin-bottom: calc($icon-size * 2);
+    max-width: 40em;
 
     &:hover {
       text-decoration: none;

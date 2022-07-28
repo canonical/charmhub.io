@@ -294,6 +294,14 @@ body {
         visibility: hidden;
       }
     }
+
+    .p-bundle-icons {
+      grid-gap: 0.75rem;
+
+      .p-bundle-icon {
+        border: 0 none;
+      }
+    }
   }
 }
 

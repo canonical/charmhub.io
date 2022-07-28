@@ -77,6 +77,14 @@
       <p><a class="p-button--base" href="https://discourse.charmhub.io/">Join the discussion</a></p>
     </div>
     <div class="col-9 p-details-tab__content__body">
+      {% if package.type == "bundle" %}
+        <h2 class="p-heading--4">Charms</h2>
+        <div class="p-bundle-icons">
+          {% for charm in package['store_front']['bundle']['charms'] %}
+            <span title="{{charm.title}}" alt="{{charm.name}}" class="p-bundle-icon" style="background-image: url('https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg');">{{ charm.title|truncate(2, true, '', 0) }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
       {{ readme | safe }}
     </div>
   </div>
@@ -84,9 +92,15 @@
 
 {% block details_scripts %}
   <script src="{{ versioned_static('js/dist/details_overview.js') }}" defer></script>
+  {% if package.type == "bundle" %}
+    <script src="{{ versioned_static('js/dist/store.js') }}" defer></script>
+  {% endif %}
   <script>
     window.addEventListener("DOMContentLoaded", function () {
       charmhub.details.overview.init();
+      {% if package.type == "bundle" %}
+        charmhub.store.loadBundleIcons();
+      {% endif %}
     });
   </script>
 {% endblock %}
