@@ -662,7 +662,6 @@ function handleBundleIcons(container) {
 
 function loadBundleIcons() {
   const bundleIcons = document.querySelectorAll(".p-bundle-icon");
-  console.log(bundleIcons);
   if (bundleIcons.length > 0) {
     bundleIcons.forEach((bundleIcon) => {
       const title = bundleIcon.getAttribute("title");
