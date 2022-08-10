@@ -18,4 +18,5 @@ module.exports = {
   "highlight-nav": "./static/js/src/libs/highlight-nav.js",
   "highlight-js": "./static/js/src/base/highlight.js",
   "navigation-events": "./static/js/src/public/navigation-events.js",
+  "icon-validator": "./static/js/src/public/icon-validator/index.tsx",
 };
