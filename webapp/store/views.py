@@ -1,6 +1,5 @@
 import re
 
-import json
 import humanize
 import talisker
 from canonicalwebteam.discourse import DocParser
