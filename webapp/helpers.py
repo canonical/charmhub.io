@@ -137,43 +137,52 @@ def get_licenses():
     return licenses
 
 
-def decrease_headers(html_content, step=2):
-    soup = BeautifulSoup(html_content, features="html.parser")
-
-    # Change all the headers (if step=2: eg h1 => h3)
-    for h in soup.find_all(re.compile("^h[1-6]$")):
-        level = int(h.name[1:]) + step
-        if level > 6:
-            level = 6
-        h.name = f"h{str(level)}"
-
+def get_soup(html_content):
+    soup = BeautifulSoup(html_content, "html.parser")
     return soup
 
 
-def add_header_ids(soup):
-    levels = []
-    # Add id to all headings that don't have one
-    for h in soup.find_all(re.compile("^h[1-6]$")):
-        id = slugify(h.get_text())
-        level = int(h.name[1:])
+# Change all the headers (if step=2: eg h1 => h3)
+def decrease_header(header, step):
+    level = int(header.name[1:]) + step
+    if level > 6:
+        level = 6
+    header.name = f"h{str(level)}"
 
-        # Go through previous headings and find any that are lower
-        levels.append((level, id))
-        reversed_levels = list(reversed(levels))
-        parents = []
-        level_cache = None
-        for i in reversed_levels:
-            if i[0] < level and not level_cache:
-                parents.append(i)
-                level_cache = i[0]
-            elif i[0] < level and i[0] < level_cache:
-                parents.append(i)
-                level_cache = i[0]
-        parents.reverse()
-        if "id" not in h.attrs:
-            parent_path_id = ""
-            if len(parents) > 0:
-                parent_path_id = "--".join([i[1] for i in parents]) + "--"
-            h["id"] = parent_path_id + id
+    return header
+
+
+def add_header_id(h, levels):
+    id = slugify(h.get_text())
+    level = int(h.name[1:])
+
+    # Go through previous headings and find any that are lower
+    levels.append((level, id))
+    reversed_levels = list(reversed(levels))
+    parents = []
+    level_cache = None
+    for i in reversed_levels:
+        if i[0] < level and not level_cache:
+            parents.append(i)
+            level_cache = i[0]
+        elif i[0] < level and i[0] < level_cache:
+            parents.append(i)
+            level_cache = i[0]
+    parents.reverse()
+    if "id" not in h.attrs:
+        parent_path_id = ""
+        if len(parents) > 0:
+            parent_path_id = "--".join([i[1] for i in parents]) + "--"
+        h["id"] = parent_path_id + id
+
+    return h
+
+
+def modify_headers(soup, decrease_step=2):
+    levels = []
+
+    for header in soup.find_all(re.compile("^h[1-6]$")):
+        decrease_header(header, decrease_step)
+        add_header_id(header, levels)
 
     return soup

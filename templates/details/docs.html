@@ -2,91 +2,30 @@
 
 {% extends '/details/details_layout.html' %}
 
+{% import '/partial/_macros.html' as macros %}
+
 {% block details_content %}
-
-{% macro create_navigation(nav_items) %}
-  <ul>
-    {% for element in nav_items %}
-    <li>
-      {% if element.navlink_href %}
-        <a href="{{ element.navlink_href }}{% if channel_requested %}?channel={{ channel_requested }}{% endif %}"
-          {% if request.path == element.navlink_href %}aria-current="page"{% endif %}
-        >{{ element.navlink_text }}</a>
-      {% else %}
-        <strong>{{ element.navlink_text }}</strong>
-      {% endif %}
-
-      {% if element.children %}
-        {{ create_navigation(element.children) }}
-      {% endif %}
-    </li>
-    {% endfor %}
-  </ul>
-{% endmacro %}
-
-  <div class="u-fixed-width p-details-tab__content">
-    {% if navigation and body_html %}
-      <div class="row u-no-padding--left u-no-padding--right">
-        <aside class="col-3">
-          {% if versions | length > 1 %}
-          <label for="version-select" class="u-hide">Version</label>
-          <select name="version-select" id="version-select" onChange="window.location.href=this.value">
-          {% for version in versions %}
-            {% set active = docs_version == version['path'] %}
-            <option value="{{ version_paths[version['path']] }}"{% if active %} selected{% endif %}>Version {{ version['version'] }}</option>
-          {% endfor %}
-          <select>
-          {% endif %}
-
-          <nav data-js="navigation" class="p-side-navigation--raw-html" id="{{ navigation['path'] or 'default' }}">
-            <a href="#{{ navigation['path'] or 'default' }}" class="p-side-navigation__toggle js-drawer-toggle" aria-controls="{{ navigation['path'] or 'default' }}">
-              Toggle side navigation
-            </a>
-            <div class="p-side-navigation__overlay js-drawer-toggle" aria-controls="{{ navigation['path'] or 'default' }}"></div>
-            <div class="p-side-navigation__drawer">
-              <div class="p-side-navigation__drawer-header">
-                <a href="#" class="p-side-navigation__toggle--in-drawer js-drawer-toggle" aria-controls="{{ navigation['path'] or 'default' }}">
-                  Toggle side navigation
-                </a>
-              </div>
-              {% for nav_group in navigation.nav_items %}
-                {% if nav_group.navlink_text %}
-                <h3>{{ nav_group.navlink_text }}</h3>
-                {% endif %}
-                {{ create_navigation(nav_group.children) }}
-              {% endfor %}
-            </div>
-          </nav>
-        </aside>
-        <div class="col-9">
-          {{ body_html | safe }}
-          <div class="u-fixed-width">
-            <hr class="p-separator--medium">
-          </div>
-          <div class="u-fixed-width">
-            <h4>Help us improve this documentation</h4>
-            <p>
-              Most of this documentation can be collaboratively discussed and changed on the respective topic in the doc category of the <a href="{{ forum_url }}" class="p-link--external">Charmhub forum</a>. See the <a href="https://discourse.charmhub.io/t/how-to-write-docs-our-documentation-guidelines-for-contributors/1245" class="p-link--external">documentation guidelines</a> if you’d like to contribute.
+  <div class="row p-details-tab__content">
+    <div class="col-3 p-details-tab__content__sidebar">
+      {% include '/details/_side-nav.html' %}
+    </div>
+    <div class="col-9 p-details-tab__content__body">
+      {{ body_html | safe }}
+      <hr class="p-separator--medium" />
+      <div class="u-fixed-width">
+        <h4>Help us improve this documentation</h4>
+        <p>
+          Most of this documentation can be collaboratively discussed and changed on the respective topic in the doc category of the <a href="{{ forum_url }}" class="p-link--external">Charmhub forum</a>. See the <a href="https://discourse.charmhub.io/t/how-to-write-docs-our-documentation-guidelines-for-contributors/1245" class="p-link--external">documentation guidelines</a> if you’d like to contribute.
+        </p>
+        <div class="p-notification--information">
+          <div class="p-notification__content">
+            <p class="p-notification__message">
+              Last updated {{ last_update }}. <a href="{{ forum_url }}{{ topic_path }}" class="p-link--external">Help improve this document in the forum</a>.
             </p>
-            <div class="p-notification--information">
-              <div class="p-notification__content">
-                <p class="p-notification__message">
-                  Last updated {{ last_update }}. <a href="{{ forum_url }}{{ topic_path }}" class="p-link--external">Help improve this document in the forum</a>.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
-    {% else %}
-      <div class="p-notification--information">
-        <div class="p-notification__content">
-          <p class="p-notification__message">
-            No documentation has been added yet.
-          </p>
-        </div>
-      </div>
-    {% endif %}
+    </div>
   </div>
 {% endblock%}
 

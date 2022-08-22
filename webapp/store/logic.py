@@ -5,7 +5,7 @@ import re
 import humanize
 from dateutil import parser
 from canonicalwebteam.docstring_extractor import get_docstrings
-from webapp.helpers import decrease_headers
+from webapp.helpers import get_soup, modify_headers
 from webapp.helpers import (
     discourse_api,
     get_yaml_loader,
@@ -375,8 +375,9 @@ def process_python_docs(library, module_name):
     # Obtain Python docstrings
     docstrings = get_docstrings(library["content"], module_name)
 
-    docstrings["html"] = decrease_headers(
-        md_parser(docstrings["docstring_text"]), 3
+    docstrings["html"] = get_soup(md_parser(docstrings["docstring_text"]))
+    docstrings["docstring_text"] = modify_headers(
+        docstrings["docstring_text"], 3
     )
 
     return docstrings

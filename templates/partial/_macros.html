@@ -1,0 +1,19 @@
+{% macro create_navigation(nav_items) %}
+  <ul>
+    {% for element in nav_items %}
+    <li>
+      {% if element.navlink_href %}
+        <a href="{{ element.navlink_href }}{% if channel_requested %}?channel={{ channel_requested }}{% endif %}"
+          {% if request.path == element.navlink_href %}aria-current="page"{% endif %}
+        >{{ element.navlink_text }}</a>
+      {% else %}
+        <strong>{{ element.navlink_text }}</strong>
+      {% endif %}
+
+      {% if element.children %}
+        {{ create_navigation(element.children) }}
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+{% endmacro %}

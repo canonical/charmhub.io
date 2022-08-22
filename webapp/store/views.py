@@ -20,8 +20,8 @@ from webapp.decorators import (
     store_maintenance,
 )
 from webapp.helpers import (
-    add_header_ids,
-    decrease_headers,
+    get_soup,
+    modify_headers,
     discourse_api,
     md_parser,
 )
@@ -145,11 +145,83 @@ def details_overview(entity_name):
         "result.bugs-url",
         "result.website",
         "result.summary",
+        "default-release.revision.metadata-yaml",
     ]
 
     package = get_package(
         entity_name, channel_request, FIELDS.copy() + extra_fields
     )
+
+    context = {
+        "package": package,
+        "channel_requested": channel_request,
+        "navigation": None,
+    }
+
+    if not package["store_front"]["docs_topic"]:
+        navigation = None
+    else:
+        docs_url_prefix = f"/{package['name']}/docs"
+
+        docs = DocParser(
+            api=discourse_api,
+            index_topic_id=package["store_front"]["docs_topic"],
+            url_prefix=docs_url_prefix,
+        )
+        docs.parse()
+
+        topic = docs.index_topic
+
+        docs.parse_topic(topic)
+
+        navigation = docs.navigation
+
+        overview = {
+            "hidden": False,
+            "level": 1,
+            "path": "",
+            "navlink_href": f"/{entity_name}",
+            "navlink_fragment": "",
+            "navlink_text": "Overview",
+            "is_active": True,
+            "has_active_child": False,
+            "children": [],
+        }
+
+        if len(navigation["nav_items"]) > 0:
+            navigation["nav_items"][0]["children"].insert(0, overview)
+            # If the first item in docs nav is "overview",
+            # prefix with "Docs - "
+            if (
+                navigation["nav_items"][0]["children"][1]["navlink_text"]
+                == "Overview"
+            ):
+                navigation["nav_items"][0]["children"][1][
+                    "navlink_text"
+                ] = "Docs - Overview"
+        else:
+            # If there is no navigation but we've got here, there are docs
+            # So add a top level "Docs item". Example: /easyrsa
+            navigation["nav_items"] = [
+                {
+                    "level": 0,
+                    "children": [
+                        overview,
+                        {
+                            "level": 1,
+                            "path": "",
+                            "navlink_href": f"/{entity_name}/docs",
+                            "navlink_fragment": "",
+                            "navlink_text": "Docs",
+                            "is_active": True,
+                            "has_active_child": False,
+                            "children": [],
+                        },
+                    ],
+                }
+            ]
+
+        context["navigation"] = navigation
 
     readme = package["default-release"]["revision"].get(
         "readme-md", "No readme available"
@@ -158,15 +230,13 @@ def details_overview(entity_name):
     readme = md_parser(readme)
     # Remove Markdown/HTML comments
     readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
-    readme = decrease_headers(readme)
-    readme = add_header_ids(readme)
-    return render_template(
-        "details/overview.html",
-        package=package,
-        readme=readme,
-        package_type=package["type"],
-        channel_requested=channel_request,
-    )
+    readme = get_soup(readme)
+    readme = modify_headers(readme)
+
+    context["readme"] = readme
+    context["package_type"] = package["type"]
+
+    return render_template("details/overview.html", **context)
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs')
@@ -179,18 +249,17 @@ def details_docs(entity_name, path=None):
     channel_request = request.args.get("channel", default=None, type=str)
     extra_fields = [
         "default-release.revision.metadata-yaml",
+        "result.bugs-url",
+        "result.website",
     ]
 
     package = get_package(
         entity_name, channel_request, FIELDS.copy() + extra_fields
     )
 
+    # If no docs, redirect to main page
     if not package["store_front"]["docs_topic"]:
-        return render_template(
-            "details/empty-docs.html",
-            package=package,
-            channel_requested=channel_request,
-        )
+        return redirect(f"/{entity_name}")
 
     docs_url_prefix = f"/{package['name']}/docs"
 
@@ -213,9 +282,54 @@ def details_docs(entity_name, path=None):
 
     document = docs.parse_topic(topic)
 
+    navigation = docs.navigation
+
+    overview = {
+        "hidden": False,
+        "level": 1,
+        "path": "",
+        "navlink_href": f"/{entity_name}",
+        "navlink_fragment": "",
+        "navlink_text": "Overview",
+        "is_active": False,
+        "has_active_child": False,
+        "children": [],
+    }
+    if len(navigation["nav_items"]) > 0:
+        navigation["nav_items"][0]["children"].insert(0, overview)
+        # If the first item in docs nav is "overview", prefix with "Docs - "
+        if (
+            navigation["nav_items"][0]["children"][1]["navlink_text"]
+            == "Overview"
+        ):
+            navigation["nav_items"][0]["children"][1][
+                "navlink_text"
+            ] = "Docs - Overview"
+    else:
+        # If there is no navigation but we've got here, there are docs
+        # So add a top level "Docs item". Example: /easyrsa
+        navigation["nav_items"] = [
+            {
+                "level": 0,
+                "children": [
+                    overview,
+                    {
+                        "level": 1,
+                        "path": "",
+                        "navlink_href": f"/{entity_name}/docs",
+                        "navlink_fragment": "",
+                        "navlink_text": "Docs",
+                        "is_active": True,
+                        "has_active_child": False,
+                        "children": [],
+                    },
+                ],
+            }
+        ]
+
     context = {
         "package": package,
-        "navigation": docs.navigation,
+        "navigation": navigation,
         "body_html": document["body_html"],
         "last_update": document["updated"],
         "forum_url": docs.api.base_url,
