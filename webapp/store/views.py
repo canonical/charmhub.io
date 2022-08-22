@@ -176,7 +176,6 @@ def details_overview(entity_name):
 
         navigation = docs.navigation
 
-        print(navigation)
         overview = {
             "hidden": False,
             "level": 1,
@@ -191,6 +190,14 @@ def details_overview(entity_name):
 
         if len(navigation["nav_items"]) > 0:
             navigation["nav_items"][0]["children"].insert(0, overview)
+            # If the first item in docs nav is "overview", prefix with "Docs - "
+            if (
+                navigation["nav_items"][0]["children"][1]["navlink_text"]
+                == "Overview"
+            ):
+                navigation["nav_items"][0]["children"][1][
+                    "navlink_text"
+                ] = "Docs - Overview"
         else:
             # If there is no navigation but we've got here, there are docs
             # So add a top level "Docs item". Example: /easyrsa
@@ -289,6 +296,14 @@ def details_docs(entity_name, path=None):
     }
     if len(navigation["nav_items"]) > 0:
         navigation["nav_items"][0]["children"].insert(0, overview)
+        # If the first item in docs nav is "overview", prefix with "Docs - "
+        if (
+            navigation["nav_items"][0]["children"][1]["navlink_text"]
+            == "Overview"
+        ):
+            navigation["nav_items"][0]["children"][1][
+                "navlink_text"
+            ] = "Docs - Overview"
     else:
         # If there is no navigation but we've got here, there are docs
         # So add a top level "Docs item". Example: /easyrsa
