@@ -190,7 +190,8 @@ def details_overview(entity_name):
 
         if len(navigation["nav_items"]) > 0:
             navigation["nav_items"][0]["children"].insert(0, overview)
-            # If the first item in docs nav is "overview", prefix with "Docs - "
+            # If the first item in docs nav is "overview",
+            # prefix with "Docs - "
             if (
                 navigation["nav_items"][0]["children"][1]["navlink_text"]
                 == "Overview"
