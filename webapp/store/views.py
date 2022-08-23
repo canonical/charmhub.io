@@ -13,18 +13,14 @@ from flask import Blueprint, Response, abort
 from flask import current_app as app
 from flask import jsonify, redirect, render_template, request
 from pybadges import badge
+from mistune import html
 
 from webapp.config import DETAILS_VIEW_REGEX, CATEGORIES
 from webapp.decorators import (
     redirect_uppercase_to_lowercase,
     store_maintenance,
 )
-from webapp.helpers import (
-    get_soup,
-    modify_headers,
-    discourse_api,
-    md_parser,
-)
+from webapp.helpers import get_soup, modify_headers, discourse_api
 from webapp.store import logic
 from webapp.topics.views import topic_list
 
@@ -227,7 +223,7 @@ def details_overview(entity_name):
         "readme-md", "No readme available"
     )
 
-    readme = md_parser(readme)
+    readme = html(readme)
     # Remove Markdown/HTML comments
     readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
     readme = get_soup(readme)

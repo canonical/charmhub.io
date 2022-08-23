@@ -2,7 +2,6 @@ import re
 import json
 
 from bs4 import BeautifulSoup
-from mistune import Markdown, Renderer
 from canonicalwebteam.discourse import DiscourseAPI
 from flask import request
 from ruamel.yaml import YAML
@@ -18,8 +17,6 @@ discourse_api = DiscourseAPI(
 
 _yaml = YAML(typ="rt")
 _yaml_safe = YAML(typ="safe")
-
-md_parser = Markdown(renderer=Renderer())
 
 
 def get_yaml_loader(typ="safe"):

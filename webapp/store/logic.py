@@ -4,12 +4,12 @@ from collections import OrderedDict
 import re
 import humanize
 from dateutil import parser
+from mistune import html
 from canonicalwebteam.docstring_extractor import get_docstrings
 from webapp.helpers import get_soup, modify_headers
 from webapp.helpers import (
     discourse_api,
     get_yaml_loader,
-    md_parser,
 )
 
 yaml = get_yaml_loader()
@@ -375,10 +375,8 @@ def process_python_docs(library, module_name):
     # Obtain Python docstrings
     docstrings = get_docstrings(library["content"], module_name)
 
-    docstrings["html"] = get_soup(md_parser(docstrings["docstring_text"]))
-    docstrings["docstring_text"] = modify_headers(
-        docstrings["docstring_text"], 3
-    )
+    bs_soup = get_soup(html(docstrings["docstring_text"]))
+    docstrings["html"] = modify_headers(bs_soup, 3)
 
     return docstrings
 
