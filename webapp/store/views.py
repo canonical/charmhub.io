@@ -547,7 +547,7 @@ def details_resources(entity_name):
         name = package["default-release"]["resources"][0]["name"]
         return redirect(f"/{entity_name}/resources/{name}")
     else:
-        abort(404)
+        return render_template("details/no-resources.html", package=package)
 
 
 @store.route(
