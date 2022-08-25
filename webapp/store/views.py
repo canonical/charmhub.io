@@ -563,14 +563,14 @@ def details_resource(entity_name, resource_name):
     resources = package["default-release"]["resources"]
 
     if not resources:
-        abort(404)
+        return redirect(f"/{entity_name}/resources")
 
     resource = next(
         (item for item in resources if item["name"] == resource_name), None
     )
 
     if not resource:
-        abort(404)
+        return redirect(f"/{entity_name}/resources")
 
     # Get OCI image details
     if resource["type"] == "oci-image":
