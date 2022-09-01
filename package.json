@@ -52,7 +52,7 @@
     "sass": "1.47.0",
     "style-loader": "2.0.0",
     "swiper": "6.8.4",
-    "vanilla-framework": "3.6.0",
+    "vanilla-framework": "3.7.0",
     "watch-cli": "0.2.3",
     "webpack": "4.46.0",
     "webpack-cli": "3.3.12"
