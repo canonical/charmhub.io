@@ -43,40 +43,49 @@
 </div>
 
 <script>
+  function scrollToSection(hash, shallow) {
+    const element = document.querySelector(hash);
+    const offset = shallow ? 55 : 110;
+    const elementPosition = element.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - offset;
+    window.scrollTo({ top: offsetPosition });
+  }
+
+  function highlightActiveNavItem() {
+    const currentHighlightedNavItem = document.querySelector(".p-side-navigation__link.is-active");
+    currentHighlightedNavItem.classList.remove("is-active");
+
+    const navigationItem = document.querySelector(`[href="${window.location.hash}"]`);
+    navigationItem.classList.add("is-active");   
+  }
+
   const sideNavigationLinks = Array.prototype.slice.call(
     document.querySelectorAll(".p-side-navigation__link")
   );
 
   sideNavigationLinks.forEach((sideNavigationLink) => {
     sideNavigationLink.addEventListener("click", (e) => {
-      const activeNavigationLink = e.target;
-      const oldActiveNavigationLink = document.querySelector(
-        ".p-side-navigation__link.is-active"
-      );
-
-      if (oldActiveNavigationLink) {
-        oldActiveNavigationLink.classList.remove("is-active");
+      if (window.location.hash) {
+        setTimeout(() => {
+          scrollToSection(window.location.hash, true);
+        }, 0);
+      } else {
+        setTimeout(() => {
+          scrollToSection(e.target.getAttribute("href"));
+        }, 0);
       }
-
-      activeNavigationLink.classList.add("is-active");
     });
   });
 
-  // Fix to see the content under the sticky nav when you navigate using # on the docstring page
-  window.addEventListener("hashchange", () => { scrollBy(0, -55) })
+  window.addEventListener("hashchange", () => {
+    highlightActiveNavItem();
+  });
 
-  function scrollToSection() {
-    const hash = window.location.hash;
-      const el = document.querySelector(hash);
-      const offset = 165;
-      const elPosition = el.getBoundingClientRect().top;
-      const offsetPosition = elPosition + window.pageYOffset - offset;
-      window.scrollTo({ top: offsetPosition });
-      window.removeEventListener("load", scrollToSection);
-  }
-
-  if (window.location.hash) {
-    window.addEventListener("load", scrollToSection)
-  }
+  window.addEventListener("load", () => {
+    if (window.location.hash) {
+      highlightActiveNavItem();
+      scrollToSection(window.location.hash);
+    }
+  });
 </script>
 {% endblock%}
