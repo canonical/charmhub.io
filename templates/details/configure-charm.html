@@ -68,7 +68,7 @@
   function scrollToSection() {
     const hash = window.location.hash;
       const el = document.querySelector(hash);
-      const offset = 110;
+      const offset = 165;
       const elPosition = el.getBoundingClientRect().top;
       const offsetPosition = elPosition + window.pageYOffset - offset;
       window.scrollTo({ top: offsetPosition });
