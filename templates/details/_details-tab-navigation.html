@@ -8,6 +8,9 @@
       <li class="p-tabs__item" role="presentation">
         <a href="/{{ package.name }}/resources{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'resources' %}aria-selected="true" {% endif %}>Resources</a>
       </li>
+      <!--<li class="p-tabs__item" role="presentation">
+        <a href="/{{ package.name }}/integrations{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'integrations' %}aria-selected="true" {% endif %}>Integrations</a>
+      </li>-->
       <li class="p-tabs__item" role="presentation">
         <a href="/{{ package.name }}/libraries{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'libraries' %}aria-selected="true" {% endif %}>Libraries</a>
       </li>

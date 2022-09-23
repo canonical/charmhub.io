@@ -1,0 +1,126 @@
+{% set current_tab = "integrations" %}
+
+{% extends '/details/details_layout.html' %}
+
+{% macro chip(is_added, data) %}
+ <span class="p-chip" id="{{data["id"]}}">
+   <span class="p-chip__lead">{{ data["lead"] }}</span><span class="p-chip__value">{{ data["value"] }}</span>
+   <button class="p-chip__dismiss{% if is_added %} u-hide{% endif %}">Dismiss</button>
+ </span>
+{% endmacro %}
+
+{% macro filter_section(name, chips) %}
+  <div class="p-filter-panel-section">
+    <h3 class="p-filter-panel-section__heading">{{name}}</h3>
+    <div class="p-filter-panel-section__chips" aria-expanded="true">
+      {% for data in chips %}
+        {{ chip(false, data) }}
+      {% endfor %}
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro interface_section(interface, type) %}
+   <hr />
+   <h3 class="p-heading--4 u-no-margin--bottom">{{interface["key"]}} | {{interface["interface"]}}</h3>
+   {% if interface["description"] %}
+     <p>{{interface["description"]}}</p>
+   {% endif %}
+
+   {% if interface["charms"] %}
+     <p>Charms that <b>{% if type == "requires" %}consume{% else %}provide{% endif %}</b> {{interface["interface"]}}:</p>
+     <div class="row">
+       {% for charm in interface["charms"] %}
+         <div class="col-3">
+           <a class="p-card--highlighted">
+             <div class="p-media-object u-no-margin--bottom">
+               <img src="https://singlecolorimage.com/get/e95420/24x24" alt="Solid colour" class="p-media-object__image is-round" style="margin-top: 0.45rem"/>
+               <div class="p-media-object__details">
+                 <h4 class="p-heading--5 p-media-object__title">Charm</h4>
+                 <div class="p-media-object__content">
+                   <p class="u-no-margin--bottom">Author name <img src="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg" style="position: relative; top: 0.25rem; margin-left: 0.25rem;" /></p>
+                   <p class="u-no-margin--bottom">Latest/Stable</p>
+                 </div>
+               </div>
+             </div>
+           </a>
+         </div>
+       {% endfor %}
+     {% endif %}
+{% endmacro %}
+
+{% block details_content %}
+  {% set integrations_count = integrations["provides"]|length + integrations["requires"]|length %}
+  <div class="row p-details-tab__content">
+    <div class="col-12 p-details-tab__content__body">
+      <div class="row">
+        <div class="col-6">
+          <h2 class="p-heading--3">{{ integrations_count }} integration{% if integrations_count > 1 or integrations_count == 0 %}s{% endif %} related to this charm</h2>
+        </div>
+        <div class="col-6">
+          {% if filter_items %}
+            <div class="p-search-and-filter">
+              <div class="p-search-and-filter__search-container" aria-expanded="false" data-active="true" data-empty="false">
+                <form class="p-search-and-filter__box" data-overflowing="false">
+                  <label class="u-off-screen" for="search">Search and filter</label>
+                  <input autocomplete="off" class="p-search-and-filter__input" id="search" name="search" placeholder="Search and filter" type="search" value="">
+                  <button alt="search" class="u-off-screen" type="submit">Search</button>
+                </form>
+              </div>
+              <div class="p-search-and-filter__panel" aria-hidden="true">
+                {% for filter_item in filter_items %}
+                  {{ filter_section(filter_item["name"], filter_item["chips"]) }}
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      {% for provides in integrations["provides"] %}
+       {{ interface_section(provides, "provides") }}
+      {% endfor %}
+
+      {% for requires in integrations["requires"] %}
+       {{ interface_section(requires, "requires") }}
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block details_scripts %}
+<script>
+  /**
+  Toggles visibility of filter panel.
+  @param {HTMLElement} panel Filter panel to show or hide.
+*/
+function togglePanel(container, panel, collapse) {
+  if (typeof collapse === 'undefined') {
+    collapse = panel.getAttribute('aria-hidden') !== 'false';
+  }
+  if (panel && container) {
+    if (collapse) {
+      panel.setAttribute('aria-hidden', 'true');
+      container.setAttribute('aria-expanded', 'false');
+    } else {
+      panel.setAttribute('aria-hidden', 'false');
+      container.setAttribute('aria-expanded', 'true');
+    }
+  }
+}
+
+// Add click handler for clicks on elements with aria-controls
+[].slice.call(document.querySelectorAll('.p-search-and-filter')).forEach(function (pattern) {
+  var input = pattern.querySelector('.p-search-and-filter__input');
+  var container = pattern.querySelector('.p-search-and-filter__search-container');
+  input.addEventListener('blur', function (event) {
+    var targetPanel = pattern.querySelector('.p-search-and-filter__panel');
+    togglePanel(container, targetPanel, true);
+  });
+  input.addEventListener('focus', function (event) {
+    var targetPanel = pattern.querySelector('.p-search-and-filter__panel');
+    togglePanel(container, targetPanel, false);
+  });
+});
+</script>
+{% endblock %}
