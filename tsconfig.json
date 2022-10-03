@@ -20,9 +20,4 @@
     "sourceMap": true
   },
   "include": ["./static/js/"],
-  "paths": [
-    {
-      "*": ["types/*.d.ts"]
-    }
-  ]
 }
