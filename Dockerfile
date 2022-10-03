@@ -23,6 +23,7 @@ ADD static/js static/js
 ADD webpack.config.js .
 ADD webpack.config.entry.js .
 ADD webpack.config.rules.js .
+ADD tsconfig.json .
 RUN yarn run build-js
 
 # Build stage: Run "yarn run build-css"
