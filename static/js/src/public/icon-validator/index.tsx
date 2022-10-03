@@ -65,19 +65,19 @@ function App() {
         return;
       }
 
+      const dataURL = e.target.result as string;
+
       const img = new Image();
       img.addEventListener("load", () => {
-        if (e?.target?.result) {
-          setIcon(e?.target?.result);
-          setImageSize([img.width, img.height]);
-          if (img.width !== 100 || img.height !== 100) {
-            setIsCorrectSize(false);
-          } else {
-            setIsCorrectSize(true);
-          }
+        setIcon(dataURL);
+        setImageSize([img.width, img.height]);
+        if (img.width !== 100 || img.height !== 100) {
+          setIsCorrectSize(false);
+        } else {
+          setIsCorrectSize(true);
         }
       });
-      img.src = e.target.result;
+      img.src = dataURL;
     });
     urlReader.readAsDataURL(file);
   }, [acceptedFiles, handleReset]);
@@ -105,7 +105,7 @@ function App() {
               display: "block",
             }}
           >
-            <Input type="file" />
+            <Input type="file" onClick={(e) => e.preventDefault()} />
             <input {...getInputProps()} />
             {icon && (
               <>
