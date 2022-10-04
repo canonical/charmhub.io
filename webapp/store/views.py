@@ -542,29 +542,47 @@ def details_integrations(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request, FIELDS)
 
-    relations = package.get("default-release", {}).get("revision", {}).get("relations", {})
+    relations = (
+        package.get("default-release", {})
+        .get("revision", {})
+        .get("relations", {})
+    )
 
     grouped_relations = {
-        "provides": [{ **provide[1], "key": provide[0]} for provide in list(relations['provides'].items())],
-        "requires": [{ **require[1], "key": require[0]} for require in list(relations['requires'].items())],
+        "provides": [
+            {**provide[1], "key": provide[0]}
+            for provide in list(relations["provides"].items())
+        ],
+        "requires": [
+            {**require[1], "key": require[0]}
+            for require in list(relations["requires"].items())
+        ],
     }
 
     filter_items = []
     chips_integrations = []
-    for relation in grouped_relations["provides"] + grouped_relations["requires"]:
-        chips_integrations.append({
-            "lead": relation["key"],
-            "value": relation["interface"],
-            "id": relation["key"] + "|" + relation["interface"]
-        })
+    for relation in (
+        grouped_relations["provides"] + grouped_relations["requires"]
+    ):
+        chips_integrations.append(
+            {
+                "lead": relation["key"],
+                "value": relation["interface"],
+                "id": relation["key"] + "|" + relation["interface"],
+            }
+        )
 
     if chips_integrations:
-        filter_items.append({
-            "name": "Integration",
-            "chips": chips_integrations
-        })
+        filter_items.append(
+            {"name": "Integration", "chips": chips_integrations}
+        )
 
-    return render_template("details/integrations.html", package=package, integrations=grouped_relations, filter_items=filter_items)
+    return render_template(
+        "details/integrations.html",
+        package=package,
+        integrations=grouped_relations,
+        filter_items=filter_items,
+    )
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/resources')
