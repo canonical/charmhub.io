@@ -99,4 +99,8 @@ module.exports = [
     ),
     use: ["expose-loader?exposes=charmhub.resources", "babel-loader"],
   },
+  {
+    test: /\.tsx?/,
+    use: ["ts-loader"],
+  },
 ];

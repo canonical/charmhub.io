@@ -94,6 +94,11 @@ def thank_you():
     return render_template("thank-you.html")
 
 
+@app.route("/icon-validator")
+def icon_validator():
+    return render_template("icon-validator.html")
+
+
 @app.route("/sitemap.xml")
 def site_map():
     xml_sitemap = render_template(
