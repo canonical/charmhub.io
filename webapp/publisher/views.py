@@ -1,3 +1,4 @@
+import json
 import talisker
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
 from canonicalwebteam.store_api.exceptions import StoreApiResponseErrorList
@@ -10,6 +11,7 @@ from flask import (
     session,
     url_for,
 )
+from flask.json import jsonify
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import login_required
 from webapp.helpers import get_licenses
@@ -54,6 +56,82 @@ def list_page():
     }
 
     return render_template("publisher/list.html", **context)
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaboration'
+)
+@login_required
+def collaboration(entity_name):
+    package = publisher_api.get_package_metadata(
+        session["account-auth"], "charm", entity_name
+    )
+    context = {
+        "package": package,
+    }
+    return render_template("publisher/collaboration.html", **context)
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaborators',
+)
+@login_required
+def get_collaborators(entity_name):
+    collaborators = publisher_api.get_collaborators(
+        session["account-auth"], entity_name
+    )
+    return jsonify(collaborators)
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites',
+)
+@login_required
+def get_pending_invites(entity_name):
+    pending_invites = publisher_api.get_pending_invites(
+        session["account-auth"], entity_name
+    )
+    return jsonify(pending_invites)
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites/invite',
+    methods=["POST"],
+)
+@login_required
+def invite_collaborators(entity_name):
+    collaborators = json.loads(request.form.get("collaborators"))
+
+    try:
+        publisher_api.invite_collaborators(
+            session["account-auth"], entity_name, collaborators
+        )
+        response = "success"
+    except StoreApiResponseErrorList:
+        response = "error"
+        pass
+
+    return jsonify({"status": response})
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites/revoke',
+    methods=["POST"],
+)
+@login_required
+def revoke_invites(entity_name):
+    collaborators = json.loads(request.form.get("collaborators"))
+
+    try:
+        publisher_api.revoke_collaborators(
+            session["account-auth"], entity_name, collaborators
+        )
+        response = "success"
+    except StoreApiResponseErrorList:
+        response = "error"
+        pass
+
+    return jsonify({"status": response})
 
 
 @publisher.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/listing')
