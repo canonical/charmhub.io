@@ -1,6 +1,6 @@
 module.exports = {
   parser: "babel-eslint",
-  plugins: ["jest"],
+  plugins: ["jest", "react"],
   globals: {
     ga: "readonly",
   },
@@ -10,9 +10,16 @@ module.exports = {
     node: true,
     jest: true,
   },
-  extends: ["eslint:recommended", "plugin:prettier/recommended"],
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended",
+  ],
   parserOptions: {
     sourceType: "module",
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
   rules: {
     "linebreak-style": ["error", "unix"],

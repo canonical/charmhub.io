@@ -7,9 +7,11 @@
 {% set selected_tab='collaboration' %}
 
 {% block publisher_content %}
-  <section class="p-strip">
-    <div class="u-fixed-width">
-      <h2>Collaboration</h2>
-    </div>
-  </section>
+  <main id="main-content"></main>
+
+  <script>
+    window.PACKAGE_NAME = "{{ package.name }}";
+    window.CSRF_TOKEN = "{{ csrf_token() }}";
+  </script>
+  <script src="{{ versioned_static('js/dist/collaborator.js') }}"></script>
 {% endblock %}
