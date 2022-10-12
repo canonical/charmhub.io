@@ -119,12 +119,11 @@ def invite_collaborators(entity_name):
     methods=["POST"],
 )
 @login_required
-def revoke_invites(entity_name):
-    collaborators = json.loads(request.form.get("collaborators"))
-
+def revoke_invite(entity_name):
+    collaborator = request.form.get("collaborator")
     try:
-        publisher_api.revoke_collaborators(
-            session["account-auth"], entity_name, collaborators
+        publisher_api.revoke_invites(
+            session["account-auth"], entity_name, collaborator
         )
         response = "success"
     except StoreApiResponseErrorList:
