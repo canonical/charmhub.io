@@ -1,4 +1,3 @@
-import json
 import talisker
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
 from canonicalwebteam.store_api.exceptions import StoreApiResponseErrorList
@@ -59,10 +58,16 @@ def list_page():
 
 
 @publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaboration'
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaboration',
+    defaults={"path": ""},
+)
+@publisher.route(
+    '/<regex("'
+    + DETAILS_VIEW_REGEX
+    + '"):entity_name>/collaboration/<path:path>',
 )
 @login_required
-def collaboration(entity_name):
+def collaboration(entity_name, path):
     package = publisher_api.get_package_metadata(
         session["account-auth"], "charm", entity_name
     )
@@ -95,23 +100,67 @@ def get_pending_invites(entity_name):
 
 
 @publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites/invite',
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invite',
     methods=["POST"],
 )
 @login_required
 def invite_collaborators(entity_name):
-    collaborators = json.loads(request.form.get("collaborators"))
+    collaborators = request.form.get("collaborators")
+
+    result = {}
 
     try:
-        publisher_api.invite_collaborators(
-            session["account-auth"], entity_name, collaborators
+        result = publisher_api.invite_collaborators(
+            session["account-auth"], entity_name, [collaborators]
         )
         response = "success"
     except StoreApiResponseErrorList:
         response = "error"
         pass
 
-    return jsonify({"status": response})
+    return jsonify({"status": response, "result": result})
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaboration/accept',
+    methods=["POST"],
+)
+@login_required
+def accept_invite(entity_name):
+    token = request.form.get("token")
+    result = {}
+
+    try:
+        result = publisher_api.accept_invite(
+            session["account-auth"], entity_name, token
+        )
+        response = "success"
+    except StoreApiResponseErrorList:
+        response = "error"
+        pass
+
+    return jsonify({"status": response, "result": result})
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaboration/reject',
+    methods=["POST"],
+)
+@login_required
+def reject_invite(entity_name):
+    token = request.form.get("token")
+    result = {}
+
+    try:
+        result = publisher_api.reject_invite(
+            session["account-auth"], entity_name, token
+        )
+        response = "success"
+    except StoreApiResponseErrorList:
+        response = "error"
+        pass
+
+    return jsonify({"status": response, "result": result})
 
 
 @publisher.route(

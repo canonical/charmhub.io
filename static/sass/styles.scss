@@ -142,6 +142,8 @@ $color-text-orange: #d54110;
 @include p-charmhub-subnav;
 @import "charmhub_p-detail-inline-list";
 @include p-detail-inline-list;
+@include vf-l-application;
+@include vf-p-icon-status-waiting;
 
 // Remove table row borders
 .p-table--no-borders tr {
@@ -455,4 +457,40 @@ h3 {
   @media (min-width: $breakpoint-large) {
     margin-left: $sp-large;
   }
+}
+
+.l-aside {
+  background-color: $color-x-light;
+  height: calc(100vh - 112px);
+  max-width: 535px;
+  padding: 1rem;
+  position: fixed;
+  z-index: 999;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.panel__header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.panel__content {
+  flex: 1 1 0;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.l-aside__overlay {
+  background-color: transparent;
+  height: 100%;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 999;
 }
