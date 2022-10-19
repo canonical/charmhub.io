@@ -1,15 +1,14 @@
-import React, { useMemo } from "react";
-import { useLocation } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Strip, Button } from "@canonical/react-components";
 
-function useQuery() {
-  const { search } = useLocation();
-  return useMemo(() => new URLSearchParams(search), [search]);
-}
+import { useQuery } from "../utils";
 
 function InviteConfirmation() {
   const packageName = window?.PACKAGE_NAME;
   let query: { get: Function } = useQuery();
+
+  const navigate = useNavigate();
 
   const acceptInvite = () => {
     const formData = new FormData();
@@ -22,7 +21,7 @@ function InviteConfirmation() {
       body: formData,
     }).then((response) => {
       if (response.status === 200) {
-        return response.json();
+        navigate(`/${packageName}/collaboration?accepted=true`);
       }
     });
   };
@@ -38,7 +37,7 @@ function InviteConfirmation() {
       body: formData,
     }).then((response) => {
       if (response.status === 200) {
-        return response.json();
+        navigate(`/${packageName}/collaboration`);
       }
     });
   };

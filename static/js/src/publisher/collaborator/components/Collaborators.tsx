@@ -7,7 +7,10 @@ import {
   Notification,
   Form,
   Input,
+  Icon,
 } from "@canonical/react-components";
+
+import { useQuery } from "../utils";
 
 import CollaboratorsTable from "./CollaboratorsTable";
 import InvitesTable from "./InvitesTable";
@@ -21,92 +24,47 @@ declare global {
 
 function Collaborators() {
   const [showRevokeConfirmation, setShowRevokeConfirmation] = useState(false);
+  const [showResendConfirmation, setShowResendConfirmation] = useState(false);
   const [collaboratorToRevoke, setCollaboratorToRevoke] = useState("");
   const [showRevokeSuccess, setShowRevokeSuccess] = useState(false);
   const [showRevokeError, setShowRevokeError] = useState(false);
+  const [showInviteSuccess, setShowInviteSuccess] = useState(false);
+  const [showInviteError, setShowInviteError] = useState(false);
+  const [showAcceptInvite, setShowAcceptInvite] = useState(false);
   const [collaborators, setCollaborators] = useState([
     {
-      email: "steve.rydz@canonical.com",
-      display_name: "Steve Rydz",
-      created_by: "sadf79s7df987sdf",
-      created_at: "2022-03-23T20:03:02",
-      expires_at: "2022-04-23T20:03:02",
-      accepted_at: "2022-03-23T20:03:02",
-      account_id: "prFvYmvaBsQbXLNaVaQFV4EAcJ8zh0Ej",
-    },
-    {
-      email: "luke.wesley-holley@canonical.com",
-      display_name: "Luke Wesley-Holley",
-      created_by: "prFvYmvaBsQbXLNaVaQFV4EAcJ8zh0Ej",
+      email: "jane.doe@canonical.com",
+      display_name: "Jane Doe",
+      created_by: "",
       created_at: "2022-03-23T20:03:02",
       expires_at: "2022-04-23T20:03:02",
       accepted_at: "2022-03-23T20:03:02",
       account_id: "asdfasdfasdf",
     },
     {
-      email: "francisco.jimenez.cabrera@canonical.com",
-      display_name: "Franciso Jimenez Cabrera",
-      created_by: "prFvYmvaBsQbXLNaVaQFV4EAcJ8zh0Ej",
+      email: "john.smith@canonical.com",
+      display_name: "John Smith",
+      created_by: "",
       created_at: "2022-03-23T20:03:02",
       expires_at: "2022-04-23T20:03:02",
       accepted_at: "2022-03-23T20:03:02",
-      account_id: "asd;klsdalk;",
-    },
-    {
-      email: "ana.sereijo@canonical.com",
-      display_name: "Ana Sereijo",
-      created_by: "prFvYmvaBsQbXLNaVaQFV4EAcJ8zh0Ej",
-      created_at: "2022-03-23T20:03:02",
-      expires_at: "2022-04-23T20:03:02",
-      accepted_at: "2022-03-23T20:03:02",
-      account_id: "sdfasdfjkljlk",
-    },
-    {
-      email: "ana.badolato.munuera@canonical.com",
-      display_name: "Ana Badolato Munuera",
-      created_by: "prFvYmvaBsQbXLNaVaQFV4EAcJ8zh0Ej",
-      created_at: "2022-03-23T20:03:02",
-      expires_at: "2022-04-23T20:03:02",
-      accepted_at: "2022-03-23T20:03:02",
-      account_id: "sdaflopiupoiu",
-    },
-    {
-      email: "anne-sophie.muller@canonical.com",
-      display_name: "Anne-Sophie Muller",
-      created_by: "prFvYmvaBsQbXLNaVaQFV4EAcJ8zh0Ej",
-      created_at: "2022-03-23T20:03:02",
-      expires_at: "2022-04-23T20:03:02",
-      accepted_at: "2022-03-23T20:03:02",
-      account_id: "klklkjlkjljk",
-    },
-    {
-      email: "huw.wilkins@canonical.com",
-      display_name: "Huw Wilkins",
-      created_by: "prFvYmvaBsQbXLNaVaQFV4EAcJ8zh0Ej",
-      created_at: "2022-03-23T20:03:02",
-      expires_at: "2022-04-23T20:03:02",
-      accepted_at: "2022-03-23T20:03:02",
-      account_id: "asdfdasfjkljkl;jkl;",
-    },
-    {
-      email: "goulin.khoge@canonical.com",
-      display_name: "Goulin Khoge",
-      created_by: "prFvYmvaBsQbXLNaVaQFV4EAcJ8zh0Ej",
-      created_at: "2022-03-23T20:03:02",
-      expires_at: "2022-04-23T20:03:02",
-      accepted_at: "2022-03-23T20:03:02",
-      account_id: "kllksdjkllkjlkj",
+      account_id: "prFvYmvaBsQbXLNaVaQFV4EAcJ8zh0Ej",
     },
   ]);
   const [invites, setInvites] = useState([]);
   const [newCollaboratorEmail, setNewCollaboratorEmail] = useState("");
   const [inviteLink, setInviteLink] = useState("");
   const [showAddCollaborator, setShowAddCollaborator] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const packageName = window?.PACKAGE_NAME;
 
   const closeRevokeConfirmation = () => {
     setShowRevokeConfirmation(false);
+  };
+
+  const closeResendConfirmation = () => {
+    setShowResendConfirmation(false);
   };
 
   const revokeInvite = (email: string) => {
@@ -129,6 +87,8 @@ function Collaborators() {
       }
     });
   };
+
+  let query: { get: Function } = useQuery();
 
   useEffect(() => {
     fetch(`/${packageName}/invites`)
@@ -158,16 +118,46 @@ function Collaborators() {
         }
       })
       .then((data) => {
-        setInviteLink(
-          `https://charmhub.io/${packageName}/collaboration/confirm?token=${data?.result?.tokens?.[0]?.token}`
-        );
+        setTimeout(() => {
+          setInvites(data?.invites?.invites);
+          setIsSaving(false);
+          setInviteLink(
+            `https://charmhub.io/${packageName}/collaboration/confirm?token=${data?.result?.tokens?.[0]?.token}`
+          );
+        }, 1500);
       });
   };
+
+  useEffect(() => {
+    setShowAcceptInvite(query.get("accepted"));
+  }, []);
 
   return (
     <div className="l-application">
       <div className="l-main">
         <Strip>
+          {showInviteSuccess && (
+            <Notification
+              severity="positive"
+              onDismiss={() => {
+                setShowInviteSuccess(false);
+              }}
+            >
+              The invite has been sent.
+            </Notification>
+          )}
+
+          {showInviteError && (
+            <Notification
+              severity="positive"
+              onDismiss={() => {
+                setShowInviteError(false);
+              }}
+            >
+              There was a problem sending this invite.
+            </Notification>
+          )}
+
           {showRevokeSuccess && (
             <Notification
               severity="positive"
@@ -189,6 +179,17 @@ function Collaborators() {
             >
               There was a problem revoking the invite for{" "}
               <strong>{collaboratorToRevoke}</strong>.
+            </Notification>
+          )}
+
+          {showAcceptInvite && (
+            <Notification
+              severity="positive"
+              onDismiss={() => {
+                setShowAcceptInvite(false);
+              }}
+            >
+              You are now a collaborator for this package
             </Notification>
           )}
 
@@ -225,7 +226,8 @@ function Collaborators() {
                     collaborators={collaborators}
                     setCollaboratorToRevoke={setCollaboratorToRevoke}
                     setShowRevokeConfirmation={setShowRevokeConfirmation}
-                    inviteCollaborator={inviteCollaborator}
+                    setShowResendConfirmation={setShowResendConfirmation}
+                    setNewCollaboratorEmail={setNewCollaboratorEmail}
                   />
                 ),
               },
@@ -264,8 +266,16 @@ function Collaborators() {
               <Notification severity="caution" title="Role">
                 A collaborator is a store user that can have equal rights over a
                 particular package as the package publisher.
-                {inviteLink}
               </Notification>
+              {inviteLink && (
+                <>
+                  <p>
+                    Send this link to the user so that they can accept or reject
+                    the invite:
+                  </p>
+                  <Input type="text" value={inviteLink} readOnly />
+                </>
+              )}
               <Input
                 type="email"
                 id="collaborator-email"
@@ -285,13 +295,19 @@ function Collaborators() {
           </div>
           <div className="panel__footer">
             <Button
+              className={`${isSaving ? "is-processing has-icon" : ""}`}
+              disabled={isSaving}
               type="submit"
               appearance="positive"
               onClick={() => {
                 inviteCollaborator();
+                setIsSaving(true);
               }}
             >
-              Add collaborator
+              {isSaving && (
+                <Icon name="spinner" className="is-light u-animation--spin" />
+              )}
+              <span>Add collaborator</span>
             </Button>
           </div>
         </div>
@@ -327,6 +343,36 @@ function Collaborators() {
             Are you sure you want to revoke the invite for{" "}
             <strong>{collaboratorToRevoke}</strong>?
           </p>
+        </Modal>
+      )}
+
+      {showResendConfirmation && (
+        <Modal
+          close={closeResendConfirmation}
+          title="Send invite"
+          buttonRow={
+            <>
+              <Button
+                type="button"
+                className="u-no-margin--bottom"
+                onClick={closeResendConfirmation}
+              >
+                Cancel
+              </Button>
+              <Button
+                appearance="positive"
+                className="u-no-margin--bottom"
+                onClick={() => {
+                  inviteCollaborator();
+                  setShowResendConfirmation(false);
+                }}
+              >
+                Resend invite
+              </Button>
+            </>
+          }
+        >
+          <p>Are you sure you want to this invite?</p>
         </Modal>
       )}
     </div>

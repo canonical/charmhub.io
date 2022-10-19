@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { MainTable } from "@canonical/react-components";
-import { isAfter } from "date-fns";
+import { MainTable, Button } from "@canonical/react-components";
+import { isAfter, format } from "date-fns";
 
-import { buildInviteTableRows } from "../utils";
+import { getCollaboratorById } from "../utils";
 
 import type { Invite, Collaborator } from "../types";
 
@@ -11,7 +11,8 @@ type Props = {
   collaborators: Array<Collaborator>;
   setCollaboratorToRevoke: Function;
   setShowRevokeConfirmation: Function;
-  inviteCollaborator: Function;
+  setShowResendConfirmation: Function;
+  setNewCollaboratorEmail: Function;
 };
 
 function InvitesTable({
@@ -19,7 +20,8 @@ function InvitesTable({
   collaborators,
   setCollaboratorToRevoke,
   setShowRevokeConfirmation,
-  inviteCollaborator,
+  setShowResendConfirmation,
+  setNewCollaboratorEmail,
 }: Props) {
   const [pendingInvites, setPendingInvites] = useState<Invite[]>([]);
   const [expiredInvites, setExpiredInvites] = useState<Invite[]>([]);
@@ -28,6 +30,111 @@ function InvitesTable({
   const [expiredInviteRows, setExpiredInviteRows] = useState<any[]>([]);
   const [revokedInviteRows, setRevokedInviteRows] = useState<any[]>([]);
   const [tableRows, setTableRows] = useState<any[]>([]);
+
+  const buildInviteTableRows = (
+    invites: Array<Invite>,
+    status: "Pending" | "Expired" | "Revoked"
+  ) => {
+    return invites.map((invite: Invite, index) => {
+      let columns: any[] = [];
+      let statusColumn;
+
+      if (index === 0) {
+        statusColumn = {
+          content: (
+            <>
+              {status === "Pending" && <i className="p-icon--status-waiting" />}
+              {status === "Expired" && <i className="p-icon--warning" />}
+              {status === "Revoked" && <i className="p-icon--error" />}
+              &nbsp;
+              {status}
+            </>
+          ),
+          rowSpan: invites.length,
+        };
+      }
+
+      const remainingColumns = [
+        {
+          content: invite?.email,
+        },
+        {
+          content: getCollaboratorById(collaborators, invite?.created_by)
+            ?.display_name,
+        },
+        {
+          content:
+            invite?.expires_at &&
+            format(new Date(invite?.expires_at), "dd/MM/yyyy"),
+        },
+        {
+          className: "u-align--right",
+          content: (
+            <>
+              {status === "Pending" && (
+                <>
+                  <Button
+                    type="button"
+                    dense
+                    onClick={() => {
+                      setCollaboratorToRevoke(invite?.email);
+                      setShowRevokeConfirmation(true);
+                    }}
+                  >
+                    Revoke
+                  </Button>
+                  <Button
+                    type="button"
+                    dense
+                    onClick={() => {
+                      setNewCollaboratorEmail(invite?.email);
+                      setShowResendConfirmation(true);
+                    }}
+                  >
+                    Resend
+                  </Button>
+                </>
+              )}
+              {status === "Expired" && (
+                <Button
+                  type="button"
+                  dense
+                  onClick={() => {
+                    setNewCollaboratorEmail(invite?.email);
+                    setShowResendConfirmation(true);
+                  }}
+                >
+                  Reopen
+                </Button>
+              )}
+              {status === "Revoked" && (
+                <Button
+                  type="button"
+                  dense
+                  onClick={() => {
+                    setNewCollaboratorEmail(invite?.email);
+                    setShowResendConfirmation(true);
+                  }}
+                >
+                  Reopen
+                </Button>
+              )}
+            </>
+          ),
+        },
+      ];
+
+      if (statusColumn) {
+        columns = columns.concat([statusColumn], remainingColumns);
+      } else {
+        columns = remainingColumns;
+      }
+
+      return {
+        columns,
+      };
+    });
+  };
 
   const isAccepted = (invite: Invite) => invite?.accepted_at !== null;
   const isRevoked = (invite: Invite) => invite?.revoked_at !== null;
@@ -56,38 +163,9 @@ function InvitesTable({
   }, [invites]);
 
   useEffect(() => {
-    setPendingInviteRows(
-      buildInviteTableRows(
-        collaborators,
-        pendingInvites,
-        "Pending",
-        setShowRevokeConfirmation,
-        setCollaboratorToRevoke,
-        inviteCollaborator
-      )
-    );
-
-    setExpiredInviteRows(
-      buildInviteTableRows(
-        collaborators,
-        expiredInvites,
-        "Expired",
-        setShowRevokeConfirmation,
-        setCollaboratorToRevoke,
-        inviteCollaborator
-      )
-    );
-
-    setRevokedInviteRows(
-      buildInviteTableRows(
-        collaborators,
-        revokedInvites,
-        "Revoked",
-        setShowRevokeConfirmation,
-        setCollaboratorToRevoke,
-        inviteCollaborator
-      )
-    );
+    setPendingInviteRows(buildInviteTableRows(pendingInvites, "Pending"));
+    setExpiredInviteRows(buildInviteTableRows(expiredInvites, "Expired"));
+    setRevokedInviteRows(buildInviteTableRows(revokedInvites, "Revoked"));
   }, [pendingInvites, expiredInvites, revokedInvites]);
 
   useEffect(() => {

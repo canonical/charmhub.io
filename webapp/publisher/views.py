@@ -106,6 +106,7 @@ def get_pending_invites(entity_name):
 @login_required
 def invite_collaborators(entity_name):
     collaborators = request.form.get("collaborators")
+    invites = []
 
     result = {}
 
@@ -114,11 +115,14 @@ def invite_collaborators(entity_name):
             session["account-auth"], entity_name, [collaborators]
         )
         response = "success"
+        invites = publisher_api.get_pending_invites(
+            session["account-auth"], entity_name
+        )
     except StoreApiResponseErrorList:
         response = "error"
         pass
 
-    return jsonify({"status": response, "result": result})
+    return jsonify({"status": response, "result": result, "invites": invites})
 
 
 @publisher.route(
@@ -172,7 +176,7 @@ def revoke_invite(entity_name):
     collaborator = request.form.get("collaborator")
     try:
         publisher_api.revoke_invites(
-            session["account-auth"], entity_name, collaborator
+            session["account-auth"], entity_name, [collaborator]
         )
         response = "success"
     except StoreApiResponseErrorList:
