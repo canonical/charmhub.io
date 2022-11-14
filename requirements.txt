@@ -13,3 +13,4 @@ pymacaroons==0.13.0
 python-slugify==6.1.1
 ruamel.yaml.clib==0.2.2
 ruamel.yaml==0.16.12
+PyGithub==1.55
