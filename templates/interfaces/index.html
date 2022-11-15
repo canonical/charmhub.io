@@ -4,30 +4,6 @@
 {% block meta_description %}-{% endblock %}
 
 {% block content %}
-
-<section class="p-strip--light is-shallow u-no-padding--bottom">
-  <div class="row">
-    <div class="col-4">
-      <h1>Interfaces</h1>
-    </div>
-    <div class="col-8">
-      <p>Lorem ipsum vitae. This will be intro text about what are interfaces. Similiar to what we have for topic pages.</p>
-      <p>Most of the content of these pages can be collaboratively discussed and changed. Help us improve these pages by clicking the button below.</p>
-      <p>
-        <a href="https://github.com/canonical/charm-relation-interfaces" class="p-button--positive">Contribute</a>
-      </p>
-    </div>
-  </div>
-</section>
-
-Table with data from /interfaces.json
-{% endblock %}
-
-{% block page_scripts %}
-  <script src="{{ versioned_static('js/dist/topics.js') }}" defer></script>
-  <script>
-    window.addEventListener("DOMContentLoaded", () => {
-      new charmhub.topics.initTopicFilters();
-    });
-  </script>
+<main id="main-content"></main>
+<script src="{{ versioned_static('js/dist/interfaces.js') }}"></script>
 {% endblock %}
