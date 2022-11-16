@@ -51,6 +51,7 @@ $color-text-orange: #d54110;
 @include vf-p-contextual-menu;
 @include vf-l-fluid-breakout;
 @include vf-p-icon-change-version;
+@include vf-p-icon-submit-bug;
 
 // Vanilla utilities
 @include vf-u-align;
