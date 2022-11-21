@@ -17,7 +17,6 @@ interfaces = Blueprint(
 
 GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 
-# Todo create token
 github_client = Github(GITHUB_TOKEN)
 
 
