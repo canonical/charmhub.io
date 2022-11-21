@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   Strip,
   Row,
@@ -31,12 +31,17 @@ function pageArray(items: Array<any>, count: number) {
 function InterfacesIndex() {
   const ITEMS_PER_PAGE = 10;
 
+  const [searchParams, setSearchParams]: [URLSearchParams, Function] =
+    useSearchParams();
+
   const [interfaces, setInterfaces] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [currentPageNumber, setCurrentPageNumber] = useState(1);
-  const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [currentItems, setCurrentItems] = useState([]);
+  const [currentPageNumber, setCurrentPageNumber] = useState(
+    parseInt(searchParams.get("page") || "1")
+  );
+  const [currentPageIndex, setCurrentPageIndex] = useState(currentPageNumber);
 
   useEffect(() => {
     setLoading(true);
@@ -59,6 +64,11 @@ function InterfacesIndex() {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    setSearchParams({ page: currentPageNumber });
+    setCurrentPageIndex(currentPageNumber - 1);
+  }, [currentPageNumber]);
 
   useEffect(() => {
     setCurrentItems(pageArray(interfaces, ITEMS_PER_PAGE)[currentPageIndex]);
@@ -168,9 +178,9 @@ function InterfacesIndex() {
             itemsPerPage={ITEMS_PER_PAGE}
             paginate={(pageNumber) => {
               setCurrentPageNumber(pageNumber);
-              setCurrentPageIndex(pageNumber - 1);
             }}
             totalItems={interfaces.length}
+            scrollToTop
           />
         </div>
       </Strip>
