@@ -23,7 +23,27 @@ function InterfaceDetails() {
       </Strip>
       <Strip>
         <Row>
-          <Col size={3}>
+          <Col size={3} className="interface-sidebar">
+            <div className="p-side-navigation u-hide--small u-hide--medium">
+              <ul className="p-side-navigation__list">
+                <li className="p-side-navigation__item">
+                  <a
+                    href="#charms"
+                    className="p-side-navigation__link is-active"
+                  >
+                    Charms
+                  </a>
+                </li>
+                <li className="p-side-navigation__item">
+                  <a
+                    href="#developer-documentation"
+                    className="p-side-navigation__link"
+                  >
+                    Developer documentation
+                  </a>
+                </li>
+              </ul>
+            </div>
             <h2 className="p-muted-heading">Relevant links</h2>
             <p>
               <a href="https://github.com/canonical/charmhub.io">
@@ -57,8 +77,28 @@ function InterfaceDetails() {
               </Button>
             </p>
           </Col>
-          <Col size={9}>
-            <h2>Charms</h2>
+          <Col size={9} className="interface-content">
+            <div className="p-side-navigation u-hide--large">
+              <ul className="p-side-navigation__list">
+                <li className="p-side-navigation__item">
+                  <a
+                    href="#charms"
+                    className="p-side-navigation__link is-active"
+                  >
+                    Charms
+                  </a>
+                </li>
+                <li className="p-side-navigation__item">
+                  <a
+                    href="#developer-documentation"
+                    className="p-side-navigation__link"
+                  >
+                    Developer documentation
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <h2 id="charms">Charms</h2>
             <hr />
             <h3 className="p-heading--4">
               Providing {InterfaceNameWithoutVersion}
@@ -76,6 +116,7 @@ function InterfaceDetails() {
                 How to test a charm
               </a>
             </p>
+            <h2 id="developer-documentation">Developer documentation</h2>
             <Notification severity="information">
               Last updated 2 months ago.{" "}
               <a href="https://github.com/canonical/charm-relation-interfaces">

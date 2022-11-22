@@ -495,3 +495,13 @@ h3 {
   width: 100%;
   z-index: 999;
 }
+
+@media only screen and (max-width: $breakpoint-large) {
+  .interface-sidebar {
+    order: 2;
+  }
+
+  .interface-content {
+    order: 1;
+  }
+}
