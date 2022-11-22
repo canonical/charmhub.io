@@ -13,6 +13,7 @@ import {
 type InterfaceData = {
   name: String;
   description: String;
+  version: String;
 };
 
 function pageArray(items: Array<any>, count: number) {
@@ -153,7 +154,9 @@ function InterfacesIndex() {
                 columns: [
                   {
                     content: (
-                      <Link to={`/interfaces/${item?.name}`}>{item?.name}</Link>
+                      <Link to={`/interfaces/${item?.name}-v${item?.version}`}>
+                        {item?.name} v{item?.version}
+                      </Link>
                     ),
                   },
                   {

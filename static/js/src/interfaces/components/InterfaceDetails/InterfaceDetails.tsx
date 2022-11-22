@@ -11,11 +11,12 @@ import {
 
 function InterfaceDetails() {
   const { interfaceName } = useParams();
+  const InterfaceNameWithoutVersion = interfaceName?.replace("-v", " v");
 
   return (
     <>
       <Strip type="light" shallow>
-        <h1>{interfaceName}</h1>
+        <h1>{InterfaceNameWithoutVersion}</h1>
         <p>
           <Link to="/interfaces">See all interfaces</Link>
         </p>
@@ -59,11 +60,15 @@ function InterfaceDetails() {
           <Col size={9}>
             <h2>Charms</h2>
             <hr />
-            <h3 className="p-heading--4">Providing {interfaceName}</h3>
+            <h3 className="p-heading--4">
+              Providing {InterfaceNameWithoutVersion}
+            </h3>
             <h4 className="p-muted-heading">Tested charms</h4>
             <h4 className="p-muted-heading">Other charms</h4>
             <hr />
-            <h3 className="p-heading--4">Requiring {interfaceName}</h3>
+            <h3 className="p-heading--4">
+              Requiring {InterfaceNameWithoutVersion}
+            </h3>
             <h4 className="p-muted-heading">Tested charms</h4>
             <h4 className="p-muted-heading">Other charms</h4>
             <p>
