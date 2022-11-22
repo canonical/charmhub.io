@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template
 from github import Github
+from os import getenv
 
 from webapp.interfaces.logic import (
     get_interfaces_from_mrkd_table,
@@ -14,8 +15,9 @@ interfaces = Blueprint(
     static_folder="/static",
 )
 
-# Todo create token
-github_client = Github()
+GITHUB_TOKEN = getenv("GITHUB_TOKEN")
+
+github_client = Github(GITHUB_TOKEN)
 
 
 @interfaces.route("/interfaces.json")

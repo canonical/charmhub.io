@@ -16,6 +16,11 @@ env:
       key: google-custom-search-key
       name: google-api
 
+  - name: GITHUB_TOKEN
+    secretKeyRef:
+      key: github-api-token
+      name: charmhub-io
+
 extraHosts:
   - domain: jujucharms.com
   - domain: openoperatorcollection.io
