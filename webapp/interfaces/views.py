@@ -44,8 +44,10 @@ def interfaces_json():
         "size": len(interfaces),
     }
     response = make_response(response)
-    response.headers["Cache-Control"] = "public, max_age=3600"
+    response.cache_control.max_age = "3600"
+
     return response
+
 
 @interfaces.route("/interfaces")
 def all_interfaces():
