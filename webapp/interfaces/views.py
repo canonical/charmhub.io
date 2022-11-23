@@ -49,14 +49,15 @@ def interfaces_json():
     return response
 
 
-@interfaces.route("/interfaces")
-def all_interfaces():
+@interfaces.route("/interfaces", defaults={"path": ""})
+@interfaces.route("/interfaces/<path:path>")
+def all_interfaces(path):
     return render_template("interfaces/index.html")
 
 
-@interfaces.route("/interfaces/<string:interface_slug>")
-def interface_page(interface_slug, path=None):
+# @interfaces.route("/interfaces/<string:interface_slug>")
+# def interface_page(interface_slug, path=None):
 
-    context = {}
+#     context = {}
 
-    return render_template("interfaces/document.html", **context)
+#     return render_template("interfaces/document.html", **context)
