@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, make_response
 from github import Github
 from os import getenv
 
@@ -39,10 +39,14 @@ def interfaces_json():
 
         interfaces[i]["description"] = description
 
-    return {
+    response = {
         "interfaces": interfaces,
         "size": len(interfaces),
     }
+    response = make_response(response)
+    response.cache_control.max_age = "3600"
+
+    return response
 
 
 @interfaces.route("/interfaces")
