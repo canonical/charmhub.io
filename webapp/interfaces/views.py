@@ -5,6 +5,7 @@ from os import getenv
 from webapp.interfaces.logic import (
     get_interfaces_from_mrkd_table,
     get_short_description_from_readme,
+    filter_interfaces_by_status,
 )
 
 
@@ -26,8 +27,9 @@ def interfaces_json():
     readme = repo.get_contents("README.md").decoded_content.decode("utf-8")
 
     interfaces = get_interfaces_from_mrkd_table(readme)
-
-    for i, inter in enumerate(interfaces):
+    live_interfaces = filter_interfaces_by_status(interfaces, "Live")
+    
+    for i, inter in enumerate(live_interfaces):
         try:
             interface_readme = repo.get_contents(
                 inter["readme_path"]
@@ -37,11 +39,11 @@ def interfaces_json():
             # Some draft interfaces are missing a readme
             description = ""
 
-        interfaces[i]["description"] = description
+        live_interfaces[i]["description"] = description
 
     return {
-        "interfaces": interfaces,
-        "size": len(interfaces),
+        "interfaces": live_interfaces,
+        "size": len(live_interfaces),
     }
 
 

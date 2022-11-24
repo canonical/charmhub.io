@@ -76,6 +76,10 @@ def get_interfaces_from_mrkd_table(content):
     return interfaces
 
 
+def filter_interfaces_by_status(interfaces, status):
+    return list(filter(lambda item: (item["status"] == status), interfaces))
+
+
 def get_short_description_from_readme(readme):
     lines = readme.split("\n")
 
