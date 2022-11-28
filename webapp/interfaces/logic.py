@@ -92,6 +92,7 @@ def get_short_description_from_readme(readme):
 
     return None
 
+
 def strip_str(string):
     return re.sub(r"[^a-zA-Z0-9 ().,!-_/:;`]", "", string)
 
@@ -102,7 +103,7 @@ def get_start_and_end(text, pattern):
 
 
 def extract_text(text, delimiter):
-    headings = re.findall(f"{delimiter}\s\S+", text)
+    headings = re.findall(f"{delimiter}" + r"\s\S+", text)
     start_end = {
         heading: get_start_and_end(text, heading) for heading in headings
     }
@@ -133,19 +134,28 @@ def convert_readme_to_dict(text, level=2):
     resulting_dict = {}
     for heading, content in headings_and_contents:
         temp = {}
-        strip_char = "{}{}".format("#"*level, " ")
+        strip_char = "{}{}".format("#" * level, " ")
         heading = heading.strip(strip_char)
         if content[0].isalpha and "#" in content:
-           
             if content.split("\n\n", 1)[0] == "Data":
                 heading = heading + "-" + content.split("\n\n", 1)[0]
-                resulting_dict[heading] = convert_readme_to_dict(content, level + 1)
+                resulting_dict[heading] = convert_readme_to_dict(
+                    content, level + 1)
             else:
                 temp[heading] = convert_readme_to_dict(content, level + 1)
                 resulting_dict.update(temp)
-                resulting_dict[heading]["Introduction"] = content.split("\n\n", 1)[0]
+                try:
+                    resulting_dict[heading]["Introduction"] = content.split(
+                        "\n\n", 1)[
+                        0
+                    ]
+                except TypeError:
+                    resulting_dict[heading] = convert_readme_to_dict(
+                        content, level + 1)
+
         else:
-            resulting_dict[heading] = convert_readme_to_dict(content, level + 1)
+            resulting_dict[heading] = convert_readme_to_dict(
+                content, level + 1)
 
     return resulting_dict
 

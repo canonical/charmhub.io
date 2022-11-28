@@ -62,12 +62,13 @@ def all_interfaces(path):
 def single_interface(interface, version):
     repo = github_client.get_repo("canonical/charm-relation-interfaces")
     interface_path = "interfaces/{}/{}".format(interface, version)
-    readme = repo.get_contents(interface_path)[0].decoded_content.decode("utf-8")
+    readme = repo.get_contents(
+        interface_path)[0].decoded_content.decode("utf-8")
 
     res = convert_readme_to_dict(readme)
     res["name"] = get_interface_name_from_readme(readme)
     response = make_response(res)
-    response.cache_control.max_age = "36000"    
+    response.cache_control.max_age = "36000"
     return response
 
 
