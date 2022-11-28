@@ -6,8 +6,8 @@ from webapp.interfaces.logic import (
     get_interfaces_from_mrkd_table,
     get_short_description_from_readme,
     filter_interfaces_by_status,
-    convert_readme_to_dict,
-    get_interface_name_from_readme
+    convert_readme,
+    get_interface_name_from_readme,
 )
 
 
@@ -62,10 +62,10 @@ def all_interfaces(path):
 def single_interface(interface, version):
     repo = github_client.get_repo("canonical/charm-relation-interfaces")
     interface_path = "interfaces/{}/{}".format(interface, version)
-    readme = repo.get_contents(
-        interface_path)[0].decoded_content.decode("utf-8")
+    repo_content = repo.get_contents(interface_path)[0]
+    readme = repo_content.decoded_content.decode("utf-8")
 
-    res = convert_readme_to_dict(readme)
+    res = convert_readme(readme)
     res["name"] = get_interface_name_from_readme(readme)
     response = make_response(res)
     response.cache_control.max_age = "36000"
