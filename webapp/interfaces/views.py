@@ -6,6 +6,8 @@ from webapp.interfaces.logic import (
     get_interfaces_from_mrkd_table,
     get_short_description_from_readme,
     filter_interfaces_by_status,
+    convert_readme,
+    get_interface_name_from_readme,
 )
 
 
@@ -47,7 +49,6 @@ def interfaces_json():
     }
     response = make_response(response)
     response.cache_control.max_age = "3600"
-
     return response
 
 
@@ -55,6 +56,20 @@ def interfaces_json():
 @interfaces.route("/interfaces/<path:path>")
 def all_interfaces(path):
     return render_template("interfaces/index.html")
+
+
+@interfaces.route("/interfaces/<interface>-<version>.json")
+def single_interface(interface, version):
+    repo = github_client.get_repo("canonical/charm-relation-interfaces")
+    interface_path = "interfaces/{}/{}".format(interface, version)
+    repo_content = repo.get_contents(interface_path)[0]
+    readme = repo_content.decoded_content.decode("utf-8")
+
+    res = convert_readme(readme)
+    res["name"] = get_interface_name_from_readme(readme)
+    response = make_response(res)
+    response.cache_control.max_age = "36000"
+    return response
 
 
 # @interfaces.route("/interfaces/<string:interface_slug>")
