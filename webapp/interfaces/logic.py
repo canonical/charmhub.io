@@ -1,3 +1,6 @@
+import re
+
+
 def find_between(s, first, last):
     try:
         start = s.index(first) + len(first)
@@ -88,3 +91,64 @@ def get_short_description_from_readme(readme):
             return line
 
     return None
+
+def strip_str(string):
+    return re.sub(r"[^a-zA-Z0-9 ().,!-_/:;`]", "", string)
+
+
+def get_start_and_end(text, pattern):
+    start_index = text.index(pattern)
+    return [start_index, start_index + len(pattern)]
+
+
+def extract_text(text, delimiter):
+    headings = re.findall(f"{delimiter}\s\S+", text)
+    start_end = {
+        heading: get_start_and_end(text, heading) for heading in headings
+    }
+    result = []
+    for i in range(len(headings)):
+        current_heading = headings[i]
+        start_index = start_end[current_heading][1]
+        has_next = i < len(headings) - 1
+        if has_next:
+            next_heading = headings[i + 1]
+            end_index = start_end[next_heading][0]
+            body = text[start_index:end_index]
+        else:
+            body = text[start_index:]
+
+        result.append([current_heading.strip(), body.strip()])
+    return result
+
+
+def convert_readme_to_dict(text, level=2):
+    headings_and_contents = extract_text(text, "\n" + ("#" * level))
+    if len(headings_and_contents) == 0:
+        if not text.startswith("- "):
+            return "".join([s for s in text.split("\n") if s.strip("\n")])
+        else:
+            return [strip_str(t) for t in text.strip("- ").split("\n- ")]
+
+    resulting_dict = {}
+    for heading, content in headings_and_contents:
+        temp = {}
+        strip_char = "{}{}".format("#"*level, " ")
+        heading = heading.strip(strip_char)
+        if content[0].isalpha and "#" in content:
+           
+            if content.split("\n\n", 1)[0] == "Data":
+                heading = heading + "-" + content.split("\n\n", 1)[0]
+                resulting_dict[heading] = convert_readme_to_dict(content, level + 1)
+            else:
+                temp[heading] = convert_readme_to_dict(content, level + 1)
+                resulting_dict.update(temp)
+                resulting_dict[heading]["Introduction"] = content.split("\n\n", 1)[0]
+        else:
+            resulting_dict[heading] = convert_readme_to_dict(content, level + 1)
+
+    return resulting_dict
+
+
+def get_interface_name_from_readme(text):
+    return re.sub(r"[#` \n]", "", text.split("\n##", 1)[0])
