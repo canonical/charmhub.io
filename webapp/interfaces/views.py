@@ -8,8 +8,8 @@ from webapp.interfaces.logic import (
     filter_interfaces_by_status,
     convert_readme,
     get_interface_name_from_readme,
-    get_interface_content_from_repo,
-    get_dict_from_yaml,
+    get_interface_cont_from_repo,
+    get_interface_yml,
 )
 
 
@@ -60,28 +60,15 @@ def all_interfaces(path):
     return render_template("interfaces/index.html")
 
 
-def get_interface_yml(interface, version):
-    interface_content = get_interface_content_from_repo(interface, version, "charms.yaml")
-    if interface_content:
-        content = interface_content[0].decoded_content.decode("utf-8")
-        response = get_dict_from_yaml(content)
-    # if there is no charm
-    else:
-        response = {"requirer": [], "provider": []}
-    response = make_response(response)
-    response.cache_control.max_age = "3600"
-
-    return response
-
-
 @interfaces.route("/interfaces/<interface>-<version>.json")
 def single_interface(interface, version):
-    content = get_interface_content_from_repo(interface, version, "README.md")
+    content = get_interface_cont_from_repo(interface, version, "README.md")
     try:
         readme = content[0].decoded_content.decode("utf-8")
 
         res = convert_readme(readme)
         res["name"] = get_interface_name_from_readme(readme)
+        res["charms"] = get_interface_yml(interface, version)
         response = make_response(res)
         response.cache_control.max_age = "36000"
         return response
