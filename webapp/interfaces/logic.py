@@ -25,22 +25,24 @@ def get_interface_yml(interface, version):
         response = get_dict_from_yaml(cont)
     # if there is no charm
     else:
-        response = {"requirer": [], "provider": []}
+        response = {"providers": [], "consumers": []}
 
     return response
 
 
 def get_dict_from_yaml(content):
     content_list = content.split("\n")
-    result = {}
+    result = {"providers": [], "consumers": []}
     for cont in content_list:
         if ":" in cont:
             key = re.sub(r"[^a-zA-Z0-9-]", "", cont)
-            result[key] = []
         else:
             stripped_cont = cont.strip("- ")
             if stripped_cont:
-                result[key].append(stripped_cont)
+                if key == "providers":
+                    result["providers"].append(stripped_cont)
+                if key == "consumers" or key == "requirers":
+                    result["consumers"].append(stripped_cont)
     return result
 
 
