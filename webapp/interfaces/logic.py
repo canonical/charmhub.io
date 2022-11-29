@@ -1,5 +1,35 @@
 from pprint import pprint
 import re
+from github import Github
+from os import getenv
+
+GITHUB_TOKEN = getenv("GITHUB_TOKEN")
+
+github_client = Github(GITHUB_TOKEN)
+
+
+def get_interface_content_from_repo(interface, version, content_type):
+    repo = github_client.get_repo("canonical/charm-relation-interfaces")
+    interface_path = "interfaces/{}/{}".format(interface, version)
+    interface_content = repo.get_contents(interface_path)
+    content = [
+        path for path in interface_content if path.path.endswith(content_type)
+    ]
+    return content
+
+
+def get_dict_from_yaml(content):
+    content_list = content.split("\n")
+    result = {}
+    for cont in content_list:
+        if ":" in cont:
+            key = re.sub(r"[^a-zA-Z0-9-]", "", cont)
+            result[key] = []
+        else:
+            stripped_cont = cont.strip("- ")
+            if stripped_cont:
+                result[key].append(stripped_cont)
+    return result
 
 
 def find_between(s, first, last):

@@ -1,3 +1,5 @@
+from pprint import pprint
+import re
 from flask import Blueprint, render_template, make_response
 from github import Github
 from os import getenv
@@ -8,6 +10,8 @@ from webapp.interfaces.logic import (
     filter_interfaces_by_status,
     convert_readme,
     get_interface_name_from_readme,
+    get_interface_content_from_repo,
+    get_dict_from_yaml,
 )
 
 
@@ -56,6 +60,21 @@ def interfaces_json():
 @interfaces.route("/interfaces/<path:path>")
 def all_interfaces(path):
     return render_template("interfaces/index.html")
+
+
+# @interfaces.route("/interfaces/<interface>-<version>.yml")
+def get_interface_yml(interface, version):
+    interface_content = get_interface_content_from_repo(interface, version, "charms.yaml")
+    if interface_content:
+        content = interface_content[0].decoded_content.decode("utf-8")
+        response = get_dict_from_yaml(content)
+    # if there is no charm
+    else:
+        response = {"requirer": [], "provider": []}
+    response = make_response(response)
+    response.cache_control.max_age = "3600"
+
+    return response
 
 
 @interfaces.route("/interfaces/<interface>-<version>.json")
