@@ -8,6 +8,8 @@ from webapp.interfaces.logic import (
     filter_interfaces_by_status,
     convert_readme,
     get_interface_name_from_readme,
+    get_interface_cont_from_repo,
+    get_interface_yml,
 )
 
 
@@ -60,16 +62,18 @@ def all_interfaces(path):
 
 @interfaces.route("/interfaces/<interface>-<version>.json")
 def single_interface(interface, version):
-    repo = github_client.get_repo("canonical/charm-relation-interfaces")
-    interface_path = "interfaces/{}/{}".format(interface, version)
-    repo_content = repo.get_contents(interface_path)[0]
-    readme = repo_content.decoded_content.decode("utf-8")
+    content = get_interface_cont_from_repo(interface, version, "README.md")
+    try:
+        readme = content[0].decoded_content.decode("utf-8")
 
-    res = convert_readme(readme)
-    res["name"] = get_interface_name_from_readme(readme)
-    response = make_response(res)
-    response.cache_control.max_age = "36000"
-    return response
+        res = convert_readme(readme)
+        res["name"] = get_interface_name_from_readme(readme)
+        res["charms"] = get_interface_yml(interface, version)
+        response = make_response(res)
+        response.cache_control.max_age = "36000"
+        return response
+    except IndexError:
+        return {}
 
 
 # @interfaces.route("/interfaces/<string:interface_slug>")
