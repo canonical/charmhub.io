@@ -51,6 +51,7 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-dropzone": "^14.2.2",
+    "react-markdown": "8.0.3",
     "react-router-dom": "6.4.2",
     "sass": "1.47.0",
     "style-loader": "2.0.0",
