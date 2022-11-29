@@ -1,5 +1,3 @@
-from pprint import pprint
-import re
 from flask import Blueprint, render_template, make_response
 from github import Github
 from os import getenv
@@ -62,7 +60,6 @@ def all_interfaces(path):
     return render_template("interfaces/index.html")
 
 
-# @interfaces.route("/interfaces/<interface>-<version>.yml")
 def get_interface_yml(interface, version):
     interface_content = get_interface_content_from_repo(interface, version, "charms.yaml")
     if interface_content:
@@ -79,16 +76,17 @@ def get_interface_yml(interface, version):
 
 @interfaces.route("/interfaces/<interface>-<version>.json")
 def single_interface(interface, version):
-    repo = github_client.get_repo("canonical/charm-relation-interfaces")
-    interface_path = "interfaces/{}/{}".format(interface, version)
-    repo_content = repo.get_contents(interface_path)[0]
-    readme = repo_content.decoded_content.decode("utf-8")
+    content = get_interface_content_from_repo(interface, version, "README.md")
+    try:
+        readme = content[0].decoded_content.decode("utf-8")
 
-    res = convert_readme(readme)
-    res["name"] = get_interface_name_from_readme(readme)
-    response = make_response(res)
-    response.cache_control.max_age = "36000"
-    return response
+        res = convert_readme(readme)
+        res["name"] = get_interface_name_from_readme(readme)
+        response = make_response(res)
+        response.cache_control.max_age = "36000"
+        return response
+    except IndexError:
+        return {}
 
 
 # @interfaces.route("/interfaces/<string:interface_slug>")
