@@ -14,6 +14,8 @@ type InterfaceData = {
   name: String;
   description: String;
   version: String;
+  consumer_count: number;
+  provider_count: number;
 };
 
 function pageArray(items: Array<any>, count: number) {
@@ -163,9 +165,13 @@ function InterfacesIndex() {
                     content: item?.description.split(".")[0],
                   },
                   {
-                    content: "",
+                    content: item?.provider_count,
+                    className: "u-align--right",
                   },
-                  { content: "" },
+                  {
+                    content: item?.consumer_count,
+                    className: "u-align--right",
+                  },
                 ],
               };
             })
