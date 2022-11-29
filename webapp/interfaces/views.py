@@ -44,9 +44,9 @@ def interfaces_json():
             description = ""
 
         live_interfaces[i]["description"] = description
-
-        charms = get_interface_yml(inter["name"],
-                                   "v{}".format(inter["version"]))
+        version = "v{}".format(inter["version"])
+        interface = inter["name"]
+        charms = get_interface_yml(interface, version)
 
         live_interfaces[i]["provider_count"] = len(charms["providers"])
         live_interfaces[i]["consumer_count"] = len(charms["consumers"])
