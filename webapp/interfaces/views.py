@@ -80,11 +80,3 @@ def single_interface(interface, version):
         return response
     except IndexError:
         return {}
-
-
-# @interfaces.route("/interfaces/<string:interface_slug>")
-# def interface_page(interface_slug, path=None):
-
-#     context = {}
-
-#     return render_template("interfaces/document.html", **context)
