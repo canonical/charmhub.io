@@ -21,6 +21,10 @@ type InterfaceData = {
     };
   };
   Usage: string;
+  charms?: {
+    consumers: Array<string>;
+    providers: Array<string>;
+  };
 };
 
 function InterfaceDetails() {
@@ -126,6 +130,52 @@ function InterfaceDetails() {
               </div>
 
               <Strip className="u-no-padding--top" bordered shallow>
+                <h2 id="charms">Charms</h2>
+              </Strip>
+
+              <Strip bordered shallow>
+                <h3 className="p-heading--4">Providing</h3>
+                <h4 className="p-muted-heading">Tested charms</h4>
+                <Row className="u-no-padding--left u-no-padding--right">
+                  {interfaceData?.charms?.providers.map((provider) => (
+                    <Col size={3} key={provider}>
+                      <iframe
+                        height={260}
+                        style={{ width: "100%" }}
+                        src={`/${provider}/embedded?store_design=true`}
+                      />
+                    </Col>
+                  ))}
+                </Row>
+                <p>
+                  <a href="https://discourse.charmhub.io/t/getting-started-with-charm-testing/6894">
+                    How to test a charm
+                  </a>
+                </p>
+              </Strip>
+
+              <Strip shallow>
+                <h3 className="p-heading--4">Requiring</h3>
+                <h4 className="p-muted-heading">Tested charms</h4>
+                <Row className="u-no-padding--left u-no-padding--right">
+                  {interfaceData?.charms?.consumers.map((consumer) => (
+                    <Col size={3} key={consumer}>
+                      <iframe
+                        height={260}
+                        style={{ width: "100%" }}
+                        src={`/${consumer}/embedded?store_design=true`}
+                      />
+                    </Col>
+                  ))}
+                </Row>
+                <p>
+                  <a href="https://discourse.charmhub.io/t/getting-started-with-charm-testing/6894">
+                    How to test a charm
+                  </a>
+                </p>
+              </Strip>
+
+              <Strip bordered shallow>
                 <h2 id="developer-documentation">Developer documentation</h2>
               </Strip>
 
