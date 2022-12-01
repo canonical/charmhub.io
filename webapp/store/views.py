@@ -68,11 +68,29 @@ def index():
 @store.route("/packages.json")
 def get_packages():
     query = request.args.get("q", default=None, type=str)
+    provides= request.args.get("provides", default=None, type=str)
+    requires = request.args.get("requires", default=None, type=str)
+    context = {"packages": [], "size": 0}
 
     if query:
         results = app.store_api.find(query=query, fields=SEARCH_FIELDS).get(
             "results"
         )
+        context["q"] = query
+    elif provides or requires:
+        if provides:
+            provides = provides.split(",")
+        if requires:
+            requires = requires.split(",")
+
+        print(provides)
+        print(requires)
+        results = app.store_api.find(
+            provides=provides, requires=requires, fields=SEARCH_FIELDS
+        ).get("results")
+
+        context["provides"] = provides
+        context["requires"] = requires
     else:
         results = app.store_api.find(fields=SEARCH_FIELDS).get("results", [])
 
@@ -84,11 +102,10 @@ def get_packages():
         package = logic.add_store_front_data(results[i], False)
         packages.append(package)
 
-    return {
-        "packages": packages,
-        "q": query,
-        "size": total_packages,
-    }
+    context["packages"] = packages
+    context["size"] = total_packages
+
+    return context
 
 
 FIELDS = [
@@ -542,6 +559,19 @@ def details_integrations(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request, FIELDS)
 
+    return render_template(
+        "details/integrations.html",
+        package=package,
+    )
+
+
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/integrations.json')
+@store_maintenance
+@redirect_uppercase_to_lowercase
+def details_integrations_data(entity_name):
+    channel_request = request.args.get("channel", default=None, type=str)
+    package = get_package(entity_name, channel_request, FIELDS)
+
     relations = (
         package.get("default-release", {})
         .get("revision", {})
@@ -559,30 +589,9 @@ def details_integrations(entity_name):
         ],
     }
 
-    filter_items = []
-    chips_integrations = []
-    for relation in (
-        grouped_relations["provides"] + grouped_relations["requires"]
-    ):
-        chips_integrations.append(
-            {
-                "lead": relation["key"],
-                "value": relation["interface"],
-                "id": relation["key"] + "|" + relation["interface"],
-            }
-        )
-
-    if chips_integrations:
-        filter_items.append(
-            {"name": "Integration", "chips": chips_integrations}
-        )
-
-    return render_template(
-        "details/integrations.html",
-        package=package,
-        integrations=grouped_relations,
-        filter_items=filter_items,
-    )
+    return jsonify({
+        "grouped_relations": grouped_relations
+    })
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/resources')
