@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, make_response
+from flask import Blueprint, render_template, make_response, current_app as app
 from github import Github
 from os import getenv
 
@@ -71,12 +71,20 @@ def single_interface(interface, version):
     content = get_interface_cont_from_repo(interface, version, "README.md")
     try:
         readme = content[0].decoded_content.decode("utf-8")
+        api = app.store_api
+        other_requirers = api.find(requires=[interface]).get("results", [])
+        other_providers = api.find(provides=[interface]).get("results", [])
 
         res = convert_readme(readme)
         res["name"] = get_interface_name_from_readme(readme)
         res["charms"] = get_interface_yml(interface, version)
+        res["other_charms"] = {
+            "providers": other_providers,
+            "requirers": other_requirers,
+        }
+
         response = make_response(res)
         response.cache_control.max_age = "36000"
         return response
-    except IndexError:
+    except Exception:
         return {}
