@@ -25,6 +25,16 @@ type InterfaceData = {
     consumers: Array<string>;
     providers: Array<string>;
   };
+  other_charms: {
+    providers: Array<{
+      id: string;
+      name: string;
+    }>;
+    requirers: Array<{
+      id: string;
+      name: string;
+    }>;
+  };
 };
 
 function InterfaceDetails() {
@@ -147,6 +157,18 @@ function InterfaceDetails() {
                     </Col>
                   ))}
                 </Row>
+                {interfaceData?.other_charms?.providers.length > 0 && (
+                  <>
+                    <h4 className="p-muted-heading">Other charms</h4>
+                    <ul className="p-list u-split--3">
+                      {interfaceData?.other_charms?.providers.map((charm) => (
+                        <li key={charm.id}>
+                          <a href={`/${charm?.name}`}>{charm?.name}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
                 <p>
                   <a href="https://discourse.charmhub.io/t/getting-started-with-charm-testing/6894">
                     How to test a charm
@@ -168,6 +190,18 @@ function InterfaceDetails() {
                     </Col>
                   ))}
                 </Row>
+                {interfaceData?.other_charms?.requirers.length > 0 && (
+                  <>
+                    <h4 className="p-muted-heading">Other charms</h4>
+                    <ul className="p-list u-split--3">
+                      {interfaceData?.other_charms?.requirers.map((charm) => (
+                        <li key={charm.id}>
+                          <a href={`/${charm?.name}`}>{charm?.name}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
                 <p>
                   <a href="https://discourse.charmhub.io/t/getting-started-with-charm-testing/6894">
                     How to test a charm
