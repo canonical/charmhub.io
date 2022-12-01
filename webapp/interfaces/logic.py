@@ -1,4 +1,3 @@
-from pprint import pprint
 import re
 from github import Github
 from os import getenv
@@ -150,7 +149,6 @@ def get_h_content(text, pattern):
 def extract_text(text, delimiter):
     headings = re.findall(f"{delimiter}" + r"\s\S+", text)
     start_end = {heading: get_h_content(text, heading) for heading in headings}
-    pprint(start_end)
     result = []
     for i in range(len(headings)):
         current_heading = headings[i]
