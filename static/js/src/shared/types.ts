@@ -3,6 +3,7 @@ export interface ICharm {
   store_front: {
     icons: string[];
     "display-name": string;
+    "deployable-on": string[];
   };
   result: {
     publisher: {

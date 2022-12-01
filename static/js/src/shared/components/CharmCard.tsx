@@ -43,16 +43,32 @@ const CharmCard = ({ charm }: CharmCardProps) => {
               <span style={{ minHeight: "3rem" }}>
                 {charm.result?.publisher?.["display-name"]}{" "}
               </span>
-              <img
-                src="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg"
-                style={{
-                  position: "relative",
-                  top: "0.25rem",
-                  marginLeft: "1rem",
-                  flexShrink: 0,
-                  justifySelf: "flex-end",
-                }}
-              />
+              {charm.store_front?.["deployable-on"]?.includes("kubernetes") && (
+                <img
+                  src="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg"
+                  style={{
+                    position: "relative",
+                    top: "0.25rem",
+                    marginLeft: "1rem",
+                    flexShrink: 0,
+                    justifySelf: "flex-end",
+                  }}
+                  alt="Deployable on Kubernetes"
+                />
+              )}
+              {charm.store_front?.["deployable-on"]?.includes("vm") && (
+                <img
+                  src="https://assets.ubuntu.com/v1/a911ecf6-vm-badge.svg"
+                  style={{
+                    position: "relative",
+                    top: "0.25rem",
+                    marginLeft: "1rem",
+                    flexShrink: 0,
+                    justifySelf: "flex-end",
+                  }}
+                  alt="Deployable on VM"
+                />
+              )}
             </p>
           </div>
         </div>
