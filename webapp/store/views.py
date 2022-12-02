@@ -591,9 +591,7 @@ def details_integrations_data(entity_name):
         ],
     }
 
-    return jsonify({
-        "grouped_relations": grouped_relations
-    })
+    return jsonify({"grouped_relations": grouped_relations})
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/resources')
