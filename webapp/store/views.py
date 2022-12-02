@@ -68,7 +68,7 @@ def index():
 @store.route("/packages.json")
 def get_packages():
     query = request.args.get("q", default=None, type=str)
-    provides= request.args.get("provides", default=None, type=str)
+    provides = request.args.get("provides", default=None, type=str)
     requires = request.args.get("requires", default=None, type=str)
     context = {"packages": [], "size": 0}
 
@@ -565,7 +565,9 @@ def details_integrations(entity_name):
     )
 
 
-@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/integrations.json')
+@store.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/integrations.json'
+)
 @store_maintenance
 @redirect_uppercase_to_lowercase
 def details_integrations_data(entity_name):
