@@ -50,41 +50,7 @@
 {% endmacro %}
 
 {% block details_content %}
-  {% set integrations_count = integrations["provides"]|length + integrations["requires"]|length %}
-  <div class="row p-details-tab__content">
-    <div class="col-12 p-details-tab__content__body">
-      <div class="row">
-        <div class="col-6">
-          <h2 class="p-heading--3">{{ integrations_count }} integration{% if integrations_count > 1 or integrations_count == 0 %}s{% endif %} related to this charm</h2>
-        </div>
-        <div class="col-6">
-          {% if filter_items %}
-            <div class="p-search-and-filter">
-              <div class="p-search-and-filter__search-container" aria-expanded="false" data-active="true" data-empty="false">
-                <form class="p-search-and-filter__box" data-overflowing="false">
-                  <label class="u-off-screen" for="search">Search and filter</label>
-                  <input autocomplete="off" class="p-search-and-filter__input" id="search" name="search" placeholder="Search and filter" type="search" value="">
-                  <button alt="search" class="u-off-screen" type="submit">Search</button>
-                </form>
-              </div>
-              <div class="p-search-and-filter__panel" aria-hidden="true">
-                {% for filter_item in filter_items %}
-                  {{ filter_section(filter_item["name"], filter_item["chips"]) }}
-                {% endfor %}
-              </div>
-            </div>
-          {% endif %}
-        </div>
-      </div>
-
-      {% for provides in integrations["provides"] %}
-       {{ interface_section(provides, "provides") }}
-      {% endfor %}
-
-      {% for requires in integrations["requires"] %}
-       {{ interface_section(requires, "requires") }}
-      {% endfor %}
-    </div>
+  <div class="row p-details-tab__content" id="tab-content">
   </div>
 {% endblock %}
 
@@ -123,4 +89,5 @@ function togglePanel(container, panel, collapse) {
   });
 });
 </script>
+<script src="{{ versioned_static('js/dist/details_integrations.js') }}"></script>
 {% endblock %}

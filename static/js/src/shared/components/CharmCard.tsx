@@ -19,7 +19,10 @@ const CharmCard = ({ charm }: CharmCardProps) => {
           className="p-media-object__image is-round"
           style={{ marginTop: "0.45rem", width: 24, height: 24 }}
         />
-        <div className="p-media-object__details" style={{ overflow: "hidden" }}>
+        <div
+          className="p-media-object__details"
+          style={{ overflow: "hidden", flexGrow: 1 }}
+        >
           <h4
             className="p-heading--5 p-media-object__title"
             style={{
