@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
-import { Strip, Row, Col, Notification } from "@canonical/react-components";
+import {
+  Strip,
+  Row,
+  Col,
+  Notification,
+  Icon,
+  Button,
+} from "@canonical/react-components";
 
 type InterfaceData = {
   Behavior?: {
@@ -35,12 +42,12 @@ type InterfaceData = {
       name: string;
     }>;
   };
+  name: string;
+  version: string;
 };
 
 function InterfaceDetails() {
   const { interfaceName } = useParams();
-  const InterfaceNameWithoutVersion = interfaceName?.replace("-v", " v");
-
   const [interfaceData, setInterfaceData] = useState<InterfaceData | null>(
     null
   );
@@ -72,7 +79,9 @@ function InterfaceDetails() {
   return (
     <>
       <Strip type="light" shallow>
-        <h1>{InterfaceNameWithoutVersion}</h1>
+        <h1>
+          {interfaceData?.name} {interfaceData?.version}
+        </h1>
         <p>
           <Link to="/interfaces">See all interfaces</Link>
         </p>
@@ -116,6 +125,42 @@ function InterfaceDetails() {
                   </li>
                 </ul>
               </div>
+              <h2 className="p-muted-heading">Relevant links</h2>
+              <p>
+                <a
+                  href={`https://github.com/canonical/charm-relation-interfaces/issues/new?title=${interfaceData?.name}+${interfaceData?.version}`}
+                >
+                  <Icon name="submit-bug" />
+                  &nbsp;&nbsp;Submit a bug
+                </a>
+              </p>
+              <h2 className="p-muted-heading">Help us improve this page</h2>
+              <p>
+                Most of this content can be collaboratively discussed and
+                changed in the respective README file.
+              </p>
+              <p>
+                <Button
+                  element="a"
+                  href={`https://github.com/canonical/charm-relation-interfaces/blob/main/interfaces/${interfaceData?.name}/${interfaceData?.version}/README.md`}
+                  appearance="positive"
+                >
+                  Contribute
+                </Button>
+              </p>
+              <h2 className="p-muted-heading">Discuss this interface</h2>
+              <p>
+                Share your thoughts on this interface with the community on
+                discourse
+              </p>
+              <p>
+                <Button
+                  element="a"
+                  href="https://discourse.charmhub.io/t/implementing-relations/1051"
+                >
+                  Join the discussion
+                </Button>
+              </p>
             </Col>
             <Col size={9} className="interface-content">
               <div className="p-side-navigation u-hide--large">
@@ -292,6 +337,12 @@ function InterfaceDetails() {
                     </ul>
                   </Col>
                 </Row>
+                <Notification severity="information">
+                  <a href="https://github.com/canonical/charm-relation-interfaces">
+                    Help us improve this page
+                  </a>
+                  .
+                </Notification>
               </Strip>
             </Col>
           </Row>
