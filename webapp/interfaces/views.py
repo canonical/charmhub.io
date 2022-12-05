@@ -78,6 +78,7 @@ def single_interface(interface, version):
         res = convert_readme(readme)
         res["name"] = get_interface_name_from_readme(readme)
         res["charms"] = get_interface_yml(interface, version)
+        res["version"] = version
         res["other_charms"] = {
             "providers": other_providers,
             "requirers": other_requirers,
