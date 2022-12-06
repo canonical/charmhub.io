@@ -88,4 +88,4 @@ def single_interface(interface, version):
         response.cache_control.max_age = "36000"
         return response
     except Exception:
-        return {}
+        return "An error occurred!"
