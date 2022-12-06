@@ -168,34 +168,24 @@ def extract_text(text, delimiter):
 def convert_readme(text, level=2):
     headings_and_contents = extract_text(text, "\n" + ("#" * level))
     if len(headings_and_contents) == 0:
-        if not text.startswith("- "):
-            return "".join([s for s in text.split("\n") if s.strip("\n")])
-        else:
-            return [strip_str(t) for t in text.strip("- ").split("\n- ")]
-
-    result = {}
+        return [s.strip("\n") for s in text.split("\n") if s.strip("\n")]
+    resulting_dict = {}
     for heading, content in headings_and_contents:
-        temp = {}
         strip_char = "{}{}".format("#" * level, " ")
         heading = heading.strip(strip_char)
+        temp = {}
         if content[0].isalpha and "#" in content:
-            if content.split("\n\n", 1)[0] == "Data":
-                heading = heading + "-" + content.split("\n\n", 1)[0]
-                result[heading] = convert_readme(content, level + 1)
+            temp[heading] = convert_readme(content, level + 1)
+            resulting_dict.update(temp)
+            if len(content.split("\n\n", 1)) > 1:
+                resulting_dict[heading]["Introduction"] = content.split("\n\n", 1)[
+                    0
+                ]
             else:
-                temp[heading] = convert_readme(content, level + 1)
-                result.update(temp)
-                try:
-                    result[heading]["Introduction"] = content.split("\n\n", 1)[
-                        0
-                    ]
-                except TypeError:
-                    result[heading] = convert_readme(content, level + 1)
-
+                resulting_dict[heading] = convert_readme(content, level + 1)
         else:
-            result[heading] = convert_readme(content, level + 1)
-
-    return result
+            resulting_dict[heading] = convert_readme(content, level + 1)
+    return resulting_dict
 
 
 def get_interface_name_from_readme(text):
