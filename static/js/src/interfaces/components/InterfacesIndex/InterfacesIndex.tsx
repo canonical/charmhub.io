@@ -86,9 +86,16 @@ function InterfacesIndex() {
           </Col>
           <Col size={8}>
             <p>
+              Interfaces describe the relation between two charms. This
+              interface catalogue shows opinionated, standardized interface
+              specifications for charmed operator relations. Each interface
+              outlines the behavior and requirements of charms relating to one
+              another.
+            </p>
+            <p>
               Most of the content of these pages can be collaboratively
-              discussed and changed. Help us improve these pages by clicking the
-              button below.
+              discussed and changed. You can help us improve these pages by
+              clicking the button below.
             </p>
             <p className="u-no-margin--bottom">
               <Button
