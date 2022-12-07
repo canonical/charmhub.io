@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
+import remarkMermaid from "remark-mermaidjs";
 import {
   Strip,
   Row,
@@ -11,23 +12,23 @@ import {
 } from "@canonical/react-components";
 
 type InterfaceData = {
-  Behavior?: {
+  Behavior: {
     Introduction: string;
     Provider: Array<string>;
     Requirer: Array<string>;
   };
-  Direction?: string;
-  "Relation-Data"?: {
+  Direction?: Array<string>;
+  Relation?: {
     Provider: {
-      Example: string;
+      Example: Array<string>;
       Introduction: string;
     };
     Requirer: {
-      Example: string;
+      Example: Array<string>;
       Introduction: string;
     };
   };
-  Usage: string;
+  Usage: Array<string>;
   charms?: {
     consumers: Array<string>;
     providers: Array<string>;
@@ -260,7 +261,9 @@ function InterfaceDetails() {
 
               <Strip bordered shallow>
                 <h3 className="p-heading--4">Usage</h3>
-                <ReactMarkdown>{interfaceData?.Usage}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkMermaid]}>
+                  {interfaceData?.Usage.join("\n")}
+                </ReactMarkdown>
               </Strip>
 
               <Strip bordered shallow>
@@ -270,13 +273,12 @@ function InterfaceDetails() {
                     <h4 className="p-muted-heading">Provider</h4>
                   </Col>
                   <Col size={6}>
-                    <ReactMarkdown>
-                      {interfaceData?.["Relation-Data"]?.Provider
-                        ?.Introduction || ""}
+                    <ReactMarkdown remarkPlugins={[remarkMermaid]}>
+                      {interfaceData?.Relation?.Provider?.Introduction || ""}
                     </ReactMarkdown>
                     <p>Example:</p>
-                    <ReactMarkdown>
-                      {interfaceData?.["Relation-Data"]?.Provider?.Example ||
+                    <ReactMarkdown remarkPlugins={[remarkMermaid]}>
+                      {interfaceData?.Relation?.Provider?.Example.join("\n") ||
                         ""}
                     </ReactMarkdown>
                   </Col>
@@ -286,13 +288,12 @@ function InterfaceDetails() {
                     <h4 className="p-muted-heading">Requirer</h4>
                   </Col>
                   <Col size={6}>
-                    <ReactMarkdown>
-                      {interfaceData?.["Relation-Data"]?.Requirer
-                        ?.Introduction || ""}
+                    <ReactMarkdown remarkPlugins={[remarkMermaid]}>
+                      {interfaceData?.Relation?.Requirer?.Introduction || ""}
                     </ReactMarkdown>
                     <p>Example:</p>
-                    <ReactMarkdown>
-                      {interfaceData?.["Relation-Data"]?.Requirer?.Example ||
+                    <ReactMarkdown remarkPlugins={[remarkMermaid]}>
+                      {interfaceData?.Relation?.Requirer?.Example.join("\n") ||
                         ""}
                     </ReactMarkdown>
                   </Col>
@@ -306,8 +307,10 @@ function InterfaceDetails() {
                     <h4 className="p-muted-heading">Direction</h4>
                   </Col>
                   <Col size={6}>
-                    <ReactMarkdown>
-                      {interfaceData?.Direction || ""}
+                    <ReactMarkdown remarkPlugins={[remarkMermaid]}>
+                      {(interfaceData?.Direction &&
+                        interfaceData?.Direction.join("\n")) ||
+                        ""}
                     </ReactMarkdown>
                   </Col>
                 </Row>
@@ -318,23 +321,13 @@ function InterfaceDetails() {
                   <Col size={6}>
                     <p>{interfaceData?.Behavior?.Introduction}</p>
                     <h5>Provider</h5>
-                    <ul>
-                      {interfaceData?.Behavior?.Provider?.map((provider) => (
-                        <li key={provider}>
-                          <ReactMarkdown>{provider}</ReactMarkdown>
-                        </li>
-                      ))}
-                    </ul>
+                    <ReactMarkdown remarkPlugins={[remarkMermaid]}>
+                      {interfaceData?.Behavior?.Provider?.join("\n")}
+                    </ReactMarkdown>
                     <h5>Requirer</h5>
-                    <ul>
-                      {interfaceData?.Behavior?.Requirer?.map(
-                        (requirer, index) => (
-                          <li key={index}>
-                            <ReactMarkdown>{requirer}</ReactMarkdown>
-                          </li>
-                        )
-                      )}
-                    </ul>
+                    <ReactMarkdown remarkPlugins={[remarkMermaid]}>
+                      {interfaceData?.Behavior?.Requirer?.join("\n")}
+                    </ReactMarkdown>
                   </Col>
                 </Row>
                 <Notification severity="information">
