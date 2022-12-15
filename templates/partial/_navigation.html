@@ -1,125 +1,132 @@
-<div data-js="sticky-nav-observer"></div>
-<header id="navigation" class="p-navigation">
+<header id="navigation" class="p-navigation is-dark">
   <div class="p-navigation__row">
     <div class="p-navigation__banner">
-      <div class="p-navigation__logo">
-        <a class="p-navigation__item" href="/">
-          <img class="p-navigation__image" src="https://assets.ubuntu.com/v1/bbea397b-Logo+no+square.svg" alt="" width="27" height="27">
+      <div class="p-navigation__tagged-logo">
+        <a class="p-navigation__link" href="/">
+          <div class="p-navigation__logo-tag">
+            <img class="p-navigation__logo-icon" src="https://assets.ubuntu.com/v1/a603c7c9-Favicon - Juju.svg" alt="Canonical Juju" />
+          </div>
+          <span class="p-navigation__logo-title">Canonical Juju</span>
         </a>
       </div>
-      <a href="#navigation" class="p-navigation__toggle--open" title="menu">Menu</a>
-      <a href="#navigation-closed" class="p-navigation__toggle--close" title="close menu">Close menu</a>
+      <ul class="p-navigation__items">
+        <li class="p-navigation__item">
+          <a href="#navigation" class="p-navigation__toggle--open" title="menu">Menu</a>
+          <a href="#navigation-closed" class="p-navigation__toggle--close" title="close menu">Close menu</a>
+        </li>
+      </ul>
     </div>
     <nav class="p-navigation__nav">
-      <span class="u-off-screen">
-        <a href="#main-content">Jump to main content</a>
-      </span>
-      <ul class="p-navigation__items is-website">
-        <li class="p-navigation__item">
-          <a class="p-navigation__link" href="https://juju.is/">Juju</a>
-        </li>
-        <li class="p-navigation__item is-selected">
-          <a class="p-navigation__link" href="/">Charmhub</a>
-        </li>
-      </ul>
       <ul class="p-navigation__items">
-        <li class="p-navigation__item is-logo">
-          <a href="https://canonical.com/" class="p-navigation__link">
-            <span class="u-off-screen">Canonical</span>
-            <svg width="75" height="10">
-              <g fill="#666" fill-rule="evenodd">
-                <path d="M4.409 9.79a4.815 4.815 0 0 1-1.799-.323 3.785 3.785 0 0 1-1.393-.951 4.321 4.321 0 0 1-.899-1.53C.106 6.382 0 5.69 0 4.907c0-.782.117-1.476.351-2.083a4.427 4.427 0 0 1 .96-1.53c.4-.41.878-.731 1.407-.946a4.459 4.459 0 0 1 1.69-.323 6.615 6.615 0 0 1 1.921.27c.195.057.385.129.568.216.144.072.243.125.298.161l-.393 1.08a2.099 2.099 0 0 0-.351-.176 6.577 6.577 0 0 0-.535-.189 5.126 5.126 0 0 0-.67-.155 4.704 4.704 0 0 0-.77-.06c-.46 0-.88.085-1.257.256-.377.17-.71.423-.974.742-.27.323-.48.717-.629 1.18-.149.463-.223.982-.223 1.557 0 .558.065 1.066.196 1.524.13.459.329.852.595 1.18.265.328.603.589.987.762.393.18.854.27 1.386.27.596 0 1.09-.063 1.481-.189.393-.126.688-.238.886-.337l.338 1.079a1.87 1.87 0 0 1-.338.169 4.615 4.615 0 0 1-.609.195 7.74 7.74 0 0 1-1.906.23zm8.33-9.548c.325.675.636 1.356.933 2.043.31.718.61 1.44.9 2.165.301.755.61 1.553.926 2.394.315.84.653 1.755 1.014 2.744h-1.433a37.938 37.938 0 0 1-.433-1.2c-.137-.4-.277-.8-.42-1.2H9.98l-.852 2.4H7.762c.333-.916.671-1.831 1.014-2.744.3-.801.609-1.6.926-2.394.29-.726.59-1.447.9-2.165.297-.688.608-1.369.933-2.043h1.204zm-.636 1.497a35.094 35.094 0 0 0-.899 2.104 75.02 75.02 0 0 0-.845 2.28h3.489c-.28-.76-.566-1.518-.859-2.273a40.365 40.365 0 0 0-.886-2.11zm12.158 7.85a75.23 75.23 0 0 0-.683-1.12c-.27-.434-.547-.864-.832-1.288a81.364 81.364 0 0 0-.926-1.356 58.91 58.91 0 0 0-1.873-2.535c-.267-.34-.542-.673-.825-.998v7.296h-1.285V.242h1.041c.473.506.927 1.03 1.36 1.571.489.607.967 1.223 1.433 1.848.473.634.92 1.256 1.339 1.868.368.534.723 1.078 1.061 1.632V.242h1.285v9.346h-1.095zm20.472 0a50.642 50.642 0 0 0-.683-1.12 49.404 49.404 0 0 0-.829-1.288 74.62 74.62 0 0 0-1.88-2.684 53.44 53.44 0 0 0-.92-1.207c-.266-.34-.541-.672-.824-.998v7.296H38.31V.242h1.042c.473.507.926 1.03 1.359 1.571a61.88 61.88 0 0 1 2.772 3.716c.37.533.723 1.077 1.06 1.632V.242h1.285v9.346h-1.096zM48.212.241h1.312v9.346h-1.312V.242zm7.72 9.548a4.83 4.83 0 0 1-1.798-.323 3.794 3.794 0 0 1-1.394-.951 4.374 4.374 0 0 1-.9-1.53c-.212-.603-.318-1.295-.318-2.078 0-.782.118-1.476.354-2.084.235-.606.553-1.117.962-1.53A4.09 4.09 0 0 1 54.243.35a4.449 4.449 0 0 1 1.689-.324 6.55 6.55 0 0 1 1.92.27c.236.072.424.144.57.216.145.072.243.125.298.161l-.393 1.08a2.18 2.18 0 0 0-.353-.176 6.4 6.4 0 0 0-.534-.189 4.955 4.955 0 0 0-1.441-.215c-.46 0-.876.085-1.257.256-.377.17-.71.424-.974.742a3.47 3.47 0 0 0-.628 1.18c-.15.463-.224.982-.224 1.557 0 .558.067 1.066.197 1.524.13.459.33.852.596 1.18.264.329.593.583.986.762.393.18.856.27 1.386.27.597 0 1.088-.063 1.48-.189a6.72 6.72 0 0 0 .888-.337l.338 1.08c-.063.044-.177.1-.338.168a4.687 4.687 0 0 1-.609.195 7.714 7.714 0 0 1-1.912.23h.004zM64.264.242c.322.674.633 1.355.931 2.043.298.688.597 1.41.9 2.165.302.755.612 1.553.926 2.394.314.84.656 1.755 1.013 2.744h-1.433a46.262 46.262 0 0 1-.432-1.2 65.234 65.234 0 0 0-.42-1.2h-4.245l-.852 2.4h-1.367c.362-.989.7-1.903 1.013-2.744a98.141 98.141 0 0 1 1.826-4.559c.299-.688.609-1.369.935-2.043h1.205zm-.636 1.497a32.5 32.5 0 0 0-.899 2.104c-.287.728-.57 1.488-.848 2.28h3.49c-.29-.783-.576-1.54-.86-2.273a39.37 39.37 0 0 0-.883-2.11zM75 8.496v1.092h-5.639V.242h1.312v8.254H75zm-43.165-.479a3.113 3.113 0 0 1-3.118-3.109A3.113 3.113 0 0 1 31.835 1.8a3.113 3.113 0 0 1 3.117 3.108 3.113 3.113 0 0 1-3.117 3.11z"></path>
-                <path d="M36.73 4.908a4.889 4.889 0 0 1-4.896 4.882 4.889 4.889 0 0 1-4.895-4.882A4.889 4.889 0 0 1 31.834.026a4.89 4.89 0 0 1 4.896 4.882zm-4.895-3.694a3.7 3.7 0 0 0-3.705 3.694 3.7 3.7 0 0 0 3.705 3.695 3.7 3.7 0 0 0 3.704-3.695 3.7 3.7 0 0 0-3.705-3.694z"></path>
-              </g>
-            </svg>
-          </a>
+        <li class="p-navigation__item{% if request.path == '/' %} is-selected{% endif %}">
+          <a class="p-navigation__link" href="https://charmhub.io">Charmhub</a>
         </li>
-      </ul>
-    </nav>
-  </div>
-  <div class="p-navigation__row">
-    <nav class="p-navigation__nav">
-      <ul class="p-navigation__items">
         <li class="p-navigation__item">
           <a class="p-navigation__link" href="https://juju.is/about">About</a>
         </li>
+        <li class="p-navigation__item--dropdown-toggle" id="learn-link">
+          <a class="p-navigation__link" href="#learn-link-menu" aria-controls="learn-link-menu">Learn</a>
+          <ul class="p-navigation__dropdown" id="learn-link-menu" aria-hidden="true">
+            <li>
+              <div class="p-navigation__dropdown-item is-title">
+                <div class="p-muted-heading u-no-margin--bottom">
+                  Documentation and resources
+                </div>
+              </div>
+            </li>
+            <li>
+              <a class="p-navigation__dropdown-item" href="https://juju.is/docs">Documentation</a>
+            </li>
+            <li>
+              <a class="p-navigation__dropdown-item" href="https://juju.is/tutorials">Tutorials</a>
+            </li>
+            <li>
+              <a class="p-navigation__dropdown-item" href="https://juju.is/cloud-native-kubernetes-usage-report-2022">Native Operations Report</a>
+            </li>
+            <li>
+              <a class="p-navigation__dropdown-item" href="https://juju.is/operator-day">Operator Day</a>
+            </li>
+            <li>
+              <a class="p-navigation__dropdown-item" href="https://juju.is/blog">Blog</a>
+            </li>
+            <li>
+              <a class="p-navigation__dropdown-item" href="https://charmhub.io/topics">Topics</a>
+            </li>
+          </ul>
+        </li>
+        <li class="p-navigation__item--dropdown-toggle" id="contribute-link">
+          <a class="p-navigation__link" href="#contribute-link-menu" aria-controls="contribute-link-menu">Contribute</a>
+          <ul class="p-navigation__dropdown" id="contribute-link-menu" aria-hidden="true">
+            <li>
+              <div class="p-navigation__dropdown-item is-title">
+                <div class="p-muted-heading u-no-margin--bottom">
+                  Create a charmed operator
+                </div>
+              </div>
+            </li>
+            <li>
+              <a class="p-navigation__dropdown-item" href="https://juju.is/docs/sdk/set-up-a-charm-project">Build</a>
+            </li>
+            <li>
+              <a class="p-navigation__dropdown-item" href="https://juju.is/docs/sdk/publishing">Publish</a>
+            </li>
+            <li>
+              <div class="p-navigation__dropdown-item is-title">
+                <div class="p-muted-heading u-no-margin--bottom">
+                  Join the community
+                </div>
+              </div>
+            </li>
+            <li>
+              <a class="p-navigation__dropdown-item" href="https://discourse.charmhub.io/">Forum</a>
+            </li>
+            <li>
+              <a class="p-navigation__dropdown-item" href="https://chat.charmhub.io/charmhub/channels/juju">Chat</a>
+            </li>
+            <li>
+              <a class="p-navigation__dropdown-item" href="https://bugs.launchpad.net/juju">Report a bug</a>
+            </li>
+            <li>
+              <a class="p-navigation__dropdown-item" href="https://juju.is/careers">Careers</a>
+            </li>
+          </ul>
+        </li>     
         <li class="p-navigation__item">
-          <a class="p-navigation__link" href="https://juju.is/blog">Blog</a>
+          <a class="p-navigation__link" href="https://jaas.ai">JAAS</a>
+        </li>   
+      </ul>
+      <ul class="p-navigation__items global-nav">
+        <li class="p-navigation__item">
+          <button class="js-search-button p-navigation__link--search-toggle">
+            <span class="p-navigation__search-label">Search</span>
+          </button>
         </li>
-        <li class="p-navigation__item--dropdown-toggle p-subnav" id="learn-link">
-          <a href="#learn-link-menu" aria-controls="learn-link-menu" class="p-subnav__toggle p-navigation__link">Learn</a>
-          <ul class="p-navigation__dropdown p-subnav__items" id="learn-link-menu" aria-hidden="true">
-            <li>
-              <p class="p-subnav__item p-navigation__dropdown-item is-title">Documentation</p>
-            </li>
-            <li>
-              <a href="https://juju.is/docs" class="p-subnav__item p-navigation__dropdown-item">Charmed Operator Lifecycle Manager</a>
-            </li>
-            <li>
-              <a href="https://juju.is/docs/sdk" class="p-subnav__item p-navigation__dropdown-item">Charmed Operator SDK</a>
-            </li>
-            <li>
-              <a href="https://juju.is/tutorials" class="p-subnav__item p-navigation__dropdown-item">Tutorials</a>
-            </li>
-            <li>
-              <p class="p-subnav__item p-navigation__dropdown-item is-title">Resources</p>
-            </li>
-            <li>
-              <a href="/topics" class="p-subnav__item p-navigation__dropdown-item">Topics</a>
-            </li>
-          </ul>
-        </li>
-        <li class="p-navigation__item--dropdown-toggle p-subnav" id="contribute-link">
-          <a href="#contribute-link-menu" aria-controls="contribute-link-menu" class="p-subnav__toggle p-navigation__link">Contribute</a>
-          <ul class="p-navigation__dropdown p-subnav__items" id="contribute-link-menu" aria-hidden="true">
-            <li>
-              <p class="p-subnav__item p-navigation__dropdown-item is-title">Create a charmed operator</p>
-            </li>
-            <li>
-              <a href="https://juju.is/docs/sdk" class="p-subnav__item p-navigation__dropdown-item">Create an Operator with the SDK</a>
-            </li>
-            <li>
-              <a href="https://juju.is/docs/sdk/publishing" class="p-subnav__item p-navigation__dropdown-item">Publish an operator</a>
-              <hr>
-            </li>
-            <li>
-              <p class="p-subnav__item p-navigation__dropdown-item is-title">Join the community</p>
-            </li>
-            <li>
-              <a href="http://discourse.charmhub.io" class="p-subnav__item p-navigation__dropdown-item p-link--external">Forum</a>
-            </li>
-            <li>
-              <a href="https://chat.charmhub.io/charmhub/channels/juju" class="p-subnav__item p-navigation__dropdown-item p-link--external">Chat</a>
-            </li>
-            <li>
-              <a href="http://bugs.launchpad.net/juju" class="p-subnav__item p-navigation__dropdown-item p-link--external">Report a bug</a>
-            </li>
-            <li>
-              <a href="https://juju.is/careers" class="p-subnav__item p-navigation__dropdown-item">Careers</a>
-            </li>
-          </ul>
-        </li>
-        <li class="p-navigation__item u-vertically-center">
-          <form action="/" class="p-search-box" data-js="search-handler-desktop">
-            <input type="search" data-js="search-input-desktop" class="p-search-box__input" name="q" aria-label="Search Charmhub" placeholder="Search Charmhub" required="">
-            <button type="reset" class="p-search-box__reset"><i class="p-icon--close" data-js="reset-search">Clear</i></button>
-            <button type="submit" class="p-search-box__button" alt="Search"><i class="p-icon--search">Search</i></button>
-          </form>
-        </li>
-        <li class="p-navigation__item u-vertically-center js-nav-account">
+        <li class="p-navigation__item js-nav-account" id="user-link">
           {# Authenticated #}
-          <a href="#user-link-menu" aria-controls="user-link-menu" class="p-subnav__toggle p-navigation__link js-nav-account--authenticated u-hide"><i class="p-icon--user"></i> <span class="js-account--name">My account</span></a>
-          <ul class="p-navigation__dropdown p-subnav__items" id="contribute-link-menu" aria-hidden="true">
+          <a href="#user-link-menu" aria-controls="user-link-menu" class="p-navigation__link js-nav-account--authenticated u-hide js-account--name account-name">My account</a>
+          <ul class="p-navigation__dropdown" id="user-link-menu" aria-hidden="true">
             <li>
-              <a href="/charms" class="p-subnav__item p-navigation__dropdown-item">My charms and bundles</a>
+              <a href="/charms" class="p-navigation__dropdown-item">My charms and bundles</a>
             </li>
             <li>
-              <a href="/logout" class="p-subnav__item p-navigation__dropdown-item">Sign out</a>
+              <a href="/logout" class="p-navigation__dropdown-item">Sign out</a>
             </li>
           </ul>
           {# Not authenticated #}
-          <a class="p-navigation__link js-nav-account--notauthenticated" href="/charms"><i class="p-icon--user"></i> Sign in</a>
+          <a class="p-navigation__link js-nav-account--notauthenticated" href="/charms">
+            Sign in
+            <i class="p-icon--user is-light"></i>
+          </a>
         </li>
+      </ul>
+      <div class="p-navigation__search">
+        <form class="p-search-box" action="/" data-js="search-handler-desktop">
+          <input type="search" data-js="search-input-desktop" class="p-search-box__input" name="q" aria-label="Search Charmhub" placeholder="Search Charmhub" required>
+          <button type="reset" class="p-search-box__reset"><i class="p-icon--close"></i></button>
+          <button type="submit" class="p-search-box__button"><i class="p-icon--search"></i></button>
+        </form>
+      </div>
     </nav>
   </div>
+  <div class="p-navigation__search-overlay"></div>
 </header>
