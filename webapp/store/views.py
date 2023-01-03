@@ -772,6 +772,44 @@ def entity_embedded_card(entity_name):
         )
 
 
+@store.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/embedded/interface'
+)
+@exclude_xframe_options_header
+def entity_embedded_interface_card(entity_name):
+    channel_request = request.args.get("channel", default=None, type=str)
+    try:
+        package = get_package(entity_name, channel_request, FIELDS)
+
+        package["default-release"]["channel"][
+            "released-at"
+        ] = logic.convert_date(
+            package["default-release"]["channel"]["released-at"]
+        )
+
+        libraries = logic.process_libraries(
+            publisher_api.get_charm_libraries(entity_name)
+        )
+
+        context = {
+            "package": package,
+            "libraries": libraries,
+        }
+
+        return render_template(
+            "interface-card.html",
+            **context,
+        )
+    except Exception:
+        return (
+            render_template(
+                "interface-card-404.html",
+                entity_name=entity_name,
+            ),
+            404,
+        )
+
+
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/icon')
 def entity_icon(entity_name):
     icon_url = (
