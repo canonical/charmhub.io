@@ -2,7 +2,7 @@
 
 # Build stage: Install python dependencies
 # ===
-FROM ubuntu:jammy AS python-dependencies
+FROM ubuntu:focal AS python-dependencies
 RUN apt-get update && apt-get install --no-install-recommends --yes python3-pip python3-setuptools python3-distutils
 ADD requirements.txt /tmp/requirements.txt
 RUN pip3 config set global.disable-pip-version-check true
@@ -10,7 +10,7 @@ RUN --mount=type=cache,target=/root/.cache/pip pip3 install --user --requirement
 
 # Build stage: Install yarn dependencies
 # ===
-FROM node:19 AS yarn-dependencies
+FROM node:16 AS yarn-dependencies
 WORKDIR /srv
 ADD package.json .
 ADD yarn.lock .
@@ -38,7 +38,7 @@ WORKDIR /srv
 
 # Build the production image
 # ===
-FROM ubuntu:jammy
+FROM ubuntu:focal
 
 # Install python and import python dependencies
 RUN apt-get update && apt-get install --no-install-recommends --yes python3-lib2to3 python3-setuptools python3-pkg-resources ca-certificates
