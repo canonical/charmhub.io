@@ -1,3 +1,4 @@
+from pprint import pprint
 import sys
 import datetime
 from collections import OrderedDict
@@ -151,7 +152,7 @@ def extract_resources(channel):
     return resources
 
 
-def extract_architectures(channel):
+def extract_default_release_architectures(channel):
     architectures = set()
 
     for base in channel["revision"]["bases"]:
@@ -161,6 +162,21 @@ def extract_architectures(channel):
         architectures.add(base["architecture"])
 
     return sorted(architectures)
+
+
+def extract_all_architecture(channel_map):
+    # {% for track, track_data in package.store_front.channel_map.items() %}
+    #           {% for channel, channel_data in track_data.items() %}
+    #           <div>{{ channel_data.latest|pprint}}</div>
+    all_archy = set()
+    for track, track_data in channel_map.items():
+        for _, channel_data in track_data.items():
+            # pprint(channel_data["releases"])
+            for version, release in channel_data["releases"].items():
+                # pprint(release["architectures"])
+                all_archy = all_archy.union(release["architectures"])
+
+    return all_archy
 
 
 def extract_series(channel, long_name=False):
@@ -250,7 +266,7 @@ def get_docs_topic_id(metadata_yaml):
 
     if docs_link:
         if docs_link.startswith(base_url):
-            docs_link_parts = docs_link[len(base_url) :].split("/")
+            docs_link_parts = docs_link[len(base_url):].split("/")
 
             if len(docs_link_parts) > 3:
                 topic_id = docs_link_parts[3]
@@ -330,8 +346,11 @@ def add_store_front_data(package, details=False):
         extra["resources"] = extract_resources(package["default-release"])
 
         # Extract all supported series
-        extra["architectures"] = extract_architectures(
+        extra["architectures"] = extract_default_release_architectures(
             package["default-release"]
+        )
+        extra["all_architectures"] = extract_all_architecture(
+            extra["channel_map"]
         )
         extra["series"] = extract_series(package["default-release"])
         extra["channel_bases"] = extract_bases(package["default-release"])
