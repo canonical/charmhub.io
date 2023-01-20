@@ -163,20 +163,24 @@ def extract_default_release_architectures(channel):
     return sorted(architectures)
 
 
-def extract_all_arch_channels_bases(channel_map, parent_dict):
+def extract_all_arch(channel_map, parent_dict):
     all_archy = set()
     all_channel_bases = []
     for channel, channel_data in channel_map["latest"].items():
-        # bases for each chanbel
         bases = set()
-        for version, release in channel_data["releases"].items():
+        for _, release in channel_data["releases"].items():
             all_archy = all_archy.union(release["architectures"])
             bases = bases.union(release["bases"])
 
-        bases = sorted(bases, key=lambda k: k.replace("Ubuntu ", ""), reverse=True)
+        bases = sorted(
+            bases, key=lambda k: k.replace("Ubuntu ", ""), reverse=True
+        )
+
         all_channel_bases.append({"channel": channel, "bases": bases})
+
     parent_dict["all_architectures"] = all_archy
     parent_dict["all_channel_bases"] = all_channel_bases
+
     return
 
 
@@ -267,7 +271,7 @@ def get_docs_topic_id(metadata_yaml):
 
     if docs_link:
         if docs_link.startswith(base_url):
-            docs_link_parts = docs_link[len(base_url):].split("/")
+            docs_link_parts = docs_link[len(base_url) :].split("/")
 
             if len(docs_link_parts) > 3:
                 topic_id = docs_link_parts[3]
@@ -350,9 +354,7 @@ def add_store_front_data(package, details=False):
         extra["architectures"] = extract_default_release_architectures(
             package["default-release"]
         )
-        extract_all_arch_channels_bases(
-            extra["channel_map"], extra
-        )
+        extract_all_arch(extra["channel_map"], extra)
         extra["series"] = extract_series(package["default-release"])
         extra["channel_bases"] = extract_bases(package["default-release"])
 
