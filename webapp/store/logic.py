@@ -1,4 +1,3 @@
-from pprint import pprint
 import sys
 import datetime
 from collections import OrderedDict
@@ -164,12 +163,21 @@ def extract_default_release_architectures(channel):
     return sorted(architectures)
 
 
-def extract_all_architecture(channel_map):
+def extract_all_arch_channels_bases(channel_map, parent_dict):
     all_archy = set()
-    for _, channel_data in channel_map["latest"].items():
+    all_channel_bases = []
+    for channel, channel_data in channel_map["latest"].items():
+        # bases for each chanbel
+        bases = set()
         for version, release in channel_data["releases"].items():
             all_archy = all_archy.union(release["architectures"])
-    return all_archy
+            bases = bases.union(release["bases"])
+
+        bases = sorted(bases, key=lambda k: k.replace("Ubuntu ", ""), reverse=True)
+        all_channel_bases.append({"channel": channel, "bases": bases})
+    parent_dict["all_architectures"] = all_archy
+    parent_dict["all_channel_bases"] = all_channel_bases
+    return
 
 
 def extract_series(channel, long_name=False):
@@ -342,8 +350,8 @@ def add_store_front_data(package, details=False):
         extra["architectures"] = extract_default_release_architectures(
             package["default-release"]
         )
-        extra["all_architectures"] = extract_all_architecture(
-            extra["channel_map"]
+        extract_all_arch_channels_bases(
+            extra["channel_map"], extra
         )
         extra["series"] = extract_series(package["default-release"])
         extra["channel_bases"] = extract_bases(package["default-release"])
