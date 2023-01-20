@@ -165,17 +165,10 @@ def extract_default_release_architectures(channel):
 
 
 def extract_all_architecture(channel_map):
-    # {% for track, track_data in package.store_front.channel_map.items() %}
-    #           {% for channel, channel_data in track_data.items() %}
-    #           <div>{{ channel_data.latest|pprint}}</div>
     all_archy = set()
-    for track, track_data in channel_map.items():
-        for _, channel_data in track_data.items():
-            # pprint(channel_data["releases"])
-            for version, release in channel_data["releases"].items():
-                # pprint(release["architectures"])
-                all_archy = all_archy.union(release["architectures"])
-
+    for _, channel_data in channel_map["latest"].items():
+        for version, release in channel_data["releases"].items():
+            all_archy = all_archy.union(release["architectures"])
     return all_archy
 
 
