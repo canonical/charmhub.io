@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
+import remarkMermaid from "remark-mermaidjs";
 import {
   Strip,
   Row,
@@ -11,23 +12,23 @@ import {
 } from "@canonical/react-components";
 
 type InterfaceData = {
-  Behavior?: {
+  Behavior: {
     Introduction: string;
     Provider: Array<string>;
     Requirer: Array<string>;
   };
-  Direction?: string;
-  "Relation-Data"?: {
+  Direction?: Array<string>;
+  Relation?: {
     Provider: {
-      Example: string;
+      Example: Array<string>;
       Introduction: string;
     };
     Requirer: {
-      Example: string;
+      Example: Array<string>;
       Introduction: string;
     };
   };
-  Usage: string;
+  Usage: Array<string>;
   charms?: {
     consumers: Array<string>;
     providers: Array<string>;
@@ -53,6 +54,12 @@ function InterfaceDetails() {
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+
+  const hasDeveloperDocumentation = () => {
+    return (
+      interfaceData?.Usage && interfaceData?.Relation && interfaceData?.Behavior
+    );
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -115,14 +122,16 @@ function InterfaceDetails() {
                       Charms
                     </a>
                   </li>
-                  <li className="p-side-navigation__item">
-                    <a
-                      href="#developer-documentation"
-                      className="p-side-navigation__link"
-                    >
-                      Developer documentation
-                    </a>
-                  </li>
+                  {hasDeveloperDocumentation() && (
+                    <li className="p-side-navigation__item">
+                      <a
+                        href="#developer-documentation"
+                        className="p-side-navigation__link"
+                      >
+                        Developer documentation
+                      </a>
+                    </li>
+                  )}
                 </ul>
               </div>
               <h2 className="p-muted-heading">Relevant links</h2>
@@ -173,14 +182,16 @@ function InterfaceDetails() {
                       Charms
                     </a>
                   </li>
-                  <li className="p-side-navigation__item">
-                    <a
-                      href="#developer-documentation"
-                      className="p-side-navigation__link"
-                    >
-                      Developer documentation
-                    </a>
-                  </li>
+                  {hasDeveloperDocumentation() && (
+                    <li className="p-side-navigation__item">
+                      <a
+                        href="#developer-documentation"
+                        className="p-side-navigation__link"
+                      >
+                        Developer documentation
+                      </a>
+                    </li>
+                  )}
                 </ul>
               </div>
 
@@ -189,16 +200,21 @@ function InterfaceDetails() {
               </Strip>
 
               <Strip bordered shallow>
-                <h3 className="p-heading--4">Providing</h3>
+                <h3 className="p-heading--4">
+                  Providing {interfaceData?.name} {interfaceData?.version}
+                </h3>
                 <h4 className="p-muted-heading">Tested charms</h4>
                 <Row className="u-no-padding--left u-no-padding--right">
                   {interfaceData?.charms?.providers.map((provider) => (
                     <Col size={3} key={provider}>
-                      <iframe
-                        height={260}
-                        style={{ width: "100%" }}
-                        src={`/${provider}/embedded?store_design=true`}
-                      />
+                      <div className="p-card--highlighted">
+                        <iframe
+                          className="u-no-margin--bottom"
+                          height={170}
+                          style={{ width: "100%" }}
+                          src={`/${provider}/embedded/interface`}
+                        />
+                      </div>
                     </Col>
                   ))}
                 </Row>
@@ -222,16 +238,21 @@ function InterfaceDetails() {
               </Strip>
 
               <Strip shallow>
-                <h3 className="p-heading--4">Requiring</h3>
+                <h3 className="p-heading--4">
+                  Requiring {interfaceData?.name} {interfaceData?.version}
+                </h3>
                 <h4 className="p-muted-heading">Tested charms</h4>
                 <Row className="u-no-padding--left u-no-padding--right">
                   {interfaceData?.charms?.consumers.map((consumer) => (
                     <Col size={3} key={consumer}>
-                      <iframe
-                        height={260}
-                        style={{ width: "100%" }}
-                        src={`/${consumer}/embedded?store_design=true`}
-                      />
+                      <div className="p-card--highlighted">
+                        <iframe
+                          className="u-no-margin--bottom"
+                          height={170}
+                          style={{ width: "100%" }}
+                          src={`/${consumer}/embedded/interface`}
+                        />
+                      </div>
                     </Col>
                   ))}
                 </Row>
@@ -254,96 +275,95 @@ function InterfaceDetails() {
                 </p>
               </Strip>
 
-              <Strip bordered shallow>
-                <h2 id="developer-documentation">Developer documentation</h2>
-              </Strip>
-
-              <Strip bordered shallow>
-                <h3 className="p-heading--4">Usage</h3>
-                <ReactMarkdown>{interfaceData?.Usage}</ReactMarkdown>
-              </Strip>
-
-              <Strip bordered shallow>
-                <h3 className="p-heading--4">Relation data</h3>
-                <Row>
-                  <Col size={3}>
-                    <h4 className="p-muted-heading">Provider</h4>
-                  </Col>
-                  <Col size={6}>
-                    <ReactMarkdown>
-                      {interfaceData?.["Relation-Data"]?.Provider
-                        ?.Introduction || ""}
+              {hasDeveloperDocumentation() && (
+                <>
+                  <Strip bordered shallow>
+                    <h2 id="developer-documentation">
+                      Developer documentation
+                    </h2>
+                  </Strip>
+                  <Strip bordered shallow>
+                    <h3 className="p-heading--4">Usage</h3>
+                    <ReactMarkdown remarkPlugins={[remarkMermaid]}>
+                      {interfaceData?.Usage?.join("\n")}
                     </ReactMarkdown>
-                    <p>Example:</p>
-                    <ReactMarkdown>
-                      {interfaceData?.["Relation-Data"]?.Provider?.Example ||
-                        ""}
-                    </ReactMarkdown>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col size={3}>
-                    <h4 className="p-muted-heading">Requirer</h4>
-                  </Col>
-                  <Col size={6}>
-                    <ReactMarkdown>
-                      {interfaceData?.["Relation-Data"]?.Requirer
-                        ?.Introduction || ""}
-                    </ReactMarkdown>
-                    <p>Example:</p>
-                    <ReactMarkdown>
-                      {interfaceData?.["Relation-Data"]?.Requirer?.Example ||
-                        ""}
-                    </ReactMarkdown>
-                  </Col>
-                </Row>
-              </Strip>
-
-              <Strip shallow className="u-no-padding--bottom">
-                <h3 className="p-heading--4">Behaviour</h3>
-                <Row>
-                  <Col size={3}>
-                    <h4 className="p-muted-heading">Direction</h4>
-                  </Col>
-                  <Col size={6}>
-                    <ReactMarkdown>
-                      {interfaceData?.Direction || ""}
-                    </ReactMarkdown>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col size={3}>
-                    <h4 className="p-muted-heading">Requirements</h4>
-                  </Col>
-                  <Col size={6}>
-                    <p>{interfaceData?.Behavior?.Introduction}</p>
-                    <h5>Provider</h5>
-                    <ul>
-                      {interfaceData?.Behavior?.Provider?.map((provider) => (
-                        <li key={provider}>
-                          <ReactMarkdown>{provider}</ReactMarkdown>
-                        </li>
-                      ))}
-                    </ul>
-                    <h5>Requirer</h5>
-                    <ul>
-                      {interfaceData?.Behavior?.Requirer?.map(
-                        (requirer, index) => (
-                          <li key={index}>
-                            <ReactMarkdown>{requirer}</ReactMarkdown>
-                          </li>
-                        )
-                      )}
-                    </ul>
-                  </Col>
-                </Row>
-                <Notification severity="information">
-                  <a href="https://github.com/canonical/charm-relation-interfaces">
-                    Help us improve this page
-                  </a>
-                  .
-                </Notification>
-              </Strip>
+                  </Strip>
+                  <Strip bordered shallow>
+                    <h3 className="p-heading--4">Relation data</h3>
+                    <Row>
+                      <Col size={3}>
+                        <h4 className="p-muted-heading">Provider</h4>
+                      </Col>
+                      <Col size={6}>
+                        <ReactMarkdown remarkPlugins={[remarkMermaid]}>
+                          {interfaceData?.Relation?.Provider?.Introduction ||
+                            ""}
+                        </ReactMarkdown>
+                        <p>Example:</p>
+                        <ReactMarkdown remarkPlugins={[remarkMermaid]}>
+                          {interfaceData?.Relation?.Provider?.Example?.join(
+                            "\n"
+                          ) || ""}
+                        </ReactMarkdown>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col size={3}>
+                        <h4 className="p-muted-heading">Requirer</h4>
+                      </Col>
+                      <Col size={6}>
+                        <ReactMarkdown remarkPlugins={[remarkMermaid]}>
+                          {interfaceData?.Relation?.Requirer?.Introduction ||
+                            ""}
+                        </ReactMarkdown>
+                        <p>Example:</p>
+                        <ReactMarkdown remarkPlugins={[remarkMermaid]}>
+                          {interfaceData?.Relation?.Requirer?.Example?.join(
+                            "\n"
+                          ) || ""}
+                        </ReactMarkdown>
+                      </Col>
+                    </Row>
+                  </Strip>
+                  <Strip shallow className="u-no-padding--bottom">
+                    <h3 className="p-heading--4">Behaviour</h3>
+                    {interfaceData?.Direction && (
+                      <Row>
+                        <Col size={3}>
+                          <h4 className="p-muted-heading">Direction</h4>
+                        </Col>
+                        <Col size={6}>
+                          <ReactMarkdown remarkPlugins={[remarkMermaid]}>
+                            {interfaceData?.Direction?.join("\n") || ""}
+                          </ReactMarkdown>
+                        </Col>
+                      </Row>
+                    )}
+                    <Row>
+                      <Col size={3}>
+                        <h4 className="p-muted-heading">Requirements</h4>
+                      </Col>
+                      <Col size={6}>
+                        <p>{interfaceData?.Behavior?.Introduction}</p>
+                        <h5>Provider</h5>
+                        <ReactMarkdown remarkPlugins={[remarkMermaid]}>
+                          {interfaceData?.Behavior?.Provider?.join("\n")}
+                        </ReactMarkdown>
+                        <h5>Requirer</h5>
+                        <ReactMarkdown remarkPlugins={[remarkMermaid]}>
+                          {interfaceData?.Behavior?.Requirer?.join("\n")}
+                        </ReactMarkdown>
+                      </Col>
+                    </Row>
+                    <Notification severity="information">
+                      <a href="https://github.com/canonical/charm-relation-interfaces">
+                        Help us improve this page
+                      </a>
+                      .
+                    </Notification>
+                  </Strip>
+                </>
+              )}
             </Col>
           </Row>
         )}

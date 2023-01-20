@@ -1,10 +1,8 @@
 @charset 'UTF-8';
 
 $brand-color: #772953;
-$color-ubuntu-orange: #e95420;
-$color-accent: #00365c;
-$color-accent-background: #00365c;
 $color-text-orange: #d54110;
+$breakpoint-navigation-threshold: 1110px;
 
 // import cookie policy
 @import "@canonical/cookie-policy/build/css/cookie-policy";
@@ -44,6 +42,7 @@ $color-text-orange: #d54110;
 @include vf-p-search-box;
 @include vf-p-strip;
 @include vf-p-side-navigation;
+@include vf-p-side-navigation-expandable;
 @include vf-p-table-of-contents;
 @include vf-p-table-mobile-card;
 @include vf-p-tabs;
@@ -139,8 +138,6 @@ $color-text-orange: #d54110;
 @include p-charmhub-topology;
 @import "pattern_l-fluid-breakout";
 @include l-charmhub-fluid-breakout;
-@import "pattern_p-subnav";
-@include p-charmhub-subnav;
 @import "charmhub_p-detail-inline-list";
 @include p-detail-inline-list;
 @include vf-l-application;

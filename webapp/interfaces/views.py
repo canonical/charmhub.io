@@ -75,7 +75,8 @@ def single_interface(interface, version):
         other_requirers = api.find(requires=[interface]).get("results", [])
         other_providers = api.find(provides=[interface]).get("results", [])
 
-        res = convert_readme(readme)
+        res = convert_readme(interface, version, readme, 2)
+
         res["name"] = get_interface_name_from_readme(readme)
         res["charms"] = get_interface_yml(interface, version)
         res["version"] = version
