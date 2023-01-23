@@ -151,7 +151,7 @@ def extract_resources(channel):
     return resources
 
 
-def extract_architectures(channel):
+def extract_default_release_architectures(channel):
     architectures = set()
 
     for base in channel["revision"]["bases"]:
@@ -161,6 +161,33 @@ def extract_architectures(channel):
         architectures.add(base["architecture"])
 
     return sorted(architectures)
+
+
+def extract_all_arch(channel_map, parent_dict):
+    all_archy = set()
+    all_channel_bases = []
+    for channel, channel_data in channel_map["latest"].items():
+        bases = set()
+        name = ""
+        for _, release in channel_data["releases"].items():
+            all_archy = all_archy.union(release["architectures"])
+            bases = bases.union(release["bases"])
+
+        for base in channel_data["latest"]["channel_bases"]:
+            name = base["name"]
+
+        bases = sorted(
+            bases, key=lambda k: k.replace("Ubuntu ", ""), reverse=True
+        )
+
+        all_channel_bases.append(
+            {"channel": channel, "bases": bases, "name": name}
+        )
+
+    parent_dict["all_architectures"] = all_archy
+    parent_dict["all_channel_bases"] = all_channel_bases
+
+    return
 
 
 def extract_series(channel, long_name=False):
@@ -330,9 +357,11 @@ def add_store_front_data(package, details=False):
         extra["resources"] = extract_resources(package["default-release"])
 
         # Extract all supported series
-        extra["architectures"] = extract_architectures(
+        extra["architectures"] = extract_default_release_architectures(
             package["default-release"]
         )
+        # extract all architecture based on series
+        extract_all_arch(extra["channel_map"], extra)
         extra["series"] = extract_series(package["default-release"])
         extra["channel_bases"] = extract_bases(package["default-release"])
 
