@@ -1,4 +1,3 @@
-from pprint import pprint
 import sys
 import datetime
 from collections import OrderedDict
@@ -167,7 +166,6 @@ def extract_default_release_architectures(channel):
 def extract_all_arch(channel_map, parent_dict):
     all_archy = set()
     all_channel_bases = []
-    # pprint({"channel": channel_map})
 
     for channel, channel_data in channel_map["latest"].items():
         bases = set()
@@ -175,7 +173,7 @@ def extract_all_arch(channel_map, parent_dict):
         for _, release in channel_data["releases"].items():
             all_archy = all_archy.union(release["architectures"])
             bases = bases.union(release["bases"])
-        # pprint({"channel_+data": channel_data["latest"]})
+
         if channel_data["latest"]["channel_bases"]:
             for base in channel_data["latest"]["channel_bases"]:
                 name = base["name"]
@@ -311,7 +309,6 @@ def convert_categories(api_categories):
 
 
 def add_store_front_data(package, details=False):
-    pprint({"pck": package})
     extra = {}
 
     extra["icons"] = get_icons(package)
