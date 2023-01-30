@@ -64,7 +64,6 @@ def convert_channel_maps(channel_map):
     result = {}
     track_order = {"latest": 1}
     risk_order = {"stable": 1, "candidate": 2, "beta": 3, "edge": 4}
-    # pprint({"channel": channel_map})
     for channel in channel_map:
         track = channel["channel"].get("track", "latest")
         risk = channel["channel"]["risk"]
@@ -166,7 +165,6 @@ def extract_default_release_architectures(channel):
 def extract_all_arch(channel_map, parent_dict):
     all_archy = set()
     all_channel_bases = []
-
     for channel, channel_data in channel_map["latest"].items():
         bases = set()
         name = ""
