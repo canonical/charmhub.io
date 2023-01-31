@@ -64,7 +64,6 @@ def convert_channel_maps(channel_map):
     result = {}
     track_order = {"latest": 1}
     risk_order = {"stable": 1, "candidate": 2, "beta": 3, "edge": 4}
-
     for channel in channel_map:
         track = channel["channel"].get("track", "latest")
         risk = channel["channel"]["risk"]
@@ -173,8 +172,9 @@ def extract_all_arch(channel_map, parent_dict):
             all_archy = all_archy.union(release["architectures"])
             bases = bases.union(release["bases"])
 
-        for base in channel_data["latest"]["channel_bases"]:
-            name = base["name"]
+        if channel_data["latest"]["channel_bases"]:
+            for base in channel_data["latest"]["channel_bases"]:
+                name = base["name"]
 
         bases = sorted(
             bases, key=lambda k: k.replace("Ubuntu ", ""), reverse=True
