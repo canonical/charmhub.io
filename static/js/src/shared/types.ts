@@ -10,4 +10,9 @@ export interface ICharm {
       "display-name": string;
     };
   };
+  "default-release": {
+    channel: {
+      risk: string;
+    };
+  };
 }

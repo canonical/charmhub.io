@@ -1,22 +1,36 @@
-import type { IInterfaceData } from "../../types";
-import { useEffect, useState, useMemo } from "react";
-import { Row, Col, Loader, SearchAndFilter } from "@canonical/react-components";
+import type { IInterfaceData, IFilterChip } from "../../types";
+import { useQuery } from "react-query";
+import { useMemo } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  Row,
+  Col,
+  Spinner,
+  SearchAndFilter,
+} from "@canonical/react-components";
 import { InterfaceSection } from "../InterfaceSection";
+
+import { filterState, filterChipsSelector } from "../../state";
 
 interface ResponseData {
   provides: IInterfaceData[];
   requires: IInterfaceData[];
 }
 
+const getIntegrations = async (charm: string): Promise<ResponseData> => {
+  const resp = await fetch(`/${charm}/integrations.json`);
+  const json = await resp.json();
+  return json.grouped_relations;
+};
+
 export const App = () => {
   const charm = window.location.pathname.split("/")[1];
-  const [data, setData] = useState<ResponseData>();
+  const setFilterData = useSetRecoilState(filterState);
+  const availableFilters = useRecoilValue(filterChipsSelector);
 
-  useEffect(() => {
-    fetch(`/${charm}/integrations.json`)
-      .then((response) => response.json())
-      .then((json) => setData(json.grouped_relations));
-  }, []);
+  const { data } = useQuery(["integrations", charm], () =>
+    getIntegrations(charm)
+  );
 
   const integrationCount = useMemo(
     () => (data ? data.provides.length + data.requires.length : 0),
@@ -25,7 +39,7 @@ export const App = () => {
 
   return (
     <Col size={12}>
-      {!data && <Loader text="Loading..." />}
+      {!data && <Spinner text="Loading..." />}
       {data && (
         <Row>
           <Col size={6}>
@@ -36,16 +50,16 @@ export const App = () => {
           </Col>
           <Col size={6}>
             <SearchAndFilter
-              filterPanelData={[]}
-              returnSearchData={(searchData) => {
-                console.log(searchData);
+              filterPanelData={availableFilters as any}
+              returnSearchData={(searchData: any) => {
+                setFilterData(searchData as IFilterChip[]);
               }}
             />
           </Col>
-          {data.provides.length > 0 && (
+          {data.provides?.length > 0 && (
             <InterfaceSection interfaceType="provides" data={data.provides} />
           )}
-          {data.requires.length > 0 && (
+          {data.requires?.length > 0 && (
             <InterfaceSection interfaceType="requires" data={data.requires} />
           )}
         </Row>
