@@ -513,11 +513,7 @@ def download_library(entity_name, library_name):
     )
 
     library = next(
-        (
-            lib
-            for lib in libraries
-            if lib.get("name") == lib_name
-        ),
+        (lib for lib in libraries if lib.get("name") == lib_name),
         None,
     )
 
