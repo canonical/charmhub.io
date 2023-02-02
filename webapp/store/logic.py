@@ -1,4 +1,3 @@
-from pprint import pprint
 import sys
 import datetime
 from collections import OrderedDict
@@ -166,7 +165,7 @@ def extract_default_release_architectures(channel):
 def extract_all_arch(channel_map, parent_dict):
     all_archy = set()
     all_channel_bases = []
-    pprint({"channel_map": channel_map})
+    
     for version, version_data in channel_map.items():
         for channel, channel_data in version_data.items():
             bases = set()
