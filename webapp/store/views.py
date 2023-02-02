@@ -504,10 +504,8 @@ def download_library(entity_name, library_name):
     lib_parts = library_name.split(".")
 
     if len(lib_parts) > 2:
-        group_name = ".".join(lib_parts[:-2])
         lib_name = "." + ".".join(lib_parts[-2:])
     else:
-        group_name = "others"
         lib_name = library_name
 
     libraries = logic.process_libraries(
@@ -515,11 +513,7 @@ def download_library(entity_name, library_name):
     )
 
     library = next(
-        (
-            lib
-            for lib in libraries.get(group_name, {})
-            if lib.get("name") == lib_name
-        ),
+        (lib for lib in libraries if lib.get("name") == lib_name),
         None,
     )
 
