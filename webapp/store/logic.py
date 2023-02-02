@@ -165,7 +165,6 @@ def extract_default_release_architectures(channel):
 def extract_all_arch(channel_map, parent_dict):
     all_archy = set()
     all_channel_bases = []
-    
     for version, version_data in channel_map.items():
         for channel, channel_data in version_data.items():
             bases = set()
