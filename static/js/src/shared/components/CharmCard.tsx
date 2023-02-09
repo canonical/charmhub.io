@@ -31,7 +31,9 @@ const CharmCard = ({ charm }: CharmCardProps) => {
               overflow: "hidden",
             }}
           >
-            {charm.store_front["display-name"]}
+            <a href={`/${charm.name}`} className="p-link--soft">
+              {charm.store_front["display-name"]}
+            </a>
           </h4>
           <div className="p-media-object__content">
             <p
