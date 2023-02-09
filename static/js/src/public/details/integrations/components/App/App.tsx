@@ -100,6 +100,7 @@ export const App = () => {
               key={`${interfaceItem.key}|${interfaceItem.interface}`}
               interfaceType={interfaceItem!.type!}
               interfaceData={interfaceItem}
+              charmName={charm}
             />
           ))}
         </Row>

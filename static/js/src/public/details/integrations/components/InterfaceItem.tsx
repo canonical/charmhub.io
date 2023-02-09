@@ -15,15 +15,17 @@ import { filterChipsSelector, filterState } from "../state";
 interface InterfaceItemProps {
   interfaceType: string;
   interfaceData: IInterfaceData;
+  charmName: string;
 }
 
 const getCharms = async (
   interfaceType: string,
-  interfaceName: string
+  interfaceName: string,
+  charmName: string
 ): Promise<ICharm[]> => {
   const resp = await fetch(`/packages.json?${interfaceType}=${interfaceName}`);
   const json = await resp.json();
-  return json.packages;
+  return json.packages.filter((pkg: any) => pkg.name !== charmName);
 };
 
 const filterMap = (charm: ICharm, heading: string) => {
@@ -46,13 +48,14 @@ const filterMap = (charm: ICharm, heading: string) => {
 export const InterfaceItem = ({
   interfaceType,
   interfaceData,
+  charmName,
 }: InterfaceItemProps) => {
   const setAvailableFilters = useSetRecoilState(filterChipsSelector);
   const filterData = useRecoilValue(filterState);
 
   const { data } = useQuery(
     ["charms", interfaceType, interfaceData.interface],
-    () => getCharms(interfaceType, interfaceData.interface)
+    () => getCharms(interfaceType, interfaceData.interface, charmName)
   );
 
   const title = `${interfaceData.key} | ${interfaceData.interface}`;
