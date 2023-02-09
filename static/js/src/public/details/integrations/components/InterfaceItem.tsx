@@ -55,13 +55,15 @@ export const InterfaceItem = ({
     () => getCharms(interfaceType, interfaceData.interface)
   );
 
+  const title = `${interfaceData.key} | ${interfaceData.interface}`;
+
   const charms = useMemo(() => {
     if (filterData.length === 0 || data?.length === 0) {
       return data;
     }
     return data?.filter((charm: ICharm) => {
       return filterData.every((filter: IFilterChip) => {
-        if (filter.lead === "Integration") {
+        if (filter.lead === "Integrations") {
           return true;
         }
         const value = filterMap(charm, filter.lead);
@@ -75,6 +77,7 @@ export const InterfaceItem = ({
       return;
     }
     const headings = ["Platform", "Stability", "Author", "Charm"];
+    // Add charms
     const filters = charms.reduce<ISearchAndFilter[]>(
       (acc: ISearchAndFilter[], charm: ICharm) => {
         headings.forEach((heading) => {
@@ -92,18 +95,31 @@ export const InterfaceItem = ({
       },
       [] as ISearchAndFilter[]
     );
+
+    // Integrations
+    let integrations = filters.find((item) => item.heading === title);
+    if (!integrations) {
+      integrations = {
+        id: "Integrations",
+        heading: "Integrations",
+        chips: [],
+      };
+      filters.unshift(integrations);
+    }
+    if (!integrations.chips.find((item) => item.value === title)) {
+      integrations.chips.push({
+        lead: "Integrations",
+        value: title,
+      });
+    }
     setAvailableFilters(filters);
   }, [charms]);
-
-  if (charms?.length === 0) {
-    return null;
-  }
 
   return (
     <>
       <hr />
       <h3 className="p-heading--4 u-no-margin--bottom">
-        {interfaceData.key} | {interfaceData.interface}{" "}
+        {title}{" "}
         <span
           className="p-tooltip--right"
           aria-describedby={`${interfaceData.key}-${interfaceData.interface}-tooltip`}
@@ -141,11 +157,19 @@ export const InterfaceItem = ({
           <Spinner text={`Loading charms for ${interfaceData.interface}`} />
         </div>
       )}
-      {charms && charms.length === 0 && (
+      {charms && charms.length === 0 && filterData.length === 0 && (
         <div className="u-fixed-width">
           <p>
             No charms found that <b>provide</b> or <b>consume</b>{" "}
             {interfaceData.interface}
+          </p>
+        </div>
+      )}
+      {charms && charms.length === 0 && filterData.length !== 0 && (
+        <div className="u-fixed-width">
+          <p>
+            No charms found that <b>provide</b> or <b>consume</b>{" "}
+            {interfaceData.interface} matching your selected filters.
           </p>
         </div>
       )}
