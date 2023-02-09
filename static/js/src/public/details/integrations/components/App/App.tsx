@@ -65,7 +65,18 @@ export const App = () => {
 
   return (
     <Col size={12}>
-      {!data && <Spinner text="Loading..." />}
+      {!data && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "10rem",
+          }}
+        >
+          <Spinner text="Loading..." />
+        </div>
+      )}
       {data && (
         <Row>
           <Col size={6}>
@@ -91,7 +102,6 @@ export const App = () => {
               interfaceData={interfaceItem}
             />
           ))}
-          {!filteredData && <div>Nope</div>}
         </Row>
       )}
     </Col>

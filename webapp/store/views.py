@@ -80,8 +80,6 @@ def get_packages():
         if requires:
             requires = requires.split(",")
 
-        print(provides)
-        print(requires)
         results = app.store_api.find(
             provides=provides, requires=requires, fields=SEARCH_FIELDS
         ).get("results")
