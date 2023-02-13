@@ -466,7 +466,6 @@ def details_library(entity_name, library_name):
         abort(404)
 
     library = publisher_api.get_charm_library(entity_name, library_id)
-
     docstrings = logic.process_python_docs(library, module_name=library_name)
 
     # Charmcraft string to fetch the library
