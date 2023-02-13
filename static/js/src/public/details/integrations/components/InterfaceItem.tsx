@@ -66,7 +66,7 @@ export const InterfaceItem = ({
     }
     return data?.filter((charm: ICharm) => {
       return filterData.every((filter: IFilterChip) => {
-        if (filter.lead === "Integrations") {
+        if (filter.lead === "Integration") {
           return true;
         }
         const value = filterMap(charm, filter.lead);
@@ -103,15 +103,15 @@ export const InterfaceItem = ({
     let integrations = filters.find((item) => item.heading === title);
     if (!integrations) {
       integrations = {
-        id: "Integrations",
-        heading: "Integrations",
+        id: "Integration",
+        heading: "Integration",
         chips: [],
       };
       filters.unshift(integrations);
     }
     if (!integrations.chips.find((item) => item.value === title)) {
       integrations.chips.push({
-        lead: "Integrations",
+        lead: "Integration",
         value: title,
       });
     }

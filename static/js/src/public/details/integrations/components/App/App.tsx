@@ -47,7 +47,7 @@ export const App = () => {
   const filterValues = useMemo(
     () =>
       filterData
-        .filter((item: IFilterChip) => item.lead === "Integrations")
+        .filter((item: IFilterChip) => item.lead === "Integration")
         .map((item: IFilterChip) => item.value),
     [filterData]
   );
