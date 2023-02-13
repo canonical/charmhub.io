@@ -165,25 +165,29 @@ def extract_default_release_architectures(channel):
 def extract_all_arch(channel_map, parent_dict):
     all_archy = set()
     all_channel_bases = []
-    for version, version_data in channel_map.items():
-        for channel, channel_data in version_data.items():
-            bases = set()
-            name = ""
-            for _, release in channel_data["releases"].items():
-                all_archy = all_archy.union(release["architectures"])
-                bases = bases.union(release["bases"])
+    if channel_map["latest"]:
+        channel_map_latest = channel_map["latest"]
+    else:
+        channel_map_latest = channel_map[0]
+        
+    for channel, channel_data in channel_map_latest.items():
+        bases = set()
+        name = ""
+        for _, release in channel_data["releases"].items():
+            all_archy = all_archy.union(release["architectures"])
+            bases = bases.union(release["bases"])
 
-            if channel_data["latest"]["channel_bases"]:
-                for base in channel_data["latest"]["channel_bases"]:
-                    name = base["name"]
+        if channel_data["latest"]["channel_bases"]:
+            for base in channel_data["latest"]["channel_bases"]:
+                name = base["name"]
 
-            bases = sorted(
-                bases, key=lambda k: k.replace("Ubuntu ", ""), reverse=True
-            )
+        bases = sorted(
+            bases, key=lambda k: k.replace("Ubuntu ", ""), reverse=True
+        )
 
-            all_channel_bases.append(
-                {"channel": channel, "bases": bases, "name": name}
-            )
+        all_channel_bases.append(
+            {"channel": channel, "bases": bases, "name": name}
+        )
 
     parent_dict["all_architectures"] = all_archy
     parent_dict["all_channel_bases"] = all_channel_bases
