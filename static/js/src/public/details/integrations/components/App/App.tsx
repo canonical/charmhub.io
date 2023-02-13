@@ -86,14 +86,25 @@ export const App = () => {
             </h2>
           </Col>
           <Col size={6}>
-            <SearchAndFilter
-              filterPanelData={availableFilters as any}
-              returnSearchData={(searchData: any) => {
-                setFilterData((prev) =>
-                  prev !== searchData ? (searchData as IFilterChip[]) : prev
-                );
+            <div
+              style={{
+                position: "relative",
+                zIndex: 1,
+                width: "100%",
+                minHeight: "3rem",
               }}
-            />
+            >
+              <div style={{ position: "absolute", width: "100%" }}>
+                <SearchAndFilter
+                  filterPanelData={availableFilters as any}
+                  returnSearchData={(searchData: any) => {
+                    setFilterData((prev) =>
+                      prev !== searchData ? (searchData as IFilterChip[]) : prev
+                    );
+                  }}
+                />
+              </div>
+            </div>
           </Col>
           {filteredData?.map((interfaceItem: IInterfaceData) => (
             <InterfaceItem
