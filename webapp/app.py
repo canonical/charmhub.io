@@ -111,12 +111,6 @@ def site_map():
 @app.route("/sitemap-links.xml")
 def site_map_links():
     links = [
-        "/overview",
-        "/about",
-        "/manifesto",
-        "/publishing",
-        "/governance",
-        "/glossary",
         "/contact-us",
     ]
 

@@ -6,7 +6,4 @@
   <sitemap>
     <loc>{{ base_url }}/sitemap-operators.xml</loc>
   </sitemap>
-  <sitemap>
-    <loc>{{ base_url }}/tutorials/sitemap.xml</loc>
-  </sitemap>
 </sitemapindex>
