@@ -243,6 +243,7 @@ def details_overview(entity_name):
     readme = html(readme)
     # Remove Markdown/HTML comments
     readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
+    readme = readme.replace("https://charmhub.io/", "/")
     readme = get_soup(readme)
     readme = modify_headers(readme)
 
