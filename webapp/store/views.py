@@ -236,6 +236,7 @@ def details_overview(entity_name):
     readme = package["default-release"]["revision"].get(
         "readme-md", "No readme available"
     )
+
     readme = logic.parse_readme(readme, channel_request)
 
     context["readme"] = readme
