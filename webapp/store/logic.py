@@ -165,14 +165,17 @@ def extract_default_release_architectures(channel):
 def extract_all_arch(channel_map, parent_dict):
     all_archy = set()
     all_channel_bases = []
-
-    if channel_map["latest"]:
-        channel_map_latest = channel_map["latest"]
+    
+    if channel_map.get("latest"):
+        channel_map_all = list(channel_map["latest"].items())
     # for charms without the latest revision
     else:
-        channel_map_latest = channel_map[0]
+        for version, version_data in channel_map.items():
+            channel_map_all = list(version_data.items())
+            break
 
-    for channel, channel_data in channel_map_latest.items():
+
+    for channel, channel_data in channel_map_all:
         bases = set()
         name = ""
         for _, release in channel_data["releases"].items():
