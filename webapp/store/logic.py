@@ -481,3 +481,15 @@ def format_slug(slug):
         .replace("And", "and")
         .replace("Iot", "IoT")
     )
+
+def parse_readme(readme, channel_request=None):
+    readme = html(readme)
+    readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
+    readme = readme.replace("https://charmhub.io/", "/")
+    if channel_request:
+        readme = readme.replace("/configure", "/configure/?channel={}".format(channel_request))
+
+    readme = get_soup(readme)
+    readme = modify_headers(readme)
+
+    return readme

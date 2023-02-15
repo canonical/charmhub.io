@@ -13,7 +13,6 @@ from flask import Blueprint, Response, abort
 from flask import current_app as app
 from flask import jsonify, redirect, render_template, request
 from pybadges import badge
-from mistune import html
 
 from webapp.config import DETAILS_VIEW_REGEX, CATEGORIES
 from webapp.decorators import (
@@ -239,14 +238,8 @@ def details_overview(entity_name):
     readme = package["default-release"]["revision"].get(
         "readme-md", "No readme available"
     )
-
-    readme = html(readme)
-    # Remove Markdown/HTML comments
-    readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
-    readme = readme.replace("https://charmhub.io/", "/")
-    readme = get_soup(readme)
-    readme = modify_headers(readme)
-
+    readme = logic.parse_readme(readme, channel_request)
+   
     context["readme"] = readme
     context["package_type"] = package["type"]
 
