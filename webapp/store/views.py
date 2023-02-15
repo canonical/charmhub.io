@@ -1,5 +1,3 @@
-import re
-
 import humanize
 import talisker
 from canonicalwebteam.discourse import DocParser
@@ -19,7 +17,7 @@ from webapp.decorators import (
     redirect_uppercase_to_lowercase,
     store_maintenance,
 )
-from webapp.helpers import get_soup, modify_headers, discourse_api
+from webapp.helpers import discourse_api
 from webapp.store import logic
 from webapp.topics.views import topic_list
 
@@ -239,7 +237,7 @@ def details_overview(entity_name):
         "readme-md", "No readme available"
     )
     readme = logic.parse_readme(readme, channel_request)
-   
+
     context["readme"] = readme
     context["package_type"] = package["type"]
 
