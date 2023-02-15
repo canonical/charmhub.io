@@ -239,7 +239,6 @@ def details_overview(entity_name):
 
     readme = logic.parse_readme(readme, channel_request)
 
-
     context["readme"] = readme
     context["package_type"] = package["type"]
 
