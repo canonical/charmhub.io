@@ -31,6 +31,7 @@ const CharmCard = ({ charm }: CharmCardProps) => {
                 textOverflow: "ellipsis",
                 overflow: "hidden",
               }}
+              title={charm.store_front["display-name"]}
             >
               {charm.store_front["display-name"]}
             </h4>
