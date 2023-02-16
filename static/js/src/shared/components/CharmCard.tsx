@@ -40,11 +40,17 @@ const CharmCard = ({ charm }: CharmCardProps) => {
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  justifyContent: "space-between",
                   alignItems: "flex-start",
                 }}
+                title={charm.result?.publisher?.["display-name"]}
               >
-                <span style={{ minHeight: "3rem" }}>
+                <span
+                  style={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
                   {charm.result?.publisher?.["display-name"]}{" "}
                 </span>
                 {charm.store_front?.["deployable-on"]?.includes(
@@ -54,7 +60,6 @@ const CharmCard = ({ charm }: CharmCardProps) => {
                     src="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg"
                     style={{
                       position: "relative",
-                      top: "0.25rem",
                       marginLeft: "1rem",
                       flexShrink: 0,
                       justifySelf: "flex-end",
@@ -67,7 +72,6 @@ const CharmCard = ({ charm }: CharmCardProps) => {
                     src="https://assets.ubuntu.com/v1/a911ecf6-vm-badge.svg"
                     style={{
                       position: "relative",
-                      top: "0.25rem",
                       marginLeft: "1rem",
                       flexShrink: 0,
                       justifySelf: "flex-end",
@@ -75,6 +79,10 @@ const CharmCard = ({ charm }: CharmCardProps) => {
                     alt="Deployable on VM"
                   />
                 )}
+              </p>
+              <p>
+                {charm["default-release"].channel.name}/
+                {charm["default-release"].channel.track}
               </p>
             </div>
           </div>

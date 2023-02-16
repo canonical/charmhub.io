@@ -13,6 +13,8 @@ export interface ICharm {
   "default-release": {
     channel: {
       risk: string;
+      name: string;
+      track: string;
     };
   };
 }
