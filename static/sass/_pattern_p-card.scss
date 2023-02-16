@@ -36,13 +36,12 @@
     }
 
     animation: shine 3s infinite ease-in-out;
-    background-image:
-      linear-gradient(
-        to bottom right,
-        $color-mid-x-light calc(50% - 2rem),
-        $color-light 50%,
-        $color-mid-x-light calc(50% + 2rem)
-      );
+    background-image: linear-gradient(
+      to bottom right,
+      $color-mid-x-light calc(50% - 2rem),
+      $color-light 50%,
+      $color-mid-x-light calc(50% + 2rem)
+    );
     background-size: 300% 300%;
     clip-path: url("#animation-mask");
   }
@@ -193,5 +192,19 @@
   #not-found .p-card__thumbnail,
   #not-found .p-card__thumbnail-container {
     border-radius: 0;
+  }
+
+  .p-charm-card {
+    &:hover {
+      text-decoration: none;
+
+      * {
+        text-decoration: none;
+      }
+
+      h4 {
+        text-decoration: underline;
+      }
+    }
   }
 }
