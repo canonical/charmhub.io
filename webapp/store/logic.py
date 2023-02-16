@@ -166,13 +166,15 @@ def extract_all_arch(channel_map, parent_dict):
     all_archy = set()
     all_channel_bases = []
 
-    if channel_map["latest"]:
-        channel_map_latest = channel_map["latest"]
+    if channel_map.get("latest"):
+        channel_map_all = list(channel_map["latest"].items())
     # for charms without the latest revision
     else:
-        channel_map_latest = channel_map[0]
+        for version, version_data in channel_map.items():
+            channel_map_all = list(version_data.items())
+            break
 
-    for channel, channel_data in channel_map_latest.items():
+    for channel, channel_data in channel_map_all:
         bases = set()
         name = ""
         for _, release in channel_data["releases"].items():
@@ -481,3 +483,18 @@ def format_slug(slug):
         .replace("And", "and")
         .replace("Iot", "IoT")
     )
+
+
+def parse_readme(readme, channel_request=None):
+    readme = html(readme)
+    readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
+    readme = readme.replace("https://charmhub.io/", "/")
+    if channel_request:
+        readme = readme.replace(
+            "/configure", "/configure/?channel={}".format(channel_request)
+        )
+
+    readme = get_soup(readme)
+    readme = modify_headers(readme)
+
+    return readme
