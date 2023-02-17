@@ -38,8 +38,14 @@ export const App = () => {
   const [filterData, setFilterData] = useRecoilState(filterState);
   const availableFilters = useRecoilValue(filterChipsSelector);
 
-  const { data } = useQuery(["integrations", charm], () =>
-    getIntegrations(charm)
+  const { data } = useQuery(
+    ["integrations", charm],
+    () => getIntegrations(charm),
+    {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    }
   );
 
   const integrationCount = useMemo(() => data?.length ?? 0, [data]);

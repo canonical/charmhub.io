@@ -28,6 +28,12 @@ const getCharms = async (
   return json.packages.filter((pkg: any) => pkg.name !== charmName);
 };
 
+const getInterfaces = async (): Promise<any> => {
+  const resp = await fetch("/interfaces.json");
+  const json = await resp.json();
+  return json.interfaces ?? [];
+};
+
 const filterMap = (charm: ICharm, heading: string) => {
   switch (heading) {
     case "Platform":
@@ -55,8 +61,26 @@ export const InterfaceItem = ({
 
   const { data } = useQuery(
     ["charms", interfaceType, interfaceData.interface],
-    () => getCharms(interfaceType, interfaceData.interface, charmName)
+    () => getCharms(interfaceType, interfaceData.interface, charmName),
+    {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    }
   );
+
+  const { data: interfaces } = useQuery(["interfaces"], () => getInterfaces(), {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  if (
+    interfaces &&
+    interfaces.find((iface: any) => iface.name === interfaceData.interface)
+  ) {
+    console.log("FOUND");
+  }
 
   const title = `${interfaceData.key} | ${interfaceData.interface}`;
 
