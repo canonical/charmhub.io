@@ -24,6 +24,8 @@ ADD webpack.config.js .
 ADD webpack.config.entry.js .
 ADD webpack.config.rules.js .
 ADD tsconfig.json .
+ADD .babelrc .
+RUN yarn install
 RUN yarn run build-js
 
 # Build stage: Run "yarn run build-css"
