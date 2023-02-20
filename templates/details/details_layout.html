@@ -1,6 +1,6 @@
 {% extends 'base_layout.html' %}
 
-{% block title %}Deploy {{ package.store_front["display-name"] }} using Charmhub - The Open Operator Collection{% endblock %}
+{% block meta_title %}Deploy {{ package.store_front["display-name"] }} using Charmhub - The Open Operator Collection{% endblock %}
 {% block meta_description %}Deploy the latest version of {{ package.store_front["display-name"] }} {% if package.store_front["deployable-on"]|length == 1 and package.store_front["deployable-on"][0] == "kubernetes" %}as a Kubernetes Operator {% endif %}on any cloud. {{ package.result.summary }}{% endblock %}
 {% block meta_image %}{% if package["store_front"]["icons"] %}https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_200,h_200/{{ package.store_front.icons[0] }}{% else %}https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg{% endif %}{% endblock %}
 {% block meta_twitter_card %}summary{% endblock %}
