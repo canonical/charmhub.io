@@ -1,6 +1,17 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { RecoilRoot } from "recoil";
 
 import App from "./components/App";
 
-ReactDOM.render(<App />, document.getElementById("tab-content"));
+const queryClient = new QueryClient();
+
+const root = createRoot(document.getElementById("tab-content")!);
+root.render(
+  <QueryClientProvider client={queryClient}>
+    <RecoilRoot>
+      <App />
+    </RecoilRoot>
+  </QueryClientProvider>
+);
