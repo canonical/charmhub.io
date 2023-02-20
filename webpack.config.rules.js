@@ -36,10 +36,6 @@ module.exports = [
     use: ["expose-loader?exposes=charmhub.base", "babel-loader"],
   },
   {
-    test: require.resolve(__dirname + "/static/js/src/base/highlight.js"),
-    use: ["expose-loader?exposes=charmhub.highlight", "babel-loader"],
-  },
-  {
     test: require.resolve(__dirname + "/static/js/src/public/store/index.js"),
     use: ["expose-loader?exposes=charmhub.store", "babel-loader"],
   },
