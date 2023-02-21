@@ -31,9 +31,9 @@ def interfaces_json():
     readme = repo.get_contents("README.md").decoded_content.decode("utf-8")
 
     interfaces = get_interfaces_from_mrkd_table(readme)
-    live_interfaces = filter_interfaces_by_status(interfaces, "Live")
+    # live_interfaces = filter_interfaces_by_status(interfaces, "Live")
 
-    for i, inter in enumerate(live_interfaces):
+    for i, inter in enumerate(interfaces):
         try:
             interface_readme = repo.get_contents(
                 inter["readme_path"]
@@ -43,17 +43,17 @@ def interfaces_json():
             # Some draft interfaces are missing a readme
             description = ""
 
-        live_interfaces[i]["description"] = description
+        interfaces[i]["description"] = description
         version = "v{}".format(inter["version"])
         interface = inter["name"]
         charms = get_interface_yml(interface, version)
 
-        live_interfaces[i]["provider_count"] = len(charms["providers"])
-        live_interfaces[i]["consumer_count"] = len(charms["consumers"])
+        interfaces[i]["provider_count"] = len(charms["providers"])
+        interfaces[i]["consumer_count"] = len(charms["consumers"])
 
     response = {
-        "interfaces": live_interfaces,
-        "size": len(live_interfaces),
+        "interfaces": interfaces,
+        "size": len(interfaces),
     }
     response = make_response(response)
     response.cache_control.max_age = "3600"
