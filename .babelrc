@@ -12,7 +12,15 @@
     "@babel/preset-react",
     "@babel/preset-typescript"
   ],
-  "plugins": ["@babel/plugin-transform-runtime"],
+  "plugins": [
+    "@babel/plugin-transform-runtime",
+    [
+      "prismjs",
+      {
+        "languages": ["python", "bash"]
+      }
+    ]
+  ],
   "env": {
     "test": {
       "presets": ["@babel/preset-env"]

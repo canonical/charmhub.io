@@ -80,8 +80,6 @@ def get_packages():
         if requires:
             requires = requires.split(",")
 
-        print(provides)
-        print(requires)
         results = app.store_api.find(
             provides=provides, requires=requires, fields=SEARCH_FIELDS
         ).get("results")
@@ -593,7 +591,11 @@ def details_resources(entity_name):
         name = package["default-release"]["resources"][0]["name"]
         return redirect(f"/{entity_name}/resources/{name}")
     else:
-        return render_template("details/no-resources.html", package=package)
+        return render_template(
+            "details/no-resources.html",
+            package=package,
+            channel_requested=channel_request,
+        )
 
 
 @store.route(
