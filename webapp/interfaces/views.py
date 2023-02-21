@@ -1,3 +1,4 @@
+from pprint import pprint
 from flask import Blueprint, render_template, make_response, current_app as app
 from github import Github
 from os import getenv
@@ -28,7 +29,6 @@ github_client = Github(GITHUB_TOKEN)
 def interfaces_json():
     repo = github_client.get_repo("canonical/charm-relation-interfaces")
     readme = repo.get_contents("README.md").decoded_content.decode("utf-8")
-
     interfaces = get_interfaces_from_mrkd_table(readme)
 
     for i, inter in enumerate(interfaces):

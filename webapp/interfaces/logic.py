@@ -1,3 +1,4 @@
+from pprint import pprint
 import re
 from github import Github
 from os import getenv
@@ -62,16 +63,21 @@ def get_interfaces_from_mrkd_table(content):
     """
     table_content = content.split("\n## Interfaces")[-1].strip("\n")
     lines = table_content.split("\n")
-
+    
     data = []
     keys = []
 
     # Get data from table
     for i, l in enumerate(lines):
+        category = l.split("|")[0].strip()
+        if category != "":
+            category = l[i-1].split("|")[0].strip()
+
         if i == 0:
             keys = [
                 _i.strip().lower().replace(" ", "_") for _i in l.split("|")
             ]
+
         elif i == 1 or not l.startswith("|"):
             continue
         else:
@@ -86,23 +92,24 @@ def get_interfaces_from_mrkd_table(content):
     interfaces = []
 
     # Curate data for the interface
+
     for interface in data:
         name_data = interface["interface"]
-
+        if interface["category"]:
+            category = interface["category"]
         if "[" in name_data:
             name = find_between(name_data, "[", "]").replace("`", "")
             readme_path = find_between(name_data, "(", ")")
         else:
             name = name_data
             readme_path = None
-
         version = None
 
         if "/" in name:
             splitted_name = name.split("/")
             version = splitted_name[1].replace("v", "")
             name = splitted_name[0]
-
+        
         if not version and readme_path:
             version = readme_path.split("/")[2].replace("v", "")
 
