@@ -64,7 +64,7 @@ const getCharms = async (interfaceName: string): Promise<InterfaceData> => {
     },
   };
 
-  if (requiresJson?.packages && providesJson?.packages) {
+  if (!!(requiresJson?.packages?.length && providesJson?.packages?.length)) {
     data.other_charms = {
       requirers: requiresJson.packages.map((charm: any) => ({
         id: charm.id,
@@ -105,7 +105,11 @@ function InterfaceDetails() {
     );
   };
 
-  let { data: interfaceData, error, isLoading } = useQuery(
+  let {
+    data: interfaceData,
+    error: interfaceError,
+    isLoading: interfaceIsLoading,
+  } = useQuery(
     ["interface", interfaceName],
     () => getInterface(interfaceName),
     {
@@ -115,6 +119,9 @@ function InterfaceDetails() {
     }
   );
 
+  let error = interfaceError;
+  let isLoading = interfaceIsLoading;
+
   const charms = useQuery(
     ["charms", interfaceName],
     () => getCharms(interfaceName!),
@@ -122,7 +129,7 @@ function InterfaceDetails() {
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
-      enabled: !!(interfaceName && !isLoading && error),
+      enabled: !!(interfaceName && !interfaceIsLoading && interfaceError),
     }
   );
 
