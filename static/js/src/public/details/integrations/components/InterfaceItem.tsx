@@ -148,7 +148,7 @@ export const InterfaceItem = ({
         <>
           <p>
             Charms that{" "}
-            <b>{interfaceType === "requires" ? "consume" : "provide"}</b>{" "}
+            <b>{interfaceType === "requires" ? "provide" : "consume"}</b>{" "}
             {interfaceData.interface}
           </p>
           <Row>
