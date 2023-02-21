@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import ReactMarkdown from "react-markdown";
@@ -132,40 +132,6 @@ function InterfaceDetails() {
     isLoading = charms.isLoading;
     isCommunity = true;
   }
-
-  // useEffect(() => {
-  //   setLoading(true);
-
-  //   fetch(`./${interfaceName}.json`)
-  //     .then((response) => {
-  //       if (response.status === 200) {
-  //         return response.json();
-  //       }
-
-  //       throw response;
-  //     })
-  //     .then((data) => {
-  //       setInterfaceData(data);
-  //     })
-  //     .catch(() => {
-  //       setLoading(true);
-  //       getCharms(interfaceName!)
-  //         .then((data) => {
-  //           setInterfaceData(data);
-  //           setIsCommunity(true);
-  //         })
-  //         .catch(() => {
-  //           console.log("error");
-  //           setError(true);
-  //         })
-  //         .finally(() => {
-  //           setLoading(false);
-  //         });
-  //     })
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  // }, []);
 
   return (
     <>
