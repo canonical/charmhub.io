@@ -5,7 +5,6 @@ from os import getenv
 from webapp.interfaces.logic import (
     get_interfaces_from_mrkd_table,
     get_short_description_from_readme,
-    filter_interfaces_by_status,
     convert_readme,
     get_interface_name_from_readme,
     get_interface_cont_from_repo,
