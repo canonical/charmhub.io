@@ -64,7 +64,7 @@ const getCharms = async (interfaceName: string): Promise<InterfaceData> => {
     },
   };
 
-  if (!!(requiresJson?.packages?.length && providesJson?.packages?.length)) {
+  if (!!(requiresJson?.packages?.length || providesJson?.packages?.length)) {
     data.other_charms = {
       requirers: requiresJson.packages.map((charm: any) => ({
         id: charm.id,
@@ -129,7 +129,12 @@ function InterfaceDetails() {
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
-      enabled: !!(interfaceName && !interfaceIsLoading && interfaceError),
+      enabled: !!(
+        interfaceName &&
+        !interfaceIsLoading &&
+        interfaceError &&
+        !isLoading
+      ),
     }
   );
 
