@@ -111,12 +111,15 @@ def get_interfaces_from_mrkd_table(content):
         else:
             status = "Draft"
 
+        category = interface["category"]
+
         interfaces.append(
             {
                 "name": name,
                 "readme_path": readme_path,
                 "version": version,
                 "status": status,
+                "category": category,
             }
         )
 
