@@ -42,12 +42,6 @@ def interfaces_json():
             description = ""
 
         interfaces[i]["description"] = description
-        version = "v{}".format(inter["version"])
-        interface = inter["name"]
-        charms = get_interface_yml(interface, version)
-
-        interfaces[i]["provider_count"] = len(charms["providers"])
-        interfaces[i]["consumer_count"] = len(charms["consumers"])
 
     response = {
         "interfaces": interfaces,
