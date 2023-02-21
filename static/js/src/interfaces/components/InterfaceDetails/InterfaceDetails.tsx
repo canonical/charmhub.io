@@ -203,7 +203,9 @@ function InterfaceDetails() {
                 <h3 className="p-heading--4">
                   Providing {interfaceData?.name} {interfaceData?.version}
                 </h3>
-                <h4 className="p-muted-heading">Tested charms</h4>
+                {interfaceData?.charms?.providers?.length !== 0 && (
+                  <h4 className="p-muted-heading">Featured charms</h4>
+                )}
                 <Row className="u-no-padding--left u-no-padding--right">
                   {interfaceData?.charms?.providers.map((provider) => (
                     <Col size={3} key={provider}>
@@ -220,7 +222,9 @@ function InterfaceDetails() {
                 </Row>
                 {interfaceData?.other_charms?.providers.length > 0 && (
                   <>
-                    <h4 className="p-muted-heading">Other charms</h4>
+                    {interfaceData?.charms?.providers?.length !== 0 && (
+                      <h4 className="p-muted-heading">Other charms</h4>
+                    )}
                     <ul className="p-list u-split--3">
                       {interfaceData?.other_charms?.providers.map((charm) => (
                         <li key={charm.id}>
@@ -241,7 +245,9 @@ function InterfaceDetails() {
                 <h3 className="p-heading--4">
                   Requiring {interfaceData?.name} {interfaceData?.version}
                 </h3>
-                <h4 className="p-muted-heading">Tested charms</h4>
+                {interfaceData?.charms?.consumers?.length !== 0 && (
+                  <h4 className="p-muted-heading">Featured charms</h4>
+                )}
                 <Row className="u-no-padding--left u-no-padding--right">
                   {interfaceData?.charms?.consumers.map((consumer) => (
                     <Col size={3} key={consumer}>
@@ -258,7 +264,9 @@ function InterfaceDetails() {
                 </Row>
                 {interfaceData?.other_charms?.requirers.length > 0 && (
                   <>
-                    <h4 className="p-muted-heading">Other charms</h4>
+                    {interfaceData?.charms?.consumers?.length !== 0 && (
+                      <h4 className="p-muted-heading">Other charms</h4>
+                    )}
                     <ul className="p-list u-split--3">
                       {interfaceData?.other_charms?.requirers.map((charm) => (
                         <li key={charm.id}>
