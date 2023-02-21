@@ -16,7 +16,9 @@
           {% endfor %}
         </div>
       {% endif %}
-      {{ readme | safe }}
+      <div class="js-readme-content">
+        {{ readme | safe }}
+      </div>
     </div>
   </div>
 {% endblock %}
