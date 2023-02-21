@@ -31,7 +31,6 @@ def interfaces_json():
     readme = repo.get_contents("README.md").decoded_content.decode("utf-8")
 
     interfaces = get_interfaces_from_mrkd_table(readme)
-    # live_interfaces = filter_interfaces_by_status(interfaces, "Live")
 
     for i, inter in enumerate(interfaces):
         try:
