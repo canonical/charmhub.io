@@ -98,7 +98,7 @@
                     {% endif %}
                   </div>
                   <div>
-                    {% for channel in base["bases"] %}
+                    {% for channel in channel_data.latest.bases %}
                       <span class="series-tag">
                         {{ channel.replace("Ubuntu ", "") }}
                       </span>
