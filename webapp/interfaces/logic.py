@@ -86,6 +86,7 @@ def get_interfaces_from_mrkd_table(content):
     interfaces = []
 
     # Curate data for the interface
+    category_cache = ""
     for interface in data:
         name_data = interface["interface"]
 
@@ -111,7 +112,11 @@ def get_interfaces_from_mrkd_table(content):
         else:
             status = "Draft"
 
-        category = interface["category"]
+        if interface["category"]:
+            category = interface["category"]
+            category_cache = category
+        else:
+            category = category_cache
 
         interfaces.append(
             {
