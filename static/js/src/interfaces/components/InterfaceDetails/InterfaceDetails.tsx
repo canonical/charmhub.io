@@ -298,7 +298,9 @@ function InterfaceDetails() {
                   {interfaceData?.other_charms?.providers &&
                     interfaceData.other_charms.providers.length > 0 && (
                       <>
-                        <h4 className="p-muted-heading">Other charms</h4>
+                        {interfaceData?.charms?.providers?.length && (
+                          <h4 className="p-muted-heading">Other charms</h4>
+                        )}
                         <ul className="p-list u-split--3">
                           {interfaceData?.other_charms?.providers.map(
                             (charm) => (
@@ -351,7 +353,9 @@ function InterfaceDetails() {
                   {interfaceData?.other_charms?.requirers &&
                     interfaceData?.other_charms?.requirers.length > 0 && (
                       <>
-                        <h4 className="p-muted-heading">Other charms</h4>
+                        {interfaceData?.charms?.consumers?.length && (
+                          <h4 className="p-muted-heading">Other charms</h4>
+                        )}
                         <ul className="p-list u-split--3">
                           {interfaceData?.other_charms?.requirers.map(
                             (charm) => (
