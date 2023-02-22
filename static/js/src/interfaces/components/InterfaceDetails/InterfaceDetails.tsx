@@ -119,7 +119,7 @@ function InterfaceDetails() {
     }
   );
 
-  let error: Error = interfaceError;
+  let error = interfaceError as Error;
   let isLoading = interfaceIsLoading;
 
   const charms = useQuery(
@@ -140,7 +140,7 @@ function InterfaceDetails() {
 
   if (charms.data || charms.error || charms.isLoading) {
     interfaceData = charms.data;
-    error = charms.error;
+    error = charms.error as Error;
     isLoading = charms.isLoading;
     isCommunity = true;
   }
