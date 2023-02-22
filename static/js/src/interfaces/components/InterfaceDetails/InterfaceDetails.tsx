@@ -79,7 +79,7 @@ const getCharms = async (interfaceName: string): Promise<InterfaceData> => {
     return data;
   }
 
-  throw new Error("Not found");
+  throw new Error("Interface does not exist.");
 };
 
 const getInterface = async (
@@ -92,7 +92,7 @@ const getInterface = async (
     }
   }
 
-  throw new Error("Not found");
+  throw new Error("Interface is not a tested interface.");
 };
 
 function InterfaceDetails() {
@@ -119,7 +119,7 @@ function InterfaceDetails() {
     }
   );
 
-  let error = interfaceError;
+  let error: Error = interfaceError;
   let isLoading = interfaceIsLoading;
 
   const charms = useQuery(
@@ -164,8 +164,15 @@ function InterfaceDetails() {
         {error && (
           <div className="u-fixed-width">
             <Notification severity="negative" title="Error">
-              There was a problem fetching this interface. Please try again in a
-              few moments.
+              There was a problem fetching this interface. {error.message}
+              {isCommunity && (
+                <>
+                  <br />
+                  <a href="https://discourse.charmhub.io/t/implementing-relations/1051">
+                    Discuss this interface on discourse.
+                  </a>
+                </>
+              )}
             </Notification>
           </div>
         )}
@@ -178,68 +185,94 @@ function InterfaceDetails() {
 
         {interfaceData && !isLoading && (
           <Row>
-            {!isCommunity && (
-              <Col size={3} className="interface-sidebar">
-                <div className="p-side-navigation u-hide--small u-hide--medium">
-                  <ul className="p-side-navigation__list">
+            <Col size={3} className="interface-sidebar">
+              <div className="p-side-navigation u-hide--small u-hide--medium">
+                <ul className="p-side-navigation__list">
+                  <li className="p-side-navigation__item">
+                    <a
+                      href="#charms"
+                      className="p-side-navigation__link is-active"
+                    >
+                      Charms
+                    </a>
+                  </li>
+                  {hasDeveloperDocumentation() && (
                     <li className="p-side-navigation__item">
                       <a
-                        href="#charms"
-                        className="p-side-navigation__link is-active"
+                        href="#developer-documentation"
+                        className="p-side-navigation__link"
                       >
-                        Charms
+                        Developer documentation
                       </a>
                     </li>
-                    {hasDeveloperDocumentation() && (
-                      <li className="p-side-navigation__item">
-                        <a
-                          href="#developer-documentation"
-                          className="p-side-navigation__link"
-                        >
-                          Developer documentation
-                        </a>
-                      </li>
-                    )}
-                  </ul>
-                </div>
-                <h2 className="p-muted-heading">Relevant links</h2>
-                <p>
-                  <a
-                    href={`https://github.com/canonical/charm-relation-interfaces/issues/new?title=${interfaceData?.name}+${interfaceData?.version}`}
-                  >
-                    <Icon name="submit-bug" />
-                    &nbsp;&nbsp;Submit a bug
-                  </a>
-                </p>
-                <h2 className="p-muted-heading">Help us improve this page</h2>
-                <p>
-                  Most of this content can be collaboratively discussed and
-                  changed in the respective README file.
-                </p>
-                <p>
-                  <Button
-                    element="a"
-                    href={`https://github.com/canonical/charm-relation-interfaces/blob/main/interfaces/${interfaceData?.name}/${interfaceData?.version}/README.md`}
-                    appearance="positive"
-                  >
-                    Contribute
-                  </Button>
-                </p>
-                <h2 className="p-muted-heading">Discuss this interface</h2>
-                <p>
-                  Share your thoughts on this interface with the community on
-                  discourse
-                </p>
-                <p>
-                  <Button
-                    element="a"
-                    href="https://discourse.charmhub.io/t/implementing-relations/1051"
-                  >
-                    Join the discussion
-                  </Button>
-                </p>
-              </Col>
-            )}
+                  )}
+                </ul>
+              </div>
+              <h2 className="p-muted-heading">Relevant links</h2>
+              <p>
+                <a
+                  href={`https://github.com/canonical/charm-relation-interfaces/issues/new?title=${
+                    isCommunity ? "(Untested)+" : ""
+                  }${interfaceData?.name}${
+                    interfaceData?.version ? `+${interfaceData.version}` : ""
+                  }`}
+                >
+                  <Icon name="submit-bug" />
+                  &nbsp;&nbsp;Submit a bug
+                </a>
+              </p>
+              {!isCommunity && (
+                <>
+                  <h2 className="p-muted-heading">Help us improve this page</h2>
+                  <p>
+                    Most of this content can be collaboratively discussed and
+                    changed in the respective README file.
+                  </p>
+                  <p>
+                    <Button
+                      element="a"
+                      href={`https://github.com/canonical/charm-relation-interfaces/blob/main/interfaces/${interfaceData?.name}/${interfaceData?.version}/README.md`}
+                      appearance="positive"
+                    >
+                      Contribute
+                    </Button>
+                  </p>
+                </>
+              )}
+              {isCommunity && (
+                <>
+                  <h2 className="p-muted-heading">
+                    Help us test this interface
+                  </h2>
+                  <p>
+                    This interface doesn't have a schema yet, help the community
+                    and get involved.
+                  </p>
+                  <p>
+                    <Button
+                      element="a"
+                      href={`https://github.com/canonical/charm-relation-interfaces`}
+                      appearance="positive"
+                    >
+                      Contribute
+                    </Button>
+                  </p>
+                </>
+              )}
+              <h2 className="p-muted-heading">Discuss this interface</h2>
+              <p>
+                Share your thoughts on this interface with the community on
+                discourse
+              </p>
+              <p>
+                <Button
+                  element="a"
+                  href="https://discourse.charmhub.io/t/implementing-relations/1051"
+                >
+                  Join the discussion
+                </Button>
+              </p>
+            </Col>
             <Col size={9} className="interface-content">
               <div className="p-side-navigation u-hide--large">
                 <ul className="p-side-navigation__list">
@@ -276,7 +309,7 @@ function InterfaceDetails() {
                   <h3 className="p-heading--4">
                     Providing {interfaceData?.name} {interfaceData?.version}
                   </h3>
-                  {interfaceData?.charms?.providers?.length && (
+                  {!!interfaceData?.charms?.providers?.length && (
                     <>
                       <h4 className="p-muted-heading">Featured charms</h4>
                       <Row className="u-no-padding--left u-no-padding--right">
@@ -298,7 +331,7 @@ function InterfaceDetails() {
                   {interfaceData?.other_charms?.providers &&
                     interfaceData.other_charms.providers.length > 0 && (
                       <>
-                        {interfaceData?.charms?.providers?.length && (
+                        {!!interfaceData?.charms?.providers?.length && (
                           <h4 className="p-muted-heading">Other charms</h4>
                         )}
                         <ul className="p-list u-split--3">
@@ -330,7 +363,7 @@ function InterfaceDetails() {
                   <h3 className="p-heading--4">
                     Requiring {interfaceData?.name} {interfaceData?.version}
                   </h3>
-                  {interfaceData?.charms?.consumers?.length && (
+                  {!!interfaceData?.charms?.consumers?.length && (
                     <>
                       <h4 className="p-muted-heading">Featured charms</h4>
                       <Row className="u-no-padding--left u-no-padding--right">
@@ -353,7 +386,7 @@ function InterfaceDetails() {
                   {interfaceData?.other_charms?.requirers &&
                     interfaceData?.other_charms?.requirers.length > 0 && (
                       <>
-                        {interfaceData?.charms?.consumers?.length && (
+                        {!!interfaceData?.charms?.consumers?.length && (
                           <h4 className="p-muted-heading">Other charms</h4>
                         )}
                         <ul className="p-list u-split--3">
@@ -457,15 +490,15 @@ function InterfaceDetails() {
                         </ReactMarkdown>
                       </Col>
                     </Row>
-                    <Notification severity="information">
-                      <a href="https://github.com/canonical/charm-relation-interfaces">
-                        Help us improve this page
-                      </a>
-                      .
-                    </Notification>
                   </Strip>
                 </>
               )}
+              <Notification severity="information">
+                <a href="https://github.com/canonical/charm-relation-interfaces">
+                  Help us improve this page
+                </a>
+                .
+              </Notification>
             </Col>
           </Row>
         )}
