@@ -55,6 +55,8 @@ def interfaces_json():
 @interfaces.route("/interfaces", defaults={"path": ""})
 @interfaces.route("/interfaces/<path:path>")
 def all_interfaces(path):
+    if getenv("ENVIRONMENT") == "production":
+        return render_template("404.html")
     return render_template("interfaces/index.html")
 
 
