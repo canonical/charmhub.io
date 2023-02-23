@@ -8,14 +8,15 @@ import {
   MainTable,
   Notification,
   Pagination,
+  StatusLabel,
 } from "@canonical/react-components";
 
 type InterfaceData = {
   name: String;
   description: String;
   version: String;
-  consumer_count: number;
-  provider_count: number;
+  status: String;
+  category: String;
 };
 
 function pageArray(items: Array<any>, count: number) {
@@ -58,7 +59,19 @@ function InterfacesIndex() {
         throw response;
       })
       .then((data) => {
-        setInterfaces(data?.interfaces);
+        setInterfaces(
+          data?.interfaces.sort((a: InterfaceData, b: InterfaceData) => {
+            if (a.status === "Live" && b.status !== "Live") {
+              return -1;
+            }
+
+            if (a.status !== "Live" && b.status === "Live") {
+              return 1;
+            }
+
+            return 0;
+          })
+        );
       })
       .catch(() => {
         setError(true);
@@ -141,19 +154,22 @@ function InterfacesIndex() {
               },
             },
             {
-              content: "Overview",
-              heading: "Overview",
+              content: "Version",
+              heading: "Version",
               style: {
-                width: "40%",
+                width: "80px",
               },
             },
             {
-              content: "Tested provider charms",
-              heading: "Tested provider charms",
+              content: "Category",
+              heading: "Category",
             },
             {
-              content: "Tested requirer charms",
-              heading: "Tested requirer charms",
+              content: "Overview",
+              heading: "Overview",
+              style: {
+                width: "45%",
+              },
             },
           ]}
           rows={
@@ -163,21 +179,32 @@ function InterfacesIndex() {
                 columns: [
                   {
                     content: (
-                      <Link to={`/interfaces/${item?.name}-v${item?.version}`}>
-                        {item?.name} v{item?.version}
-                      </Link>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Link
+                          to={`/interfaces/${item?.name}-v${item?.version}`}
+                        >
+                          {item?.name}
+                        </Link>
+                        {item?.status !== "Live" && (
+                          <StatusLabel>{item?.status}</StatusLabel>
+                        )}
+                      </div>
                     ),
                   },
                   {
+                    content: item?.version,
+                    className: "u-align--right",
+                  },
+                  {
+                    content: item?.category,
+                  },
+                  {
                     content: item?.description.split(".")[0],
-                  },
-                  {
-                    content: item?.provider_count,
-                    className: "u-align--right",
-                  },
-                  {
-                    content: item?.consumer_count,
-                    className: "u-align--right",
                   },
                 ],
               };
