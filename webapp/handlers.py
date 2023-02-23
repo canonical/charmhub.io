@@ -13,6 +13,7 @@ from canonicalwebteam import image_template
 
 from webapp import authentication, helpers
 
+
 def charmhub_utility_processor():
     """
     This defines the set of properties and functions that will be added
@@ -30,6 +31,7 @@ def charmhub_utility_processor():
         "account": account,
         "image": image_template,
     }
+
 
 def set_handlers(app):
     @app.context_processor
