@@ -1,13 +1,11 @@
-from pprint import pprint
 import talisker.requests
-# from canonicalwebteam.flask_base.app import FlaskBase
+from canonicalwebteam.flask_base.app import FlaskBase
 from canonicalwebteam.store_api.stores.charmstore import CharmStore
-from canonicalwebteam.store_base.app import create_app
 from dateutil import parser
-from flask import render_template, make_response, request, session, Blueprint, url_for
+from flask import render_template, make_response, request, session
 
 from webapp import config
-# from webapp.extensions import csrf
+from webapp.extensions import csrf
 from webapp.handlers import set_handlers
 from webapp.login.views import login
 from webapp.topics.views import topics
@@ -15,40 +13,47 @@ from webapp.publisher.views import publisher
 from webapp.store.views import store
 from webapp.interfaces.views import interfaces
 
-charmhub_bp = Blueprint(
-    "charmhub_bp",
+app = FlaskBase(
     __name__,
+    config.APP_NAME,
     template_folder="../templates",
     static_folder="../static",
-    static_url_path="", 
+    template_404="404.html",
+    template_500="500.html",
+    favicon_url="https://assets.ubuntu.com/v1/5d4edefd-jaas-favicon.png",
 )
-
-app = create_app(
-    "charmhub",
-    store_bp=charmhub_bp
-)
-app.name = "charmhub.io"
-app.static_url_path=""
-# app.static_folder="static"
-app.static_folder=charmhub_bp.static_folder
-app.template_folder=charmhub_bp.template_folder
-app.static_url_path=charmhub_bp.static_url_path
-pprint({"app.static_folder": app.static_folder})
-pprint({"app.static_folder": app.template_folder})
-
-app.store_api = CharmStore(talisker.requests.get_session())
+app.store_api = CharmStore(session=talisker.requests.get_session())
 
 set_handlers(app)
-  
+csrf.init_app(app)
+
 app.register_blueprint(publisher)
 app.register_blueprint(store)
+app.register_blueprint(login)
 app.register_blueprint(topics)
 app.register_blueprint(interfaces)
 
 
+@app.route("/account.json")
+def get_account_json():
+    """
+    A JSON endpoint to request login status
+    """
+    account = None
+
+    if "account" in session:
+        account = session["account"]
+
+    response = {"account": account}
+    response = make_response(response)
+    response.headers["Cache-Control"] = "no-store"
+
+    return response
+
+
 @app.route("/overview")
 def overview():
-    return render_template("/details/overview.html")
+    return render_template("overview.html")
 
 
 @app.route("/about")
