@@ -149,11 +149,7 @@ function InterfaceDetails() {
     <>
       <Strip type="light" shallow>
         <h1>
-          {interfaceData?.name && (
-            <>
-              {interfaceData?.name}
-            </>
-          )}
+          {interfaceData?.name && <>{interfaceData?.name}</>}
           {!interfaceData?.name && interfaceName}
         </h1>
         <p>
@@ -213,7 +209,7 @@ function InterfaceDetails() {
                 <a
                   href={`https://github.com/canonical/charm-relation-interfaces/issues/new?title=${
                     isCommunity ? "(Untested)+" : ""
-                  }${interfaceData?.name}${
+                  }${interfaceName}${
                     interfaceData?.version ? `+${interfaceData.version}` : ""
                   }`}
                 >
@@ -231,7 +227,7 @@ function InterfaceDetails() {
                   <p>
                     <Button
                       element="a"
-                      href={`https://github.com/canonical/charm-relation-interfaces/blob/main/interfaces/${interfaceData?.name}/${interfaceData?.version}/README.md`}
+                      href={`https://github.com/canonical/charm-relation-interfaces/blob/main/interfaces/${interfaceName}/${interfaceData?.version}/README.md`}
                       appearance="positive"
                     >
                       Contribute
