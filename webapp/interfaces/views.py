@@ -1,4 +1,3 @@
-from pprint import pprint
 from flask import Blueprint, render_template, make_response, current_app as app
 from github import Github
 from os import getenv

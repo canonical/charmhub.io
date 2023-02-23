@@ -1,4 +1,3 @@
-from pprint import pprint
 import re
 from github import Github
 from os import getenv
@@ -14,6 +13,7 @@ def get_latest_version(interface):
     all_versions = repo.get_contents(path)
     latest_version = all_versions[-1].path.split("/")[-1]
     return latest_version
+
 
 def get_interface_cont_from_repo(interface, content_type):
     latest_version = get_latest_version(interface)
