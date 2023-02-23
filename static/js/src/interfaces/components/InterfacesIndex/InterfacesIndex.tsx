@@ -185,9 +185,7 @@ function InterfacesIndex() {
                           justifyContent: "space-between",
                         }}
                       >
-                        <Link
-                          to={`/interfaces/${item?.name}-v${item?.version}`}
-                        >
+                        <Link to={`/interfaces/${item?.name}`}>
                           {item?.name}
                         </Link>
                         {item?.status !== "Live" && (
