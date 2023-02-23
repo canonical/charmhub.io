@@ -217,6 +217,9 @@ function InterfaceDetails() {
                   &nbsp;&nbsp;Submit a bug
                 </a>
               </p>
+              <p>
+                <a href={`https://github.com/canonical/charm-relation-interfaces/tree/main/interfaces/${interfaceName}${interfaceData?.version ? `/${interfaceData.version}` : ""}`}>Specification folder</a>
+              </p>
               {!isCommunity && (
                 <>
                   <h2 className="p-muted-heading">Help us improve this page</h2>
@@ -303,7 +306,7 @@ function InterfaceDetails() {
               ) && (
                 <Strip bordered shallow>
                   <h3 className="p-heading--4">
-                    Providing {interfaceData?.name} {interfaceData?.version}
+                    Providing {interfaceData?.name}
                   </h3>
                   {!!interfaceData?.charms?.providers?.length && (
                     <>
@@ -357,7 +360,7 @@ function InterfaceDetails() {
               ) && (
                 <Strip shallow>
                   <h3 className="p-heading--4">
-                    Requiring {interfaceData?.name} {interfaceData?.version}
+                    Requiring {interfaceData?.name}
                   </h3>
                   {!!interfaceData?.charms?.consumers?.length && (
                     <>
