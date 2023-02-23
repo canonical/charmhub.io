@@ -50,10 +50,10 @@
           <nav class="p-tabs" aria-label="Charms and bundles navigation">
             <ul class="p-tabs__list" role="tablist">
               <li class="p-tabs__item" role="presentation">
-                <a href="/charms" class="p-tabs__link" tabindex="0" role="tab" aria-controls="charms" {% if page_type=='charm' %}aria-selected="true" {% endif %}>Charms</a>
+                <a href="{{url_for('publisher.list_page')}}" class="p-tabs__link" tabindex="0" role="tab" aria-controls="charms" {% if page_type=='charm' %}aria-selected="true" {% endif %}>Charms</a>
               </li>
               <li class="p-tabs__item" role="presentation">
-                <a href="/bundles" class="p-tabs__link" role="tab" aria-controls="bundles" {% if page_type=='bundle' %}aria-selected="true" {% endif %}>Bundles</a>
+                <a href="{{url_for('publisher.list_page')}}" class="p-tabs__link" role="tab" aria-controls="bundles" {% if page_type=='bundle' %}aria-selected="true" {% endif %}>Bundles</a>
               </li>
             </ul>
           </nav>

@@ -13,3 +13,14 @@ CATEGORIES = [
     {"slug": "security", "name": "Security"},
     {"slug": "storage", "name": "Storage"},
 ]
+
+SEARCH_FIELDS = [
+    "result.categories",
+    "result.summary",
+    "result.media",
+    "result.title",
+    "result.publisher.display-name",
+    "default-release.revision.revision",
+    "default-release.channel",
+    "result.deployable-on",
+]

@@ -23,22 +23,12 @@ from webapp.decorators import (
 from webapp.helpers import get_soup, modify_headers, discourse_api
 from webapp.store import logic
 from webapp.topics.views import topic_list
+from webapp.config import SEARCH_FIELDS
 
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
 )
 publisher_api = CharmPublisher(talisker.requests.get_session())
-
-SEARCH_FIELDS = [
-    "result.categories",
-    "result.summary",
-    "result.media",
-    "result.title",
-    "result.publisher.display-name",
-    "default-release.revision.revision",
-    "default-release.channel",
-    "result.deployable-on",
-]
 
 
 @store.route("/")
