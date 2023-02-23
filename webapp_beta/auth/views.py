@@ -1,4 +1,3 @@
-from pprint import pprint
 import talisker
 import flask
 
@@ -48,4 +47,4 @@ def login_callback():
 
 @auth.route("/logout")
 def charm_logout():
-    return logout("/charmhub")
+    return logout(flask.url_for("store.index"))
