@@ -151,7 +151,7 @@ function InterfaceDetails() {
         <h1>
           {interfaceData?.name && (
             <>
-              {interfaceData?.name} {interfaceData?.version}
+              {interfaceData?.name}
             </>
           )}
           {!interfaceData?.name && interfaceName}

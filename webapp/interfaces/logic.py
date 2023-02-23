@@ -1,3 +1,4 @@
+from pprint import pprint
 import re
 from github import Github
 from os import getenv
@@ -5,11 +6,18 @@ from os import getenv
 GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 
 github_client = Github(GITHUB_TOKEN)
+repo = github_client.get_repo("canonical/charm-relation-interfaces")
 
 
-def get_interface_cont_from_repo(interface, version, content_type):
-    repo = github_client.get_repo("canonical/charm-relation-interfaces")
-    interface_path = "interfaces/{}/{}".format(interface, version)
+def get_latest_version(interface):
+    path = "interfaces/{}".format(interface)
+    all_versions = repo.get_contents(path)
+    latest_version = all_versions[-1].path.split("/")[-1]
+    return latest_version
+
+def get_interface_cont_from_repo(interface, content_type):
+    latest_version = get_latest_version(interface)
+    interface_path = "interfaces/{}/{}".format(interface, latest_version)
     interface_content = repo.get_contents(interface_path)
     content = [
         path for path in interface_content if path.path.endswith(content_type)
@@ -17,8 +25,8 @@ def get_interface_cont_from_repo(interface, version, content_type):
     return content
 
 
-def get_interface_yml(interface, version):
-    content = get_interface_cont_from_repo(interface, version, "charms.yaml")
+def get_interface_yml(interface):
+    content = get_interface_cont_from_repo(interface, "charms.yaml")
     if content:
         cont = content[0].decoded_content.decode("utf-8")
         response = get_dict_from_yaml(cont)
@@ -222,4 +230,5 @@ def convert_readme(interface, version, text, level=2):
 
 
 def get_interface_name_from_readme(text):
-    return re.sub(r"[#` \n]", "", text.split("\n##", 1)[0])
+    name = re.sub(r"[#` \n]", "", text.split("\n##", 1)[0]).split("/")[0]
+    return name

@@ -1,9 +1,11 @@
+from pprint import pprint
 from flask import Blueprint, render_template, make_response, current_app as app
 from github import Github
 from os import getenv
 
 from webapp.interfaces.logic import (
     get_interfaces_from_mrkd_table,
+    get_latest_version,
     get_short_description_from_readme,
     convert_readme,
     get_interface_name_from_readme,
@@ -60,9 +62,10 @@ def all_interfaces(path):
     return render_template("interfaces/index.html")
 
 
-@interfaces.route("/interfaces/<interface>-<version>.json")
-def single_interface(interface, version):
-    content = get_interface_cont_from_repo(interface, version, "README.md")
+@interfaces.route("/interfaces/<interface>.json")
+def single_interface(interface):
+    content = get_interface_cont_from_repo(interface, "README.md")
+    version = get_latest_version(interface)
     try:
         readme = content[0].decoded_content.decode("utf-8")
         api = app.store_api
@@ -72,7 +75,7 @@ def single_interface(interface, version):
         res = convert_readme(interface, version, readme, 2)
 
         res["name"] = get_interface_name_from_readme(readme)
-        res["charms"] = get_interface_yml(interface, version)
+        res["charms"] = get_interface_yml(interface)
         res["version"] = version
         res["other_charms"] = {
             "providers": other_providers,
