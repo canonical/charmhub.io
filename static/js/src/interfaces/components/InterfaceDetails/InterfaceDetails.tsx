@@ -217,9 +217,14 @@ function InterfaceDetails() {
                   &nbsp;&nbsp;Submit a bug
                 </a>
               </p>
+              {!isCommunity && (
               <p>
-                <a href={`https://github.com/canonical/charm-relation-interfaces/tree/main/interfaces/${interfaceName}${interfaceData?.version ? `/${interfaceData.version}` : ""}`}>Specification folder</a>
+                <a href={`https://github.com/canonical/charm-relation-interfaces/tree/main/interfaces/${interfaceName}${interfaceData?.version ? `/${interfaceData.version}` : ""}`}>
+                  <Icon name="containers" />
+                  &nbsp;&nbsp;Specification folder
+                </a>
               </p>
+              )}
               {!isCommunity && (
                 <>
                   <h2 className="p-muted-heading">Help us improve this page</h2>
