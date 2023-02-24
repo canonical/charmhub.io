@@ -221,7 +221,7 @@ function InterfaceDetails() {
               <p>
                 <a href={`https://github.com/canonical/charm-relation-interfaces/tree/main/interfaces/${interfaceName}${interfaceData?.version ? `/${interfaceData.version}` : ""}`}>
                   <Icon name="containers" />
-                  &nbsp;&nbsp;Specification folder
+                  &nbsp;&nbsp;Specification archive
                 </a>
               </p>
               )}
