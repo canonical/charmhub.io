@@ -220,7 +220,7 @@ function InterfaceDetails() {
               {!isCommunity && (
               <p>
                 <a href={`https://github.com/canonical/charm-relation-interfaces/tree/main/interfaces/${interfaceName}`}>
-                  <Icon name="containers" />
+                  <i className="p-icon--archive"></i>
                   &nbsp;&nbsp;Specification archive
                 </a>
               </p>
