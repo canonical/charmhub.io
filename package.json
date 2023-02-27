@@ -29,7 +29,7 @@
     "@babel/preset-react": "7.18.6",
     "@babel/preset-typescript": "7.18.6",
     "@canonical/cookie-policy": "3.4.0",
-    "@canonical/global-nav": "3.2.3",
+    "@canonical/global-nav": "3.2.4",
     "@canonical/react-components": "0.38.0",
     "@types/react-dom": "18.0.6",
     "@types/react-router-dom": "5.3.3",
