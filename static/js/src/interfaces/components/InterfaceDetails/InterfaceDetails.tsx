@@ -149,11 +149,7 @@ function InterfaceDetails() {
     <>
       <Strip type="light" shallow>
         <h1>
-          {interfaceData?.name && (
-            <>
-              {interfaceData?.name} {interfaceData?.version}
-            </>
-          )}
+          {interfaceData?.name && <>{interfaceData?.name}</>}
           {!interfaceData?.name && interfaceName}
         </h1>
         <p>
@@ -213,7 +209,7 @@ function InterfaceDetails() {
                 <a
                   href={`https://github.com/canonical/charm-relation-interfaces/issues/new?title=${
                     isCommunity ? "(Untested)+" : ""
-                  }${interfaceData?.name}${
+                  }${interfaceName}${
                     interfaceData?.version ? `+${interfaceData.version}` : ""
                   }`}
                 >
@@ -221,6 +217,14 @@ function InterfaceDetails() {
                   &nbsp;&nbsp;Submit a bug
                 </a>
               </p>
+              {!isCommunity && (
+              <p>
+                <a href={`https://github.com/canonical/charm-relation-interfaces/tree/main/interfaces/${interfaceName}`}>
+                  <i className="p-icon--archive"></i>
+                  &nbsp;&nbsp;Specification archive
+                </a>
+              </p>
+              )}
               {!isCommunity && (
                 <>
                   <h2 className="p-muted-heading">Help us improve this page</h2>
@@ -231,7 +235,7 @@ function InterfaceDetails() {
                   <p>
                     <Button
                       element="a"
-                      href={`https://github.com/canonical/charm-relation-interfaces/blob/main/interfaces/${interfaceData?.name}/${interfaceData?.version}/README.md`}
+                      href={`https://github.com/canonical/charm-relation-interfaces/blob/main/interfaces/${interfaceName}/${interfaceData?.version}/README.md`}
                       appearance="positive"
                     >
                       Contribute
@@ -307,7 +311,7 @@ function InterfaceDetails() {
               ) && (
                 <Strip bordered shallow>
                   <h3 className="p-heading--4">
-                    Providing {interfaceData?.name} {interfaceData?.version}
+                    Providing {interfaceData?.name}
                   </h3>
                   {!!interfaceData?.charms?.providers?.length && (
                     <>
@@ -361,7 +365,7 @@ function InterfaceDetails() {
               ) && (
                 <Strip shallow>
                   <h3 className="p-heading--4">
-                    Requiring {interfaceData?.name} {interfaceData?.version}
+                    Requiring {interfaceData?.name}
                   </h3>
                   {!!interfaceData?.charms?.consumers?.length && (
                     <>
