@@ -18,6 +18,6 @@
         "slug": "operators-corner",
         "topic_id": 5990,
         "description": "Welcome to the Operator’s Corner, where you can find information about the best practices on developing your Charmed Operators!",
-        "categories": ["cloud"]
+        "categories": ["cloud", "featured"]
     }
 ]
