@@ -14,13 +14,6 @@
         "categories": ["featured", "ai-ml", "big-data", "containers", "networking"]
     },
     {
-        "name": "FINOS Charmed Operators",
-        "slug": "finos",
-        "topic_id": 5832,
-        "description": "Juju and Charms are the easiest way to quickly try FINOS projects in your laptop. Here you can also find information about enterprise-grade deployment options that covers day-2 operations.",
-        "categories": ["featured", "cloud", "big-data"]
-    },
-    {
         "name": "Operator’s Corner",
         "slug": "operators-corner",
         "topic_id": 5990,
