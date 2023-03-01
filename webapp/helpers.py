@@ -7,7 +7,7 @@ from flask import request
 from ruamel.yaml import YAML
 from slugify import slugify
 from talisker import requests
-
+from datetime import datetime
 
 session = requests.get_session()
 discourse_api = DiscourseAPI(
@@ -183,3 +183,13 @@ def modify_headers(soup, decrease_step=2):
         add_header_id(header, levels)
 
     return soup
+
+
+def schedule_banner(start_date: str, end_date: str):
+    try:
+        end = datetime.strptime(end_date, "%Y-%m-%d")
+        start = datetime.strptime(start_date, "%Y-%m-%d")
+        present = datetime.now()
+        return start <= present < end
+    except ValueError:
+        return False

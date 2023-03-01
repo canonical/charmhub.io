@@ -29,11 +29,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install requirements
-        run: |
-          sudo apt-get update && sudo apt-get install --yes python3-setuptools
-          sudo pip3 install -r requirements.txt
-
       - name: Install Dotrun
         uses: canonical/install-dotrun@main
 
@@ -44,7 +39,7 @@ jobs:
         run: /snap/bin/dotrun build
 
       - name: Test site
-        run: /snap/bin/dotrun & sleep 10 & curl --head --fail --retry-delay 1 --retry 30 --retry-connrefused http://localhost:8045
+        run: /snap/bin/dotrun & sleep 10 && curl --head --fail --retry-delay 1 --retry 30 --retry-connrefused http://localhost:8045
 
   check-prettier:
     runs-on: ubuntu-latest
