@@ -23,7 +23,11 @@ const getCharms = async (
   interfaceName: string,
   charmName: string
 ): Promise<ICharm[]> => {
-  const resp = await fetch(`/packages.json?${interfaceType}=${interfaceName}`);
+  const resp = await fetch(
+    `/packages.json?${
+      interfaceType === "provides" ? "requires" : "provides"
+    }=${interfaceName}`
+  );
   const json = await resp.json();
   return json.packages.filter((pkg: any) => pkg.name !== charmName);
 };
@@ -148,7 +152,7 @@ export const InterfaceItem = ({
         <>
           <p>
             Charms that{" "}
-            <b>{interfaceType === "requires" ? "consume" : "provide"}</b>{" "}
+            <b>{interfaceType === "requires" ? "provide" : "consume"}</b>{" "}
             {interfaceData.interface}
           </p>
           <Row>
