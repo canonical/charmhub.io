@@ -14,4 +14,13 @@
       padding-bottom: 0.75rem;
     }
   }
+
+  ul.p-navigation__sub-list {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+  }
+
+  ul.p-navigation__sub-list .p-navigation__dropdown-item {
+    padding-left: 2rem !important;
+  }
 }
