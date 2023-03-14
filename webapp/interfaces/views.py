@@ -4,8 +4,8 @@ from os import getenv
 
 from webapp.interfaces.logic import (
     get_interfaces_from_mrkd_table,
+    get_latest_version,
     get_short_description_from_readme,
-    filter_interfaces_by_status,
     convert_readme,
     get_interface_name_from_readme,
     get_interface_cont_from_repo,
@@ -31,9 +31,8 @@ def interfaces_json():
     readme = repo.get_contents("README.md").decoded_content.decode("utf-8")
 
     interfaces = get_interfaces_from_mrkd_table(readme)
-    live_interfaces = filter_interfaces_by_status(interfaces, "Live")
 
-    for i, inter in enumerate(live_interfaces):
+    for i, inter in enumerate(interfaces):
         try:
             interface_readme = repo.get_contents(
                 inter["readme_path"]
@@ -43,17 +42,11 @@ def interfaces_json():
             # Some draft interfaces are missing a readme
             description = ""
 
-        live_interfaces[i]["description"] = description
-        version = "v{}".format(inter["version"])
-        interface = inter["name"]
-        charms = get_interface_yml(interface, version)
-
-        live_interfaces[i]["provider_count"] = len(charms["providers"])
-        live_interfaces[i]["consumer_count"] = len(charms["consumers"])
+        interfaces[i]["description"] = description
 
     response = {
-        "interfaces": live_interfaces,
-        "size": len(live_interfaces),
+        "interfaces": interfaces,
+        "size": len(interfaces),
     }
     response = make_response(response)
     response.cache_control.max_age = "3600"
@@ -63,12 +56,15 @@ def interfaces_json():
 @interfaces.route("/interfaces", defaults={"path": ""})
 @interfaces.route("/interfaces/<path:path>")
 def all_interfaces(path):
+    if getenv("ENVIRONMENT") == "production":
+        return render_template("404.html")
     return render_template("interfaces/index.html")
 
 
-@interfaces.route("/interfaces/<interface>-<version>.json")
-def single_interface(interface, version):
-    content = get_interface_cont_from_repo(interface, version, "README.md")
+@interfaces.route("/interfaces/<interface>.json")
+def single_interface(interface):
+    content = get_interface_cont_from_repo(interface, "README.md")
+    version = get_latest_version(interface)
     try:
         readme = content[0].decoded_content.decode("utf-8")
         api = app.store_api
@@ -78,7 +74,7 @@ def single_interface(interface, version):
         res = convert_readme(interface, version, readme, 2)
 
         res["name"] = get_interface_name_from_readme(readme)
-        res["charms"] = get_interface_yml(interface, version)
+        res["charms"] = get_interface_yml(interface)
         res["version"] = version
         res["other_charms"] = {
             "providers": other_providers,

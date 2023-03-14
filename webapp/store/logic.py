@@ -165,25 +165,33 @@ def extract_default_release_architectures(channel):
 def extract_all_arch(channel_map, parent_dict):
     all_archy = set()
     all_channel_bases = []
-    for version, version_data in channel_map.items():
-        for channel, channel_data in version_data.items():
-            bases = set()
-            name = ""
-            for _, release in channel_data["releases"].items():
-                all_archy = all_archy.union(release["architectures"])
-                bases = bases.union(release["bases"])
 
-            if channel_data["latest"]["channel_bases"]:
-                for base in channel_data["latest"]["channel_bases"]:
-                    name = base["name"]
+    if channel_map.get("latest"):
+        channel_map_all = list(channel_map["latest"].items())
+    # for charms without the latest revision
+    else:
+        for version, version_data in channel_map.items():
+            channel_map_all = list(version_data.items())
+            break
 
-            bases = sorted(
-                bases, key=lambda k: k.replace("Ubuntu ", ""), reverse=True
-            )
+    for channel, channel_data in channel_map_all:
+        bases = set()
+        name = ""
+        for _, release in channel_data["releases"].items():
+            all_archy = all_archy.union(release["architectures"])
+            bases = bases.union(release["bases"])
 
-            all_channel_bases.append(
-                {"channel": channel, "bases": bases, "name": name}
-            )
+        if channel_data["latest"]["channel_bases"]:
+            for base in channel_data["latest"]["channel_bases"]:
+                name = base["name"]
+
+        bases = sorted(
+            bases, key=lambda k: k.replace("Ubuntu ", ""), reverse=True
+        )
+
+        all_channel_bases.append(
+            {"channel": channel, "bases": bases, "name": name}
+        )
 
     parent_dict["all_architectures"] = all_archy
     parent_dict["all_channel_bases"] = all_channel_bases
@@ -475,3 +483,18 @@ def format_slug(slug):
         .replace("And", "and")
         .replace("Iot", "IoT")
     )
+
+
+def parse_readme(readme, channel_request=None):
+    readme = html(readme)
+    readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
+    readme = readme.replace("https://charmhub.io/", "/")
+    if channel_request:
+        readme = readme.replace(
+            "/configure", "/configure/?channel={}".format(channel_request)
+        )
+
+    readme = get_soup(readme)
+    readme = modify_headers(readme)
+
+    return readme

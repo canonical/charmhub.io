@@ -43,9 +43,9 @@
             <li>
               <a class="p-navigation__dropdown-item" href="https://juju.is/docs/dev">Dev docs: Contribute to the OLM</a>
             </li>
-            <li>
+            {#<li>
               <a class="p-navigation__dropdown-item" href="https://charmhub.io/interfaces">Interfaces</a>
-            </li>
+            </li>#}
             <li>
               <a class="p-navigation__dropdown-item" href="https://juju.is/tutorials">Tutorials</a>
             </li>
@@ -107,9 +107,6 @@
             </li>
           </ul>
         </li>
-        <li class="p-navigation__item">
-          <a class="p-navigation__link" href="https://jaas.ai">JAAS</a>
-        </li>
       </ul>
       <ul class="p-navigation__items global-nav">
         <li class="p-navigation__item">
@@ -120,7 +117,7 @@
         <li class="p-navigation__item js-nav-account" id="user-link">
           {# Authenticated #}
           <a href="#user-link-menu" aria-controls="user-link-menu" class="p-navigation__link js-nav-account--authenticated u-hide js-account--name account-name">My account</a>
-          <ul class="p-navigation__dropdown" id="user-link-menu" aria-hidden="true">
+          <ul class="p-navigation__dropdown--right" id="user-link-menu" aria-hidden="true">
             <li>
               <a href="/charms" class="p-navigation__dropdown-item">My charms and bundles</a>
             </li>

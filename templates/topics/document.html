@@ -1,6 +1,6 @@
 {% extends 'base_layout.html' %}
 
-{% block title %}{% if document %}{{ document.title }}{% else %}Topic page{% endif %}{% endblock %}
+{% block meta_title %}{% if document %}{{ document.title }}{% else %}Topic page{% endif %}{% endblock %}
 {% block meta_description %}{{ document.body_html | striptags | truncate(155) }}{% endblock %}
 
 {% macro create_navigation(nav_items, expandable=False, expanded=False) %}
@@ -83,7 +83,7 @@
           {% endif %}
         {% endfor %}
         </div>
-        <a href="https://juju.is/tutorials/how-to-write-a-topic-page" class="p-button--positive p-topics-contribute__button">How to contribute a Topic</a>
+        <a href="https://discourse.charmhub.io/t/how-to-write-a-topic-page/5442" class="p-button--positive p-topics-contribute__button">How to contribute a Topic</a>
       </nav>
     </aside>
     <main class="col-9" id="main-content">

@@ -1,4 +1,7 @@
 <div class="p-strip--light is-shallow">
+  {% if request.path.startswith("/kubeflow") and schedule_banner("2023-03-08", "2023-03-22") %}
+    {% include "partial/_kubeflow-beta-banner.html" %}
+  {% endif %}
   <div class="row">
     <div class="col-8">
       <div class="p-charm-header">
@@ -98,7 +101,7 @@
                     {% endif %}
                   </div>
                   <div>
-                    {% for channel in base["bases"] %}
+                    {% for channel in channel_data.latest.bases %}
                       <span class="series-tag">
                         {{ channel.replace("Ubuntu ", "") }}
                       </span>
