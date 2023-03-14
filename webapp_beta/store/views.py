@@ -11,7 +11,8 @@ store = Blueprint(
 )
 publisher_api = CharmPublisher(talisker.requests.get_session())
 
-# to be aligned in store base, oold code used for now
+
+# to be aligned in store base, old code used for now
 @store.route("/store")
 def index():
     featured_charms = app.store_api.find(
@@ -33,4 +34,4 @@ def index():
 
     context["featured_charms"] = featured_packages
 
-    return render_template("store.html", **context)
+    return render_template("beta/store.html", **context)
