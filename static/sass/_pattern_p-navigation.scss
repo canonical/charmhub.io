@@ -14,49 +14,4 @@
       padding-bottom: 0.75rem;
     }
   }
-
-  .global-nav {
-    .global-nav__dropdown-toggle {
-      .global-nav__header-link-anchor::after {
-        @media only screen and (min-width: $breakpoint-small) and (max-width: $breakpoint-navigation-threshold) {
-          right: 1.5rem !important;
-        }
-      }
-
-      .global-nav__header-link-anchor.is-selected::before {
-        background-color: #fff !important;
-        bottom: -1px;
-        content: "";
-        display: block;
-        height: auto;
-        left: 0;
-        position: absolute;
-        top: -1px;
-        width: 0.1875rem;
-        z-index: 1;
-
-        @media only screen and (min-width: $breakpoint-navigation-threshold) {
-          bottom: 0;
-          height: 0.1875rem;
-          right: 0;
-          top: auto;
-          width: auto;
-        }
-      }
-    }
-  }
-
-  #all-canonical-mobile .global-nav__header-link-anchor::after {
-    right: 1rem !important;
-  }
-
-  .global-nav-dropdown {
-    z-index: 10 !important;
-  }
-
-  .account-name {
-    @media only screen and (min-width: $breakpoint-navigation-threshold) {
-      max-width: 150px;
-    }
-  }
 }
