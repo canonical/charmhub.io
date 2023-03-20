@@ -30,7 +30,6 @@
             <thead>
               <tr>
                 <th>Channel</th>
-                <th>Version</th>
                 <th>Revision</th>
                 <th>Published</th>
                 <th>Runs on</th>
@@ -41,7 +40,6 @@
               {% for channel, channel_data in track_data.items() %}
               <tr data-channel-map-track="{{ track }}" data-channel-map-channel="{{ channel }}" data-channel-map-version="{{ channel_data.latest.version }}" data-channel-map-filter="{% for release, release_data in channel_data.releases.items() %}{% for arch in release_data.architectures %} {{ arch }} {% endfor %}{% endfor %}">
                 <td data-heading="Channel">{{ track }}/{{ channel }}</td>
-                <td data-heading="Version">{{ channel_data.latest.version }}</td>
                 <td data-heading="Revision">{{ channel_data.latest.revision.revision }}</td>
                 <td data-heading="Published">{{ channel_data.latest.released_at }}</td>
                 <td data-heading="Runs on">
@@ -64,7 +62,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="p-charm-header__code">
     <div class="p-tooltip--information">
       <div>
