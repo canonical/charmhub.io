@@ -2,7 +2,7 @@
 
 set -e
 
-if [${ENVIRONMENT} = "production"] || [! DEVEL = true]; then
+if [${ENVIRONMENT} = "production"]; then
     RUN_COMMAND="talisker.gunicorn.gevent webapp.app:app --bind $1 --worker-class gevent --name talisker-`hostname`"
 else
     RUN_COMMAND="talisker.gunicorn.gevent webapp_beta.app:app --bind $1 --worker-class gevent --name talisker-`hostname`"
