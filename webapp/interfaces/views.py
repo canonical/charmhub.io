@@ -85,7 +85,7 @@ def single_interface(interface):
             "providers": other_providers,
             "requirers": other_requirers,
         }
-        res["last_modofied"] = last_modified
+        res["last_modified"] = last_modified
 
         response = make_response(res)
         response.cache_control.max_age = "36000"
