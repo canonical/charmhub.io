@@ -66,9 +66,10 @@ def all_interfaces(path):
 def single_interface(interface):
     content = get_interface_cont_from_repo(interface, "README.md")
     last_modified = datetime.strptime(
-        content[0].last_modified, "%a, %d %b %Y %H:%M:%S %Z").isoformat()
-    
+        content[0].last_modified, "%a, %d %b %Y %H:%M:%S %Z"
+    ).isoformat()
     version = get_latest_version(interface)
+
     try:
         readme = content[0].decoded_content.decode("utf-8")
         api = app.store_api
