@@ -51,7 +51,6 @@ def publisher_login():
         callback_url=flask.url_for("login.login_callback", _external=True),
         state=generate_csrf(),
     )
-    pprint(flask.url_for("login.login_callback", _external=True))
 
     # Next URL to redirect the user after the login
     next_url = flask.request.args.get("next")

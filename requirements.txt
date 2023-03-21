@@ -16,4 +16,4 @@ ruamel.yaml==0.17.21
 PyGithub==1.57
 black==22.12.0
 flake8==6.0.0
--e git+https://git@github.com/codeEmpress1/canonicalwebteam.store-base.git@bdbb40d3c4f6a18a05447a77f2ea871b8bd8aa08#egg=canonicalwebteam_store_base
+git+https://git@github.com/codeEmpress1/canonicalwebteam.store-base.git@2de63df0534743f9808bea8e8a166ea1425f27fd#egg=canonicalwebteam_store_base
