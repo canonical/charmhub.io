@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import { Strip, Row, Col } from "@canonical/react-components";
 import { CardList, Filters } from "@canonical/store-components";
@@ -41,18 +41,20 @@ const formatData = (data: any) => {
 
 function Packages() {
   const { data } = useQuery("packages", getPackages);
-  const formattedData = formatData(data);
+  const [packages, setPackages] = useState([]);
 
-  const [packages, setPackages] = useState(formattedData);
+  useEffect(() => {
+    setPackages(formatData(data));
+  }, [data]);
 
   return (
     <Strip>
       <Row>
         <Col size={3}>
-          {formattedData && formattedData.length > 0 && (
+          {packages && packages.length > 0 && (
             <Filters
-              setFilteredPackages={setPackages}
-              packages={formattedData}
+              setFilteredPackages={() => false}
+              packages={packages}
               categories={[
                 {
                   display_name: "AI/ML",
@@ -109,8 +111,8 @@ function Packages() {
           )}
         </Col>
         <Col size={9}>
-          {formattedData.length > 0 ? (
-            <CardList packages={formattedData} itemsPerPage={12} />
+          {packages.length > 0 ? (
+            <CardList packages={packages} itemsPerPage={12} />
           ) : (
             <Row>
               <h2>Loading packages...</h2>
