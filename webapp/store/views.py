@@ -1,5 +1,3 @@
-import re
-
 import humanize
 import talisker
 from canonicalwebteam.discourse import DocParser
@@ -13,14 +11,13 @@ from flask import Blueprint, Response, abort
 from flask import current_app as app
 from flask import jsonify, redirect, render_template, request
 from pybadges import badge
-from mistune import html
 
 from webapp.config import DETAILS_VIEW_REGEX, CATEGORIES
 from webapp.decorators import (
     redirect_uppercase_to_lowercase,
     store_maintenance,
 )
-from webapp.helpers import get_soup, modify_headers, discourse_api
+from webapp.helpers import discourse_api
 from webapp.store import logic
 from webapp.topics.views import topic_list
 
@@ -68,11 +65,27 @@ def index():
 @store.route("/packages.json")
 def get_packages():
     query = request.args.get("q", default=None, type=str)
+    provides = request.args.get("provides", default=None, type=str)
+    requires = request.args.get("requires", default=None, type=str)
+    context = {"packages": [], "size": 0}
 
     if query:
         results = app.store_api.find(query=query, fields=SEARCH_FIELDS).get(
             "results"
         )
+        context["q"] = query
+    elif provides or requires:
+        if provides:
+            provides = provides.split(",")
+        if requires:
+            requires = requires.split(",")
+
+        results = app.store_api.find(
+            provides=provides, requires=requires, fields=SEARCH_FIELDS
+        ).get("results")
+
+        context["provides"] = provides
+        context["requires"] = requires
     else:
         results = app.store_api.find(fields=SEARCH_FIELDS).get("results", [])
 
@@ -84,11 +97,10 @@ def get_packages():
         package = logic.add_store_front_data(results[i], False)
         packages.append(package)
 
-    return {
-        "packages": packages,
-        "q": query,
-        "size": total_packages,
-    }
+    context["packages"] = packages
+    context["size"] = total_packages
+
+    return context
 
 
 FIELDS = [
@@ -223,11 +235,7 @@ def details_overview(entity_name):
         "readme-md", "No readme available"
     )
 
-    readme = html(readme)
-    # Remove Markdown/HTML comments
-    readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
-    readme = get_soup(readme)
-    readme = modify_headers(readme)
+    readme = logic.parse_readme(readme, channel_request)
 
     context["readme"] = readme
     context["package_type"] = package["type"]
@@ -487,10 +495,8 @@ def download_library(entity_name, library_name):
     lib_parts = library_name.split(".")
 
     if len(lib_parts) > 2:
-        group_name = ".".join(lib_parts[:-2])
         lib_name = "." + ".".join(lib_parts[-2:])
     else:
-        group_name = "others"
         lib_name = library_name
 
     libraries = logic.process_libraries(
@@ -498,11 +504,7 @@ def download_library(entity_name, library_name):
     )
 
     library = next(
-        (
-            lib
-            for lib in libraries.get(group_name, {})
-            if lib.get("name") == lib_name
-        ),
+        (lib for lib in libraries if lib.get("name") == lib_name),
         None,
     )
 
@@ -542,6 +544,21 @@ def details_integrations(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request, FIELDS)
 
+    return render_template(
+        "details/integrations.html",
+        package=package,
+    )
+
+
+@store.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/integrations.json'
+)
+@store_maintenance
+@redirect_uppercase_to_lowercase
+def details_integrations_data(entity_name):
+    channel_request = request.args.get("channel", default=None, type=str)
+    package = get_package(entity_name, channel_request, FIELDS)
+
     relations = (
         package.get("default-release", {})
         .get("revision", {})
@@ -559,30 +576,7 @@ def details_integrations(entity_name):
         ],
     }
 
-    filter_items = []
-    chips_integrations = []
-    for relation in (
-        grouped_relations["provides"] + grouped_relations["requires"]
-    ):
-        chips_integrations.append(
-            {
-                "lead": relation["key"],
-                "value": relation["interface"],
-                "id": relation["key"] + "|" + relation["interface"],
-            }
-        )
-
-    if chips_integrations:
-        filter_items.append(
-            {"name": "Integration", "chips": chips_integrations}
-        )
-
-    return render_template(
-        "details/integrations.html",
-        package=package,
-        integrations=grouped_relations,
-        filter_items=filter_items,
-    )
+    return jsonify({"grouped_relations": grouped_relations})
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/resources')
@@ -597,7 +591,11 @@ def details_resources(entity_name):
         name = package["default-release"]["resources"][0]["name"]
         return redirect(f"/{entity_name}/resources/{name}")
     else:
-        return render_template("details/no-resources.html", package=package)
+        return render_template(
+            "details/no-resources.html",
+            package=package,
+            channel_requested=channel_request,
+        )
 
 
 @store.route(
@@ -757,6 +755,44 @@ def entity_embedded_card(entity_name):
             render_template(
                 "embeddable-404.html",
                 store_design=store_design,
+                entity_name=entity_name,
+            ),
+            404,
+        )
+
+
+@store.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/embedded/interface'
+)
+@exclude_xframe_options_header
+def entity_embedded_interface_card(entity_name):
+    channel_request = request.args.get("channel", default=None, type=str)
+    try:
+        package = get_package(entity_name, channel_request, FIELDS)
+
+        package["default-release"]["channel"][
+            "released-at"
+        ] = logic.convert_date(
+            package["default-release"]["channel"]["released-at"]
+        )
+
+        libraries = logic.process_libraries(
+            publisher_api.get_charm_libraries(entity_name)
+        )
+
+        context = {
+            "package": package,
+            "libraries": libraries,
+        }
+
+        return render_template(
+            "interface-card.html",
+            **context,
+        )
+    except Exception:
+        return (
+            render_template(
+                "interface-card-404.html",
                 entity_name=entity_name,
             ),
             404,

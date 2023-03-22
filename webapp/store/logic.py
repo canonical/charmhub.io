@@ -64,7 +64,6 @@ def convert_channel_maps(channel_map):
     result = {}
     track_order = {"latest": 1}
     risk_order = {"stable": 1, "candidate": 2, "beta": 3, "edge": 4}
-
     for channel in channel_map:
         track = channel["channel"].get("track", "latest")
         risk = channel["channel"]["risk"]
@@ -151,7 +150,7 @@ def extract_resources(channel):
     return resources
 
 
-def extract_architectures(channel):
+def extract_default_release_architectures(channel):
     architectures = set()
 
     for base in channel["revision"]["bases"]:
@@ -161,6 +160,43 @@ def extract_architectures(channel):
         architectures.add(base["architecture"])
 
     return sorted(architectures)
+
+
+def extract_all_arch(channel_map, parent_dict):
+    all_archy = set()
+    all_channel_bases = []
+
+    if channel_map.get("latest"):
+        channel_map_all = list(channel_map["latest"].items())
+    # for charms without the latest revision
+    else:
+        for version, version_data in channel_map.items():
+            channel_map_all = list(version_data.items())
+            break
+
+    for channel, channel_data in channel_map_all:
+        bases = set()
+        name = ""
+        for _, release in channel_data["releases"].items():
+            all_archy = all_archy.union(release["architectures"])
+            bases = bases.union(release["bases"])
+
+        if channel_data["latest"]["channel_bases"]:
+            for base in channel_data["latest"]["channel_bases"]:
+                name = base["name"]
+
+        bases = sorted(
+            bases, key=lambda k: k.replace("Ubuntu ", ""), reverse=True
+        )
+
+        all_channel_bases.append(
+            {"channel": channel, "bases": bases, "name": name}
+        )
+
+    parent_dict["all_architectures"] = all_archy
+    parent_dict["all_channel_bases"] = all_channel_bases
+
+    return
 
 
 def extract_series(channel, long_name=False):
@@ -330,9 +366,11 @@ def add_store_front_data(package, details=False):
         extra["resources"] = extract_resources(package["default-release"])
 
         # Extract all supported series
-        extra["architectures"] = extract_architectures(
+        extra["architectures"] = extract_default_release_architectures(
             package["default-release"]
         )
+        # extract all architecture based on series
+        extract_all_arch(extra["channel_map"], extra)
         extra["series"] = extract_series(package["default-release"])
         extra["channel_bases"] = extract_bases(package["default-release"])
 
@@ -445,3 +483,18 @@ def format_slug(slug):
         .replace("And", "and")
         .replace("Iot", "IoT")
     )
+
+
+def parse_readme(readme, channel_request=None):
+    readme = html(readme)
+    readme = re.sub("(<!--.*-->)", "", readme, flags=re.DOTALL)
+    readme = readme.replace("https://charmhub.io/", "/")
+    if channel_request:
+        readme = readme.replace(
+            "/configure", "/configure/?channel={}".format(channel_request)
+        )
+
+    readme = get_soup(readme)
+    readme = modify_headers(readme)
+
+    return readme

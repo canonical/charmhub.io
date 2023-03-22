@@ -1,6 +1,7 @@
 module.exports = {
   about: "./static/js/src/public/about/index.js",
   docs: "./static/js/src/public/docs/index.js",
+  "docs-side-nav": "./static/js/src/base/docs-side-nav.js",
   base: "./static/js/src/base/base.js",
   details: "./static/js/src/public/details/index.js",
   details_overview: "./static/js/src/public/details/overview/index.js",
@@ -8,6 +9,7 @@ module.exports = {
   details_history: "./static/js/src/public/details/history/index.js",
   details_integrate: "./static/js/src/public/details/integrate/index.js",
   details_resources: "./static/js/src/public/details/resources/index.js",
+  details_integrations: "./static/js/src/public/details/integrations/index.tsx",
   store: "./static/js/src/public/store/index.js",
   list: "./static/js/src/publisher/list-page.js",
   listing: "./static/js/src/publisher/listing-page.js",
@@ -19,4 +21,6 @@ module.exports = {
   "highlight-js": "./static/js/src/base/highlight.js",
   "navigation-events": "./static/js/src/public/navigation-events.js",
   "icon-validator": "./static/js/src/public/icon-validator/index.tsx",
+  collaborator: "./static/js/src/publisher/collaborator/index.tsx",
+  interfaces: "./static/js/src/interfaces/index.tsx",
 };

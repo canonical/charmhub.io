@@ -1,4 +1,4 @@
-{% macro create_navigation(nav_items) %}
+{% macro create_navigation(nav_items, channel_requested=None) %}
   <ul>
     {% for element in nav_items %}
     <li>
@@ -11,7 +11,7 @@
       {% endif %}
 
       {% if element.children %}
-        {{ create_navigation(element.children) }}
+        {{ create_navigation(element.children, channel_requested) }}
       {% endif %}
     </li>
     {% endfor %}

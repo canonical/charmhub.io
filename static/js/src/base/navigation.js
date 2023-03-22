@@ -1,157 +1,163 @@
-/**
-  Toggles visibility of given subnav by toggling is-active class to it
-  and setting aria-hidden attribute on dropdown contents.
-  @param {HTMLElement} subnav Root element of subnavigation to open.
-*/
-function toggleSubnav(subnav, open) {
+function toggleDropdown(toggle, open) {
+  const parentElement = toggle.parentNode;
+  const dropdown = document.getElementById(
+    toggle.getAttribute("aria-controls")
+  );
+  dropdown.setAttribute("aria-hidden", !open);
+
   if (open) {
-    subnav.classList.add("is-active");
+    parentElement.classList.add("is-active", "is-selected");
   } else {
-    subnav.classList.remove("is-active");
-  }
-
-  var toggle = subnav.querySelector(".p-subnav__toggle");
-
-  if (toggle) {
-    var dropdown = document.getElementById(
-      toggle.getAttribute("aria-controls")
-    );
-
-    if (dropdown) {
-      dropdown.setAttribute("aria-hidden", open ? "true" : "false");
-    }
+    parentElement.classList.remove("is-active", "is-selected");
   }
 }
 
-/**
-  Closes all subnavs on the page.
-*/
-function closeAllSubnavs() {
-  var subnavs = document.querySelectorAll(".p-subnav");
-  for (var i = 0, l = subnavs.length; i < l; i++) {
-    toggleSubnav(subnavs[i], false);
-  }
-}
-
-/**
-  Attaches click event listener to subnav toggle.
-  @param {HTMLElement} subnavToggle Toggle element of subnavigation.
-*/
-function setupSubnavToggle(subnavToggle) {
-  subnavToggle.addEventListener("click", function (event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    var subnav = subnavToggle.parentElement;
-    var isActive = subnav.classList.contains("is-active");
-
-    closeAllSubnavs();
-    if (!isActive) {
-      toggleSubnav(subnav, true);
-    }
+function closeAllDropdowns(toggles) {
+  toggles.forEach((toggle) => {
+    toggleDropdown(toggle, false);
   });
+}
 
-  // Close the subnav on Esc key press
-  document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") {
-      event.preventDefault();
-      var subnav = subnavToggle.parentElement;
-      var isActive = subnav.classList.contains("is-active");
+function handleClickOutside(toggles, containerClass) {
+  document.addEventListener("click", (event) => {
+    const target = event.target;
 
-      if (isActive) {
-        toggleSubnav(subnav, false);
+    if (target.closest) {
+      if (!target.closest(containerClass)) {
+        closeAllDropdowns(toggles);
       }
     }
   });
 }
 
-// Setup all subnav toggles on the page
-var subnavToggles = document.querySelectorAll(".p-subnav__toggle");
+function initNavDropdowns(containerClass) {
+  const toggles = [].slice.call(
+    document.querySelectorAll(containerClass + " [aria-controls]")
+  );
 
-for (var i = 0, l = subnavToggles.length; i < l; i++) {
-  setupSubnavToggle(subnavToggles[i]);
-}
+  handleClickOutside(toggles, containerClass);
 
-// Close all menus if anything else on the page is clicked
-document.addEventListener("click", function (event) {
-  var target = event.target;
+  toggles.forEach((toggle) => {
+    toggle.addEventListener("click", (e) => {
+      e.preventDefault();
 
-  if (target.closest) {
-    if (
-      !target.closest(".p-subnav__toggle") &&
-      !target.closest(".p-subnav__item")
-    ) {
-      closeAllSubnavs();
-    }
-  } else if (target.msMatchesSelector) {
-    // IE friendly `Element.closest` equivalent
-    // as in https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
-    do {
-      if (
-        target.msMatchesSelector(".p-subnav__toggle") ||
-        target.msMatchesSelector(".p-subnav__item")
-      ) {
-        return;
-      }
-      target = target.parentElement || target.parentNode;
-    } while (target !== null && target.nodeType === 1);
+      const isOpen = e.target.parentNode.classList.contains("is-active");
 
-    closeAllSubnavs();
-  }
-});
-
-const enableResetSearchClick = (selector) => {
-  const resetIconList = document.querySelectorAll(selector);
-
-  if (resetIconList) {
-    resetIconList.forEach((resetIcon) => {
-      resetIcon.addEventListener("click", () => {
-        window.location.href = "/";
-      });
+      closeAllDropdowns(toggles);
+      toggleDropdown(toggle, !isOpen);
     });
-  } else {
-    console.error(`${selector} is not a valida element!`);
-  }
-};
-
-// Enable sticky navigation
-function enableStickyNav() {
-  document.addEventListener("DOMContentLoaded", function () {
-    var selector = "[data-js='sticky-nav-observer']";
-    // select the observer element
-    var observerEl = document.querySelector(selector);
-    // select the navigation element
-    var nav = document.getElementById("navigation");
-
-    if (observerEl && nav) {
-      // create a new observer
-      var observer = new IntersectionObserver(
-        function (entries) {
-          // add "sticky" class if the observerEl is not on the screen
-          if (entries[0].intersectionRatio === 0) {
-            nav.classList.add("is-sticky");
-            // remove "sticky" class if the observerEl is on the screen - i.e. you scrolled all the way to the top of the page
-          } else if (entries[0].intersectionRatio === 1)
-            nav.classList.remove("is-sticky");
-        },
-        { threshold: [0, 1] }
-      );
-      // ask the observer to observe the position of the observerEl - i.e. if it's on/off screen
-      observer.observe(observerEl);
-    } else {
-      if (selector) {
-        console.error(
-          `${selector ? selector : "#navigation"} is not a valid element!`
-        );
-      }
-    }
   });
 }
 
-enableStickyNav();
-enableResetSearchClick("[data-js='reset-search']");
+// initNavDropdowns(".p-navigation__item--dropdown-toggle");
 
-export { toggleSubnav };
+function initNavigationSearch(element) {
+  const searchButtons = element.querySelectorAll(".js-search-button");
+
+  searchButtons.forEach((searchButton) => {
+    searchButton.addEventListener("click", toggleSearch);
+  });
+
+  const menuButton = element.querySelector(".js-menu-button");
+  if (menuButton) {
+    menuButton.addEventListener("click", toggleMenu);
+  }
+
+  const overlay = element.querySelector(".p-navigation__search-overlay");
+  if (overlay) {
+    overlay.addEventListener("click", closeAll);
+  }
+
+  function toggleMenu(e) {
+    e.preventDefault();
+
+    var navigation = e.target.closest(".p-navigation");
+    if (navigation.classList.contains("has-menu-open")) {
+      closeAll();
+    } else {
+      closeAll();
+      openMenu(e);
+    }
+  }
+
+  function toggleSearch(e) {
+    e.preventDefault();
+
+    var navigation = e.target.closest(".p-navigation");
+    if (navigation.classList.contains("has-search-open")) {
+      closeAll();
+    } else {
+      closeAll();
+      openSearch(e);
+    }
+  }
+
+  function openSearch(e) {
+    e.preventDefault();
+    var navigation = e.target.closest(".p-navigation");
+    var searchInput = navigation.querySelector(".p-search-box__input");
+    var buttons = document.querySelectorAll(".js-search-button");
+
+    buttons.forEach((searchButton) => {
+      searchButton.setAttribute("aria-pressed", true);
+    });
+
+    navigation.classList.add("has-search-open");
+    searchInput.focus();
+    document.addEventListener("keyup", keyPressHandler);
+  }
+
+  function openMenu(e) {
+    e.preventDefault();
+    var navigation = e.target.closest(".p-navigation");
+    var buttons = document.querySelectorAll(".js-menu-button");
+
+    buttons.forEach((searchButton) => {
+      searchButton.setAttribute("aria-pressed", true);
+    });
+
+    navigation.classList.add("has-menu-open");
+    document.addEventListener("keyup", keyPressHandler);
+  }
+
+  function closeSearch() {
+    var navigation = document.querySelector(".p-navigation");
+    var buttons = document.querySelectorAll(".js-search-button");
+
+    buttons.forEach((searchButton) => {
+      searchButton.removeAttribute("aria-pressed");
+    });
+
+    navigation.classList.remove("has-search-open");
+    document.removeEventListener("keyup", keyPressHandler);
+  }
+
+  function closeMenu() {
+    var navigation = document.querySelector(".p-navigation");
+    var buttons = document.querySelectorAll(".js-menu-button");
+
+    buttons.forEach((searchButton) => {
+      searchButton.removeAttribute("aria-pressed");
+    });
+
+    navigation.classList.remove("has-menu-open");
+    document.removeEventListener("keyup", keyPressHandler);
+  }
+
+  function closeAll() {
+    closeSearch();
+    closeMenu();
+  }
+
+  function keyPressHandler(e) {
+    if (e.key === "Escape") {
+      closeAll();
+    }
+  }
+}
+
+var navigation = document.querySelector("#navigation");
+initNavigationSearch(navigation);
 
 // Login
 var navAccountContainer = document.querySelector(".js-nav-account");
@@ -169,14 +175,15 @@ if (navAccountContainer) {
         );
         var displayName =
           navAccountContainer.querySelector(".js-account--name");
-
         navAccountContainer.classList.add(
-          "p-subnav",
           "p-navigation__item--dropdown-toggle"
         );
         notAuthenticatedMenu.classList.add("u-hide");
         authenticatedMenu.classList.remove("u-hide");
         displayName.innerHTML = data.account["display-name"];
+        initNavDropdowns(".js-nav-account");
       }
     });
 }
+
+initNavDropdowns(".p-navigation__item--dropdown-toggle");

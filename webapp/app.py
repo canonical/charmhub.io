@@ -11,6 +11,7 @@ from webapp.login.views import login
 from webapp.topics.views import topics
 from webapp.publisher.views import publisher
 from webapp.store.views import store
+from webapp.interfaces.views import interfaces
 
 app = FlaskBase(
     __name__,
@@ -30,6 +31,7 @@ app.register_blueprint(publisher)
 app.register_blueprint(store)
 app.register_blueprint(login)
 app.register_blueprint(topics)
+app.register_blueprint(interfaces)
 
 
 @app.route("/account.json")
@@ -114,12 +116,6 @@ def site_map():
 @app.route("/sitemap-links.xml")
 def site_map_links():
     links = [
-        "/overview",
-        "/about",
-        "/manifesto",
-        "/publishing",
-        "/governance",
-        "/glossary",
         "/contact-us",
     ]
 

@@ -194,4 +194,18 @@
   #not-found .p-card__thumbnail-container {
     border-radius: 0;
   }
+
+  .p-charm-card {
+    &:hover {
+      text-decoration: none;
+
+      * {
+        text-decoration: none;
+      }
+
+      h4 {
+        text-decoration: underline;
+      }
+    }
+  }
 }

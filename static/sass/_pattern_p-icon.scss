@@ -114,6 +114,12 @@
     @extend %icon;
     @include vf-icon-error($color-mid-dark);
   }
+
+  .p-icon--archive {
+    @extend %icon;
+
+    background-image: url("https://assets.ubuntu.com/v1/da36d07a-topic.svg");
+  }
 }
 
 @mixin charmhub-p-icon-chat {

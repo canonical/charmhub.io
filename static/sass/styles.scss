@@ -1,10 +1,8 @@
 @charset 'UTF-8';
 
 $brand-color: #772953;
-$color-ubuntu-orange: #e95420;
-$color-accent: #00365c;
-$color-accent-background: #00365c;
 $color-text-orange: #d54110;
+$breakpoint-navigation-threshold: 1110px;
 
 // import cookie policy
 @import "@canonical/cookie-policy/build/css/cookie-policy";
@@ -44,6 +42,7 @@ $color-text-orange: #d54110;
 @include vf-p-search-box;
 @include vf-p-strip;
 @include vf-p-side-navigation;
+@include vf-p-side-navigation-expandable;
 @include vf-p-table-of-contents;
 @include vf-p-table-mobile-card;
 @include vf-p-tabs;
@@ -51,6 +50,7 @@ $color-text-orange: #d54110;
 @include vf-p-contextual-menu;
 @include vf-l-fluid-breakout;
 @include vf-p-icon-change-version;
+@include vf-p-icon-submit-bug;
 
 // Vanilla utilities
 @include vf-u-align;
@@ -138,10 +138,10 @@ $color-text-orange: #d54110;
 @include p-charmhub-topology;
 @import "pattern_l-fluid-breakout";
 @include l-charmhub-fluid-breakout;
-@import "pattern_p-subnav";
-@include p-charmhub-subnav;
 @import "charmhub_p-detail-inline-list";
 @include p-detail-inline-list;
+@include vf-l-application;
+@include vf-p-icon-status-waiting;
 
 // Remove table row borders
 .p-table--no-borders tr {
@@ -228,10 +228,6 @@ body {
 // https://github.com/canonical-web-and-design/vanilla-framework/issues/3172
 .has-no-arrow-mobile.p-tabs::after {
   content: "";
-}
-
-.global-nav .has-dropdown .global-nav__header-link-anchor {
-  display: none;
 }
 
 .package-card-icons {
@@ -455,4 +451,54 @@ h3 {
   @media (min-width: $breakpoint-large) {
     margin-left: $sp-large;
   }
+}
+
+.l-aside {
+  background-color: $color-x-light;
+  height: calc(100vh - 112px);
+  max-width: 535px;
+  padding: 1rem;
+  position: fixed;
+  z-index: 999;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.panel__header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.panel__content {
+  flex: 1 1 0;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.l-aside__overlay {
+  background-color: transparent;
+  height: 100%;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+@media only screen and (max-width: $breakpoint-large) {
+  .interface-sidebar {
+    order: 2;
+  }
+
+  .interface-content {
+    order: 1;
+  }
+}
+
+.u-split--3 {
+  columns: 3;
 }

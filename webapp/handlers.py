@@ -34,6 +34,7 @@ def set_handlers(app):
             "remove_filter": helpers.remove_filter,
             "account": account,
             "image": image_template,
+            "schedule_banner": helpers.schedule_banner,
         }
 
     # Error handlers

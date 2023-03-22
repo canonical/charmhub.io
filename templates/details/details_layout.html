@@ -1,6 +1,6 @@
 {% extends 'base_layout.html' %}
 
-{% block title %}Deploy {{ package.store_front["display-name"] }} using Charmhub - The Open Operator Collection{% endblock %}
+{% block meta_title %}Deploy {{ package.store_front["display-name"] }} using Charmhub - The Open Operator Collection{% endblock %}
 {% block meta_description %}Deploy the latest version of {{ package.store_front["display-name"] }} {% if package.store_front["deployable-on"]|length == 1 and package.store_front["deployable-on"][0] == "kubernetes" %}as a Kubernetes Operator {% endif %}on any cloud. {{ package.result.summary }}{% endblock %}
 {% block meta_image %}{% if package["store_front"]["icons"] %}https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_200,h_200/{{ package.store_front.icons[0] }}{% else %}https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg{% endif %}{% endblock %}
 {% block meta_twitter_card %}summary{% endblock %}
@@ -49,14 +49,14 @@
   <script src="{{ versioned_static('js/dist/highlight-js.js') }}" defer></script>
   <script>
     window.addEventListener("DOMContentLoaded", function () {
-      var codeblocks = Array.prototype.slice.call(document.querySelectorAll("pre code"));
-
-      codeblocks.forEach(function(block) {
-        charmhub.highlight.hljs.highlightBlock(block);
-      });
-
       charmhub.details.init("{{ package.name }}");
+
+      const codeBlocks = document.querySelectorAll(".js-readme-content code");
+      codeBlocks.forEach((codeBlock) => {
+        codeBlock.classList.add("language-bash");
+      });
+      Prism.highlightAll();
     });
-  </script>
+    </script>
   {% block details_scripts %}{% endblock details_scripts %}
 {% endblock %}

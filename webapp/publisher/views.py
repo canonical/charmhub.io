@@ -10,6 +10,7 @@ from flask import (
     session,
     url_for,
 )
+from flask.json import jsonify
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import login_required
 from webapp.helpers import get_licenses
@@ -54,6 +55,131 @@ def list_page():
     }
 
     return render_template("publisher/list.html", **context)
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaboration',
+    defaults={"path": ""},
+)
+@publisher.route(
+    '/<regex("'
+    + DETAILS_VIEW_REGEX
+    + '"):entity_name>/collaboration/<path:path>',
+)
+@login_required
+def collaboration(entity_name, path):
+    package = publisher_api.get_package_metadata(
+        session["account-auth"], "charm", entity_name
+    )
+    context = {
+        "package": package,
+    }
+    return render_template("publisher/collaboration.html", **context)
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaborators',
+)
+@login_required
+def get_collaborators(entity_name):
+    collaborators = publisher_api.get_collaborators(
+        session["account-auth"], entity_name
+    )
+    return jsonify(collaborators)
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites',
+)
+@login_required
+def get_pending_invites(entity_name):
+    pending_invites = publisher_api.get_pending_invites(
+        session["account-auth"], entity_name
+    )
+    return jsonify(pending_invites)
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invite',
+    methods=["POST"],
+)
+@login_required
+def invite_collaborators(entity_name):
+    collaborators = request.form.get("collaborators")
+
+    result = {}
+
+    try:
+        result = publisher_api.invite_collaborators(
+            session["account-auth"], entity_name, [collaborators]
+        )
+        response = "success"
+    except StoreApiResponseErrorList:
+        response = "error"
+        pass
+
+    return jsonify({"status": response, "result": result})
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaboration/accept',
+    methods=["POST"],
+)
+@login_required
+def accept_invite(entity_name):
+    token = request.form.get("token")
+    result = {}
+
+    try:
+        result = publisher_api.accept_invite(
+            session["account-auth"], entity_name, token
+        )
+        response = "success"
+    except StoreApiResponseErrorList:
+        response = "error"
+        pass
+
+    return jsonify({"status": response, "result": result})
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaboration/reject',
+    methods=["POST"],
+)
+@login_required
+def reject_invite(entity_name):
+    token = request.form.get("token")
+    result = {}
+
+    try:
+        result = publisher_api.reject_invite(
+            session["account-auth"], entity_name, token
+        )
+        response = "success"
+    except StoreApiResponseErrorList:
+        response = "error"
+        pass
+
+    return jsonify({"status": response, "result": result})
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites/revoke',
+    methods=["POST"],
+)
+@login_required
+def revoke_invite(entity_name):
+    collaborator = request.form.get("collaborator")
+    try:
+        publisher_api.revoke_invites(
+            session["account-auth"], entity_name, collaborator
+        )
+        response = "success"
+    except StoreApiResponseErrorList:
+        response = "error"
+        pass
+
+    return jsonify({"status": response})
 
 
 @publisher.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/listing')

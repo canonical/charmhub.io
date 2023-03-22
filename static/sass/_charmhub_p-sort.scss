@@ -14,7 +14,7 @@
     // set this to 10 to match the stick nav - it has to be greater than 2 (bundle icons use 2)
     z-index: 10;
 
-    @media screen and(min-width: $breakpoint-small) {
+    @media screen and (min-width: $breakpoint-small) {
       display: none;
     }
 

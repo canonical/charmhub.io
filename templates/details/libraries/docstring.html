@@ -14,294 +14,302 @@
     <div class="col-medium-5 col-7">
       <ul class="p-list">
         {% for group in docstrings['content'] %}
+          {% if not group["is_private"] %}
             <li class="p-list__item u-no-padding">
               <p class="u-no-margin--bottom">
                 <a href="#{{ group['name'].lower() }}">{% if group["type"].lower() == "function" %}def {{ group["name"] }}(
-                  {%- for arg in group["arguments"] -%}
+                  {% for arg in group["arguments"] %}
                     {{ arg.name }}{{ ", " if not loop.last else "" }}
-                  {%- endfor -%}
+                  {% endfor %}
                 ){% else %}{{ group["type"].lower() }} {{ group["name"] }}{% endif %}</a>
               </p>
             </li>
-          {% for item in group["content"] %}
-            <li class="p-list__item u-no-padding">
-              <ul class="p-list u-no-margin--bottom" style="margin-inline-start: 1.5rem;">
+            {% for item in group["content"] %}
+              {% if not item["is_private"] %}
                 <li class="p-list__item u-no-padding">
-                  <p class="u-no-margin--bottom">
-                    <a href="#{{ group['name'].lower() }}-{{ item['name'].lower() }}">{% if item["type"].lower() == "function" %}def {{ item["name"] }}(
-                      {%- for arg in item["arguments"] -%}
-                        {{ arg.name }}{{ ", " if not loop.last else "" }}
-                      {%- endfor -%}
-                    ){% else %}{{ item["type"].lower() }} {{ item["name"] }}{% endif %}</a>
-                  </p>
+                  <ul class="p-list u-no-margin--bottom" style="margin-inline-start: 1.5rem;">
+                    <li class="p-list__item u-no-padding">
+                      <p class="u-no-margin--bottom">
+                        <a href="#{{ group['name'].lower() }}-{{ item['name'].lower() }}">{% if item["type"].lower() == "function" %}def {{ item["name"] }}(
+                          {% for arg in item["arguments"] %}
+                            {{ arg.name }}{{ ", " if not loop.last else "" }}
+                          {%- endfor -%}
+                          ){% else %}{{ item["type"].lower() }} {{ item["name"] }}{% endif %}</a>
+                      </p>
+                    </li>
+                  </ul>
                 </li>
-              </ul>
-            </li>
-          {% endfor %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
         {% endfor %}
       </ul>
     </div>
   </div>
   <div class="p-docstring__docs">
     {% for group in docstrings['content'] %}
-      <div class="p-docstring-block">
-        <div class="p-docstring-block__header">
-          <h4 id="{{ group['name'].lower() }}" class="p-docstring-block__heading">
-            {% if group["type"].lower() == "function" %}
-              <span class="token keyword">def</span>
-              <span class="token function">{{ group["name"] }}(</span>
-              {%- if group["arguments"] -%}
-                {%- if group["arguments"]|length < 2 -%}
-                  {%- for arg in group["arguments"] -%}
-                    <span class="token string">{{ arg.name }}{% if arg.type %}: {{ arg.type }}{% endif %}{{ ", " if not loop.last else "" }}</span>
-                  {%- endfor -%}
-                {% else %}
-                  <br />
-                  {%- for arg in group["arguments"] -%}
-                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="token string">{{ arg.name }}{% if arg.type %}: {{ arg.type }}{% endif %}{{ ", " if not loop.last else "" }}</span>
+      {% if not group["is_private"] %}
+        <div class="p-docstring-block">
+          <div class="p-docstring-block__header">
+            <h4 id="{{ group['name'].lower() }}" class="p-docstring-block__heading">
+              {% if group["type"].lower() == "function" %}
+                <span class="token keyword">def</span>
+                <span class="token function">{{ group["name"] }}(</span>
+                {%- if group["arguments"] -%}
+                  {%- if group["arguments"]|length < 2 -%}
+                    {%- for arg in group["arguments"] -%}
+                      <span class="token string">{{ arg.name }}{% if arg.type %}: {{ arg.type }}{% endif %}{{ ", " if not loop.last else "" }}</span>
+                    {%- endfor -%}
+                  {% else %}
                     <br />
-                  {%- endfor -%}
+                    {%- for arg in group["arguments"] -%}
+                      &nbsp;&nbsp;&nbsp;&nbsp;<span class="token string">{{ arg.name }}{% if arg.type %}: {{ arg.type }}{% endif %}{{ ", " if not loop.last else "" }}</span>
+                      <br />
+                    {%- endfor -%}
+                  {%- endif -%}
                 {%- endif -%}
-              {%- endif -%}
-              <span class="token function">)</span>
+                <span class="token function">)</span>
               {% elif group["type"].lower() == "class" %}
-              <span class="token keyword">{{ group["type"].lower() }}</span>
-              <span class="token class-name">{{ group["name"] }}</span>
+                <span class="token keyword">{{ group["type"].lower() }}</span>
+                <span class="token class-name">{{ group["name"] }}</span>
+              {% endif %}
+            </h4>
+            {% if group.description.short %}
+              <p class="p-docstring-block__short-description u-no-margin--bottom">{{ group.description.short }}</p>
             {% endif %}
-          </h4>
-        {% if group.description.short %}
-          <p class="p-docstring-block__short-description u-no-margin--bottom">{{ group.description.short }}</p>
-        {% endif %}
-        </div>
+          </div>
           {% if group.params.arguments %}
-          <div class="p-docstring-block__group">
+            <div class="p-docstring-block__group">
               <div class="row">
                 <div class="col-medium-1 col-2 col-x-large-1">
                   <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Arguments</p>
                 </div>
                 <div class="col-medium-5 col-6 col-x-large-7">
                   {% for argument in group.params.arguments %}
-                  <div class="row p-docstring-block__arg-block">
-                    {% if argument.name %}
-                    <div class="col-3 col-x-large-3 p-code p-text--dense">
-                        <span class="token string">{{ argument.name }}</span>
-                        {% if argument.type_name %}
-                        <span class="token comment">({{ argument.type_name }})</span>
-                        {% endif %}
+                    <div class="row p-docstring-block__arg-block">
+                      {% if argument.name %}
+                        <div class="col-3 col-x-large-3 p-code p-text--dense">
+                          <span class="token string">{{ argument.name }}</span>
+                          {% if argument.type_name %}
+                            <span class="token comment">({{ argument.type_name }})</span>
+                          {% endif %}
+                        </div>
+                      {% endif %}
+                      {% if argument.description %}
+                        <div class="col-3 col-x-large-4 p-text--dense">{{ argument.description }}</div>
+                      {% endif %}
                     </div>
-                    {% endif %}
-                    {% if argument.description %}
-                      <div class="col-3 col-x-large-4 p-text--dense">{{ argument.description }}</div>
-                    {% endif %}
-                  </div>
                   {% endfor %}
                 </div>
               </div>
-          </div>
+            </div>
           {% endif %}
           {% if group.params.attributes %}
-          <div class="p-docstring-block__group">
-            <div class="row">
-              <div class="col-medium-1 col-2 col-x-large-1">
-                <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Attributes</p>
-              </div>
-              <div class="col-medium-5 col-6 col-x-large-7">
-                {% for attribute in group.params.attributes %}
-                  <div class="row p-docstring-block__arg-block">
-                    {% if attribute.name or attribute.type_name %}
-                      <div class="col-3 col-x-large-3 p-code p-text--dense">
-                        {% if attribute.name %}
-                        <span class="token keyword">{{ attribute.name }}</span>
-                        {% endif %}
-                        {% if attribute.type_name %}
-                        <span class="token comment">({{ attribute.type_name }})</span>
-                        {% endif %}
-                      </div>
-                    {% endif %}
-                    {% if attribute.description %}
-                      <div class="col-3 col-x-large-4 p-text--dense">{{ attribute.description }}</div>
-                    {% endif %}
-                  </div>
-                {% endfor %}
+            <div class="p-docstring-block__group">
+              <div class="row">
+                <div class="col-medium-1 col-2 col-x-large-1">
+                  <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Attributes</p>
+                </div>
+                <div class="col-medium-5 col-6 col-x-large-7">
+                  {% for attribute in group.params.attributes %}
+                    <div class="row p-docstring-block__arg-block">
+                      {% if attribute.name or attribute.type_name %}
+                        <div class="col-3 col-x-large-3 p-code p-text--dense">
+                          {% if attribute.name %}
+                            <span class="token keyword">{{ attribute.name }}</span>
+                          {% endif %}
+                          {% if attribute.type_name %}
+                            <span class="token comment">({{ attribute.type_name }})</span>
+                          {% endif %}
+                        </div>
+                      {% endif %}
+                      {% if attribute.description %}
+                        <div class="col-3 col-x-large-4 p-text--dense">{{ attribute.description }}</div>
+                      {% endif %}
+                    </div>
+                  {% endfor %}
+                </div>
               </div>
             </div>
-          </div>
           {% endif %}
           {% if group.params.returns %}
-          <div class="p-docstring-block__group">
-            <div class="row">
-              <div class="col-medium-1 col-2 col-x-large-1">
-                <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Returns</p>
-              </div>
-              <div class="col-medium-5 col-6 col-x-large-7">
-                {% if group.params.returns.name %}
-                <div class="row p-docstring-block__arg-block">
-                  <div class="col-3 col-x-large-3 p-code p-text--dense">
-                    <span class="token string">{{ group.params.returns.name }}</span>
-                    {% if group.params.returns.type_name %}
-                    <span class="token comment">({{ group.params.returns.type_name }})</span>
-                    {% endif %}
-                  </div>
+            <div class="p-docstring-block__group">
+              <div class="row">
+                <div class="col-medium-1 col-2 col-x-large-1">
+                  <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Returns</p>
                 </div>
-                {% endif %}
-                {% if group.params.returns.description %}
-                  <div class="col-3 col-x-large-4 p-text--dense">{{ group.params.returns.description }}</div>
-                {% endif %}
+                <div class="col-medium-5 col-6 col-x-large-7">
+                  {% if group.params.returns.name %}
+                    <div class="row p-docstring-block__arg-block">
+                      <div class="col-3 col-x-large-3 p-code p-text--dense">
+                        <span class="token string">{{ group.params.returns.name }}</span>
+                        {% if group.params.returns.type_name %}
+                          <span class="token comment">({{ group.params.returns.type_name }})</span>
+                        {% endif %}
+                      </div>
+                    </div>
+                  {% endif %}
+                  {% if group.params.returns.description %}
+                    <div class="col-3 col-x-large-4 p-text--dense">{{ group.params.returns.description }}</div>
+                  {% endif %}
+                </div>
               </div>
             </div>
-          </div>
           {% endif %}
           {% if group.description.long %}
-          <div class="p-docstring-block__group">
-            <div class="row">
-              <div class="col-medium-1 col-2 col-x-large-1">
-                <p class="p-text--x-small-capitalised u-align-text--small-to-default -u-no-margin--bottom">Description</p>
-              </div>
-              <div class="col-medium-5 col-6 col-x-large-7">
-                <p>{{ group.description.long }}</p>
+            <div class="p-docstring-block__group">
+              <div class="row">
+                <div class="col-medium-1 col-2 col-x-large-1">
+                  <p class="p-text--x-small-capitalised u-align-text--small-to-default -u-no-margin--bottom">Description</p>
+                </div>
+                <div class="col-medium-5 col-6 col-x-large-7">
+                  <p>{{ group.description.long }}</p>
+                </div>
               </div>
             </div>
-          </div>
           {% endif %}
           {% if group["content"] %}
-          <div class="p-docstring-block__group">
-            <div class="row">
-              <div class="col-medium-1 col-2 col-x-large-1">
-                <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Methods</p>
-              </div>
-              <div class="col-medium-5 col-6 col-x-large-7">
-              {% for item in group["content"] %}
-                <div class="p-docstring-block--nested">
-                  <div class="p-docstring-block__header">
-                    <p id="{{ group['name'].lower() }}-{{ item['name'].lower() }}" class="p-code u-no-margin--bottom">
-                      {% if item["type"].lower() == "function" %}
-                        <span class="token keyword">{{ group["name"] }}.</span>
-                        <span class="token function u-no-horizontal-space">{{ item["name"] }}(</span>
-                        {% for arg in item["arguments"] %}
-                          <span class="token string u-no-horizontal-space">
-                            {% if arg.name == "self" %}<em>{% endif %}
-                            {% if loop.index <= loop.length and loop.index > 1 %},{% endif %}
-                            {{ arg.name }}{% if arg.type %}: {{ arg.type }}{% endif %}
-                            {% if arg.name == "self" %}</em>{% endif %}
-                          </span>
-                        {% endfor %}
-                        <span class="token function u-no-horizontal-space">)</span>
-                      {% elif item["type"].lower() == "class" %}
-                        <span class="token keyword">{{ group["name"] }}.</span>
-                        <span class="token function">{{ item["name"] }}</span>
-                      {% endif %}
-                    </p>
-                    {% if item.description.short %}
-                      <p class="u-no-margin--bottom">{{ item.description.short }}</p>
-                    {% endif %}
-                  </div>
-                  {% if item.params.arguments %}
-                  <div class="p-docstring-block__group">
-                      <div class="row">
-                        <div class="col-2 col-x-large-1">
-                          <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Arguments</p>
+            <div class="p-docstring-block__group">
+              <div class="row">
+                <div class="col-medium-1 col-2 col-x-large-1">
+                  <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Methods</p>
+                </div>
+                <div class="col-medium-5 col-6 col-x-large-7">
+                  {% for item in group["content"] %}
+                    {% if not item["is_private"] %}
+                      <div class="p-docstring-block--nested">
+                        <div class="p-docstring-block__header">
+                          <p id="{{ group['name'].lower() }}-{{ item['name'].lower() }}" class="p-code u-no-margin--bottom">
+                            {% if item["type"].lower() == "function" %}
+                              <span class="token keyword">{{ group["name"] }}.</span>
+                              <span class="token function u-no-horizontal-space">{{ item["name"] }}(</span>
+                              {% for arg in item["arguments"] %}
+                                <span class="token string u-no-horizontal-space">
+                                  {% if arg.name == "self" %}<em>{% endif %}
+                                  {% if loop.index <= loop.length and loop.index > 1 %},{% endif %}
+                                  {{ arg.name }}{% if arg.type %}: {{ arg.type }}{% endif %}
+                                  {% if arg.name == "self" %}</em>{% endif %}
+                                </span>
+                              {% endfor %}
+                              <span class="token function u-no-horizontal-space">)</span>
+                            {% elif item["type"].lower() == "class" %}
+                              <span class="token keyword">{{ group["name"] }}.</span>
+                              <span class="token function">{{ item["name"] }}</span>
+                            {% endif %}
+                          </p>
+                          {% if item.description.short %}
+                            <p class="u-no-margin--bottom">{{ item.description.short }}</p>
+                          {% endif %}
                         </div>
-                        <div class="col-4 col-x-large-6">
-                          {% for argument in item.params.arguments %}
-                            <div class="row p-docstring-block__arg-block">
-                              {% if argument.name or argument.type_name %}
-                                <div class="col-2 col-x-large-2 p-code p-text--dense">
-                                  {% if argument.name %}
-                                  <span class="token string">{{ argument.name }}</span>
+                        {% if item.params.arguments %}
+                          <div class="p-docstring-block__group">
+                            <div class="row">
+                              <div class="col-2 col-x-large-1">
+                                <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Arguments</p>
+                              </div>
+                              <div class="col-4 col-x-large-6">
+                                {% for argument in item.params.arguments %}
+                                  <div class="row p-docstring-block__arg-block">
+                                    {% if argument.name or argument.type_name %}
+                                      <div class="col-2 col-x-large-2 p-code p-text--dense">
+                                        {% if argument.name %}
+                                          <span class="token string">{{ argument.name }}</span>
+                                        {% endif %}
+                                        {% if argument.type_name %}
+                                          <span class="token comment">({{ argument.type_name }})</span>
+                                        {% endif %}
+                                      </div>
+                                    {% endif %}
+                                    {% if argument.description %}
+                                      <div class="col-2 col-x-large-4 p-text--dense">{{ argument.description }}</div>
+                                    {% endif %}
+                                  </div>
+                                {% endfor %}
+                              </div>
+                            </div>
+                          </div>
+                        {% endif %}
+                        {% if item.params.attributes %}
+                          <div class="p-docstring-block__group">
+                            <div class="row">
+                              <div class="col-2 col-x-large-1 p-docstring__attribute">
+                                <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Attributes</p>
+                              </div>
+                              <div class="col-4 col-x-large-7">
+                                {% for attribute in item.params.attributes %}
+                                  <div class="row">
+                                    {% if attribute.name or attribute.type_name %}
+                                      <div class="col-2 col-x-large-1">
+                                        <p class="p-code{% if loop.index < loop.length %} p-text--dense{% endif %}">
+                                          {% if attribute.name %}
+                                            <span class="token keyword">{{ attribute.name }}</span>
+                                          {% endif %}
+                                          {% if attribute.type_name %}
+                                            <span class="token comment">({{ attribute.type_name }})</span>
+                                          {% endif %}
+                                        </p>
+                                      </div>
+                                    {% endif %}
+                                    {% if attribute.description %}
+                                      <div class="col-2 col-x-large-3">
+                                        <p class="p-text--dense">{{ attribute.description }}</p>
+                                      </div>
+                                    {% endif %}
+                                  </div>
+                                {% endfor %}
+                              </div>
+                            </div>
+                          </div>
+                        {% endif %}
+                        {% if item.params.returns %}
+                          <div class="p-docstring-block__group">
+                            <div class="row">
+                              <div class="col-medium-1 col-2 col-x-large-1">
+                                <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Returns</p>
+                              </div>
+                              <div class="col-medium-5 col-4 col-x-large-6">
+                                <div class="row">
+                                  {% if item.params.returns.name %}
+                                    <div class="col-2 col-x-large-1 p-code p-text--dense">
+                                      <span class="token string">{{ item.params.returns.name }}</span>
+                                    </div>
                                   {% endif %}
-                                  {% if argument.type_name %}
-                                  <span class="token comment">({{ argument.type_name }})</span>
+                                  {% if item.params.returns.type_name %}
+                                    <div class="col-2 col-x-large-2 p-code p-text--dense">
+                                      <span class="token string">{{ item.params.returns.type_name }}</span>
+                                    </div>
+                                  {% endif %}
+                                  {% if item.params.returns.description %}
+                                    <div class="col-2 col-x-large-4 p-text--dense">
+                                      {{ item.params.returns.description }}
+                                    </div>
                                   {% endif %}
                                 </div>
-                              {% endif %}
-                              {% if argument.description %}
-                                <div class="col-2 col-x-large-4 p-text--dense">{{ argument.description }}</div>
-                              {% endif %}
+                              </div>
                             </div>
-                          {% endfor %}
-                        </div>
-                      </div>
-                  </div>
-                  {% endif %}
-                  {% if item.params.attributes %}
-                  <div class="p-docstring-block__group">
-                    <div class="row">
-                      <div class="col-2 col-x-large-1 p-docstring__attribute">
-                        <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Attributes</p>
-                      </div>
-                      <div class="col-4 col-x-large-7">
-                        {% for attribute in item.params.attributes %}
-                          <div class="row">
-                            {% if attribute.name or attribute.type_name %}
-                            <div class="col-2 col-x-large-1">
-                              <p class="p-code{% if loop.index < loop.length %} p-text--dense{% endif %}">
-                                {% if attribute.name %}
-                                <span class="token keyword">{{ attribute.name }}</span>
-                                {% endif %}
-                                {% if attribute.type_name %}
-                                <span class="token comment">({{ attribute.type_name }})</span>
-                                {% endif %}
-                              </p>
+                          </div>
+                        {% endif %}
+                        {% if item.description.long %}
+                          <div class="p-docstring-block__group">
+                            <div class="row">
+                              <div class="col-medium-1 col-2 col-x-large-1">
+                                <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Description</p>
+                              </div>
+                              <div class="col-medium-5 col-4 col-x-large-6 p-text--dense">
+                                {{ item.description.long }}
+                              </div>
                             </div>
-                            {% endif %}
-                            {% if attribute.description %}
-                            <div class="col-2 col-x-large-3">
-                              <p class="p-text--dense">{{ attribute.description }}</p>
-                            </div>
-                            {% endif %}
                           </div>
-                        {% endfor %}
+                        {% endif %}
                       </div>
-                    </div>
-                  </div>
-                  {% endif %}
-                  {% if item.params.returns %}
-                  <div class="p-docstring-block__group">
-                    <div class="row">
-                      <div class="col-medium-1 col-2 col-x-large-1">
-                        <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Returns</p>
-                      </div>
-                      <div class="col-medium-5 col-4 col-x-large-6">
-                        <div class="row">
-                          {% if item.params.returns.name %}
-                          <div class="col-2 col-x-large-1 p-code p-text--dense">
-                            <span class="token string">{{ item.params.returns.name }}</span>
-                          </div>
-                          {% endif %}
-                          {% if item.params.returns.type_name %}
-                          <div class="col-2 col-x-large-2 p-code p-text--dense">
-                              <span class="token string">{{ item.params.returns.type_name }}</span>
-                          </div>
-                          {% endif %}
-                          {% if item.params.returns.description %}
-                          <div class="col-2 col-x-large-4 p-text--dense">
-                            {{ item.params.returns.description }}
-                          </div>
-                          {% endif %}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {% endif %}
-                  {% if item.description.long %}
-                  <div class="p-docstring-block__group">
-                    <div class="row">
-                      <div class="col-medium-1 col-2 col-x-large-1">
-                        <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Description</p>
-                      </div>
-                      <div class="col-medium-5 col-4 col-x-large-6 p-text--dense">
-                        {{ item.description.long }}
-                      </div>
-                    </div>
-                  </div>
-                  {% endif %}
+                    {% endif %}
+                  {% endfor %}
                 </div>
-              {% endfor %}
               </div>
             </div>
-          </div>
           {% endif %}
-      </div>
+        </div>
+      {% endif %}
     {% endfor %}
   </div>
 </div>

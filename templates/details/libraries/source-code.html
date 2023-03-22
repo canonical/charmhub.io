@@ -5,7 +5,7 @@
 {% block libraries_content %}
 
 <div data-js="tab-content">
-  <pre id="python-code"><code>{{ library["content"] }}</code></pre>
+  <pre><code class="language-python">{{ library["content"] }}</code></pre>
 </div>
 
 {% endblock%}
@@ -16,8 +16,8 @@
 
 <script src="{{ versioned_static('js/dist/highlight-js.js') }}" defer></script>
 <script>
-  window.addEventListener("DOMContentLoaded", function () {
-    charmhub.highlight.hljs.highlightBlock(document.getElementById('python-code'));
+  window.addEventListener("DOMContentLoaded", () => {
+    Prism.highlightAll();
   });
 </script>
 {% endblock %}

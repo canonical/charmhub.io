@@ -1,0 +1,9 @@
+{% extends 'base_layout.html' %}
+
+{% block meta_title %}Interface catalogue{% endblock %}
+{% block meta_description %}Interfaces describe the relation between two charms. This interface catalogue shows opinionated, standardized interface specifications for charmed operator relations.{% endblock %}
+
+{% block content %}
+<main id="main-content"></main>
+<script src="{{ versioned_static('js/dist/interfaces.js') }}"></script>
+{% endblock %}

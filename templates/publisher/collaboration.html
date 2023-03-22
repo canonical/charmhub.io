@@ -1,0 +1,17 @@
+{% extends 'publisher/publisher_layout.html' %}
+
+{% block title %}Collaboration details for {{ package.name }}{% endblock %}
+{% block meta_copydoc %}{% endblock meta_copydoc %}
+{% block meta_description %}{% endblock %}
+
+{% set selected_tab='collaboration' %}
+
+{% block publisher_content %}
+  <main id="main-content"></main>
+
+  <script>
+    window.PACKAGE_NAME = "{{ package.name }}";
+    window.CSRF_TOKEN = "{{ csrf_token() }}";
+  </script>
+  <script src="{{ versioned_static('js/dist/collaborator.js') }}"></script>
+{% endblock %}
