@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Blueprint, render_template, make_response, current_app as app
 from github import Github
 from os import getenv
@@ -64,7 +65,11 @@ def all_interfaces(path):
 @interfaces.route("/interfaces/<interface>.json")
 def single_interface(interface):
     content = get_interface_cont_from_repo(interface, "README.md")
+    last_modified = datetime.strptime(
+        content[0].last_modified, "%a, %d %b %Y %H:%M:%S %Z"
+    ).isoformat()
     version = get_latest_version(interface)
+
     try:
         readme = content[0].decoded_content.decode("utf-8")
         api = app.store_api
@@ -80,6 +85,7 @@ def single_interface(interface):
             "providers": other_providers,
             "requirers": other_requirers,
         }
+        res["last_modified"] = last_modified
 
         response = make_response(res)
         response.cache_control.max_age = "36000"
