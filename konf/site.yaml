@@ -8,6 +8,11 @@ env:
       key: maintenance
       name: charmhub
 
+  - name: ENVIRONMENT
+    configMapKeyRef:
+      key: environment
+      name: environment
+
   - name: SENTRY_DSN
     value: https://6cacb25de947478faeb57f3836da1cf3@sentry.is.canonical.com//24
 
