@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from flask import Blueprint, render_template, make_response, current_app as app
 from github import Github
 from os import getenv
@@ -57,7 +58,7 @@ def interfaces_json():
 @interfaces.route("/interfaces", defaults={"path": ""})
 @interfaces.route("/interfaces/<path:path>")
 def all_interfaces(path):
-    if getenv("ENVIRONMENT") == "production":
+    if not getenv("ENVIRONMENT") in ["devel", "staging"]:
         return render_template("404.html")
     return render_template("interfaces/index.html")
 
