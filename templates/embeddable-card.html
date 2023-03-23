@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://assets.ubuntu.com">
 
   {% if store_design %}
-  <link rel="stylesheet" type="text/css" media="screen" href="/static/css/styles.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="{{url_for('static', filename='css/styles.css')}}" />
   {% else %}
   <link rel="stylesheet" type="text/css" media="screen" href="{{ versioned_static('css/styles-embedded.css') }}" />
   {% endif %}
