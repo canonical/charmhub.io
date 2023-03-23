@@ -9,7 +9,7 @@ from canonicalwebteam.store_api.exceptions import StoreApiResponseErrorList
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
 from flask import Blueprint, Response, abort
 from flask import current_app as app
-from flask import jsonify, redirect, render_template, request
+from flask import jsonify, redirect, render_template, request, make_response
 from pybadges import badge
 
 from webapp.config import DETAILS_VIEW_REGEX, CATEGORIES
@@ -851,3 +851,10 @@ def get_charms_from_bundle(entity_name):
         return "Requested object should be a bundle", 400
 
     return jsonify({"charms": package["store_front"]["bundle"]["charms"]})
+
+
+@store.route("/beta-store")
+def beta_store_index():
+    response = make_response(render_template("beta/store.html"))
+    response.headers["X-Robots-Tag"] = "noindex"
+    return response
