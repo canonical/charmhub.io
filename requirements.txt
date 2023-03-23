@@ -5,6 +5,7 @@ canonicalwebteam.discourse==5.2.4
 canonicalwebteam.image-template==1.3.1
 canonicalwebteam.store-api==4.1.0
 canonicalwebteam.docstring-extractor==1.2.0
+canonicalwebteam.store-base==0.0.1
 Flask-WTF==1.0.1
 humanize==4.4.0
 mistune==2.0.4
@@ -16,4 +17,3 @@ ruamel.yaml==0.17.21
 PyGithub==1.57
 black==22.12.0
 flake8==6.0.0
-git+https://git@github.com/codeEmpress1/canonicalwebteam.store-base.git@2de63df0534743f9808bea8e8a166ea1425f27fd#egg=canonicalwebteam_store_base
