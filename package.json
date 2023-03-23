@@ -31,7 +31,7 @@
     "@canonical/cookie-policy": "3.4.0",
     "@canonical/global-nav": "3.2.3",
     "@canonical/react-components": "0.37.6",
-    "@canonical/store-components": "0.6.0",
+    "@canonical/store-components": "0.7.0",
     "@types/react-dom": "^18.0.6",
     "@types/react-router-dom": "5.3.3",
     "autoprefixer": "10.4.13",

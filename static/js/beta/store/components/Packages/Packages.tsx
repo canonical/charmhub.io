@@ -112,7 +112,7 @@ function Packages() {
         </Col>
         <Col size={9}>
           {packages.length > 0 ? (
-            <CardList packages={packages} itemsPerPage={12} />
+            <CardList packages={packages} />
           ) : (
             <Row>
               <h2>Loading packages...</h2>
