@@ -31,7 +31,7 @@ github_client = Github(GITHUB_TOKEN)
 def interfaces_json():
     repo = github_client.get_repo("canonical/charm-relation-interfaces")
     readme = repo.get_contents("README.md").decoded_content.decode("utf-8")
-    
+
     interfaces = get_public_interfaces_from_readme(readme)
 
     for i, inter in enumerate(interfaces):

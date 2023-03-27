@@ -65,9 +65,11 @@ def find_between(s, first, last):
 def get_public_interfaces_from_readme(readme):
     """
     This function will return a list of interfaces from
-    a Markdown table. 
+    a Markdown table.
     """
-    table_content = readme.split("## Public Interfaces\n")[1].split("## Project-internal Interfaces\n")[0]
+    table_content = readme.split("## Public Interfaces\n")[1].split(
+        "## Project-internal Interfaces\n"
+    )[0]
     lines = table_content.split("\n")
 
     data = []
