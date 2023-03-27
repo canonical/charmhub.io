@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import ReactMarkdown from "react-markdown";
 import remarkMermaid from "remark-mermaidjs";
+import { formatDistance } from "date-fns";
 import {
   Strip,
   Row,
@@ -46,6 +47,7 @@ type InterfaceData = {
   };
   name: string;
   version: string;
+  last_modified: string | null;
 };
 
 const getCharms = async (interfaceName: string): Promise<InterfaceData> => {
@@ -62,6 +64,7 @@ const getCharms = async (interfaceName: string): Promise<InterfaceData> => {
       Provider: [""],
       Requirer: [""],
     },
+    last_modified: null,
   };
 
   if (!!(requiresJson?.packages?.length || providesJson?.packages?.length)) {
@@ -218,12 +221,14 @@ function InterfaceDetails() {
                 </a>
               </p>
               {!isCommunity && (
-              <p>
-                <a href={`https://github.com/canonical/charm-relation-interfaces/tree/main/interfaces/${interfaceName}`}>
-                  <i className="p-icon--archive"></i>
-                  &nbsp;&nbsp;Specification archive
-                </a>
-              </p>
+                <p>
+                  <a
+                    href={`https://github.com/canonical/charm-relation-interfaces/tree/main/interfaces/${interfaceName}`}
+                  >
+                    <i className="p-icon--archive"></i>
+                    &nbsp;&nbsp;Specification archive
+                  </a>
+                </p>
               )}
               {!isCommunity && (
                 <>
@@ -498,10 +503,20 @@ function InterfaceDetails() {
                 </>
               )}
               <Notification severity="information">
-                <a href="https://github.com/canonical/charm-relation-interfaces">
-                  Help us improve this page
-                </a>
-                .
+                <>
+                  {interfaceData.last_modified &&
+                    `Last updated ${formatDistance(
+                      new Date(interfaceData.last_modified),
+                      new Date(),
+                      {
+                        addSuffix: true,
+                      }
+                    )}.`}{" "}
+                  <a href="https://github.com/canonical/charm-relation-interfaces">
+                    Help us improve this page
+                  </a>
+                  .
+                </>
               </Notification>
             </Col>
           </Row>

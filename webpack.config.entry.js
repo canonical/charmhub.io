@@ -23,4 +23,5 @@ module.exports = {
   "icon-validator": "./static/js/src/public/icon-validator/index.tsx",
   collaborator: "./static/js/src/publisher/collaborator/index.tsx",
   interfaces: "./static/js/src/interfaces/index.tsx",
+  "beta-store": "./static/js/beta-store/index.tsx",
 };

@@ -75,7 +75,7 @@
     <script src="{{ versioned_static('js/dist/base.js') }}"></script>
     <script src="{{ versioned_static('js/dist/navigation-events.js') }}"></script>
 
-    <script src="/static/js/build/global-nav/global-nav.js"></script>
+    <script src="{{url_for('static', filename='js/build/global-nav/global-nav.js')}}"></script>
     <script>
       canonicalGlobalNav.createNav({ breakpoint: 1110 });
     </script>

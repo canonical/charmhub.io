@@ -9,7 +9,7 @@ from canonicalwebteam.store_api.exceptions import StoreApiResponseErrorList
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
 from flask import Blueprint, Response, abort
 from flask import current_app as app
-from flask import jsonify, redirect, render_template, request
+from flask import jsonify, redirect, render_template, request, make_response
 from pybadges import badge
 
 from webapp.config import DETAILS_VIEW_REGEX, CATEGORIES
@@ -20,22 +20,12 @@ from webapp.decorators import (
 from webapp.helpers import discourse_api
 from webapp.store import logic
 from webapp.topics.views import topic_list
+from webapp.config import SEARCH_FIELDS
 
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
 )
 publisher_api = CharmPublisher(talisker.requests.get_session())
-
-SEARCH_FIELDS = [
-    "result.categories",
-    "result.summary",
-    "result.media",
-    "result.title",
-    "result.publisher.display-name",
-    "default-release.revision.revision",
-    "default-release.channel",
-    "result.deployable-on",
-]
 
 
 @store.route("/")
@@ -457,7 +447,6 @@ def details_library(entity_name, library_name):
         abort(404)
 
     library = publisher_api.get_charm_library(entity_name, library_id)
-
     docstrings = logic.process_python_docs(library, module_name=library_name)
 
     # Charmcraft string to fetch the library
@@ -862,3 +851,10 @@ def get_charms_from_bundle(entity_name):
         return "Requested object should be a bundle", 400
 
     return jsonify({"charms": package["store_front"]["bundle"]["charms"]})
+
+
+@store.route("/beta-store")
+def beta_store_index():
+    response = make_response(render_template("beta/store.html"))
+    response.headers["X-Robots-Tag"] = "noindex"
+    return response
