@@ -139,7 +139,6 @@ def details_overview(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
 
     extra_fields = [
-        "default-release.revision.readme-md",
         "result.bugs-url",
         "result.website",
         "result.summary",
@@ -158,7 +157,9 @@ def details_overview(entity_name):
 
     if not package["store_front"]["docs_topic"]:
         navigation = None
+        description = package["store_front"]["metadata"]["description"]
     else:
+
         docs_url_prefix = f"/{package['name']}/docs"
 
         docs = DocParser(
@@ -167,10 +168,10 @@ def details_overview(entity_name):
             url_prefix=docs_url_prefix,
         )
         docs.parse()
-
         topic = docs.index_topic
 
-        docs.parse_topic(topic)
+        docs_content = docs.parse_topic(topic)
+        description = docs_content.get("body_html", "")
 
         navigation = docs.navigation
 
@@ -220,14 +221,7 @@ def details_overview(entity_name):
             ]
 
         context["navigation"] = navigation
-
-    readme = package["default-release"]["revision"].get(
-        "readme-md", "No readme available"
-    )
-
-    readme = logic.parse_readme(readme, channel_request)
-
-    context["readme"] = readme
+    context["description"] = description
     context["package_type"] = package["type"]
 
     return render_template("details/overview.html", **context)
