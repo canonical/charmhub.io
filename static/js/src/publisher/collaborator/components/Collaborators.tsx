@@ -167,7 +167,7 @@ function Collaborators() {
   return (
     <div className="l-application">
       <div className="l-main">
-        <Strip>
+        <Strip shallow>
           {showRevokeSuccess && (
             <Notification
               severity="positive"
