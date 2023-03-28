@@ -62,13 +62,14 @@ def find_between(s, first, last):
         return ""
 
 
-def get_interfaces_from_mrkd_table(content):
+def get_public_interfaces_from_readme(readme):
     """
     This function will return a list of interfaces from
-    a Markdown table. The table needs to start with
-    "| Interface"
+    a Markdown table.
     """
-    table_content = content.split("\n## Interfaces")[-1].strip("\n")
+    table_content = readme.split("## Public Interfaces\n")[1].split(
+        "## Project-internal Interfaces\n"
+    )[0]
     lines = table_content.split("\n")
 
     data = []
@@ -76,11 +77,13 @@ def get_interfaces_from_mrkd_table(content):
 
     # Get data from table
     for i, l in enumerate(lines):
-        if i == 0:
+        if l == "":
+            continue
+        if i == 1:
             keys = [
                 _i.strip().lower().replace(" ", "_") for _i in l.split("|")
             ]
-        elif i == 1 or not l.startswith("|"):
+        elif l.startswith("|") and i == 2:
             continue
         else:
             data.append(
