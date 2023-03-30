@@ -460,6 +460,10 @@ h3 {
   padding: 1rem;
   position: fixed;
   z-index: 999;
+
+  .l-application & {
+    z-index: 1000;
+  }
 }
 
 .panel {
