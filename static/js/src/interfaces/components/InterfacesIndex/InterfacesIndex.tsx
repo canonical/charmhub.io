@@ -185,12 +185,20 @@ function InterfacesIndex() {
                           justifyContent: "space-between",
                         }}
                       >
-                        <Link to={`/interfaces/${item?.name}`}>
-                          {item?.name}
-                        </Link>
-                        {item?.status !== "Live" && (
-                          <StatusLabel>{item?.status}</StatusLabel>
-                        )}
+                        {(item?.status === "Live") 
+                          ? <Link to={`/interfaces/${item?.name}`}>
+                              {item?.name}
+                            </Link>
+                          : (
+                            <>
+                              <Link to={`/interfaces/${item?.name}/${item?.status.toLowerCase()}`}>
+                                {item?.name}
+                              </Link>
+                              <StatusLabel>{item?.status}</StatusLabel>
+                            </>
+                          )
+                        }
+                        
                       </div>
                     ),
                   },

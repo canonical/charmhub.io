@@ -8,25 +8,28 @@ github_client = Github(GITHUB_TOKEN)
 repo = github_client.get_repo("canonical/charm-relation-interfaces")
 
 
-def get_latest_version(interface):
-    path = "interfaces/{}".format(interface)
-    all_versions = repo.get_contents(path)
-    latest_version = all_versions[-1].path.split("/")[-1]
-    return latest_version
+def get_interface_latest_version(interfaces, interface, status):
+    inter = [i for i in interfaces if i["name"] == interface and i["status"].lower() == status]
+    if inter:
+        latest_version = min(inter, key=lambda x: x["version"])
+        return latest_version["version"]
+    else:
+        return None
 
 
-def get_interface_cont_from_repo(interface, content_type):
-    latest_version = get_latest_version(interface)
-    interface_path = "interfaces/{}/{}".format(interface, latest_version)
+def get_interface_cont_from_repo(interfaces, interface, status, content_type):
+    version = get_interface_latest_version(interfaces, interface, status)
+    interface_path = "interfaces/{}/v{}".format(interface, version)
     interface_content = repo.get_contents(interface_path)
+
     content = [
         path for path in interface_content if path.path.endswith(content_type)
     ]
     return content
 
 
-def get_interface_yml(interface):
-    content = get_interface_cont_from_repo(interface, "charms.yaml")
+def get_interface_yml(interfaces, interface, status):
+    content = get_interface_cont_from_repo(interfaces, interface, status, "charms.yaml")
     if content:
         cont = content[0].decoded_content.decode("utf-8")
         response = get_dict_from_yaml(cont)
@@ -74,7 +77,6 @@ def get_public_interfaces_from_readme(readme):
 
     data = []
     keys = []
-
     # Get data from table
     for i, l in enumerate(lines):
         if l == "":

@@ -86,10 +86,19 @@ const getCharms = async (interfaceName: string): Promise<InterfaceData> => {
 };
 
 const getInterface = async (
-  interfaceName: string | undefined
+  interfaceName: string | undefined,
+  interfaceStatus: string | undefined
 ): Promise<InterfaceData> => {
+
   if (interfaceName) {
-    const response = await fetch(`./${interfaceName}.json`);
+    let response;
+    if (interfaceStatus === "draft") {
+      response = await fetch(`./${interfaceName}.json/${interfaceStatus}`);
+      if (response.status === 404) {
+        response = await fetch(`./${interfaceName}.json`); 
+      }
+    }
+    response = await fetch(`./${interfaceName}.json`);
     if (response.status === 200) {
       return response.json();
     }
@@ -99,7 +108,7 @@ const getInterface = async (
 };
 
 function InterfaceDetails() {
-  const { interfaceName } = useParams();
+  const { interfaceName, interfaceStatus } = useParams();
   let isCommunity = false;
 
   const hasDeveloperDocumentation = () => {
@@ -113,8 +122,8 @@ function InterfaceDetails() {
     error: interfaceError,
     isLoading: interfaceIsLoading,
   } = useQuery(
-    ["interface", interfaceName],
-    () => getInterface(interfaceName),
+    ["interface", interfaceName, interfaceStatus],
+    () => getInterface(interfaceName, interfaceStatus),
     {
       refetchOnMount: false,
       refetchOnWindowFocus: false,
@@ -147,7 +156,6 @@ function InterfaceDetails() {
     isLoading = charms.isLoading;
     isCommunity = true;
   }
-
   return (
     <>
       <Strip type="light" shallow>
