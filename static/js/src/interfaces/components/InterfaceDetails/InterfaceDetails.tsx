@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import ReactMarkdown from "react-markdown";
 import remarkMermaid from "remark-mermaidjs";
@@ -87,18 +87,11 @@ const getCharms = async (interfaceName: string): Promise<InterfaceData> => {
 
 const getInterface = async (
   interfaceName: string | undefined,
-  interfaceStatus: string | undefined
+  interfaceStatus: string
 ): Promise<InterfaceData> => {
 
   if (interfaceName) {
-    let response;
-    if (interfaceStatus === "draft") {
-      response = await fetch(`./${interfaceName}.json/${interfaceStatus}`);
-      if (response.status === 404) {
-        response = await fetch(`./${interfaceName}.json`); 
-      }
-    }
-    response = await fetch(`./${interfaceName}.json`);
+    const response = await fetch(`./${interfaceName}/${interfaceStatus}.json`);
     if (response.status === 200) {
       return response.json();
     }
@@ -108,7 +101,10 @@ const getInterface = async (
 };
 
 function InterfaceDetails() {
-  const { interfaceName, interfaceStatus } = useParams();
+  const { interfaceName } = useParams();
+  const [searchParams, setSearchParams]: [URLSearchParams, Function] =
+  useSearchParams();
+  const interfaceStatus = searchParams.get("status") || "live";
   let isCommunity = false;
 
   const hasDeveloperDocumentation = () => {

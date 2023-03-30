@@ -8,14 +8,19 @@ github_client = Github(GITHUB_TOKEN)
 repo = github_client.get_repo("canonical/charm-relation-interfaces")
 
 
-def get_interface_latest_version(interfaces, interface, status):
+def get_interface_status(interfaces, interface, status):
     inter = [
         i
         for i in interfaces
         if i["name"] == interface and i["status"].lower() == status
     ]
-    if inter:
-        latest_version = min(inter, key=lambda x: x["version"])
+    return inter
+
+
+def get_interface_latest_version(interfaces, interface, status):
+    interface_has_status = get_interface_status(interfaces, interface, status)
+    if interface_has_status:
+        latest_version = min(interface_has_status, key=lambda x: x["version"])
         return latest_version["version"]
     else:
         return None

@@ -3,7 +3,6 @@ from datetime import datetime
 from flask import (
     Blueprint,
     render_template,
-    redirect,
     make_response,
     current_app as app,
 )
@@ -11,6 +10,7 @@ from github import Github
 from os import getenv
 
 from webapp.interfaces.logic import (
+    get_interface_status,
     get_public_interfaces_from_readme,
     get_interface_latest_version,
     get_short_description_from_readme,
@@ -73,16 +73,19 @@ def all_interfaces(path):
     return render_template("interfaces/index.html")
 
 
-@interfaces.route(
-    "/interfaces/<interface_name>.json", defaults={"status": "live"}
-)
-@interfaces.route("/interfaces/<interface_name>.json/<status>")
+@interfaces.route("/interfaces/<interface_name>/<status>.json")
 def get_single_interface(interface_name, status):
     interfaces = get_interfaces().get_json()["interfaces"]
-
+    interface_has_status = get_interface_status(
+        interfaces, interface_name, status
+    )
+    # if the user sends request for a status that does not exist
+    if not interface_has_status:
+        if status == "live":
+            status = "draft"
+        else:
+            status = "live"
     version = get_interface_latest_version(interfaces, interface_name, status)
-    if status == "draft" and not version:
-        return redirect("/interfaces/{}.json".format(interface_name))
     content = get_interface_cont_from_repo(
         interfaces, interface_name, status, "README.md"
     )
@@ -112,7 +115,7 @@ def get_single_interface(interface_name, status):
         }
         res["last_modified"] = last_modified
         response = make_response(res)
-        # response.cache_control.max_age = "36000"
+        response.cache_control.max_age = "36000"
         return response
     except Exception:
         return "An error occurred!"

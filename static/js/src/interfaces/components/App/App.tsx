@@ -13,10 +13,10 @@ function App() {
           path="/interfaces/:interfaceName"
           element={<InterfaceDetails />}
         />
-        <Route
+        {/* <Route
           path="/interfaces/:interfaceName/:interfaceStatus"
           element={<InterfaceDetails />}
-        />
+        /> */}
       </Routes>
     </Router>
   );
