@@ -9,7 +9,11 @@ repo = github_client.get_repo("canonical/charm-relation-interfaces")
 
 
 def get_interface_latest_version(interfaces, interface, status):
-    inter = [i for i in interfaces if i["name"] == interface and i["status"].lower() == status]
+    inter = [
+        i
+        for i in interfaces
+        if i["name"] == interface and i["status"].lower() == status
+    ]
     if inter:
         latest_version = min(inter, key=lambda x: x["version"])
         return latest_version["version"]
@@ -29,7 +33,9 @@ def get_interface_cont_from_repo(interfaces, interface, status, content_type):
 
 
 def get_interface_yml(interfaces, interface, status):
-    content = get_interface_cont_from_repo(interfaces, interface, status, "charms.yaml")
+    content = get_interface_cont_from_repo(
+        interfaces, interface, status, "charms.yaml"
+    )
     if content:
         cont = content[0].decoded_content.decode("utf-8")
         response = get_dict_from_yaml(cont)

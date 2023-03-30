@@ -1,6 +1,12 @@
 from datetime import datetime
 
-from flask import Blueprint, render_template, redirect, make_response, current_app as app
+from flask import (
+    Blueprint,
+    render_template,
+    redirect,
+    make_response,
+    current_app as app,
+)
 from github import Github
 from os import getenv
 
@@ -25,6 +31,7 @@ interfaces = Blueprint(
 GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 
 github_client = Github(GITHUB_TOKEN)
+
 
 def get_interfaces():
     repo = github_client.get_repo("canonical/charm-relation-interfaces")
@@ -57,6 +64,7 @@ def get_interfaces():
 def interfaces_json():
     return get_interfaces()
 
+
 @interfaces.route("/interfaces", defaults={"path": ""})
 @interfaces.route("/interfaces/<path:path>")
 def all_interfaces(path):
@@ -65,15 +73,19 @@ def all_interfaces(path):
     return render_template("interfaces/index.html")
 
 
-@interfaces.route("/interfaces/<interface_name>.json", defaults={"status": "live"})
+@interfaces.route(
+    "/interfaces/<interface_name>.json", defaults={"status": "live"}
+)
 @interfaces.route("/interfaces/<interface_name>.json/<status>")
 def get_single_interface(interface_name, status):
     interfaces = get_interfaces().get_json()["interfaces"]
-  
+
     version = get_interface_latest_version(interfaces, interface_name, status)
     if status == "draft" and not version:
         return redirect("/interfaces/{}.json".format(interface_name))
-    content = get_interface_cont_from_repo(interfaces, interface_name, status, "README.md")
+    content = get_interface_cont_from_repo(
+        interfaces, interface_name, status, "README.md"
+    )
 
     last_modified = datetime.strptime(
         content[0].last_modified, "%a, %d %b %Y %H:%M:%S %Z"
@@ -82,8 +94,12 @@ def get_single_interface(interface_name, status):
     try:
         readme = content[0].decoded_content.decode("utf-8")
         api = app.store_api
-        other_requirers = api.find(requires=[interface_name]).get("results", [])
-        other_providers = api.find(provides=[interface_name]).get("results", [])
+        other_requirers = api.find(requires=[interface_name]).get(
+            "results", []
+        )
+        other_providers = api.find(provides=[interface_name]).get(
+            "results", []
+        )
 
         res = convert_readme(interface_name, version, readme, 2)
 
