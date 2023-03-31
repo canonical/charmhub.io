@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
 import { Strip, Row, Col } from "@canonical/react-components";
-import { PackageCard } from "@canonical/store-components";
+import { CharmCard } from "@canonical/store-components";
 
 function Packages() {
   const getPackages = async () => {
@@ -32,8 +32,8 @@ function Packages() {
             {status === "success" &&
               data.length > 0 &&
               data.map((packageData: any) => (
-                <Col size={3}>
-                  <PackageCard key={packageData.id} item={packageData} />
+                <Col size={3} style={{ marginBottom: "1.5rem" }}>
+                  <CharmCard key={packageData.id} data={packageData} />
                 </Col>
               ))}
           </Row>
