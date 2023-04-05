@@ -32,8 +32,14 @@ type InterfaceData = {
   };
   Usage: Array<string>;
   charms?: {
-    consumers: Array<string>;
-    providers: Array<string>;
+    consumers: Array<{
+      name: string;
+      url: string;
+    }>;
+    providers: Array<{
+      name: string;
+      url: string;
+    }>;
   };
   other_charms?: {
     providers: Array<{
@@ -323,13 +329,13 @@ function InterfaceDetails() {
                       <h4 className="p-muted-heading">Featured charms</h4>
                       <Row className="u-no-padding--left u-no-padding--right">
                         {interfaceData?.charms?.providers.map((provider) => (
-                          <Col size={3} key={provider}>
+                          <Col size={3} key={provider.name}>
                             <div className="p-card--highlighted">
                               <iframe
                                 className="u-no-margin--bottom"
                                 height={170}
                                 style={{ width: "100%" }}
-                                src={`/${provider}/embedded/interface`}
+                                src={`/${provider.name}/embedded/interface`}
                               />
                             </div>
                           </Col>
@@ -377,13 +383,13 @@ function InterfaceDetails() {
                       <h4 className="p-muted-heading">Featured charms</h4>
                       <Row className="u-no-padding--left u-no-padding--right">
                         {interfaceData?.charms?.consumers.map((consumer) => (
-                          <Col size={3} key={consumer}>
+                          <Col size={3} key={consumer.name}>
                             <div className="p-card--highlighted">
                               <iframe
                                 className="u-no-margin--bottom"
                                 height={170}
                                 style={{ width: "100%" }}
-                                src={`/${consumer}/embedded/interface`}
+                                src={`/${consumer.name}/embedded/interface`}
                               />
                             </div>
                           </Col>
