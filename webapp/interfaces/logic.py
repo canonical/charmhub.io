@@ -1,4 +1,3 @@
-from pprint import pprint
 import re
 from github import Github
 from os import getenv
@@ -10,6 +9,7 @@ GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 github_client = Github(GITHUB_TOKEN)
 repo = github_client.get_repo("canonical/charm-relation-interfaces")
 yaml = get_yaml_loader()
+
 
 def get_latest_version(interface):
     path = "interfaces/{}".format(interface)
