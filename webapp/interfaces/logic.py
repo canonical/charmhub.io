@@ -2,10 +2,13 @@ import re
 from github import Github
 from os import getenv
 
+from webapp.helpers import get_yaml_loader
+
 GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 
 github_client = Github(GITHUB_TOKEN)
 repo = github_client.get_repo("canonical/charm-relation-interfaces")
+yaml = get_yaml_loader()
 
 
 def get_interface_status(interfaces, interface, status):
@@ -43,28 +46,12 @@ def get_interface_yml(interfaces, interface, status):
     )
     if content:
         cont = content[0].decoded_content.decode("utf-8")
-        response = get_dict_from_yaml(cont)
+        response = yaml.load(cont)
     # if there is no charm
     else:
         response = {"providers": [], "consumers": []}
 
     return response
-
-
-def get_dict_from_yaml(content):
-    content_list = content.split("\n")
-    result = {"providers": [], "consumers": []}
-    for cont in content_list:
-        if ":" in cont:
-            key = re.sub(r"[^a-zA-Z0-9-]", "", cont)
-        else:
-            stripped_cont = cont.strip("- ")
-            if stripped_cont:
-                if key == "providers":
-                    result["providers"].append(stripped_cont)
-                if key == "consumers" or key == "requirers":
-                    result["consumers"].append(stripped_cont)
-    return result
 
 
 def find_between(s, first, last):
