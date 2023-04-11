@@ -87,24 +87,29 @@ const getCharms = async (interfaceName: string): Promise<InterfaceData> => {
 
 const getInterface = async (
   interfaceName: string | undefined,
-  interfaceStatus: string
+  interfaceStatus?: string | undefined
 ): Promise<InterfaceData> => {
 
   if (interfaceName) {
-    const response = await fetch(`./${interfaceName}/${interfaceStatus}.json`);
+    
+    if (interfaceStatus) {
+      const response = await fetch(`./${interfaceStatus}.json`);
+      if (response.status === 200) {
+        return response.json();
+      }
+    }
+    const response = await fetch(`./${interfaceName}.json`);
     if (response.status === 200) {
       return response.json();
     }
+    
   }
 
   throw new Error("Interface is not a tested interface.");
 };
 
 function InterfaceDetails() {
-  const { interfaceName } = useParams();
-  const [searchParams, setSearchParams]: [URLSearchParams, Function] =
-  useSearchParams();
-  const interfaceStatus = searchParams.get("status") || "live";
+  const { interfaceName, interfaceStatus } = useParams();
   let isCommunity = false;
 
   const hasDeveloperDocumentation = () => {
@@ -118,7 +123,7 @@ function InterfaceDetails() {
     error: interfaceError,
     isLoading: interfaceIsLoading,
   } = useQuery(
-    ["interface", interfaceName, interfaceStatus],
+    ["interface", interfaceName],
     () => getInterface(interfaceName, interfaceStatus),
     {
       refetchOnMount: false,

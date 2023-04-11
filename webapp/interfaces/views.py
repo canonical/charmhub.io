@@ -73,6 +73,7 @@ def all_interfaces(path):
     return render_template("interfaces/index.html")
 
 
+@interfaces.route("/interfaces/<interface_name>.json", defaults={"status": ""})
 @interfaces.route("/interfaces/<interface_name>/<status>.json")
 def get_single_interface(interface_name, status):
     interfaces = get_interfaces().get_json()["interfaces"]
