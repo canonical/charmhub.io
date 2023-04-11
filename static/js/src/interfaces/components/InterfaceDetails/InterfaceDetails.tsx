@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import ReactMarkdown from "react-markdown";
 import remarkMermaid from "remark-mermaidjs";
@@ -86,20 +86,30 @@ const getCharms = async (interfaceName: string): Promise<InterfaceData> => {
 };
 
 const getInterface = async (
-  interfaceName: string | undefined
+  interfaceName: string | undefined,
+  interfaceStatus?: string | undefined
 ): Promise<InterfaceData> => {
+
   if (interfaceName) {
+    
+    if (interfaceStatus) {
+      const response = await fetch(`./${interfaceStatus}.json`);
+      if (response.status === 200) {
+        return response.json();
+      }
+    }
     const response = await fetch(`./${interfaceName}.json`);
     if (response.status === 200) {
       return response.json();
     }
+    
   }
 
   throw new Error("Interface is not a tested interface.");
 };
 
 function InterfaceDetails() {
-  const { interfaceName } = useParams();
+  const { interfaceName, interfaceStatus } = useParams();
   let isCommunity = false;
 
   const hasDeveloperDocumentation = () => {
@@ -114,7 +124,7 @@ function InterfaceDetails() {
     isLoading: interfaceIsLoading,
   } = useQuery(
     ["interface", interfaceName],
-    () => getInterface(interfaceName),
+    () => getInterface(interfaceName, interfaceStatus),
     {
       refetchOnMount: false,
       refetchOnWindowFocus: false,
@@ -147,7 +157,6 @@ function InterfaceDetails() {
     isLoading = charms.isLoading;
     isCommunity = true;
   }
-
   return (
     <>
       <Strip type="light" shallow>
