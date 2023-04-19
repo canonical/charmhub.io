@@ -160,7 +160,6 @@ def details_overview(entity_name):
         description = package["store_front"]["metadata"]["description"]
         summary = package["store_front"]["metadata"]["summary"]
     else:
-
         docs_url_prefix = f"/{package['name']}/docs"
 
         docs = DocParser(
