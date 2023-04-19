@@ -158,6 +158,7 @@ def details_overview(entity_name):
     if not package["store_front"]["docs_topic"]:
         navigation = None
         description = package["store_front"]["metadata"]["description"]
+        summary = package["store_front"]["metadata"]["summary"]
     else:
 
         docs_url_prefix = f"/{package['name']}/docs"
@@ -222,6 +223,10 @@ def details_overview(entity_name):
 
         context["navigation"] = navigation
     context["description"] = description
+
+    if summary:
+        context["summary"] = summary
+
     context["package_type"] = package["type"]
 
     return render_template("details/overview.html", **context)
