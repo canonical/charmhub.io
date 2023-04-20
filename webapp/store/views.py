@@ -22,6 +22,7 @@ from webapp.store import logic
 from webapp.topics.views import topic_list
 from webapp.config import SEARCH_FIELDS
 
+
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
 )
@@ -160,10 +161,17 @@ def details_overview(entity_name):
 
     if not package["store_front"]["docs_topic"]:
         navigation = None
-        description = package["store_front"]["metadata"].get(
-            "description", None
-        )
-        summary = package["store_front"]["metadata"].get("summary", None)
+
+        if package["type"] == "bundle":
+            description = package["store_front"]["bundle"].get(
+                "description", None
+            )
+            summary = package["store_front"]["bundle"].get("summary", None)
+        else:
+            description = package["store_front"]["metadata"].get(
+                "description", None
+            )
+            summary = package["store_front"]["metadata"].get("summary", None)
     else:
         docs_url_prefix = f"/{package['name']}/docs"
 
@@ -226,10 +234,9 @@ def details_overview(entity_name):
             ]
 
         context["navigation"] = navigation
+
     context["description"] = description
-
     context["summary"] = summary
-
     context["package_type"] = package["type"]
 
     return render_template("details/overview.html", **context)
