@@ -162,14 +162,14 @@ def details_overview(entity_name):
     if not package["store_front"]["docs_topic"]:
         navigation = None
 
-        if package["type"] == "charm":
+        if package["type"] == "bundle":
+            description = package["store_front"]["bundle"].get("description", None)
+            summary = package["store_front"]["bundle"].get("summary", None)
+        else:
             description = package["store_front"]["metadata"].get(
                 "description", None
             )
             summary = package["store_front"]["metadata"].get("summary", None)
-        else:
-            description = package["store_front"]["bundle"].get("description", None)
-            summary = package["store_front"]["bundle"].get("summary", None)
     else:
         docs_url_prefix = f"/{package['name']}/docs"
 
