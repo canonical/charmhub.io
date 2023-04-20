@@ -17,7 +17,8 @@
         </div>
       {% endif %}
       <div class="js-readme-content">
-        {{ readme | safe }}
+        <h4>{{summary | safe }}</h4>
+        <p>{{ description | safe }}</p>
       </div>
     </div>
   </div>
