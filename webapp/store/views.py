@@ -155,6 +155,8 @@ def details_overview(entity_name):
         "navigation": None,
     }
 
+    summary = None
+
     if not package["store_front"]["docs_topic"]:
         navigation = None
         description = package["store_front"]["metadata"]["description"]
@@ -223,8 +225,7 @@ def details_overview(entity_name):
         context["navigation"] = navigation
     context["description"] = description
 
-    if summary:
-        context["summary"] = summary
+    context["summary"] = summary
 
     context["package_type"] = package["type"]
 
