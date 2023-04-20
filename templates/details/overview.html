@@ -20,7 +20,11 @@
         {% if summary %}
           <h4>{{summary | safe }}</h4>
         {% endif %}
-        <p>{{ description | safe }}</p>
+        {% if description %}
+          <p>{{ description | safe }}</p>
+        {% else %}
+          <p>No description provided.</p>
+        {% endif %}
       </div>
     </div>
   </div>
