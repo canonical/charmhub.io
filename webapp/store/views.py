@@ -163,7 +163,9 @@ def details_overview(entity_name):
         navigation = None
 
         if package["type"] == "bundle":
-            description = package["store_front"]["bundle"].get("description", None)
+            description = package["store_front"]["bundle"].get(
+                "description", None
+            )
             summary = package["store_front"]["bundle"].get("summary", None)
         else:
             description = package["store_front"]["metadata"].get(
