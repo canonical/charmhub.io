@@ -160,7 +160,9 @@ def details_overview(entity_name):
 
     if not package["store_front"]["docs_topic"]:
         navigation = None
-        description = package["store_front"]["metadata"].get("description", None)
+        description = package["store_front"]["metadata"].get(
+            "description", None
+        )
         summary = package["store_front"]["metadata"].get("summary", None)
     else:
         docs_url_prefix = f"/{package['name']}/docs"
