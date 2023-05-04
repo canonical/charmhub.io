@@ -86,7 +86,6 @@ def get_interfaces_from_readme(readme):
     keys = []
     # Get data from table
     for index, line in enumerate(lines):
-
         if "----" in line or line == "":
             continue
         elif index == 0:
