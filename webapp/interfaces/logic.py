@@ -63,33 +63,41 @@ def find_between(s, first, last):
         return ""
 
 
-def get_public_interfaces_from_readme(readme):
+def extract_table_from_markdown(readme_markdown: str) -> str:
+    """
+    extracts the first table in a markdown and returns it as a string
+    """
+    regex = r"\|.*\|\n\|.*\|.*\|\n(\|.*\|.*\|\n)+"
+
+    table_match = re.search(regex, readme_markdown)
+    table_str = table_match.group(0)
+    return table_str
+
+
+def get_interfaces_from_readme(readme):
     """
     This function will return a list of interfaces from
     a Markdown table.
     """
-    table_content = readme.split("## Public Interfaces\n")[1].split(
-        "## Project-internal Interfaces\n"
-    )[0]
-    lines = table_content.split("\n")
 
+    table_content = extract_table_from_markdown(readme)
+    lines = table_content.split("\n")
     data = []
     keys = []
     # Get data from table
-    for i, l in enumerate(lines):
-        if l == "":
+    for index, line in enumerate(lines):
+
+        if "----" in line or line == "":
             continue
-        if i == 1:
+        elif index == 0:
             keys = [
-                _i.strip().lower().replace(" ", "_") for _i in l.split("|")
+                _i.strip().lower().replace(" ", "_") for _i in line.split("|")
             ]
-        elif l.startswith("|") and i == 2:
-            continue
         else:
             data.append(
                 {
                     keys[_i]: v.strip()
-                    for _i, v in enumerate(l.split("|"))
+                    for _i, v in enumerate(line.split("|"))
                     if _i > 0 and _i < len(keys) - 1
                 }
             )

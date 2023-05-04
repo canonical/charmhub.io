@@ -11,7 +11,7 @@ from os import getenv
 
 from webapp.interfaces.logic import (
     get_interface_status,
-    get_public_interfaces_from_readme,
+    get_interfaces_from_readme,
     get_interface_latest_version,
     get_short_description_from_readme,
     convert_readme,
@@ -37,8 +37,7 @@ def get_interfaces():
     repo = github_client.get_repo("canonical/charm-relation-interfaces")
     readme = repo.get_contents("README.md").decoded_content.decode("utf-8")
 
-    interfaces = get_public_interfaces_from_readme(readme)
-
+    interfaces = get_interfaces_from_readme(readme)
     for i, inter in enumerate(interfaces):
         try:
             interface_readme = repo.get_contents(
