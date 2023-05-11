@@ -95,9 +95,7 @@ const getInterface = async (
   interfaceName: string | undefined,
   interfaceStatus?: string | undefined
 ): Promise<InterfaceData> => {
-
   if (interfaceName) {
-    
     if (interfaceStatus) {
       const response = await fetch(`./${interfaceStatus}.json`);
       if (response.status === 200) {
@@ -108,7 +106,6 @@ const getInterface = async (
     if (response.status === 200) {
       return response.json();
     }
-    
   }
 
   throw new Error("Interface is not a tested interface.");
@@ -141,6 +138,8 @@ function InterfaceDetails() {
   let error = interfaceError as Error;
   let isLoading = interfaceIsLoading;
 
+  // Get charms from the package.json endpoint, filtering
+  // by the interface name
   const charms = useQuery(
     ["charms", interfaceName],
     () => getCharms(interfaceName!),
@@ -148,6 +147,7 @@ function InterfaceDetails() {
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
+      // Only fetch charms if the interface.json endpoint fails
       enabled: !!(
         interfaceName &&
         !interfaceIsLoading &&
