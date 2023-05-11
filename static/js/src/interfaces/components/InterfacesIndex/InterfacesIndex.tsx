@@ -35,8 +35,10 @@ function pageArray(items: Array<any>, count: number) {
 function InterfacesIndex() {
   const ITEMS_PER_PAGE = 10;
 
-  const [searchParams, setSearchParams]: [URLSearchParams, Function] =
-    useSearchParams();
+  const [searchParams, setSearchParams]: [
+    URLSearchParams,
+    Function
+  ] = useSearchParams();
 
   const [interfaces, setInterfaces] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -182,21 +184,24 @@ function InterfacesIndex() {
                       <div
                         style={{
                           display: "flex",
-                          justifyContent: "space-between",
                         }}
                       >
-                        {
-                            item?.status === "Live" && (
-                              <Link to={`/interfaces/${item?.name}`}>
-                              {item?.name}
-                            </Link>
-                            )
-                        }
+                        {item?.status === "Live" && (
+                          <Link to={`/interfaces/${item?.name}`}>
+                            {item?.name}
+                          </Link>
+                        )}
                         {item?.status !== "Live" && (
                           <>
-                            <StatusLabel>{item?.status}</StatusLabel>
-                            <Link to={`/interfaces/${item?.name}/${item?.status.toLowerCase()}`}>
-                            {item?.name}
+                            <StatusLabel style={{ marginRight: "1rem" }}>
+                              {item?.status}
+                            </StatusLabel>
+                            <Link
+                              to={`/interfaces/${
+                                item?.name
+                              }/${item?.status.toLowerCase()}`}
+                            >
+                              {item?.name}
                             </Link>
                           </>
                         )}
