@@ -1245,26 +1245,26 @@
     react-table "7.8.0"
     react-useportal "1.0.17"
 
-"@canonical/react-components@0.40.1":
-  version "0.40.1"
-  resolved "https://registry.yarnpkg.com/@canonical/react-components/-/react-components-0.40.1.tgz#89c23347c32d3b3ebf2b6369881700b4f87883f1"
-  integrity sha512-r8/bEjCkVtqMmMozEtjkVPHzSjME+3PfHTemjuY+Ah8w1zQ8pDfWG9KFo7dP1ha29/W3Ci+A5DUCk9ZqiPoS7A==
+"@canonical/react-components@0.41.0":
+  version "0.41.0"
+  resolved "https://registry.yarnpkg.com/@canonical/react-components/-/react-components-0.41.0.tgz#8700ce1e9388b117b51325fa7c0815ccf885acb6"
+  integrity sha512-VcurpN0W5trQ9Wj/APsANwWmaE4w2RAr6STmSsSbxKTnBPlM87K/rSYqP3Tmxb+jKxOJmNI/t4S/LDu5cJMtEA==
   dependencies:
     "@types/jest" "27.5.2"
-    "@types/node" "18.14.2"
-    "@types/react" "18.0.28"
-    "@types/react-dom" "17.0.18"
+    "@types/node" "18.16.3"
+    "@types/react" "18.2.0"
+    "@types/react-dom" "17.0.20"
     "@types/react-table" "7.7.14"
     classnames "2.3.2"
-    nanoid "3.3.4"
+    nanoid "3.3.6"
     prop-types "15.8.1"
     react-table "7.8.0"
-    react-useportal "1.0.17"
+    react-useportal "1.0.18"
 
-"@canonical/store-components@0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@canonical/store-components/-/store-components-0.8.0.tgz#55c613417d6dee146ab3483d1f28163248a9208c"
-  integrity sha512-/ZH82gD9uDpBx+hLtbT/3rmaN4kE1PC8w3z6wTRnHDn4N6QEBwLBRJlX63HigAjOCJOtpRKqPHRY6x1Ke7MvSw==
+"@canonical/store-components@0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@canonical/store-components/-/store-components-0.11.0.tgz#b30b8b058a489fdd3351b9a50fe69c56c6b2416d"
+  integrity sha512-y2EhBdzKVEYUNUQ3QykQIdGPhmjpzpGGnZ8jORmxtajXsBmcEvZFW1bbR0TOi+Di/+Rg4zF2JYN6Thci2l+yQg==
   dependencies:
     "@canonical/react-components" "0.40.0"
     "@types/jest" "27.5.2"
@@ -1806,6 +1806,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.14.6.tgz#ae1973dd2b1eeb1825695bb11ebfb746d27e3e93"
   integrity sha512-93+VvleD3mXwlLI/xASjw0FzKcwzl3OdTCzm1LaRfqgS21gfFtK3zDXM5Op9TeeMsJVOaJ2VRDpT9q4Y3d0AvA==
 
+"@types/node@18.16.3":
+  version "18.16.3"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.16.3.tgz#6bda7819aae6ea0b386ebc5b24bdf602f1b42b01"
+  integrity sha512-OPs5WnnT1xkCBiuQrZA4+YAV4HEJejmHneyraIaxsbev5yCEr6KMwINNFP9wQeFIw8FWcoTqF3vQsa5CDaI+8Q==
+
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.1.tgz#d3357479a0fdfdd5907fe67e17e0a85c906e1301"
@@ -1842,6 +1847,13 @@
   version "17.0.19"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.19.tgz#36feef3aa35d045cacd5ed60fe0eef5272f19492"
   integrity sha512-PiYG40pnQRdPHnlf7tZnp0aQ6q9tspYr72vD61saO6zFCybLfMqwUCN0va1/P+86DXn18ZWeW30Bk7xlC5eEAQ==
+  dependencies:
+    "@types/react" "^17"
+
+"@types/react-dom@17.0.20":
+  version "17.0.20"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.20.tgz#e0c8901469d732b36d8473b40b679ad899da1b53"
+  integrity sha512-4pzIjSxDueZZ90F52mU3aPoogkHIoSIDG+oQ+wQK7Cy2B9S+MvOqY0uEA/qawKz381qrEDkvpwyt8Bm31I8sbA==
   dependencies:
     "@types/react" "^17"
 
@@ -1907,6 +1919,15 @@
   version "18.0.28"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.28.tgz#accaeb8b86f4908057ad629a26635fe641480065"
   integrity sha512-RD0ivG1kEztNBdoAK7lekI9M+azSnitIn85h4iOiaLjaTrMjzslhaqCGaI4IyCJ1RljWiLCEu4jyrLLgqxBTew==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
+
+"@types/react@18.2.0":
+  version "18.2.0"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.0.tgz#15cda145354accfc09a18d2f2305f9fc099ada21"
+  integrity sha512-0FLj93y5USLHdnhIhABk83rm8XEGA7kH3cr+YUlvxoUGp1xNt/DINUMvqPxLyOQMzLmZe8i4RTHbvb8MC7NmrA==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -6225,6 +6246,11 @@ nanoid@3.3.4, nanoid@^3.3.4:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.4.tgz#730b67e3cd09e2deacf03c027c81c9d9dbc5e8ab"
   integrity sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==
 
+nanoid@3.3.6:
+  version "3.3.6"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.6.tgz#443380c856d6e9f9824267d960b4236ad583ea4c"
+  integrity sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==
+
 natural-compare@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
@@ -6906,6 +6932,13 @@ react-useportal@1.0.17:
   dependencies:
     use-ssr "^1.0.22"
 
+react-useportal@1.0.18:
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/react-useportal/-/react-useportal-1.0.18.tgz#b3baf14962f44402b2d0d6152acc2035c5342bd8"
+  integrity sha512-dGuT/yyE2T9RtUxRZJYkIX8tLHC7KxAxbMw/Ufjiwo8ixoDYzkk9LFKGnARtCtFz6Yd5AoP7fVymrN3eT04jiA==
+  dependencies:
+    use-ssr "^1.0.25"
+
 react@18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
@@ -7239,15 +7272,6 @@ sass@1.58.0:
   version "1.58.0"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.58.0.tgz#ee8aea3ad5ea5c485c26b3096e2df6087d0bb1cc"
   integrity sha512-PiMJcP33DdKtZ/1jSjjqVIKihoDc6yWmYr9K/4r3fVVIEDAluD0q7XZiRKrNJcPK3qkLRF/79DND1H5q1LBjgg==
-  dependencies:
-    chokidar ">=3.0.0 <4.0.0"
-    immutable "^4.0.0"
-    source-map-js ">=0.6.2 <2.0.0"
-
-sass@1.58.3:
-  version "1.58.3"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.58.3.tgz#2348cc052061ba4f00243a208b09c40e031f270d"
-  integrity sha512-Q7RaEtYf6BflYrQ+buPudKR26/lH+10EmO9bBqbmPh/KeLqv8bjpTNqxe71ocONqXq+jYiCbpPUmQMS+JJPk4A==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
@@ -8145,6 +8169,11 @@ use-ssr@^1.0.22:
   resolved "https://registry.yarnpkg.com/use-ssr/-/use-ssr-1.0.24.tgz#213a3df58f5ab9268e6fe1a57ad0a9de91e514d1"
   integrity sha512-0MFps7ezL57/3o0yl4CvrHLlp9z20n1rQZV/lSRz7if+TUoM6POU1XdOvEjIgjgKeIhTEye1U0khrIYWCTWw4g==
 
+use-ssr@^1.0.25:
+  version "1.0.25"
+  resolved "https://registry.yarnpkg.com/use-ssr/-/use-ssr-1.0.25.tgz#c7f54b59d6e52db26749b1d4115a650101a190bd"
+  integrity sha512-VYF8kJKI+X7+U4XgGoUER2BUl0vIr+8OhlIhyldgSGE0KHMoDRXPvWeHUUeUktq7ACEOVLzXGq1+QRxcvtwvyQ==
+
 util-deprecate@^1.0.1, util-deprecate@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
@@ -8201,19 +8230,10 @@ vanilla-framework@3.11.1:
     sass "1.58.0"
     yaml "1.10.2"
 
-vanilla-framework@3.13.0:
-  version "3.13.0"
-  resolved "https://registry.yarnpkg.com/vanilla-framework/-/vanilla-framework-3.13.0.tgz#264f6f33e6926e6d1019e7659660f36fa20cd4b4"
-  integrity sha512-L6Z+8q4nbUTl12yCDJ/TqdWRugFeCaPMxUV7o0qrI1/bmuOLGpDaVPhGOcBPIO+uzIxANICVABXvk0qvzAClxA==
-  dependencies:
-    "@canonical/cookie-policy" "3.4.0"
-    "@canonical/latest-news" "1.4.1"
-    autoprefixer "10.4.13"
-    postcss "8.4.21"
-    postcss-cli "9.1.0"
-    postcss-scss "4.0.6"
-    sass "1.58.3"
-    yaml "1.10.2"
+vanilla-framework@3.14.0:
+  version "3.14.0"
+  resolved "https://registry.yarnpkg.com/vanilla-framework/-/vanilla-framework-3.14.0.tgz#c5b94d7e2e3ef2d3c9f24091b7efc4abf8054cf9"
+  integrity sha512-06Vr2nhjU72N9IivwCLcd7FgqFNopkiHfzANJUCNdvs8FkbTjIB7fcsFgJ6O76KnOBsEiAoJAssRkTh9x3a2jw==
 
 verbalize@^0.1.2:
   version "0.1.2"
