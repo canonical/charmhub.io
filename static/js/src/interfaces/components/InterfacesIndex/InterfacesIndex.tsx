@@ -82,7 +82,12 @@ function InterfacesIndex() {
   }, []);
 
   useEffect(() => {
-    setSearchParams({ page: currentPageNumber });
+    if (currentPageNumber > 1) {
+      setSearchParams({ page: currentPageNumber });
+    } else {
+      setSearchParams({});
+    }
+
     setCurrentPageIndex(currentPageNumber - 1);
   }, [currentPageNumber]);
 
