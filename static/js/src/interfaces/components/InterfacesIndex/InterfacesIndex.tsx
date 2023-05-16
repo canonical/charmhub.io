@@ -35,10 +35,8 @@ function pageArray(items: Array<any>, count: number) {
 function InterfacesIndex() {
   const ITEMS_PER_PAGE = 10;
 
-  const [searchParams, setSearchParams]: [
-    URLSearchParams,
-    Function
-  ] = useSearchParams();
+  const [searchParams, setSearchParams]: [URLSearchParams, Function] =
+    useSearchParams();
 
   const [interfaces, setInterfaces] = useState([]);
   const [loading, setLoading] = useState(false);
