@@ -76,7 +76,7 @@ function InterfaceDetails() {
 
   const hasDeveloperDocumentation = () => {
     return (
-      interfaceData?.Usage && interfaceData?.Relation && interfaceData?.Behavior
+      interfaceData?.Usage || interfaceData?.Relation || interfaceData?.Behavior
     );
   };
 
