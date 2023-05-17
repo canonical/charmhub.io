@@ -45,7 +45,9 @@ function InterfacesIndex() {
   const [currentPageNumber, setCurrentPageNumber] = useState(
     parseInt(searchParams.get("page") || "1")
   );
-  const [currentPageIndex, setCurrentPageIndex] = useState(currentPageNumber);
+  const [currentPageIndex, setCurrentPageIndex] = useState(
+    currentPageNumber - 1
+  );
 
   useEffect(() => {
     setLoading(true);
@@ -80,16 +82,6 @@ function InterfacesIndex() {
         setLoading(false);
       });
   }, []);
-
-  useEffect(() => {
-    if (currentPageNumber > 1) {
-      setSearchParams({ page: currentPageNumber });
-    } else {
-      setSearchParams({});
-    }
-
-    setCurrentPageIndex(currentPageNumber - 1);
-  }, [currentPageNumber]);
 
   useEffect(() => {
     setCurrentItems(pageArray(interfaces, ITEMS_PER_PAGE)[currentPageIndex]);
@@ -236,6 +228,13 @@ function InterfacesIndex() {
             itemsPerPage={ITEMS_PER_PAGE}
             paginate={(pageNumber) => {
               setCurrentPageNumber(pageNumber);
+              setCurrentPageIndex(pageNumber - 1);
+
+              if (pageNumber > 1) {
+                setSearchParams({ page: pageNumber });
+              } else {
+                setSearchParams({});
+              }
             }}
             totalItems={interfaces.length}
             scrollToTop
