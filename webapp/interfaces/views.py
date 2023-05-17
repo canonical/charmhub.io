@@ -9,16 +9,9 @@ from flask import (
 from github import Github
 from os import getenv
 
-from webapp.interfaces.logic import (
-    get_interface_status,
-    get_interfaces_from_readme,
-    get_interface_latest_version,
-    get_short_description_from_readme,
-    convert_readme,
-    get_interface_name_from_readme,
-    get_interface_cont_from_repo,
-    get_interface_yml,
-)
+from webapp.interfaces.logic import Interfaces
+
+interface_logic = Interfaces()
 
 
 interfaces = Blueprint(
@@ -37,13 +30,15 @@ def get_interfaces():
     repo = github_client.get_repo("canonical/charm-relation-interfaces")
     readme = repo.get_contents("README.md").decoded_content.decode("utf-8")
 
-    interfaces = get_interfaces_from_readme(readme)
+    interfaces = interface_logic.get_interfaces_from_readme(readme)
     for i, inter in enumerate(interfaces):
         try:
             interface_readme = repo.get_contents(
                 inter["readme_path"]
             ).decoded_content.decode("utf-8")
-            description = get_short_description_from_readme(interface_readme)
+            description = interface_logic.get_short_description_from_readme(
+                interface_readme
+            )
         except Exception:
             # Some draft interfaces are missing a readme
             description = ""
@@ -76,7 +71,7 @@ def all_interfaces(path):
 @interfaces.route("/interfaces/<interface_name>/<status>.json")
 def get_single_interface(interface_name, status):
     interfaces = get_interfaces().get_json()["interfaces"]
-    interface_has_status = get_interface_status(
+    interface_has_status = interface_logic.get_interface_status(
         interfaces, interface_name, status
     )
     # if the user sends request for a status that does not exist
@@ -85,8 +80,10 @@ def get_single_interface(interface_name, status):
             status = "draft"
         else:
             status = "live"
-    version = get_interface_latest_version(interfaces, interface_name, status)
-    content = get_interface_cont_from_repo(
+    version = interface_logic.get_interface_latest_version(
+        interfaces, interface_name, status
+    )
+    content = interface_logic.get_interface_cont_from_repo(
         interfaces, interface_name, status, "README.md"
     )
 
@@ -104,10 +101,14 @@ def get_single_interface(interface_name, status):
             "results", []
         )
 
-        res = convert_readme(interface_name, version, readme, 2)
+        res = interface_logic.convert_readme(
+            interface_name, version, readme, 2
+        )
 
-        res["name"] = get_interface_name_from_readme(readme)
-        res["charms"] = get_interface_yml(interfaces, interface_name, status)
+        res["name"] = interface_logic.get_interface_name_from_readme(readme)
+        res["charms"] = interface_logic.get_interface_yml(
+            interfaces, interface_name, status
+        )
         res["version"] = version
         res["other_charms"] = {
             "providers": other_providers,
