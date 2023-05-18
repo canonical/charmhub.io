@@ -1,19 +1,19 @@
 import React from "react";
 
 type Props = {
-  hasDeveloperDocumentation: Function;
+  hasDeveloperDocumentation: boolean;
 };
 
 function InterfaceDetailsNav({ hasDeveloperDocumentation }: Props) {
   return (
-    <div className="p-side-navigation u-hide--small u-hide--medium">
+    <div className="p-side-navigation">
       <ul className="p-side-navigation__list">
         <li className="p-side-navigation__item">
           <a href="#charms" className="p-side-navigation__link is-active">
             Charms
           </a>
         </li>
-        {hasDeveloperDocumentation() && (
+        {hasDeveloperDocumentation && (
           <li className="p-side-navigation__item">
             <a
               href="#developer-documentation"

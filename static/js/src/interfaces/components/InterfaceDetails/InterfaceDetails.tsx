@@ -23,13 +23,8 @@ const getCharms = async (interfaceName: string): Promise<InterfaceData> => {
   const data: InterfaceData = {
     name: interfaceName,
     version: "",
-    Usage: [""],
-    Behavior: {
-      Introduction: "",
-      Provider: [""],
-      Requirer: [""],
-    },
     last_modified: null,
+    body: [],
   };
 
   if (!!(requiresJson?.packages?.length || providesJson?.packages?.length)) {
@@ -74,12 +69,6 @@ function InterfaceDetails() {
   const { interfaceName, interfaceStatus } = useParams();
   let isCommunity = false;
 
-  const hasDeveloperDocumentation = () => {
-    return (
-      interfaceData?.Usage || interfaceData?.Relation || interfaceData?.Behavior
-    );
-  };
-
   let {
     data: interfaceData,
     error: interfaceError,
@@ -122,6 +111,10 @@ function InterfaceDetails() {
     isLoading = charms.isLoading;
     isCommunity = true;
   }
+
+  const hasDeveloperDocumentation =
+    interfaceData && interfaceData.body.length > 0 ? true : false;
+
   return (
     <>
       <Strip type="light" shallow>
@@ -159,9 +152,11 @@ function InterfaceDetails() {
         {interfaceData && !isLoading && (
           <Row>
             <Col size={3} className="interface-sidebar">
-              <InterfaceDetailsNav
-                hasDeveloperDocumentation={hasDeveloperDocumentation}
-              />
+              <div className="u-hide--small u-hide--medium">
+                <InterfaceDetailsNav
+                  hasDeveloperDocumentation={hasDeveloperDocumentation}
+                />
+              </div>
               <InterfaceDetailsLinks
                 isCommunity={isCommunity}
                 interfaceName={interfaceName}
@@ -177,27 +172,10 @@ function InterfaceDetails() {
               <InterfaceDiscussion />
             </Col>
             <Col size={9} className="interface-content">
-              <div className="p-side-navigation u-hide--large">
-                <ul className="p-side-navigation__list">
-                  <li className="p-side-navigation__item">
-                    <a
-                      href="#charms"
-                      className="p-side-navigation__link is-active"
-                    >
-                      Charms
-                    </a>
-                  </li>
-                  {hasDeveloperDocumentation() && (
-                    <li className="p-side-navigation__item">
-                      <a
-                        href="#developer-documentation"
-                        className="p-side-navigation__link"
-                      >
-                        Developer documentation
-                      </a>
-                    </li>
-                  )}
-                </ul>
+              <div className="u-hide--large">
+                <InterfaceDetailsNav
+                  hasDeveloperDocumentation={hasDeveloperDocumentation}
+                />
               </div>
 
               <Strip className="u-no-padding--top" bordered shallow>
@@ -215,7 +193,7 @@ function InterfaceDetails() {
               )}
 
               {!!(
-                interfaceData?.charms?.consumers?.length ||
+                interfaceData?.charms?.requirers?.length ||
                 interfaceData?.other_charms?.requirers?.length
               ) && (
                 <RequiringCharms
@@ -224,7 +202,7 @@ function InterfaceDetails() {
                 />
               )}
 
-              {hasDeveloperDocumentation() && (
+              {hasDeveloperDocumentation && (
                 <DeveloperDocumentation interfaceData={interfaceData} />
               )}
 
