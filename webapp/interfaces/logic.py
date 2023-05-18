@@ -12,9 +12,11 @@ yaml = get_yaml_loader()
 
 
 class Interfaces:
+    interfaces = []
+    last_fetch = None
+    repo = None
+
     def __init__(self):
-        self.interfaces = []
-        self.last_fetch = None
         self.repo = github_client.get_repo(
             "canonical/charm-relation-interfaces"
         )
@@ -291,3 +293,4 @@ class Interfaces:
     def get_interface_name_from_readme(self, text):
         name = re.sub(r"[#` \n]", "", text.split("\n##", 1)[0]).split("/")[0]
         return name
+
