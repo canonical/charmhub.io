@@ -24,6 +24,7 @@ GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 
 github_client = Github(GITHUB_TOKEN)
 
+
 def get_interfaces():
     interfaces = interface_logic.get_interfaces()
     for i, inter in enumerate(interfaces):
@@ -31,7 +32,9 @@ def get_interfaces():
             interface_readme = interface_logic.repo.get_contents(
                 inter["readme_path"]
             ).decoded_content.decode("utf-8")
-            description = interface_logic.get_short_description_from_readme(interface_readme)
+            description = interface_logic.get_short_description_from_readme(
+                interface_readme
+            )
         except Exception:
             # Some draft interfaces are missing a readme
             description = ""
@@ -63,14 +66,18 @@ def all_interfaces(path):
 @interfaces.route("/interfaces/<interface_name>.json", defaults={"status": ""})
 @interfaces.route("/interfaces/<interface_name>/<status>.json")
 def get_single_interface(interface_name, status):
-    interface_has_status = interface_logic.get_interface_status(interface_name, status)
+    interface_has_status = interface_logic.get_interface_status(
+        interface_name, status
+    )
     # if the user sends request for a status that does not exist
     if not interface_has_status:
         if status == "live":
             status = "draft"
         else:
             status = "live"
-    version = interface_logic.get_interface_latest_version(interface_name, status)
+    version = interface_logic.get_interface_latest_version(
+        interface_name, status
+    )
     content = interface_logic.get_interface_cont_from_repo(
         interface_name, status, "README.md"
     )
@@ -81,14 +88,14 @@ def get_single_interface(interface_name, status):
 
     readme = content[0].decoded_content.decode("utf-8")
     api = app.store_api
-    other_requirers = api.find(requires=[interface_name]).get(
-        "results", []
-    )
-    other_providers = api.find(provides=[interface_name]).get(
-        "results", []
-    )
+    other_requirers = api.find(requires=[interface_name]).get("results", [])
+    other_providers = api.find(provides=[interface_name]).get("results", [])
 
-    res = {"body": interface_logic.convert_readme(interface_name, version, readme, 2)}
+    res = {
+        "body": interface_logic.convert_readme(
+            interface_name, version, readme, 2
+        )
+    }
 
     res["name"] = interface_logic.get_interface_name_from_readme(readme)
     res["charms"] = interface_logic.get_interface_yml(interface_name, status)

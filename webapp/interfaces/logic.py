@@ -11,15 +11,24 @@ github_client = Github(GITHUB_TOKEN)
 repo = github_client.get_repo("canonical/charm-relation-interfaces")
 yaml = get_yaml_loader()
 
+
 class Interfaces:
     def __init__(self):
         self.interfaces = []
         self.last_fetch = None
-        self.repo = github_client.get_repo("canonical/charm-relation-interfaces")
+        self.repo = github_client.get_repo(
+            "canonical/charm-relation-interfaces"
+        )
 
     def get_interfaces(self):
-        if len(self.interfaces) == 0 or not self.last_fetch or time.time() - self.last_fetch > 3600:
-            readme = self.repo.get_contents("README.md").decoded_content.decode("utf-8")
+        if (
+            len(self.interfaces) == 0
+            or not self.last_fetch
+            or time.time() - self.last_fetch > 3600
+        ):
+            readme = self.repo.get_contents(
+                "README.md"
+            ).decoded_content.decode("utf-8")
             self.interfaces = self.get_interfaces_from_readme(readme)
             self.last_fetch = time.time()
 
@@ -34,15 +43,15 @@ class Interfaces:
         ]
         return inter
 
-
     def get_interface_latest_version(self, interface, status):
         interface_has_status = self.get_interface_status(interface, status)
         if interface_has_status:
-            latest_version = min(interface_has_status, key=lambda x: x["version"])
+            latest_version = min(
+                interface_has_status, key=lambda x: x["version"]
+            )
             return latest_version["version"]
         else:
             return None
-
 
     def get_interface_cont_from_repo(self, interface, status, content_type):
         version = self.get_interface_latest_version(interface, status)
@@ -50,10 +59,11 @@ class Interfaces:
         interface_content = repo.get_contents(interface_path)
 
         content = [
-            path for path in interface_content if path.path.endswith(content_type)
+            path
+            for path in interface_content
+            if path.path.endswith(content_type)
         ]
         return content
-
 
     def get_interface_yml(self, interface, status):
         content = self.get_interface_cont_from_repo(
@@ -68,7 +78,6 @@ class Interfaces:
 
         return response
 
-
     def find_between(self, s, first, last):
         try:
             start = s.index(first) + len(first)
@@ -76,7 +85,6 @@ class Interfaces:
             return s[start:end]
         except ValueError:
             return ""
-
 
     def extract_table_from_markdown(self, readme_markdown: str) -> str:
         """
@@ -87,7 +95,6 @@ class Interfaces:
         table_match = re.search(regex, readme_markdown)
         table_str = table_match.group(0)
         return table_str
-
 
     def get_interfaces_from_readme(self, readme):
         """
@@ -105,7 +112,8 @@ class Interfaces:
                 continue
             elif index == 0:
                 keys = [
-                    _i.strip().lower().replace(" ", "_") for _i in line.split("|")
+                    _i.strip().lower().replace(" ", "_")
+                    for _i in line.split("|")
                 ]
             else:
                 data.append(
@@ -169,7 +177,9 @@ class Interfaces:
 
     def filter_interfaces_by_status(self, status):
         interfaces = self.get_interfaces()
-        return list(filter(lambda item: (item["status"] == status), interfaces))
+        return list(
+            filter(lambda item: (item["status"] == status), interfaces)
+        )
 
     def strip_str(self, string):
         return re.sub(r"[^a-zA-Z0-9 ().,!-_/:;`]", "", string)
@@ -193,24 +203,18 @@ class Interfaces:
     def strip_str(self, string):
         return re.sub(r"[^a-zA-Z0-9 ().,!-_/:;`]", "", string)
 
-        if len(headings_and_contents) == 0:
-            return [s.strip("\n") for s in text.split("\n") if s.strip("\n")]
-        resulting_dict = {}
-
     def get_h_content(self, text, pattern):
         start_index = text.index(pattern)
         return [start_index, start_index + len(pattern)]
 
-            if content[0].isalpha and "#" in content:
-                temp[heading] = self.convert_readme(
-                    interface, version, content, level + 1
-                )
-                resulting_dict.update(temp)
-
     def extract_headings_and_content(self, text, level):
-        headings = re.findall(r"^#{" + str(level) + r"}\s.*", text, flags=re.MULTILINE)
+        headings = re.findall(
+            r"^#{" + str(level) + r"}\s.*", text, flags=re.MULTILINE
+        )
 
-        start_end = {heading: self.get_h_content(text, heading) for heading in headings}
+        start_end = {
+            heading: self.get_h_content(text, heading) for heading in headings
+        }
         result = []
         for i in range(len(headings)):
             current_heading = headings[i]
@@ -226,7 +230,6 @@ class Interfaces:
             result.append([current_heading.strip(), body.strip()])
         return result
 
-
     def get_schema_url(self, interface, version, schema):
         base_link = (
             "{}https://github.com/canonical/"
@@ -234,17 +237,16 @@ class Interfaces:
         ).format("(", interface, version)
         return base_link.join(schema.split("(."))
 
-
     def parse_text(self, interface, version, text):
         base_link = (
             "https://github.com/canonical/"
             "charm-relation-interfaces/blob/main/interfaces/{}/v{}"
         ).format(interface, version)
-        pattern = r'\[.*?\]\(.*?\)'
+        pattern = r"\[.*?\]\(.*?\)"
         matches = re.findall(pattern, text)
 
         for match in matches:
-            element_pattern = r'\[(.*?)\]\((.*?)\)'
+            element_pattern = r"\[(.*?)\]\((.*?)\)"
             element_match = re.search(element_pattern, match)
             if element_match:
                 title = element_match.group(1)
@@ -257,7 +259,6 @@ class Interfaces:
 
         return text
 
-
     def convert_readme(self, interface, version, text, level=2):
         headings_and_contents = self.extract_headings_and_content(text, level)
 
@@ -269,11 +270,7 @@ class Interfaces:
         for heading, content in headings_and_contents:
             strip_char = "{}{}".format("#" * level, " ")
             heading = heading.strip(strip_char)
-            _temp = {
-                "heading": heading,
-                "level": level,
-                "children":  []
-            }
+            _temp = {"heading": heading, "level": level, "children": []}
 
             children = []
 
@@ -298,12 +295,13 @@ class Interfaces:
 
             for index, child in list(enumerate(_temp["children"])):
                 if isinstance(child, str):
-                    _temp["children"][index] = self.parse_text(interface, version, child)
+                    _temp["children"][index] = self.parse_text(
+                        interface, version, child
+                    )
 
-            resulting_list.append(_temp);
+            resulting_list.append(_temp)
 
         return resulting_list
-
 
     def get_interface_name_from_readme(self, text):
         name = re.sub(r"[#` \n]", "", text.split("\n##", 1)[0]).split("/")[0]
