@@ -8,7 +8,6 @@ from webapp.helpers import get_yaml_loader
 GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 
 github_client = Github(GITHUB_TOKEN)
-repo = github_client.get_repo("canonical/charm-relation-interfaces")
 yaml = get_yaml_loader()
 
 
@@ -56,7 +55,7 @@ class Interfaces:
     def get_interface_cont_from_repo(self, interface, status, content_type):
         version = self.get_interface_latest_version(interface, status)
         interface_path = "interfaces/{}/v{}".format(interface, version)
-        interface_content = repo.get_contents(interface_path)
+        interface_content = self.repo.get_contents(interface_path)
 
         content = [
             path
