@@ -171,10 +171,6 @@ class Interfaces:
 
         return interfaces
 
-        for line in lines:
-            if line and line[0].isalpha():
-                return line
-
     def filter_interfaces_by_status(self, status):
         interfaces = self.get_interfaces()
         return list(
@@ -192,16 +188,6 @@ class Interfaces:
                 return line
 
         return None
-
-    def get_schema_url(self, interface, version, schema):
-        base_link = (
-            "{}https://github.com/canonical/"
-            "charm-relation-interfaces/blob/main/interfaces/{}/{}"
-        ).format("(", interface, version)
-        return base_link.join(schema.split("(."))
-
-    def strip_str(self, string):
-        return re.sub(r"[^a-zA-Z0-9 ().,!-_/:;`]", "", string)
 
     def get_h_content(self, text, pattern):
         start_index = text.index(pattern)
