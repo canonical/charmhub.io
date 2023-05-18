@@ -13,7 +13,6 @@ from webapp.interfaces.logic import Interfaces
 
 interface_logic = Interfaces()
 
-
 interfaces = Blueprint(
     "interfaces",
     __name__,
@@ -25,20 +24,14 @@ GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 
 github_client = Github(GITHUB_TOKEN)
 
-
 def get_interfaces():
-    repo = github_client.get_repo("canonical/charm-relation-interfaces")
-    readme = repo.get_contents("README.md").decoded_content.decode("utf-8")
-
-    interfaces = interface_logic.get_interfaces_from_readme(readme)
+    interfaces = interface_logic.get_interfaces()
     for i, inter in enumerate(interfaces):
         try:
-            interface_readme = repo.get_contents(
+            interface_readme = interface_logic.repo.get_contents(
                 inter["readme_path"]
             ).decoded_content.decode("utf-8")
-            description = interface_logic.get_short_description_from_readme(
-                interface_readme
-            )
+            description = interface_logic.get_short_description_from_readme(interface_readme)
         except Exception:
             # Some draft interfaces are missing a readme
             description = ""
@@ -70,53 +63,41 @@ def all_interfaces(path):
 @interfaces.route("/interfaces/<interface_name>.json", defaults={"status": ""})
 @interfaces.route("/interfaces/<interface_name>/<status>.json")
 def get_single_interface(interface_name, status):
-    interfaces = get_interfaces().get_json()["interfaces"]
-    interface_has_status = interface_logic.get_interface_status(
-        interfaces, interface_name, status
-    )
+    interface_has_status = interface_logic.get_interface_status(interface_name, status)
     # if the user sends request for a status that does not exist
     if not interface_has_status:
         if status == "live":
             status = "draft"
         else:
             status = "live"
-    version = interface_logic.get_interface_latest_version(
-        interfaces, interface_name, status
-    )
+    version = interface_logic.get_interface_latest_version(interface_name, status)
     content = interface_logic.get_interface_cont_from_repo(
-        interfaces, interface_name, status, "README.md"
+        interface_name, status, "README.md"
     )
 
     last_modified = datetime.strptime(
         content[0].last_modified, "%a, %d %b %Y %H:%M:%S %Z"
     ).isoformat()
 
-    try:
-        readme = content[0].decoded_content.decode("utf-8")
-        api = app.store_api
-        other_requirers = api.find(requires=[interface_name]).get(
-            "results", []
-        )
-        other_providers = api.find(provides=[interface_name]).get(
-            "results", []
-        )
+    readme = content[0].decoded_content.decode("utf-8")
+    api = app.store_api
+    other_requirers = api.find(requires=[interface_name]).get(
+        "results", []
+    )
+    other_providers = api.find(provides=[interface_name]).get(
+        "results", []
+    )
 
-        res = interface_logic.convert_readme(
-            interface_name, version, readme, 2
-        )
+    res = {"body": interface_logic.convert_readme(interface_name, version, readme, 2)}
 
-        res["name"] = interface_logic.get_interface_name_from_readme(readme)
-        res["charms"] = interface_logic.get_interface_yml(
-            interfaces, interface_name, status
-        )
-        res["version"] = version
-        res["other_charms"] = {
-            "providers": other_providers,
-            "requirers": other_requirers,
-        }
-        res["last_modified"] = last_modified
-        response = make_response(res)
-        response.cache_control.max_age = "36000"
-        return response
-    except Exception:
-        return "An error occurred!"
+    res["name"] = interface_logic.get_interface_name_from_readme(readme)
+    res["charms"] = interface_logic.get_interface_yml(interface_name, status)
+    res["version"] = version
+    res["other_charms"] = {
+        "providers": other_providers,
+        "requirers": other_requirers,
+    }
+    res["last_modified"] = last_modified
+    response = make_response(res)
+    response.cache_control.max_age = "36000"
+    return response
