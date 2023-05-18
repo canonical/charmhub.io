@@ -293,4 +293,3 @@ class Interfaces:
     def get_interface_name_from_readme(self, text):
         name = re.sub(r"[#` \n]", "", text.split("\n##", 1)[0]).split("/")[0]
         return name
-
