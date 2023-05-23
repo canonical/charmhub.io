@@ -1,5 +1,7 @@
 import mermaid from "mermaid";
 
+// We don't get the "mermaid" code block id through
+// so be really hacky about it
 const START_SYNTAX = [
   "flowchart",
   "sequenceDiagram",
@@ -19,6 +21,7 @@ const START_SYNTAX = [
   "graph",
 ];
 
+// Render each SVG and add events for the dropdown
 async function renderSVG(block) {
   const codeSnippet = document.createElement("div");
   codeSnippet.className = "p-code-snippet";
@@ -45,11 +48,13 @@ async function renderSVG(block) {
   const rendered = codeSnippet.querySelector(".rendered");
   const markup = codeSnippet.querySelector(".markup");
 
+  // immediately hide the original markup block
   markup.style.display = "none";
 
   codeSnippet
     .querySelector(".p-code-snippet__dropdown")
     .addEventListener("change", (e) => {
+      // Simple switch
       if (e.target.value === "rendered") {
         markup.style.display = "none";
         rendered.style.display = "block";
@@ -61,14 +66,19 @@ async function renderSVG(block) {
 }
 
 async function initMermaid() {
+  // Get all code blocks that are in the main content of the site
   const codeBlocks = document.querySelectorAll("#main-content pre code");
   const mermaidBlocks = Array.from(codeBlocks).filter((block) => {
+    // Get the first line of the inner code
     const firstLine = block.innerText.split("\n")[0];
-    if (START_SYNTAX.includes(firstLine.split(" ")[0])) {
+    // Get the first word and match it against the predefined list
+    if (START_SYNTAX.includes(firstLine.split(" ")[0].trim())) {
       return true;
     }
     return false;
   });
+
+  // Only if we have some blocks should we do anything
   if (mermaidBlocks) {
     mermaid.initialize({ startOnLoad: false });
     Promise.all(mermaidBlocks.map(renderSVG));
