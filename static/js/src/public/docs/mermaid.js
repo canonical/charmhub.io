@@ -22,12 +22,12 @@ const START_SYNTAX = [
 ];
 
 // Render each SVG and add events for the dropdown
-async function renderSVG(block) {
+async function renderSVG(block, index) {
   const codeSnippet = document.createElement("div");
   codeSnippet.className = "p-code-snippet";
 
   const content = block.innerText;
-  const { svg } = await mermaid.render("diagram", content);
+  const { svg } = await mermaid.render(`diagram-${index}`, content);
 
   codeSnippet.innerHTML = `<div class="p-code-snippet__header">
   <h5 class="p-code-snippet__title">Mermaid Diagram</h5>
@@ -44,6 +44,8 @@ async function renderSVG(block) {
 <div class="markup">${block.parentNode.outerHTML}</div>`;
 
   block.parentNode.parentNode.replaceChild(codeSnippet, block.parentNode);
+
+  console.log(codeSnippet);
 
   const rendered = codeSnippet.querySelector(".rendered");
   const markup = codeSnippet.querySelector(".markup");
@@ -81,7 +83,7 @@ async function initMermaid() {
   // Only if we have some blocks should we do anything
   if (mermaidBlocks) {
     mermaid.initialize({ startOnLoad: false, securityLevel: "antiscript" });
-    Promise.all(mermaidBlocks.map(renderSVG));
+    Promise.all(mermaidBlocks.map((block, index) => renderSVG(block, index)));
   }
 }
 
