@@ -27,7 +27,7 @@ async function renderSVG(block) {
   codeSnippet.className = "p-code-snippet";
 
   const content = block.innerText;
-  const svg = await mermaid.render("diagram", content);
+  const { svg } = await mermaid.render("diagram", content);
 
   codeSnippet.innerHTML = `<div class="p-code-snippet__header">
   <h5 class="p-code-snippet__title">Mermaid Diagram</h5>
@@ -80,7 +80,7 @@ async function initMermaid() {
 
   // Only if we have some blocks should we do anything
   if (mermaidBlocks) {
-    mermaid.initialize({ startOnLoad: false });
+    mermaid.initialize({ startOnLoad: false, securityLevel: "antiscript" });
     Promise.all(mermaidBlocks.map(renderSVG));
   }
 }
