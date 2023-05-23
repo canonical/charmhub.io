@@ -1,23 +1,25 @@
+export type SubSubSectionData = {
+  heading: string;
+  level: number;
+  children: Array<string>;
+};
+
+export type SubSectionData = {
+  heading: string;
+  level: number;
+  children: string | Array<SubSubSectionData>;
+};
+
+export type SectionData = {
+  children: Array<SubSectionData>;
+  heading: string;
+  level: number;
+};
+
 export type InterfaceData = {
-  Behavior: {
-    Introduction: string;
-    Provider: Array<string>;
-    Requirer: Array<string>;
-  };
-  Direction?: Array<string>;
-  Relation?: {
-    Provider: {
-      Example: Array<string>;
-      Introduction: string;
-    };
-    Requirer: {
-      Example: Array<string>;
-      Introduction: string;
-    };
-  };
-  Usage: Array<string>;
+  body: Array<SectionData>;
   charms?: {
-    consumers: Array<{
+    requirers: Array<{
       name: string;
       url: string;
     }>;
