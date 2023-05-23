@@ -1,6 +1,9 @@
 function initSideNav() {
   var sideNav = document.getElementById("drawer");
   var path = window.location.pathname;
+  if (!sideNav) {
+    return;
+  }
   var active = sideNav.querySelector(`a[href="${path}"]`);
 
   if (active) {
