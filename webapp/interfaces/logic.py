@@ -269,7 +269,7 @@ class Interfaces:
                 body = content.split("#")[0].strip()
                 body_list = body.split("\n\n")
                 if len(list(filter(None, body_list))) > 0:
-                    children += [body.split("\n") for body in body_list]
+                    children += body_list
 
             if isinstance(result, list) and isinstance(result[0], dict):
                 children += result
