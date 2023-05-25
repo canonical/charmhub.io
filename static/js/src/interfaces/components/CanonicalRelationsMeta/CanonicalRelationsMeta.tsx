@@ -17,7 +17,7 @@ function CanonicalRelationsMeta({ interfaceName, interfaceVersion }: Props) {
       <p>
         <Button
           element="a"
-          href={`https://github.com/canonical/charm-relation-interfaces/blob/main/interfaces/${interfaceName}/${interfaceVersion}/README.md`}
+          href={`https://github.com/canonical/charm-relation-interfaces/blob/main/interfaces/${interfaceName}/v${interfaceVersion}/README.md`}
           appearance="positive"
         >
           Contribute
