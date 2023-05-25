@@ -49,6 +49,18 @@ function InterfacesIndex() {
     currentPageNumber - 1
   );
 
+  const pageParam = searchParams.get("page");
+
+  useEffect(() => {
+    if (pageParam !== null) {
+      setCurrentPageNumber(parseInt(pageParam));
+      setCurrentPageIndex(parseInt(pageParam) - 1);
+    } else {
+      setCurrentPageNumber(1);
+      setCurrentPageIndex(0);
+    }
+  }, [pageParam]);
+
   useEffect(() => {
     setLoading(true);
 
