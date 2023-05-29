@@ -1,4 +1,5 @@
 from datetime import datetime
+from pprint import pprint
 
 from flask import (
     Blueprint,
@@ -67,9 +68,20 @@ def all_interfaces(path):
 @interfaces.route("/interfaces/<interface_name>.json", defaults={"status": ""})
 @interfaces.route("/interfaces/<interface_name>/<status>.json")
 def get_single_interface(interface_name, status):
-    has_interface = interface_logic.get_interface_list(interface_name)
-    if not has_interface:
-        return jsonify(error=404, text="Interface not found"), 404
+    repo_has_interface = interface_logic.get_interface_list(interface_name)
+
+    api = app.store_api
+    other_requirers = api.find(requires=[interface_name]).get("results", [])
+    other_providers = api.find(provides=[interface_name]).get("results", [])
+
+    res = {}
+    # check if interface exists in github repo
+    if not repo_has_interface:
+        res["other_charms"] = {
+            "providers": other_providers,
+            "requirers": other_requirers,
+        }
+        return jsonify(res)
 
     interface_status = interface_logic.get_interface_status(
         interface_name, status
@@ -83,36 +95,33 @@ def get_single_interface(interface_name, status):
     version = interface_logic.get_interface_latest_version(
         interface_name, status
     )
+
+    # check if interface exists in github repo
+
     readme_contentfile = interface_logic.get_interface_cont_from_repo(
         interface_name, status, "README.md"
     )
-    # check if the interface has a readme
-    if not readme_contentfile:
-        readme = ""
-    else:
-        last_modified = datetime.strptime(
-            readme_contentfile[0].last_modified, "%a, %d %b %Y %H:%M:%S %Z"
-        ).isoformat()
+    last_modified = datetime.strptime(
+        readme_contentfile[0].last_modified, "%a, %d %b %Y %H:%M:%S %Z"
+    ).isoformat()
 
-        readme = readme_contentfile[0].decoded_content.decode("utf-8")
-    api = app.store_api
-    other_requirers = api.find(requires=[interface_name]).get("results", [])
-    other_providers = api.find(provides=[interface_name]).get("results", [])
+    readme = readme_contentfile[0].decoded_content.decode("utf-8")
 
-    res = {
-        "body": interface_logic.convert_readme(
-            interface_name, version, readme, 2
-        )
-    }
+    res["body"] = interface_logic.convert_readme(
+        interface_name, version, readme, 2
+    )
 
     res["name"] = interface_logic.get_interface_name_from_readme(readme)
     res["charms"] = interface_logic.get_interface_yml(interface_name, status)
+    res["last_modified"] = last_modified
+
     res["version"] = version
+
     res["other_charms"] = {
         "providers": other_providers,
         "requirers": other_requirers,
     }
-    res["last_modified"] = last_modified
+
     response = make_response(res)
-    response.cache_control.max_age = "36000"
+    response.cache_control.max_age = "3600"
     return response
