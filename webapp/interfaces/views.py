@@ -6,6 +6,7 @@ from flask import (
     make_response,
     current_app as app,
 )
+from flask.json import jsonify
 from github import Github
 from os import getenv
 
@@ -66,11 +67,15 @@ def all_interfaces(path):
 @interfaces.route("/interfaces/<interface_name>.json", defaults={"status": ""})
 @interfaces.route("/interfaces/<interface_name>/<status>.json")
 def get_single_interface(interface_name, status):
-    interface_has_status = interface_logic.get_interface_status(
+    has_interface = interface_logic.get_interface_list(interface_name)
+    if not has_interface:
+        return jsonify(error=404, text="Interface not found"), 404
+
+    interface_status = interface_logic.get_interface_status(
         interface_name, status
     )
     # if the user sends request for a status that does not exist
-    if not interface_has_status:
+    if not interface_status:
         if status == "live":
             status = "draft"
         else:
@@ -78,15 +83,18 @@ def get_single_interface(interface_name, status):
     version = interface_logic.get_interface_latest_version(
         interface_name, status
     )
-    content = interface_logic.get_interface_cont_from_repo(
+    readme_contentfile = interface_logic.get_interface_cont_from_repo(
         interface_name, status, "README.md"
     )
+    # check if the interface has a readme
+    if not readme_contentfile:
+        readme = ""
+    else:
+        last_modified = datetime.strptime(
+            readme_contentfile[0].last_modified, "%a, %d %b %Y %H:%M:%S %Z"
+        ).isoformat()
 
-    last_modified = datetime.strptime(
-        content[0].last_modified, "%a, %d %b %Y %H:%M:%S %Z"
-    ).isoformat()
-
-    readme = content[0].decoded_content.decode("utf-8")
+        readme = readme_contentfile[0].decoded_content.decode("utf-8")
     api = app.store_api
     other_requirers = api.find(requires=[interface_name]).get("results", [])
     other_providers = api.find(provides=[interface_name]).get("results", [])

@@ -30,17 +30,25 @@ class Interfaces:
             readme = self.repo.get_contents(
                 "README.md"
             ).decoded_content.decode("utf-8")
+            # the readme fetched here is for all interfaces
             self.interfaces = self.get_interfaces_from_readme(readme)
             self.last_fetch = time.time()
 
         return self.interfaces
 
-    def get_interface_status(self, interface, status):
+    def get_interface_list(self, interface):
+        """
+        return all versions of a particular interface from the interfaces list
+        """
         interfaces = self.get_interfaces()
+        return [i for i in interfaces if i["name"] == interface]
+
+    def get_interface_status(self, interface, status):
+        interfaces = self.get_interface_list(interface)
         inter = [
             i
             for i in interfaces
-            if i["name"] == interface and i["status"].lower() == status
+            if i["status"].lower() == status
         ]
         return inter
 

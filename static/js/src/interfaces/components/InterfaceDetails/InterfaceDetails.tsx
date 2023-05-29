@@ -54,7 +54,7 @@ const getInterface = async (
       const response = await fetch(`./${interfaceStatus}.json`);
       if (response.status === 200) {
         return response.json();
-      }
+      }        
     }
     const response = await fetch(`./${interfaceName}.json`);
     if (response.status === 200) {
