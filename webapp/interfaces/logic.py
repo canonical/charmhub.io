@@ -45,11 +45,7 @@ class Interfaces:
 
     def get_interface_status(self, interface, status):
         interfaces = self.get_interface_list(interface)
-        inter = [
-            i
-            for i in interfaces
-            if i["status"].lower() == status
-        ]
+        inter = [i for i in interfaces if i["status"].lower() == status]
         return inter
 
     def get_interface_latest_version(self, interface, status):
