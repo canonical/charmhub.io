@@ -15,35 +15,6 @@ import RequiringCharms from "../RequiringCharms";
 
 import type { InterfaceData } from "../../types";
 
-const getCharms = async (interfaceName: string): Promise<InterfaceData> => {
-  const requiresResp = await fetch(`/packages.json?requires=${interfaceName}`);
-  const providesResp = await fetch(`/packages.json?provides=${interfaceName}`);
-  const requiresJson = await requiresResp.json();
-  const providesJson = await providesResp.json();
-  const data: InterfaceData = {
-    name: interfaceName,
-    version: "",
-    last_modified: null,
-    body: [],
-  };
-
-  if (!!(requiresJson?.packages?.length || providesJson?.packages?.length)) {
-    data.other_charms = {
-      requirers: requiresJson.packages.map((charm: any) => ({
-        id: charm.id,
-        name: charm.name,
-      })),
-      providers: providesJson.packages.map((charm: any) => ({
-        id: charm.id,
-        name: charm.name,
-      })),
-    };
-
-    return data;
-  }
-
-  throw new Error("Interface does not exist.");
-};
 
 const getInterface = async (
   interfaceName: string | undefined,
@@ -54,7 +25,7 @@ const getInterface = async (
       const response = await fetch(`./${interfaceStatus}.json`);
       if (response.status === 200) {
         return response.json();
-      }
+      }        
     }
     const response = await fetch(`./${interfaceName}.json`);
     if (response.status === 200) {
@@ -86,34 +57,13 @@ function InterfaceDetails() {
   let error = interfaceError as Error;
   let isLoading = interfaceIsLoading;
 
-  // Get charms from the package.json endpoint, filtering
-  // by the interface name
-  const charms = useQuery(
-    ["charms", interfaceName],
-    () => getCharms(interfaceName!),
-    {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      // Only fetch charms if the interface.json endpoint fails
-      enabled: !!(
-        interfaceName &&
-        !interfaceIsLoading &&
-        interfaceError &&
-        !isLoading
-      ),
-    }
-  );
-
-  if (charms.data || charms.error || charms.isLoading) {
-    interfaceData = charms.data;
-    error = charms.error as Error;
-    isLoading = charms.isLoading;
-    isCommunity = true;
-  }
 
   const hasDeveloperDocumentation =
-    interfaceData && interfaceData.body.length > 0 ? true : false;
+    interfaceData && interfaceData.body ? true : false;
+
+  if (!hasDeveloperDocumentation) {
+    isCommunity = true;
+  }
 
   return (
     <>
