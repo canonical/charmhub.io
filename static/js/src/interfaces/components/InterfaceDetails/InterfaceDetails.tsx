@@ -147,11 +147,11 @@ function InterfaceDetails({ interfaceItem }: Props) {
                 />
               </div>
 
-              {!(
-                interfaceData?.charms?.providers?.length &&
-                interfaceData?.other_charms?.providers?.length &&
-                interfaceData?.charms?.requirers?.length &&
-                interfaceData?.other_charms?.requirers?.length
+              {!!(
+                !interfaceData?.charms?.providers?.length &&
+                !interfaceData?.other_charms?.providers?.length &&
+                !interfaceData?.charms?.requirers?.length &&
+                !interfaceData?.other_charms?.requirers?.length
               ) && (
                 <Notification severity="information">
                   <p>No charms found that Provide or Require {interfaceName}</p>
