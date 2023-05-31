@@ -147,9 +147,27 @@ function InterfaceDetails({ interfaceItem }: Props) {
                 />
               </div>
 
-              <Strip className="u-no-padding--top" bordered shallow>
-                <h2 id="charms">Charms</h2>
-              </Strip>
+              {!(
+                interfaceData?.charms?.providers?.length &&
+                interfaceData?.other_charms?.providers?.length &&
+                interfaceData?.charms?.requirers?.length &&
+                interfaceData?.other_charms?.requirers?.length
+              ) && (
+                <Notification severity="information">
+                  <p>No charms found that Provide or Require {interfaceName}</p>
+                </Notification>
+              )}
+
+              {!!(
+                interfaceData?.charms?.providers?.length ||
+                interfaceData?.other_charms?.providers?.length ||
+                interfaceData?.charms?.requirers?.length ||
+                interfaceData?.other_charms?.requirers?.length
+              ) && (
+                <Strip className="u-no-padding--top" bordered shallow>
+                  <h2 id="charms">Charms</h2>
+                </Strip>
+              )}
 
               {!!(
                 interfaceData?.charms?.providers?.length ||
