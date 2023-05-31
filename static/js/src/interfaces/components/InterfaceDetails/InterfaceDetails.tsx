@@ -73,8 +73,6 @@ function InterfaceDetails({ interfaceItem }: Props) {
   let error = interfaceError as Error;
   let isLoading = interfaceIsLoading;
 
-<<<<<<< HEAD
-
   const hasDeveloperDocumentation =
     interfaceData && interfaceData.body ? true : false;
 
@@ -82,15 +80,6 @@ function InterfaceDetails({ interfaceItem }: Props) {
     isCommunity = true;
   }
 
-=======
-  const hasDeveloperDocumentation =
-    interfaceData && interfaceData.body ? true : false;
-
-  if (!hasDeveloperDocumentation) {
-    isCommunity = true;
-  }
-
->>>>>>> 1f2b6d6453de9b22560968b6e9802254caeec1f2
   return (
     <>
       <Strip type="light" shallow>
