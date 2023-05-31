@@ -57,11 +57,27 @@ def interfaces_json():
 
 
 @interfaces.route("/interfaces", defaults={"path": ""})
-@interfaces.route("/interfaces/<path:path>")
 def all_interfaces(path):
     if not getenv("ENVIRONMENT") in ["devel", "staging"]:
         return render_template("404.html")
-    return render_template("interfaces/index.html")
+
+    response = get_interfaces()
+    interfaces = eval(response.data.decode("utf-8"))
+    context = {"interfaces": interfaces["interfaces"]}
+
+    return render_template("interfaces/index.html", **context)
+
+
+@interfaces.route("/interfaces/<path:path>")
+def single_interface(path):
+    if not getenv("ENVIRONMENT") in ["devel", "staging"]:
+        return render_template("404.html")
+
+    response = get_single_interface(path, "")
+    interface = eval(response.data.decode("utf-8"))
+    context = {"interface": interface}
+
+    return render_template("interfaces/index.html", **context)
 
 
 @interfaces.route("/interfaces/<interface_name>.json", defaults={"status": ""})

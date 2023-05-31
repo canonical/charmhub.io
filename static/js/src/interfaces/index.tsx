@@ -6,7 +6,7 @@ import App from "./components/App";
 
 const queryClient = new QueryClient();
 
-const root = createRoot(document.getElementById("main-content")!);
+const root = createRoot(document.getElementById("app")!);
 root.render(
   <QueryClientProvider client={queryClient}>
     <App />

@@ -11,13 +11,7 @@ import {
   StatusLabel,
 } from "@canonical/react-components";
 
-type InterfaceData = {
-  name: String;
-  description: String;
-  version: String;
-  status: String;
-  category: String;
-};
+import type { InterfaceItem } from "../../types";
 
 function pageArray(items: Array<any>, count: number) {
   const result: Array<any> = [];
@@ -32,13 +26,29 @@ function pageArray(items: Array<any>, count: number) {
   return result;
 }
 
-function InterfacesIndex() {
+function sortInterfaces(a: InterfaceItem, b: InterfaceItem) {
+  if (a.status === "Live" && b.status !== "Live") {
+    return -1;
+  }
+
+  if (a.status !== "Live" && b.status === "Live") {
+    return 1;
+  }
+
+  return 0;
+}
+
+type Props = {
+  interfacesList: Array<InterfaceItem>;
+};
+
+function InterfacesIndex({ interfacesList }: Props) {
   const ITEMS_PER_PAGE = 10;
 
   const [searchParams, setSearchParams]: [URLSearchParams, Function] =
     useSearchParams();
 
-  const [interfaces, setInterfaces] = useState([]);
+  const [interfaces, setInterfaces] = useState<Array<InterfaceItem>>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [currentItems, setCurrentItems] = useState([]);
@@ -62,6 +72,11 @@ function InterfacesIndex() {
   }, [pageParam]);
 
   useEffect(() => {
+    if (interfacesList) {
+      setInterfaces(interfacesList.sort(sortInterfaces));
+      return;
+    }
+
     setLoading(true);
 
     fetch("./interfaces.json")
@@ -73,19 +88,7 @@ function InterfacesIndex() {
         throw response;
       })
       .then((data) => {
-        setInterfaces(
-          data?.interfaces.sort((a: InterfaceData, b: InterfaceData) => {
-            if (a.status === "Live" && b.status !== "Live") {
-              return -1;
-            }
-
-            if (a.status !== "Live" && b.status === "Live") {
-              return 1;
-            }
-
-            return 0;
-          })
-        );
+        setInterfaces(data?.interfaces.sort(sortInterfaces));
       })
       .catch(() => {
         setError(true);
@@ -93,7 +96,7 @@ function InterfacesIndex() {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [interfacesList]);
 
   useEffect(() => {
     setCurrentItems(pageArray(interfaces, ITEMS_PER_PAGE)[currentPageIndex]);
@@ -183,7 +186,7 @@ function InterfacesIndex() {
           ]}
           rows={
             currentItems &&
-            currentItems.map((item: InterfaceData) => {
+            currentItems.map((item: InterfaceItem) => {
               return {
                 columns: [
                   {
