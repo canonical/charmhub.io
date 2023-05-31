@@ -4,6 +4,20 @@
 {% block meta_description %}Interfaces describe the relation between two charms. This interface catalogue shows opinionated, standardized interface specifications for charmed operator relations.{% endblock %}
 
 {% block content %}
-<main id="main-content"></main>
+<main id="app"></main>
+<script>
+  window.initialProps = {
+    interfacesList: null,
+    interfaceItem: null
+  };
+
+  {% if interfaces %}
+  window.initialProps.interfacesList = {{ interfaces|safe }};
+  {% endif %}
+
+  {% if interface %}
+  window.initialProps.interfaceItem = {{ interface|safe }}
+  {% endif %}
+</script>
 <script src="{{ versioned_static('js/dist/interfaces.js') }}"></script>
 {% endblock %}
