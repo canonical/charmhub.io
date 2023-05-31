@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { formatDistance } from "date-fns";
@@ -79,6 +79,10 @@ function InterfaceDetails({ interfaceItem }: Props) {
   if (!hasDeveloperDocumentation) {
     isCommunity = true;
   }
+
+  useEffect(() => {
+    document.title = `Charmhub | ${interfaceName} interface`;
+  }, []);
 
   return (
     <>

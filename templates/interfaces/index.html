@@ -1,14 +1,19 @@
 {% extends 'base_layout.html' %}
 
-{% block meta_title %}Interface catalogue{% endblock %}
-{% block meta_description %}Interfaces describe the relation between two charms. This interface catalogue shows opinionated, standardized interface specifications for charmed operator relations.{% endblock %}
+{% block meta_title %}{% if interface %}{{ interface.name }} interface{% else %}Interface catalogue{% endif %}{% endblock %}
+
+{% set interfaces_description = "Interfaces describe the relation between two charms. This interface catalogue shows opinionated, standardized interface specifications for charmed operator relations." %}
+
+{% set interface_description = "Interfaces describe the relation between two charms. This interface shows opinionated, standardized interface specifications for charmed operator relations." %}
+
+{% block meta_description %}{% if interface %}{{ interface_description }}{% else %}{{ interfaces_description }}{% endif %}{% endblock %}
 
 {% block content %}
 <main id="app"></main>
 <script>
   window.initialProps = {
     interfacesList: null,
-    interfaceItem: null
+    interfaceItem: null,
   };
 
   {% if interfaces %}
@@ -16,7 +21,7 @@
   {% endif %}
 
   {% if interface %}
-  window.initialProps.interfaceItem = {{ interface|safe }}
+  window.initialProps.interfaceItem = {{ interface|safe }};
   {% endif %}
 </script>
 <script src="{{ versioned_static('js/dist/interfaces.js') }}"></script>
