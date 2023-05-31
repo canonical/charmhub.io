@@ -5,17 +5,22 @@ import InterfacesIndex from "../InterfacesIndex";
 import InterfaceDetails from "../InterfaceDetails";
 
 function App() {
+  const initialProps = window.initialProps;
+
   return (
     <Router>
       <Routes>
-        <Route path="/interfaces" element={<InterfacesIndex />} />
+        <Route
+          path="/interfaces"
+          element={<InterfacesIndex {...initialProps} />}
+        />
         <Route
           path="/interfaces/:interfaceName"
-          element={<InterfaceDetails />}
+          element={<InterfaceDetails {...initialProps} />}
         />
-         <Route
+        <Route
           path="/interfaces/:interfaceName/:interfaceStatus"
-          element={<InterfaceDetails />}
+          element={<InterfaceDetails {...initialProps} />}
         />
       </Routes>
     </Router>

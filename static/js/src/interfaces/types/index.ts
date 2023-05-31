@@ -42,3 +42,11 @@ export type InterfaceData = {
   version: string;
   last_modified: string | null;
 };
+
+export type InterfaceItem = {
+  name: String;
+  description: String;
+  version: String;
+  status: String;
+  category: String;
+};

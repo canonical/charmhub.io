@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { formatDistance } from "date-fns";
 import { Strip, Row, Col, Notification } from "@canonical/react-components";
@@ -14,7 +14,6 @@ import ProvidingCharms from "../ProvidingCharms";
 import RequiringCharms from "../RequiringCharms";
 
 import type { InterfaceData } from "../../types";
-
 
 const getInterface = async (
   interfaceName: string | undefined,
@@ -36,8 +35,20 @@ const getInterface = async (
   throw new Error("Interface is not a tested interface.");
 };
 
-function InterfaceDetails() {
+type Props = {
+  interfaceItem: InterfaceData;
+};
+
+function InterfaceDetails({ interfaceItem }: Props) {
   const { interfaceName, interfaceStatus } = useParams();
+  const shouldFetchData = () => {
+    if (interfaceItem && interfaceItem.name === interfaceName) {
+      return false;
+    }
+
+    return true;
+  };
+
   let isCommunity = false;
 
   let {
@@ -51,12 +62,18 @@ function InterfaceDetails() {
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
+      enabled: shouldFetchData(),
     }
   );
+
+  if (interfaceItem && interfaceItem.name === interfaceName) {
+    interfaceData = interfaceItem;
+  }
 
   let error = interfaceError as Error;
   let isLoading = interfaceIsLoading;
 
+<<<<<<< HEAD
 
   const hasDeveloperDocumentation =
     interfaceData && interfaceData.body ? true : false;
@@ -65,6 +82,15 @@ function InterfaceDetails() {
     isCommunity = true;
   }
 
+=======
+  const hasDeveloperDocumentation =
+    interfaceData && interfaceData.body ? true : false;
+
+  if (!hasDeveloperDocumentation) {
+    isCommunity = true;
+  }
+
+>>>>>>> 1f2b6d6453de9b22560968b6e9802254caeec1f2
   return (
     <>
       <Strip type="light" shallow>
@@ -93,7 +119,7 @@ function InterfaceDetails() {
           </div>
         )}
 
-        {isLoading && (
+        {isLoading && shouldFetchData() && (
           <div className="u-fixed-width u-align--center">
             Fetching interface...
           </div>
