@@ -32,25 +32,7 @@ publisher_api = CharmPublisher(talisker.requests.get_session())
 @store.route("/")
 @store_maintenance
 def index():
-    featured_charms = app.store_api.find(
-        category="featured", fields=SEARCH_FIELDS
-    )["results"]
-    featured_topics = [t for t in topic_list if "featured" in t["categories"]]
-
-    context = {
-        "categories": CATEGORIES,
-        "featured_topics": featured_topics,
-    }
-
-    featured_packages = []
-
-    for i, item in enumerate(featured_charms):
-        charm = logic.add_store_front_data(featured_charms[i], False)
-        featured_packages.append(charm)
-
-    context["featured_charms"] = featured_packages
-
-    return render_template("store.html", **context)
+    return render_template("beta/store.html")
 
 
 @store.route("/packages.json")
