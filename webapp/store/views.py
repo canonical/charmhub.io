@@ -12,14 +12,13 @@ from flask import current_app as app
 from flask import jsonify, redirect, render_template, request, make_response
 from pybadges import badge
 
-from webapp.config import DETAILS_VIEW_REGEX, CATEGORIES
+from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import (
     redirect_uppercase_to_lowercase,
     store_maintenance,
 )
 from webapp.helpers import discourse_api
 from webapp.store import logic
-from webapp.topics.views import topic_list
 from webapp.config import SEARCH_FIELDS
 
 

@@ -1,5 +1,8 @@
 import talisker.requests
-from canonicalwebteam.store_api.stores.charmstore import CharmStore, CharmPublisher
+from canonicalwebteam.store_api.stores.charmstore import (
+    CharmStore,
+    CharmPublisher,
+)
 from canonicalwebteam.store_base.app import create_app
 from canonicalwebteam.candid import CandidClient
 from dateutil import parser
