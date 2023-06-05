@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { formatDistance } from "date-fns";
@@ -73,8 +73,6 @@ function InterfaceDetails({ interfaceItem }: Props) {
   let error = interfaceError as Error;
   let isLoading = interfaceIsLoading;
 
-<<<<<<< HEAD
-
   const hasDeveloperDocumentation =
     interfaceData && interfaceData.body ? true : false;
 
@@ -82,15 +80,6 @@ function InterfaceDetails({ interfaceItem }: Props) {
     isCommunity = true;
   }
 
-=======
-  const hasDeveloperDocumentation =
-    interfaceData && interfaceData.body ? true : false;
-
-  if (!hasDeveloperDocumentation) {
-    isCommunity = true;
-  }
-
->>>>>>> 1f2b6d6453de9b22560968b6e9802254caeec1f2
   return (
     <>
       <Strip type="light" shallow>
@@ -154,9 +143,27 @@ function InterfaceDetails({ interfaceItem }: Props) {
                 />
               </div>
 
-              <Strip className="u-no-padding--top" bordered shallow>
-                <h2 id="charms">Charms</h2>
-              </Strip>
+              {!!(
+                !interfaceData?.charms?.providers?.length &&
+                !interfaceData?.other_charms?.providers?.length &&
+                !interfaceData?.charms?.requirers?.length &&
+                !interfaceData?.other_charms?.requirers?.length
+              ) && (
+                <Notification severity="information">
+                  <p>No charms found that Provide or Require {interfaceName}</p>
+                </Notification>
+              )}
+
+              {!!(
+                interfaceData?.charms?.providers?.length ||
+                interfaceData?.other_charms?.providers?.length ||
+                interfaceData?.charms?.requirers?.length ||
+                interfaceData?.other_charms?.requirers?.length
+              ) && (
+                <Strip className="u-no-padding--top" bordered shallow>
+                  <h2 id="charms">Charms</h2>
+                </Strip>
+              )}
 
               {!!(
                 interfaceData?.charms?.providers?.length ||

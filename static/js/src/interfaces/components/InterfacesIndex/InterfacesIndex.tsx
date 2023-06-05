@@ -102,6 +102,10 @@ function InterfacesIndex({ interfacesList }: Props) {
     setCurrentItems(pageArray(interfaces, ITEMS_PER_PAGE)[currentPageIndex]);
   }, [currentPageIndex, interfaces]);
 
+  useEffect(() => {
+    document.title = "Charmhub | Interface catalogue";
+  }, []);
+
   return (
     <>
       <Strip type="light">
