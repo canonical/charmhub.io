@@ -144,6 +144,7 @@ def details_overview(entity_name):
         "result.website",
         "result.summary",
         "default-release.revision.metadata-yaml",
+        "result.links",
     ]
 
     package = get_package(
