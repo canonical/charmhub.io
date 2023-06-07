@@ -1,5 +1,4 @@
 from datetime import datetime
-from pprint import pprint
 
 from flask import (
     Blueprint,
@@ -111,8 +110,6 @@ def get_single_interface(interface_name, status):
     version = interface_logic.get_interface_latest_version(
         interface_name, status
     )
-
-    # check if interface exists in github repo
 
     readme_contentfile = interface_logic.get_interface_cont_from_repo(
         interface_name, status, "README.md"

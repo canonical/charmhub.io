@@ -1,7 +1,10 @@
 import re
 import time
+from flask import request
 from github import Github
 from os import getenv
+
+import requests
 
 from webapp.helpers import get_yaml_loader
 
@@ -76,12 +79,27 @@ class Interfaces:
         )
         if content:
             cont = content[0].decoded_content.decode("utf-8")
-            response = yaml.load(cont)
-            # if there is no charm
-        else:
-            response = {"providers": [], "consumers": []}
+            charms = yaml.load(cont)
 
-        return response
+            active_providers = []
+            active_requirers = []
+            if "providers" in charms and len(charms["providers"]) > 0:
+                for provider in charms["providers"]:
+                    p = requests.get(f"{request.url_root}/{provider['name']}")
+                    if p.status_code != 404:
+                        active_providers.append(provider)
+                charms["providers"] = list(active_providers)
+            if "requirers" in charms and len(charms["requirers"]) > 0:
+                for requirer in charms["requirers"]:
+                    c = requests.get(f"{request.url_root}/{requirer['name']}")
+                    if c.status_code != 404:
+                        active_requirers.append(requirer)
+                charms["requirers"] = active_requirers
+
+        else:
+            charms = {"providers": [], "requirers": []}
+
+        return charms
 
     def find_between(self, s, first, last):
         try:
