@@ -83,17 +83,28 @@ class Interfaces:
 
             active_providers = []
             active_requirers = []
-            if "providers" in charms and len(charms["providers"]) > 0:
+            if "providers" in charms and charms["providers"]:
                 for provider in charms["providers"]:
-                    p = requests.get(f"{request.url_root}/{provider['name']}")
-                    if p.status_code != 404:
-                        active_providers.append(provider)
+                    try:
+                        p = requests.get(
+                            f"{request.url_root}/{provider['name']}"
+                        )
+                        if p.status_code == 200:
+                            active_providers.append(provider)
+                    except Exception:
+                        continue
+
                 charms["providers"] = list(active_providers)
-            if "requirers" in charms and len(charms["requirers"]) > 0:
+            if "requirers" in charms and charms["requirers"]:
                 for requirer in charms["requirers"]:
-                    c = requests.get(f"{request.url_root}/{requirer['name']}")
-                    if c.status_code != 404:
-                        active_requirers.append(requirer)
+                    try:
+                        c = requests.get(
+                            f"{request.url_root}/{requirer['name']}"
+                        )
+                        if c.status_code == 200:
+                            active_requirers.append(requirer)
+                    except Exception:
+                        continue
                 charms["requirers"] = active_requirers
 
         else:

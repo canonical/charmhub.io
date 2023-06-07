@@ -20,16 +20,19 @@ const getInterface = async (
   interfaceStatus?: string | undefined
 ): Promise<InterfaceData> => {
   if (interfaceName) {
+    console.log({interfaceStatus})
     if (interfaceStatus) {
       const response = await fetch(`./${interfaceStatus}.json`);
       if (response.status === 200) {
         return response.json();
       }
     }
-    const response = await fetch(`./${interfaceName}.json`);
-    if (response.status === 200) {
-      return response.json();
+    else {
+      const response = await fetch(`./${interfaceName}.json`);
+      if (response.status === 200) {
+        return response.json();
     }
+  }
   }
 
   throw new Error("Interface is not a tested interface.");
@@ -41,6 +44,7 @@ type Props = {
 
 function InterfaceDetails({ interfaceItem }: Props) {
   const { interfaceName, interfaceStatus } = useParams();
+  console.log({interfaceName, interfaceStatus})
   const shouldFetchData = () => {
     if (interfaceItem && interfaceItem.name === interfaceName) {
       return false;
