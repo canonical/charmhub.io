@@ -1,54 +1,39 @@
 import talisker.requests
-from canonicalwebteam.flask_base.app import FlaskBase
-from canonicalwebteam.store_api.stores.charmstore import CharmStore
+from canonicalwebteam.store_api.stores.charmstore import (
+    CharmStore,
+    CharmPublisher,
+)
+from canonicalwebteam.store_base.app import create_app
+from canonicalwebteam.candid import CandidClient
 from dateutil import parser
-from flask import render_template, make_response, request, session
+from flask import render_template, make_response, request
 
-from webapp import config
-from webapp.extensions import csrf
-from webapp.handlers import set_handlers
-from webapp.login.views import login
 from webapp.topics.views import topics
 from webapp.publisher.views import publisher
 from webapp.store.views import store
 from webapp.interfaces.views import interfaces
+from webapp.charmhub import charmhub_bp
+from webapp.handlers import charmhub_utility_processor
 
-app = FlaskBase(
-    __name__,
-    config.APP_NAME,
-    template_folder="../templates",
-    static_folder="../static",
-    template_404="404.html",
-    template_500="500.html",
-    favicon_url="https://assets.ubuntu.com/v1/5d4edefd-jaas-favicon.png",
+
+app = create_app(
+    "charmhub",
+    store_bp=charmhub_bp,
+    utility_processor=charmhub_utility_processor,
 )
+app.name = "charmhub"
+app.static_folder = charmhub_bp.static_folder
+app.template_folder = charmhub_bp.template_folder
 app.store_api = CharmStore(session=talisker.requests.get_session())
 
-set_handlers(app)
-csrf.init_app(app)
+request_session = talisker.requests.get_session()
+candid = CandidClient(request_session)
+publisher_api = CharmPublisher(request_session)
 
 app.register_blueprint(publisher)
-app.register_blueprint(store)
-app.register_blueprint(login)
 app.register_blueprint(topics)
+app.register_blueprint(store)
 app.register_blueprint(interfaces)
-
-
-@app.route("/account.json")
-def get_account_json():
-    """
-    A JSON endpoint to request login status
-    """
-    account = None
-
-    if "account" in session:
-        account = session["account"]
-
-    response = {"account": account}
-    response = make_response(response)
-    response.headers["Cache-Control"] = "no-store"
-
-    return response
 
 
 @app.route("/overview")

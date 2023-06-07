@@ -6,7 +6,7 @@ import { CharmCard } from "@canonical/store-components";
 
 function Packages() {
   const getData = async () => {
-    const response = await fetch(`/beta/store?page=${currentPage}`);
+    const response = await fetch(`/store.json?page=${currentPage}`);
     const data = await response.json();
     const packagesWithId = data.packages.map((item: any) => {
       return {

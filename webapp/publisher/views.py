@@ -12,7 +12,7 @@ from flask import (
 )
 from flask.json import jsonify
 from webapp.config import DETAILS_VIEW_REGEX
-from webapp.decorators import login_required
+from canonicalwebteam.store_base.utils.decorators import login_required
 from webapp.helpers import get_licenses
 
 publisher = Blueprint(

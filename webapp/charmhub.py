@@ -1,5 +1,6 @@
 from flask import Blueprint
 
+
 charmhub_bp = Blueprint(
     "charmhub_bp",
     __name__,
