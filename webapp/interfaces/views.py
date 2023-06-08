@@ -111,8 +111,6 @@ def get_single_interface(interface_name, status):
         interface_name, status
     )
 
-    # check if interface exists in github repo
-
     readme_contentfile = interface_logic.get_interface_cont_from_repo(
         interface_name, status, "README.md"
     )

@@ -3,6 +3,8 @@ import time
 from github import Github
 from os import getenv
 
+import requests
+
 from webapp.helpers import get_yaml_loader
 
 GITHUB_TOKEN = getenv("GITHUB_TOKEN")
@@ -76,12 +78,33 @@ class Interfaces:
         )
         if content:
             cont = content[0].decoded_content.decode("utf-8")
-            response = yaml.load(cont)
-            # if there is no charm
-        else:
-            response = {"providers": [], "consumers": []}
+            charms = yaml.load(cont)
+            active_providers = []
+            active_requirers = []
+            url = "https://charmhub.io/"
+            if "providers" in charms and charms["providers"]:
+                for provider in charms["providers"]:
+                    try:
+                        p = requests.get(f"{url}/{provider['name']}")
+                        if p.status_code != 404:
+                            active_providers.append(provider)
+                    except Exception:
+                        continue
 
-        return response
+                charms["providers"] = active_providers
+            if "requirers" in charms and charms["requirers"]:
+                for requirer in charms["requirers"]:
+                    try:
+                        c = requests.get(f"{url}/{requirer['name']}")
+                        if c.status_code != 404:
+                            active_requirers.append(requirer)
+                    except Exception:
+                        continue
+                charms["requirers"] = active_requirers
+
+        else:
+            charms = {"providers": [], "requirers": []}
+        return charms
 
     def find_between(self, s, first, last):
         try:
