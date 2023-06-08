@@ -172,7 +172,8 @@ export const InterfaceItem = ({
       {charms && charms.length === 0 && filterData.length === 0 && (
         <div className="u-fixed-width">
           <p>
-            No charms found that <b>provide</b> or <b>consume</b>{" "}
+            No charms found that{" "}
+            <b>{interfaceType === "requires" ? "provide" : "consume"}</b>{" "}
             {interfaceData.interface}
           </p>
         </div>
