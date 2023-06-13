@@ -88,31 +88,7 @@ function Packages() {
         selectedPackageType
       )
     );
-  }, [selectedCategories]);
-
-  useEffect(() => {
-    setCurrentPage("1");
-    setSearchParams(
-      getUpdatedSearchParams(
-        1,
-        selectedCategories,
-        selectedPlatform,
-        selectedPackageType
-      )
-    );
-  }, [selectedPlatform]);
-
-  useEffect(() => {
-    setCurrentPage("1");
-    setSearchParams(
-      getUpdatedSearchParams(
-        1,
-        selectedCategories,
-        selectedPlatform,
-        selectedPackageType
-      )
-    );
-  }, [selectedPackageType]);
+  }, [selectedCategories, selectedPlatform, selectedPackageType]);
 
   return (
     <Strip>
