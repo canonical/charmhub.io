@@ -288,8 +288,9 @@ def get_docs_topic_id(metadata_yaml):
         if docs_link.startswith(base_url):
             docs_link_parts = docs_link[len(base_url) :].split("/")
 
-            if len(docs_link_parts) > 3:
-                topic_id = docs_link_parts[3]
+            if len(docs_link_parts) > 2:
+                topic_id = docs_link_parts[-1]
+                print(topic_id)
 
                 if topic_id.isnumeric():
                     return topic_id
