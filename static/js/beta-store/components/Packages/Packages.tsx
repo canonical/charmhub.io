@@ -79,10 +79,9 @@ function Packages() {
   }, [searchParams]);
 
   useEffect(() => {
-    setCurrentPage("1");
     setSearchParams(
       getUpdatedSearchParams(
-        1,
+        parseInt(currentPage),
         selectedCategories,
         selectedPlatform,
         selectedPackageType
