@@ -4,13 +4,13 @@
   $icon-size: 1.5rem;
 
   .p-bundle-icons {
+    align-items: center;
     display: grid;
     grid-gap: 0.5rem;
     grid-template-columns: repeat(auto-fit, 1.5rem);
     grid-template-rows: 1.5rem;
     margin-bottom: calc($icon-size * 2);
     max-width: 40em;
-    align-items: center;
 
     &:hover {
       text-decoration: none;
@@ -35,7 +35,7 @@
       }
     }
 
-    .p-bundle-icon-title{
+    .p-bundle-icon-title {
       font-size: 16px;
       vertical-align: top;
     }
