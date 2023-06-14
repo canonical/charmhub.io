@@ -9,31 +9,32 @@ import platforms from "../../data/platforms";
 import packageTypes from "../../data/package-types";
 
 function Packages() {
-  const getUpdatedSearchParams = (
-    page: number,
-    selectedCategories: Array<string>,
-    selectedPlatform: string,
-    selectedPackageType: string
+  const getCurrentSearchParams = (
+    searchParams: { get: Function },
+    keysToRemove?: Array<string>
   ) => {
-    const searchParams: any = {};
+    const currentSearchParams: any = {};
 
-    if (page && page > 1) {
-      searchParams.page = page.toString();
+    if (searchParams.get("page") && !keysToRemove?.includes("page")) {
+      currentSearchParams.page = searchParams.get("page");
     }
 
-    if (selectedCategories && selectedCategories.length > 0) {
-      searchParams.categories = selectedCategories.join(",");
+    if (
+      searchParams.get("categories") &&
+      !keysToRemove?.includes("categories")
+    ) {
+      currentSearchParams.categories = searchParams.get("categories");
     }
 
-    if (selectedPlatform) {
-      searchParams.platforms = selectedPlatform;
+    if (searchParams.get("platforms") && keysToRemove?.includes("platforms")) {
+      currentSearchParams.platforms = searchParams.get("platforms");
     }
 
-    if (selectedPackageType) {
-      searchParams.type = selectedPackageType;
+    if (searchParams.get("type") && keysToRemove?.includes("type")) {
+      currentSearchParams.type = searchParams.get("type");
     }
 
-    return searchParams;
+    return currentSearchParams;
   };
 
   const getData = async () => {
@@ -60,59 +61,11 @@ function Packages() {
     searchParams.get("page") || "1"
   );
 
-  const [selectedCategories, setSelectedCategories] = useState(
-    searchParams.get("categories")?.split(",") || []
-  );
-
-  const [selectedPlatform, setSelectedPlatform] = useState(
-    searchParams.get("platforms") || ""
-  );
-
-  const [selectedPackageType, setSelectedPackageType] = useState(
-    searchParams.get("type") || ""
-  );
-
   const { data, status, refetch } = useQuery("data", getData);
 
   useEffect(() => {
     refetch();
   }, [searchParams]);
-
-  useEffect(() => {
-    setCurrentPage("1");
-    setSearchParams(
-      getUpdatedSearchParams(
-        1,
-        selectedCategories,
-        selectedPlatform,
-        selectedPackageType
-      )
-    );
-  }, [selectedCategories]);
-
-  useEffect(() => {
-    setCurrentPage("1");
-    setSearchParams(
-      getUpdatedSearchParams(
-        1,
-        selectedCategories,
-        selectedPlatform,
-        selectedPackageType
-      )
-    );
-  }, [selectedPlatform]);
-
-  useEffect(() => {
-    setCurrentPage("1");
-    setSearchParams(
-      getUpdatedSearchParams(
-        1,
-        selectedCategories,
-        selectedPlatform,
-        selectedPackageType
-      )
-    );
-  }, [selectedPackageType]);
 
   return (
     <Strip>
@@ -120,14 +73,37 @@ function Packages() {
         <Col size={3}>
           <Filters
             categories={categories}
-            selectedCategories={selectedCategories}
-            setSelectedCategories={setSelectedCategories}
+            selectedCategories={
+              searchParams.get("categories")?.split(",") || []
+            }
+            setSelectedCategories={(items: any) => {
+              if (items.length < 1) {
+                setSearchParams(
+                  getCurrentSearchParams(searchParams, ["categories", "page"])
+                );
+              } else {
+                setSearchParams({
+                  ...getCurrentSearchParams(searchParams, ["page"]),
+                  categories: items.join(","),
+                });
+              }
+            }}
             platforms={platforms}
-            selectedPlatform={selectedPlatform}
-            setSelectedPlatform={setSelectedPlatform}
+            selectedPlatform={searchParams.get("platforms") || "all"}
+            setSelectedPlatform={(item: string) => {
+              setSearchParams({
+                ...getCurrentSearchParams(searchParams, ["page"]),
+                platforms: item,
+              });
+            }}
             packageTypes={packageTypes}
-            selectedPackageType={selectedPackageType}
-            setSelectedPackageType={setSelectedPackageType}
+            selectedPackageType={searchParams.get("type") || "all"}
+            setSelectedPackageType={(item: string) => {
+              setSearchParams({
+                ...getCurrentSearchParams(searchParams, ["page"]),
+                type: item,
+              });
+            }}
             disabled={status === "loading"}
           />
         </Col>
@@ -148,14 +124,7 @@ function Packages() {
               ))}
 
             {status === "success" && data.packages.length === 0 && (
-              <h1 className="p-heading--2">
-                No packages match{" "}
-                {`${
-                  selectedCategories.length > 1
-                    ? "these filters"
-                    : "this filter"
-                }`}
-              </h1>
+              <h1 className="p-heading--2">No packages match this filter</h1>
             )}
           </Row>
 
@@ -165,14 +134,10 @@ function Packages() {
               totalItems={data.total_pages}
               paginate={(pageNumber) => {
                 setCurrentPage(pageNumber.toString());
-                setSearchParams(
-                  getUpdatedSearchParams(
-                    pageNumber,
-                    selectedCategories,
-                    selectedPlatform,
-                    selectedPackageType
-                  )
-                );
+                setSearchParams({
+                  ...getCurrentSearchParams(searchParams),
+                  page: pageNumber.toString(),
+                });
               }}
               currentPage={parseInt(currentPage)}
               centered
