@@ -10,6 +10,7 @@
     grid-template-rows: 1.5rem;
     margin-bottom: calc($icon-size * 2);
     max-width: 40em;
+    align-items: center;
 
     &:hover {
       text-decoration: none;
@@ -32,6 +33,11 @@
         border-radius: 100%;
         overflow: hidden;
       }
+    }
+
+    .p-bundle-icon-title{
+      font-size: 16px;
+      vertical-align: top;
     }
   }
 
