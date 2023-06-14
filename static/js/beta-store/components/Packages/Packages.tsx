@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { Strip, Row, Col, Pagination } from "@canonical/react-components";
-import { CharmCard, Filters } from "@canonical/store-components";
+import { CharmCard, Filters, LoadingCard } from "@canonical/store-components";
 
 import categories from "../../data/categories";
 import platforms from "../../data/platforms";
 import packageTypes from "../../data/package-types";
 
 function Packages() {
+  const ITEMS_PER_PAGE = 12;
+
   const getCurrentSearchParams = (
     searchParams: { get: Function },
     keysToRemove?: Array<string>
@@ -61,7 +63,7 @@ function Packages() {
     searchParams.get("page") || "1"
   );
 
-  const { data, status, refetch } = useQuery("data", getData);
+  const { data, status, refetch, isFetching } = useQuery("data", getData);
 
   useEffect(() => {
     refetch();
@@ -104,12 +106,17 @@ function Packages() {
                 type: item,
               });
             }}
-            disabled={status === "loading"}
+            disabled={isFetching}
           />
         </Col>
         <Col size={9}>
           <Row>
-            {status === "loading" && <p>Loading packages...</p>}
+            {isFetching &&
+              [...Array(ITEMS_PER_PAGE)].map((item, index) => (
+                <Col size={3} key={index}>
+                  <LoadingCard />
+                </Col>
+              ))}
 
             {status === "success" &&
               data.packages.length > 0 &&
@@ -130,7 +137,7 @@ function Packages() {
 
           {status === "success" && data.packages.length > 0 && (
             <Pagination
-              itemsPerPage={12}
+              itemsPerPage={ITEMS_PER_PAGE}
               totalItems={data.total_pages}
               paginate={(pageNumber) => {
                 setCurrentPage(pageNumber.toString());
