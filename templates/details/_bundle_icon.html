@@ -1,4 +1,19 @@
-<a href="/{{charm.name}}" title="{{charm.title}}" alt="{{charm.name}}" class="p-bundle-icon" style="background-image: url('https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg');">{{ charm.title|truncate(2, true, '', 0) }}</a>
-<span class="p-bundle-icon-title">
+<a href="/{{charm.name}}" title="{{charm.title}}" alt="{{charm.name}}" class="p-bundle-icon" id="{{charm.name}}_id" style="background-image: url('https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg');">{{ charm.title|truncate(2, true, '', 0) }}</a>
+<a href="/{{charm.name}}" class="p-bundle-icon-title" id="{{charm.name}}_link">
   {{ charm.title }}
-</span>
+</a>
+<script>
+  fetch("/{{charm.name}}", { method: "HEAD" })
+      .then((r) => {
+        if (r.status === 404) {
+          const iconLink = document.getElementById("{{charm.name}}_id");
+          const nameLink = document.getElementById("{{charm.name}}_link");
+          if (iconLink) {
+            iconLink.removeAttribute('href');
+          }
+          if (nameLink) {
+            nameLink.removeAttribute('href');
+          }
+        }
+      });
+</script>
