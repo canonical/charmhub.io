@@ -5,7 +5,14 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import Packages from "../Packages";
 
 function App() {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+      },
+    },
+  });
 
   return (
     <Router>
