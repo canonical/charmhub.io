@@ -87,7 +87,11 @@
         <a href="{{ package.result.repository }}"><i class="p-icon--repository"></i>&nbsp;&nbsp;Repository</a>
       </li>
     {% endif %}
-    {% if package.result["bugs-url"] %}
+    {% if package["store_front"]["metadata"]["issues"] %}
+      <li class="p-list__item">
+        <a href="{{ package["store_front"]["metadata"]["issues"][0] }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
+      </li>
+    {% elif package.result["bugs-url"] %}
       <li class="p-list__item">
         <a href="{{ package.result["bugs-url"] }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
       </li>

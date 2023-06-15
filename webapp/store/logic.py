@@ -382,6 +382,15 @@ def add_store_front_data(package, details=False):
         if "summary" in package["result"]:
             extra["summary"] = package["result"]["summary"]
 
+        # Handle issues and website keys
+        if "issues" in extra["metadata"]:
+            if not isinstance(extra["metadata"]["issues"], list):
+                extra["metadata"]["issues"] = [extra["metadata"]["issues"]]
+
+        if "website" in extra["metadata"]:
+            if not isinstance(extra["metadata"]["website"], list):
+                extra["metadata"]["website"] = [extra["metadata"]["website"]]
+
     package["store_front"] = extra
     return package
 
