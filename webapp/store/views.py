@@ -156,7 +156,7 @@ def details_overview(entity_name):
         "channel_requested": channel_request,
         "navigation": None,
         "last_update": None,
-        "forum_url":  None,
+        "forum_url": None,
         "topic_path": None,
     }
 
