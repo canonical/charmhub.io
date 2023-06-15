@@ -117,7 +117,7 @@ function InterfacesIndex({ interfacesList }: Props) {
             <p>
               Interfaces describe the relation between two charms. This
               interface catalogue shows opinionated, standardized interface
-              specifications for charmed operator relations. Each interface
+              specifications for charm relations. Each interface
               outlines the behavior and requirements of charms relating to one
               another.
             </p>
