@@ -9,10 +9,16 @@
           const iconLink = document.getElementById("{{charm.name}}_id");
           const nameLink = document.getElementById("{{charm.name}}_link");
           if (iconLink) {
-            iconLink.removeAttribute('href');
+            const span = document.createElement('span');
+            span.style.backgroundImage = iconLink.style.backgroundImage;
+            span.classList.add('p-bundle-icon');
+            span.innerText = iconLink.innerText;
+            iconLink.parentNode.replaceChild(span, iconLink);
           }
           if (nameLink) {
-            nameLink.removeAttribute('href');
+            const span = document.createElement('span');
+            span.innerHTML = nameLink.innerHTML;
+            nameLink.replaceWith(span);
           }
         }
       });
