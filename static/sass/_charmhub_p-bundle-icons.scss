@@ -12,10 +12,6 @@
     margin-bottom: calc($icon-size * 2);
     max-width: 40em;
 
-    &:hover {
-      text-decoration: none;
-    }
-
     .p-bundle-icon {
       align-items: center;
       background-size: cover;
@@ -37,7 +33,6 @@
 
     .p-bundle-icon-title {
       font-size: 16px;
-      text-decoration: none;
       vertical-align: top;
     }
   }
