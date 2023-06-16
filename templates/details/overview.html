@@ -10,9 +10,11 @@
     <div class="col-9 p-details-tab__content__body">
       {% if package.type == "bundle" %}
         <h2 class="p-heading--4">Charms</h2>
-        <div class="p-bundle-icons">
+        <div class="row p-bundle-icons">
           {% for charm in package['store_front']['bundle']['charms'] %}
-            <a href="/{{charm.name}}" title="{{charm.title}}" alt="{{charm.name}}" class="p-bundle-icon" style="background-image: url('https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg');">{{ charm.title|truncate(2, true, '', 0) }}</a>
+            <div class="col-3 col-medium-3">
+              {% include "/details/_bundle_icon.html" %}
+            </div>
           {% endfor %}
         </div>
       {% endif %}
