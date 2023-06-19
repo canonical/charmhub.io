@@ -5,6 +5,7 @@ import { Strip, Row, Col, Pagination } from "@canonical/react-components";
 import { CharmCard, Filters, LoadingCard } from "@canonical/store-components";
 
 import Banner from "../Banner";
+import Topics from "../Topics";
 
 import categories from "../../data/categories";
 import platforms from "../../data/platforms";
@@ -67,6 +68,8 @@ function Packages() {
 
   const { data, status, refetch, isFetching } = useQuery("data", getData);
 
+  const topicsQuery = searchParams ? searchParams.get("categories") : null;
+
   useEffect(() => {
     refetch();
   }, [searchParams]);
@@ -114,6 +117,7 @@ function Packages() {
             />
           </Col>
           <Col size={9}>
+            <Topics topicsQuery={topicsQuery} />
             <Row>
               {isFetching &&
                 [...Array(ITEMS_PER_PAGE)].map((item, index) => (
