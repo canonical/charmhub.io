@@ -4,6 +4,8 @@ import { useLocation, useSearchParams } from "react-router-dom";
 import { Strip, Row, Col, Pagination } from "@canonical/react-components";
 import { CharmCard, Filters, LoadingCard } from "@canonical/store-components";
 
+import Banner from "../Banner";
+
 import categories from "../../data/categories";
 import platforms from "../../data/platforms";
 import packageTypes from "../../data/package-types";
@@ -70,90 +72,93 @@ function Packages() {
   }, [searchParams]);
 
   return (
-    <Strip>
-      <Row>
-        <Col size={3}>
-          <Filters
-            categories={categories}
-            selectedCategories={
-              searchParams.get("categories")?.split(",") || []
-            }
-            setSelectedCategories={(items: any) => {
-              if (items.length < 1) {
-                setSearchParams(
-                  getCurrentSearchParams(searchParams, ["categories", "page"])
-                );
-              } else {
+    <>
+      <Banner />
+      <Strip>
+        <Row>
+          <Col size={3}>
+            <Filters
+              categories={categories}
+              selectedCategories={
+                searchParams.get("categories")?.split(",") || []
+              }
+              setSelectedCategories={(items: any) => {
+                if (items.length < 1) {
+                  setSearchParams(
+                    getCurrentSearchParams(searchParams, ["categories", "page"])
+                  );
+                } else {
+                  setSearchParams({
+                    ...getCurrentSearchParams(searchParams, ["page"]),
+                    categories: items.join(","),
+                  });
+                }
+              }}
+              platforms={platforms}
+              selectedPlatform={searchParams.get("platforms") || "all"}
+              setSelectedPlatform={(item: string) => {
                 setSearchParams({
                   ...getCurrentSearchParams(searchParams, ["page"]),
-                  categories: items.join(","),
-                });
-              }
-            }}
-            platforms={platforms}
-            selectedPlatform={searchParams.get("platforms") || "all"}
-            setSelectedPlatform={(item: string) => {
-              setSearchParams({
-                ...getCurrentSearchParams(searchParams, ["page"]),
-                platforms: item,
-              });
-            }}
-            packageTypes={packageTypes}
-            selectedPackageType={searchParams.get("type") || "all"}
-            setSelectedPackageType={(item: string) => {
-              setSearchParams({
-                ...getCurrentSearchParams(searchParams, ["page"]),
-                type: item,
-              });
-            }}
-            disabled={isFetching}
-          />
-        </Col>
-        <Col size={9}>
-          <Row>
-            {isFetching &&
-              [...Array(ITEMS_PER_PAGE)].map((item, index) => (
-                <Col size={3} key={index}>
-                  <LoadingCard />
-                </Col>
-              ))}
-
-            {status === "success" &&
-              data.packages.length > 0 &&
-              data.packages.map((packageData: any) => (
-                <Col
-                  size={3}
-                  style={{ marginBottom: "1.5rem" }}
-                  key={packageData.id}
-                >
-                  <CharmCard data={packageData} />
-                </Col>
-              ))}
-
-            {status === "success" && data.packages.length === 0 && (
-              <h1 className="p-heading--2">No packages match this filter</h1>
-            )}
-          </Row>
-
-          {status === "success" && data.packages.length > 0 && (
-            <Pagination
-              itemsPerPage={ITEMS_PER_PAGE}
-              totalItems={data.total_pages}
-              paginate={(pageNumber) => {
-                setCurrentPage(pageNumber.toString());
-                setSearchParams({
-                  ...getCurrentSearchParams(searchParams),
-                  page: pageNumber.toString(),
+                  platforms: item,
                 });
               }}
-              currentPage={parseInt(currentPage)}
-              centered
-              scrollToTop
+              packageTypes={packageTypes}
+              selectedPackageType={searchParams.get("type") || "all"}
+              setSelectedPackageType={(item: string) => {
+                setSearchParams({
+                  ...getCurrentSearchParams(searchParams, ["page"]),
+                  type: item,
+                });
+              }}
+              disabled={isFetching}
             />
-          )}
-        </Col>
-      </Row>
-    </Strip>
+          </Col>
+          <Col size={9}>
+            <Row>
+              {isFetching &&
+                [...Array(ITEMS_PER_PAGE)].map((item, index) => (
+                  <Col size={3} key={index}>
+                    <LoadingCard />
+                  </Col>
+                ))}
+
+              {status === "success" &&
+                data.packages.length > 0 &&
+                data.packages.map((packageData: any) => (
+                  <Col
+                    size={3}
+                    style={{ marginBottom: "1.5rem" }}
+                    key={packageData.id}
+                  >
+                    <CharmCard data={packageData} />
+                  </Col>
+                ))}
+
+              {status === "success" && data.packages.length === 0 && (
+                <h1 className="p-heading--2">No packages match this filter</h1>
+              )}
+            </Row>
+
+            {status === "success" && data.packages.length > 0 && (
+              <Pagination
+                itemsPerPage={ITEMS_PER_PAGE}
+                totalItems={data.total_pages}
+                paginate={(pageNumber) => {
+                  setCurrentPage(pageNumber.toString());
+                  setSearchParams({
+                    ...getCurrentSearchParams(searchParams),
+                    page: pageNumber.toString(),
+                  });
+                }}
+                currentPage={parseInt(currentPage)}
+                centered
+                scrollToTop
+              />
+            )}
+          </Col>
+        </Row>
+      </Strip>
+    </>
   );
 }
 
