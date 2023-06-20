@@ -1229,22 +1229,6 @@
   resolved "https://registry.yarnpkg.com/@canonical/latest-news/-/latest-news-1.4.1.tgz#dcdd445ac2268a54cf60f2f8c725b6bdeb285d71"
   integrity sha512-lwrikCj0Y11X8Ln8D+elp6Ri3mYjMjsAOJtadNEFzhBrgmg8TVGYJjOdwy8TvRaxy7fHnvVajIKAYWX44Tfj6w==
 
-"@canonical/react-components@0.41.0":
-  version "0.41.0"
-  resolved "https://registry.yarnpkg.com/@canonical/react-components/-/react-components-0.41.0.tgz#8700ce1e9388b117b51325fa7c0815ccf885acb6"
-  integrity sha512-VcurpN0W5trQ9Wj/APsANwWmaE4w2RAr6STmSsSbxKTnBPlM87K/rSYqP3Tmxb+jKxOJmNI/t4S/LDu5cJMtEA==
-  dependencies:
-    "@types/jest" "27.5.2"
-    "@types/node" "18.16.3"
-    "@types/react" "18.2.0"
-    "@types/react-dom" "17.0.20"
-    "@types/react-table" "7.7.14"
-    classnames "2.3.2"
-    nanoid "3.3.6"
-    prop-types "15.8.1"
-    react-table "7.8.0"
-    react-useportal "1.0.18"
-
 "@canonical/react-components@0.42.0":
   version "0.42.0"
   resolved "https://registry.yarnpkg.com/@canonical/react-components/-/react-components-0.42.0.tgz#c73e0b5557714dbff29c78a12269a5969d85ff17"
@@ -1261,12 +1245,12 @@
     react-table "7.8.0"
     react-useportal "1.0.18"
 
-"@canonical/store-components@0.18.0":
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/@canonical/store-components/-/store-components-0.18.0.tgz#cff28929b3e59b0a8199b15c6122e9fe46494bd0"
-  integrity sha512-BUVX883XXO/B98xY0JpAjvNABpm8qOM5Rs6Ien7z/KkH7pn9hQw9cx+h/xbgDWg2wF9QCZQuuo5h/0Hv/X/ZZg==
+"@canonical/store-components@0.19.0":
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/@canonical/store-components/-/store-components-0.19.0.tgz#3e48aa4da8a0d62e3aa89782a6cb918ed92b46e8"
+  integrity sha512-c9ezefD6oClFbmCyez64eqOwhWRRUOStqOOKTRklwWegeLc7eRWCuDgsMqU33bFJWeVwXbaaPyEKmFCLwicZcQ==
   dependencies:
-    "@canonical/react-components" "0.41.0"
+    "@canonical/react-components" "0.42.0"
     "@types/jest" "27.5.2"
     "@types/node" "18.16.14"
     "@types/react" "17.0.59"
