@@ -43,7 +43,8 @@ function Topics({ topicsQuery }: Props) {
             </Col>
           ))}
 
-        {status === "success" &&
+        {!isFetching &&
+          status === "success" &&
           data.topics.length > 0 &&
           data.topics.map((topic: Topic) => (
             <Col size={3} key={topic.topic_id}>

@@ -126,7 +126,8 @@ function Packages() {
                   </Col>
                 ))}
 
-              {status === "success" &&
+              {!isFetching &&
+                status === "success" &&
                 data.packages.length > 0 &&
                 data.packages.map((packageData: any) => (
                   <Col
