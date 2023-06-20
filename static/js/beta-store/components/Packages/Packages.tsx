@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { Strip, Row, Col, Pagination } from "@canonical/react-components";
-import { CharmCard, Filters, LoadingCard } from "@canonical/store-components";
+import {
+  CharmCard,
+  BundleCard,
+  Filters,
+  LoadingCard,
+} from "@canonical/store-components";
 
 import Banner from "../Banner";
 import Topics from "../Topics";
@@ -135,7 +140,11 @@ function Packages() {
                     style={{ marginBottom: "1.5rem" }}
                     key={packageData.id}
                   >
-                    <CharmCard data={packageData} />
+                    {packageData.package.type === "bundle" ? (
+                      <BundleCard data={packageData} />
+                    ) : (
+                      <CharmCard data={packageData} />
+                    )}
                   </Col>
                 ))}
 
