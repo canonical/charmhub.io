@@ -1,17 +1,30 @@
-{% macro create_navigation(nav_items, channel_requested=None) %}
-  <ul>
+{% macro create_navigation(nav_items, channel_requested=None, expandable=False, expanded=False) %}
+  <ul class="p-side-navigation__list">
     {% for element in nav_items %}
-    <li>
+    <li class="p-side-navigation__item">
       {% if element.navlink_href %}
-        <a href="{{ element.navlink_href }}{% if channel_requested %}?channel={{ channel_requested }}{% endif %}"
+        <a
+          class="p-side-navigation__link {% if expandable and element.children %}is-expandable{% endif %}"
+          href="{{ element.navlink_href }}"
+          {% if expandable and element.children %}aria-expanded={% if expanded %}"true"{% else %}"false"{% endif %}{% endif %}
           {% if request.path == element.navlink_href %}aria-current="page"{% endif %}
         >{{ element.navlink_text }}</a>
       {% else %}
-        <strong>{{ element.navlink_text }}</strong>
+        <strong
+          class="p-side-navigation__text {% if expandable and element.children %}is-expandable{% endif %}"
+          {% if expandable and element.children %}aria-expanded={% if expanded %}"true"{% else %}"false"{% endif %}{% endif %}
+        >{{ element.navlink_text }}</strong>
       {% endif %}
 
-      {% if element.children %}
-        {{ create_navigation(element.children, channel_requested) }}
+      {% if expandable %}
+        {% if element.children %}
+          <button class="p-side-navigation__expand" aria-expanded={% if element.is_active or element.has_active_child %}"true"{% else %}"false"{% endif %} aria-label="show submenu for {{ element.navlink_text }}"></button>
+        {% endif %}
+        {{ create_navigation(element.children, expandable, element.is_active or element.has_active_child) }}
+      {% else %}
+        {% if element.children %}
+          {{ create_navigation(element.children, expandable) }}
+        {% endif %}
       {% endif %}
     </li>
     {% endfor %}
