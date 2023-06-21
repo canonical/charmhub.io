@@ -1245,15 +1245,15 @@
     react-table "7.8.0"
     react-useportal "1.0.18"
 
-"@canonical/store-components@0.19.0":
-  version "0.19.0"
-  resolved "https://registry.yarnpkg.com/@canonical/store-components/-/store-components-0.19.0.tgz#3e48aa4da8a0d62e3aa89782a6cb918ed92b46e8"
-  integrity sha512-c9ezefD6oClFbmCyez64eqOwhWRRUOStqOOKTRklwWegeLc7eRWCuDgsMqU33bFJWeVwXbaaPyEKmFCLwicZcQ==
+"@canonical/store-components@0.20.0":
+  version "0.20.0"
+  resolved "https://registry.yarnpkg.com/@canonical/store-components/-/store-components-0.20.0.tgz#a2a7f6b5ae8ed7edac99b6d4c8987f550cfd8838"
+  integrity sha512-t2vUBJGV0W7oLFiqBLQxa+uiSaUFKRkmmXwfq0ppVJCPrCTpNmE7v7UhpGqGQZBKJYpIR1UfIXaN7fJMzLlT3Q==
   dependencies:
     "@canonical/react-components" "0.42.0"
     "@types/jest" "27.5.2"
-    "@types/node" "18.16.14"
-    "@types/react" "17.0.59"
+    "@types/node" "18.16.18"
+    "@types/react" "17.0.62"
     "@types/react-dom" "17.0.20"
     "@types/react-table" "7.7.14"
     classnames "2.3.2"
@@ -1787,10 +1787,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.8.0.tgz#b8ee8d83a99470c0661bd899417fcd77060682fe"
   integrity sha512-u+h43R6U8xXDt2vzUaVP3VwjjLyOJk6uEciZS8OSyziUQGOwmk+l+4drxcsDboHXwyTaqS1INebghmWMRxq3LA==
 
-"@types/node@18.16.14":
-  version "18.16.14"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.16.14.tgz#ab67bb907f1146afc6fedb9ce60ae8a99c989631"
-  integrity sha512-+ImzUB3mw2c5ISJUq0punjDilUQ5GnUim0ZRvchHIWJmOC0G+p0kzhXBqj6cDjK0QdPFwzrHWgrJp3RPvCG5qg==
+"@types/node@18.16.18":
+  version "18.16.18"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.16.18.tgz#85da09bafb66d4bc14f7c899185336d0c1736390"
+  integrity sha512-/aNaQZD0+iSBAGnvvN2Cx92HqE5sZCPZtx2TsK+4nvV23fFe09jVDvpArXr2j9DnYlzuU9WuoykDDc6wqvpNcw==
 
 "@types/node@18.16.3":
   version "18.16.3"
@@ -1869,10 +1869,10 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
-"@types/react@17.0.59":
-  version "17.0.59"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.59.tgz#5aa4e161a356fcb824d81f166e01bad9e82243bb"
-  integrity sha512-gSON5zWYIGyoBcycCE75E9+r6dCC2dHdsrVkOEiIYNU5+Q28HcBAuqvDuxHcCbMfHBHdeT5Tva/AFn3rnMKE4g==
+"@types/react@17.0.62":
+  version "17.0.62"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.62.tgz#2efe8ddf8533500ec44b1334dd1a97caa2f860e3"
+  integrity sha512-eANCyz9DG8p/Vdhr0ZKST8JV12PhH2ACCDYlFw6DIO+D+ca+uP4jtEDEpVqXZrh/uZdXQGwk7whJa3ah5DtyLw==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
