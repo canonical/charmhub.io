@@ -155,6 +155,9 @@ def details_overview(entity_name):
         "package": package,
         "channel_requested": channel_request,
         "navigation": None,
+        "last_update": None,
+        "forum_url": None,
+        "topic_path": None,
     }
 
     description = None
@@ -235,6 +238,9 @@ def details_overview(entity_name):
             ]
 
         context["navigation"] = navigation
+        context["forum_url"] = docs.api.base_url
+        context["last_update"] = docs_content["updated"]
+        context["topic_path"] = docs_content["topic_path"]
 
     context["description"] = description
     context["summary"] = summary

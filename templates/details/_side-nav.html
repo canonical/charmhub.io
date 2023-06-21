@@ -25,7 +25,7 @@
         {% if nav_group.navlink_text %}
           <h3>{{ nav_group.navlink_text }}</h3>
         {% endif %}
-        {{ macros.create_navigation(nav_group.children, channel_requested) }}
+        {{ macros.create_navigation(nav_group.children, channel_requested, expandable=True) }}
       {% endfor %}
     </div>
   </nav>
@@ -87,7 +87,11 @@
         <a href="{{ package.result.repository }}"><i class="p-icon--repository"></i>&nbsp;&nbsp;Repository</a>
       </li>
     {% endif %}
-    {% if package.result["bugs-url"] %}
+    {% if package["store_front"]["metadata"]["issues"] %}
+      <li class="p-list__item">
+        <a href="{{ package["store_front"]["metadata"]["issues"][0] }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
+      </li>
+    {% elif package.result["bugs-url"] %}
       <li class="p-list__item">
         <a href="{{ package.result["bugs-url"] }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
       </li>
@@ -128,3 +132,5 @@
 <h4 class="p-heading--5 u-no-margin--bottom">Discuss this {{ package.type }}</h4>
 <p>Share your thoughts on this charm with the community on discourse.</p>
 <p><a class="p-button" href="https://discourse.charmhub.io/">Join the discussion</a></p>
+
+<script src="{{ versioned_static('js/dist/docs-side-nav.js') }}"></script>

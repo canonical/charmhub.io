@@ -82,8 +82,10 @@ const CharmCard = ({ charm }: CharmCardProps) => {
                 )}
               </p>
               <p>
-                {charm["default-release"].channel.name}/
-                {charm["default-release"].channel.track}
+                {charm["default-release"].channel.track === "latest"
+                  ? "latest/"
+                  : ""}
+                {charm["default-release"].channel.name}
               </p>
             </div>
           </div>

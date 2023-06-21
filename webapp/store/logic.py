@@ -288,8 +288,8 @@ def get_docs_topic_id(metadata_yaml):
         if docs_link.startswith(base_url):
             docs_link_parts = docs_link[len(base_url) :].split("/")
 
-            if len(docs_link_parts) > 3:
-                topic_id = docs_link_parts[3]
+            if len(docs_link_parts) > 2:
+                topic_id = docs_link_parts[-1]
 
                 if topic_id.isnumeric():
                     return topic_id
@@ -381,6 +381,15 @@ def add_store_front_data(package, details=False):
 
         if "summary" in package["result"]:
             extra["summary"] = package["result"]["summary"]
+
+        # Handle issues and website keys
+        if "issues" in extra["metadata"]:
+            if not isinstance(extra["metadata"]["issues"], list):
+                extra["metadata"]["issues"] = [extra["metadata"]["issues"]]
+
+        if "website" in extra["metadata"]:
+            if not isinstance(extra["metadata"]["website"], list):
+                extra["metadata"]["website"] = [extra["metadata"]["website"]]
 
     package["store_front"] = extra
     return package
