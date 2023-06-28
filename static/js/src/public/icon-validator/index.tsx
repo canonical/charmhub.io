@@ -18,6 +18,7 @@ function App() {
   const [isSVG, setIsSVG] = useState<boolean>(false);
   const [isCorrectSize, setIsCorrectSize] = useState<boolean>(false);
   const [imageSize, setImageSize] = useState<number[]>([100, 100]);
+  const [hasConstraints, setHasConstraints] = useState<boolean>(true);
 
   const {
     acceptedFiles,
@@ -67,21 +68,47 @@ function App() {
 
       const dataURL = e.target.result as string;
 
+      const svgString = window.atob(dataURL.split("base64,")[1]);
+
+      if (svgString.indexOf("<svg") === -1) {
+        setIsSVG(false);
+      }
+
+      const svgImage = document.createElement("div");
+      svgImage.innerHTML = svgString;
+      const svgEl = svgImage.querySelector("svg");
+      const svgElWidth = svgEl?.getAttribute("width");
+      const svgElHeight = svgEl?.getAttribute("height");
+      const viewBoxSize = svgEl?.getAttribute("viewBox")?.split(" ");
+
+      if (svgElHeight && svgElWidth) {
+        setImageSize([parseInt(svgElWidth), parseInt(svgElHeight)]);
+      } else if (viewBoxSize && viewBoxSize[2] && viewBoxSize[2]) {
+        setImageSize([parseInt(viewBoxSize[2]), parseInt(viewBoxSize[2])]);
+      } else {
+        setHasConstraints(false);
+      }
+
       const img = new Image();
       img.addEventListener("load", () => {
         setIcon(dataURL);
-        setImageSize([img.width, img.height]);
-        if (img.width !== 100 || img.height !== 100) {
-          setIsCorrectSize(false);
+        if (!imageSize) {
+          setImageSize([img.width, img.height]);
+          if (img.width !== 100 || img.height !== 100) {
+            setIsCorrectSize(false);
+          } else {
+            setIsCorrectSize(true);
+          }
         } else {
-          setIsCorrectSize(true);
+          if (imageSize[0] !== 100 || imageSize[1] !== 100) {
+            setIsCorrectSize(false);
+          }
         }
       });
       img.src = dataURL;
     });
     urlReader.readAsDataURL(file);
   }, [acceptedFiles, handleReset]);
-
   return (
     <Row>
       <Col size={8} emptyLarge={4}>
@@ -123,11 +150,20 @@ function App() {
                     </p>
                     <p>
                       <Icon
+                        name={hasConstraints ? ICONS.success : ICONS.error}
+                      />{" "}
+                      Root <code>svg</code> element has <code>width="100"</code>{" "}
+                      and <code>height="100"</code> attributes or a valid
+                      viewbox of <code>100 100</code>
+                    </p>
+                    <p>
+                      <Icon
                         name={
                           imageSize[0] === 100 ? ICONS.success : ICONS.error
                         }
                       />{" "}
-                      Image width is {imageSize[0]}px, not 100px
+                      Image width is {imageSize[0]}px
+                      {imageSize[0] !== 100 ? ", not 100px" : ""}
                     </p>
                     <p>
                       <Icon
@@ -135,7 +171,8 @@ function App() {
                           imageSize[1] === 100 ? ICONS.success : ICONS.error
                         }
                       />{" "}
-                      Image height is {imageSize[1]}px, not 100px
+                      Image height is {imageSize[1]}px
+                      {imageSize[1] !== 100 ? ", not 100px" : ""}
                     </p>
                   </Col>
                 </Row>
