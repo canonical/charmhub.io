@@ -1,23 +1,39 @@
 [
-    {
-        "name": "Canonical Observability Stack",
-        "slug": "canonical-observability-stack",
-        "topic_id": 5132,
-        "description": "At Canonical, we have been referring to LMA as a system of machine charms currently in use to monitor Canonical and customer systems. COS draws a lot of learning from years of operational experience with LMA, but it is also different enough that we felt we needed to make a distinction from the previous iteration.",
-        "categories": ["featured", "cloud", "containers", "databases", "logging-tracing", "monitoring", "networking", "storage"]
-    },
-    {
-        "name": "Kubeflow AI/MLOps",
-        "slug": "kubeflow",
-        "topic_id": 5774,
-        "description": "Canonical Charmed Kubeflow is a state of the art, fully supported MLOps platform that helps data scientists collaborate on AI innovation on any cloud from concept to production, offered by Canonical - the open source experts.",
-        "categories": ["featured", "ai-ml", "big-data", "containers", "networking"]
-    },
-    {
-        "name": "Operator’s Corner",
-        "slug": "operators-corner",
-        "topic_id": 5990,
-        "description": "Welcome to the Operator’s Corner, where you can find information about the best practices on developing your charms!",
-        "categories": ["cloud", "featured"]
-    }
+  {
+    "name": "Charm Maturity",
+    "slug": "charm-maturity",
+    "topic_id": 10632,
+    "description": "Our maturity model defining important qualities and capabilities of a charm.",
+    "categories": ["cloud", "containers"]
+  },
+  {
+    "name": "Canonical Observability Stack",
+    "slug": "canonical-observability-stack",
+    "topic_id": 5132,
+    "description": "At Canonical, we have been referring to LMA as a system of machine charms currently in use to monitor Canonical and customer systems. COS draws a lot of learning from years of operational experience with LMA, but it is also different enough that we felt we needed to make a distinction from the previous iteration.",
+    "categories": [
+      "featured",
+      "cloud",
+      "containers",
+      "databases",
+      "logging-tracing",
+      "monitoring",
+      "networking",
+      "storage"
+    ]
+  },
+  {
+    "name": "Kubeflow AI/MLOps",
+    "slug": "kubeflow",
+    "topic_id": 5774,
+    "description": "Canonical Charmed Kubeflow is a state of the art, fully supported MLOps platform that helps data scientists collaborate on AI innovation on any cloud from concept to production, offered by Canonical - the open source experts.",
+    "categories": ["featured", "ai-ml", "big-data", "containers", "networking"]
+  },
+  {
+    "name": "Operator’s Corner",
+    "slug": "operators-corner",
+    "topic_id": 5990,
+    "description": "Welcome to the Operator’s Corner, where you can find information about the best practices on developing your charms!",
+    "categories": ["cloud", "featured"]
+  }
 ]
