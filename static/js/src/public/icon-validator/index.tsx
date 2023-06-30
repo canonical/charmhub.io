@@ -102,6 +102,8 @@ function App() {
         } else {
           if (imageSize[0] !== 100 || imageSize[1] !== 100) {
             setIsCorrectSize(false);
+          } else {
+            setIsCorrectSize(true);
           }
         }
       });
