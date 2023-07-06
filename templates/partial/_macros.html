@@ -5,7 +5,7 @@
       {% if element.navlink_href %}
         <a
           class="p-side-navigation__link {% if expandable and element.children %}is-expandable{% endif %}"
-          href="{{ element.navlink_href }}"
+          href="{{ element.navlink_href }}{% if request.args.get('channel') %}?channel={{request.args.get('channel')}}{% endif %}"
           {% if expandable and element.children %}aria-expanded={% if expanded %}"true"{% else %}"false"{% endif %}{% endif %}
           {% if request.path == element.navlink_href %}aria-current="page"{% endif %}
         >{{ element.navlink_text }}</a>
