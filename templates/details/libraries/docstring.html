@@ -8,10 +8,10 @@
   </div>
   <hr class="is-fixed-width">
   <div class="row">
-    <div class="col-medium-1 col-1">
+    <div class="col-medium-1 col-2">
       <p class="p-text--x-small-capitalised u-align-text--x-small-to-default">Index</p>
     </div>
-    <div class="col-medium-5 col-7">
+    <div class="col-medium-5 col-6">
       <ul class="p-list">
         {% for group in docstrings['content'] %}
           {% if not group["is_private"] %}
@@ -81,10 +81,10 @@
           {% if group.params.arguments %}
             <div class="p-docstring-block__group">
               <div class="row">
-                <div class="col-medium-1 col-2 col-x-large-1">
+                <div class="col-medium-1 col-2">
                   <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Arguments</p>
                 </div>
-                <div class="col-medium-5 col-6 col-x-large-7">
+                <div class="col-medium-5 col-6">
                   {% for argument in group.params.arguments %}
                     <div class="row p-docstring-block__arg-block">
                       {% if argument.name %}
@@ -107,10 +107,10 @@
           {% if group.params.attributes %}
             <div class="p-docstring-block__group">
               <div class="row">
-                <div class="col-medium-1 col-2 col-x-large-1">
+                <div class="col-medium-1 col-2">
                   <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Attributes</p>
                 </div>
-                <div class="col-medium-5 col-6 col-x-large-7">
+                <div class="col-medium-5 col-6">
                   {% for attribute in group.params.attributes %}
                     <div class="row p-docstring-block__arg-block">
                       {% if attribute.name or attribute.type_name %}
@@ -135,10 +135,10 @@
           {% if group.params.returns %}
             <div class="p-docstring-block__group">
               <div class="row">
-                <div class="col-medium-1 col-2 col-x-large-1">
+                <div class="col-medium-1 col-2">
                   <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Returns</p>
                 </div>
-                <div class="col-medium-5 col-6 col-x-large-7">
+                <div class="col-medium-5 col-6">
                   {% if group.params.returns.name %}
                     <div class="row p-docstring-block__arg-block">
                       <div class="col-3 col-x-large-3 p-code p-text--dense">
@@ -159,10 +159,10 @@
           {% if group.description.long %}
             <div class="p-docstring-block__group">
               <div class="row">
-                <div class="col-medium-1 col-2 col-x-large-1">
+                <div class="col-medium-1 col-2">
                   <p class="p-text--x-small-capitalised u-align-text--small-to-default -u-no-margin--bottom">Description</p>
                 </div>
-                <div class="col-medium-5 col-6 col-x-large-7">
+                <div class="col-medium-5 col-6">
                   <p>{{ group.description.long }}</p>
                 </div>
               </div>
@@ -171,10 +171,10 @@
           {% if group["content"] %}
             <div class="p-docstring-block__group">
               <div class="row">
-                <div class="col-medium-1 col-2 col-x-large-1">
+                <div class="col-medium-1 col-2">
                   <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Methods</p>
                 </div>
-                <div class="col-medium-5 col-6 col-x-large-7">
+                <div class="col-medium-5 col-6">
                   {% for item in group["content"] %}
                     {% if not item["is_private"] %}
                       <div class="p-docstring-block--nested">
@@ -264,7 +264,7 @@
                         {% if item.params.returns %}
                           <div class="p-docstring-block__group">
                             <div class="row">
-                              <div class="col-medium-1 col-2 col-x-large-1">
+                              <div class="col-medium-1 col-2">
                                 <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Returns</p>
                               </div>
                               <div class="col-medium-5 col-4 col-x-large-6">
@@ -292,7 +292,7 @@
                         {% if item.description.long %}
                           <div class="p-docstring-block__group">
                             <div class="row">
-                              <div class="col-medium-1 col-2 col-x-large-1">
+                              <div class="col-medium-1 col-2">
                                 <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Description</p>
                               </div>
                               <div class="col-medium-5 col-4 col-x-large-6 p-text--dense">

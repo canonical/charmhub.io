@@ -1,6 +1,6 @@
 domain: charmhub.io
 
-image: prod-comms.docker-registry.canonical.com/charmhub.io
+image: prod-comms.ps5.docker-registry.canonical.com/charmhub.io
 
 env:
   - name: MAINTENANCE
