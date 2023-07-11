@@ -9,7 +9,7 @@
     </div>
     <div class="col-9 p-details-tab__content__body">
       {% if package.type == "bundle" %}
-        <h2 class="p-heading--4">Charms</h2>
+        <h2 class="p-heading--4">Charms in the {{ package.store_front["display-name"] }} bundle</h2>
         <div class="row p-bundle-icons">
           {% for charm in package['store_front']['bundle']['charms'] %}
             <div class="col-3 col-medium-3">
