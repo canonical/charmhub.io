@@ -24,7 +24,7 @@ const getInterface = async (
       const response = await fetch(`./${interfaceStatus}.json`);
       if (response.status === 200) {
         return response.json();
-      }
+      }        
     }
     else {
       const response = await fetch(`./${interfaceName}.json`);
@@ -81,10 +81,6 @@ function InterfaceDetails({ interfaceItem }: Props) {
   if (!hasDeveloperDocumentation) {
     isCommunity = true;
   }
-
-  useEffect(() => {
-    document.title = `Charmhub | ${interfaceName} interface`;
-  }, []);
 
   return (
     <>
