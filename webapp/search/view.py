@@ -125,7 +125,7 @@ def get_all(doc_type: str, search_term: str, page: int):
     doc_page = -((count * page) // -50)
     docs = get_docs(search_term, page=doc_page, see_all=see_all)
     if "error" not in docs:
-        all_post = docs.get("posts", [])
+        all_post = docs.get(doc_type, [])
         end = page * count
         start = end - count
         if start >= len(all_post):
