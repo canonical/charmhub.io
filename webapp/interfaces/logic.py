@@ -4,8 +4,9 @@ from github import Github
 from os import getenv
 
 import requests
+from mistune import html
 
-from webapp.helpers import get_yaml_loader
+from webapp.helpers import get_soup, get_yaml_loader
 
 GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 
@@ -114,88 +115,51 @@ class Interfaces:
         except ValueError:
             return ""
 
-    def extract_table_from_markdown(self, readme_markdown: str) -> str:
-        """
-        extracts the first table in a markdown and returns it as a string
-        """
-        regex = r"\|.*\|\n\|.*\|.*\|\n(\|.*\|.*\|\n)+"
-
-        table_match = re.search(regex, readme_markdown)
-        table_str = table_match.group(0)
-        return table_str
-
     def get_interfaces_from_readme(self, readme):
-        """
-        This function will return a list of interfaces from
-        a Markdown table.
-        """
-
-        table_content = self.extract_table_from_markdown(readme)
-        lines = table_content.split("\n")
-        data = []
-        keys = []
-        # Get data from table
-        for index, line in enumerate(lines):
-            if "----" in line or line == "":
-                continue
-            elif index == 0:
-                keys = [
-                    _i.strip().lower().replace(" ", "_")
-                    for _i in line.split("|")
-                ]
-            else:
-                data.append(
-                    {
-                        keys[_i]: v.strip()
-                        for _i, v in enumerate(line.split("|"))
-                        if _i > 0 and _i < len(keys) - 1
-                    }
-                )
+        html_text = get_soup(html(readme))
+        interface_table = html_text.find("table")
 
         interfaces = []
+        for i, row in enumerate(interface_table.find_all("tr")):
+            if i == 0:
+                keys = [th.text.lower() for th in row.find_all("th")]
+            else:
+                interface = {}
+                for j, key in enumerate(keys):
+                    cols = row.find_all("td")
+                    if key == "interface":
+                        interface["name"] = cols[j].text
+                    else:
+                        interface[key] = cols[j].text
+                    interface["readme_path"] = cols[1].find("a")["href"]
+                    interface["status"] = (
+                        cols[2].find("img")["alt"].split(":")[1].strip()
+                    )
+                if interface:
+                    interfaces.append(interface)
 
         # Curate data for the interface
         category_cache = ""
-        for interface in data:
-            name_data = interface["interface"]
-
-            if "[" in name_data:
-                name = self.find_between(name_data, "[", "]").replace("`", "")
-                readme_path = self.find_between(name_data, "(", ")")
-            else:
-                name = name_data
-                readme_path = None
-
+        for interface in interfaces:
+            name_data = interface["name"]
             version = None
 
-            if "/" in name:
-                splitted_name = name.split("/")
+            if "/" in name_data:
+                splitted_name = name_data.split("/")
                 version = splitted_name[1].replace("v", "")
-                name = splitted_name[0]
+                interface["name"] = splitted_name[0]
 
-            if not version and readme_path:
-                version = readme_path.split("/")[2].replace("v", "")
-
-            if "live" in interface["status"].lower():
-                status = "Live"
-            else:
-                status = "Draft"
+            if not version and interface["readme_path"]:
+                version = (
+                    interface["readme_path"].split("/")[2].replace("v", "")
+                )
+            interface["version"] = version
 
             if interface["category"]:
                 category = interface["category"]
                 category_cache = category
             else:
-                category = category_cache
-
-            interfaces.append(
-                {
-                    "name": name,
-                    "readme_path": readme_path,
-                    "version": version,
-                    "status": status,
-                    "category": category,
-                }
-            )
+                interface["category"] = category_cache
 
         return interfaces
 
