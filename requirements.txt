@@ -17,3 +17,4 @@ ruamel.yaml==0.17.21
 PyGithub==1.57
 black==22.12.0
 flake8==6.0.0
+Flask-Caching==2.0.2
