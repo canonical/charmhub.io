@@ -12,6 +12,8 @@ from webapp.topics.views import topics
 from webapp.publisher.views import publisher
 from webapp.store.views import store
 from webapp.interfaces.views import interfaces
+from webapp.search.view import search, cache
+
 
 app = FlaskBase(
     __name__,
@@ -24,6 +26,7 @@ app = FlaskBase(
 )
 app.store_api = CharmStore(session=talisker.requests.get_session())
 
+cache.init_app(app)
 set_handlers(app)
 csrf.init_app(app)
 
@@ -32,6 +35,7 @@ app.register_blueprint(store)
 app.register_blueprint(login)
 app.register_blueprint(topics)
 app.register_blueprint(interfaces)
+app.register_blueprint(search)
 
 
 @app.route("/account.json")
