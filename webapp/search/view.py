@@ -1,6 +1,8 @@
 from flask import Blueprint, request, make_response
-import requests
 from flask_caching import Cache
+import requests
+from urllib.parse import quote
+
 
 search = Blueprint(
     "search", __name__, template_folder="/templates", static_folder="/static"
@@ -36,21 +38,20 @@ def get_docs(search_term: str, page: int, see_all=False):
         reducing redundant requests to the charmhub.io discourse API.
     """
     categories = ["#doc"]
-    query = f"{search_term} {' '.join(categories)}".strip()
+    encoded_cat = [quote(cat) for cat in categories]
+    filter = ["-status:archived"]
+    query = f"{search_term} {' '.join(encoded_cat)} {' '.join(filter)}".strip()
+    base_search_url = f"https://discourse.charmhub.io/search.json?q={query}"
     resp = {}
     term = cache.get(search_term)
 
     more_pages = True
-    docs = {}
     if not term:
+        docs = {}
         # clear cache of any previously saved search term
         cache.clear()
         while more_pages:
-            docs = requests.get(
-                f"https://discourse.charmhub.io/search.json?q={query}"
-                "&page={page}"
-            ).json()
-
+            docs = requests.get(f"{base_search_url}&page={page}").json()
             if not docs.get("posts") and not docs.get("topics"):
                 return {"error": "No results found"}
 
@@ -62,29 +63,28 @@ def get_docs(search_term: str, page: int, see_all=False):
                 resp["topics"].append(docs.get("topics", []))
             else:
                 resp["topics"] = docs.get("topics", [])
-
-            next_docs = requests.get(
-                f"https://discourse.charmhub.io/search.json?q={query}"
-                "&page={page + 1}"
-            ).json()
+            page = page + 1
+            next_docs = requests.get(f"{base_search_url}&page={page}").json()
+            if not next_docs.get("posts"):
+                more_pages = False
+                return resp
             if (
                 docs["posts"][0]["id"] == next_docs["posts"][0]["id"]
                 and docs["topics"][0]["id"] == next_docs["topics"][0]["id"]
             ):
                 more_pages = False
                 cache.set(search_term, resp)
-                if not see_all:
+                if page == 1 and not see_all:
                     resp["posts"] = docs.get("posts", [])[0:4]
                     resp["topics"] = docs.get("topics", [])[0:4]
                     return resp
                 return resp
             else:
-                page += 1
                 resp["posts"].append(next_docs.get("posts", []))
                 resp["topics"].append(next_docs.get("topics", []))
                 docs = next_docs
     else:
-        if not see_all:
+        if page == 1 and not see_all:
             resp["posts"] = term.get("posts", [])[0:4]
             resp["topics"] = term.get("topics", [])[0:4]
             return resp
