@@ -24,7 +24,7 @@ def map_topic_to_doc(topic):
             return docs_id_cache[key]["id"]
 
 
-def rewrite_topic_url(topics: list, posts: list):
+def rewrite_topic_url(topics: list) -> list:
     """
     This function takes a list of topics and posts.
     It retrieves navigation details from Discourse and modifies the topic URLs
@@ -43,7 +43,7 @@ def rewrite_topic_url(topics: list, posts: list):
     Discourse API
 
     """
-    topics_with_url_ids = []
+    topics_with_url = []
     for topic in topics:
         index_id = map_topic_to_doc(topic)
         index_details = cache.get(index_id)
@@ -78,18 +78,12 @@ def rewrite_topic_url(topics: list, posts: list):
                     topic_url = f"https://juju.is/docs/{url_tag}/{topic_path}"
                     topic_urls.append(topic_url)
                 topic["url"] = topic_urls
-            topics_with_url_ids.append(topic["id"])
+            topics_with_url.append(topic)
 
-    topics_with_url = [
-        topic for topic in topics if topic["id"] in topics_with_url_ids
-    ]
-    posts_with_topic_url = [
-        post for post in posts if post["topic_id"] in topics_with_url_ids
-    ]
-    return {"posts": posts_with_topic_url, "topics": topics_with_url}
+    return topics_with_url
 
 
-def get_docs(term: str, page: int, see_all=False):
+def get_docs(term: str, page: int, see_all=False) -> dict:
     """
     Fetches documentation from discourse based on category and
     a specific search term.
@@ -134,23 +128,18 @@ def get_docs(term: str, page: int, see_all=False):
         topics = [
             topic for topic in docs.get("topics") if not topic["archived"]
         ]
-        posts = docs.get("posts")
 
-        resp = rewrite_topic_url(topics, posts)
+        resp["topics"] = rewrite_topic_url(topics)
         cache.set(f"{term}_{page}", resp, timeout=600)  # 10 min cache
     else:
         resp = cached_page
     if page == 1 and not see_all:
-        response = {
-            "topics": resp["topics"][:4],
-            "posts": resp["posts"][:4],
-        }
-        return response
+        return {"topics": resp["topics"][:5]}
 
     return resp
 
 
-def get_all(doc_type: str, search_term: str, page: int):
+def get_all(doc_type: str, search_term: str, page: int) -> dict:
     """
     Returns paginated documentation of a specific type(post or topic) from the
     charmhub.io discourse.
@@ -204,13 +193,6 @@ def docs_search():
     page = int(request.args.get("page", 1))
     docs = get_docs(search_term, page)
     return docs
-
-
-@search.route("/docs/all-posts")
-def get_all_posts():
-    search_term = request.args.get("q")
-    page = int(request.args.get("page", 1))
-    return get_all("posts", search_term, page)
 
 
 @search.route("/docs/all-topics")
