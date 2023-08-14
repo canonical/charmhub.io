@@ -83,7 +83,7 @@ def rewrite_topic_url(topics: list) -> list:
     return topics_with_url
 
 
-def get_docs(term: str, page: int, see_all=False) -> dict:
+def search_docs(term: str, page: int, see_all=False) -> dict:
     """
     Fetches documentation from discourse based on category and
     a specific search term.
