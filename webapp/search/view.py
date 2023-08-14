@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 from flask import Blueprint, request, make_response
 from flask_caching import Cache
 import requests
@@ -10,8 +11,79 @@ search = Blueprint(
 
 cache = Cache(config={"CACHE_TYPE": "simple"})
 
+docs_id_cache = {
+    "olm": {"id": 1087, "tag": "juju"},
+    "sdk": {"id": 4449, "tag": "sdk"},
+    "dev": {"id": 6669, "tag": "dev"},
+}
 
-def get_docs(search_term: str, page: int, see_all=False):
+
+def map_topic_to_doc(topic):
+    for key in docs_id_cache.keys():
+        if key in topic["tags"]:
+            return docs_id_cache[key]["id"]
+
+
+def rewrite_topic_url(topics: list) -> list:
+    """
+    This function takes a list of topics and posts.
+    It retrieves navigation details from Discourse and modifies the topic URLs
+    based on tag matches. It then adds a url key to each topic dictionary.
+    Topics and corresponding Posts without urls are filtered out
+
+    Args:
+        topics (list): A list of topic dictionaries
+        posts (list): A list of post dictionaries
+
+    Returns:
+        dict: A dictionary containing modified lists of posts and topics with
+        rewritten URLs.
+
+    Note: it caches navigation table to minimize the number of requests to
+    Discourse API
+
+    """
+    topics_with_url = []
+    for topic in topics:
+        index_id = map_topic_to_doc(topic)
+        index_details = cache.get(index_id)
+
+        if index_details:
+            nav_table = BeautifulSoup(
+                index_details["nav_table"], "html.parser"
+            )
+        else:
+            index_page = requests.get(
+                f"https://discourse.charmhub.io/t/{index_id}.json"
+            ).json()
+            index_doc = (
+                index_page.get("post_stream").get("posts")[0].get("cooked")
+            )
+            soup = BeautifulSoup(index_doc, "html.parser")
+            nav_heading = soup.find("h2", text="Navigation")
+            nav_table = nav_heading.find_next_sibling("details").find("table")
+            cache.set(index_id, {"nav_table": str(nav_table)}, timeout=3600)
+
+        topic_link = nav_table.find(
+            "a", href=lambda href: href and str(topic["id"]) in href
+        )
+        if topic_link:
+            topic_row_in_nav = topic_link.find_parent("tr")
+            topic_data = topic_row_in_nav.find_all("td")
+            topic_path = topic_data[1].text
+            topic_urls = []
+            for tag in topic["tags"]:
+                if tag in docs_id_cache.keys():
+                    url_tag = docs_id_cache[tag]["tag"]
+                    topic_url = f"https://juju.is/docs/{url_tag}/{topic_path}"
+                    topic_urls.append(topic_url)
+                topic["url"] = topic_urls
+            topics_with_url.append(topic)
+
+    return topics_with_url
+
+
+def get_docs(term: str, page: int, see_all=False) -> dict:
     """
     Fetches documentation from discourse based on category and
     a specific search term.
@@ -39,61 +111,35 @@ def get_docs(search_term: str, page: int, see_all=False):
     """
     categories = ["#doc"]
     encoded_cat = [quote(cat) for cat in categories]
-    filter = ["-status:archived"]
-    query = f"{search_term} {' '.join(encoded_cat)} {' '.join(filter)}".strip()
-    base_search_url = f"https://discourse.charmhub.io/search.json?q={query}"
+    tags = ["olm", "sdk", "dev"]
+    query = f"{term} {' '.join(encoded_cat)} tag:{','.join(tags)}".strip()
+
+    search_url = f"https://discourse.charmhub.io/search.json?q={query}"
+
     resp = {}
-    term = cache.get(search_term)
+    cached_page = cache.get(f"{term}_{page}")
+    if not cached_page:
+        docs = requests.get(f"{search_url}&page={page}").json()
 
-    more_pages = True
-    if not term:
-        docs = {}
-        # clear cache of any previously saved search term
-        cache.clear()
-        while more_pages:
-            docs = requests.get(f"{base_search_url}&page={page}").json()
-            if not docs.get("posts") and not docs.get("topics"):
-                return {"error": "No results found"}
+        if not docs.get("topics"):
+            return {"error": "No results found"}
 
-            if "posts" in resp:
-                resp["posts"].append(docs.get("posts", []))
-            else:
-                resp["posts"] = docs.get("posts", [])
-            if "topics" in resp:
-                resp["topics"].append(docs.get("topics", []))
-            else:
-                resp["topics"] = docs.get("topics", [])
-            page = page + 1
-            next_docs = requests.get(f"{base_search_url}&page={page}").json()
-            if not next_docs.get("posts"):
-                more_pages = False
-                return resp
-            if (
-                docs["posts"][0]["id"] == next_docs["posts"][0]["id"]
-                and docs["topics"][0]["id"] == next_docs["topics"][0]["id"]
-            ):
-                more_pages = False
-                cache.set(search_term, resp)
-                if page == 1 and not see_all:
-                    resp["posts"] = docs.get("posts", [])[0:4]
-                    resp["topics"] = docs.get("topics", [])[0:4]
-                    return resp
-                return resp
-            else:
-                resp["posts"].append(next_docs.get("posts", []))
-                resp["topics"].append(next_docs.get("topics", []))
-                docs = next_docs
+        # filter out archived topics
+        topics = [
+            topic for topic in docs.get("topics") if not topic["archived"]
+        ]
+
+        resp["topics"] = rewrite_topic_url(topics)
+        cache.set(f"{term}_{page}", resp, timeout=600)  # 10 min cache
     else:
-        if page == 1 and not see_all:
-            resp["posts"] = term.get("posts", [])[0:4]
-            resp["topics"] = term.get("topics", [])[0:4]
-            return resp
-        resp["posts"] = term.get("posts", [])
-        resp["topics"] = term.get("topics", [])
-        return resp
+        resp = cached_page
+    if page == 1 and not see_all:
+        return {"topics": resp["topics"][:5]}
+
+    return resp
 
 
-def get_all(doc_type: str, search_term: str, page: int):
+def get_all(doc_type: str, search_term: str, page: int) -> dict:
     """
     Returns paginated documentation of a specific type(post or topic) from the
     charmhub.io discourse.
@@ -125,16 +171,15 @@ def get_all(doc_type: str, search_term: str, page: int):
     doc_page = -((count * page) // -50)
     docs = get_docs(search_term, page=doc_page, see_all=see_all)
     if "error" not in docs:
-        all_post = docs.get(doc_type, [])
+        all = docs.get(doc_type, [])
         end = page * count
         start = end - count
-        if start >= len(all_post):
-            end = len(all_post)
+        if start >= len(all):
+            end = len(all)
             start = end - count
-        total_pages = -(len(all_post) // -count)
+        # to do: find a way of calculating total pages
         posts_per_page = {
-            doc_type: all_post[start:end],
-            "total_pages": total_pages,
+            doc_type: all[start:end],
         }
 
         return make_response(posts_per_page, 200)
@@ -146,15 +191,8 @@ def get_all(doc_type: str, search_term: str, page: int):
 def docs_search():
     search_term = request.args.get("q")
     page = int(request.args.get("page", 1))
-    docs = get_docs(search_term, page=page)
-    return make_response(docs, 200)
-
-
-@search.route("/docs/all-posts")
-def get_all_posts():
-    search_term = request.args.get("q")
-    page = int(request.args.get("page", 1))
-    return get_all("posts", search_term, page)
+    docs = get_docs(search_term, page)
+    return docs
 
 
 @search.route("/docs/all-topics")
