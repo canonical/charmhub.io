@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from flask import Blueprint, request, make_response
+from flask import Blueprint, request
 from flask_caching import Cache
 import requests
 from urllib.parse import quote
@@ -16,6 +16,7 @@ docs_id_cache = {
     "sdk": {"id": 4449, "tag": "sdk"},
     "dev": {"id": 6669, "tag": "dev"},
 }
+url = "https://discourse.charmhub.io"
 
 
 def map_topic_to_doc(topic):
@@ -53,9 +54,7 @@ def rewrite_topic_url(topics: list) -> list:
                 index_details["nav_table"], "html.parser"
             )
         else:
-            index_page = requests.get(
-                f"https://discourse.charmhub.io/t/{index_id}.json"
-            ).json()
+            index_page = requests.get(f"{url}/t/{index_id}.json").json()
             index_doc = (
                 index_page.get("post_stream").get("posts")[0].get("cooked")
             )
@@ -83,9 +82,91 @@ def rewrite_topic_url(topics: list) -> list:
     return topics_with_url
 
 
-def get_docs(term: str, page: int, see_all=False) -> dict:
+def search_discourse(
+    term: str,
+    query: str,
+    category: str,
+    page: int,
+    see_all: bool,
+    filter_topics: callable,
+) -> dict:
     """
-    Fetches documentation from discourse based on category and
+    Searches discourse for topics based on the query parameters.
+
+    Parameters:
+        term (str): The search term used to find relevant topics.
+        page (int): The page number of the search results to retrieve.
+        category (str): The category to search from.
+        see_all (bool, optional): If True, retrieves all available search
+        results. If False (default), returns a limited number of results
+        (5 posts and topics).
+
+    Returns:
+        dict: A dictionary containing the a list of topics.
+
+    Note:
+        This function makes use of a cache to store result for a fetched search
+        terms, this helps in reducing redundant requests to the discourse API.
+    """
+    cached_page = cache.get(f"{category}-{term}")
+    docs = {"topics": []}
+    more_pages = True
+
+    if page == 1 and not see_all:
+        if cached_page:
+            return {"topics": cached_page.get("topics")[:5]}
+        else:
+            result = requests.get(
+                f"{url}/search.json?q={query}&page={page}"
+            ).json()
+
+            topics = filter_topics(result.get("topics", []))
+
+            return {"topics": topics[:5]}
+    if not cached_page:
+        # Note: this logic is currently slower than it should ordinarily
+        # be because the  discourse API currently has some limitations that
+        # would probably be fixed in the near future.
+        # The ones affecting this code are:
+        # 1. The API does not return any indicator to show if there are more
+        #   pages to be fetched.
+        # 2. The API does not support fetching multiple categories or
+        #   excluding a category from the search
+        # 3. The API does not support excluding (we had to filter out archived
+        #   topics) a status from the search
+        while more_pages:
+            result = requests.get(
+                f"{url}/search.json?q={query}&page={page}"
+            ).json()
+
+            if result.get("topics"):
+                topics = filter_topics(result.get("topics", []))
+                docs["topics"].extend(topics)
+                next_page = requests.get(
+                    f"{url}/search.json?q={query}&page={page+1}"
+                ).json()
+                if (
+                    next_page.get("topics")
+                    and next_page.get("topics")[0]["id"]
+                    == result.get("topics")[0]["id"]
+                ):
+                    more_pages = False
+                    cache.set(f"{category}-{term}", docs, timeout=300)
+                    return docs
+                page += 1
+            else:
+                more_pages = False
+                cache.set(f"{category}-{term}", docs, timeout=300)
+                return docs
+
+    else:
+        docs = cached_page
+        return docs
+
+
+def search_docs(term: str, page: int, see_all) -> dict:
+    """
+    Fetches documentation from discourse from the doc category and
     a specific search term.
 
     Parameters:
@@ -93,110 +174,95 @@ def get_docs(term: str, page: int, see_all=False) -> dict:
         page (int): The page number of the search results to retrieve.
         see_all (bool, optional): If True, retrieves all available search
         results. If False (default), returns a limited number of results
-        (4 posts and topics).
+        (5 posts and topics).
 
     Returns:
-        dict: A dictionary containing the retrieved documentation.
-            - If there are no results found, the dictionary will contain an
-                "error" key with the value "No results found".
-            - If `see_all` is True, the dictionary will contain all the
-                available posts and topics.
-            - If `see_all` is False the dictionary will contain only 4 posts
-                and topics.
-
-    Note:
-        This function makes use of a cache to store result for a fetched search
-        terms, it clears cache when another term is searched and this helps in
-        reducing redundant requests to the charmhub.io discourse API.
+        dict: A dictionary containing the retrieved dtopics.
     """
     categories = ["#doc"]
     encoded_cat = [quote(cat) for cat in categories]
     tags = ["olm", "sdk", "dev"]
     query = f"{term} {' '.join(encoded_cat)} tag:{','.join(tags)}".strip()
 
-    search_url = f"https://discourse.charmhub.io/search.json?q={query}"
+    def filter_topics(topics):
+        return [topic for topic in topics if not topic["archived"]]
 
-    resp = {}
-    cached_page = cache.get(f"{term}_{page}")
-    if not cached_page:
-        docs = requests.get(f"{search_url}&page={page}").json()
-
-        if not docs.get("topics"):
-            return {"error": "No results found"}
-
-        # filter out archived topics
-        topics = [
-            topic for topic in docs.get("topics") if not topic["archived"]
-        ]
-
-        resp["topics"] = rewrite_topic_url(topics)
-        cache.set(f"{term}_{page}", resp, timeout=600)  # 10 min cache
-    else:
-        resp = cached_page
-    if page == 1 and not see_all:
-        return {"topics": resp["topics"][:5]}
-
-    return resp
+    result = search_discourse(
+        term, query, "docs", page, see_all, filter_topics
+    )
+    topics_with_docs_url = rewrite_topic_url(result["topics"])
+    return {"topics": topics_with_docs_url}
 
 
-def get_all(doc_type: str, search_term: str, page: int) -> dict:
+def search_topics(term: str, page: int, see_all=False) -> dict:
     """
-    Returns paginated documentation of a specific type(post or topic) from the
-    charmhub.io discourse.
+    Search discousre for a specific term and return the results.
+    It searches from all categories except doc category.
 
     Parameters:
-        doc_type (str): type of documentation to fetch ("posts" or "topics").
         search_term (str): The search term used to find relevant documentation.
         page (int): The page number of the search results to retrieve.
+        see_all (bool, optional): If True, retrieves all available search
+        results. If False (default), returns a limited number of results
+        (5 posts and topics).
 
     Returns:
-        dict: A dictionary containing the paginated documentation of the
-        specified type.
-            - If there are no results found for the provided `search_term`,
-                the dictionary will contain an "error" key
-                with the value "No results found", and a 404 status code will
-                be returned.
-            - If there are results, the dictionary will contain the paginated
-                requested `doc_type` (e.g., "posts" or "topics") and the total
-                pages
-
-    Note:
-        The function internally calls the `get_docs` function to retrieve the
-        documentation.
+        dict: A dictionary containing the retrieved topics.
     """
-    see_all = True
-    count = 10
-    page = page
+    query = term
 
-    doc_page = -((count * page) // -50)
-    docs = get_docs(search_term, page=doc_page, see_all=see_all)
-    if "error" not in docs:
-        all = docs.get(doc_type, [])
-        end = page * count
-        start = end - count
-        if start >= len(all):
-            end = len(all)
-            start = end - count
-        # to do: find a way of calculating total pages
-        posts_per_page = {
-            doc_type: all[start:end],
-        }
+    def filter_topics(topics):
+        return [
+            topic
+            for topic in topics
+            if not topic["archived"] and topic["category_id"] != 22
+        ]
 
-        return make_response(posts_per_page, 200)
-    else:
-        return make_response({"error": "No results found"}, 404)
+    result = search_discourse(
+        term, query, "discourse", page, see_all, filter_topics
+    )
+    return result
 
 
 @search.route("/docs")
-def docs_search():
+def docs():
     search_term = request.args.get("q")
     page = int(request.args.get("page", 1))
-    docs = get_docs(search_term, page)
+
+    docs = search_docs(search_term, page, False)
     return docs
 
 
-@search.route("/docs/all-topics")
-def get_all_topics():
+@search.route("/docs/all")
+def all_docs():
     search_term = request.args.get("q")
     page = int(request.args.get("page", 1))
-    return get_all("topics", search_term, page)
+
+    all_topics = search_docs(search_term, page, True).get("topics")
+    count = 50
+    total_pages = -(len(all_topics) // -count)
+    start = (page - 1) * count
+    end = start + count
+    return {"topics": all_topics[start:end], "total_pages": total_pages}
+
+
+@search.route("/discourse-topics")
+def topics():
+    search_term = request.args.get("q")
+    page = int(request.args.get("page", 1))
+
+    topics = search_topics(search_term, page, False)
+    return topics
+
+
+@search.route("/discourse-topics/all")
+def all_topics():
+    search_term = request.args.get("q")
+    page = int(request.args.get("page", 1))
+
+    all_topics = search_topics(search_term, page, True).get("topics")
+    count = 50
+    total_pages = -(len(all_topics) // -count)
+    start = (page - 1) * count
+    end = start + count
+    return {"topics": all_topics[start:end], "total_pages": total_pages}
