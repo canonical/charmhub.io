@@ -16,6 +16,7 @@ docs_id_cache = {
     "sdk": {"id": 4449, "tag": "sdk"},
     "dev": {"id": 6669, "tag": "dev"},
 }
+url = "https://discourse.charmhub.io"
 
 
 def map_topic_to_doc(topic):
@@ -53,9 +54,7 @@ def rewrite_topic_url(topics: list) -> list:
                 index_details["nav_table"], "html.parser"
             )
         else:
-            index_page = requests.get(
-                f"https://discourse.charmhub.io/t/{index_id}.json"
-            ).json()
+            index_page = requests.get(f"{url}/t/{index_id}.json").json()
             index_doc = (
                 index_page.get("post_stream").get("posts")[0].get("cooked")
             )
@@ -115,14 +114,13 @@ def search_discourse(
 
     if page == 1 and not see_all:
         if cached_page:
-            return {"topics": cached_page[:5]}
+            return {"topics": cached_page.get("topics")[:5]}
         else:
             result = requests.get(
-                f"https://discourse.charmhub.io/search.json?q={query}"
-                "&page={page}"
+                f"{url}/search.json?q={query}&page={page}"
             ).json()
 
-            topics = filter_topics(result.get("topics"))
+            topics = filter_topics(result.get("topics", []))
 
             return {"topics": topics[:5]}
     if not cached_page:
@@ -138,16 +136,14 @@ def search_discourse(
         #   topics) a status from the search
         while more_pages:
             result = requests.get(
-                f"https://discourse.charmhub.io/search.json?q={query}&"
-                "page={page}"
+                f"{url}/search.json?q={query}&page={page}"
             ).json()
 
             if result.get("topics"):
-                topics = filter_topics(result.get("topics"))
+                topics = filter_topics(result.get("topics", []))
                 docs["topics"].extend(topics)
                 next_page = requests.get(
-                    f"https://discourse.charmhub.io/search.json?q={query}&"
-                    "page={page+1}"
+                    f"{url}/search.json?q={query}&page={page+1}"
                 ).json()
                 if (
                     next_page.get("topics")
@@ -192,7 +188,7 @@ def search_docs(term: str, page: int, see_all) -> dict:
         return [topic for topic in topics if not topic["archived"]]
 
     result = search_discourse(
-        term, query, "discourse", page, see_all, filter_topics
+        term, query, "docs", page, see_all, filter_topics
     )
     topics_with_docs_url = rewrite_topic_url(result["topics"])
     return {"topics": topics_with_docs_url}
@@ -219,7 +215,7 @@ def search_topics(term: str, page: int, see_all=False) -> dict:
         return [
             topic
             for topic in topics
-            if not topic["archived"] and not topic["category_id"] == 22
+            if not topic["archived"] and topic["category_id"] != 22
         ]
 
     result = search_discourse(
