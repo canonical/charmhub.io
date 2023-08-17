@@ -1,8 +1,11 @@
+from pprint import pprint
 from bs4 import BeautifulSoup
-from flask import Blueprint, request
+from flask import Blueprint, request, current_app as app
 from flask_caching import Cache
 import requests
 from urllib.parse import quote
+
+from webapp.config import SEARCH_FIELDS
 
 
 search = Blueprint(
@@ -222,6 +225,40 @@ def search_topics(term: str, page: int, see_all=False) -> dict:
         term, query, "discourse", page, see_all, filter_topics
     )
     return result
+
+
+@search.route("/packages")
+def search_packages(query):
+    query = request.args.get("q", "")
+    packages = app.store_api.find(query, fields=SEARCH_FIELDS)
+    charms = [
+        package
+        for package in packages["results"]
+        if package["type"] == "charm"
+    ]
+    bundles = [
+        package
+        for package in packages["results"]
+        if package["type"] == "bundle"
+    ]
+    return {"charms": charms[:5], "bundles": bundles[:5]}
+
+
+@search.route("/all-charms")
+@search.route("/all-bundles")
+def all_charms():
+    query = request.args.get("q", "")
+    page = int(request.args.get("page", 1))
+    packages = app.store_api.find(query, fields=SEARCH_FIELDS)
+    package_type = request.path[1:-1].split("-")[1]
+    result = [
+        package
+        for package in packages["results"]
+        if package["type"] == package_type
+    ]
+    start = (page - 1) * 50
+    end = start + 50
+    return {"charms": result[start:end]}
 
 
 @search.route("/docs")
