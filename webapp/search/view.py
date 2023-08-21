@@ -90,9 +90,10 @@ def search_discourse(
     query: str,
     category: str,
     page: int,
+    limit: int,
     see_all: bool,
     filter_topics: callable,
-) -> dict:
+) -> list:
     """
     Searches discourse for topics based on the query parameters.
 
@@ -112,20 +113,21 @@ def search_discourse(
         terms, this helps in reducing redundant requests to the discourse API.
     """
     cached_page = cache.get(f"{category}-{term}")
-    docs = {"topics": []}
+    result = []
     more_pages = True
 
     if page == 1 and not see_all:
+        pprint("here, limited page 1")
         if cached_page:
-            return {"topics": cached_page.get("topics")[:5]}
+            return cached_page.get("topics")[:limit]
         else:
             result = requests.get(
                 f"{url}/search.json?q={query}&page={page}"
             ).json()
 
             topics = filter_topics(result.get("topics", []))
-
-            return {"topics": topics[:5]}
+            pprint(limit)
+            return topics[:limit]
     if not cached_page:
         # Note: this logic is currently slower than it should ordinarily
         # be because the  discourse API currently has some limitations that
@@ -144,7 +146,7 @@ def search_discourse(
 
             if result.get("topics"):
                 topics = filter_topics(result.get("topics", []))
-                docs["topics"].extend(topics)
+                result.extend(topics)
                 next_page = requests.get(
                     f"{url}/search.json?q={query}&page={page+1}"
                 ).json()
@@ -154,20 +156,20 @@ def search_discourse(
                     == result.get("topics")[0]["id"]
                 ):
                     more_pages = False
-                    cache.set(f"{category}-{term}", docs, timeout=300)
-                    return docs
+                    cache.set(f"{category}-{term}", result, timeout=300)
+                    return result[:limit]
                 page += 1
             else:
                 more_pages = False
-                cache.set(f"{category}-{term}", docs, timeout=300)
-                return docs
+                cache.set(f"{category}-{term}", result, timeout=300)
+                return result[:limit]
 
     else:
-        docs = cached_page
-        return docs
+        result = cached_page
+        return result[:limit]
 
 
-def search_docs(term: str, page: int, see_all) -> dict:
+def search_docs(term: str, page: int, limit: int, see_all) -> dict:
     """
     Fetches documentation from discourse from the doc category and
     a specific search term.
@@ -191,13 +193,13 @@ def search_docs(term: str, page: int, see_all) -> dict:
         return [topic for topic in topics if not topic["archived"]]
 
     result = search_discourse(
-        term, query, "docs", page, see_all, filter_topics
+        term, query, "docs", page, limit, see_all, filter_topics
     )
-    topics_with_docs_url = rewrite_topic_url(result["topics"])
-    return {"topics": topics_with_docs_url}
+    topics_with_docs_url = rewrite_topic_url(result)
+    return topics_with_docs_url
 
 
-def search_topics(term: str, page: int, see_all=False) -> dict:
+def search_topics(term: str, page: int, limit: int, see_all=False) -> dict:
     """
     Search discousre for a specific term and return the results.
     It searches from all categories except doc category.
@@ -222,26 +224,67 @@ def search_topics(term: str, page: int, see_all=False) -> dict:
         ]
 
     result = search_discourse(
-        term, query, "discourse", page, see_all, filter_topics
+        term, query, "discourse", page, limit, see_all, filter_topics
     )
     return result
 
 
-@search.route("/packages")
-def search_packages(query):
-    query = request.args.get("q", "")
-    packages = app.store_api.find(query, fields=SEARCH_FIELDS)
+@search.route("/search.json")
+def search_home():
+    params = request.args
+    term = params.get("q")
+    types = params.get("types", "")
+    pprint(types)
+    limit = int(params.get("type_limit", 5))
+
+    valid_types = {
+        "docs": search_docs,
+        "topics": search_topics,
+        "charms": search_charms,
+        "bundles": search_bundles,
+    }
+    if types:
+        result = {}
+        search_types = types.split(",")
+        for type in search_types:
+            if type not in valid_types.keys():
+                return {"error": "Invalid search type"}
+            if type == "docs" or type == "topics":
+                result[type] = valid_types[type](term, 1, False)
+            else:
+                result[type] = valid_types[type](term, type, limit).get(type)
+    else:
+        result = {
+            "docs": search_docs(term, 1, limit, False),
+            "topics": search_topics(term, 1, limit, False),
+            "charms": search_charms(term, limit),
+            "bundles": search_bundles(term, limit),
+        }
+
+    # charmhub.io/search?q=term&types=docs|topics|charms|bundles&type_limit=50&page=1
+    return result
+
+
+def search_charms(term: str, limit: int):
+    packages = app.store_api.find(term, fields=SEARCH_FIELDS)
     charms = [
         package
         for package in packages["results"]
         if package["type"] == "charm"
     ]
+
+    return charms[:limit]
+
+
+def search_bundles(term: str, limit: int):
+    packages = app.store_api.find(term, fields=SEARCH_FIELDS)
     bundles = [
         package
         for package in packages["results"]
         if package["type"] == "bundle"
     ]
-    return {"charms": charms[:5], "bundles": bundles[:5]}
+
+    return bundles[:limit]
 
 
 @search.route("/all-charms")
@@ -249,6 +292,7 @@ def search_packages(query):
 def all_charms():
     query = request.args.get("q", "")
     page = int(request.args.get("page", 1))
+    limit = int(request.args.get("type_limit", 50))
     packages = app.store_api.find(query, fields=SEARCH_FIELDS)
     package_type = request.path[1:-1].split("-")[1]
     result = [
@@ -256,50 +300,32 @@ def all_charms():
         for package in packages["results"]
         if package["type"] == package_type
     ]
-    start = (page - 1) * 50
-    end = start + 50
-    return {"charms": result[start:end]}
-
-
-@search.route("/docs")
-def docs():
-    search_term = request.args.get("q")
-    page = int(request.args.get("page", 1))
-
-    docs = search_docs(search_term, page, False)
-    return docs
+    start = (page - 1) * limit
+    end = start + limit
+    return {f"{package_type}s": result[start:end]}
 
 
 @search.route("/docs/all")
 def all_docs():
     search_term = request.args.get("q")
     page = int(request.args.get("page", 1))
+    limit = int(request.args.get("type_limit", 50))
 
     all_topics = search_docs(search_term, page, True).get("topics")
-    count = 50
-    total_pages = -(len(all_topics) // -count)
-    start = (page - 1) * count
-    end = start + count
+    total_pages = -(len(all_topics) // -limit)
+    start = (page - 1) * limit
+    end = start + limit
     return {"topics": all_topics[start:end], "total_pages": total_pages}
-
-
-@search.route("/discourse-topics")
-def topics():
-    search_term = request.args.get("q")
-    page = int(request.args.get("page", 1))
-
-    topics = search_topics(search_term, page, False)
-    return topics
 
 
 @search.route("/discourse-topics/all")
 def all_topics():
     search_term = request.args.get("q")
     page = int(request.args.get("page", 1))
+    limit = int(request.args.get("type_limit", 50))
 
     all_topics = search_topics(search_term, page, True).get("topics")
-    count = 50
-    total_pages = -(len(all_topics) // -count)
-    start = (page - 1) * count
-    end = start + count
+    total_pages = -(len(all_topics) // -limit)
+    start = (page - 1) * limit
+    end = start + limit
     return {"topics": all_topics[start:end], "total_pages": total_pages}
