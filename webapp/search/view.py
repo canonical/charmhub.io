@@ -14,7 +14,7 @@ search = Blueprint(
 )
 
 
-@search.route("/search.json")
+@search.route("/all-search")
 def search_home():
     params = request.args
     term = params.get("q")
