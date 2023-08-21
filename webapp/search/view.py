@@ -15,7 +15,7 @@ search = Blueprint(
 
 
 @search.route("/all-search")
-def search_home():
+def all_search():
     params = request.args
     term = params.get("q")
     types = params.get("types", "")
@@ -34,9 +34,9 @@ def search_home():
             if type not in valid_types.keys():
                 return {"error": "Invalid search type"}
             if type == "docs" or type == "topics":
-                result[type] = valid_types[type](term, 1, False)
+                result[type] = valid_types[type](term, 1, limit, False)
             else:
-                result[type] = valid_types[type](term, type, limit).get(type)
+                result[type] = valid_types[type](term, limit)
     else:
         result = {
             "docs": search_docs(term, 1, limit, False),
