@@ -22,15 +22,11 @@ const init = (packageName, channelMapButton) => {
     "[data-channel-map-filter]"
   );
 
-  const selectChannel = (track, channel, version) => {
+  const selectChannel = (track, channel) => {
     var page = window.location.pathname;
 
-    if (track === "latest") {
-      if (channel === "stable") {
-        window.location.href = `${page}`;
-      } else {
-        window.location.href = `${page}?channel=${channel}`;
-      }
+    if (track === "latest" && channel === "stable") {
+      window.location.href = `${page}`;
     } else {
       window.location.href = `${page}?channel=${track}/${channel}`;
     }
