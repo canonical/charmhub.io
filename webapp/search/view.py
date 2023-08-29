@@ -50,7 +50,7 @@ def all_search():
 
 @search.route("/all-charms")
 @search.route("/all-bundles")
-def all_charms():
+def all_charms() -> dict:
     query = request.args.get("q", "")
     page = int(request.args.get("page", 1))
     limit = int(request.args.get("type_limit", 50))
