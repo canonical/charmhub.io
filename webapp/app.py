@@ -12,7 +12,7 @@ from webapp.topics.views import topics
 from webapp.publisher.views import publisher
 from webapp.store.views import store
 from webapp.interfaces.views import interfaces
-from webapp.search.view import search
+from webapp.search.views import search
 from webapp.search.logic import cache
 
 

@@ -39,12 +39,11 @@ def all_search():
                 result[type] = valid_types[type](term, limit)
     else:
         result = {
-            "docs": search_docs(term, 1, limit, False),
-            "topics": search_topics(term, 1, limit, False),
             "charms": search_charms(term, limit),
             "bundles": search_bundles(term, limit),
+            "docs": search_docs(term, 1, limit, False),
+            "topics": search_topics(term, 1, limit, False),
         }
-
     return result
 
 
@@ -73,7 +72,6 @@ def all_docs():
     limit = int(request.args.get("type_limit", 50))
 
     all_topics = search_docs(search_term, page, limit, True)
-
     total_pages = -(len(all_topics) // -limit)
     start = (page - 1) * limit
     end = start + limit

@@ -1,56 +1,26 @@
 import json
-from pprint import pprint
 from unittest import TestCase
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 from urllib.parse import urlencode
-from flask_caching import Cache
-
-import requests
 
 import responses
 
 from webapp.app import app
-# from webapp.search.logic import search_docs
 from mock_data.search_mock import (
     sample_packages_api_response,
-    sample_docs_api_response,
-    sample_topics_api_response,
+    sample_charms,
+    sample_bundles,
+    sample_docs,
+    sample_topics,
 )
 
-from urllib.parse import quote
 
-
-
-# mock external api calls
-# mock functions that are called by the endpoints
-# test that real api and mocked data has the same data structure
-
-class TestSearch(TestCase):
+class TestSearchPackage(TestCase):
     def setUp(self):
-
-        # Clear cache completely
-        cache = Cache()
-        cache.init_app(app, config={"CACHE_TYPE": "simple"})
-        with app.app_context():
-            cache.clear()
-
-        app.config['TESTING'] = True
-        app.config['DEBUG'] = True
+        app.config["TESTING"] = True
+        app.config["DEBUG"] = True
         self.client = app.test_client()
-        self.discourse_api_url = "https://discourse.charmhub.com"
-        self.docs_search_url = "".join([
-            "https://discourse.charmhub.io/search.json?q=juju%20",
-            quote("#doc"),
-            "%20tag:olm,sdk,dev",
-            "&page=1"
-        ])
-        self.topics_search_url = "".join(
-            [
-                f"{self.discourse_api_url}/search.json?",
-                urlencode({"q": "juju"}),
 
-            ]
-        )
         self.charmhub_api_url = "".join(
             [
                 "https://api.charmhub.io/v2/",
@@ -84,10 +54,10 @@ class TestSearch(TestCase):
         self.assertEqual(response1.status_code, 200)
         self.assertEqual(len(response1.json["charms"]), 3)
         self.assertEqual(len(response1.json), 1)
-        self.assertEqual(type((response1.json["charms"])), list)
-        self.assertEqual("bundles" not in response1.json, True)
-        self.assertEqual("docs" not in response1.json, True)
-        self.assertEqual("topics" not in response1.json, True)
+        self.assertIsInstance(response1.json["charms"], list)
+        self.assertNotIn("bundles", response1.json)
+        self.assertNotIn("docs", response1.json)
+        self.assertNotIn("topics", response1.json)
 
     @responses.activate
     def test_all_bundles(self):
@@ -105,81 +75,82 @@ class TestSearch(TestCase):
         self.assertEqual(len(bundle_response.json["bundles"]), 4)
         self.assertEqual(len(bundle_response.json), 1)
         self.assertEqual(type((bundle_response.json["bundles"])), list)
-        self.assertEqual("charms" not in bundle_response.json, True)
-        self.assertEqual("docs" not in bundle_response.json, True)
-        self.assertEqual("topics" not in bundle_response.json, True)
+        self.assertNotIn("charms", bundle_response.json)
+        self.assertNotIn("docs", bundle_response.json)
+        self.assertNotIn("topics", bundle_response.json)
 
-    @patch("webapp.search.logic.search_docs")
-    def test_all_docs(self, search_docs):
-        search_docs.return_value = Mock()
-        search_docs.return_value.ok = True
-        search_docs.return_value.json.return_value = sample_docs_api_response
 
-        docs_response1 = self.client.get("/all-docs?q=juju")
-        self.assertEqual(docs_response1.status_code, 200)
+class TestAllSearchView(TestCase):
+    def setUp(self):
+        self.client = app.test_client()
 
     @patch("webapp.search.logic.search_topics")
-    def test_all_topics(self, search_discourse):
-        search_discourse.return_value = Mock()
-        search_discourse.return_value.ok = True
-        search_discourse.return_value.json.return_value = sample_topics_api_response
+    @patch("webapp.search.logic.search_docs")
+    @patch("webapp.search.logic.search_bundles")
+    @patch("webapp.search.logic.search_charms")
+    def test_search(
+        self,
+        mock_search_charms,
+        mock_search_bundles,
+        mock_search_docs,
+        mock_search_topics,
+    ):
+        mock_search_charms.return_value = sample_charms
+        mock_search_bundles.return_value = sample_bundles
+        mock_search_docs.return_value.json = sample_docs
+        mock_search_topics.return_value = sample_topics
 
-        docs_response1 = self.client.get("/all-docs?q=juju")
-        pprint(docs_response1.json)
-        self.assertEqual(docs_response1.status_code, 200)
+        all_search_response = self.client.get("/all-search?q=juju")
+        all_docs_response = self.client.get("/all-docs?q=juju&type_limit=3")
+        all_topics_response = self.client.get("/all-topics?q=juju")
 
-    # @responses.activate
-    # def test_search(self):
-    #     responses.add(
-    #         responses.Response(
-    #             method="GET",
-    #             url=self.charmhub_api_url,
-    #             body=json.dumps(sample_packages_api_response),
-    #             status=200,
-    #         )
-    #     )
+        self.assertEqual(all_search_response.status_code, 200)
+        self.assertIn("topics", all_docs_response.json)
+        self.assertIn("charms", all_search_response.json)
+        self.assertIn("bundles", all_search_response.json)
+        self.assertIn("docs", all_search_response.json)
+        self.assertIsInstance(all_search_response.json["charms"], list)
+        self.assertIsInstance(all_search_response.json["bundles"], list)
+        self.assertIsInstance(all_search_response.json["docs"], list)
+        self.assertIsInstance(all_search_response.json["topics"], list)
 
-    #     responses.add(
-    #         responses.Response(
-    #             method="GET",
-    #             url=self.docs_search_url,
-    #             body=json.dumps(xyz),
-    #             status=200,
-    #         )
-    #     )
+        self.assertEqual(all_docs_response.status_code, 200)
+        self.assertLessEqual(len(all_docs_response.json["topics"]), 3)
+        self.assertIn("url", all_docs_response.json["topics"][0])
+        self.assertTrue(
+            all(
+                topic.get("archived", False) is not True
+                for topic in all_docs_response.json["topics"]
+            )
+        )
 
-    #     # responses.add(
-    #     #     responses.Response(
-    #     #         method="GET",
-    #     #         url=self.topics_search_url,
-    #     #         body=json.dumps(sample_docs_api_response),
-    #     #         status=200,
-    #     #     )
-    #     # )
+        self.assertEqual(all_topics_response.status_code, 200)
+        self.assertTrue(
+            all(
+                topic.get("archived", False) is not True
+                for topic in all_topics_response.json["topics"]
+            )
+        )
 
-    #     # search_response = self.client.get("/all-search")
-    #     # search_res
-    #     pprint(search_response.json)
-    #     self.assertEqual(search_response.status_code, 200)
+    @patch("webapp.search.logic.search_charms")
+    def test_search_with_single_type(self, mock_search_charms):
+        mock_search_charms.return_value = sample_charms
+        response = self.client.get(
+            "/all-search?q=test&types=charms&type_limit=2"
+        )
+        data = json.loads(response.data)
 
-# test rewite topic url;
-# - should take a list of topics and return a list of topics with url addded to each topic
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("charms", data)
+        self.assertIsInstance(data["charms"], list)
+        self.assertEqual(len(data["charms"]), 2)
 
-# test all charms
-# - should take a query and return a list of charms
+    def test_invalid_search_type(self):
+        response = self.client.get(
+            "/all-search?q=test&types=invalid&type_limit=5"
+        )
+        data = json.loads(response.data)
 
-# test all bundles
-# - should take a query and return a list of bundles
-
-# test all docs
-# - should take a query and return a list of docs
-# - category_ids 22 only
-
-# test search
-# - should return an error if the type is not valid
-# - should return a dict of results containing keys that are the same as the types supplies
-# - should return a dict containing all types if no types supplied
-
-# test search docs
-# - should return a dict containing the results of the search
-# - category id exclude 22  ``
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("error", data)
+        self.assertEqual(data["error"], "Invalid search type")
