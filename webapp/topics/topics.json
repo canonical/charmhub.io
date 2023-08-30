@@ -35,5 +35,12 @@
     "topic_id": 5990,
     "description": "Welcome to the Operator’s Corner, where you can find information about the best practices on developing your charms!",
     "categories": ["cloud", "featured"]
+  },
+  {
+    "name": "Secure your charm deployments with X.509 certificates",
+    "slug": "secure-your-charm-deployments-with-x-509-certificates",
+    "topic_id": 11664,
+    "description": "An introduction to using X.509 certificates in your charm deployment.",
+    "categories": ["security", "cloud", "networking"]
   }
 ]
