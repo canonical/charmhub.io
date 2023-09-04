@@ -18,3 +18,4 @@ PyGithub==1.57
 black==22.12.0
 flake8==6.0.0
 Flask-Caching==2.0.2
+Flask-Misaka==1.0.0
