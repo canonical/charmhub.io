@@ -3,7 +3,8 @@ from canonicalwebteam.flask_base.app import FlaskBase
 from canonicalwebteam.store_api.stores.charmstore import CharmStore
 from dateutil import parser
 from flask import render_template, make_response, request, session
-from flask_misaka import Misaka
+# from flask_misaka import Misaka
+import mistune
 from webapp import config
 from webapp.extensions import csrf
 from webapp.handlers import set_handlers
@@ -30,7 +31,7 @@ app.store_api = CharmStore(session=talisker.requests.get_session())
 cache.init_app(app)
 set_handlers(app)
 csrf.init_app(app)
-Misaka(app)
+# Misaka(app)
 
 app.register_blueprint(publisher)
 app.register_blueprint(store)
@@ -40,6 +41,11 @@ app.register_blueprint(interfaces)
 app.register_blueprint(search)
 
 
+def markdown(markdown_text):
+    markdown_to_html = mistune.create_markdown(renderer=mistune.HTMLRenderer())
+    return markdown_to_html(markdown_text)
+
+app.jinja_env.filters["markdown"] = markdown
 @app.route("/account.json")
 def get_account_json():
     """
