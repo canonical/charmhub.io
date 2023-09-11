@@ -156,7 +156,7 @@ function Packages() {
             {status === "success" && data.packages.length > 0 && (
               <Pagination
                 itemsPerPage={ITEMS_PER_PAGE}
-                totalItems={data.total_pages}
+                totalItems={ITEMS_PER_PAGE * data.total_pages}
                 paginate={(pageNumber) => {
                   setCurrentPage(pageNumber.toString());
                   setSearchParams({
