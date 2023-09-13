@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import { useLocation, useSearchParams } from "react-router-dom";
-import { Strip, Row, Col, Pagination } from "@canonical/react-components";
+import {
+  Strip,
+  Row,
+  Col,
+  Pagination,
+  Button,
+} from "@canonical/react-components";
 import {
   CharmCard,
   BundleCard,
@@ -67,6 +73,7 @@ function Packages() {
   const { search } = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const [hideFilters, setHideFilters] = useState(true);
   const [currentPage, setCurrentPage] = useState(
     searchParams.get("page") || "1"
   );
@@ -85,41 +92,83 @@ function Packages() {
       <Strip>
         <Row>
           <Col size={3}>
-            <Filters
-              categories={categories}
-              selectedCategories={
-                searchParams.get("categories")?.split(",") || []
-              }
-              setSelectedCategories={(items: any) => {
-                if (items.length < 1) {
-                  setSearchParams(
-                    getCurrentSearchParams(searchParams, ["categories", "page"])
-                  );
-                } else {
-                  setSearchParams({
-                    ...getCurrentSearchParams(searchParams, ["page"]),
-                    categories: items.join(","),
-                  });
-                }
+            <Button
+              className="has-icon u-hide--large p-filter-panel__toggle"
+              onClick={() => {
+                setHideFilters(false);
               }}
-              platforms={platforms}
-              selectedPlatform={searchParams.get("platforms") || "all"}
-              setSelectedPlatform={(item: string) => {
-                setSearchParams({
-                  ...getCurrentSearchParams(searchParams, ["page"]),
-                  platforms: item,
-                });
+            >
+              <i className="p-icon--arrow-right"></i>
+              <span>Filters</span>
+            </Button>
+            <div
+              className={`p-filter-panel-overlay u-hide--large ${
+                hideFilters ? "u-hide--small u-hide--medium" : ""
+              }`}
+              onClick={() => {
+                setHideFilters(true);
               }}
-              packageTypes={packageTypes}
-              selectedPackageType={searchParams.get("type") || "all"}
-              setSelectedPackageType={(item: string) => {
-                setSearchParams({
-                  ...getCurrentSearchParams(searchParams, ["page"]),
-                  type: item,
-                });
-              }}
-              disabled={isFetching}
-            />
+            ></div>
+
+            <div
+              className={`p-filter-panel ${
+                !hideFilters ? "p-filter-panel--expanded" : ""
+              }`}
+            >
+              <div className="p-filter-panel__header">
+                <Button
+                  className="has-icon u-hide--large u-no-margin--bottom u-no-padding--left"
+                  appearance="base"
+                  onClick={() => {
+                    setHideFilters(true);
+                  }}
+                >
+                  <i className="p-icon--chevron-down"></i>
+                  <span>Hide filters</span>
+                </Button>
+              </div>
+
+              <div className="p-filter-panel__inner">
+                <Filters
+                  categories={categories}
+                  selectedCategories={
+                    searchParams.get("categories")?.split(",") || []
+                  }
+                  setSelectedCategories={(items: any) => {
+                    if (items.length < 1) {
+                      setSearchParams(
+                        getCurrentSearchParams(searchParams, [
+                          "categories",
+                          "page",
+                        ])
+                      );
+                    } else {
+                      setSearchParams({
+                        ...getCurrentSearchParams(searchParams, ["page"]),
+                        categories: items.join(","),
+                      });
+                    }
+                  }}
+                  platforms={platforms}
+                  selectedPlatform={searchParams.get("platforms") || "all"}
+                  setSelectedPlatform={(item: string) => {
+                    setSearchParams({
+                      ...getCurrentSearchParams(searchParams, ["page"]),
+                      platforms: item,
+                    });
+                  }}
+                  packageTypes={packageTypes}
+                  selectedPackageType={searchParams.get("type") || "all"}
+                  setSelectedPackageType={(item: string) => {
+                    setSearchParams({
+                      ...getCurrentSearchParams(searchParams, ["page"]),
+                      type: item,
+                    });
+                  }}
+                  disabled={isFetching}
+                />
+              </div>
+            </div>
           </Col>
           <Col size={9}>
             <Topics topicsQuery={topicsQuery} />

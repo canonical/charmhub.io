@@ -142,6 +142,8 @@ $breakpoint-navigation-threshold: 1110px;
 @include p-detail-inline-list;
 @include vf-l-application;
 @include vf-p-icon-status-waiting;
+@import "pattern_p-filter-panel";
+@include p-charmhub-filter-panel;
 
 // Remove table row borders
 .p-table--no-borders tr {
