@@ -47,9 +47,13 @@ function Topics({ topicsQuery }: Props) {
           status === "success" &&
           data.topics.length > 0 &&
           data.topics.map((topic: Topic) => (
-            <Col size={3} key={topic.topic_id}>
-              <TopicCard data={topic} truncateTitle truncateContent />
-            </Col>
+            <TopicCard
+              data={topic}
+              truncateTitle
+              truncateContent
+              className="col-3 u-equal-height"
+              key={topic.topic_id.toString()}
+            />
           ))}
       </Row>
 
