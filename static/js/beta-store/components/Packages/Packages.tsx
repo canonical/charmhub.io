@@ -50,6 +50,10 @@ function Packages() {
       currentSearchParams.type = searchParams.get("type");
     }
 
+    if (searchParams.get("q") && !keysToRemove?.includes("q")) {
+      currentSearchParams.q = searchParams.get("q");
+    }
+
     return currentSearchParams;
   };
 
