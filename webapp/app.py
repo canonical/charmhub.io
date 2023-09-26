@@ -3,7 +3,6 @@ from canonicalwebteam.flask_base.app import FlaskBase
 from canonicalwebteam.store_api.stores.charmstore import CharmStore
 from dateutil import parser
 from flask import render_template, make_response, request, session
-
 from webapp import config
 from webapp.extensions import csrf
 from webapp.handlers import set_handlers
@@ -14,6 +13,7 @@ from webapp.store.views import store
 from webapp.interfaces.views import interfaces
 from webapp.search.views import search
 from webapp.search.logic import cache
+from webapp.helpers import markdown_to_html
 
 
 app = FlaskBase(
@@ -37,6 +37,9 @@ app.register_blueprint(login)
 app.register_blueprint(topics)
 app.register_blueprint(interfaces)
 app.register_blueprint(search)
+
+
+app.jinja_env.filters["markdown"] = markdown_to_html
 
 
 @app.route("/account.json")

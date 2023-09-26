@@ -2,12 +2,13 @@ import re
 import json
 
 from bs4 import BeautifulSoup
-from canonicalwebteam.discourse import DiscourseAPI
 from flask import request
 from ruamel.yaml import YAML
 from slugify import slugify
 from talisker import requests
 from datetime import datetime
+import mistune
+from canonicalwebteam.discourse import DiscourseAPI
 
 session = requests.get_session()
 discourse_api = DiscourseAPI(
@@ -193,3 +194,8 @@ def schedule_banner(start_date: str, end_date: str):
         return start <= present < end
     except ValueError:
         return False
+
+
+def markdown_to_html(markdown_text):
+    markdown = mistune.create_markdown(renderer=mistune.HTMLRenderer())
+    return markdown(markdown_text)
