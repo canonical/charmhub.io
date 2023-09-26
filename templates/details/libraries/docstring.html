@@ -66,7 +66,7 @@
                       &nbsp;&nbsp;&nbsp;&nbsp;<span class="token string">{{ arg.name }}{% if arg.type %}: {{ arg.type }}{% endif %}{{ ", " if not loop.last else "" }}</span>
                       <br />
                     {%- endfor -%}
-                  {%- endif -%}
+                    {%- endif -%}
                 {%- endif -%}
                 <span class="token function">)</span>
               {% elif group["type"].lower() == "class" %}
@@ -75,7 +75,7 @@
               {% endif %}
             </h4>
             {% if group.description.short %}
-              <p class="p-docstring-block__short-description u-no-margin--bottom">{{ group.description.short }}</p>
+              <p class="p-docstring-block__short-description u-no-margin--bottom">{{ group.description.short | markdown | safe }}</p>
             {% endif %}
           </div>
           {% if group.params.arguments %}
@@ -96,7 +96,7 @@
                         </div>
                       {% endif %}
                       {% if argument.description %}
-                        <div class="col-3 col-x-large-4 p-text--dense">{{ argument.description }}</div>
+                        <div class="col-3 col-x-large-4 p-text--dense">{{ argument.description | markdown | safe }}</div>
                       {% endif %}
                     </div>
                   {% endfor %}
@@ -150,7 +150,7 @@
                     </div>
                   {% endif %}
                   {% if group.params.returns.description %}
-                    <div class="col-3 col-x-large-4 p-text--dense">{{ group.params.returns.description }}</div>
+                    <div class="col-3 col-x-large-4 p-text--dense">{{ group.params.returns.description | markdown | safe }}</div>
                   {% endif %}
                 </div>
               </div>
@@ -163,7 +163,7 @@
                   <p class="p-text--x-small-capitalised u-align-text--small-to-default -u-no-margin--bottom">Description</p>
                 </div>
                 <div class="col-medium-5 col-6">
-                  <p>{{ group.description.long }}</p>
+                  <p>{{ group.description.long | markdown | safe }}</p>
                 </div>
               </div>
             </div>
@@ -198,7 +198,7 @@
                             {% endif %}
                           </p>
                           {% if item.description.short %}
-                            <p class="u-no-margin--bottom">{{ item.description.short }}</p>
+                            <p class="u-no-margin--bottom">{{ item.description.short | markdown | safe }}</p>
                           {% endif %}
                         </div>
                         {% if item.params.arguments %}
@@ -221,7 +221,7 @@
                                       </div>
                                     {% endif %}
                                     {% if argument.description %}
-                                      <div class="col-2 col-x-large-4 p-text--dense">{{ argument.description }}</div>
+                                      <div class="col-2 col-x-large-4 p-text--dense">{{ argument.description | markdown | safe }}</div>
                                     {% endif %}
                                   </div>
                                 {% endfor %}
@@ -252,7 +252,7 @@
                                     {% endif %}
                                     {% if attribute.description %}
                                       <div class="col-2 col-x-large-3">
-                                        <p class="p-text--dense">{{ attribute.description }}</p>
+                                        <p class="p-text--dense">{{ attribute.description | markdown | safe }}</p>
                                       </div>
                                     {% endif %}
                                   </div>
@@ -281,8 +281,7 @@
                                   {% endif %}
                                   {% if item.params.returns.description %}
                                     <div class="col-2 col-x-large-4 p-text--dense">
-                                      {{ item.params.returns.description }}
-                                    </div>
+                                    {{ item.params.returns.description | markdown | safe }}
                                   {% endif %}
                                 </div>
                               </div>
@@ -296,7 +295,7 @@
                                 <p class="p-text--x-small-capitalised u-align-text--small-to-default u-no-margin--bottom">Description</p>
                               </div>
                               <div class="col-medium-5 col-4 col-x-large-6 p-text--dense">
-                                {{ item.description.long }}
+                               {{ item.description.long | markdown | safe }}
                               </div>
                             </div>
                           </div>
