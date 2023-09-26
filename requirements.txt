@@ -8,7 +8,7 @@ canonicalwebteam.docstring-extractor==1.2.0
 canonicalwebteam.store-base==0.0.8
 
 Flask-WTF==1.0.1
-humanize==4.4.0
+humanize==3.13.0
 mistune==2.0.4
 pybadges==3.0.0
 pymacaroons==0.13.0
