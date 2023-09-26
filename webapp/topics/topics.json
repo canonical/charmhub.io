@@ -42,5 +42,12 @@
     "topic_id": 11664,
     "description": "An introduction to using X.509 certificates in your charm deployment.",
     "categories": ["security", "cloud", "networking"]
+  },
+  {
+    "name": "Canonical Identity Platform",
+    "slug": "canonical-identity-platform",
+    "topic_id": 11825,
+    "description": "The Canonical Identity Platform is the simplest way to add single sign on (SSO) for charmed workloads and centralized authentication, authorisation and access governance controls.",
+    "categories": ["security", "identity"]
   }
 ]
