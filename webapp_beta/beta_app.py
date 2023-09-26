@@ -4,11 +4,13 @@ from canonicalwebteam.store_api.stores.charmstore import CharmStore, CharmPublis
 from canonicalwebteam.candid import CandidClient
 
 from webapp_beta.charmhub_bp import charmhub_bp
+from webapp.decorators import login_required
 from webapp.handlers import charmhub_utility_processor
 
 # beta charmhub configiuration
 app = create_app(
     "charmhub_beta",
+    login_required,
     store_bp=charmhub_bp,
     utility_processor=charmhub_utility_processor,
 )
