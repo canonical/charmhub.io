@@ -68,6 +68,7 @@ function Packages() {
     });
 
     return {
+      total_items: data.total_items,
       total_pages: data.total_pages,
       packages: packagesWithId,
       categories: data.categories,
@@ -176,6 +177,25 @@ function Packages() {
           </Col>
           <Col size={9}>
             <Topics topicsQuery={topicsQuery} />
+            {data?.packages &&
+              data.packages.length > 0 &&
+              searchParams.get("q") && (
+                <div className="u-fixed-width">
+                  <p>
+                    {data?.packages.length} of {data?.total_items} results for{" "}
+                    <strong>"{searchParams.get("q")}"</strong>.{" "}
+                    <Button
+                      appearance="link"
+                      onClick={() => {
+                        searchParams.delete("q");
+                        setSearchParams(searchParams);
+                      }}
+                    >
+                      Clear search
+                    </Button>
+                  </p>
+                </div>
+              )}
             <Row>
               {isFetching &&
                 [...Array(ITEMS_PER_PAGE)].map((item, index) => (
@@ -209,7 +229,7 @@ function Packages() {
             {status === "success" && data.packages.length > 0 && (
               <Pagination
                 itemsPerPage={ITEMS_PER_PAGE}
-                totalItems={ITEMS_PER_PAGE * data.total_pages}
+                totalItems={data.total_items}
                 paginate={(pageNumber) => {
                   setCurrentPage(pageNumber.toString());
                   setSearchParams({
