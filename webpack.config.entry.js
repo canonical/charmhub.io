@@ -10,7 +10,7 @@ module.exports = {
   details_integrate: "./static/js/src/public/details/integrate/index.js",
   details_resources: "./static/js/src/public/details/resources/index.js",
   details_integrations: "./static/js/src/public/details/integrations/index.tsx",
-  store: "./static/js/src/public/store/index.js",
+  "store-details": "./static/js/src/public/store-details/index.js",
   list: "./static/js/src/publisher/list-page.js",
   listing: "./static/js/src/publisher/listing-page.js",
   publicise: "./static/js/src/publisher/publicise.js",
@@ -23,5 +23,5 @@ module.exports = {
   "icon-validator": "./static/js/src/public/icon-validator/index.tsx",
   collaborator: "./static/js/src/publisher/collaborator/index.tsx",
   interfaces: "./static/js/src/interfaces/index.tsx",
-  "beta-store": "./static/js/beta-store/index.tsx",
+  store: "./static/js/store/index.tsx",
 };

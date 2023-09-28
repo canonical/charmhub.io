@@ -45,7 +45,7 @@
 {% block details_scripts %}
   <script src="{{ versioned_static('js/dist/details_overview.js') }}" defer></script>
   {% if package.type == "bundle" %}
-    <script src="{{ versioned_static('js/dist/store.js') }}" defer></script>
+    <script src="{{ versioned_static('js/dist/store-details.js') }}" defer></script>
   {% endif %}
   <script>
     window.addEventListener("DOMContentLoaded", function () {
