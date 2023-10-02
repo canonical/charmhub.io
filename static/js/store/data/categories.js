@@ -21,7 +21,7 @@ const categories = [
   },
   {
     display_name: "Logging and Tracing",
-    name: "logging-and-tracing",
+    name: "logging-tracing",
   },
   {
     display_name: "Monitoring",
