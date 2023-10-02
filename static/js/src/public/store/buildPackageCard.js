@@ -89,7 +89,10 @@ function buildPackageCard(entity) {
   }
 
   const entityCardTitle = clone.querySelector(".package-card-title");
-  entityCardTitle.innerText = entity.name.replace(/-/g, " ");
+  entityCardTitle.innerText = entity.store_front["display-name"].replace(
+    /-/g,
+    " "
+  );
 
   if (entity.result.publisher["display-name"] === null) {
     entity.result.publisher["display-name"] = "";
