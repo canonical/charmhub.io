@@ -120,6 +120,7 @@ function Packages() {
 
                     searchParams.delete("page");
                     setSearchParams(searchParams);
+                    setCurrentPage("1");
                   }}
                   platforms={platforms}
                   selectedPlatform={searchParams.get("platforms") || "all"}
@@ -127,6 +128,7 @@ function Packages() {
                     searchParams.set("platforms", item);
                     searchParams.delete("page");
                     setSearchParams(searchParams);
+                    setCurrentPage("1");
                   }}
                   packageTypes={packageTypes}
                   selectedPackageType={searchParams.get("type") || "all"}
@@ -134,6 +136,7 @@ function Packages() {
                     searchParams.set("type", item);
                     searchParams.delete("page");
                     setSearchParams(searchParams);
+                    setCurrentPage("1");
                   }}
                   disabled={isFetching}
                 />
@@ -155,6 +158,7 @@ function Packages() {
                         searchParams.delete("q");
                         searchParams.delete("page");
                         setSearchParams(searchParams);
+                        setCurrentPage("1");
                       }}
                     >
                       Clear search
