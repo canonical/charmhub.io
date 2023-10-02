@@ -177,10 +177,9 @@ function Packages() {
           </Col>
           <Col size={9}>
             <Topics topicsQuery={topicsQuery} />
-            {data?.packages &&
-              data.packages.length > 0 &&
-              searchParams.get("q") && (
-                <div className="u-fixed-width">
+            {data?.packages && data?.packages.length > 0 && (
+              <div className="u-fixed-width">
+                {searchParams.get("q") ? (
                   <p>
                     {data?.packages.length} of {data?.total_items} results for{" "}
                     <strong>"{searchParams.get("q")}"</strong>.{" "}
@@ -194,8 +193,13 @@ function Packages() {
                       Clear search
                     </Button>
                   </p>
-                </div>
-              )}
+                ) : (
+                  <p>
+                    {data?.packages.length} of {data?.total_items} items
+                  </p>
+                )}
+              </div>
+            )}
             <Row>
               {isFetching &&
                 [...Array(ITEMS_PER_PAGE)].map((item, index) => (
