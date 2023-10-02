@@ -59,6 +59,10 @@ function Packages() {
     refetch();
   }, [searchParams]);
 
+  const firstResultNumber = (parseInt(currentPage) - 1) * ITEMS_PER_PAGE + 1;
+  const lastResultNumber =
+    (parseInt(currentPage) - 1) * ITEMS_PER_PAGE + data?.packages.length;
+
   return (
     <>
       <Banner />
@@ -142,7 +146,8 @@ function Packages() {
               <div className="u-fixed-width">
                 {searchParams.get("q") ? (
                   <p>
-                    {data?.packages.length} of {data?.total_items} results for{" "}
+                    Showing {currentPage === "1" ? "1" : firstResultNumber} to{" "}
+                    {lastResultNumber} of {data?.total_items} results for{" "}
                     <strong>"{searchParams.get("q")}"</strong>.{" "}
                     <Button
                       appearance="link"
@@ -157,7 +162,8 @@ function Packages() {
                   </p>
                 ) : (
                   <p>
-                    {data?.packages.length} of {data?.total_items} items
+                    Showing {currentPage === "1" ? "1" : firstResultNumber} to{" "}
+                    {lastResultNumber} of {data?.total_items} items
                   </p>
                 )}
               </div>
