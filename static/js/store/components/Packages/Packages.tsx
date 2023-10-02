@@ -47,10 +47,7 @@ function Packages() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [hideFilters, setHideFilters] = useState(true);
-  const [currentPage, setCurrentPage] = useState(
-    searchParams.get("page") || "1"
-  );
-
+  const currentPage = searchParams.get("page") || "1";
   const { data, status, refetch, isFetching } = useQuery("data", getData);
 
   const topicsQuery = searchParams ? searchParams.get("categories") : null;
@@ -120,7 +117,6 @@ function Packages() {
 
                     searchParams.delete("page");
                     setSearchParams(searchParams);
-                    setCurrentPage("1");
                   }}
                   platforms={platforms}
                   selectedPlatform={searchParams.get("platforms") || "all"}
@@ -128,7 +124,6 @@ function Packages() {
                     searchParams.set("platforms", item);
                     searchParams.delete("page");
                     setSearchParams(searchParams);
-                    setCurrentPage("1");
                   }}
                   packageTypes={packageTypes}
                   selectedPackageType={searchParams.get("type") || "all"}
@@ -136,7 +131,6 @@ function Packages() {
                     searchParams.set("type", item);
                     searchParams.delete("page");
                     setSearchParams(searchParams);
-                    setCurrentPage("1");
                   }}
                   disabled={isFetching}
                 />
@@ -158,7 +152,6 @@ function Packages() {
                         searchParams.delete("q");
                         searchParams.delete("page");
                         setSearchParams(searchParams);
-                        setCurrentPage("1");
                       }}
                     >
                       Clear search
@@ -207,7 +200,6 @@ function Packages() {
                 itemsPerPage={ITEMS_PER_PAGE}
                 totalItems={data.total_items}
                 paginate={(pageNumber) => {
-                  setCurrentPage(pageNumber.toString());
                   searchParams.set("page", pageNumber.toString());
                   setSearchParams(searchParams);
                 }}
