@@ -1258,10 +1258,10 @@
     react-table "7.8.0"
     react-useportal "1.0.18"
 
-"@canonical/store-components@0.26.0":
-  version "0.26.0"
-  resolved "https://registry.yarnpkg.com/@canonical/store-components/-/store-components-0.26.0.tgz#c417a6d8423e5c822ec549cf8f4342540f1834e5"
-  integrity sha512-18hgLYH2CKff2wNOvd96q+fXxftXfQj7Wg+dA+k38pVDO9nPJLI8JKMCXwVuUbs9z8nzQNSiLgPRIg/qYDHwqg==
+"@canonical/store-components@0.27.0":
+  version "0.27.0"
+  resolved "https://registry.yarnpkg.com/@canonical/store-components/-/store-components-0.27.0.tgz#55cb599e51cf940d13d61b33cbdb81aaefbadb37"
+  integrity sha512-t2mdpOktlCJ7xv6XSU+AdGqjpj7yv7tS5VrUhqGwTehaAir/aq4k/QV84V1TgUOFwi5HtC25Na8K3i0wip8NSw==
   dependencies:
     "@canonical/react-components" "0.47.0"
     "@types/jest" "27.5.2"
