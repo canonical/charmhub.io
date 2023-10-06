@@ -10,7 +10,7 @@
       <ul class="p-side-navigation__list">
         {% for charm in package.store_front.bundle.charms %}
         <li class="p-side-navigation__item">
-          <a href="{{ charm.name }}" class="p-side-navigation__link u-truncate{% if subpackage_path == charm.name %} is-active{% endif %}" role="tab" aria-controls="{{ charm.name }}" aria-selected="{% if subpackage.name == charm.name %}true{% else %}false{% endif %}">
+          <a href="{{ charm.name }}{% if channel_requested %}?channel={{channel_requested}}{% endif %}" class="p-side-navigation__link u-truncate{% if subpackage_path == charm.name %} is-active{% endif %}" role="tab" aria-controls="{{ charm.name }}" aria-selected="{% if subpackage.name == charm.name %}true{% else %}false{% endif %}">
             <img class="p-side-navigation__icon" src="/{{ charm.name }}/icon" alt="{{ charm.name }}" width="16" height="16">
             {{ charm.title }}
           </a>
