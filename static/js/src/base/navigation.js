@@ -104,6 +104,7 @@ function initNavigationSearch(element) {
 
     navigation.classList.add("has-search-open");
     searchInput.focus();
+    searchInput.select();
     document.addEventListener("keyup", keyPressHandler);
   }
 
