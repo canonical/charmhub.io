@@ -372,9 +372,10 @@ def details_configuration(entity_name, path=None):
 
         if not path and bundle_charms:
             default_charm = bundle_charms[0]
-            return redirect(
-                f"/{entity_name}/configure/{default_charm['name']}"
-            )
+            redirect_url = f"/{entity_name}/configure/{default_charm['name']}"
+            if channel_request:
+                redirect_url = redirect_url + f"?channel={channel_request}"
+            return redirect(redirect_url)
 
         if path:
             if not any(d["name"] == path for d in bundle_charms):
@@ -552,6 +553,7 @@ def details_integrations(entity_name):
     return render_template(
         "details/integrations.html",
         package=package,
+        channel_requested=channel_request,
     )
 
 
