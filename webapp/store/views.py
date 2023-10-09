@@ -134,10 +134,16 @@ def get_package(entity_name, channel_request=None, fields=FIELDS):
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs')
 @store_maintenance
 @redirect_uppercase_to_lowercase
 def details_overview(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
+    if request.base_url.endswith("/docs"):
+        url = f"/{entity_name}"
+        if channel_request:
+            url = f"{url}?channel={channel_request}"
+        return redirect(url)
 
     extra_fields = [
         "result.bugs-url",
@@ -212,9 +218,7 @@ def details_overview(entity_name):
                 navigation["nav_items"][0]["children"][1]["navlink_text"]
                 == "Overview"
             ):
-                navigation["nav_items"][0]["children"][1][
-                    "navlink_text"
-                ] = "Docs - Overview"
+                del navigation["nav_items"][0]["children"][1]
         else:
             # If there is no navigation but we've got here, there are docs
             # So add a top level "Docs item". Example: /easyrsa
@@ -223,16 +227,6 @@ def details_overview(entity_name):
                     "level": 0,
                     "children": [
                         overview,
-                        {
-                            "level": 1,
-                            "path": "",
-                            "navlink_href": f"/{entity_name}/docs",
-                            "navlink_fragment": "",
-                            "navlink_text": "Docs",
-                            "is_active": True,
-                            "has_active_child": False,
-                            "children": [],
-                        },
                     ],
                 }
             ]
@@ -249,7 +243,6 @@ def details_overview(entity_name):
     return render_template("details/overview.html", **context)
 
 
-@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs')
 @store.route(
     '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs/<path:path>'
 )
@@ -281,6 +274,7 @@ def details_docs(entity_name, path=None):
     docs.parse()
 
     if path:
+        topic_id = None
         try:
             topic_id = docs.resolve_path(path)[0]
         except PathNotFoundError:
@@ -305,16 +299,16 @@ def details_docs(entity_name, path=None):
         "has_active_child": False,
         "children": [],
     }
+
     if len(navigation["nav_items"]) > 0:
         navigation["nav_items"][0]["children"].insert(0, overview)
-        # If the first item in docs nav is "overview", prefix with "Docs - "
+        # If the first item in docs nav is "overview",
+        # prefix with "Docs - "
         if (
             navigation["nav_items"][0]["children"][1]["navlink_text"]
             == "Overview"
         ):
-            navigation["nav_items"][0]["children"][1][
-                "navlink_text"
-            ] = "Docs - Overview"
+            del navigation["nav_items"][0]["children"][1]
     else:
         # If there is no navigation but we've got here, there are docs
         # So add a top level "Docs item". Example: /easyrsa
@@ -323,16 +317,6 @@ def details_docs(entity_name, path=None):
                 "level": 0,
                 "children": [
                     overview,
-                    {
-                        "level": 1,
-                        "path": "",
-                        "navlink_href": f"/{entity_name}/docs",
-                        "navlink_fragment": "",
-                        "navlink_text": "Docs",
-                        "is_active": True,
-                        "has_active_child": False,
-                        "children": [],
-                    },
                 ],
             }
         ]
