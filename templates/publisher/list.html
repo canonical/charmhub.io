@@ -196,6 +196,20 @@
           </table>
         </div>
       </div>
+
+      <div class="p-modal u-hide" data-js="unregister-confirmation-modal">
+        <section class="p-modal__dialog">
+          <header class="p-modal__header">
+            <h2 class="p-modal__title"><i class="p-icon--warning modal-header-icon"></i> Unregister “<span data-js="package-name"></span>”</h2>
+            <button class="p-modal__close" data-js="close-confirmation-modal-button">Close</button>
+          </header>
+          <p>Are you sure you want to unregister “<span data-js="package-name"></span>”? This action is permanent and cannot be undone.</p>
+          <footer class="p-modal__footer">
+            <button class="u-no-margin--bottom" aria-controls="modal" data-js="close-confirmation-modal-button">Cancel</button>
+            <button class="p-button--negative u-no-margin--bottom" data-js="unregister-package-button">Unregister</button>
+          </footer>
+        </section>
+      </div>
     {% endif %}
   {% endif %}
 
@@ -273,21 +287,58 @@
   });
 
   // De-register charms and bundles
-  const unregisterError = document.querySelector("[data-js='unregister-error']");
-  const unregisterErrorMessage = document.querySelector("[data-js='unregister-error-message']");
-  const unregisterButtons = document.querySelectorAll("[data-js='unregister-button']");
-  
+  const unregisterConfirmationModal = document.querySelector(
+    "[data-js='unregister-confirmation-modal']"
+  );
+  const closeConfirmationModalButtons = document.querySelectorAll(
+    "[data-js='close-confirmation-modal-button']"
+  );
+  const unregisterError = document.querySelector(
+    "[data-js='unregister-error']"
+  );
+  const unregisterErrorMessage = document.querySelector(
+    "[data-js='unregister-error-message']"
+  );
+  const unregisterButtons = document.querySelectorAll(
+    "[data-js='unregister-button']"
+  );
+  const packageNameHolders = document.querySelectorAll(
+    "[data-js='package-name']"
+  );
+  const unregisterPackageButton = document.querySelector(
+    "[data-js='unregister-package-button']"
+  );
+
+  let currentPackage;
+
   unregisterButtons.forEach((unregisterButton) => {
-    unregisterButton.addEventListener("click", async () => {
+    unregisterButton.addEventListener("click", () => {
       unregisterError.classList.add("u-hide");
       unregisterErrorMessage.innerText = "";
 
       const packageName = unregisterButton.dataset.packageName;
-      const formData = new FormData();
-
-      formData.set("csrf_token", "{{ csrf_token() }}");
+      currentPackage = packageName;
       
-      const response = await fetch(`/${packageName}`, {
+      packageNameHolders.forEach((packageNameHolder) => {
+        packageNameHolder.innerText = packageName;
+      });
+
+      unregisterConfirmationModal.classList.remove("u-hide");
+    });
+  });  
+
+  if (unregisterConfirmationModal) {
+    unregisterConfirmationModal.addEventListener("click", (e) => {
+      if (e.target === unregisterConfirmationModal) {
+        unregisterConfirmationModal.classList.add("u-hide");
+      }
+    });
+
+    unregisterPackageButton.addEventListener("click", async () => {
+      const formData = new FormData();
+      formData.set("csrf_token", "{{ csrf_token() }}");
+        
+      const response = await fetch(`/${currentPackage}`, {
         method: "DELETE",
         body: formData,
       });
@@ -300,6 +351,12 @@
         unregisterError.classList.remove("u-hide");
       }
     });
-  });
+
+    closeConfirmationModalButtons.forEach((closeConfirmationModalButton) => {
+      closeConfirmationModalButton.addEventListener("click", () => {
+        unregisterConfirmationModal.classList.add("u-hide");
+      });
+    });
+  }
 </script>
 {% endblock %}

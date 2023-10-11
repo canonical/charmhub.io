@@ -516,3 +516,10 @@ h3 {
 .registered-charms-table td {
   vertical-align: middle;
 }
+// stylelint-enable
+
+// Large icon for modal headers
+.modal-header-icon {
+  height: 1rem !important;
+  width: 1rem !important;
+}
