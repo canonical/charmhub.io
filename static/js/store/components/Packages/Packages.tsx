@@ -25,38 +25,6 @@ import packageTypes from "../../data/package-types";
 function Packages() {
   const ITEMS_PER_PAGE = 12;
 
-  const getCurrentSearchParams = (
-    searchParams: { get: Function },
-    keysToRemove?: Array<string>
-  ) => {
-    const currentSearchParams: any = {};
-
-    if (searchParams.get("page") && !keysToRemove?.includes("page")) {
-      currentSearchParams.page = searchParams.get("page");
-    }
-
-    if (
-      searchParams.get("categories") &&
-      !keysToRemove?.includes("categories")
-    ) {
-      currentSearchParams.categories = searchParams.get("categories");
-    }
-
-    if (searchParams.get("platforms") && keysToRemove?.includes("platforms")) {
-      currentSearchParams.platforms = searchParams.get("platforms");
-    }
-
-    if (searchParams.get("type") && keysToRemove?.includes("type")) {
-      currentSearchParams.type = searchParams.get("type");
-    }
-
-    if (searchParams.get("q") && !keysToRemove?.includes("q")) {
-      currentSearchParams.q = searchParams.get("q");
-    }
-
-    return currentSearchParams;
-  };
-
   const getData = async () => {
     const response = await fetch(`/beta/store.json${search}`);
     const data = await response.json();
@@ -79,10 +47,7 @@ function Packages() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [hideFilters, setHideFilters] = useState(true);
-  const [currentPage, setCurrentPage] = useState(
-    searchParams.get("page") || "1"
-  );
-
+  const currentPage = searchParams.get("page") || "1";
   const { data, status, refetch, isFetching } = useQuery("data", getData);
 
   const topicsQuery = searchParams ? searchParams.get("categories") : null;
@@ -90,6 +55,10 @@ function Packages() {
   useEffect(() => {
     refetch();
   }, [searchParams]);
+
+  const firstResultNumber = (parseInt(currentPage) - 1) * ITEMS_PER_PAGE + 1;
+  const lastResultNumber =
+    (parseInt(currentPage) - 1) * ITEMS_PER_PAGE + data?.packages.length;
 
   return (
     <>
@@ -140,35 +109,28 @@ function Packages() {
                     searchParams.get("categories")?.split(",") || []
                   }
                   setSelectedCategories={(items: any) => {
-                    if (items.length < 1) {
-                      setSearchParams(
-                        getCurrentSearchParams(searchParams, [
-                          "categories",
-                          "page",
-                        ])
-                      );
+                    if (items.length > 0) {
+                      searchParams.set("categories", items.join(","));
                     } else {
-                      setSearchParams({
-                        ...getCurrentSearchParams(searchParams, ["page"]),
-                        categories: items.join(","),
-                      });
+                      searchParams.delete("categories");
                     }
+
+                    searchParams.delete("page");
+                    setSearchParams(searchParams);
                   }}
                   platforms={platforms}
                   selectedPlatform={searchParams.get("platforms") || "all"}
                   setSelectedPlatform={(item: string) => {
-                    setSearchParams({
-                      ...getCurrentSearchParams(searchParams, ["page"]),
-                      platforms: item,
-                    });
+                    searchParams.set("platforms", item);
+                    searchParams.delete("page");
+                    setSearchParams(searchParams);
                   }}
                   packageTypes={packageTypes}
                   selectedPackageType={searchParams.get("type") || "all"}
                   setSelectedPackageType={(item: string) => {
-                    setSearchParams({
-                      ...getCurrentSearchParams(searchParams, ["page"]),
-                      type: item,
-                    });
+                    searchParams.set("type", item);
+                    searchParams.delete("page");
+                    setSearchParams(searchParams);
                   }}
                   disabled={isFetching}
                 />
@@ -177,25 +139,32 @@ function Packages() {
           </Col>
           <Col size={9}>
             <Topics topicsQuery={topicsQuery} />
-            {data?.packages &&
-              data.packages.length > 0 &&
-              searchParams.get("q") && (
-                <div className="u-fixed-width">
+            {data?.packages && data?.packages.length > 0 && (
+              <div className="u-fixed-width">
+                {searchParams.get("q") ? (
                   <p>
-                    {data?.packages.length} of {data?.total_items} results for{" "}
+                    Showing {currentPage === "1" ? "1" : firstResultNumber} to{" "}
+                    {lastResultNumber} of {data?.total_items} results for{" "}
                     <strong>"{searchParams.get("q")}"</strong>.{" "}
                     <Button
                       appearance="link"
                       onClick={() => {
                         searchParams.delete("q");
+                        searchParams.delete("page");
                         setSearchParams(searchParams);
                       }}
                     >
                       Clear search
                     </Button>
                   </p>
-                </div>
-              )}
+                ) : (
+                  <p>
+                    Showing {currentPage === "1" ? "1" : firstResultNumber} to{" "}
+                    {lastResultNumber} of {data?.total_items} items
+                  </p>
+                )}
+              </div>
+            )}
             <Row>
               {isFetching &&
                 [...Array(ITEMS_PER_PAGE)].map((item, index) => (
@@ -231,11 +200,8 @@ function Packages() {
                 itemsPerPage={ITEMS_PER_PAGE}
                 totalItems={data.total_items}
                 paginate={(pageNumber) => {
-                  setCurrentPage(pageNumber.toString());
-                  setSearchParams({
-                    ...getCurrentSearchParams(searchParams),
-                    page: pageNumber.toString(),
-                  });
+                  searchParams.set("page", pageNumber.toString());
+                  setSearchParams(searchParams);
                 }}
                 currentPage={parseInt(currentPage)}
                 centered

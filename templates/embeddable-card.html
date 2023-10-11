@@ -92,7 +92,7 @@
     </a>
   </div>
   {% if package.type == "bundle" %}
-    <script src="{{ versioned_static('js/dist/store.js') }}"></script>
+    <script src="{{ versioned_static('js/dist/store-details.js') }}"></script>
     <script>
       window.addEventListener("DOMContentLoaded", () => {
         charmhub.store.handleBundleIcons(document.querySelector(".p-card--button"));
