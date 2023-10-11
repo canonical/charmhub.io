@@ -377,6 +377,15 @@ def register_name_dispute_thank_you():
     )
 
 
+@publisher.route("/<package_name>", methods=["DELETE"])
+@login_required
+def delete_package(package_name):
+    resp = publisher_api.unregister_package_name(sess["account-auth"], package_name)
+    if resp.status_code == 200:
+        return ("", 200)
+    return jsonify({"error": resp.json()["error-list"][0]["message"]}), resp.status_code
+
+
 @publisher.route(
     '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/publicise'
 )
