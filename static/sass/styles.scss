@@ -518,3 +518,18 @@ h3 {
   height: 1rem !important;
   width: 1rem !important;
 }
+
+// Fix for issue where text is white on white in search
+// This can be removed when the following issue is done:
+// https://warthogs.atlassian.net/browse/WD-6773
+.is-dark [type="search"] {
+  color: $color-x-dark !important;
+  
+  &:focus {
+    background-color: $color-light !important;
+  }
+
+  &::placeholder {
+    color: $color-mid-dark !important;
+  }
+}
