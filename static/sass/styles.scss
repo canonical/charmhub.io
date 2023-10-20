@@ -522,6 +522,7 @@ h3 {
 // Fix for issue where text is white on white in search
 // This can be removed when the following issue is done:
 // https://warthogs.atlassian.net/browse/WD-6773
+/* stylelint-disable-next-line no-eol-whitespace */
 .is-dark [type="search"] {
   color: $color-x-dark !important;
   
