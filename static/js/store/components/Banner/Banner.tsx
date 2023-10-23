@@ -1,61 +1,63 @@
-import React from "react";
-import { TypeAnimation } from "react-type-animation";
+import React, { RefObject } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Strip, Row, Col } from "@canonical/react-components";
 
-function Banner() {
-  const terms = [
-    "Kubernetes",
-    "Bare metal",
-    "VM workloads",
-    "infrastructure",
-    "integrations",
-    "deployment",
-    "management",
-    "hybrid cloud",
-    "multi cloud",
-    "observability",
-    "identity",
-    "data",
-    "applications",
-  ];
+type Props = {
+  searchRef: RefObject<HTMLInputElement>;
+  searchSummaryRef: RefObject<HTMLDivElement>;
+};
 
-  const sequence: Array<string | number> = [];
-
-  terms.forEach((term) => {
-    sequence.push(term);
-    sequence.push(1500);
-  });
+function Banner({ searchRef, searchSummaryRef }: Props) {
+  const [searchParams, setSearchParams] = useSearchParams();
 
   return (
     <Strip type="dark">
       <Row>
-        <Col size={6}>
-          <h1>
-            Take control of <br />
-            <TypeAnimation
-              sequence={sequence}
-              wrapper="span"
-              speed={30}
-              repeat={Infinity}
-              style={{ display: "block", height: "1.2em" }}
-              cursor={false}
-              deletionSpeed={60}
+        <Col size={7}>
+          <h1>The Charm Collection</h1>
+          <form
+            className="p-search-box"
+            onSubmit={(e) => {
+              e.preventDefault();
+
+              if (searchRef.current && searchRef.current.value) {
+                searchParams.set("q", searchRef.current.value);
+                setSearchParams(searchParams);
+              }
+
+              if (searchSummaryRef && searchSummaryRef.current) {
+                searchSummaryRef.current.scrollIntoView({
+                  behavior: "smooth",
+                });
+              }
+            }}
+          >
+            <label className="u-off-screen" htmlFor="search">
+              Search Charmhub
+            </label>
+            <input
+              type="search"
+              id="search"
+              className="p-search-box__input"
+              name="q"
+              placeholder="Search Charmhub"
+              defaultValue={searchParams.get("q") || ""}
+              ref={searchRef}
             />
-          </h1>
-          <h2 className="p-heading--4">The Charm Collection</h2>
-        </Col>
-        <Col size={6}>
-          <p>
-            Take control of your applications and infrastructure across hybrid
-            cloud, Kubernetes (K8s) and VM environments. Deploy, integrate and
-            manage your way beyond configuration management to application
-            management. Charms use{" "}
-            <a className="p-link--inverted" href="https://juju.is">
-              Juju
-            </a>
-            . They’re broad, they’re powerful and they're Open Source (unless
-            you choose otherwise).
-          </p>
+            <button
+              type="reset"
+              className="p-search-box__reset"
+              onClick={() => {
+                searchParams.delete("q");
+                setSearchParams(searchParams);
+              }}
+            >
+              <i className="p-icon--close">Close</i>
+            </button>
+            <button type="submit" className="p-search-box__button">
+              <i className="p-icon--search">Search</i>
+            </button>
+          </form>
         </Col>
       </Row>
     </Strip>

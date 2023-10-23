@@ -58,11 +58,6 @@
         </li>
       </ul>
       <ul class="p-navigation__items global-nav">
-        <li class="p-navigation__item">
-          <button class="js-search-button p-navigation__link--search-toggle">
-            <span class="p-navigation__search-label">Search</span>
-          </button>
-        </li>
         <li class="p-navigation__item js-nav-account" id="user-link">
           {# Authenticated #}
           <a href="#user-link-menu" aria-controls="user-link-menu" class="p-navigation__link js-nav-account--authenticated u-hide js-account--name account-name">My account</a>
@@ -81,14 +76,6 @@
           </a>
         </li>
       </ul>
-      <div class="p-navigation__search">
-        <form class="p-search-box" action="/" data-js="search-handler-desktop">
-          <input type="search" data-js="search-input-desktop" class="p-search-box__input" name="q" aria-label="Search Charmhub" placeholder="Search Charmhub" required>
-          <button type="reset" class="p-search-box__reset"><i class="p-icon--close">Reset</i></button>
-          <button type="submit" class="p-search-box__button"><i class="p-icon--search">Search</i></button>
-        </form>
-      </div>
     </nav>
   </div>
-  <div class="p-navigation__search-overlay"></div>
 </header>

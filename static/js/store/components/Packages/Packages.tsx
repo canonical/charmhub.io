@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useQuery } from "react-query";
 import { useLocation, useSearchParams } from "react-router-dom";
 import {
@@ -52,6 +52,9 @@ function Packages() {
 
   const topicsQuery = searchParams ? searchParams.get("categories") : null;
 
+  const searchRef = useRef<HTMLInputElement | null>(null);
+  const searchSummaryRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     refetch();
   }, [searchParams]);
@@ -62,7 +65,7 @@ function Packages() {
 
   return (
     <>
-      <Banner />
+      <Banner searchRef={searchRef} searchSummaryRef={searchSummaryRef} />
       <Strip>
         <Row>
           <Col size={3}>
@@ -140,7 +143,7 @@ function Packages() {
           <Col size={9}>
             <Topics topicsQuery={topicsQuery} />
             {data?.packages && data?.packages.length > 0 && (
-              <div className="u-fixed-width">
+              <div className="u-fixed-width" ref={searchSummaryRef}>
                 {searchParams.get("q") ? (
                   <p>
                     Showing {currentPage === "1" ? "1" : firstResultNumber} to{" "}
@@ -152,6 +155,10 @@ function Packages() {
                         searchParams.delete("q");
                         searchParams.delete("page");
                         setSearchParams(searchParams);
+
+                        if (searchRef.current) {
+                          searchRef.current.value = "";
+                        }
                       }}
                     >
                       Clear search
