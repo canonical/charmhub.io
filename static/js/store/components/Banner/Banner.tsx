@@ -13,7 +13,7 @@ function Banner({ searchRef, searchSummaryRef }: Props) {
   return (
     <Strip type="dark">
       <Row>
-        <Col size={7}>
+        <Col size={6} className="col-start-large-4">
           <h1>The Charm Collection</h1>
           <form
             className="p-search-box"
