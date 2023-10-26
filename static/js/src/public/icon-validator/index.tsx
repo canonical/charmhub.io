@@ -8,6 +8,10 @@ import {
   Icon,
   Notification,
   ICONS,
+  Strip,
+  Button,
+  Navigation,
+  Theme
 } from "@canonical/react-components";
 
 import { useDropzone } from "react-dropzone";
@@ -17,7 +21,7 @@ function App() {
   const [isImage, setIsImage] = useState<boolean>(false);
   const [isSVG, setIsSVG] = useState<boolean>(false);
   const [isCorrectSize, setIsCorrectSize] = useState<boolean>(false);
-  const [imageSize, setImageSize] = useState<number[]>([100, 100]);
+  const [imageSize, setImageSize] = useState<number[]>([0, 0]);
   const [hasConstraints, setHasConstraints] = useState<boolean>(true);
 
   const {
@@ -34,12 +38,15 @@ function App() {
     setIsImage(false);
     setIsSVG(false);
     setIsCorrectSize(false);
+    setImageSize([0, 0]);
+    setHasConstraints(true);
   }, []);
 
-  const isValid = useMemo(() => isImage && isSVG && isCorrectSize, [
+  const isValid = useMemo(() => isImage && isSVG && isCorrectSize && hasConstraints, [
     isImage,
     isSVG,
     isCorrectSize,
+    hasConstraints
   ]);
 
   useEffect(() => {
@@ -67,32 +74,33 @@ function App() {
       }
 
       const dataURL = e.target.result as string;
-
       const svgString = window.atob(dataURL.split("base64,")[1]);
 
       if (svgString.indexOf("<svg") === -1) {
         setIsSVG(false);
-      }
-
-      const svgImage = document.createElement("div");
-      svgImage.innerHTML = svgString;
-      const svgEl = svgImage.querySelector("svg");
-      const svgElWidth = svgEl?.getAttribute("width");
-      const svgElHeight = svgEl?.getAttribute("height");
-      const viewBoxSize = svgEl?.getAttribute("viewBox")?.split(" ");
-
-      if (svgElHeight && svgElWidth) {
-        setImageSize([parseInt(svgElWidth), parseInt(svgElHeight)]);
-      } else if (viewBoxSize && viewBoxSize[2] && viewBoxSize[2]) {
-        setImageSize([parseInt(viewBoxSize[2]), parseInt(viewBoxSize[2])]);
-      } else {
         setHasConstraints(false);
+      } else {
+        const svgImage = document.createElement("div");
+        svgImage.innerHTML = svgString;
+        const svgEl = svgImage.querySelector("svg");
+        const svgElWidth = svgEl?.getAttribute("width");
+        const svgElHeight = svgEl?.getAttribute("height");
+        const viewBoxSize = svgEl?.getAttribute("viewBox")?.split(" ");
+
+
+        if (svgElHeight && svgElWidth) {
+          setImageSize([parseInt(svgElWidth), parseInt(svgElHeight)]);
+        } else if (viewBoxSize && viewBoxSize[2] && viewBoxSize[2]) {
+          setImageSize([parseInt(viewBoxSize[2]), parseInt(viewBoxSize[2])]);
+        } else {
+          setHasConstraints(false);
+        }
       }
 
       const img = new Image();
       img.addEventListener("load", () => {
         setIcon(dataURL);
-        if (!imageSize) {
+        if (imageSize[0] === 0 && imageSize[1] === 0) {
           setImageSize([img.width, img.height]);
           if (img.width !== 100 || img.height !== 100) {
             setIsCorrectSize(false);
@@ -112,6 +120,7 @@ function App() {
     urlReader.readAsDataURL(file);
   }, [acceptedFiles, handleReset]);
   return (
+    <>
     <Row>
       <Col size={8} emptyLarge={4}>
         <h1>Charm Icon Validator</h1>
@@ -183,33 +192,63 @@ function App() {
           </div>
         </Form>
         {icon && (
-          <Notification
-            severity={isValid ? "positive" : "negative"}
-            title={isValid ? "Valid icon" : "Invalid icon"}
-          >
-            {isValid ? (
-              <>
-                Based on the automated checks above your icon is valid, but you
-                should manually check the{" "}
-                <a href="https://juju.is/docs/sdk/create-an-icon-for-your-charm">
-                  Charm Icon Specification
-                </a>
-                .
-              </>
-            ) : (
-              <>
-                Based on the automated checks above your icon is not valid.
-                Please check the{" "}
-                <a href="https://juju.is/docs/sdk/create-an-icon-for-your-charm">
-                  Charm Icon Specification
-                </a>
-                , update your icon, and try again.
-              </>
-            )}
-          </Notification>
+          <>
+            <Notification
+              severity={isValid ? "positive" : "negative"}
+              title={isValid ? "Valid icon" : "Invalid icon"}
+            >
+              {isValid ? (
+                <>
+                  Based on the automated checks above your icon is valid, but you
+                  should manually check the{" "}
+                  <a href="https://juju.is/docs/sdk/create-an-icon-for-your-charm">
+                    Charm Icon Specification
+                  </a>
+                  .
+                </>
+              ) : (
+                <>
+                  Based on the automated checks above your icon is not valid.
+                  Please check the{" "}
+                  <a href="https://juju.is/docs/sdk/create-an-icon-for-your-charm">
+                    Charm Icon Specification
+                  </a>
+                  , update your icon, and try again.
+                </>
+              )}
+            </Notification>
+            {isValid && <h2>Charmhub.io Preview</h2>}
+          </>
         )}
       </Col>
     </Row>
+    {icon && isValid && (
+      <>
+        <Navigation theme={Theme.DARK} logo={{src: "https://assets.ubuntu.com/v1/a603c7c9-Favicon - Juju.svg", title: "Charmhub", url: "#"}} />
+        <Strip type="light" shallow>
+          <Row>
+            <Col size={8}>
+              <div className="p-media-object--large">
+                <img src={icon} className="p-media-object__image is-round" />
+                <div className="p-media-object__details">
+                  <h1 className="p-media-object__title">Your Charm</h1>
+                  <div className="p-media-object__content u-no-margin--bottom">
+                    <ul className="p-inline-list--middot">
+                      <li className="p-inline-list__item">By You!</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div style={{marginLeft: "-1rem"}}>
+                <Button inline styles={{ marginLeft: 0 }}>stable 10</Button>
+                  <code style={{ backgroundColor: "transparent" }}>juju deploy yourcharm --channel stable</code>
+              </div>
+            </Col>
+          </Row>
+        </Strip>
+      </>
+    )}
+    </>
   );
 }
 
