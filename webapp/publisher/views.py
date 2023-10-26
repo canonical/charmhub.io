@@ -192,7 +192,9 @@ def listing(entity_name):
     licenses = []
     for license in get_licenses():
         licenses.append({"key": license["licenseId"], "name": license["name"]})
-
+    package["has-guardrails"] = (
+        False if len(package.get("track-guardrails", [])) == 0 else True
+    )
     context = {
         "package": package,
         "licenses": licenses,
