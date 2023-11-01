@@ -1,8 +1,10 @@
+import re
+
 import talisker.requests
 from canonicalwebteam.flask_base.app import FlaskBase
 from canonicalwebteam.store_api.stores.charmstore import CharmStore
 from dateutil import parser
-from flask import render_template, make_response, request, session
+from flask import render_template, make_response, request, session, escape
 from webapp import config
 from webapp.extensions import csrf
 from webapp.handlers import set_handlers
@@ -26,6 +28,25 @@ app = FlaskBase(
     favicon_url="https://assets.ubuntu.com/v1/5d4edefd-jaas-favicon.png",
 )
 app.store_api = CharmStore(session=talisker.requests.get_session())
+
+
+@app.template_filter('linkify')
+def linkify(text):
+    escaped_text = escape(text)
+    url_pattern = re.compile(
+        r'http[s]?://'
+        r'(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|'
+        r'(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+        r'(?:#[\w-]+)?'
+    )
+
+    def replace_with_link(match):
+        url = match.group(0)
+        anchor_tag = f'<a href="{url}" target="_blank">{url}</a>'
+        return anchor_tag
+
+    return url_pattern.sub(replace_with_link, str(escaped_text))
+
 
 cache.init_app(app)
 set_handlers(app)
