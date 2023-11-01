@@ -14,7 +14,7 @@ function Banner({ searchRef, searchSummaryRef }: Props) {
     <Strip type="dark">
       <Row>
         <Col size={6} className="col-start-large-4">
-          <h1>The Charm Collection</h1>
+          <h1 className="p-heading--2">The Charm Collection</h1>
           <form
             className="p-search-box"
             onSubmit={(e) => {
