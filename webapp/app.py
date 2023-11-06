@@ -30,14 +30,14 @@ app = FlaskBase(
 app.store_api = CharmStore(session=talisker.requests.get_session())
 
 
-@app.template_filter('linkify')
+@app.template_filter("linkify")
 def linkify(text):
     escaped_text = escape(text)
     url_pattern = re.compile(
-        r'http[s]?://'
-        r'(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|'
-        r'(?:%[0-9a-fA-F][0-9a-fA-F]))+'
-        r'(?:#[\w-]+)?'
+        r"http[s]?://"
+        r"(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|"
+        r"(?:%[0-9a-fA-F][0-9a-fA-F]))+"
+        r"(?:#[\w-]+)?"
     )
 
     def replace_with_link(match):
