@@ -58,8 +58,16 @@ def rewrite_topic_url(topics: list) -> list:
             )
             soup = BeautifulSoup(index_doc, "html.parser")
             nav_heading = soup.find("h2", text="Navigation")
-            nav_table = nav_heading.find_next_sibling("details").find("table")
-            cache.set(index_id, {"nav_table": str(nav_table)}, timeout=3600)
+
+            if nav_heading:
+                nav_table = nav_heading.find_next_sibling("details").find(
+                    "table"
+                )
+
+            if nav_table:
+                cache.set(
+                    index_id, {"nav_table": str(nav_table)}, timeout=3600
+                )
 
         topic_link = nav_table.find(
             "a", href=lambda href: href and str(topic["id"]) in href

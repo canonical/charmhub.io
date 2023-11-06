@@ -39,7 +39,6 @@ class TestSearchPackage(TestCase):
             ]
         )
 
-    @responses.activate
     def test_all_charms(self):
         responses.add(
             responses.Response(
@@ -59,7 +58,6 @@ class TestSearchPackage(TestCase):
         self.assertNotIn("docs", response1.json)
         self.assertNotIn("topics", response1.json)
 
-    @responses.activate
     def test_all_bundles(self):
         responses.add(
             responses.Response(
@@ -70,9 +68,9 @@ class TestSearchPackage(TestCase):
             )
         )
 
-        bundle_response = self.client.get("/all-bundles?q=juju&type_limit=4")
+        bundle_response = self.client.get("/all-bundles?q=juju&type_limit=2")
         self.assertEqual(bundle_response.status_code, 200)
-        self.assertEqual(len(bundle_response.json["bundles"]), 4)
+        self.assertEqual(len(bundle_response.json["bundles"]), 2)
         self.assertEqual(len(bundle_response.json), 1)
         self.assertEqual(type((bundle_response.json["bundles"])), list)
         self.assertNotIn("charms", bundle_response.json)

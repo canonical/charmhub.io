@@ -87,7 +87,7 @@
         {% for track, track_data in package.store_front.channel_map.items() %}
           {% for channel, channel_data in track_data.items() %}
             {% for base in package.store_front.all_channel_bases %}
-              {% if track == package["default-release"].channel.track and channel == package["default-release"].channel.risk == base.channel %}
+              {% if track == package["default-release"].channel.track and channel == package["default-release"].channel.risk %}
                 <div class="series-base">
                   <div class="series-base__title">
                     {% if base["name"] == "ubuntu" %}
