@@ -26,7 +26,7 @@
         {% if value.default %}
         <p style="overflow-wrap: break-word; white-space: pre-wrap;"><span class="u-text--muted">Default:</span> {{ value.default }}</p>
         {% endif %}
-        <p style="overflow-wrap: break-word; white-space: pre-wrap;">{{ value.description | escape }}</p>
+        <p style="overflow-wrap: break-word; white-space: pre-wrap;">{{ value.description | linkify | safe }}</p>
       </li>
       {% endfor %}
     </ul>
@@ -56,7 +56,7 @@
     currentHighlightedNavItem.classList.remove("is-active");
 
     const navigationItem = document.querySelector(`[href="${window.location.hash}"]`);
-    navigationItem.classList.add("is-active");   
+    navigationItem.classList.add("is-active");
   }
 
   const sideNavigationLinks = Array.prototype.slice.call(
