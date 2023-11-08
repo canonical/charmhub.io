@@ -71,7 +71,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.21.3",
-    "@types/react": "18.0.15",
+    "@types/react": "18.2.37",
     "babel-jest": "29.3.1",
     "babel-plugin-prismjs": "2.1.0",
     "concurrently": "7.6.0",
