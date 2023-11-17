@@ -14,6 +14,8 @@ function App() {
     },
   });
 
+  const foo = "bar";
+
   return (
     <Router>
       <QueryClientProvider client={queryClient}>
