@@ -82,7 +82,9 @@ def rewrite_topic_url(topics: list) -> list:
                 for tag in topic["tags"]:
                     if tag in docs_id_cache.keys():
                         url_tag = docs_id_cache[tag]["tag"]
-                        topic_url = f"https://juju.is/docs/{url_tag}/{topic_path}"
+                        topic_url = (
+                            f"https://juju.is/docs/{url_tag}/{topic_path}"
+                        )
                         topic_urls.append(topic_url)
                     topic["url"] = topic_urls
                 topics_with_url.append(topic)
