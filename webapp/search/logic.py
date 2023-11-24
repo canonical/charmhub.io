@@ -46,6 +46,7 @@ def rewrite_topic_url(topics: list) -> list:
     for topic in topics:
         index_id = map_topic_to_doc(topic)
         index_details = cache.get(index_id)
+        nav_table = None
 
         if index_details:
             nav_table = BeautifulSoup(
@@ -69,21 +70,22 @@ def rewrite_topic_url(topics: list) -> list:
                     index_id, {"nav_table": str(nav_table)}, timeout=3600
                 )
 
-        topic_link = nav_table.find(
-            "a", href=lambda href: href and str(topic["id"]) in href
-        )
-        if topic_link:
-            topic_row_in_nav = topic_link.find_parent("tr")
-            topic_data = topic_row_in_nav.find_all("td")
-            topic_path = topic_data[1].text
-            topic_urls = []
-            for tag in topic["tags"]:
-                if tag in docs_id_cache.keys():
-                    url_tag = docs_id_cache[tag]["tag"]
-                    topic_url = f"https://juju.is/docs/{url_tag}/{topic_path}"
-                    topic_urls.append(topic_url)
-                topic["url"] = topic_urls
-            topics_with_url.append(topic)
+        if nav_table:
+            topic_link = nav_table.find(
+                "a", href=lambda href: href and str(topic["id"]) in href
+            )
+            if topic_link:
+                topic_row_in_nav = topic_link.find_parent("tr")
+                topic_data = topic_row_in_nav.find_all("td")
+                topic_path = topic_data[1].text
+                topic_urls = []
+                for tag in topic["tags"]:
+                    if tag in docs_id_cache.keys():
+                        url_tag = docs_id_cache[tag]["tag"]
+                        topic_url = f"https://juju.is/docs/{url_tag}/{topic_path}"
+                        topic_urls.append(topic_url)
+                    topic["url"] = topic_urls
+                topics_with_url.append(topic)
 
     return topics_with_url
 
