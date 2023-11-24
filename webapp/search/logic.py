@@ -146,11 +146,13 @@ def search_discourse(
         # 3. The API does not support excluding (we had to filter out archived
         #   topics) a status from the search
         while more_pages:
-            resp = (
-                requests.get(f"{url}/search.json?q={query}&page={page}")
-                .json()
-                .get("topics", [])
-            )
+            resp = None
+            if len(result) < 10:
+                resp = (
+                    requests.get(f"{url}/search.json?q={query}&page={page}")
+                    .json()
+                    .get("topics", [])
+                )
             if resp:
                 topics = filter_topics(resp)
                 result.extend(topics)
