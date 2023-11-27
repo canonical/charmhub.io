@@ -18,7 +18,6 @@ import {
 import Banner from "../Banner";
 import Topics from "../Topics";
 
-import categories from "../../data/categories";
 import platforms from "../../data/platforms";
 import packageTypes from "../../data/package-types";
 
@@ -107,7 +106,7 @@ function Packages() {
 
               <div className="p-filter-panel__inner">
                 <Filters
-                  categories={categories}
+                  categories={data?.categories || []}
                   selectedCategories={
                     searchParams.get("categories")?.split(",") || []
                   }
