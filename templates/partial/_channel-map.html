@@ -64,30 +64,8 @@
   </div>
 
   <div class="p-charm-header__code">
-    <div class="p-tooltip--information">
-      <div>
-        <code>juju deploy {{ package["name"] }}{% if package["default-release"]["channel"]["name"] and package["default-release"]["channel"]["name"] != "stable" %} --channel {{ package["default-release"]["channel"]["name"] }}{% endif %}</code>
-      </div>
-      <div class="instruction-tooltip">
-        <div class="p-tooltip__button" role="button" aria-controls="icon-tooltip-modal" tabindex="0">
-          Show information
-        </div>
-        <div class="p-tooltip__modal" id="icon-tooltip-modal">
-          <div class="p-tooltip__dialog" role="dialog" aria-labelledby="modal-content">
-            <button class="p-tooltip__close" aria-controls="icon-tooltip-modal" aria-label="Close tooltip modal">Close</button>
-            <span id="modal-content" class="u-no-margin--bottom u-no-padding--top">
-              <p class="u-no-padding--top">You will need Juju 2.9 to be able to run this command. <a href="https://discourse.charmhub.io/t/juju-2-9-0-release-notes/4525">Learn how to upgrade to Juju 2.9</a>.</p>
-              {% if package.store_front["deployable-on"]|length == 1 and package.store_front["deployable-on"][0] == "kubernetes" %}
-              <p>Deploy Kubernetes operators easily with Juju, the <a href="https://juju.is/overview">Universal Operator Lifecycle Manager</a>. Need a Kubernetes cluster? Install <a href="https://microk8s.io/">MicroK8s</a> to create a full <a href="https://www.cncf.io/certification/software-conformance/">CNCF-certified</a> Kubernetes system in under 60 seconds.</p>
-              <p class="u-no-margin--bottom"><a href="https://juju.is/docs/microk8s-cloud">Deploy using our Quickstart Guide</a></p>
-              {% else %}
-              <p>Deploy universal operators easily with Juju, the <a href="https://juju.is/overview">Universal Operator Lifecycle Manager</a>.</p>
-              <p class="u-no-margin--bottom"><a href="https://juju.is/docs/deploying-applications#heading--deploying-from-the-charm-store">Learn how with our Quickstart Guide</a></p>
-              {% endif %}
-            </span>
-          </div>
-        </div>
-      </div>
+    <div>
+      <code>juju deploy {{ package["name"] }}{% if package["default-release"]["channel"]["name"] and package["default-release"]["channel"]["name"] != "stable" %} --channel {{ package["default-release"]["channel"]["name"] }}{% endif %}</code>
     </div>
   </div>
 </div>
