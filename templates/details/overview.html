@@ -12,7 +12,7 @@
         <h2 class="p-heading--4">Charms in the {{ package.store_front["display-name"] }} bundle</h2>
         <div class="row p-bundle-icons">
           {% for charm in package['store_front']['bundle']['charms'] %}
-            <div class="col-3 col-medium-3">
+            <div class="col-3 col-medium-6">
               {% include "/details/_bundle_icon.html" %}
             </div>
           {% endfor %}
