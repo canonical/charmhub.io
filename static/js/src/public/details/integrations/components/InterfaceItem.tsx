@@ -130,7 +130,7 @@ export const InterfaceItem = ({
   return (
     <>
       <hr />
-      <h3 className="p-heading--4 u-no-margin--bottom">
+      <h3 className="p-heading--4 u-no-margin--bottom" id={interfaceData.key}>
         {title}{" "}
         <span
           className="p-tooltip--right"
