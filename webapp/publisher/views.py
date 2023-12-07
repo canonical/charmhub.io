@@ -474,3 +474,25 @@ def get_publicise_cards(entity_name):
     return render_template(
         "publisher/publicise/embedded_cards.html", **context
     )
+
+
+@publisher.route("/<charm_name>/create-track", methods=["POST"])
+@login_required
+def post_create_track(charm_name):
+    track_name = request.form["track-name"]
+    response = publisher_api.create_track(
+        session["account-auth"], charm_name, track_name
+    )
+    if response.status_code == 201:
+        return response.json(), response.status_code
+    if response.status_code == 409:
+        return (
+            jsonify({"error": "Track already exists."}),
+            response.status_code,
+        )
+    if "error-list" in response.json():
+        return (
+            jsonify({"error": response.json()["error-list"][0]["message"]}),
+            response.status_code,
+        )
+    return response.json(), response.status_code

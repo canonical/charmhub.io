@@ -1288,29 +1288,12 @@
   resolved "https://registry.yarnpkg.com/@canonical/cookie-policy/-/cookie-policy-3.5.0.tgz#1c7e6cc2d5a7218375001b2cff2996a927693e89"
   integrity sha512-XLCIl8+h+3BRfvqADqFsmAfWdaDGDchY/TPCKtpeQdb4r64SR6arsdNftlOb7vX8EuLCK2QRp6evUy0J+qnQTg==
 
-"@canonical/global-nav@3.6.1":
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/@canonical/global-nav/-/global-nav-3.6.1.tgz#d4294a1cc287fd036a12e801fbf86ecf0a9864e0"
-  integrity sha512-P0yuQbItr6E+Y2C6Zxns+rF1ZMunokDSwj5ji9RfXUX7BZ3C3xFwy9DuXYVzTYyAoFfpxzZ/w4fs65sH5Nd3UA==
+"@canonical/global-nav@3.6.2":
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/@canonical/global-nav/-/global-nav-3.6.2.tgz#ee12cf7ebbf212c724a4652f1f4643ac5c4c461c"
+  integrity sha512-ZIC3OhSpDINAHfuDtX/1adrSiWl7qdYC5mqdYVt/2gyH3C8ffz2QmELpkZamSQ6qxYsGjVVzmddFJVP/W8vxaw==
   dependencies:
     vanilla-framework "4.0.0"
-
-"@canonical/react-components@0.47.0":
-  version "0.47.0"
-  resolved "https://registry.yarnpkg.com/@canonical/react-components/-/react-components-0.47.0.tgz#1c6c29052eb07cb794ab0e9f50e206ab523b8232"
-  integrity sha512-6iIaw5qqJ7bD3M9mGbmh9Ej/uRl6Zi3BsHtotThXQKvvJr4aA7qhh8cISS+zLh/zfJ2a7J1MLc/151PlcSsK6g==
-  dependencies:
-    "@types/jest" "27.5.2"
-    "@types/node" "18.16.18"
-    "@types/react" "18.2.14"
-    "@types/react-dom" "18.2.6"
-    "@types/react-table" "7.7.14"
-    classnames "2.3.2"
-    nanoid "3.3.6"
-    prop-types "15.8.1"
-    react-router-dom "6.6.1"
-    react-table "7.8.0"
-    react-useportal "1.0.18"
 
 "@canonical/react-components@0.47.1":
   version "0.47.1"
@@ -1329,12 +1312,12 @@
     react-table "7.8.0"
     react-useportal "1.0.18"
 
-"@canonical/store-components@0.30.0":
-  version "0.30.0"
-  resolved "https://registry.yarnpkg.com/@canonical/store-components/-/store-components-0.30.0.tgz#251e3d4c1b2953618959029e7ab2d0b0cd6e6122"
-  integrity sha512-IPI81SSfbEsbKJJt4mvKBtGr6sbTu3w3DcSl54JRnmrD2lT85W4zi2z040pucs+A1CsAhXMOht062Ylxp6+YKA==
+"@canonical/store-components@0.38.0":
+  version "0.38.0"
+  resolved "https://registry.yarnpkg.com/@canonical/store-components/-/store-components-0.38.0.tgz#883565484a90da6d0e223bd37b1eeaffca5023a9"
+  integrity sha512-06br6mqewCHj02WXgW276Qo0LIKLBPqfrQ0XsjELsuTN7EksL3ZqtNRF/kZM3sGI6r/m37WyypVetYe854DeKA==
   dependencies:
-    "@canonical/react-components" "0.47.0"
+    "@canonical/react-components" "0.47.1"
     "@types/jest" "27.5.2"
     "@types/node" "18.18.4"
     "@types/react" "17.0.68"
@@ -1894,11 +1877,6 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.8.0.tgz#b8ee8d83a99470c0661bd899417fcd77060682fe"
   integrity sha512-u+h43R6U8xXDt2vzUaVP3VwjjLyOJk6uEciZS8OSyziUQGOwmk+l+4drxcsDboHXwyTaqS1INebghmWMRxq3LA==
 
-"@types/node@18.16.18":
-  version "18.16.18"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.16.18.tgz#85da09bafb66d4bc14f7c899185336d0c1736390"
-  integrity sha512-/aNaQZD0+iSBAGnvvN2Cx92HqE5sZCPZtx2TsK+4nvV23fFe09jVDvpArXr2j9DnYlzuU9WuoykDDc6wqvpNcw==
-
 "@types/node@18.18.4":
   version "18.18.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.18.4.tgz#519fef47a13cf869be290c20fc6ae9b7fe887aa7"
@@ -1955,13 +1933,6 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-dom@18.2.6":
-  version "18.2.6"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.2.6.tgz#ad621fa71a8db29af7c31b41b2ea3d8a6f4144d1"
-  integrity sha512-2et4PDvg6PVCyS7fuTc4gPoksV58bW0RwSxWKcPRcHZf0PRUGq03TKcD/rUHe3azfV6/5/biUBJw+HhCQjaP0A==
-  dependencies:
-    "@types/react" "*"
-
 "@types/react-router-dom@5.3.3":
   version "5.3.3"
   resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-5.3.3.tgz#e9d6b4a66fcdbd651a5f106c2656a30088cc1e83"
@@ -1979,13 +1950,6 @@
     "@types/history" "^4.7.11"
     "@types/react" "*"
 
-"@types/react-table@7.7.14":
-  version "7.7.14"
-  resolved "https://registry.yarnpkg.com/@types/react-table/-/react-table-7.7.14.tgz#b880f1ae140ed065bca2e21b3008ca1ebe71595a"
-  integrity sha512-TYrv7onCiakaG1uAu/UpQ9FojNEt/4/ht87EgJQaEGFoWV606ZLWUZAcUHzMxgc3v1mywP1cDyz3qB4ho3hWOw==
-  dependencies:
-    "@types/react" "*"
-
 "@types/react-table@7.7.16":
   version "7.7.16"
   resolved "https://registry.yarnpkg.com/@types/react-table/-/react-table-7.7.16.tgz#e143e2c0fa2dcac739fcc8055e58f5a7a9c0e5fb"
@@ -1993,7 +1957,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@18.2.14":
+"@types/react@*":
   version "18.2.14"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.14.tgz#fa7a6fecf1ce35ca94e74874f70c56ce88f7a127"
   integrity sha512-A0zjq+QN/O0Kpe30hA1GidzyFjatVvrpIvWLxD+xv67Vt91TWWgco9IvrJBkeyHm1trGaFS/FSGqPlhyeZRm0g==
@@ -7094,14 +7058,6 @@ react-router-dom@6.17.0:
     "@remix-run/router" "1.10.0"
     react-router "6.17.0"
 
-react-router-dom@6.6.1:
-  version "6.6.1"
-  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.6.1.tgz#1b96ec0b2cefa7319f1251383ea5b41295ee260d"
-  integrity sha512-u+8BKUtelStKbZD5UcY0NY90WOzktrkJJhyhNg7L0APn9t1qJNLowzrM9CHdpB6+rcPt6qQrlkIXsTvhuXP68g==
-  dependencies:
-    "@remix-run/router" "1.2.1"
-    react-router "6.6.1"
-
 react-router-dom@6.6.2:
   version "6.6.2"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.6.2.tgz#bbf1f9b45855b218d22fc2d294b79408a084740a"
@@ -7116,13 +7072,6 @@ react-router@6.17.0:
   integrity sha512-YJR3OTJzi3zhqeJYADHANCGPUu9J+6fT5GLv82UWRGSxu6oJYCKVmxUcaBQuGm9udpWmPsvpme/CdHumqgsoaA==
   dependencies:
     "@remix-run/router" "1.10.0"
-
-react-router@6.6.1:
-  version "6.6.1"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.6.1.tgz#17de6cf285f2d1c9721a3afca999c984e5558854"
-  integrity sha512-YkvlYRusnI/IN0kDtosUCgxqHeulN5je+ew8W+iA1VvFhf86kA+JEI/X/8NqYcr11hCDDp906S+SGMpBheNeYQ==
-  dependencies:
-    "@remix-run/router" "1.2.1"
 
 react-router@6.6.2:
   version "6.6.2"
@@ -8409,10 +8358,10 @@ vanilla-framework@4.0.0:
   resolved "https://registry.yarnpkg.com/vanilla-framework/-/vanilla-framework-4.0.0.tgz#a2fee9bd9763ebd6932b764f9d66484dc177d4cc"
   integrity sha512-fiPnmaTUe15l5MRNJ6IsiJ8qiunfmgtLETOFltaYiE/bQKL7xTI+riBak2iygBKeF1y0Gi/GxUNt4hyb6xDPKA==
 
-vanilla-framework@4.5.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/vanilla-framework/-/vanilla-framework-4.5.0.tgz#992332239682821094defaae0e8aacd343bf9239"
-  integrity sha512-35q360QpJirosK7403fSQLRPXsdabZ6LdkP2x5bqJBak3rkwmYE34wOqGbm0KggQLXSZimW5ZP2Y+0LohtAF+w==
+vanilla-framework@4.5.1:
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/vanilla-framework/-/vanilla-framework-4.5.1.tgz#19b55dd4771c304b2bae8af646312916f5f45917"
+  integrity sha512-vF7GGZsXcQZnM2522Q2am08to/iM2K+EhsfYPuYsiHvp2kRGxY/rJ8tcjbKftNY859qOqT8yJg0PE+sVmKI5zg==
 
 verbalize@^0.1.2:
   version "0.1.2"
