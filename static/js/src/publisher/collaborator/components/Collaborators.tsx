@@ -47,9 +47,8 @@ function Collaborators() {
       body: formData,
     }).then((response) => {
       if (response.status === 200) {
-        setCollaborators(
-          collaborators.filter((collaborator) => collaborator?.email !== email)
-        );
+        // setCollaborators();
+        // collaborators.filter((collaborator) => collaborator?.email !== email)
         setShowRevokeSuccess(true);
       } else {
         setShowRevokeError(true);
