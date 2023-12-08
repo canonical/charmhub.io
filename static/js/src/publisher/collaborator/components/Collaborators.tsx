@@ -24,80 +24,7 @@ function Collaborators() {
   const [collaboratorToRevoke, setCollaboratorToRevoke] = useState("");
   const [showRevokeSuccess, setShowRevokeSuccess] = useState(false);
   const [showRevokeError, setShowRevokeError] = useState(false);
-  const [collaborators, setCollaborators] = useState([
-    {
-      email: "steve.rydz@canonical.com",
-      display_name: "Steve Rydz",
-      created_by: "sadf79s7df987sdf",
-      created_at: "2022-03-23T20:03:02",
-      expires_at: "2022-04-23T20:03:02",
-      accepted_at: "2022-03-23T20:03:02",
-      account_id: "prFvYmvaBsQbXLNaVaQFV4EAcJ8zh0Ej",
-    },
-    {
-      email: "luke.wesley-holley@canonical.com",
-      display_name: "Luke Wesley-Holley",
-      created_by: "prFvYmvaBsQbXLNaVaQFV4EAcJ8zh0Ej",
-      created_at: "2022-03-23T20:03:02",
-      expires_at: "2022-04-23T20:03:02",
-      accepted_at: "2022-03-23T20:03:02",
-      account_id: "asdfasdfasdf",
-    },
-    {
-      email: "francisco.jimenez.cabrera@canonical.com",
-      display_name: "Franciso Jimenez Cabrera",
-      created_by: "prFvYmvaBsQbXLNaVaQFV4EAcJ8zh0Ej",
-      created_at: "2022-03-23T20:03:02",
-      expires_at: "2022-04-23T20:03:02",
-      accepted_at: "2022-03-23T20:03:02",
-      account_id: "asd;klsdalk;",
-    },
-    {
-      email: "ana.sereijo@canonical.com",
-      display_name: "Ana Sereijo",
-      created_by: "prFvYmvaBsQbXLNaVaQFV4EAcJ8zh0Ej",
-      created_at: "2022-03-23T20:03:02",
-      expires_at: "2022-04-23T20:03:02",
-      accepted_at: "2022-03-23T20:03:02",
-      account_id: "sdfasdfjkljlk",
-    },
-    {
-      email: "ana.badolato.munuera@canonical.com",
-      display_name: "Ana Badolato Munuera",
-      created_by: "prFvYmvaBsQbXLNaVaQFV4EAcJ8zh0Ej",
-      created_at: "2022-03-23T20:03:02",
-      expires_at: "2022-04-23T20:03:02",
-      accepted_at: "2022-03-23T20:03:02",
-      account_id: "sdaflopiupoiu",
-    },
-    {
-      email: "anne-sophie.muller@canonical.com",
-      display_name: "Anne-Sophie Muller",
-      created_by: "prFvYmvaBsQbXLNaVaQFV4EAcJ8zh0Ej",
-      created_at: "2022-03-23T20:03:02",
-      expires_at: "2022-04-23T20:03:02",
-      accepted_at: "2022-03-23T20:03:02",
-      account_id: "klklkjlkjljk",
-    },
-    {
-      email: "huw.wilkins@canonical.com",
-      display_name: "Huw Wilkins",
-      created_by: "prFvYmvaBsQbXLNaVaQFV4EAcJ8zh0Ej",
-      created_at: "2022-03-23T20:03:02",
-      expires_at: "2022-04-23T20:03:02",
-      accepted_at: "2022-03-23T20:03:02",
-      account_id: "asdfdasfjkljkl;jkl;",
-    },
-    {
-      email: "goulin.khoge@canonical.com",
-      display_name: "Goulin Khoge",
-      created_by: "prFvYmvaBsQbXLNaVaQFV4EAcJ8zh0Ej",
-      created_at: "2022-03-23T20:03:02",
-      expires_at: "2022-04-23T20:03:02",
-      accepted_at: "2022-03-23T20:03:02",
-      account_id: "kllksdjkllkjlkj",
-    },
-  ]);
+  const [collaborators, setCollaborators] = useState([]);
   const [invites, setInvites] = useState([]);
   const [newCollaboratorEmail, setNewCollaboratorEmail] = useState("");
   const [inviteLink, setInviteLink] = useState("");
@@ -138,7 +65,7 @@ function Collaborators() {
         }
       })
       .then((data) => {
-        setInvites(data?.invites);
+        // setInvites(data?.invites);
       });
   }, [collaborators]);
 
@@ -192,7 +119,7 @@ function Collaborators() {
             </Notification>
           )}
 
-          <Button
+          {/* <Button
             appearance="positive"
             hasIcon
             onClick={() => {
@@ -201,7 +128,7 @@ function Collaborators() {
           >
             <i className="p-icon--plus is-light"></i>
             <span>Add new collaborator</span>
-          </Button>
+          </Button> */}
 
           <Accordion
             expanded="collaborators-table"
