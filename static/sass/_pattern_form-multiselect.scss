@@ -2,8 +2,7 @@
   $box-shadow-color: rgba(0, 0, 0, 0.12);
 
   .p-multiselect__wrapper {
-    margin-block-end: $input-margin-bottom;
-    margin-block-start: $spv--small;
+    margin-block: $spv--small $input-margin-bottom;
   }
 
   .p-multiselect__clear {
@@ -14,18 +13,16 @@
   .p-multiselect {
     @extend %vf-clearfix;
 
-    align-content: flex-start;
     align-items: flex-start;
     border: 1px solid $colors--light-theme--border-high-contrast;
     box-shadow: inset 0 1px 1px $color-input-shadow;
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start;
     line-height: 1.5rem;
-    margin-block-end: $input-margin-bottom;
-    margin-block-start: $spv--small;
+    margin-block: $spv--small $input-margin-bottom;
     min-width: 10em;
     padding: 0 $spv--small;
+    place-content: flex-start flex-start;
     position: relative;
     width: 100%;
 

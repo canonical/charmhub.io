@@ -175,10 +175,8 @@ $breakpoint-navigation-threshold: 1110px;
   }
 
   .p-channel-map__mask {
-    bottom: 0;
     left: 0;
     position: fixed;
-    right: 0;
     top: 0;
   }
 
@@ -220,7 +218,7 @@ body {
 // as the issue was fixed
 // https://github.com/canonical-web-and-design/global-nav/commit/03173d82a1f1d4b77f8e20e41ef552b90dbab798
 
-@media (max-width: 875px) {
+@media (width <= 875px) {
   body {
     padding-bottom: 0 !important;
   }
@@ -476,8 +474,11 @@ h3 {
 
 .panel__content {
   flex: 1 1 0;
-  overflow: hidden;
-  overflow-y: scroll;
+}
+
+.panel__footer {
+  border-top: 1px solid $color-mid-x-light;
+  padding-top: $sph--large;
 }
 
 .l-aside__overlay {
@@ -530,4 +531,13 @@ h3 {
 
 .p-search-box .p-search-box__input:placeholder-shown ~ .p-search-box__reset {
   display: none !important;
+}
+
+.collaboration-ui .l-aside {
+  height: 100vh;
+  top: 0;
+}
+
+.collaboration-ui.l-application {
+  width: 100%;
 }

@@ -1,4 +1,7 @@
-import React, { useState, useEffect, SyntheticEvent } from "react";
+import React, { useState, SyntheticEvent } from "react";
+import { useParams } from "react-router-dom";
+import { useQueryClient } from "react-query";
+import { useRecoilValue, useRecoilState } from "recoil";
 import {
   Accordion,
   Strip,
@@ -12,88 +15,103 @@ import {
 import CollaboratorsTable from "./CollaboratorsTable";
 import InvitesTable from "./InvitesTable";
 
+import { isPending } from "../utils";
+
+import {
+  useCollaboratorsQuery,
+  useInvitesQuery,
+  useSendInviteMutation,
+  useRevokeInviteMutation,
+} from "../hooks";
+import { activeInviteState, actionState, inviteLinkState } from "../atoms";
+
+import type { Invite } from "../types";
+
 declare global {
   interface Window {
-    PACKAGE_NAME: string;
     CSRF_TOKEN: string;
   }
 }
 
 function Collaborators() {
-  const [showRevokeConfirmation, setShowRevokeConfirmation] = useState(false);
-  const [collaboratorToRevoke, setCollaboratorToRevoke] = useState("");
+  const { packageName } = useParams();
+  const queryClient = useQueryClient();
+  const [activeInvite, setActiveInvite] = useRecoilState(activeInviteState);
+  const [inviteLink, setInviteLink] = useRecoilState(inviteLinkState);
+  const action = useRecoilValue(actionState);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showInviteSuccess, setShowInviteSuccess] = useState(false);
   const [showRevokeSuccess, setShowRevokeSuccess] = useState(false);
   const [showRevokeError, setShowRevokeError] = useState(false);
-  const [collaborators, setCollaborators] = useState([]);
-  const [invites, setInvites] = useState([]);
-  const [newCollaboratorEmail, setNewCollaboratorEmail] = useState("");
-  const [inviteLink, setInviteLink] = useState("");
   const [showAddCollaborator, setShowAddCollaborator] = useState(false);
 
-  const packageName = window?.PACKAGE_NAME;
+  const {
+    isLoading: collaboratorsIsLoading,
+    isError: collaboratorsIsError,
+    data: collaboratorsData,
+  } = useCollaboratorsQuery(packageName);
 
-  const closeRevokeConfirmation = () => {
-    setShowRevokeConfirmation(false);
-  };
+  const {
+    isLoading: invitesIsLoading,
+    isError: invitesIsError,
+    data: invites,
+  } = useInvitesQuery(packageName);
 
-  const revokeInvite = (email: string) => {
-    const formData = new FormData();
+  const sendInviteMutation = useSendInviteMutation(
+    packageName,
+    window.CSRF_TOKEN,
+    queryClient,
+    activeInvite,
+    setInviteLink,
+    setShowInviteSuccess,
+    setShowAddCollaborator
+  );
 
-    formData.set("csrf_token", window?.CSRF_TOKEN);
-    formData.set("collaborator", email);
+  const revokeInviteMutation = useRevokeInviteMutation(
+    packageName,
+    window.CSRF_TOKEN,
+    queryClient,
+    activeInvite,
+    setShowRevokeSuccess,
+    setShowRevokeError
+  );
 
-    fetch(`/${packageName}/invites/revoke`, {
-      method: "POST",
-      body: formData,
-    }).then((response) => {
-      if (response.status === 200) {
-        // setCollaborators();
-        // collaborators.filter((collaborator) => collaborator?.email !== email)
-        setShowRevokeSuccess(true);
-      } else {
-        setShowRevokeError(true);
-      }
+  const isUnique = (activeInvite: string | undefined) => {
+    if (!activeInvite) {
+      return true;
+    }
+
+    if (!invites) {
+      return false;
+    }
+
+    const existingInvites = invites.filter((invite: Invite) => {
+      return invite.email === activeInvite && isPending(invite);
     });
-  };
 
-  useEffect(() => {
-    fetch(`/${packageName}/invites`)
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        }
-      })
-      .then((data) => {
-        // setInvites(data?.invites);
-      });
-  }, [collaborators]);
+    if (!existingInvites.length) {
+      return true;
+    }
 
-  const inviteCollaborator = (email?: string) => {
-    const formData = new FormData();
-
-    formData.set("collaborators", email || newCollaboratorEmail);
-    formData.set("csrf_token", window.CSRF_TOKEN);
-
-    fetch(`/${packageName}/invite`, {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        }
-      })
-      .then((data) => {
-        setInviteLink(
-          `https://charmhub.io/${packageName}/collaboration/confirm?token=${data?.result?.tokens?.[0]?.token}`
-        );
-      });
+    return false;
   };
 
   return (
-    <div className="l-application">
+    <div className="l-application collaboration-ui">
       <div className="l-main">
         <Strip shallow>
+          {showInviteSuccess && (
+            <Notification
+              severity="positive"
+              onDismiss={() => {
+                setShowInviteSuccess(false);
+              }}
+            >
+              An invite has been created. <a href={inviteLink}>Accept invite</a>
+              .
+            </Notification>
+          )}
+
           {showRevokeSuccess && (
             <Notification
               severity="positive"
@@ -101,8 +119,7 @@ function Collaborators() {
                 setShowRevokeSuccess(false);
               }}
             >
-              The invite for <strong>{collaboratorToRevoke}</strong> has been
-              revoked.
+              The invite for <strong>{activeInvite}</strong> has been revoked.
             </Notification>
           )}
 
@@ -114,11 +131,11 @@ function Collaborators() {
               }}
             >
               There was a problem revoking the invite for{" "}
-              <strong>{collaboratorToRevoke}</strong>.
+              <strong>{activeInvite}</strong>.
             </Notification>
           )}
 
-          {/* <Button
+          <Button
             appearance="positive"
             hasIcon
             onClick={() => {
@@ -127,32 +144,50 @@ function Collaborators() {
           >
             <i className="p-icon--plus is-light"></i>
             <span>Add new collaborator</span>
-          </Button> */}
+          </Button>
 
           <Accordion
             expanded="collaborators-table"
             sections={[
               {
                 key: "collaborators-table",
-                title: `Active shares (${collaborators.length})`,
+                title: `Active shares ${
+                  collaboratorsData &&
+                  collaboratorsData?.collaborators.length > 0
+                    ? `(${collaboratorsData.collaborators.length})`
+                    : ""
+                }`,
                 content: (
-                  <CollaboratorsTable
-                    collaborators={collaborators}
-                    setCollaboratorToRevoke={setCollaboratorToRevoke}
-                    setShowRevokeConfirmation={setShowRevokeConfirmation}
-                  />
+                  <>
+                    {!collaboratorsIsLoading &&
+                      !collaboratorsIsError &&
+                      collaboratorsData &&
+                      collaboratorsData.collaborators.length > 0 && (
+                        <CollaboratorsTable
+                          collaboratorsData={collaboratorsData}
+                          setShowConfirmation={setShowConfirmation}
+                        />
+                      )}
+                  </>
                 ),
               },
               {
-                title: `Invites (${invites.length})`,
+                key: "invites-table",
+                title: `Invites ${
+                  invites && invites.length > 0 ? `(${invites.length})` : ""
+                }`,
                 content: (
-                  <InvitesTable
-                    invites={invites}
-                    collaborators={collaborators}
-                    setCollaboratorToRevoke={setCollaboratorToRevoke}
-                    setShowRevokeConfirmation={setShowRevokeConfirmation}
-                    inviteCollaborator={inviteCollaborator}
-                  />
+                  <>
+                    {!invitesIsLoading &&
+                      !invitesIsError &&
+                      invites &&
+                      invites.length > 0 && (
+                        <InvitesTable
+                          invites={invites}
+                          setShowConfirmation={setShowConfirmation}
+                        />
+                      )}
+                  </>
                 ),
               },
             ]}
@@ -167,30 +202,31 @@ function Collaborators() {
         }}
       ></div>
       <aside className={`l-aside ${!showAddCollaborator && "is-collapsed"}`}>
-        <div className="panel">
-          <div className="panel__header">
-            <h2 className="p-heading--4">Add new collaborator</h2>
-            <Button
-              appearance="base"
-              hasIcon
-              onClick={() => {
-                setShowAddCollaborator(false);
-              }}
-            >
-              <i className="p-icon--close">Close</i>
-            </Button>
-          </div>
-          <div className="panel__content">
-            <Form
-              onSubmit={(e) => {
-                e.preventDefault();
-                inviteCollaborator();
-              }}
-            >
+        <Form
+          style={{ height: "100%" }}
+          onSubmit={(e) => {
+            e.preventDefault();
+            sendInviteMutation.mutate(activeInvite);
+            setActiveInvite("");
+          }}
+        >
+          <div className="panel">
+            <div className="panel__header">
+              <h2 className="p-heading--4">Add new collaborator</h2>
+              <Button
+                appearance="base"
+                hasIcon
+                onClick={() => {
+                  setShowAddCollaborator(false);
+                }}
+              >
+                <i className="p-icon--close">Close</i>
+              </Button>
+            </div>
+            <div className="panel__content">
               <Notification severity="caution" title="Role">
                 A collaborator is a store user that can have equal rights over a
                 particular package as the package publisher.
-                {inviteLink}
               </Notification>
               <Input
                 type="email"
@@ -198,41 +234,58 @@ function Collaborators() {
                 label="Email"
                 placeholder="yourname@example.com"
                 help="The primary email for the Ubuntu One account"
-                value={newCollaboratorEmail}
+                value={activeInvite}
                 onInput={(
                   e: SyntheticEvent<HTMLInputElement> & {
                     target: HTMLInputElement;
                   }
                 ) => {
-                  setNewCollaboratorEmail(e.target.value);
+                  setActiveInvite(e.target.value);
                 }}
+                error={
+                  !isUnique(activeInvite)
+                    ? "There is already an invite for this email address"
+                    : ""
+                }
               />
-            </Form>
+            </div>
+            <div className="panel__footer u-align--right">
+              <Button
+                type="button"
+                className="u-no-margin--bottom"
+                onClick={() => {
+                  setShowAddCollaborator(false);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                appearance="positive"
+                className="u-no-margin--bottom"
+                disabled={!activeInvite || !isUnique(activeInvite)}
+              >
+                Add collaborator
+              </Button>
+            </div>
           </div>
-          <div className="panel__footer">
-            <Button
-              type="submit"
-              appearance="positive"
-              onClick={() => {
-                inviteCollaborator();
-              }}
-            >
-              Add collaborator
-            </Button>
-          </div>
-        </div>
+        </Form>
       </aside>
 
-      {showRevokeConfirmation && (
+      {showConfirmation && (
         <Modal
-          close={closeRevokeConfirmation}
-          title="Revoke invite"
+          close={() => {
+            setShowConfirmation(false);
+          }}
+          title={`${action} invite`}
           buttonRow={
             <>
               <Button
                 type="button"
                 className="u-no-margin--bottom"
-                onClick={closeRevokeConfirmation}
+                onClick={() => {
+                  setShowConfirmation(false);
+                }}
               >
                 Cancel
               </Button>
@@ -240,18 +293,25 @@ function Collaborators() {
                 appearance="positive"
                 className="u-no-margin--bottom"
                 onClick={() => {
-                  revokeInvite(collaboratorToRevoke);
-                  setShowRevokeConfirmation(false);
+                  if (action === "Revoke") {
+                    revokeInviteMutation.mutate(activeInvite);
+                  }
+
+                  if (action === "Resend" || action === "Reopen") {
+                    sendInviteMutation.mutate(activeInvite);
+                  }
+
+                  setShowConfirmation(false);
                 }}
               >
-                Revoke invite
+                {action} invite
               </Button>
             </>
           }
         >
           <p>
-            Are you sure you want to revoke the invite for{" "}
-            <strong>{collaboratorToRevoke}</strong>?
+            Are you sure you want to {action.toLowerCase()} the invite for{" "}
+            <strong>{activeInvite}</strong>?
           </p>
         </Modal>
       )}

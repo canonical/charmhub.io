@@ -1,22 +1,95 @@
 import React from "react";
 import { MainTable, Button } from "@canonical/react-components";
 import { format } from "date-fns";
+import { useSetRecoilState } from "recoil";
 
-import { getCollaboratorById } from "../utils";
+import { activeInviteState, actionState } from "../atoms";
 
-import type { Collaborator } from "../types";
+import type { Collaborator, Publisher } from "../types";
 
 type Props = {
-  collaborators: Array<Collaborator>;
-  setCollaboratorToRevoke: Function;
-  setShowRevokeConfirmation: Function;
+  collaboratorsData: {
+    collaborators: Array<Collaborator>;
+    publisher: Publisher;
+  };
+  setShowConfirmation: Function;
 };
 
-function CollaboratorsTable({
-  collaborators,
-  setCollaboratorToRevoke,
-  setShowRevokeConfirmation,
-}: Props) {
+function CollaboratorsTable({ collaboratorsData, setShowConfirmation }: Props) {
+  const setActiveInvite = useSetRecoilState(activeInviteState);
+  const setAction = useSetRecoilState(actionState);
+
+  const publisherRow = {
+    columns: [
+      {
+        content: (
+          <>
+            {collaboratorsData.publisher["display-name"]}&nbsp;&nbsp;
+            <div className="p-status-label--information">Owner</div>
+          </>
+        ),
+        className: "u-truncate",
+      },
+      {
+        content: collaboratorsData.publisher.email,
+        className: "u-truncate",
+      },
+      {
+        content: "",
+      },
+      {
+        content: "",
+      },
+      {
+        content: "",
+      },
+    ],
+  };
+
+  const collaboratorRows = collaboratorsData.collaborators.map(
+    (collaborator: Collaborator) => {
+      return {
+        columns: [
+          {
+            content: collaborator.account["display-name"],
+            className: "u-truncate",
+          },
+          {
+            content: collaborator.account.email,
+            className: "u-truncate",
+          },
+          {
+            content: collaborator["created-by"]["display-name"],
+            className: "u-truncate",
+          },
+          {
+            content: format(new Date(collaborator["created-at"]), "dd/MM/yyyy"),
+          },
+          {
+            className: "u-align--right",
+            content: (
+              <>
+                <Button
+                  type="button"
+                  dense
+                  onClick={() => {
+                    setAction("Revoke");
+                    setShowConfirmation(true);
+                    setActiveInvite(collaborator?.account?.email);
+                  }}
+                >
+                  Revoke
+                </Button>
+              </>
+            ),
+          },
+        ],
+      };
+    }
+  );
+
+  const tableRows = [publisherRow, ...collaboratorRows];
+
   return (
     <MainTable
       responsive
@@ -41,49 +114,9 @@ function CollaboratorsTable({
         {
           content: "",
           heading: "Actions",
-          style: { width: "140px" },
         },
       ]}
-      rows={collaborators.map((collaborator: Collaborator) => {
-        return {
-          columns: [
-            {
-              content: collaborator?.display_name,
-            },
-            {
-              content: collaborator?.email,
-            },
-            {
-              content: getCollaboratorById(
-                collaborators,
-                collaborator?.created_by
-              )?.display_name,
-            },
-            {
-              content: format(
-                new Date(collaborator?.accepted_at),
-                "dd/MM/yyyy"
-              ),
-            },
-            {
-              content: (
-                <Button
-                  dense
-                  type="button"
-                  className="u-no-margin--bottom"
-                  onClick={() => {
-                    setCollaboratorToRevoke(collaborator?.email);
-                    setShowRevokeConfirmation(true);
-                  }}
-                >
-                  Revoke
-                </Button>
-              ),
-              className: "u-align--right",
-            },
-          ],
-        };
-      })}
+      rows={tableRows}
     />
   );
 }

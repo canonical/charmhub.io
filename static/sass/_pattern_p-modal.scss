@@ -1,5 +1,5 @@
 @mixin p-charmhub-modal {
-  @media (min-width: 975px) {
+  @media (width >= 975px) {
     #contact-modal.p-modal .p-modal__dialog {
       max-width: 875px;
       min-width: 875px;
@@ -33,8 +33,7 @@
 
     .p-modal__dialog {
       @media screen and (min-width: $breakpoint-large) {
-        padding-inline-end: 1rem;
-        padding-inline-start: 2rem;
+        padding-inline: 2rem 1rem;
       }
     }
 
