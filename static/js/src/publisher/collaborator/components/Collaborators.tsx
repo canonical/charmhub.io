@@ -91,7 +91,7 @@ function Collaborators() {
   };
 
   return (
-    <div className="l-application">
+    <div className="l-application collaboration-ui">
       <div className="l-main">
         <Strip shallow>
           {showRevokeSuccess && (
@@ -118,7 +118,7 @@ function Collaborators() {
             </Notification>
           )}
 
-          {/* <Button
+          <Button
             appearance="positive"
             hasIcon
             onClick={() => {
@@ -127,7 +127,7 @@ function Collaborators() {
           >
             <i className="p-icon--plus is-light"></i>
             <span>Add new collaborator</span>
-          </Button> */}
+          </Button>
 
           <Accordion
             expanded="collaborators-table"
