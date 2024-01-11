@@ -190,8 +190,13 @@ function Collaborators() {
               <Notification severity="caution" title="Role">
                 A collaborator is a store user that can have equal rights over a
                 particular package as the package publisher.
-                {inviteLink}
               </Notification>
+              {inviteLink && (
+                <Notification severity="positive">
+                  An invite has been created.{" "}
+                  <a href={inviteLink}>Accept invite</a>.
+                </Notification>
+              )}
               <Input
                 type="email"
                 id="collaborator-email"
