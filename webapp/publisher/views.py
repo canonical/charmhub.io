@@ -174,12 +174,12 @@ def revoke_invite(entity_name):
         publisher_api.revoke_invites(
             session["account-auth"], entity_name, collaborator
         )
-        response = "success"
+        response = True
     except StoreApiResponseErrorList:
-        response = "error"
+        response = False
         pass
 
-    return jsonify({"status": response})
+    return jsonify({"success": response})
 
 
 @publisher.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/listing')

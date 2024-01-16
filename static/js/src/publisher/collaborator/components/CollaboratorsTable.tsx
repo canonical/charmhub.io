@@ -8,13 +8,11 @@ import type { Collaborator } from "../types";
 
 type Props = {
   collaborators: Array<Collaborator>;
-  setCollaboratorToRevoke: Function;
   setShowRevokeConfirmation: Function;
 };
 
 function CollaboratorsTable({
   collaborators,
-  setCollaboratorToRevoke,
   setShowRevokeConfirmation,
 }: Props) {
   return (
@@ -72,7 +70,6 @@ function CollaboratorsTable({
                   type="button"
                   className="u-no-margin--bottom"
                   onClick={() => {
-                    setCollaboratorToRevoke(collaborator?.email);
                     setShowRevokeConfirmation(true);
                   }}
                 >

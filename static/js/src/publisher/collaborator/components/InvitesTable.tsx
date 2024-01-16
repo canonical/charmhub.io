@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { MainTable } from "@canonical/react-components";
 import { isAfter } from "date-fns";
+import { useSetRecoilState } from "recoil";
+
+import { inviteToRevokeState } from "../atoms";
 
 import { buildInviteTableRows } from "../utils";
 
@@ -8,16 +11,12 @@ import type { Invite, Collaborator } from "../types";
 
 type Props = {
   invites: Array<Invite>;
-  collaborators: Array<Collaborator>;
-  setCollaboratorToRevoke: Function;
   setShowRevokeConfirmation: Function;
   inviteCollaborator: Function;
 };
 
 function InvitesTable({
   invites,
-  collaborators,
-  setCollaboratorToRevoke,
   setShowRevokeConfirmation,
   inviteCollaborator,
 }: Props) {
@@ -28,6 +27,8 @@ function InvitesTable({
   const [expiredInviteRows, setExpiredInviteRows] = useState<any[]>([]);
   const [revokedInviteRows, setRevokedInviteRows] = useState<any[]>([]);
   const [tableRows, setTableRows] = useState<any[]>([]);
+
+  const setInviteToRevoke = useSetRecoilState(inviteToRevokeState);
 
   const isAccepted = (invite: Invite) => invite?.accepted_at !== null;
   const isRevoked = (invite: Invite) => invite?.revoked_at !== null;
@@ -58,34 +59,31 @@ function InvitesTable({
   useEffect(() => {
     setPendingInviteRows(
       buildInviteTableRows(
-        collaborators,
         pendingInvites,
         "Pending",
         setShowRevokeConfirmation,
-        setCollaboratorToRevoke,
-        inviteCollaborator
+        inviteCollaborator,
+        setInviteToRevoke
       )
     );
 
     setExpiredInviteRows(
       buildInviteTableRows(
-        collaborators,
         expiredInvites,
         "Expired",
         setShowRevokeConfirmation,
-        setCollaboratorToRevoke,
-        inviteCollaborator
+        inviteCollaborator,
+        setInviteToRevoke
       )
     );
 
     setRevokedInviteRows(
       buildInviteTableRows(
-        collaborators,
         revokedInvites,
         "Revoked",
         setShowRevokeConfirmation,
-        setCollaboratorToRevoke,
-        inviteCollaborator
+        inviteCollaborator,
+        setInviteToRevoke
       )
     );
   }, [pendingInvites, expiredInvites, revokedInvites]);
