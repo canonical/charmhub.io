@@ -42,10 +42,6 @@ export function useSendInviteMutation(
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error("There was a problem sending invites");
-      }
-
       const inviteData = await response.json();
 
       if (!inviteData.success) {
@@ -112,17 +108,14 @@ export function useRevokeInviteMutation(
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error("There was a problem revoking this invite");
-      }
-
       const responseData = await response.json();
 
-      if (responseData.success) {
-        setShowRevokeSuccess(true);
-      } else {
+      if (!responseData.success) {
         setShowRevokeError(true);
+        throw new Error(responseData.message);
       }
+
+      setShowRevokeSuccess(true);
     },
     {
       onMutate: async (inviteEmail: string) => {
