@@ -1,34 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useParams } from "react-router-dom";
 import { MainTable } from "@canonical/react-components";
 import { isAfter } from "date-fns";
-import { useSetRecoilState } from "recoil";
+import { useQueryClient } from "react-query";
+import { useRecoilState } from "recoil";
 
+import { useSendInviteMutation } from "../hooks";
 import { inviteToRevokeState } from "../atoms";
 
 import { buildInviteTableRows } from "../utils";
 
-import type { Invite, Collaborator } from "../types";
+import type { Invite } from "../types";
 
 type Props = {
   invites: Array<Invite>;
   setShowRevokeConfirmation: Function;
   inviteCollaborator: Function;
+  setInviteLink: Function;
 };
 
 function InvitesTable({
   invites,
   setShowRevokeConfirmation,
-  inviteCollaborator,
+  setInviteLink,
 }: Props) {
-  const [pendingInvites, setPendingInvites] = useState<Invite[]>([]);
-  const [expiredInvites, setExpiredInvites] = useState<Invite[]>([]);
-  const [revokedInvites, setRevokedInvites] = useState<Invite[]>([]);
-  const [pendingInviteRows, setPendingInviteRows] = useState<any[]>([]);
-  const [expiredInviteRows, setExpiredInviteRows] = useState<any[]>([]);
-  const [revokedInviteRows, setRevokedInviteRows] = useState<any[]>([]);
-  const [tableRows, setTableRows] = useState<any[]>([]);
+  const { packageName } = useParams();
+  const queryClient = useQueryClient();
 
-  const setInviteToRevoke = useSetRecoilState(inviteToRevokeState);
+  const [inviteToRevoke, setInviteToRevoke] =
+    useRecoilState(inviteToRevokeState);
+
+  const sendInviteMutation = useSendInviteMutation(
+    packageName,
+    inviteToRevoke,
+    window.CSRF_TOKEN,
+    queryClient,
+    setInviteLink
+  );
 
   const isAccepted = (invite: Invite) => invite?.accepted_at !== null;
   const isRevoked = (invite: Invite) => invite?.revoked_at !== null;
@@ -36,63 +44,41 @@ function InvitesTable({
     invite?.expires_at !== null &&
     isAfter(new Date(), new Date(invite?.expires_at));
 
-  useEffect(() => {
-    setPendingInvites(
-      invites.filter((invite) => {
-        return !isAccepted(invite) && !isRevoked(invite) && !isExpired(invite);
-      })
-    );
+  const pendingInvites = invites.filter((invite) => {
+    return !isAccepted(invite) && !isRevoked(invite) && !isExpired(invite);
+  });
 
-    setRevokedInvites(
-      invites.filter((invite) => {
-        return isRevoked(invite) && !isExpired(invite);
-      })
-    );
+  const expiredInvites = invites.filter((invite) => {
+    return isExpired(invite);
+  });
 
-    setExpiredInvites(
-      invites.filter((invite) => {
-        return isExpired(invite);
-      })
-    );
-  }, [invites]);
+  const revokedInvites = invites.filter((invite) => {
+    return isRevoked(invite) && !isExpired(invite);
+  });
 
-  useEffect(() => {
-    setPendingInviteRows(
-      buildInviteTableRows(
-        pendingInvites,
-        "Pending",
-        setShowRevokeConfirmation,
-        inviteCollaborator,
-        setInviteToRevoke
-      )
-    );
+  const pendingInviteRows = buildInviteTableRows(
+    pendingInvites,
+    "Pending",
+    setShowRevokeConfirmation,
+    setInviteToRevoke,
+    sendInviteMutation
+  );
 
-    setExpiredInviteRows(
-      buildInviteTableRows(
-        expiredInvites,
-        "Expired",
-        setShowRevokeConfirmation,
-        inviteCollaborator,
-        setInviteToRevoke
-      )
-    );
+  const expiredInviteRows = buildInviteTableRows(
+    expiredInvites,
+    "Expired",
+    setShowRevokeConfirmation,
+    setInviteToRevoke,
+    sendInviteMutation
+  );
 
-    setRevokedInviteRows(
-      buildInviteTableRows(
-        revokedInvites,
-        "Revoked",
-        setShowRevokeConfirmation,
-        inviteCollaborator,
-        setInviteToRevoke
-      )
-    );
-  }, [pendingInvites, expiredInvites, revokedInvites]);
-
-  useEffect(() => {
-    setTableRows(
-      pendingInviteRows.concat(expiredInviteRows, revokedInviteRows)
-    );
-  }, [pendingInviteRows, expiredInviteRows, revokedInviteRows]);
+  const revokedInviteRows = buildInviteTableRows(
+    revokedInvites,
+    "Revoked",
+    setShowRevokeConfirmation,
+    setInviteToRevoke,
+    sendInviteMutation
+  );
 
   return (
     <MainTable
@@ -119,7 +105,7 @@ function InvitesTable({
           heading: "Actions",
         },
       ]}
-      rows={tableRows}
+      rows={pendingInviteRows.concat(expiredInviteRows, revokedInviteRows)}
     />
   );
 }
