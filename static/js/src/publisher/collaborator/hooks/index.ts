@@ -47,9 +47,14 @@ export function useSendInviteMutation(
       }
 
       const inviteData = await response.json();
+
+      if (!inviteData.success) {
+        throw new Error(inviteData.message);
+      }
+
       // This shouldn't be necessary once emails are enabled
       setInviteLink(
-        `/${packageName}/collaboration/confirm?token=${inviteData?.result?.tokens?.[0]?.token}`
+        `/${packageName}/collaboration/confirm?token=${inviteData.data[0].token}`
       );
     },
     {

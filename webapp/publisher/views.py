@@ -121,20 +121,25 @@ def get_pending_invites(entity_name):
 )
 @login_required
 def invite_collaborators(entity_name):
-    collaborators = request.form.get("collaborators")
-
-    result = {}
+    res = {}
 
     try:
+        collaborators = request.form.get("collaborators")
         result = publisher_api.invite_collaborators(
             session["account-auth"], entity_name, [collaborators]
         )
-        response = "success"
-    except StoreApiResponseErrorList:
-        response = "error"
-        pass
+        res["success"] = True
+        res["data"] = result["tokens"]
+        response = make_response(res, 200)
+    except StoreApiResponseErrorList as error_list:
+        res["success"] = False
+        messages = [
+            f"{error.get('message', 'An error occurred')}"
+            for error in error_list.errors
+        ]
+        res["message"] = (" ").join(messages)
 
-    return jsonify({"status": response, "result": result})
+    return response
 
 
 @publisher.route(
