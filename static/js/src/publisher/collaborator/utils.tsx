@@ -17,8 +17,8 @@ function buildInviteTableRows(
   invites: Array<Invite>,
   status: "Pending" | "Expired" | "Revoked",
   setShowRevokeConfirmation: Function,
-  inviteCollaborator: Function,
-  setInviteToRevoke: Function
+  setInviteToRevoke: Function,
+  sendInviteMutation: any
 ) {
   return invites.map((invite: Invite, index) => {
     let columns: any[] = [];
@@ -71,7 +71,8 @@ function buildInviteTableRows(
                   type="button"
                   dense
                   onClick={() => {
-                    inviteCollaborator(invite?.email);
+                    setInviteToRevoke(invite.email);
+                    sendInviteMutation.mutate(invite.email);
                   }}
                 >
                   Resend
@@ -83,7 +84,8 @@ function buildInviteTableRows(
                 type="button"
                 dense
                 onClick={() => {
-                  inviteCollaborator(invite?.email);
+                  setInviteToRevoke(invite.email);
+                  sendInviteMutation.mutate(invite.email);
                 }}
               >
                 Reopen
@@ -94,7 +96,8 @@ function buildInviteTableRows(
                 type="button"
                 dense
                 onClick={() => {
-                  inviteCollaborator(invite?.email);
+                  setInviteToRevoke(invite.email);
+                  sendInviteMutation.mutate(invite.email);
                 }}
               >
                 Reopen

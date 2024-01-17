@@ -121,6 +121,7 @@ function Collaborators() {
                           invites={invites}
                           setShowRevokeConfirmation={setShowRevokeConfirmation}
                           inviteCollaborator={() => false}
+                          setInviteLink={setInviteLink}
                         />
                       )}
                   </>
