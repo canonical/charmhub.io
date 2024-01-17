@@ -9,6 +9,7 @@ from flask import (
     request,
     session,
     url_for,
+    make_response,
 )
 from flask.json import jsonify
 from webapp.config import DETAILS_VIEW_REGEX
@@ -93,10 +94,25 @@ def get_collaborators(entity_name):
 )
 @login_required
 def get_pending_invites(entity_name):
-    pending_invites = publisher_api.get_pending_invites(
-        session["account-auth"], entity_name
-    )
-    return jsonify(pending_invites)
+    res = {}
+
+    try:
+        invites = publisher_api.get_pending_invites(
+            session["account-auth"], entity_name
+        )
+        res["success"] = True
+        res["data"] = invites["invites"]
+        response = make_response(res, 200)
+    except StoreApiResponseErrorList as error_list:
+        error_messages = [
+            f"{error.get('message', 'An error occured')}"
+            for error in error_list.errors
+        ]
+        res["message"] = " ".join(error_messages)
+        res["success"] = False
+        response = make_response(res, 500)
+
+    return response
 
 
 @publisher.route(

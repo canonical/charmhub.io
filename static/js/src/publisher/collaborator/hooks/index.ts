@@ -15,7 +15,11 @@ export function useInvitesQuery(packageName: string | undefined) {
 
     const invitesData = await response.json();
 
-    return invitesData.invites;
+    if (!invitesData.success) {
+      throw new Error(invitesData.message);
+    }
+
+    return invitesData.data;
   });
 }
 
