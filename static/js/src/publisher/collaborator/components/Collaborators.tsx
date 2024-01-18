@@ -21,6 +21,8 @@ import {
 } from "../hooks";
 import { inviteToRevokeState } from "../atoms";
 
+import type { Invite } from "../types";
+
 declare global {
   interface Window {
     CSRF_TOKEN: string;
@@ -64,6 +66,26 @@ function Collaborators() {
     setShowRevokeSuccess,
     setShowRevokeError
   );
+
+  const isUnique = (newCollaboratorEmail: string | undefined) => {
+    if (!newCollaboratorEmail) {
+      return true;
+    }
+
+    if (!invites) {
+      return false;
+    }
+
+    const existingInvites = invites.filter(
+      (invite: Invite) => invite.email === newCollaboratorEmail
+    );
+
+    if (!existingInvites.length) {
+      return true;
+    }
+
+    return false;
+  };
 
   return (
     <div className="l-application collaboration-ui">
@@ -183,10 +205,21 @@ function Collaborators() {
                 ) => {
                   setNewCollaboratorEmail(e.target.value);
                 }}
+                error={
+                  !isUnique(newCollaboratorEmail)
+                    ? "There is already an invite for this email address"
+                    : ""
+                }
               />
             </div>
             <div className="panel__footer">
-              <Button type="submit" appearance="positive">
+              <Button
+                type="submit"
+                appearance="positive"
+                disabled={
+                  !newCollaboratorEmail || !isUnique(newCollaboratorEmail)
+                }
+              >
                 Add collaborator
               </Button>
             </div>
