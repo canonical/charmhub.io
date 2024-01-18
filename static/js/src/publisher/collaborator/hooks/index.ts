@@ -15,7 +15,11 @@ export function useInvitesQuery(packageName: string | undefined) {
 
     const invitesData = await response.json();
 
-    return invitesData.invites;
+    if (!invitesData.success) {
+      throw new Error(invitesData.message);
+    }
+
+    return invitesData.data;
   });
 }
 
@@ -38,14 +42,15 @@ export function useSendInviteMutation(
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error("There was a problem sending invites");
+      const inviteData = await response.json();
+
+      if (!inviteData.success) {
+        throw new Error(inviteData.message);
       }
 
-      const inviteData = await response.json();
       // This shouldn't be necessary once emails are enabled
       setInviteLink(
-        `/${packageName}/collaboration/confirm?token=${inviteData?.result?.tokens?.[0]?.token}`
+        `/${packageName}/collaboration/confirm?token=${inviteData.data[0].token}`
       );
     },
     {
@@ -103,17 +108,14 @@ export function useRevokeInviteMutation(
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error("There was a problem revoking this invite");
-      }
-
       const responseData = await response.json();
 
-      if (responseData.success) {
-        setShowRevokeSuccess(true);
-      } else {
+      if (!responseData.success) {
         setShowRevokeError(true);
+        throw new Error(responseData.message);
       }
+
+      setShowRevokeSuccess(true);
     },
     {
       onMutate: async (inviteEmail: string) => {

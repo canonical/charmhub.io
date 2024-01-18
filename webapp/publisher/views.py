@@ -9,6 +9,7 @@ from flask import (
     request,
     session,
     url_for,
+    make_response,
 )
 from flask.json import jsonify
 from webapp.config import DETAILS_VIEW_REGEX
@@ -93,10 +94,25 @@ def get_collaborators(entity_name):
 )
 @login_required
 def get_pending_invites(entity_name):
-    pending_invites = publisher_api.get_pending_invites(
-        session["account-auth"], entity_name
-    )
-    return jsonify(pending_invites)
+    res = {}
+
+    try:
+        invites = publisher_api.get_pending_invites(
+            session["account-auth"], entity_name
+        )
+        res["success"] = True
+        res["data"] = invites["invites"]
+        response = make_response(res, 200)
+    except StoreApiResponseErrorList as error_list:
+        error_messages = [
+            f"{error.get('message', 'An error occured')}"
+            for error in error_list.errors
+        ]
+        res["message"] = " ".join(error_messages)
+        res["success"] = False
+        response = make_response(res, 500)
+
+    return response
 
 
 @publisher.route(
@@ -105,20 +121,57 @@ def get_pending_invites(entity_name):
 )
 @login_required
 def invite_collaborators(entity_name):
-    collaborators = request.form.get("collaborators")
-
-    result = {}
+    res = {}
 
     try:
+        collaborators = request.form.get("collaborators")
         result = publisher_api.invite_collaborators(
             session["account-auth"], entity_name, [collaborators]
         )
-        response = "success"
-    except StoreApiResponseErrorList:
-        response = "error"
-        pass
+        res["success"] = True
+        res["data"] = result["tokens"]
+        return make_response(res, 200)
+    except StoreApiResponseErrorList as error_list:
+        res["success"] = False
+        messages = [
+            f"{error.get('message', 'An error occurred')}"
+            for error in error_list.errors
+        ]
+        res["message"] = (" ").join(messages)
+    except Exception:
+        res["success"] = False
+        res["message"] = "An error occurred"
 
-    return jsonify({"status": response, "result": result})
+    return make_response(res, 500)
+
+
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites/revoke',
+    methods=["POST"],
+)
+@login_required
+def revoke_invite(entity_name):
+    res = {}
+
+    try:
+        collaborator = request.form.get("collaborator")
+        publisher_api.revoke_invites(
+            session["account-auth"], entity_name, collaborator
+        )
+        res["success"] = True
+        return make_response(res, 200)
+    except StoreApiResponseErrorList as error_list:
+        res["success"] = False
+        messages = [
+            f"{error.get('message', 'An error occurred')}"
+            for error in error_list.errors
+        ]
+        res["message"] = (" ").join(messages)
+    except Exception:
+        res["success"] = False
+        res["message"] = "An error occurred"
+
+    return make_response(res, 500)
 
 
 @publisher.route(
@@ -161,25 +214,6 @@ def reject_invite(entity_name):
         pass
 
     return jsonify({"status": response, "result": result})
-
-
-@publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites/revoke',
-    methods=["POST"],
-)
-@login_required
-def revoke_invite(entity_name):
-    collaborator = request.form.get("collaborator")
-    try:
-        publisher_api.revoke_invites(
-            session["account-auth"], entity_name, collaborator
-        )
-        response = True
-    except StoreApiResponseErrorList:
-        response = False
-        pass
-
-    return jsonify({"success": response})
 
 
 @publisher.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/listing')
