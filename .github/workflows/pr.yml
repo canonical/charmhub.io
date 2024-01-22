@@ -102,7 +102,9 @@ jobs:
         run: sudo pip3 install coverage
 
       - name: Install node dependencies
-        run: dotrun install --immutable
+        run: |
+          sudo chmod -R 777 .
+          dotrun install --immutable
 
       - name: Build resources
         run: yarn build
