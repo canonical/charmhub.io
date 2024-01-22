@@ -14,18 +14,17 @@ function getCollaboratorById(
 }
 
 function buildInviteTableRows(
-  collaborators: Array<Collaborator>,
   invites: Array<Invite>,
   status: "Pending" | "Expired" | "Revoked",
-  setCollaboratorToRevoke: Function,
   setShowRevokeConfirmation: Function,
-  inviteCollaborator: Function
+  setInviteToRevoke: Function,
+  sendInviteMutation: any
 ) {
   return invites.map((invite: Invite, index) => {
     let columns: any[] = [];
     let statusColumn;
 
-    if (invites.length > 1 && index === 0) {
+    if (invites.length > 0 && index === 0) {
       statusColumn = {
         content: (
           <>
@@ -45,8 +44,7 @@ function buildInviteTableRows(
         content: invite?.email,
       },
       {
-        content: getCollaboratorById(collaborators, invite?.created_by)
-          ?.display_name,
+        content: invite?.created_by,
       },
       {
         content:
@@ -63,8 +61,8 @@ function buildInviteTableRows(
                   type="button"
                   dense
                   onClick={() => {
-                    setCollaboratorToRevoke(invite?.email);
                     setShowRevokeConfirmation(true);
+                    setInviteToRevoke(invite.email);
                   }}
                 >
                   Revoke
@@ -73,7 +71,8 @@ function buildInviteTableRows(
                   type="button"
                   dense
                   onClick={() => {
-                    inviteCollaborator(invite?.email);
+                    setInviteToRevoke(invite.email);
+                    sendInviteMutation.mutate(invite.email);
                   }}
                 >
                   Resend
@@ -85,7 +84,8 @@ function buildInviteTableRows(
                 type="button"
                 dense
                 onClick={() => {
-                  inviteCollaborator(invite?.email);
+                  setInviteToRevoke(invite.email);
+                  sendInviteMutation.mutate(invite.email);
                 }}
               >
                 Reopen
@@ -96,7 +96,8 @@ function buildInviteTableRows(
                 type="button"
                 dense
                 onClick={() => {
-                  inviteCollaborator(invite?.email);
+                  setInviteToRevoke(invite.email);
+                  sendInviteMutation.mutate(invite.email);
                 }}
               >
                 Reopen

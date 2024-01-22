@@ -531,3 +531,8 @@ h3 {
 .p-search-box .p-search-box__input:placeholder-shown ~ .p-search-box__reset {
   display: none !important;
 }
+
+.collaboration-ui .l-aside {
+  height: 100vh;
+  top: 0;
+}

@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Strip, Button } from "@canonical/react-components";
 
 function useQuery() {
@@ -8,7 +8,7 @@ function useQuery() {
 }
 
 function InviteConfirmation() {
-  const packageName = window?.PACKAGE_NAME;
+  const { packageName } = useParams();
   let query: { get: Function } = useQuery();
 
   const acceptInvite = () => {
