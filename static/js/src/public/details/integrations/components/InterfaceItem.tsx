@@ -8,9 +8,9 @@ import { useQuery } from "react-query";
 
 import { Row, Col, Spinner, Icon } from "@canonical/react-components";
 
-import CharmCard from "../../../../shared/components/CharmCard";
-
 import { filterChipsSelector, filterState } from "../state";
+
+import { IntegrationCard } from "@canonical/store-components";
 
 interface InterfaceItemProps {
   interfaceType: string;
@@ -24,7 +24,7 @@ const getCharms = async (
   charmName: string
 ): Promise<ICharm[]> => {
   const resp = await fetch(
-    `/packages.json?${
+    `/beta/store.json?${
       interfaceType === "provides" ? "requires" : "provides"
     }=${interfaceName}`
   );
@@ -35,15 +35,15 @@ const getCharms = async (
 const filterMap = (charm: ICharm, heading: string) => {
   switch (heading) {
     case "Platform":
-      return charm.store_front["deployable-on"][0] === "vm"
+      return charm.package["platforms"][0] === "vm"
         ? "Linux"
         : "Kubernetes";
     case "Stability":
-      return charm["default-release"].channel.risk;
+      return charm.package["channel"]["risk"];
     case "Author":
-      return charm.result.publisher["display-name"];
+      return charm.publisher["display_name"];
     case "Charm":
-      return charm.store_front["display-name"];
+      return charm.package["display_name"];
     default:
       return "";
   }
@@ -157,8 +157,12 @@ export const InterfaceItem = ({
           </p>
           <Row>
             {charms.map((charm: ICharm) => (
-              <Col size={3} key={charm.name}>
-                <CharmCard charm={charm} />
+              <Col
+              size={3}
+              style={{ marginBottom: "1.5rem" }}
+              key={charm.package["display_name"]}
+              >
+                <IntegrationCard data={charm} />
               </Col>
             ))}
           </Row>
