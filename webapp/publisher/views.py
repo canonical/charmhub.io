@@ -156,7 +156,7 @@ def revoke_invite(entity_name):
     try:
         collaborator = request.form.get("collaborator")
         publisher_api.revoke_invites(
-            session["account-auth"], entity_name, collaborator
+            session["account-auth"], entity_name, [collaborator]
         )
         res["success"] = True
         return make_response(res, 200)
