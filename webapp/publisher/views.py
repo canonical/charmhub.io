@@ -155,11 +155,18 @@ def revoke_invite(entity_name):
 
     try:
         collaborator = request.form.get("collaborator")
-        publisher_api.revoke_invites(
+        response = publisher_api.revoke_invites(
             session["account-auth"], entity_name, [collaborator]
         )
-        res["success"] = True
-        return make_response(res, 200)
+
+        if response.status_code == 204:
+            res["success"] = True
+            return make_response(res, 200)
+        else:
+            res["success"] = False
+            res["message"] = "An error occurred"
+            return make_response(res, 500)
+
     except StoreApiResponseErrorList as error_list:
         res["success"] = False
         messages = [
