@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@canonical/react-components";
-import { format } from "date-fns";
+import { format, isAfter } from "date-fns";
 
 import type { Collaborator, Invite } from "./types";
 
@@ -120,4 +120,20 @@ function buildInviteTableRows(
   });
 }
 
-export { getCollaboratorById, buildInviteTableRows };
+const isAccepted = (invite: Invite) => invite?.accepted_at !== null;
+const isRevoked = (invite: Invite) => invite?.revoked_at !== null;
+const isExpired = (invite: Invite) =>
+  invite?.expires_at !== null &&
+  isAfter(new Date(), new Date(invite?.expires_at));
+const isPending = (invite: Invite) => {
+  return !isAccepted(invite) && !isRevoked(invite) && !isExpired(invite);
+};
+
+export {
+  getCollaboratorById,
+  buildInviteTableRows,
+  isAccepted,
+  isRevoked,
+  isExpired,
+  isPending,
+};
