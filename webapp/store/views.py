@@ -29,7 +29,7 @@ publisher_api = CharmPublisher(talisker.requests.get_session())
 
 
 @store.route("/packages.json")
-def get_packages():
+def (get_package)s():
     query = request.args.get("q", default=None, type=str)
     provides = request.args.get("provides", default=None, type=str)
     requires = request.args.get("requires", default=None, type=str)
@@ -693,10 +693,10 @@ def entity_embedded_card(entity_name):
     try:
         package = get_package(entity_name, channel_request, FIELDS)
 
-        package["default-release"]["channel"][
-            "released-at"
-        ] = logic.convert_date(
-            package["default-release"]["channel"]["released-at"]
+        package["default-release"]["channel"]["released-at"] = (
+            logic.convert_date(
+                package["default-release"]["channel"]["released-at"]
+            )
         )
 
         button = request.args.get("button")
@@ -736,10 +736,10 @@ def entity_embedded_interface_card(entity_name):
     try:
         package = get_package(entity_name, channel_request, FIELDS)
 
-        package["default-release"]["channel"][
-            "released-at"
-        ] = logic.convert_date(
-            package["default-release"]["channel"]["released-at"]
+        package["default-release"]["channel"]["released-at"] = (
+            logic.convert_date(
+                package["default-release"]["channel"]["released-at"]
+            )
         )
 
         libraries = logic.process_libraries(
