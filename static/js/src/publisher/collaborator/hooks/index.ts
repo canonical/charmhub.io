@@ -3,6 +3,26 @@ import { sub, add } from "date-fns";
 
 import type { Invite } from "../types";
 
+export function useCollaboratorsQuery(packageName: string | undefined) {
+  return useQuery("collaboratorsData", async () => {
+    const response = await fetch(`/${packageName}/collaborators`, {
+      cache: "no-cache",
+    });
+
+    if (!response.ok) {
+      throw new Error("There was a problem fetching collaborators");
+    }
+
+    const collaboratorsData = await response.json();
+
+    if (!collaboratorsData.success) {
+      throw new Error(collaboratorsData.message);
+    }
+
+    return collaboratorsData.data;
+  });
+}
+
 export function useInvitesQuery(packageName: string | undefined) {
   return useQuery("invitesData", async () => {
     const response = await fetch(`/${packageName}/invites`, {
