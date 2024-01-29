@@ -180,6 +180,7 @@ function Collaborators() {
             onSubmit={(e) => {
               e.preventDefault();
               sendInviteMutation.mutate(newCollaboratorEmail);
+              setNewCollaboratorEmail("");
             }}
           >
             <div className="panel__content">
