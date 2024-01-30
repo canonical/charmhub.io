@@ -78,6 +78,81 @@ def collaboration(entity_name, path):
     return render_template("publisher/collaboration.html", **context)
 
 
+@publisher.route("/accept-invite")
+@login_required
+def accept_invite():
+    return render_template("publisher/accept-invite.html")
+
+
+@publisher.route("/accept-invite", methods=["POST"])
+@login_required
+def accept_post_invite():
+    res = {}
+
+    try:
+        token = request.form.get("token")
+        package = request.form.get("package")
+        response = publisher_api.accept_invite(
+            session["account-auth"], package, token
+        )
+
+        if response.status_code == 204:
+            res["success"] = True
+            return make_response(res, 200)
+        else:
+            res["success"] = False
+            res["message"] = "An error occured"
+            return make_response(res, 500)
+
+    except StoreApiResponseErrorList as error_list:
+        res["success"] = False
+        error_messages = [
+            f"{error.get('message', 'An error occured')}"
+            for error in error_list.errors
+        ]
+        res["message"] = " ".join(error_messages)
+    except Exception:
+        res["success"] = False
+        res["message"] = "An error occured"
+
+    return make_response(res, 500)
+
+
+@publisher.route("/reject-invite", methods=["POST"])
+@login_required
+def reject_post_invite():
+    res = {}
+
+    try:
+        token = request.form.get("token")
+        package = request.form.get("package")
+        response = publisher_api.reject_invite(
+            session["account-auth"], package, token
+        )
+
+        if response.status_code == 204:
+            res["success"] = True
+            return make_response(res, 200)
+        else:
+            res["success"] = False
+            res["message"] = "An error occured"
+            return make_response(res, 200)
+
+    except StoreApiResponseErrorList as error_list:
+        res["success"] = False
+        error_messages = [
+            f"{error.get('message', 'An error occured')}"
+            for error in error_list.errors
+        ]
+        res["message"] = " ".join(error_messages)
+        response = make_response(res, 500)
+    except Exception:
+        res["success"] = False
+        res["message"] = "An error occured"
+
+    return response
+
+
 @publisher.route(
     '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaborators',
 )
@@ -155,11 +230,18 @@ def revoke_invite(entity_name):
 
     try:
         collaborator = request.form.get("collaborator")
-        publisher_api.revoke_invites(
-            session["account-auth"], entity_name, collaborator
+        response = publisher_api.revoke_invites(
+            session["account-auth"], entity_name, [collaborator]
         )
-        res["success"] = True
-        return make_response(res, 200)
+
+        if response.status_code == 204:
+            res["success"] = True
+            return make_response(res, 200)
+        else:
+            res["success"] = False
+            res["message"] = "An error occurred"
+            return make_response(res, 500)
+
     except StoreApiResponseErrorList as error_list:
         res["success"] = False
         messages = [
@@ -172,48 +254,6 @@ def revoke_invite(entity_name):
         res["message"] = "An error occurred"
 
     return make_response(res, 500)
-
-
-@publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaboration/accept',
-    methods=["POST"],
-)
-@login_required
-def accept_invite(entity_name):
-    token = request.form.get("token")
-    result = {}
-
-    try:
-        result = publisher_api.accept_invite(
-            session["account-auth"], entity_name, token
-        )
-        response = "success"
-    except StoreApiResponseErrorList:
-        response = "error"
-        pass
-
-    return jsonify({"status": response, "result": result})
-
-
-@publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaboration/reject',
-    methods=["POST"],
-)
-@login_required
-def reject_invite(entity_name):
-    token = request.form.get("token")
-    result = {}
-
-    try:
-        result = publisher_api.reject_invite(
-            session["account-auth"], entity_name, token
-        )
-        response = "success"
-    except StoreApiResponseErrorList:
-        response = "error"
-        pass
-
-    return jsonify({"status": response, "result": result})
 
 
 @publisher.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/listing')

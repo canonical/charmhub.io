@@ -14,6 +14,8 @@ import {
 
 import InvitesTable from "./InvitesTable";
 
+import { isPending } from "../utils";
+
 import {
   useInvitesQuery,
   useSendInviteMutation,
@@ -76,9 +78,9 @@ function Collaborators() {
       return false;
     }
 
-    const existingInvites = invites.filter(
-      (invite: Invite) => invite.email === newCollaboratorEmail
-    );
+    const existingInvites = invites.filter((invite: Invite) => {
+      return invite.email === newCollaboratorEmail && isPending(invite);
+    });
 
     if (!existingInvites.length) {
       return true;
@@ -178,6 +180,7 @@ function Collaborators() {
             onSubmit={(e) => {
               e.preventDefault();
               sendInviteMutation.mutate(newCollaboratorEmail);
+              setNewCollaboratorEmail("");
             }}
           >
             <div className="panel__content">

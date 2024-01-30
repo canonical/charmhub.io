@@ -8,7 +8,12 @@ import { useRecoilState } from "recoil";
 import { useSendInviteMutation } from "../hooks";
 import { inviteToRevokeState } from "../atoms";
 
-import { buildInviteTableRows } from "../utils";
+import {
+  buildInviteTableRows,
+  isAccepted,
+  isRevoked,
+  isExpired,
+} from "../utils";
 
 import type { Invite } from "../types";
 
@@ -37,12 +42,6 @@ function InvitesTable({
     queryClient,
     setInviteLink
   );
-
-  const isAccepted = (invite: Invite) => invite?.accepted_at !== null;
-  const isRevoked = (invite: Invite) => invite?.revoked_at !== null;
-  const isExpired = (invite: Invite) =>
-    invite?.expires_at !== null &&
-    isAfter(new Date(), new Date(invite?.expires_at));
 
   const pendingInvites = invites.filter((invite) => {
     return !isAccepted(invite) && !isRevoked(invite) && !isExpired(invite);

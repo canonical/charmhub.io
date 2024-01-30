@@ -50,7 +50,7 @@ export function useSendInviteMutation(
 
       // This shouldn't be necessary once emails are enabled
       setInviteLink(
-        `/${packageName}/collaboration/confirm?token=${inviteData.data[0].token}`
+        `/accept-invite?package=${packageName}&token=${inviteData.data[0].token}`
       );
     },
     {
