@@ -241,7 +241,15 @@ function Collaborators() {
                 }
               />
             </div>
-            <div className="panel__footer">
+            <div className="panel__footer u-align--right">
+              <Button
+                type="button"
+                onClick={() => {
+                  setShowAddCollaborator(false);
+                }}
+              >
+                Cancel
+              </Button>
               <Button
                 type="submit"
                 appearance="positive"
