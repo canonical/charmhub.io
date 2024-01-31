@@ -2,16 +2,7 @@ import React from "react";
 import { Button } from "@canonical/react-components";
 import { format, isAfter } from "date-fns";
 
-import type { Collaborator, Invite } from "./types";
-
-function getCollaboratorById(
-  collaborators: Array<Collaborator>,
-  accountId: string
-) {
-  return collaborators.find(
-    (collaborator) => collaborator?.account_id === accountId
-  );
-}
+import type { Invite } from "./types";
 
 function buildInviteTableRows(
   invites: Array<Invite>,
@@ -129,11 +120,4 @@ const isPending = (invite: Invite) => {
   return !isAccepted(invite) && !isRevoked(invite) && !isExpired(invite);
 };
 
-export {
-  getCollaboratorById,
-  buildInviteTableRows,
-  isAccepted,
-  isRevoked,
-  isExpired,
-  isPending,
-};
+export { buildInviteTableRows, isAccepted, isRevoked, isExpired, isPending };

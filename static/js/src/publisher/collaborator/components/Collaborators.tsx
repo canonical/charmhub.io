@@ -12,11 +12,13 @@ import {
   Input,
 } from "@canonical/react-components";
 
+import CollaboratorsTable from "./CollaboratorsTable";
 import InvitesTable from "./InvitesTable";
 
 import { isPending } from "../utils";
 
 import {
+  useCollaboratorsQuery,
   useInvitesQuery,
   useSendInviteMutation,
   useRevokeInviteMutation,
@@ -45,6 +47,12 @@ function Collaborators() {
   const closeRevokeConfirmation = () => {
     setShowRevokeConfirmation(false);
   };
+
+  const {
+    isLoading: collaboratorsIsLoading,
+    isError: collaboratorsIsError,
+    data: collaborators,
+  } = useCollaboratorsQuery(packageName);
 
   const {
     isLoading: invitesIsLoading,
@@ -132,6 +140,24 @@ function Collaborators() {
             sections={[
               {
                 key: "collaborators-table",
+                title: `Active shares ${
+                  collaborators && collaborators.length > 0
+                    ? `(${collaborators.length})`
+                    : ""
+                }`,
+                content: (
+                  <>
+                    {!collaboratorsIsLoading &&
+                      !collaboratorsIsError &&
+                      collaborators &&
+                      collaborators.length > 0 && (
+                        <CollaboratorsTable collaborators={collaborators} />
+                      )}
+                  </>
+                ),
+              },
+              {
+                key: "invites-table",
                 title: `Invites ${
                   invites && invites.length > 0 ? `(${invites.length})` : ""
                 }`,

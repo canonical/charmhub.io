@@ -1,7 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { MainTable } from "@canonical/react-components";
-import { isAfter } from "date-fns";
 import { useQueryClient } from "react-query";
 import { useRecoilState } from "recoil";
 

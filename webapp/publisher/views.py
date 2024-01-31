@@ -158,10 +158,25 @@ def reject_post_invite():
 )
 @login_required
 def get_collaborators(entity_name):
-    collaborators = publisher_api.get_collaborators(
-        session["account-auth"], entity_name
-    )
-    return jsonify(collaborators)
+    res = {}
+
+    try:
+        collaborators = publisher_api.get_collaborators(
+            session["account-auth"], entity_name
+        )
+        res["success"] = True
+        res["data"] = collaborators["account_perms"]
+        response = make_response(res, 200)
+    except StoreApiResponseErrorList as error_list:
+        error_messages = [
+            f"{error.get('message', 'An error occured')}"
+            for error in error_list.errors
+        ]
+        res["message"] = " ".join(error_messages)
+        res["success"] = False
+        response = make_response(res, 500)
+
+    return response
 
 
 @publisher.route(
