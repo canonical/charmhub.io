@@ -476,8 +476,11 @@ h3 {
 
 .panel__content {
   flex: 1 1 0;
-  overflow: hidden;
-  overflow-y: scroll;
+}
+
+.panel__footer {
+  border-top: 1px solid $color-mid-x-light;
+  padding-top: $sph--large;
 }
 
 .l-aside__overlay {
@@ -535,4 +538,8 @@ h3 {
 .collaboration-ui .l-aside {
   height: 100vh;
   top: 0;
+}
+
+.collaboration-ui.l-application {
+  width: 100%;
 }
