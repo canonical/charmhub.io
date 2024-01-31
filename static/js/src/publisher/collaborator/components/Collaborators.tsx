@@ -189,26 +189,27 @@ function Collaborators() {
         }}
       ></div>
       <aside className={`l-aside ${!showAddCollaborator && "is-collapsed"}`}>
-        <div className="panel">
-          <div className="panel__header">
-            <h2 className="p-heading--4">Add new collaborator</h2>
-            <Button
-              appearance="base"
-              hasIcon
-              onClick={() => {
-                setShowAddCollaborator(false);
-              }}
-            >
-              <i className="p-icon--close">Close</i>
-            </Button>
-          </div>
-          <Form
-            onSubmit={(e) => {
-              e.preventDefault();
-              sendInviteMutation.mutate(newCollaboratorEmail);
-              setNewCollaboratorEmail("");
-            }}
-          >
+        <Form
+          style={{ height: "100%" }}
+          onSubmit={(e) => {
+            e.preventDefault();
+            sendInviteMutation.mutate(newCollaboratorEmail);
+            setNewCollaboratorEmail("");
+          }}
+        >
+          <div className="panel">
+            <div className="panel__header">
+              <h2 className="p-heading--4">Add new collaborator</h2>
+              <Button
+                appearance="base"
+                hasIcon
+                onClick={() => {
+                  setShowAddCollaborator(false);
+                }}
+              >
+                <i className="p-icon--close">Close</i>
+              </Button>
+            </div>
             <div className="panel__content">
               <Notification severity="caution" title="Role">
                 A collaborator is a store user that can have equal rights over a
@@ -244,6 +245,7 @@ function Collaborators() {
             <div className="panel__footer u-align--right">
               <Button
                 type="button"
+                className="u-no-margin--bottom"
                 onClick={() => {
                   setShowAddCollaborator(false);
                 }}
@@ -253,6 +255,7 @@ function Collaborators() {
               <Button
                 type="submit"
                 appearance="positive"
+                className="u-no-margin--bottom"
                 disabled={
                   !newCollaboratorEmail || !isUnique(newCollaboratorEmail)
                 }
@@ -260,8 +263,8 @@ function Collaborators() {
                 Add collaborator
               </Button>
             </div>
-          </Form>
-        </div>
+          </div>
+        </Form>
       </aside>
 
       {showRevokeConfirmation && (
