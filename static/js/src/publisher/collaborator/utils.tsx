@@ -7,9 +7,9 @@ import type { Invite } from "./types";
 function buildInviteTableRows(
   invites: Array<Invite>,
   status: "Pending" | "Expired" | "Revoked",
-  setShowRevokeConfirmation: Function,
-  setInviteToRevoke: Function,
-  sendInviteMutation: any
+  setShowConfirmation: Function,
+  setActiveInvite: Function,
+  setAction: Function
 ) {
   return invites.map((invite: Invite, index) => {
     let columns: any[] = [];
@@ -52,8 +52,9 @@ function buildInviteTableRows(
                   type="button"
                   dense
                   onClick={() => {
-                    setShowRevokeConfirmation(true);
-                    setInviteToRevoke(invite.email);
+                    setAction("Revoke");
+                    setShowConfirmation(true);
+                    setActiveInvite(invite.email);
                   }}
                 >
                   Revoke
@@ -62,8 +63,9 @@ function buildInviteTableRows(
                   type="button"
                   dense
                   onClick={() => {
-                    setInviteToRevoke(invite.email);
-                    sendInviteMutation.mutate(invite.email);
+                    setAction("Resend");
+                    setShowConfirmation(true);
+                    setActiveInvite(invite.email);
                   }}
                 >
                   Resend
@@ -75,8 +77,9 @@ function buildInviteTableRows(
                 type="button"
                 dense
                 onClick={() => {
-                  setInviteToRevoke(invite.email);
-                  sendInviteMutation.mutate(invite.email);
+                  setAction("Reopen");
+                  setShowConfirmation(true);
+                  setActiveInvite(invite.email);
                 }}
               >
                 Reopen
@@ -87,8 +90,9 @@ function buildInviteTableRows(
                 type="button"
                 dense
                 onClick={() => {
-                  setInviteToRevoke(invite.email);
-                  sendInviteMutation.mutate(invite.email);
+                  setAction("Reopen");
+                  setShowConfirmation(true);
+                  setActiveInvite(invite.email);
                 }}
               >
                 Reopen

@@ -1,8 +1,18 @@
 import { atom } from "recoil";
 
-const inviteToRevokeState = atom({
-  key: "inviteToRevoke",
+const activeInviteState = atom({
+  key: "activeInvite",
   default: "",
 });
 
-export { inviteToRevokeState };
+const actionState = atom({
+  key: "action",
+  default: "",
+});
+
+const inviteLinkState = atom({
+  key: "inviteLink",
+  default: "",
+});
+
+export { activeInviteState, actionState, inviteLinkState };

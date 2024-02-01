@@ -1,11 +1,8 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 import { MainTable } from "@canonical/react-components";
-import { useQueryClient } from "react-query";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 
-import { useSendInviteMutation } from "../hooks";
-import { inviteToRevokeState } from "../atoms";
+import { activeInviteState, actionState } from "../atoms";
 
 import {
   buildInviteTableRows,
@@ -18,29 +15,12 @@ import type { Invite } from "../types";
 
 type Props = {
   invites: Array<Invite>;
-  setShowRevokeConfirmation: Function;
-  inviteCollaborator: Function;
-  setInviteLink: Function;
+  setShowConfirmation: Function;
 };
 
-function InvitesTable({
-  invites,
-  setShowRevokeConfirmation,
-  setInviteLink,
-}: Props) {
-  const { packageName } = useParams();
-  const queryClient = useQueryClient();
-
-  const [inviteToRevoke, setInviteToRevoke] =
-    useRecoilState(inviteToRevokeState);
-
-  const sendInviteMutation = useSendInviteMutation(
-    packageName,
-    inviteToRevoke,
-    window.CSRF_TOKEN,
-    queryClient,
-    setInviteLink
-  );
+function InvitesTable({ invites, setShowConfirmation }: Props) {
+  const setActiveInvite = useSetRecoilState(activeInviteState);
+  const setAction = useSetRecoilState(actionState);
 
   const pendingInvites = invites.filter((invite) => {
     return !isAccepted(invite) && !isRevoked(invite) && !isExpired(invite);
@@ -57,25 +37,25 @@ function InvitesTable({
   const pendingInviteRows = buildInviteTableRows(
     pendingInvites,
     "Pending",
-    setShowRevokeConfirmation,
-    setInviteToRevoke,
-    sendInviteMutation
+    setShowConfirmation,
+    setActiveInvite,
+    setAction
   );
 
   const expiredInviteRows = buildInviteTableRows(
     expiredInvites,
     "Expired",
-    setShowRevokeConfirmation,
-    setInviteToRevoke,
-    sendInviteMutation
+    setShowConfirmation,
+    setActiveInvite,
+    setAction
   );
 
   const revokedInviteRows = buildInviteTableRows(
     revokedInvites,
     "Revoked",
-    setShowRevokeConfirmation,
-    setInviteToRevoke,
-    sendInviteMutation
+    setShowConfirmation,
+    setActiveInvite,
+    setAction
   );
 
   return (
