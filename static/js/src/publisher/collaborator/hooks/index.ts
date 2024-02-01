@@ -45,16 +45,18 @@ export function useInvitesQuery(packageName: string | undefined) {
 
 export function useSendInviteMutation(
   packageName: string | undefined,
-  newCollaboratorEmail: string,
   csrfToken: string,
   queryClient: any,
-  setInviteLink: Function
+  inviteToSend: string,
+  setInviteLink: Function,
+  setShowInviteSuccess: Function,
+  setShowAddCollaborator: Function
 ) {
   return useMutation(
     async () => {
       const formData = new FormData();
 
-      formData.set("collaborators", newCollaboratorEmail);
+      formData.set("collaborators", inviteToSend);
       formData.set("csrf_token", csrfToken);
 
       const response = await fetch(`/${packageName}/invite`, {
@@ -72,6 +74,9 @@ export function useSendInviteMutation(
       setInviteLink(
         `/accept-invite?package=${packageName}&token=${inviteData.data[0].token}`
       );
+
+      setShowInviteSuccess(true);
+      setShowAddCollaborator(false);
     },
     {
       onMutate: async (inviteEmail: string) => {
