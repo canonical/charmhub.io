@@ -13,7 +13,7 @@ from flask import (
 )
 from flask.json import jsonify
 from webapp.config import DETAILS_VIEW_REGEX
-from webapp.decorators import login_required
+from webapp.decorators import login_required, cached_redirect
 from webapp.helpers import get_licenses
 
 publisher = Blueprint(
@@ -80,6 +80,7 @@ def collaboration(entity_name, path):
 
 @publisher.route("/accept-invite")
 @login_required
+@cached_redirect
 def accept_invite():
     return render_template("publisher/accept-invite.html")
 
