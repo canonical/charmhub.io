@@ -27,9 +27,9 @@ sample_channel_map = [
                     "name": "ubuntu",
                 },
             ],
-            "created-at": "2021-10-21T16:45:42.323000+00:00",
+            "created-at": "2021-10-21",
             "download": {
-                "hash-sha-256": "some_randon_long_string",
+                "hash-sha-256": "qwerty",
                 "url": "some-random-url",
                 "size": 1024,
             },
@@ -67,9 +67,9 @@ sample_channel_map = [
                     "name": "ubuntu",
                 },
             ],
-            "created-at": "2022-10-21T16:45:42.323000+00:00",
+            "created-at": "2022-10-21",
             "download": {
-                "hash-sha-256": "some_randon_long_string2",
+                "hash-sha-256": "qwerty2",
                 "url": "some-random-url2",
                 "size": 1024,
             },
@@ -114,7 +114,7 @@ converted_sample_channel_map = OrderedDict(
                                     ],
                                     "created-at": "2021-10-21",
                                     "download": {
-                                        "hash-sha-256": "some_string",
+                                        "hash-sha-256": "qwerty",
                                         "size": 1024,
                                         "url": "some-random-url",
                                     },
@@ -161,7 +161,7 @@ converted_sample_channel_map = OrderedDict(
                                                 ],
                                                 "created-at": "2021-10-21",
                                                 "download": {
-                                                    "hash-sha-256": "some_str",
+                                                    "hash-sha-256": "qwerty",
                                                     "size": 1024,
                                                     "url": "some-random-url",
                                                 },
@@ -218,7 +218,7 @@ converted_sample_channel_map = OrderedDict(
                                     ],
                                     "created-at": "2022-10-21",
                                     "download": {
-                                        "hash-sha-256": "some_string2",
+                                        "hash-sha-256": "qwerty2",
                                         "size": 1024,
                                         "url": "some-random-url2",
                                     },
@@ -270,7 +270,7 @@ converted_sample_channel_map = OrderedDict(
                                                 ],
                                                 "created-at": "2022-10-21",
                                                 "download": {
-                                                    "hash-sha-256": "some_str",
+                                                    "hash-sha-256": "qwerty2",
                                                     "size": 1024,
                                                     "url": "some-random-url2",
                                                 },

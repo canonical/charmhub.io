@@ -21,7 +21,7 @@ from mock_data.mock_store_logic import (
 class TestConvertChannelMaps(TestCase):
     def test_convert_channel_map(self):
         result = convert_channel_maps(sample_channel_map)
-        self.assertEqual(result, converted_sample_channel_map)
+        self.assertDictEqual(result, converted_sample_channel_map)
 
 
 class TestAddStoreFront(TestCase):
