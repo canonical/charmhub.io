@@ -1,11 +1,16 @@
-export type Collaborator = {
+export type Publisher = {
+  "display-name": string;
   email: string;
-  display_name: string;
-  created_by: string;
-  created_at: string;
-  expires_at: string;
-  accepted_at: string;
-  account_id: string;
+  id: string;
+  username: string;
+};
+
+export type Collaborator = {
+  account: Publisher;
+  "created-at": string;
+  "created-by": Publisher;
+  permissions: Array<string>;
+  "updated-at": string | null;
 };
 
 export type Invite = {

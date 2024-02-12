@@ -2,17 +2,24 @@ import React from "react";
 import { MainTable } from "@canonical/react-components";
 import { format } from "date-fns";
 
-import type { Collaborator } from "../types";
+import type { Collaborator, Publisher } from "../types";
 
 type Props = {
-  collaborators: Array<Collaborator>;
+  collaboratorsData: {
+    collaborators: Array<Collaborator>;
+    publisher: Publisher;
+  };
 };
 
-function CollaboratorsTable({ collaborators }: Props) {
+function CollaboratorsTable({ collaboratorsData }: Props) {
   return (
     <MainTable
       responsive
       headers={[
+        {
+          content: "Users",
+          heading: "Users",
+        },
         {
           content: "Email",
           heading: "Email",
@@ -27,21 +34,29 @@ function CollaboratorsTable({ collaborators }: Props) {
           style: { width: "180px" },
         },
       ]}
-      rows={collaborators.map((collaborator: Collaborator) => {
-        return {
-          columns: [
-            {
-              content: collaborator?.account_id,
-            },
-            {
-              content: collaborator?.created_by,
-            },
-            {
-              content: format(new Date(collaborator?.created_at), "dd/MM/yyyy"),
-            },
-          ],
-        };
-      })}
+      rows={collaboratorsData.collaborators.map(
+        (collaborator: Collaborator) => {
+          return {
+            columns: [
+              {
+                content: collaborator.account["display-name"],
+              },
+              {
+                content: collaborator.account.email,
+              },
+              {
+                content: collaborator["created-by"]["display-name"],
+              },
+              {
+                content: format(
+                  new Date(collaborator["created-at"]),
+                  "dd/MM/yyyy"
+                ),
+              },
+            ],
+          };
+        }
+      )}
     />
   );
 }
