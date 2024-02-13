@@ -1,6 +1,9 @@
 import React from "react";
-import { MainTable } from "@canonical/react-components";
+import { MainTable, Button } from "@canonical/react-components";
 import { format } from "date-fns";
+import { useSetRecoilState } from "recoil";
+
+import { activeInviteState, actionState } from "../atoms";
 
 import type { Collaborator, Publisher } from "../types";
 
@@ -9,9 +12,13 @@ type Props = {
     collaborators: Array<Collaborator>;
     publisher: Publisher;
   };
+  setShowConfirmation: Function;
 };
 
-function CollaboratorsTable({ collaboratorsData }: Props) {
+function CollaboratorsTable({ collaboratorsData, setShowConfirmation }: Props) {
+  const setActiveInvite = useSetRecoilState(activeInviteState);
+  const setAction = useSetRecoilState(actionState);
+
   return (
     <MainTable
       responsive
@@ -33,6 +40,10 @@ function CollaboratorsTable({ collaboratorsData }: Props) {
           heading: "Accepted on",
           style: { width: "180px" },
         },
+        {
+          content: "",
+          heading: "Actions",
+        },
       ]}
       rows={collaboratorsData.collaborators.map(
         (collaborator: Collaborator) => {
@@ -51,6 +62,24 @@ function CollaboratorsTable({ collaboratorsData }: Props) {
                 content: format(
                   new Date(collaborator["created-at"]),
                   "dd/MM/yyyy"
+                ),
+              },
+              {
+                className: "u-align--right",
+                content: (
+                  <>
+                    <Button
+                      type="button"
+                      dense
+                      onClick={() => {
+                        setAction("Revoke");
+                        setShowConfirmation(true);
+                        setActiveInvite(collaborator?.account?.email);
+                      }}
+                    >
+                      Revoke
+                    </Button>
+                  </>
                 ),
               },
             ],
