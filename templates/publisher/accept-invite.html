@@ -8,7 +8,7 @@
     <div class="p-notification--positive u-hide" id="accept-invite-success-notification" aria-live="polite">
       <div class="p-notification__content">
         <h5 class="p-notification__title">Success</h5>
-        <p class="p-notification__message">You're invite has been accepted. <a href="/{{ request.args.get('package') }}/listing">Go to the charm listing page</a>.</p>
+        <p class="p-notification__message">You're invite has been accepted.</p>
         <button class="p-notification__close" aria-controls="accept-invite-success-notification">Close this notification</button>
       </div>
     </div>
@@ -37,9 +37,15 @@
       </div>
     </div>
 
-    <p>You have been invited to be a collaborator on the following charm: <strong>{{ request.args.get("package") }}</strong>.</p>
-    <button class="p-button--positive" id="accept-invite-button">Accept invite</button>
-    <button id="reject-invite-button">Reject invite</button>
+    <div id="invite-actions-panel">
+      <p>You have been invited to be a collaborator on the following charm: <strong>{{ request.args.get("package") }}</strong>.</p>
+      <button class="p-button--positive" id="accept-invite-button">Accept invite</button>
+      <button id="reject-invite-button">Reject invite</button>
+    </div>
+
+    <p class="u-hide" id="invite-success-panel">
+      <i class="p-icon--spinner u-animation--spin"></i>&nbsp;Redirecting to the {{ request.args.get("package") }} listing page...
+    </p>
   </div>
 </section>
 
@@ -50,6 +56,8 @@
   const acceptInviteErrorNotification = document.querySelector("#accept-invite-error-notification");
   const rejectInviteSuccessNotification = document.querySelector("#reject-invite-success-notification");
   const rejectInviteErrorNotification = document.querySelector("#reject-invite-error-notification");
+  const inviteActionsPanel = document.querySelector("#invite-actions-panel");
+  const inviteSuccessPanel = document.querySelector("#invite-success-panel");
   const closeNotificationButtons = document.querySelectorAll(".p-notification__close");
   const searchParams = new URL(window.location).searchParams;
   const token = searchParams.get("token");
@@ -70,6 +78,7 @@
       notification.classList.add("u-hide");
     });
   });
+  
 
   acceptInviteButton.addEventListener("click", () => {
     const formData = new FormData();
@@ -89,6 +98,12 @@
 
       closeAllNotifcations();
       acceptInviteSuccessNotification.classList.remove("u-hide");
+      inviteActionsPanel.classList.add("u-hide");
+      inviteSuccessPanel.classList.remove("u-hide");
+
+      setTimeout(() => {
+        window.location = `/${package}/listing`;
+      }, 3000);
     }).catch((error) => {
       closeAllNotifcations();
       acceptInviteErrorNotification.classList.remove("u-hide");
