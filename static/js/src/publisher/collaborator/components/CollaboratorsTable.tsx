@@ -19,6 +19,77 @@ function CollaboratorsTable({ collaboratorsData, setShowConfirmation }: Props) {
   const setActiveInvite = useSetRecoilState(activeInviteState);
   const setAction = useSetRecoilState(actionState);
 
+  const publisherRow = {
+    columns: [
+      {
+        content: (
+          <>
+            {collaboratorsData.publisher["display-name"]}&nbsp;&nbsp;
+            <div className="p-status-label--information">Owner</div>
+          </>
+        ),
+        className: "u-truncate",
+      },
+      {
+        content: collaboratorsData.publisher.email,
+        className: "u-truncate",
+      },
+      {
+        content: "",
+      },
+      {
+        content: "",
+      },
+      {
+        content: "",
+      },
+    ],
+  };
+
+  const collaboratorRows = collaboratorsData.collaborators.map(
+    (collaborator: Collaborator) => {
+      return {
+        columns: [
+          {
+            content: collaborator.account["display-name"],
+            className: "u-truncate",
+          },
+          {
+            content: collaborator.account.email,
+            className: "u-truncate",
+          },
+          {
+            content: collaborator["created-by"]["display-name"],
+            className: "u-truncate",
+          },
+          {
+            content: format(new Date(collaborator["created-at"]), "dd/MM/yyyy"),
+          },
+          {
+            className: "u-align--right",
+            content: (
+              <>
+                <Button
+                  type="button"
+                  dense
+                  onClick={() => {
+                    setAction("Revoke");
+                    setShowConfirmation(true);
+                    setActiveInvite(collaborator?.account?.email);
+                  }}
+                >
+                  Revoke
+                </Button>
+              </>
+            ),
+          },
+        ],
+      };
+    }
+  );
+
+  const tableRows = [publisherRow, ...collaboratorRows];
+
   return (
     <MainTable
       responsive
@@ -45,47 +116,7 @@ function CollaboratorsTable({ collaboratorsData, setShowConfirmation }: Props) {
           heading: "Actions",
         },
       ]}
-      rows={collaboratorsData.collaborators.map(
-        (collaborator: Collaborator) => {
-          return {
-            columns: [
-              {
-                content: collaborator.account["display-name"],
-              },
-              {
-                content: collaborator.account.email,
-              },
-              {
-                content: collaborator["created-by"]["display-name"],
-              },
-              {
-                content: format(
-                  new Date(collaborator["created-at"]),
-                  "dd/MM/yyyy"
-                ),
-              },
-              {
-                className: "u-align--right",
-                content: (
-                  <>
-                    <Button
-                      type="button"
-                      dense
-                      onClick={() => {
-                        setAction("Revoke");
-                        setShowConfirmation(true);
-                        setActiveInvite(collaborator?.account?.email);
-                      }}
-                    >
-                      Revoke
-                    </Button>
-                  </>
-                ),
-              },
-            ],
-          };
-        }
-      )}
+      rows={tableRows}
     />
   );
 }
