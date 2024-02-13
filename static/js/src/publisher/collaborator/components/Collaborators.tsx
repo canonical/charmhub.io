@@ -165,6 +165,7 @@ function Collaborators() {
                       collaboratorsData.collaborators.length > 0 && (
                         <CollaboratorsTable
                           collaboratorsData={collaboratorsData}
+                          setShowConfirmation={setShowConfirmation}
                         />
                       )}
                   </>
