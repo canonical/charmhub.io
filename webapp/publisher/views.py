@@ -166,7 +166,7 @@ def get_collaborators(entity_name):
             session["account-auth"], entity_name
         )
         res["success"] = True
-        res["data"] = collaborators["account_perms"]
+        res["data"] = collaborators
         response = make_response(res, 200)
     except StoreApiResponseErrorList as error_list:
         error_messages = [

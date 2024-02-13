@@ -48,7 +48,7 @@ function Collaborators() {
   const {
     isLoading: collaboratorsIsLoading,
     isError: collaboratorsIsError,
-    data: collaborators,
+    data: collaboratorsData,
   } = useCollaboratorsQuery(packageName);
 
   const {
@@ -152,17 +152,20 @@ function Collaborators() {
               {
                 key: "collaborators-table",
                 title: `Active shares ${
-                  collaborators && collaborators.length > 0
-                    ? `(${collaborators.length})`
+                  collaboratorsData &&
+                  collaboratorsData?.collaborators.length > 0
+                    ? `(${collaboratorsData.collaborators.length})`
                     : ""
                 }`,
                 content: (
                   <>
                     {!collaboratorsIsLoading &&
                       !collaboratorsIsError &&
-                      collaborators &&
-                      collaborators.length > 0 && (
-                        <CollaboratorsTable collaborators={collaborators} />
+                      collaboratorsData &&
+                      collaboratorsData.collaborators.length > 0 && (
+                        <CollaboratorsTable
+                          collaboratorsData={collaboratorsData}
+                        />
                       )}
                   </>
                 ),
