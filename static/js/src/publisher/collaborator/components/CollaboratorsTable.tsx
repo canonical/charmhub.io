@@ -40,9 +40,6 @@ function CollaboratorsTable({ collaboratorsData, setShowConfirmation }: Props) {
       {
         content: "",
       },
-      {
-        content: "",
-      },
     ],
   };
 
@@ -56,10 +53,6 @@ function CollaboratorsTable({ collaboratorsData, setShowConfirmation }: Props) {
           },
           {
             content: collaborator.account.email,
-            className: "u-truncate",
-          },
-          {
-            content: collaborator["created-by"]["display-name"],
             className: "u-truncate",
           },
           {
@@ -101,10 +94,6 @@ function CollaboratorsTable({ collaboratorsData, setShowConfirmation }: Props) {
         {
           content: "Email",
           heading: "Email",
-        },
-        {
-          content: "Added by",
-          heading: "Added by",
         },
         {
           content: "Accepted on",
