@@ -11,7 +11,7 @@
       <ul class="p-side-navigation__list">
         {% for resource in package['default-release']['resources'] %}
         <li class="p-side-navigation__item">
-          <a href="/{{ package.name }}/resources/{{ resource.name }}" class="p-side-navigation__link is-active">{{ resource.name }}</a>
+          <a href="/{{ package.name }}/resources/{{ resource.name }}" class="p-side-navigation__link" role="tab" aria-controls="{{ resource.name }}" {% if loop.index == 1 %}aria-current="page"{% endif %}>{{ resource.name }}</a>
         </li>
         {% endfor %}
       </ul>
@@ -113,6 +113,7 @@
 </div>
 
 <script src="{{ versioned_static('js/dist/details_resources.js') }}" defer></script>
+
 <script>
   function handleShowMoreRevisions(resourceType, revisions) {
     var revisionsCountContainer = document.querySelector(
@@ -184,5 +185,29 @@
     charmhub.resources.init();
     handleShowMoreRevisions("{{ resource.type }}", {{ revisions | safe }});
   });
+
+  function getActiveNavItem(navigationLinks) {
+      return Array.from(navigationLinks).find((navigationLink) => {
+        const href = navigationLink.getAttribute("href");
+        return href && window.location.href.includes(href);
+      });
+    }
+
+  function setActiveNavItem() {
+    const navigationLinks = document.querySelectorAll(".p-side-navigation__link");
+    const activeNavItem = getActiveNavItem(navigationLinks);
+
+    Array.from(navigationLinks).forEach((navigationLink) => {
+      if (navigationLink === activeNavItem) {
+        navigationLink.setAttribute("aria-current", "page");
+      } else {
+        navigationLink.removeAttribute("aria-current");
+      }
+    });
+  }
+
+  setActiveNavItem();
+
+  window.addEventListener("popstate", setActiveNavItem);
 </script>
 {% endblock %}
