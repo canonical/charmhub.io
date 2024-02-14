@@ -49,12 +49,9 @@ $color-navigation-background: #252525;
 
 // cover whole card with a link to the Store page
 .p-embedded-card-link {
-  bottom: 0;
   display: block;
-  left: 0;
+  inset: 0;
   position: fixed;
-  right: 0;
-  top: 0;
   z-index: 10;
 }
 
@@ -68,8 +65,7 @@ $color-navigation-background: #252525;
 // make max-width of the layout smaller for embedded view
 .row {
   max-width: 40rem;
-  padding-inline-end: 1.5rem;
-  padding-inline-start: 1.5rem;
+  padding-inline: 1.5rem 1.5rem;
 }
 
 .p-inline-list--stretch {

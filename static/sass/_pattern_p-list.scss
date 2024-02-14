@@ -7,8 +7,7 @@
       column-gap: $spv--large;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      padding-block-end: $spv--small;
-      padding-block-start: $spv--small;
+      padding-block: $spv--small $spv--small;
       position: relative;
 
       &:not(:last-child)::after {
@@ -45,8 +44,7 @@
   // Overide the default vanilla padding for p-list--divided
   .p-list--divided.has-padding {
     .p-list__item {
-      padding-block-end: $spv--small;
-      padding-block-start: $spv--small;
+      padding-block: $spv--small $spv--small;
     }
   }
 
@@ -64,7 +62,7 @@
       display: flex;
       justify-content: flex-end;
 
-      @media screen and (max-width: 1055px) {
+      @media screen and (width <= 1055px) {
         justify-content: flex-start;
         margin-block-end: 0.5rem;
 
@@ -75,7 +73,7 @@
       }
     }
 
-    @media screen and (max-width: 1055px) {
+    @media screen and (width <= 1055px) {
       flex-direction: column-reverse;
     }
 
@@ -90,7 +88,7 @@
   }
 
   .p-inline-list.has-vertical-separator {
-    @media screen and (min-width: $breakpoint-small) and (max-width: 1055px) {
+    @media screen and (min-width: $breakpoint-small) and (width <= 1055px) {
       margin-inline-start: -$spv--large;
     }
 
@@ -141,7 +139,7 @@
     .p-inline-list__item:first-child {
       width: 70%;
 
-      @media screen and (min-width: $breakpoint-small) and (max-width: 985px) {
+      @media screen and (min-width: $breakpoint-small) and (width <= 985px) {
         width: 60%;
       }
     }

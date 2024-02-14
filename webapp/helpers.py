@@ -6,7 +6,7 @@ from flask import request
 from ruamel.yaml import YAML
 from slugify import slugify
 from talisker import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 import mistune
 from canonicalwebteam.discourse import DiscourseAPI
 
@@ -199,3 +199,57 @@ def schedule_banner(start_date: str, end_date: str):
 def markdown_to_html(markdown_text):
     markdown = mistune.create_markdown(renderer=mistune.HTMLRenderer())
     return markdown(markdown_text)
+
+
+def param_redirect_capture(req, resp):
+    """
+    Functions that captures params and sets a cookie based on a match
+    with a predefined list.
+    """
+    # Signatures to capture in a cookie
+    param_signatures = [
+        {"endpoint": "/accept-invite", "params": ["package", "token"]}
+    ]
+    path = req.path
+    params = req.args
+
+    for item in param_signatures:
+        # If the endpoint and params match a param_signature
+        if item["endpoint"] == path and set(params).issubset(item["params"]):
+            param_values = {}
+            for param in item["params"]:
+                param_values[param] = params[param]
+            # Set the cookie
+            resp.set_cookie(
+                "param_redirect",
+                json.dumps(
+                    {"endpoint": item["endpoint"], "params": param_values}
+                ),
+                # Set expiration for 10 days in the future
+                expires=datetime.now() + timedelta(days=10),
+            )
+
+    return resp
+
+
+def param_redirect_exec(req, make_response, redirect):
+    """
+    Function that returns a response, redirecting based on
+    a matched cookie
+    """
+    # Get cookie data
+    encoded_redirect_data = req.cookies.get("param_redirect")
+
+    if encoded_redirect_data:
+        redirect_data = json.loads(encoded_redirect_data)
+        # Only redirect if the current path matches the redirect endpoint
+        if req.path == redirect_data["endpoint"]:
+            params = []
+            for key, value in redirect_data["params"].items():
+                params.append(f"{key}={value}")
+            response = make_response(
+                redirect(f'{redirect_data["endpoint"]}?{"&".join(params)}')
+            )
+            response.set_cookie("param_redirect", "", expires=0)
+            return response
+    return None

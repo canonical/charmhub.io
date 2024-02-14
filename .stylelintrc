@@ -6,7 +6,6 @@
     "color-function-notation": "legacy",
     "alpha-value-notation": "number",
     "selector-class-pattern": null,
-    "selector-max-empty-lines": 1,
     "no-invalid-position-at-import-rule": null,
     "scss/at-extend-no-missing-placeholder": null,
     "scss/percent-placeholder-pattern": null,

@@ -1,20 +1,19 @@
 export interface ICharm {
-  name: string;
-  store_front: {
-    icons: string[];
-    "display-name": string;
-    "deployable-on": string[];
-  };
-  result: {
-    publisher: {
-      "display-name": string;
-    };
-  };
-  "default-release": {
+  package: {
+    description: string;
+    display_name: string;
+    icon_url?: string;
+    name: string;
+    platforms: Array<string>;
     channel: {
-      risk: string;
       name: string;
+      risk: string;
       track: string;
     };
   };
-}
+  publisher: {
+    display_name: string;
+    name: string;
+    validation?: string;
+  };
+};

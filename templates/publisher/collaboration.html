@@ -10,7 +10,6 @@
   <main id="root"></main>
 
   <script>
-    window.PACKAGE_NAME = "{{ package.name }}";
     window.CSRF_TOKEN = "{{ csrf_token() }}";
   </script>
   <script src="{{ versioned_static('js/dist/collaborator.js') }}"></script>

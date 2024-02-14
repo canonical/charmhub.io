@@ -1,31 +1,21 @@
 import React from "react";
 import { Button } from "@canonical/react-components";
-import { format } from "date-fns";
+import { format, isAfter } from "date-fns";
 
-import type { Collaborator, Invite } from "./types";
-
-function getCollaboratorById(
-  collaborators: Array<Collaborator>,
-  accountId: string
-) {
-  return collaborators.find(
-    (collaborator) => collaborator?.account_id === accountId
-  );
-}
+import type { Invite } from "./types";
 
 function buildInviteTableRows(
-  collaborators: Array<Collaborator>,
   invites: Array<Invite>,
   status: "Pending" | "Expired" | "Revoked",
-  setCollaboratorToRevoke: Function,
-  setShowRevokeConfirmation: Function,
-  inviteCollaborator: Function
+  setShowConfirmation: Function,
+  setActiveInvite: Function,
+  setAction: Function
 ) {
   return invites.map((invite: Invite, index) => {
     let columns: any[] = [];
     let statusColumn;
 
-    if (invites.length > 1 && index === 0) {
+    if (invites.length > 0 && index === 0) {
       statusColumn = {
         content: (
           <>
@@ -45,8 +35,7 @@ function buildInviteTableRows(
         content: invite?.email,
       },
       {
-        content: getCollaboratorById(collaborators, invite?.created_by)
-          ?.display_name,
+        content: invite?.created_by,
       },
       {
         content:
@@ -63,8 +52,9 @@ function buildInviteTableRows(
                   type="button"
                   dense
                   onClick={() => {
-                    setCollaboratorToRevoke(invite?.email);
-                    setShowRevokeConfirmation(true);
+                    setAction("Revoke");
+                    setShowConfirmation(true);
+                    setActiveInvite(invite.email);
                   }}
                 >
                   Revoke
@@ -73,7 +63,9 @@ function buildInviteTableRows(
                   type="button"
                   dense
                   onClick={() => {
-                    inviteCollaborator(invite?.email);
+                    setAction("Resend");
+                    setShowConfirmation(true);
+                    setActiveInvite(invite.email);
                   }}
                 >
                   Resend
@@ -85,7 +77,9 @@ function buildInviteTableRows(
                 type="button"
                 dense
                 onClick={() => {
-                  inviteCollaborator(invite?.email);
+                  setAction("Reopen");
+                  setShowConfirmation(true);
+                  setActiveInvite(invite.email);
                 }}
               >
                 Reopen
@@ -96,7 +90,9 @@ function buildInviteTableRows(
                 type="button"
                 dense
                 onClick={() => {
-                  inviteCollaborator(invite?.email);
+                  setAction("Reopen");
+                  setShowConfirmation(true);
+                  setActiveInvite(invite.email);
                 }}
               >
                 Reopen
@@ -119,4 +115,13 @@ function buildInviteTableRows(
   });
 }
 
-export { getCollaboratorById, buildInviteTableRows };
+const isAccepted = (invite: Invite) => invite?.accepted_at !== null;
+const isRevoked = (invite: Invite) => invite?.revoked_at !== null;
+const isExpired = (invite: Invite) =>
+  invite?.expires_at !== null &&
+  isAfter(new Date(), new Date(invite?.expires_at));
+const isPending = (invite: Invite) => {
+  return !isAccepted(invite) && !isRevoked(invite) && !isExpired(invite);
+};
+
+export { buildInviteTableRows, isAccepted, isRevoked, isExpired, isPending };

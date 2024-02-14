@@ -1,6 +1,6 @@
 @mixin p-charmhub-grid {
   .col-x-small-1 {
-    @media (max-width: 450px) {
+    @media (width <= 450px) {
       grid-column-end: span 4;
     }
   }
