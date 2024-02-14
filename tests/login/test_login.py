@@ -25,13 +25,13 @@ class TestLoginViews(unittest.TestCase):
         with self.client as client:
             res = client.get("/login")
             self.assertEqual(res.status_code, 302)
-            self.assertIn('account-macaroon', session)
+            self.assertIn("account-macaroon", session)
 
     def test_login_next(self):
         with self.client as client:
             client.get("/login?next=/test-page")
-            self.assertIn('next_url', session)
-            self.assertEqual(session['next_url'], '/test-page')
+            self.assertIn("next_url", session)
+            self.assertEqual(session["next_url"], "/test-page")
 
     @responses.activate
     def test_login_api_500(self):
@@ -49,5 +49,5 @@ class TestLoginViews(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
         with self.client.session_transaction() as s:
             self.assertEqual(response.location, "http://localhost/")
-            self.assertEqual(s.get('account-auth'), None)
-            self.assertEqual(s.get('account-macaroon'), None)
+            self.assertEqual(s.get("account-auth"), None)
+            self.assertEqual(s.get("account-macaroon"), None)
