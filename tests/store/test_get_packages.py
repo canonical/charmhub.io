@@ -37,8 +37,11 @@ class TestGetPackages(TestCase):
     def test_get_packages_error_handling(self, mock_find):
         mock_find.side_effect = Exception("Mocked Error")
         with self.client as client:
-            response = client.get("/packages.json")
-            self.assertEqual(response.status_code, 500)
+            with self.assertRaises(Exception) as context:
+                response = client.get("/packages.json")
+                self.assertEqual(str(context.exception), "Mocked Error")
+
+                self.assertEqual(response.status_code, 500)
 
     @patch("webapp.app.app.store_api.find")
     def test_get_packages_empty_response(self, mock_find):
