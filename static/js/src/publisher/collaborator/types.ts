@@ -14,13 +14,12 @@ export type Collaborator = {
 };
 
 export type Invite = {
-  accepted_at: string | null;
-  accepted_by: string | null;
-  created_at: string;
-  created_by: string;
-  email: string;
-  expires_at: string | null;
-  invite_type: string;
-  revoked_at: string | null;
-  revoked_by: string | null;
+  "accepted-at": string | null;
+  "accepted-by"?: Publisher;
+  "created-at": string;
+  "created-by": Publisher;
+  email: string | null;
+  "expires-at": string | null;
+  "invite-type": string | null;
+  "revoked-at": string | null;
 };
