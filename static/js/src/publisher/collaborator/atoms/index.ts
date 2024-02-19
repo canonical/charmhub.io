@@ -1,5 +1,7 @@
 import { atom } from "recoil";
 
+import type { Collaborator, Invite } from "../types";
+
 const activeInviteState = atom({
   key: "activeInvite",
   default: "",
@@ -15,4 +17,26 @@ const inviteLinkState = atom({
   default: "",
 });
 
-export { activeInviteState, actionState, inviteLinkState };
+const collaboratorsListState = atom({
+  key: "collaboratorsList",
+  default: [] as Array<Collaborator>,
+});
+
+const collaboratorsListFilterState = atom({
+  key: "collaboratorsListFilter",
+  default: "" as string,
+});
+
+const invitesListState = atom({
+  key: "invitesList",
+  default: [] as Array<Invite>,
+});
+
+export {
+  activeInviteState,
+  actionState,
+  inviteLinkState,
+  collaboratorsListState,
+  collaboratorsListFilterState,
+  invitesListState,
+};

@@ -1,7 +1,7 @@
-import React, { useState, SyntheticEvent } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect, SyntheticEvent } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
-import { useRecoilValue, useRecoilState } from "recoil";
+import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil";
 import {
   Accordion,
   Strip,
@@ -10,10 +10,13 @@ import {
   Notification,
   Form,
   Input,
+  Row,
+  Col,
 } from "@canonical/react-components";
 
 import CollaboratorsTable from "./CollaboratorsTable";
 import InvitesTable from "./InvitesTable";
+import CollaboratorsFilter from "./CollaboratorsFilter";
 
 import { isPending } from "../utils";
 
@@ -23,9 +26,20 @@ import {
   useSendInviteMutation,
   useRevokeInviteMutation,
 } from "../hooks";
-import { activeInviteState, actionState, inviteLinkState } from "../atoms";
+import {
+  activeInviteState,
+  actionState,
+  inviteLinkState,
+  collaboratorsListState,
+  collaboratorsListFilterState,
+  invitesListState,
+} from "../atoms";
+import {
+  filteredCollaboratorsListState,
+  filteredInvitesListState,
+} from "../selectors";
 
-import type { Invite } from "../types";
+import type { Collaborator, Invite } from "../types";
 
 declare global {
   interface Window {
@@ -44,6 +58,16 @@ function Collaborators() {
   const [showRevokeSuccess, setShowRevokeSuccess] = useState(false);
   const [showRevokeError, setShowRevokeError] = useState(false);
   const [showAddCollaborator, setShowAddCollaborator] = useState(false);
+  const [searchParams] = useSearchParams();
+  const setCollaboratorsList = useSetRecoilState<Array<Collaborator>>(
+    collaboratorsListState
+  );
+  const setInvitesList = useSetRecoilState<Array<Invite>>(invitesListState);
+  const setFilter = useSetRecoilState<string>(collaboratorsListFilterState);
+  const invitesList = useRecoilValue<Array<Invite>>(filteredInvitesListState);
+  const collaboratorsList = useRecoilValue<Array<Collaborator>>(
+    filteredCollaboratorsListState
+  );
 
   const {
     isLoading: collaboratorsIsLoading,
@@ -96,6 +120,26 @@ function Collaborators() {
     return false;
   };
 
+  useEffect(() => {
+    if (
+      !collaboratorsIsLoading &&
+      !collaboratorsIsError &&
+      !invitesIsLoading &&
+      !invitesIsError
+    ) {
+      setCollaboratorsList(collaboratorsData.collaborators);
+      setInvitesList(invites);
+      setFilter(searchParams.get("filter") || "");
+    }
+  }, [
+    collaboratorsIsLoading,
+    collaboratorsIsError,
+    collaboratorsData,
+    invitesIsLoading,
+    invitesIsError,
+    invites,
+  ]);
+
   return (
     <div className="l-application collaboration-ui">
       <div className="l-main">
@@ -135,28 +179,30 @@ function Collaborators() {
             </Notification>
           )}
 
-          <Button
-            appearance="positive"
-            hasIcon
-            onClick={() => {
-              setShowAddCollaborator(true);
-            }}
-          >
-            <i className="p-icon--plus is-light"></i>
-            <span>Add new collaborator</span>
-          </Button>
+          <Row>
+            <Col size={6}>
+              <CollaboratorsFilter />
+            </Col>
+            <Col size={6} className="u-align--right">
+              <Button
+                appearance="positive"
+                hasIcon
+                onClick={() => {
+                  setShowAddCollaborator(true);
+                }}
+              >
+                <i className="p-icon--plus is-light"></i>
+                <span>Add new collaborator</span>
+              </Button>
+            </Col>
+          </Row>
 
           <Accordion
             expanded="collaborators-table"
             sections={[
               {
                 key: "collaborators-table",
-                title: `Active shares ${
-                  collaboratorsData &&
-                  collaboratorsData?.collaborators.length > 0
-                    ? `(${collaboratorsData.collaborators.length})`
-                    : ""
-                }`,
+                title: `Active shares (${collaboratorsList.length})`,
                 content: (
                   <>
                     {!collaboratorsIsLoading &&
@@ -173,9 +219,7 @@ function Collaborators() {
               },
               {
                 key: "invites-table",
-                title: `Invites ${
-                  invites && invites.length > 0 ? `(${invites.length})` : ""
-                }`,
+                title: `Invites (${invitesList.length})`,
                 content: (
                   <>
                     {!invitesIsLoading &&
