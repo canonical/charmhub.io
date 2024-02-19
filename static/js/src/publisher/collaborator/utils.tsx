@@ -33,14 +33,15 @@ function buildInviteTableRows(
     const remainingColumns = [
       {
         content: invite?.email,
+        className: "u-truncate",
       },
       {
-        content: invite?.created_by,
+        content: invite?.["created-by"]?.["display-name"],
       },
       {
         content:
-          invite?.expires_at &&
-          format(new Date(invite?.expires_at), "dd/MM/yyyy"),
+          invite?.["expires-at"] &&
+          format(new Date(invite?.["expires-at"]), "dd/MM/yyyy"),
       },
       {
         className: "u-align--right",
@@ -115,11 +116,11 @@ function buildInviteTableRows(
   });
 }
 
-const isAccepted = (invite: Invite) => invite?.accepted_at !== null;
-const isRevoked = (invite: Invite) => invite?.revoked_at !== null;
+const isAccepted = (invite: Invite) => invite?.["accepted-at"] !== null;
+const isRevoked = (invite: Invite) => invite?.["revoked-at"] !== null;
 const isExpired = (invite: Invite) =>
-  invite?.expires_at !== null &&
-  isAfter(new Date(), new Date(invite?.expires_at));
+  invite?.["expires-at"] !== null &&
+  isAfter(new Date(), new Date(invite?.["expires-at"]));
 const isPending = (invite: Invite) => {
   return !isAccepted(invite) && !isRevoked(invite) && !isExpired(invite);
 };
