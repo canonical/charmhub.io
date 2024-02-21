@@ -1,8 +1,9 @@
 import React from "react";
 import { MainTable } from "@canonical/react-components";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 
 import { activeInviteState, actionState } from "../atoms";
+import { filteredInvitesListState } from "../selectors";
 
 import {
   buildInviteTableRows,
@@ -21,16 +22,17 @@ type Props = {
 function InvitesTable({ invites, setShowConfirmation }: Props) {
   const setActiveInvite = useSetRecoilState(activeInviteState);
   const setAction = useSetRecoilState(actionState);
+  const invitesList = useRecoilValue<Array<Invite>>(filteredInvitesListState);
 
-  const pendingInvites = invites.filter((invite) => {
+  const pendingInvites = invitesList.filter((invite) => {
     return !isAccepted(invite) && !isRevoked(invite) && !isExpired(invite);
   });
 
-  const expiredInvites = invites.filter((invite) => {
+  const expiredInvites = invitesList.filter((invite) => {
     return isExpired(invite);
   });
 
-  const revokedInvites = invites.filter((invite) => {
+  const revokedInvites = invitesList.filter((invite) => {
     return isRevoked(invite) && !isExpired(invite);
   });
 

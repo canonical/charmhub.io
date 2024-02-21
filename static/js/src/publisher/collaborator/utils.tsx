@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@canonical/react-components";
 import { format, isAfter } from "date-fns";
 
-import type { Invite } from "./types";
+import type { Invite, Collaborator } from "./types";
 
 function buildInviteTableRows(
   invites: Array<Invite>,
@@ -125,4 +125,61 @@ const isPending = (invite: Invite) => {
   return !isAccepted(invite) && !isRevoked(invite) && !isExpired(invite);
 };
 
-export { buildInviteTableRows, isAccepted, isRevoked, isExpired, isPending };
+function getFilteredCollaborators(
+  collaborators: Array<Collaborator>,
+  filterQuery?: string | null
+) {
+  if (!filterQuery) {
+    return collaborators;
+  }
+
+  return collaborators.filter((collaborator: Collaborator) => {
+    if (
+      (collaborator.account["display-name"] &&
+        collaborator.account["display-name"].includes(filterQuery)) ||
+      (collaborator.account.email &&
+        collaborator.account.email.includes(filterQuery)) ||
+      (collaborator.account.username &&
+        collaborator.account.username.includes(filterQuery))
+    ) {
+      return true;
+    }
+
+    return false;
+  });
+}
+
+function getFilteredInvites(
+  collaborators: Array<Invite>,
+  filterQuery?: string | null
+) {
+  if (!filterQuery) {
+    return collaborators;
+  }
+
+  return collaborators.filter((invite: Invite) => {
+    if (
+      (invite.email && invite.email.includes(filterQuery)) ||
+      (invite["created-by"] &&
+        invite["created-by"]["display-name"].includes(filterQuery)) ||
+      (invite["created-by"] &&
+        invite["created-by"].email.includes(filterQuery)) ||
+      (invite["created-by"] &&
+        invite["created-by"].username.includes(filterQuery))
+    ) {
+      return true;
+    }
+
+    return false;
+  });
+}
+
+export {
+  buildInviteTableRows,
+  isAccepted,
+  isRevoked,
+  isExpired,
+  isPending,
+  getFilteredCollaborators,
+  getFilteredInvites,
+};

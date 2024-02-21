@@ -1,9 +1,14 @@
 import React from "react";
 import { MainTable, Button } from "@canonical/react-components";
 import { format } from "date-fns";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 
-import { activeInviteState, actionState } from "../atoms";
+import {
+  activeInviteState,
+  actionState,
+  collaboratorsListFilterState,
+} from "../atoms";
+import { filteredCollaboratorsListState } from "../selectors";
 
 import type { Collaborator, Publisher } from "../types";
 
@@ -18,6 +23,10 @@ type Props = {
 function CollaboratorsTable({ collaboratorsData, setShowConfirmation }: Props) {
   const setActiveInvite = useSetRecoilState(activeInviteState);
   const setAction = useSetRecoilState(actionState);
+  const filterState = useRecoilValue(collaboratorsListFilterState);
+  const collaboratorsList = useRecoilValue<Array<Collaborator>>(
+    filteredCollaboratorsListState
+  );
 
   const publisherRow = {
     columns: [
@@ -43,7 +52,7 @@ function CollaboratorsTable({ collaboratorsData, setShowConfirmation }: Props) {
     ],
   };
 
-  const collaboratorRows = collaboratorsData.collaborators.map(
+  const collaboratorRows = collaboratorsList.map(
     (collaborator: Collaborator) => {
       return {
         columns: [
@@ -81,7 +90,14 @@ function CollaboratorsTable({ collaboratorsData, setShowConfirmation }: Props) {
     }
   );
 
-  const tableRows = [publisherRow, ...collaboratorRows];
+  let tableRows = [];
+
+  // This removes owner from filtered results
+  if (filterState) {
+    tableRows = collaboratorRows;
+  } else {
+    tableRows = [publisherRow, ...collaboratorRows];
+  }
 
   return (
     <MainTable
