@@ -1,7 +1,4 @@
 import { useQuery, useMutation } from "react-query";
-import { sub, add } from "date-fns";
-
-import type { Invite } from "../types";
 
 export function useCollaboratorsQuery(packageName: string | undefined) {
   return useQuery("collaboratorsData", async () => {
@@ -43,20 +40,25 @@ export function useInvitesQuery(packageName: string | undefined) {
   });
 }
 
-export function useSendInviteMutation(
+export function useSendMutation(
   packageName: string | undefined,
-  csrfToken: string,
-  queryClient: any,
-  inviteToSend: string,
+  activeInviteEmail: string | undefined,
   setInviteLink: Function,
   setShowInviteSuccess: Function,
-  setShowAddCollaborator: Function
+  setShowInviteError: Function,
+  queryClient: any,
+  csrfToken: string,
+  setShowSidePanel?: Function
 ) {
   return useMutation(
     async () => {
+      if (!activeInviteEmail) {
+        return;
+      }
+
       const formData = new FormData();
 
-      formData.set("collaborators", inviteToSend);
+      formData.set("collaborators", activeInviteEmail);
       formData.set("csrf_token", csrfToken);
 
       const response = await fetch(`/${packageName}/invite`, {
@@ -64,9 +66,19 @@ export function useSendInviteMutation(
         body: formData,
       });
 
+      if (setShowSidePanel) {
+        setShowSidePanel(false);
+      }
+
+      if (!response.ok) {
+        setShowInviteError(true);
+        throw new Error(response.statusText);
+      }
+
       const inviteData = await response.json();
 
       if (!inviteData.success) {
+        setShowInviteError(true);
         throw new Error(inviteData.message);
       }
 
@@ -76,62 +88,52 @@ export function useSendInviteMutation(
       );
 
       setShowInviteSuccess(true);
-      setShowAddCollaborator(false);
     },
     {
-      onMutate: async (inviteEmail: string) => {
-        await queryClient.cancelQueries("invitesData");
-
-        const previousInvites = queryClient.getQueryData("invitesData");
-        const newInvite = {
-          accepted_at: null,
-          accepted_by: null,
-          created_at: new Date().toISOString(),
-          created_by: "",
-          email: inviteEmail,
-          expires_at: sub(add(new Date(), { months: 1 }), {
-            days: 1,
-          }).toISOString(),
-          invite_type: "",
-          revoked_at: null,
-          revoked_by: null,
-        };
-
-        queryClient.setQueryData("invitesData", (oldInvites: any) => {
-          return [newInvite, ...oldInvites];
-        });
-
-        return { previousInvites };
-      },
       onError: ({ context }) => {
         queryClient.setQueryData("invitesData", context?.previousInvites);
       },
       onSettled: () => {
         queryClient.invalidateQueries();
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "smooth",
+        });
       },
     }
   );
 }
 
-export function useRevokeInviteMutation(
+export function useRevokeMutation(
   packageName: string | undefined,
-  csrfToken: string,
-  queryClient: any,
-  inviteToRevoke: string,
+  activeInviteEmail: string | undefined,
+  queryKey: string,
   setShowRevokeSuccess: Function,
-  setShowRevokeError: Function
+  setShowRevokeError: Function,
+  queryClient: any,
+  csrfToken: string
 ) {
   return useMutation(
     async () => {
+      if (!activeInviteEmail) {
+        return;
+      }
+
       const formData = new FormData();
 
       formData.set("csrf_token", csrfToken);
-      formData.set("collaborator", inviteToRevoke);
+      formData.set("collaborator", activeInviteEmail);
 
       const response = await fetch(`/${packageName}/invites/revoke`, {
         method: "POST",
         body: formData,
       });
+
+      if (!response.ok) {
+        setShowRevokeError(true);
+        throw new Error(response.statusText);
+      }
 
       const responseData = await response.json();
 
@@ -143,35 +145,16 @@ export function useRevokeInviteMutation(
       setShowRevokeSuccess(true);
     },
     {
-      onMutate: async (inviteEmail: string) => {
-        await queryClient.cancelQueries("invitesData");
-
-        const previousInvites: any = queryClient.getQueryData("invitesData");
-
-        queryClient.setQueryData("invitesData", (oldInvites: any) => {
-          const revokedInvite = oldInvites.find(
-            (invite: Invite) => invite.email === inviteEmail
-          );
-
-          revokedInvite.revoked_at = sub(new Date(), {
-            minutes: 1,
-          }).toISOString();
-
-          return [
-            ...oldInvites.filter(
-              (invite: Invite) => invite.email !== inviteEmail
-            ),
-            revokedInvite,
-          ];
-        });
-
-        return { previousInvites };
-      },
       onError: ({ context }) => {
-        queryClient.setQueryData("invitesData", context?.previousInvites);
+        queryClient.setQueryData(queryKey, context?.previousInvites);
       },
       onSettled: () => {
         queryClient.invalidateQueries();
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "smooth",
+        });
       },
     }
   );

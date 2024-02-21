@@ -3,11 +3,11 @@ import { useSearchParams } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { Button, Icon } from "@canonical/react-components";
 
-import { collaboratorsListFilterState } from "../../atoms";
+import { filterQueryState } from "../atoms";
 
-function CollaboratorsFilter() {
+function CollaboratorFilter() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const setFilter = useSetRecoilState(collaboratorsListFilterState);
+  const setFilterQuery = useSetRecoilState(filterQueryState);
 
   return (
     <div className="p-search-box">
@@ -26,10 +26,10 @@ function CollaboratorsFilter() {
         onChange={(e) => {
           if (e.target.value) {
             setSearchParams({ filter: e.target.value });
-            setFilter(e.target.value);
+            setFilterQuery(e.target.value);
           } else {
             setSearchParams();
-            setFilter("");
+            setFilterQuery("");
           }
         }}
       />
@@ -38,7 +38,7 @@ function CollaboratorsFilter() {
         className="p-search-box__reset"
         onClick={() => {
           setSearchParams();
-          setFilter("");
+          setFilterQuery("");
         }}
       >
         <Icon name="close">Clear filter</Icon>
@@ -50,4 +50,4 @@ function CollaboratorsFilter() {
   );
 }
 
-export default CollaboratorsFilter;
+export default CollaboratorFilter;
