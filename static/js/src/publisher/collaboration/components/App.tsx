@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
 
-import Collaborators from "./Collaborators";
+import Collaboration from "./Collaboration";
 
 function App() {
   const queryClient = new QueryClient({
@@ -22,7 +22,7 @@ function App() {
           <Routes>
             <Route
               path="/:packageName/collaboration"
-              element={<Collaborators />}
+              element={<Collaboration />}
             />
           </Routes>
         </QueryClientProvider>

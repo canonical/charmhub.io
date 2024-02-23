@@ -450,10 +450,11 @@ h3 {
 
 .l-aside {
   background-color: $color-x-light;
-  height: calc(100vh - 112px);
+  height: 100vh;
   max-width: 535px;
   padding: 1rem;
   position: fixed;
+  top: 0;
   z-index: 999;
 
   .l-application & {
@@ -461,24 +462,19 @@ h3 {
   }
 }
 
-.panel {
+.p-panel {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  padding-right: 0.75rem;
 }
 
-.panel__header {
-  display: flex;
-  justify-content: space-between;
-}
-
-.panel__content {
+.p-panel__content {
   flex: 1 1 0;
 }
 
-.panel__footer {
+.p-panel__footer {
   border-top: 1px solid $color-mid-x-light;
-  padding-top: $sph--large;
+  padding: $sph--large 0;
 }
 
 .l-aside__overlay {
@@ -533,11 +529,3 @@ h3 {
   display: none !important;
 }
 
-.collaboration-ui .l-aside {
-  height: 100vh;
-  top: 0;
-}
-
-.collaboration-ui.l-application {
-  width: 100%;
-}
