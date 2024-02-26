@@ -24,7 +24,7 @@ ADD webpack.config.js .
 ADD webpack.config.entry.js .
 ADD webpack.config.rules.js .
 ADD tsconfig.json .
-ADD .babelrc .
+ADD babel.config.json .
 RUN yarn install
 RUN yarn run build-js
 
@@ -50,7 +50,7 @@ ENV PATH="/root/.local/bin:${PATH}"
 
 # Import code, build assets
 ADD . .
-RUN rm -rf package.json yarn.lock .babelrc webpack.config.js requirements.txt
+RUN rm -rf package.json yarn.lock babel.config.json webpack.config.js requirements.txt
 COPY --from=build-js /srv/static/js static/js
 COPY --from=build-css /srv/static/css static/css
 
