@@ -2,7 +2,10 @@ import { isAfter } from "date-fns";
 
 import type { Invite } from "../types";
 
-function getInvitesByStatus(invites: Array<Invite>, status: string) {
+function getInvitesByStatus(
+  invites: Array<Invite>,
+  status: "pending" | "expired" | "revoked"
+) {
   const isAccepted = (invite: Invite) => invite?.["accepted-at"] !== null;
   const isRevoked = (invite: Invite) => invite?.["revoked-at"] !== null;
   const isExpired = (invite: Invite) =>

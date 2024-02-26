@@ -1,8 +1,8 @@
 import type { Publisher } from "../types";
 
 function publisherMatchesFilterQuery(
-  publisher: Publisher,
-  filterQuery: string
+  publisher: Publisher | undefined,
+  filterQuery: string | undefined
 ) {
   if (!publisher || !filterQuery) {
     return false;
