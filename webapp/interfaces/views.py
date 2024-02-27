@@ -5,7 +5,11 @@ from flask import (
     render_template,
     make_response,
     current_app as app,
+<<<<<<< HEAD
     redirect,
+=======
+    abort
+>>>>>>> 27b7a94 (ensure /interfaces/:interface does not 404 on production)
 )
 from flask.json import jsonify
 from github import Github
@@ -84,6 +88,9 @@ def single_interface(path):
             return redirect(f"/interfaces/{path}/draft")
 
     context = {"interface": interface}
+
+    if not response or response.status_code != 200:
+        abort(404)
 
     return render_template("interfaces/index.html", **context)
 
