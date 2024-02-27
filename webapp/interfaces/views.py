@@ -5,11 +5,7 @@ from flask import (
     render_template,
     make_response,
     current_app as app,
-<<<<<<< HEAD
-    redirect,
-=======
-    abort
->>>>>>> 27b7a94 (ensure /interfaces/:interface does not 404 on production)
+    abort,
 )
 from flask.json import jsonify
 from github import Github
