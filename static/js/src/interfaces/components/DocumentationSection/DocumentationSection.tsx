@@ -9,11 +9,13 @@ import type {
   SubSubSectionData,
 } from "../../types";
 
+import { v4 as uuidv4} from 'uuid';
+
 function addUniqueIds(data: any) {
   return data.map((item: any) => {
     return {
       content: item,
-      id: crypto.randomUUID(),
+      id: uuidv4(),
     };
   });
 }
