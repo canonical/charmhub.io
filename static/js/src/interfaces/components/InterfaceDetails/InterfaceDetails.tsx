@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { formatDistance } from "date-fns";
@@ -24,7 +24,7 @@ const getInterface = async (
       const response = await fetch(`./${interfaceStatus}.json`);
       if (response.status === 200) {
         return response.json();
-      }        
+      }
     }
     else {
       const response = await fetch(`./${interfaceName}.json`);
@@ -42,6 +42,7 @@ type Props = {
 };
 
 function InterfaceDetails({ interfaceItem }: Props) {
+  const [showLink, setShowLink] = useState(false);
   const { interfaceName, interfaceStatus } = useParams();
   const shouldFetchData = () => {
     if (interfaceItem && interfaceItem.name === interfaceName) {
@@ -89,9 +90,11 @@ function InterfaceDetails({ interfaceItem }: Props) {
           {interfaceData?.name && <>{interfaceData?.name}</>}
           {!interfaceData?.name && interfaceName}
         </h1>
-        <p>
-          <Link to="/interfaces">See all interfaces</Link>
-        </p>
+          {showLink && (
+            <p>
+              <Link to="/interfaces">See all interfaces</Link>
+            </p>
+          )}
       </Strip>
       <Strip>
         {error && (
