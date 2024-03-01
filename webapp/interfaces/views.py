@@ -80,12 +80,10 @@ def single_interface(path):
         response = get_single_interface(path, "draft")
         if response:
             return redirect(f"/interfaces/{path}/draft")
+        else:
+            abort(404)
 
     context = {"interface": interface}
-
-    if not response or response.status_code != 200:
-        abort(404)
-
     return render_template("interfaces/index.html", **context)
 
 
