@@ -5,6 +5,7 @@ from flask import (
     render_template,
     make_response,
     current_app as app,
+    redirect,
 )
 from flask.json import jsonify
 from github import Github
@@ -73,8 +74,15 @@ def single_interface(path):
     if not getenv("ENVIRONMENT") in ["devel", "staging"]:
         return render_template("404.html")
 
-    response = get_single_interface(path, "")
-    interface = eval(response.data.decode("utf-8"))
+    interface = None
+    try:
+        response = get_single_interface(path, "")
+        interface = eval(response.data.decode("utf-8"))
+    except Exception:
+        response = get_single_interface(path, "draft")
+        if response:
+            return redirect(f"/interfaces/{path}/draft")
+
     context = {"interface": interface}
 
     return render_template("interfaces/index.html", **context)
@@ -101,6 +109,7 @@ def get_single_interface(interface_name, status):
     interface_status = interface_logic.get_interface_status(
         interface_name, status
     )
+
     # if the user sends request for a status that does not exist
     if not interface_status:
         if status == "live":
