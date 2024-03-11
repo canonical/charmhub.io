@@ -28,6 +28,45 @@ store = Blueprint(
 publisher_api = CharmPublisher(talisker.requests.get_session())
 
 
+@store.route("/publisher/<regex('[a-z0-9-]*[a-z][a-z0-9-]*'):publisher>")
+def get_publisher_details(publisher):
+    """
+    A view to display the publisher details page for specific publisher.
+    """
+
+    status_code = 200
+    error_info = {}
+    charms_results = []
+    charms = []
+    charms_count = 0
+    publisher_details = {"display-name": publisher}
+
+    charms_results = app.store_api.find(
+        publisher=publisher,
+        fields=SEARCH_FIELDS,
+    )["results"]
+
+    for charm in charms_results:
+        item = charm["result"]
+        item["package_name"] = charm["name"]
+        charms.append(item)
+
+    charms_count = len(charms)
+
+    if charms_count > 0:
+        publisher_details = charms[0]["publisher"]
+
+    context = {
+        "charms": charms,
+        "charms_count": charms_count,
+        "publisher": publisher_details,
+        "error_info": error_info,
+    }
+
+    # HTML template will be returned here for the front end
+    return (context, status_code)
+
+
 @store.route("/packages.json")
 def get_packages():
     query = request.args.get("q", default=None, type=str)
