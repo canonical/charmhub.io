@@ -348,9 +348,13 @@ def details_docs(entity_name, path=None):
     return render_template("details/docs.html", **context)
 
 
-@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configure')
 @store.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configure/<path:path>'
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configuration'
+)
+@store.route(
+    '/<regex("'
+    + DETAILS_VIEW_REGEX
+    + '"):entity_name>/configuration/<path:path>'
 )
 @store_maintenance
 @redirect_uppercase_to_lowercase
@@ -370,7 +374,9 @@ def details_configuration(entity_name, path=None):
 
         if not path and bundle_charms:
             default_charm = bundle_charms[0]
-            redirect_url = f"/{entity_name}/configure/{default_charm['name']}"
+            redirect_url = (
+                f"/{entity_name}/configuration/{default_charm['name']}"
+            )
             if channel_request:
                 redirect_url = redirect_url + f"?channel={channel_request}"
             return redirect(redirect_url)
