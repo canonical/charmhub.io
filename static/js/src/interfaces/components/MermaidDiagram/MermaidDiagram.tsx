@@ -24,7 +24,13 @@ const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ code }) => {
     renderDiagram();
   }, [code]);
 
-  return <div ref={diagramRef} />;
+  const centerStyle: React.CSSProperties = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  };
+
+  return <div ref={diagramRef} style={centerStyle}/>;
 };
 
 export default MermaidDiagram;
