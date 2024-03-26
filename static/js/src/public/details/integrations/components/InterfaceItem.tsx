@@ -131,7 +131,10 @@ export const InterfaceItem = ({
     <>
       <hr />
       <h3 className="p-heading--4 u-no-margin--bottom" id={interfaceData.key}>
-        {title}{" "}
+        {interfaceData.key} |{" "}
+        <a href={`/interfaces/${interfaceData.interface}`}>
+          {interfaceData.interface}
+        </a>{" "}
         <span
           className="p-tooltip--right"
           aria-describedby={`${interfaceData.key}-${interfaceData.interface}-tooltip`}

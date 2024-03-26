@@ -5,6 +5,8 @@ import DocumentationSection from "../DocumentationSection";
 
 import type { InterfaceData } from "../../types";
 
+import { v4 as uuidv4} from 'uuid';
+
 type Props = {
   interfaceData: InterfaceData;
 };
@@ -13,7 +15,7 @@ function DeveloperDocumentation({ interfaceData }: Props) {
   const data = interfaceData.body.map((item) => {
     return {
       ...item,
-      id: crypto.randomUUID(),
+      id: uuidv4(),
     };
   });
 
