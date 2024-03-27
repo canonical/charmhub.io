@@ -1102,10 +1102,10 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-6.0.4.tgz#923ca57e173c6b232bbbb07347b1be982f03e783"
   integrity sha512-s3jaWicZd0pkP0jf5ysyHUI/RE7MHos6qlToFcGWXVp+ykHOy77OUMrfbgJ9it2C5bow7OIQwYYaHjk9XlBQ2A==
 
-"@canonical/cookie-policy@3.5.0":
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/@canonical/cookie-policy/-/cookie-policy-3.5.0.tgz#1c7e6cc2d5a7218375001b2cff2996a927693e89"
-  integrity sha512-XLCIl8+h+3BRfvqADqFsmAfWdaDGDchY/TPCKtpeQdb4r64SR6arsdNftlOb7vX8EuLCK2QRp6evUy0J+qnQTg==
+"@canonical/cookie-policy@3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@canonical/cookie-policy/-/cookie-policy-3.6.0.tgz#6e1f5fa481b7625d5c4401666dfb7503a19bb0c8"
+  integrity sha512-h4gV7vkZS9PDjqiTIn2xFc/3Zo5lds8hcQ6UmwD3yDDWY7CwCwjvBd13Z86PszMf2S8DiCfQ4wWQLvynqP/MiA==
 
 "@canonical/global-nav@3.6.4":
   version "3.6.4"
@@ -1131,10 +1131,10 @@
     react-table "7.8.0"
     react-useportal "1.0.18"
 
-"@canonical/react-components@0.50.5":
-  version "0.50.5"
-  resolved "https://registry.yarnpkg.com/@canonical/react-components/-/react-components-0.50.5.tgz#291c397ed07f251ec3b5eec74de9c1ead97aa033"
-  integrity sha512-4XJsMsc+2dDeK2ZDlNaE/vz3j6+kfU8UEIZR2zvnsimUHzfnhPXABSy/n1BcbCn3H3AcqTY3sRMJn921ncAyPQ==
+"@canonical/react-components@0.51.1":
+  version "0.51.1"
+  resolved "https://registry.yarnpkg.com/@canonical/react-components/-/react-components-0.51.1.tgz#9ef1a43003bc431bab7faaa627f2ceff065b6fdc"
+  integrity sha512-05ywaCceGE4yDWdNThKO9fZKyDdUi+PxBHpLVsxsvO7wVDsIg6TP+pdB+YvbSMQgcEOghI1UbIL72WDeSkMNug==
   dependencies:
     "@types/jest" "29.5.11"
     "@types/node" "20.8.5"
