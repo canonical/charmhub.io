@@ -21,7 +21,8 @@ class TestInterfaceRoutes(TestCase):
 
         mock_repo = MagicMock()
         mock_content = MagicMock()
-        mock_content.decoded_content.decode.return_value = "Mock README content"
+        readme_content = "Mock README content"
+        mock_content.decoded_content.decode.return_value = readme_content
         mock_repo.get_contents.return_value = mock_content
         mock_get_repo.return_value = mock_repo
 
@@ -35,7 +36,9 @@ class TestInterfaceRoutes(TestCase):
             self.assertIn("description", interface)
             self.assertIsInstance(interface["description"], str)
         self.assertEqual(
-            len(json_data["interfaces"]), 1, "Expected 1 interface in the response"
+            len(json_data["interfaces"]),
+            1,
+            "Expected 1 interface in the response"
         )
         if json_data["interfaces"]:
             first_interface = json_data["interfaces"][0]
