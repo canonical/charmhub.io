@@ -38,7 +38,7 @@ class TestInterfaceRoutes(TestCase):
         self.assertEqual(
             len(json_data["interfaces"]),
             1,
-            "Expected 1 interface in the response"
+            "Expected 1 interface in the response",
         )
         if json_data["interfaces"]:
             first_interface = json_data["interfaces"][0]
