@@ -77,18 +77,27 @@ class TestInterfaceRoutes(TestCase):
         self.assertEqual(response.status_code, 200)
         mock_get_single_interface.assert_called_with("test_interface", "")
 
-    @patch('webapp.interfaces.views.get_single_interface')
+    @patch("webapp.interfaces.views.get_single_interface")
     def test_single_interface_draft_redirect(self, mock_get_single_interface):
-        mock_get_single_interface.side_effect = [Exception("Failed to retrieve"), _RedirectStream(url_for('interfaces.single_interface', path='test_interface/draft'))]
+        mock_get_single_interface.side_effect = [
+            Exception("Failed to retrieve"),
+            _RedirectStream(
+                url_for("interfaces.single_interface", path="test_interface/draft")
+            ),
+        ]
 
-        response = self.client.get(url_for('interfaces.single_interface', path='test_interface'))
+        response = self.client.get(
+            url_for("interfaces.single_interface", path="test_interface")
+        )
 
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(response.location.endswith('test_interface/draft'))
+        self.assertTrue(response.location.endswith("test_interface/draft"))
 
-    @patch('webapp.interfaces.views.get_single_interface')
+    @patch("webapp.interfaces.views.get_single_interface")
     def test_single_interface_not_found(self, mock_get_single_interface):
         mock_get_single_interface.side_effect = [Exception("Failed"), None]
 
-        response = self.client.get(url_for('interfaces.single_interface', path='nonexistent_interface'))
+        response = self.client.get(
+            url_for("interfaces.single_interface", path="nonexistent_interface")
+        )
         self.assertEqual(response.status_code, 404)
