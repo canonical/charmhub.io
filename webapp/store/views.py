@@ -1,3 +1,4 @@
+from pprint import pprint
 import humanize
 import talisker
 from canonicalwebteam.discourse import DocParser
@@ -229,7 +230,8 @@ def details_overview(entity_name):
             # If the first item in docs nav is "overview",
             # prefix with "Docs - "
             if (
-                navigation["nav_items"][0]["children"][1]["navlink_text"]
+                len(navigation["nav_items"][0]["children"]) > 1
+                and navigation["nav_items"][0]["children"][1]["navlink_text"]
                 == "Overview"
             ):
                 del navigation["nav_items"][0]["children"][1]
