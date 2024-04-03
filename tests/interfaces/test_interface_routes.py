@@ -82,7 +82,9 @@ class TestInterfaceRoutes(TestCase):
         mock_get_single_interface.side_effect = [
             Exception("Failed to retrieve"),
             _RedirectStream(
-                url_for("interfaces.single_interface", path="test_interface/draft")
+                url_for(
+                    "interfaces.single_interface", path="test_interface/draft"
+                )
             ),
         ]
 
@@ -98,6 +100,8 @@ class TestInterfaceRoutes(TestCase):
         mock_get_single_interface.side_effect = [Exception("Failed"), None]
 
         response = self.client.get(
-            url_for("interfaces.single_interface", path="nonexistent_interface")
+            url_for(
+                "interfaces.single_interface", path="nonexistent_interface"
+            )
         )
         self.assertEqual(response.status_code, 404)
