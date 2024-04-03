@@ -1,4 +1,3 @@
-from pprint import pprint
 import humanize
 import talisker
 from canonicalwebteam.discourse import DocParser
