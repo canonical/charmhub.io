@@ -150,10 +150,15 @@ export const App = () => {
           <Col size={9} className="p-details-tab__content__body">
             <Row>
               <Col size={5}>
-                <h2 className="p-heading--3">
+                <h2 className="p-heading--3 p-details-tab__content__body__title">
                   {integrationCount} integration
-                  {integrationCount > 1 ? "s" : ""} related to this charm
+                  {integrationCount > 1 ? "s" : ""}
                 </h2>
+                <h3 className="p-heading--4 p-details-tab__content__body__link">
+                  <a href="https://juju.is/docs/juju/relation">
+                    Learn about integrations &gt;
+                  </a>
+                </h3>
               </Col>
               <Col size={4}>
                 <div
