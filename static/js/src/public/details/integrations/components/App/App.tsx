@@ -154,11 +154,11 @@ export const App = () => {
                   {integrationCount} integration
                   {integrationCount > 1 ? "s" : ""}
                 </h2>
-                <h3 className="p-heading--4 p-details-tab__content__body__link">
+                <p className="p-heading--4 p-details-tab__content__body__link">
                   <a href="https://juju.is/docs/juju/relation">
-                    Learn about integrations &gt;
+                    Learn about integrations&nbsp;&gt;
                   </a>
-                </h3>
+                </p>
               </Col>
               <Col size={4}>
                 <div
