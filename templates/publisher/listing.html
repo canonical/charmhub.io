@@ -121,7 +121,8 @@
               <div class=" p-file-input">
                 <div class="p-market-banner__image is-empty" tabindex="0">
                   <div class="u-align-text--center"><i class="p-icon--plus"></i>Add topology</div>
-                </div><input type="file" name="bundle-topology" id="bundle-topology" accept="image/png,image/jpeg" hidden="">
+                </div><input type="file" name="bundle-topology" id="bundle-topology" accept="image/png,image/jpeg">
+                <div id="file-name-display" style="margin-bottom: 1rem;"></div>
               </div>
             </div>
             <p class="p-form-help-text">Reposition charm icons in a manner that is both meaningful and memorable. To manipulate charms in the canvas, click and drag.</p>
@@ -179,5 +180,12 @@
     };
     charmhub.publisher.listing.init(formFields);
   });
+
+  document.getElementById('bundle-topology').addEventListener('change', function () {
+      var fileNameDisplay = document.getElementById('file-name-display');
+      if (this.files && this.files.length > 0) {
+        fileNameDisplay.textContent = this.files[0].name;
+      }
+    });
 </script>
 {% endblock%}
