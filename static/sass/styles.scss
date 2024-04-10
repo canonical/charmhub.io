@@ -301,6 +301,12 @@ body {
       }
     }
   }
+
+  .p-details-tab__content__body .p-details-tab__content__body__title,
+  .p-details-tab__content__body .p-details-tab__content__body__link {
+    display: inline;
+    margin-right: 1rem;
+  }
 }
 
 // Override h3 font weight based on design feedback from MS
