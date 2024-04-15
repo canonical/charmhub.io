@@ -9,6 +9,13 @@
 {% block publisher_content %}
 <form id="market-form" class="p-form p-form--stacked p-strip u-no-padding--top" method="POST" enctype="multipart/form-data">
   <div class="row" style="padding-top: 1rem">
+    <div class="p-notification--caution">
+      <div class="p-notification__content">
+        <p class="p-notification__message">A published {{ package.type }} is required to successfully save this form.</p>
+    </div>
+  </div>
+  </form>
+  <div class="row">
     <div class="col-7">
       <p style="margin-bottom: 1rem;">
         Updates to this information will appear immediately on the <a href="/{{ package.name }}">{{ package.type }} listing page</a>.
@@ -121,7 +128,8 @@
               <div class=" p-file-input">
                 <div class="p-market-banner__image is-empty" tabindex="0">
                   <div class="u-align-text--center"><i class="p-icon--plus"></i>Add topology</div>
-                </div><input type="file" name="bundle-topology" id="bundle-topology" accept="image/png,image/jpeg" hidden="">
+                </div><input type="file" name="bundle-topology" id="bundle-topology" accept="image/png,image/jpeg">
+                <div id="file-name-display" style="margin-bottom: 1rem;"></div>
               </div>
             </div>
             <p class="p-form-help-text">Reposition charm icons in a manner that is both meaningful and memorable. To manipulate charms in the canvas, click and drag.</p>
@@ -179,5 +187,12 @@
     };
     charmhub.publisher.listing.init(formFields);
   });
+
+  document.getElementById('bundle-topology').addEventListener('change', function () {
+      var fileNameDisplay = document.getElementById('file-name-display');
+      if (this.files && this.files.length > 0) {
+        fileNameDisplay.textContent = this.files[0].name;
+      }
+    });
 </script>
 {% endblock%}
