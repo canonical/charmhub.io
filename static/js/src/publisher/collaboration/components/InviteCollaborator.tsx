@@ -10,6 +10,7 @@ import {
   Icon,
 } from "@canonical/react-components";
 
+import { isPending } from "../utils/getInvitesByStatus";
 import {
   activeInviteEmailState,
   invitesListState,
@@ -59,7 +60,7 @@ function InviteCollaborator({
     }
 
     const existingInvites = invitesList.filter((invite: Invite) => {
-      return invite.email === email;
+      return invite.email === email && isPending(invite);
     });
 
     if (!existingInvites.length) {
@@ -114,7 +115,7 @@ function InviteCollaborator({
             }}
             error={
               !isUnique(activeInviteEmail)
-                ? "There is already an invite for this email address"
+                ? "There is already a pending invite for this email address"
                 : ""
             }
           />
