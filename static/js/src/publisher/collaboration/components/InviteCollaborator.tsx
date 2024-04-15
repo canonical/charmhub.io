@@ -15,6 +15,8 @@ import {
   activeInviteEmailState,
   invitesListState,
   inviteLinkState,
+  inviteEmailLinkState,
+  publisherState,
 } from "../atoms";
 import { useSendMutation } from "../hooks";
 
@@ -37,12 +39,16 @@ function InviteCollaborator({
     activeInviteEmailState
   );
   const setInviteLink = useSetRecoilState(inviteLinkState);
+  const setInviteEmailLink = useSetRecoilState(inviteEmailLinkState);
   const invitesList = useRecoilValue(invitesListState);
+  const publisher = useRecoilValue(publisherState);
 
   const sendMutation = useSendMutation(
     packageName,
+    publisher?.["display-name"],
     activeInviteEmail,
     setInviteLink,
+    setInviteEmailLink,
     setShowInviteSuccess,
     setShowInviteError,
     queryClient,

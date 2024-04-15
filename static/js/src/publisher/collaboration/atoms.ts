@@ -31,3 +31,8 @@ export const inviteLinkState = atom({
   key: "inviteLink",
   default: "" as string | undefined,
 });
+
+export const inviteEmailLinkState = atom({
+  key: "inviteEmailLink",
+  default: "" as string | undefined,
+});

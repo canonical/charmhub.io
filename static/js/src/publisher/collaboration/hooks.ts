@@ -42,8 +42,10 @@ export function useInvitesQuery(packageName: string | undefined) {
 
 export function useSendMutation(
   packageName: string | undefined,
+  publisherName: string | undefined,
   activeInviteEmail: string | undefined,
   setInviteLink: Function,
+  setInviteEmailLink: Function,
   setShowInviteSuccess: Function,
   setShowInviteError: Function,
   queryClient: any,
@@ -83,8 +85,10 @@ export function useSendMutation(
       }
 
       // This shouldn't be necessary once emails are enabled
-      setInviteLink(
-        `/accept-invite?package=${packageName}&token=${inviteData.data[0].token}`
+      const inviteLink = `https://charmhub.io/accept-invite?package=${packageName}%26token=${inviteData.data[0].token}`;
+      setInviteLink(inviteLink);
+      setInviteEmailLink(
+        `mailto:${inviteData.data[0].email}?subject=${publisherName} has invited you to collaborate on ${packageName}&body=Click this link to accept the invite: ${inviteLink}`
       );
 
       setShowInviteSuccess(true);
