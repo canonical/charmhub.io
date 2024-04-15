@@ -25,6 +25,7 @@ import {
   invitesListState,
   activeInviteEmailState,
   inviteLinkState,
+  inviteEmailLinkState,
   filterQueryState,
 } from "../atoms";
 import {
@@ -55,6 +56,7 @@ function Collaboration() {
   const invitesList = useRecoilValue(filteredInvitesListState);
   const activeInviteEmail = useRecoilValue(activeInviteEmailState);
   const inviteLink = useRecoilValue(inviteLinkState);
+  const inviteEmailLink = useRecoilValue(inviteEmailLinkState);
   const filterQuery = useRecoilValue(filterQueryState);
   const { data: collaboratorsData } = useCollaboratorsQuery(packageName);
   const { data: invitesData } = useInvitesQuery(packageName);
@@ -118,12 +120,31 @@ function Collaboration() {
               {showInviteSuccess && (
                 <Notification
                   severity="positive"
+                  title="An invite has been created"
                   onDismiss={() => {
                     setShowInviteSuccess(false);
                   }}
                 >
-                  An invite has been created.{" "}
-                  <a href={inviteLink}>Accept invite</a>.
+                  <p>
+                    <a target="_blank" href={inviteEmailLink}>
+                      Send the invite by email
+                    </a>{" "}
+                    or copy link:
+                  </p>
+                  <div>
+                    <input
+                      className="u-no-margin--bottom"
+                      type="text"
+                      readOnly
+                      value={inviteLink}
+                      style={{
+                        color: "inherit",
+                      }}
+                      onFocus={(e) => {
+                        e.target.select();
+                      }}
+                    />
+                  </div>
                 </Notification>
               )}
 

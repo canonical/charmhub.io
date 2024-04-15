@@ -9,6 +9,8 @@ import {
   invitesListState,
   inviteLinkState,
   collaboratorsListState,
+  inviteEmailLinkState,
+  publisherState,
 } from "../atoms";
 import {
   filteredInvitesListState,
@@ -37,15 +39,19 @@ function InviteConfirmationModal({
   const invitesList = useRecoilValue(filteredInvitesListState);
   const setCollaboratorsList = useSetRecoilState(collaboratorsListState);
   const collaboratorsList = useRecoilValue(filteredCollaboratorsListState);
+  const publisher = useRecoilValue(publisherState);
   const setInviteLink = useSetRecoilState(inviteLinkState);
+  const setInviteEmailLink = useSetRecoilState(inviteEmailLinkState);
   const [activeInviteEmail, setActiveInviteEmail] = useRecoilState(
     activeInviteEmailState
   );
 
   const sendMutation = useSendMutation(
     packageName,
+    publisher?.["display-name"],
     activeInviteEmail,
     setInviteLink,
+    setInviteEmailLink,
     setShowSuccess,
     setShowError,
     queryClient,
