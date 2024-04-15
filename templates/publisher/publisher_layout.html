@@ -25,6 +25,11 @@
           </a>
         </li>
         <li class="p-tabs__item" role="presentation">
+          <a href="/{{package.name}}/collaboration" class="p-tabs__link" tabindex="0" role="tab" {% if selected_tab == "collaboration" %}aria-selected="true"{% endif %}>
+            Collaboration
+          </a>
+        </li>
+        <li class="p-tabs__item" role="presentation">
           <a href="/{{package.name}}/settings" class="p-tabs__link" tabindex="0" role="tab" {% if selected_tab == "settings" %}aria-selected="true"{% endif %}>
             Settings
           </a>
