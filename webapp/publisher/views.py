@@ -47,6 +47,18 @@ def get_publisher(entity_name, path):
     return render_template("publisher/publisher.html", **context)
 
 
+@publisher.route(
+    '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>',
+)
+@login_required
+def get_package(entity_name):
+    package = publisher_api.get_package_metadata(
+        session["account-auth"], "charm", entity_name
+    )
+
+    return jsonify({"data": package, "success": True})
+
+
 @publisher.route("/charms")
 @publisher.route("/bundles")
 @login_required
