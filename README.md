@@ -18,7 +18,7 @@ If you have found a bug on the site or have an idea for a new feature, feel free
 
 ## Local development
 
-The simplest way to run the site locally is using the [`dotrun`](https://snapcraft.io/dotrun) snap:
+The simplest way to run the site locally is using [`dotrun`](https://github.com/canonical/dotrun):
 
 ```bash
 dotrun
