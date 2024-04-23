@@ -149,7 +149,7 @@ export const InterfaceItem = ({
           <div style={{ paddingTop: "0.5rem" }}>
             <p className="u-fixed-width u-no-margin--bottom">
               The <b>{interfaceData.key}</b> endpoint
-              <b>{interfaceType === "requires" ? " provides " : " requires "}</b> 
+              <b>{interfaceType === "requires" ? " requires " : " provides "}</b> 
               an integration over the {" "}
               <a href={`/interfaces/${interfaceData.interface}`}>
                 {interfaceData.interface}
@@ -182,7 +182,7 @@ export const InterfaceItem = ({
         <div className="u-fixed-width">
           <p>
             No charms found that{" "}
-            <b>{interfaceType === "requires" ? "provide" : "consume"}</b>{" "}
+            <b>{interfaceType === "requires" ? "require" : "provide"}</b>{" "}
             {interfaceData.interface}
           </p>
         </div>
