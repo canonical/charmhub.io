@@ -131,33 +131,35 @@ export const InterfaceItem = ({
     <>
       <hr />
       <h3 className="p-heading--4 u-no-margin--bottom" id={interfaceData.key}>
-        {interfaceData.key} |{" "}
-        <a href={`/interfaces/${interfaceData.interface}`}>
-          {interfaceData.interface}
-        </a>{" "}
-        <span
-          className="p-tooltip--right"
-          aria-describedby={`${interfaceData.key}-${interfaceData.interface}-tooltip`}
-        >
-          <Icon name="information" />
-          <span
-            className="p-tooltip__message"
-            role="tooltip"
-            id={`${interfaceData.key}-${interfaceData.interface}-tooltip`}
-          >
-            Relation | Interface
-          </span>
-        </span>
+        <div>
+          {interfaceData.key}
+          <span className="u-text--muted"> endpoint</span>
+        </div>
+        <div>
+          <a href={`/interfaces/${interfaceData.interface}`}>
+            {interfaceData.interface}
+          </a>
+          <span className="u-text--muted"> interface </span>
+        </div>
       </h3>
       {interfaceData.description && <p>{interfaceData.description}</p>}
 
       {charms && charms?.length > 0 && (
         <>
-          <p>
-            Charms that{" "}
-            <b>{interfaceType === "requires" ? "provide" : "consume"}</b>{" "}
-            {interfaceData.interface}
-          </p>
+          <div style={{ paddingTop: "0.5rem" }}>
+            <p className="u-fixed-width u-no-margin--bottom">
+              The <b>{interfaceData.key}</b> endpoint
+              <b>{interfaceType === "requires" ? " provides " : " requires "}</b> 
+              an integration over the {" "}
+              <a href={`/interfaces/${interfaceData.interface}`}>
+                {interfaceData.interface}
+              </a> 
+              {" "} interface
+            </p>
+            <p>
+              This means it can integrate with:
+            </p>
+          </div>
           <Row>
             {charms.map((charm: ICharm) => (
               <Col
