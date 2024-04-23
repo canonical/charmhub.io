@@ -31,6 +31,22 @@ def get_account_details():
     return render_template("publisher/account-details.html")
 
 
+@publisher.route(
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/<path:path>',
+)
+@login_required
+def get_publisher(entity_name, path):
+    package = publisher_api.get_package_metadata(
+        session["account-auth"], "charm", entity_name
+    )
+
+    context = {
+        "package": package,
+    }
+
+    return render_template("publisher/publisher.html", **context)
+
+
 @publisher.route("/charms")
 @publisher.route("/bundles")
 @login_required
