@@ -344,41 +344,6 @@ def post_listing(entity_name):
     return redirect(url_for(".listing", entity_name=entity_name))
 
 
-@publisher.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/settings')
-@login_required
-def settings(entity_name):
-    package = publisher_api.get_package_metadata(
-        session["account-auth"], "charm", entity_name
-    )
-
-    context = {
-        "package": package,
-    }
-
-    return render_template("publisher/settings.html", **context)
-
-
-@publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/settings',
-    methods=["POST"],
-)
-@login_required
-def post_settings(entity_name):
-    # These are the available fields to update in API
-    data = {
-        "private": True if request.form["private"] == "private" else False,
-    }
-
-    result = publisher_api.update_package_metadata(
-        session["account-auth"], "charm", entity_name, data
-    )
-
-    if result:
-        flash("Changes applied successfully.", "positive")
-
-    return redirect(url_for(".settings", entity_name=entity_name))
-
-
 @publisher.route("/register-name")
 @login_required
 def register_name():

@@ -14,7 +14,6 @@ module.exports = {
   list: "./static/js/src/publisher/list-page.js",
   listing: "./static/js/src/publisher/listing-page.js",
   publicise: "./static/js/src/publisher/publicise.js",
-  settings: "./static/js/src/publisher/settings.js",
   topics: "./static/js/src/public/topics/index.js",
   typer: "./static/js/src/libs/typer.js",
   "highlight-nav": "./static/js/src/libs/highlight-nav.js",
