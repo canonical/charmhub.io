@@ -82,10 +82,6 @@ module.exports = [
     use: ["expose-loader?exposes=charmhub.publisher.publicise", "babel-loader"],
   },
   {
-    test: require.resolve(__dirname + "/static/js/src/publisher/settings.js"),
-    use: ["expose-loader?exposes=charmhub.publisher.settings", "babel-loader"],
-  },
-  {
     test: require.resolve(
       __dirname + "/static/js/src/public/details/integrate/index.js"
     ),

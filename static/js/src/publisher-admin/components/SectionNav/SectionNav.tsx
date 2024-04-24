@@ -1,7 +1,13 @@
-import { useParams } from "react-router-dom";
+import { useParams, useLocation, NavLink } from "react-router-dom";
 
 function SectionNav() {
   const { packageName } = useParams();
+  const location = useLocation();
+
+  const getSectionName = (path: string, sectionName: string) => {
+    const pathFragments = path.split("/");
+    return pathFragments[pathFragments.length - 1] === sectionName;
+  };
 
   return (
     <nav className="p-tabs">
@@ -22,9 +28,13 @@ function SectionNav() {
           </a>
         </li>
         <li className="p-tabs__item" role="presentation">
-          <a href={`/${packageName}/settings`} className="p-tabs__link">
+          <NavLink
+            to={`/${packageName}/settings`}
+            className="p-tabs__link"
+            aria-selected={getSectionName(location.pathname, "settings")}
+          >
             Settings
-          </a>
+          </NavLink>
         </li>
       </ul>
     </nav>
