@@ -73,7 +73,7 @@ function PubliciseButtons() {
         <Col size={7}>
           <div className="p-code-snippet">
             {/* prettier-ignore */}
-            <pre className="p-code-snippet__block is-wrapped"><code>[![{languages[selectedLanguage].text}](https://charmhub.io/static/images/badges/{selectedLanguage}/charmhub-black.svg)](https://charmhub.io/{packageName})</code></pre>
+            <pre className="p-code-snippet__block is-wrapped"><code>{`[![${languages[selectedLanguage].text}](https://charmhub.io/static/images/badges/${selectedLanguage}/charmhub-black.svg)](https://charmhub.io/${packageName})`}</code></pre>
           </div>
         </Col>
       </Row>
@@ -114,7 +114,7 @@ function PubliciseButtons() {
         <Col size={7}>
           <div className="p-code-snippet">
             {/* prettier-ignore */}
-            <pre className="p-code-snippet__block is-wrapped"><code>[![{languages[selectedLanguage].text}](https://charmhub.io/static/images/badges/{selectedLanguage}/charmhub-white.svg)](https://charmhub.io/{packageName})</code></pre>
+            <pre className="p-code-snippet__block is-wrapped"><code>{`[![${languages[selectedLanguage].text}](https://charmhub.io/static/images/badges/${selectedLanguage}/charmhub-white.svg)](https://charmhub.io/${packageName})`}</code></pre>
           </div>
         </Col>
       </Row>
