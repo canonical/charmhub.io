@@ -44,4 +44,16 @@ describe("SectionNav", () => {
       "true"
     );
   });
+
+  test("highlights listing nav link", async () => {
+    const user = userEvent.setup();
+    renderComponent();
+
+    await user.click(screen.getByText("Listing"));
+
+    expect(screen.getByText("Listing")).toHaveAttribute(
+      "aria-selected",
+      "true"
+    );
+  });
 });

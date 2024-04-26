@@ -90,9 +90,11 @@
     "eslint-plugin-react": "7.33.2",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
+    "msw": "2.2.14",
     "sass-loader": "14.1.0",
     "stylelint": "16.2.1",
     "stylelint-config-standard-scss": "13.0.0",
-    "stylelint-order": "6.0.4"
+    "stylelint-order": "6.0.4",
+    "undici": "6.15.0"
   }
 }

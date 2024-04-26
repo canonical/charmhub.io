@@ -12,9 +12,13 @@ function SectionNav() {
     <nav className="p-tabs">
       <ul className="p-tabs__list u-no-margin--bottom" role="tablist">
         <li className="p-tabs__item" role="presentation">
-          <a href={`/${packageName}/listing`} className="p-tabs__link">
+          <NavLink
+            to={`/${packageName}/listing`}
+            className="p-tabs__link"
+            aria-selected={isSelected(`/${packageName}/listing`)}
+          >
             Listing
-          </a>
+          </NavLink>
         </li>
         <li className="p-tabs__item" role="presentation">
           <NavLink
