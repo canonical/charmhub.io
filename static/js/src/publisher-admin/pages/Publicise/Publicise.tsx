@@ -15,36 +15,58 @@ function Publicise() {
   return (
     <Row>
       <Col size={3}>
-        <div className="p-side-navigation">
-          <ul className="p-side-navigation__list">
-            <li className="p-side-navigation__item">
-              <NavLink
-                end
-                to={`/${packageName}/publicise`}
-                className="p-side-navigation__link"
+        <div className="p-side-navigation " id="drawer">
+          <a
+            href="#drawer"
+            className="p-side-navigation__toggle"
+            aria-controls="drawer"
+          >
+            Toggle side navigation
+          </a>
+          <div
+            className="p-side-navigation__overlay"
+            aria-controls="drawer"
+          ></div>
+          <nav className="p-side-navigation__drawer">
+            <div className="p-side-navigation__drawer-header">
+              <a
+                href="#"
+                className="p-side-navigation__toggle--in-drawer"
+                aria-controls="drawer"
               >
-                Charmhub buttons
-              </NavLink>
-            </li>
-            <li className="p-side-navigation__item">
-              <NavLink
-                end
-                to={`/${packageName}/publicise/badges`}
-                className="p-side-navigation__link"
-              >
-                GitHub badges
-              </NavLink>
-            </li>
-            <li className="p-side-navigation__item">
-              <NavLink
-                end
-                to={`/${packageName}/publicise/cards`}
-                className="p-side-navigation__link"
-              >
-                Embeddable cards
-              </NavLink>
-            </li>
-          </ul>
+                Toggle side navigation
+              </a>
+            </div>
+            <ul className="p-side-navigation__list">
+              <li className="p-side-navigation__item">
+                <NavLink
+                  end
+                  to={`/${packageName}/publicise`}
+                  className="p-side-navigation__link"
+                >
+                  Charmhub buttons
+                </NavLink>
+              </li>
+              <li className="p-side-navigation__item">
+                <NavLink
+                  end
+                  to={`/${packageName}/publicise/badges`}
+                  className="p-side-navigation__link"
+                >
+                  GitHub badges
+                </NavLink>
+              </li>
+              <li className="p-side-navigation__item">
+                <NavLink
+                  end
+                  to={`/${packageName}/publicise/cards`}
+                  className="p-side-navigation__link"
+                >
+                  Embeddable cards
+                </NavLink>
+              </li>
+            </ul>
+          </nav>
         </div>
       </Col>
       <Col size={9}>
