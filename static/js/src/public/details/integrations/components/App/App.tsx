@@ -92,6 +92,49 @@ export const App = () => {
     }
   }
 
+  const renderSideNav = (data: IInterfaceData[], type: string) => {
+    const hasItems = data.some((interfaceItem: IInterfaceData) => interfaceItem.type === type);
+    if (!hasItems) {
+      return <></>;
+    } else {
+      return <>
+        <h3 className="p-side-navigation__heading" style={{ paddingLeft: 0, paddingTop: 10 }}>{type.toUpperCase()}</h3>
+        {data.map((interfaceItem: IInterfaceData, index) => {
+          if (interfaceItem.type === type) {
+            return (
+              <li
+                key={`${interfaceItem.key}|${interfaceItem.interface}`}
+                className="p-side-navigation__item"
+              >
+                <a
+                  className={`p-side-navigation__link ${
+                    isActive(`#${interfaceItem.key}`, index) ? "is-active" : ""
+                  }`}
+                  href={`#${interfaceItem.key}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const target = e.target as HTMLLinkElement;
+                    const targetElId = target.getAttribute("href");
+  
+                    if (targetElId) {
+                      const targetEl = document.querySelector(targetElId);
+                      targetEl?.scrollIntoView();
+                      setFragment(targetElId);
+                      window.location.hash = targetElId;
+                      target.classList.add("is-active");
+                    }
+                  }}
+                >
+                  {`${interfaceItem.key}`}
+                </a>
+              </li>
+            );
+          }
+        })}
+      </>;
+    }
+  };
+
   return (
     <Col size={12}>
       {!data && (
@@ -106,7 +149,7 @@ export const App = () => {
           <Spinner text="Loading..." />
         </div>
       )}
-      {data && (
+      {data && integrationCount > 0 && (
         <Row className="p-details-tab__content">
           <Col size={3} className="p-details-tab__content__sidebar">
             <div
@@ -114,36 +157,8 @@ export const App = () => {
               style={{ position: "sticky", top: "0" }}
             >
               <ul className="p-side-navigation__list">
-                {filteredData?.map((interfaceItem: IInterfaceData, index) => (
-                  <li
-                    className="p-side-navigation__item"
-                    key={`${interfaceItem.key}|${interfaceItem.interface}`}
-                  >
-                    <a
-                      className={`p-side-navigation__link ${
-                        isActive(`#${interfaceItem.key}`, index)
-                          ? "is-active"
-                          : ""
-                      }`}
-                      href={`#${interfaceItem.key}`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        const target = e.target as HTMLLinkElement;
-                        const targetElId = target.getAttribute("href");
-
-                        if (targetElId) {
-                          const targetEl = document.querySelector(targetElId);
-                          targetEl?.scrollIntoView();
-                          setFragment(targetElId);
-                          window.location.hash = targetElId;
-                          target.classList.add("is-active");
-                        }
-                      }}
-                    >
-                      {`${interfaceItem.key} | ${interfaceItem.interface}`}
-                    </a>
-                  </li>
-                ))}
+                {filteredData && renderSideNav(filteredData, 'provides')}
+                {filteredData && renderSideNav(filteredData, 'requires')}
               </ul>
             </div>
           </Col>
@@ -194,6 +209,20 @@ export const App = () => {
             ))}
           </Col>
         </Row>
+      )}
+      {data && integrationCount === 0 && (
+        <div className="p-strip u-no-padding--top">
+          <div className="u-fixed-width u-equal-height">
+            <div className="charm-empty-docs-icon u-vertically-center">
+              <img src="https://assets.ubuntu.com/v1/8acd8f55-Integrations.svg" alt="" width="121" height="121" />
+            </div>
+            <div className="col-9 charm-empty-docs-content">
+              <h4>No Integrations have been added for this charm</h4>
+              <p>Integration is a connection an application supports by virtue of having a particular endpoint.</p>
+              <p className="u-no-margin--bottom"><a className="p-button--positive u-no-margin--bottom" href="https://juju.is/docs/juju/relation">Learn how to manage charm integrations</a></p>
+            </div>
+          </div>
+        </div>
       )}
     </Col>
   );
