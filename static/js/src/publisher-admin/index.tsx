@@ -6,6 +6,7 @@ import { RecoilRoot } from "recoil";
 
 import Root from "./routes/root";
 import NotFound from "./pages/NotFound";
+import Publicise from "./pages/Publicise";
 import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient({
@@ -24,8 +25,18 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       {
-        path: "/:packageName/foo",
-        element: <h1>Hello</h1>,
+        path: "/:packageName/publicise",
+        element: <Publicise />,
+        children: [
+          {
+            path: "/:packageName/publicise/badges",
+            element: <Publicise />,
+          },
+          {
+            path: "/:packageName/publicise/cards",
+            element: <Publicise />,
+          },
+        ],
       },
       {
         path: "/:packageName/settings",

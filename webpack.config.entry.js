@@ -13,7 +13,6 @@ module.exports = {
   "store-details": "./static/js/src/public/store-details/index.js",
   list: "./static/js/src/publisher/list-page.js",
   listing: "./static/js/src/publisher/listing-page.js",
-  publicise: "./static/js/src/publisher/publicise.js",
   topics: "./static/js/src/public/topics/index.js",
   typer: "./static/js/src/libs/typer.js",
   "highlight-nav": "./static/js/src/libs/highlight-nav.js",

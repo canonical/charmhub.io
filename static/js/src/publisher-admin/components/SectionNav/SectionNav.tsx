@@ -4,9 +4,8 @@ function SectionNav() {
   const { packageName } = useParams();
   const location = useLocation();
 
-  const getSectionName = (path: string, sectionName: string) => {
-    const pathFragments = path.split("/");
-    return pathFragments[pathFragments.length - 1] === sectionName;
+  const isSelected = (sectionPath: string) => {
+    return location.pathname === sectionPath;
   };
 
   return (
@@ -18,9 +17,17 @@ function SectionNav() {
           </a>
         </li>
         <li className="p-tabs__item" role="presentation">
-          <a href={`/${packageName}/publicise`} className="p-tabs__link">
+          <NavLink
+            to={`/${packageName}/publicise`}
+            className="p-tabs__link"
+            aria-selected={
+              isSelected(`/${packageName}/publicise`) ||
+              isSelected(`/${packageName}/publicise/badges`) ||
+              isSelected(`/${packageName}/publicise/cards`)
+            }
+          >
             Publicise
-          </a>
+          </NavLink>
         </li>
         <li className="p-tabs__item" role="presentation">
           <a href={`/${packageName}/collaboration`} className="p-tabs__link">
@@ -31,7 +38,7 @@ function SectionNav() {
           <NavLink
             to={`/${packageName}/settings`}
             className="p-tabs__link"
-            aria-selected={getSectionName(location.pathname, "settings")}
+            aria-selected={isSelected(`/${packageName}/settings`)}
           >
             Settings
           </NavLink>
