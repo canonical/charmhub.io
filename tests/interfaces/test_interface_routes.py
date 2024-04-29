@@ -1,4 +1,3 @@
-from contextlib import _RedirectStream
 from unittest import TestCase
 from unittest.mock import patch, MagicMock
 from webapp.app import app
@@ -66,7 +65,7 @@ class TestInterfaceRoutes(TestCase):
     def test_single_interface_success(self, mock_get_single_interface):
         mock_response = MagicMock()
         mock_response.data.decode.return_value = (
-            '{"interface": {"name": "test_interface"}}'
+            '{"interface": {"name": "test_interface"}, "status": "live"}'
         )
         mock_get_single_interface.return_value = mock_response
 
@@ -79,14 +78,11 @@ class TestInterfaceRoutes(TestCase):
 
     @patch("webapp.interfaces.views.get_single_interface")
     def test_single_interface_draft_redirect(self, mock_get_single_interface):
-        mock_get_single_interface.side_effect = [
-            Exception("Failed to retrieve"),
-            _RedirectStream(
-                url_for(
-                    "interfaces.single_interface", path="test_interface/draft"
-                )
-            ),
-        ]
+        mock_response = MagicMock()
+        mock_response.data.decode.return_value = (
+            '{"name": "test_interface","status": "draft"}'
+        )
+        mock_get_single_interface.return_value = mock_response
 
         response = self.client.get(
             url_for("interfaces.single_interface", path="test_interface")
@@ -97,7 +93,11 @@ class TestInterfaceRoutes(TestCase):
 
     @patch("webapp.interfaces.views.get_single_interface")
     def test_single_interface_not_found(self, mock_get_single_interface):
-        mock_get_single_interface.side_effect = [Exception("Failed"), None]
+        mock_response = MagicMock()
+        mock_response.data.decode.return_value = (
+            '{"other_charms": {"providers": [], "requirers": []}}'
+        )
+        mock_get_single_interface.return_value = mock_response
 
         response = self.client.get(
             url_for(

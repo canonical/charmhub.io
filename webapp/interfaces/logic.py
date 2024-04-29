@@ -61,8 +61,12 @@ class Interfaces:
         else:
             return None
 
-    def get_interface_cont_from_repo(self, interface, status, content_type):
-        version = self.get_interface_latest_version(interface, status)
+    def get_interface_cont_from_repo(
+        self, interface, status, content_type, version=None
+    ):
+        if version is None:
+            version = self.get_interface_latest_version(interface, status)
+
         interface_path = "interfaces/{}/v{}".format(interface, version)
         interface_content = self.repo.get_contents(interface_path)
 
@@ -115,7 +119,79 @@ class Interfaces:
         except ValueError:
             return ""
 
+    def repo_has_interface(self, interface):
+        try:
+            self.repo.get_contents("interfaces/{}".format(interface))
+            return True
+        except Exception:
+            return False
+
+    def get_interface_from_path(self, interface_name):
+        interface_versions = self.repo.get_contents(
+            "interfaces/{}".format(interface_name)
+        )
+        versions = []
+        for i, version in enumerate(interface_versions):
+            if version.type == "dir" and version.name.startswith("v"):
+                versions.append(version.name)
+
+        versions.sort()
+
+        latest_version = versions.pop()
+
+        latest_version_interface = self.repo.get_contents(
+            "interfaces/{}/{}/interface.yaml".format(
+                interface_name, latest_version
+            )
+        ).decoded_content.decode("utf-8")
+        interface = yaml.load(latest_version_interface)
+
+        active_providers = []
+        active_requirers = []
+        url = "https://charmhub.io/"
+        if "providers" in interface and interface["providers"]:
+            for provider in interface["providers"]:
+                try:
+                    p = requests.get(f"{url}/{provider['name']}")
+                    if p.status_code != 404:
+                        active_providers.append(provider)
+                except Exception:
+                    continue
+
+                interface["providers"] = active_providers
+        if "requirers" in interface and interface["requirers"]:
+            for requirer in interface["requirers"]:
+                try:
+                    c = requests.get(f"{url}/{requirer['name']}")
+                    if c.status_code != 404:
+                        active_requirers.append(requirer)
+                except Exception:
+                    continue
+                interface["requirers"] = active_requirers
+
+        return interface
+
+    def get_interfaces_from_path(self):
+        interface_paths = self.repo.get_contents("interfaces")
+
+        interfaces = []
+        for i, row in enumerate(interface_paths):
+            path = row.path.replace("interfaces/", "")
+            if row.type == "dir" and not path.startswith("__"):
+                interface = {}
+                interface["name"] = path
+                interface["readme_path"] = (
+                    "https://github.com/canonical/charm-relation-interfaces/"
+                    + row.path
+                    + "/README.md"
+                )
+                interface["status"] = "draft"
+                interfaces.append(interface)
+
+        return interfaces
+
     def get_interfaces_from_readme(self, readme):
+        return None
         html_text = get_soup(html(readme))
         interface_table = html_text.find("table")
 

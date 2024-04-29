@@ -72,16 +72,30 @@ def all_interfaces(path):
 
 @interfaces.route("/interfaces/<path:path>")
 def single_interface(path):
+    is_draft = path.endswith("draft")
     interface = None
-    try:
-        response = get_single_interface(path, "")
-        interface = eval(response.data.decode("utf-8"))
-    except Exception:
+
+    if is_draft:
         response = get_single_interface(path, "draft")
-        if response:
-            return redirect(f"/interfaces/{path}/draft")
-        else:
-            abort(404)
+    else:
+        response = get_single_interface(path, "")
+
+    interface = eval(response.data.decode("utf-8"))
+
+    if (
+        "status" not in interface
+        and "other_charms" in interface
+        and len(interface["other_charms"]["providers"]) == 0
+        and len(interface["other_charms"]["requirers"]) == 0
+    ):
+        return abort(404)
+
+    if (
+        not is_draft
+        and "status" in interface
+        and interface["status"] == "draft"
+    ):
+        return redirect(f"/interfaces/{path}/draft")
 
     context = {"interface": interface}
     return render_template("interfaces/index.html", **context)
@@ -90,7 +104,7 @@ def single_interface(path):
 @interfaces.route("/interfaces/<interface_name>.json", defaults={"status": ""})
 @interfaces.route("/interfaces/<interface_name>/<status>.json")
 def get_single_interface(interface_name, status):
-    repo_has_interface = interface_logic.get_interface_list(interface_name)
+    repo_has_interface = interface_logic.repo_has_interface(interface_name)
 
     api = app.store_api
     other_requirers = api.find(requires=[interface_name]).get("results", [])
@@ -105,22 +119,10 @@ def get_single_interface(interface_name, status):
         }
         return jsonify(res)
 
-    interface_status = interface_logic.get_interface_status(
-        interface_name, status
-    )
-
-    # if the user sends request for a status that does not exist
-    if not interface_status:
-        if status == "live":
-            status = "draft"
-        else:
-            status = "live"
-    version = interface_logic.get_interface_latest_version(
-        interface_name, status
-    )
+    interface = interface_logic.get_interface_from_path(interface_name)
 
     readme_contentfile = interface_logic.get_interface_cont_from_repo(
-        interface_name, status, "README.md"
+        interface_name, status, "README.md", interface["version"]
     )
     last_modified = datetime.strptime(
         readme_contentfile[0].last_modified, "%a, %d %b %Y %H:%M:%S %Z"
@@ -129,14 +131,18 @@ def get_single_interface(interface_name, status):
     readme = readme_contentfile[0].decoded_content.decode("utf-8")
 
     res["body"] = interface_logic.convert_readme(
-        interface_name, version, readme, 2
+        interface_name, f"v{interface['version']}", readme, 2
     )
 
     res["name"] = interface_logic.get_interface_name_from_readme(readme)
-    res["charms"] = interface_logic.get_interface_yml(interface_name, status)
+    res["charms"] = {
+        "providers": interface["providers"],
+        "requirers": interface["requirers"],
+    }
     res["last_modified"] = last_modified
+    res["status"] = interface["status"]
 
-    res["version"] = version
+    res["version"] = interface["version"]
 
     res["other_charms"] = {
         "providers": other_providers,
