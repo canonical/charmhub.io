@@ -120,6 +120,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # fetch all history for codecov
 
       - uses: actions/setup-node@v4
         with:
@@ -130,8 +132,12 @@ jobs:
 
       - name: Test JS
         run: |
-          yarn test-js
-          bash <(curl -s https://codecov.io/bash) -cF javascript
+          yarn test-js --coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          flags: javascript
 
   check-inclusive-naming:
     runs-on: ubuntu-latest
