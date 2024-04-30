@@ -118,26 +118,6 @@ def list_page():
     return render_template("publisher/list.html", **context)
 
 
-@publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaboration',
-    defaults={"path": ""},
-)
-@publisher.route(
-    '/<regex("'
-    + DETAILS_VIEW_REGEX
-    + '"):entity_name>/collaboration/<path:path>',
-)
-@login_required
-def collaboration(entity_name, path):
-    package = publisher_api.get_package_metadata(
-        session["account-auth"], "charm", entity_name
-    )
-    context = {
-        "package": package,
-    }
-    return render_template("publisher/collaboration.html", **context)
-
-
 @publisher.route("/accept-invite")
 @login_required
 @cached_redirect

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
@@ -17,7 +17,7 @@ import Invites from "./Invites";
 import InviteCollaborator from "./InviteCollaborator";
 import InviteConfirmationModal from "./InviteConfirmationModal";
 
-import publisherMatchesFilterQuery from "../utils/publisherMatchesFilterQuery";
+import { publisherMatchesFilterQuery } from "../../utils";
 
 import {
   collaboratorsListState,
@@ -27,12 +27,12 @@ import {
   inviteLinkState,
   inviteEmailLinkState,
   filterQueryState,
-} from "../atoms";
+} from "../../state/atoms";
 import {
   filteredCollaboratorsListState,
   filteredInvitesListState,
-} from "../selectors";
-import { useCollaboratorsQuery, useInvitesQuery } from "../hooks";
+} from "../../state/selectors";
+import { useCollaboratorsQuery, useInvitesQuery } from "../../hooks";
 
 function Collaboration() {
   const { packageName } = useParams();

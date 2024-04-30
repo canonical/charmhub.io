@@ -1,6 +1,6 @@
 import { add } from "date-fns";
 
-import getInvitesByStatus from "./getInvitesByStatus";
+import getInvitesByStatus from "../getInvitesByStatus";
 
 const invites = [
   {

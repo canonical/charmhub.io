@@ -1,4 +1,4 @@
-import publisherMatchesFilterQuery from "./publisherMatchesFilterQuery";
+import publisherMatchesFilterQuery from "../publisherMatchesFilterQuery";
 
 const publisher = {
   "display-name": "John Doe",

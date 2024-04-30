@@ -1,12 +1,11 @@
-import React from "react";
 import { RecoilRoot } from "recoil";
 import { BrowserRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-import CollaboratorFilter from "./CollaboratorFilter";
-import { filterQueryState } from "../atoms";
-import { RecoilObserver, Provider } from "../test-utils";
+import CollaboratorFilter from "../CollaboratorFilter";
+import { filterQueryState } from "../../../state/atoms";
+import { RecoilObserver, QueryProvider } from "../../../utils";
 
 let mockSearchParams = { filter: "" };
 
@@ -27,10 +26,10 @@ const renderComponent = ({
   return render(
     <RecoilRoot>
       <BrowserRouter>
-        <Provider>
+        <QueryProvider>
           <RecoilObserver node={filterQueryState} event={event || jest.fn()} />
           <CollaboratorFilter />
-        </Provider>
+        </QueryProvider>
       </BrowserRouter>
     </RecoilRoot>
   );

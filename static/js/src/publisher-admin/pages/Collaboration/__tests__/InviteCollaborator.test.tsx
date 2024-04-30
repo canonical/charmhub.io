@@ -1,19 +1,18 @@
-import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
-import InviteCollaborator from "./InviteCollaborator";
-import { RecoilObserver, Provider } from "../test-utils";
-import { activeInviteEmailState } from "../atoms";
+import InviteCollaborator from "../InviteCollaborator";
+import { RecoilObserver, QueryProvider } from "../../../utils";
+import { activeInviteEmailState } from "../../../state/atoms";
 
 const renderComponent = ({ event }: { event?: Function }) => {
   return render(
     <RecoilRoot>
       <BrowserRouter>
-        <Provider>
+        <QueryProvider>
           <RecoilObserver
             node={activeInviteEmailState}
             event={event || jest.fn()}
@@ -23,7 +22,7 @@ const renderComponent = ({ event }: { event?: Function }) => {
             setShowInviteSuccess={jest.fn()}
             setShowInviteError={jest.fn()}
           />
-        </Provider>
+        </QueryProvider>
       </BrowserRouter>
     </RecoilRoot>
   );

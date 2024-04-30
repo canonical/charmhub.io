@@ -1,7 +1,6 @@
 import { selector } from "recoil";
 
-import getFilteredCollaborators from "./utils/getFilteredCollaborators";
-import getFilteredInvites from "./utils/getFilteredInvites";
+import { getFilteredInvites, getFilteredCollaborators } from "../utils";
 
 import {
   filterQueryState,
@@ -9,7 +8,7 @@ import {
   invitesListState,
 } from "./atoms";
 
-import type { Collaborator, Invite } from "./types";
+import type { Collaborator, Invite } from "../types";
 
 export const filteredCollaboratorsListState = selector<Array<Collaborator>>({
   key: "filteredCollaboratorsList",
