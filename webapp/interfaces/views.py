@@ -76,10 +76,7 @@ def single_interface(path):
     interface = None
 
     if is_draft:
-        response = get_single_interface(
-            path.replace("/draft", ""),
-            "draft"
-        )
+        response = get_single_interface(path.replace("/draft", ""), "draft")
     else:
         response = get_single_interface(path, "")
 
