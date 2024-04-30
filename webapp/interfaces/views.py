@@ -107,7 +107,6 @@ def single_interface(path):
 @interfaces.route("/interfaces/<interface_name>.json", defaults={"status": ""})
 @interfaces.route("/interfaces/<interface_name>/<status>.json")
 def get_single_interface(interface_name, status):
-    print(interface_name)
     repo_has_interface = interface_logic.repo_has_interface(interface_name)
 
     api = app.store_api
