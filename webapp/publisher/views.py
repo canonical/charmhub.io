@@ -215,7 +215,9 @@ def reject_post_invite():
 
 
 @publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaborators',
+    '/api/packages/<regex("'
+    + DETAILS_VIEW_REGEX
+    + '"):entity_name>/collaborators',
 )
 @login_required
 def get_collaborators(entity_name):
@@ -241,7 +243,7 @@ def get_collaborators(entity_name):
 
 
 @publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites',
+    '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites',
 )
 @login_required
 def get_pending_invites(entity_name):
@@ -267,7 +269,7 @@ def get_pending_invites(entity_name):
 
 
 @publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invite',
+    '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites',
     methods=["POST"],
 )
 @login_required
@@ -297,8 +299,8 @@ def invite_collaborators(entity_name):
 
 
 @publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites/revoke',
-    methods=["POST"],
+    '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites',
+    methods=["DELETE"],
 )
 @login_required
 def revoke_invite(entity_name):

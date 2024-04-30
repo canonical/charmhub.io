@@ -2,7 +2,7 @@ import { useQuery, useMutation } from "react-query";
 
 export function useCollaboratorsQuery(packageName: string | undefined) {
   return useQuery("collaboratorsData", async () => {
-    const response = await fetch(`/${packageName}/collaborators`, {
+    const response = await fetch(`/api/packages/${packageName}/collaborators`, {
       cache: "no-cache",
     });
 
@@ -22,7 +22,7 @@ export function useCollaboratorsQuery(packageName: string | undefined) {
 
 export function useInvitesQuery(packageName: string | undefined) {
   return useQuery("invitesData", async () => {
-    const response = await fetch(`/${packageName}/invites`, {
+    const response = await fetch(`/api/packages/${packageName}/invites`, {
       cache: "no-cache",
     });
 
@@ -63,7 +63,7 @@ export function useSendMutation(
       formData.set("collaborators", activeInviteEmail);
       formData.set("csrf_token", csrfToken);
 
-      const response = await fetch(`/${packageName}/invite`, {
+      const response = await fetch(`/api/packages/${packageName}/invites`, {
         method: "POST",
         body: formData,
       });
@@ -129,8 +129,8 @@ export function useRevokeMutation(
       formData.set("csrf_token", csrfToken);
       formData.set("collaborator", activeInviteEmail);
 
-      const response = await fetch(`/${packageName}/invites/revoke`, {
-        method: "POST",
+      const response = await fetch(`/api/packages/${packageName}/invites`, {
+        method: "DELETE",
         body: formData,
       });
 
