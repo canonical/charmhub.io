@@ -89,6 +89,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # fetch all history for codecov
 
       - name: Install requirements
         run: |
@@ -108,6 +110,11 @@ jobs:
         run: |
           SECRET_KEY=insecure_secret_key coverage run  --source=. -m unittest discover tests
           bash <(curl -s https://codecov.io/bash) -cF python
+          
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          flags: python
 
   test-js:
     runs-on: ubuntu-latest
