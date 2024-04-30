@@ -109,7 +109,6 @@ jobs:
       - name: Run python tests with coverage
         run: |
           SECRET_KEY=insecure_secret_key coverage run  --source=. -m unittest discover tests
-          bash <(curl -s https://codecov.io/bash) -cF python
           
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
