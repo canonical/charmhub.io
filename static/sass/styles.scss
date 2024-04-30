@@ -108,8 +108,6 @@ $breakpoint-navigation-threshold: 1110px;
 @include charmhub-p-tutorial;
 @import "charmhub_utils";
 @include charmhub-utils;
-@import "charmhub_publisher";
-@include charmhub-publisher;
 @import "charmhub_metrics";
 @include charmhub-metrics;
 @import "charmhub_p-contextual-menu";

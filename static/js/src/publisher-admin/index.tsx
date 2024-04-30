@@ -8,6 +8,7 @@ import Root from "./routes/root";
 import NotFound from "./pages/NotFound";
 import Publicise from "./pages/Publicise";
 import Settings from "./pages/Settings";
+import Listing from "./pages/Listing";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: "/:packageName/settings",
         element: <Settings />,
+      },
+      {
+        path: "/:packageName/listing",
+        element: <Listing />,
       },
     ],
   },

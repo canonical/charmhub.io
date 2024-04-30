@@ -14,7 +14,6 @@ from flask import (
 from flask.json import jsonify
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import login_required, cached_redirect
-from webapp.helpers import get_licenses
 
 publisher = Blueprint(
     "publisher",
@@ -57,6 +56,39 @@ def get_package(entity_name):
     )
 
     return jsonify({"data": package, "success": True})
+
+
+@publisher.route(
+    '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>',
+    methods=["PATCH"],
+)
+@login_required
+def update_package(entity_name):
+    payload = request.get_json()
+
+    res = {}
+
+    try:
+        package = publisher_api.update_package_metadata(
+            session["account-auth"], "charm", entity_name, payload
+        )
+        res["data"] = package
+        res["success"] = True
+        res["message"] = ""
+        response = make_response(res, 200)
+    except StoreApiResponseErrorList as error_list:
+        error_messages = [
+            f"{error.get('message', 'Unable to update this charm or bundle')}"
+            for error in error_list.errors
+        ]
+        if "unauthorized" in error_messages:
+            res["message"] = "Package not found"
+        else:
+            res["message"] = " ".join(error_messages)
+        res["success"] = False
+        response = make_response(res, 500)
+
+    return response
 
 
 @publisher.route("/charms")
@@ -298,50 +330,6 @@ def revoke_invite(entity_name):
         res["message"] = "An error occurred"
 
     return make_response(res, 500)
-
-
-@publisher.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/listing')
-@login_required
-def listing(entity_name):
-    package = publisher_api.get_package_metadata(
-        session["account-auth"], "charm", entity_name
-    )
-
-    licenses = []
-    for license in get_licenses():
-        licenses.append({"key": license["licenseId"], "name": license["name"]})
-    package["has-guardrails"] = (
-        False if len(package.get("track-guardrails", [])) == 0 else True
-    )
-    context = {
-        "package": package,
-        "licenses": licenses,
-    }
-    return render_template("publisher/listing.html", **context)
-
-
-@publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/listing',
-    methods=["POST"],
-)
-@login_required
-def post_listing(entity_name):
-    # These are the available fields to update in API
-    data = {
-        "contact": request.form["contact"],
-        "summary": request.form["summary"],
-        "title": request.form["title"],
-        "website": request.form["website"],
-    }
-
-    result = publisher_api.update_package_metadata(
-        session["account-auth"], "charm", entity_name, data
-    )
-
-    if result:
-        flash("Changes applied successfully.", "positive")
-
-    return redirect(url_for(".listing", entity_name=entity_name))
 
 
 @publisher.route("/register-name")
