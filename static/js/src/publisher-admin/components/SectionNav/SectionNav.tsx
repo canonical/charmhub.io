@@ -10,7 +10,7 @@ function SectionNav() {
 
   return (
     <nav className="p-tabs">
-      <ul className="p-tabs__list u-no-margin--bottom" role="tablist">
+      <ul className="p-tabs__list" role="tablist">
         <li className="p-tabs__item" role="presentation">
           <NavLink
             to={`/${packageName}/listing`}
