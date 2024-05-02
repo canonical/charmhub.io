@@ -1,9 +1,8 @@
-import React from "react";
 import { useSetRecoilState } from "recoil";
 import { format } from "date-fns";
 import { Button } from "@canonical/react-components";
 
-import { activeInviteEmailState } from "../atoms";
+import { activeInviteEmailState } from "../state/atoms";
 
 import type { Invite } from "../types";
 

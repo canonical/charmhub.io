@@ -1,11 +1,9 @@
-import React from "react";
 import { useRecoilValue } from "recoil";
 import { MainTable } from "@canonical/react-components";
 
-import getInvitesByStatus from "../utils/getInvitesByStatus";
-import buildInviteTableRows from "../utils/buildInviteTableRows";
+import { getInvitesByStatus, buildInviteTableRows } from "../../utils";
 
-import { filteredInvitesListState } from "../selectors";
+import { filteredInvitesListState } from "../../state/selectors";
 
 type Props = {
   setShowRevokeModal: Function;

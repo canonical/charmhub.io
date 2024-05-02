@@ -56,4 +56,16 @@ describe("SectionNav", () => {
       "true"
     );
   });
+
+  test("highlights collaboration link", async () => {
+    const user = userEvent.setup();
+    renderComponent();
+
+    await user.click(screen.getByText("Collaboration"));
+
+    expect(screen.getByText("Collaboration")).toHaveAttribute(
+      "aria-selected",
+      "true"
+    );
+  });
 });

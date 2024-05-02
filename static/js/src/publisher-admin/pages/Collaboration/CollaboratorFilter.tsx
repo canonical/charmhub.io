@@ -1,9 +1,8 @@
-import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { Button, Icon } from "@canonical/react-components";
 
-import { filterQueryState } from "../atoms";
+import { filterQueryState } from "../../state/atoms";
 
 function CollaboratorFilter() {
   const [searchParams, setSearchParams] = useSearchParams();

@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from "react";
+import { SyntheticEvent } from "react";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
@@ -10,17 +10,17 @@ import {
   Icon,
 } from "@canonical/react-components";
 
-import { isPending } from "../utils/getInvitesByStatus";
+import { isPending } from "../../utils";
 import {
   activeInviteEmailState,
   invitesListState,
   inviteLinkState,
   inviteEmailLinkState,
   publisherState,
-} from "../atoms";
-import { useSendMutation } from "../hooks";
+} from "../../state/atoms";
+import { useSendMutation } from "../../hooks";
 
-import { Invite } from "../types";
+import { Invite } from "../../types";
 
 type Props = {
   setShowSidePanel: Function;

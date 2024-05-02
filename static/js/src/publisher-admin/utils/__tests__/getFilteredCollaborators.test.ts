@@ -1,4 +1,4 @@
-import getFilteredCollaborators from "./getFilteredCollaborators";
+import getFilteredCollaborators from "../getFilteredCollaborators";
 
 const collaborators = [
   {

@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import Publicise from "./pages/Publicise";
 import Settings from "./pages/Settings";
 import Listing from "./pages/Listing";
+import Collaboration from "./pages/Collaboration";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: "/:packageName/listing",
         element: <Listing />,
+      },
+      {
+        path: "/:packageName/collaboration",
+        element: <Collaboration />,
       },
     ],
   },

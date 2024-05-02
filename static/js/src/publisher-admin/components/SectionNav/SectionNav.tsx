@@ -10,7 +10,7 @@ function SectionNav() {
 
   return (
     <nav className="p-tabs">
-      <ul className="p-tabs__list u-no-margin--bottom" role="tablist">
+      <ul className="p-tabs__list" role="tablist">
         <li className="p-tabs__item" role="presentation">
           <NavLink
             to={`/${packageName}/listing`}
@@ -34,9 +34,13 @@ function SectionNav() {
           </NavLink>
         </li>
         <li className="p-tabs__item" role="presentation">
-          <a href={`/${packageName}/collaboration`} className="p-tabs__link">
+          <NavLink
+            to={`/${packageName}/collaboration`}
+            className="p-tabs__link"
+            aria-selected={isSelected(`/${packageName}/collaboration`)}
+          >
             Collaboration
-          </a>
+          </NavLink>
         </li>
         <li className="p-tabs__item" role="presentation">
           <NavLink

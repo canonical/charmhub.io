@@ -1,16 +1,15 @@
-import React from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { format } from "date-fns";
 import { MainTable, Button } from "@canonical/react-components";
 
-import publisherMatchesFilterQuery from "../utils/publisherMatchesFilterQuery";
+import { publisherMatchesFilterQuery } from "../../utils";
 
 import {
   filterQueryState,
   publisherState,
   activeInviteEmailState,
-} from "../atoms";
-import { filteredCollaboratorsListState } from "../selectors";
+} from "../../state/atoms";
+import { filteredCollaboratorsListState } from "../../state/selectors";
 
 type Props = {
   setShowRevokeModal: Function;

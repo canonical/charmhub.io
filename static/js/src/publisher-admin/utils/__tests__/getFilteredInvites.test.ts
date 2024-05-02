@@ -1,4 +1,4 @@
-import getFilteredInvites from "./getFilteredInvites";
+import getFilteredInvites from "../getFilteredInvites";
 
 const invites = [
   {

@@ -452,12 +452,17 @@ h3 {
   }
 }
 
+.l-application {
+  width: 100% !important;
+}
+
 .l-aside {
   background-color: $color-x-light;
   height: 100vh;
   max-width: 535px;
   padding: 1rem;
   position: fixed;
+  right: 0;
   top: 0;
   z-index: 999;
 
@@ -469,7 +474,6 @@ h3 {
 .p-panel {
   display: flex;
   flex-direction: column;
-  padding-right: 0.75rem;
 }
 
 .p-panel__content {
@@ -478,11 +482,11 @@ h3 {
 
 .p-panel__footer {
   border-top: 1px solid $color-mid-x-light;
-  padding: $sph--large 0;
+  padding-top: $sph--large;
 }
 
 .l-aside__overlay {
-  background-color: transparent;
+  background-color: rgba(0,0,0,0.5);
   height: 100%;
   position: fixed;
   right: 0;

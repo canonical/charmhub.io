@@ -1,4 +1,3 @@
-import React from "react";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil";
@@ -11,12 +10,12 @@ import {
   collaboratorsListState,
   inviteEmailLinkState,
   publisherState,
-} from "../atoms";
+} from "../../state/atoms";
 import {
   filteredInvitesListState,
   filteredCollaboratorsListState,
-} from "../selectors";
-import { useSendMutation, useRevokeMutation } from "../hooks";
+} from "../../state/selectors";
+import { useSendMutation, useRevokeMutation } from "../../hooks";
 
 type Props = {
   action: string;

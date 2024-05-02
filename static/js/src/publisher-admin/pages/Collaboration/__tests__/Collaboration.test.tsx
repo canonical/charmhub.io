@@ -1,24 +1,23 @@
-import React from "react";
 import { RecoilRoot } from "recoil";
 import { BrowserRouter } from "react-router-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-import Collaboration from "./Collaboration";
+import Collaboration from "../Collaboration";
 import {
   filteredCollaboratorsListState,
   filteredInvitesListState,
-} from "../selectors";
-import { RecoilObserver, Provider } from "../test-utils";
+} from "../../../state/selectors";
+import { RecoilObserver, QueryProvider } from "../../../utils";
 
 const renderComponent = ({ event, state }: { event: Function; state: any }) => {
   return render(
     <RecoilRoot>
       <BrowserRouter>
-        <Provider>
+        <QueryProvider>
           <RecoilObserver node={state} event={event} />
           <Collaboration />
-        </Provider>
+        </QueryProvider>
       </BrowserRouter>
     </RecoilRoot>
   );
