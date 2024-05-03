@@ -19,6 +19,11 @@ function Root() {
     }
   }, [packageData]);
 
+  // This is to be removed
+  window.testSentryError = () => {
+    throw new Error("Testing sentry on charmhub.io");
+  };
+
   return (
     <>
       <SectionHeader />
