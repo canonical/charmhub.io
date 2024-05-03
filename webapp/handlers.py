@@ -1,4 +1,5 @@
 from flask import render_template, session
+from webapp.config import SENTRY_DSN
 
 from canonicalwebteam.store_api.exceptions import (
     StoreApiError,
@@ -31,6 +32,7 @@ def charmhub_utility_processor():
         "schedule_banner": helpers.schedule_banner,
         "account": account,
         "image": image_template,
+        "SENTRY_DSN": SENTRY_DSN,
     }
 
 
