@@ -27,6 +27,7 @@ GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 
 github_client = Github(GITHUB_TOKEN)
 
+
 @integrations.route("/integrations/<path:path>")
 def single_interface(path):
     is_draft = path.endswith("draft")
@@ -58,7 +59,9 @@ def single_interface(path):
     return render_template("interfaces/index.html", **context)
 
 
-@integrations.route("/integrations/<interface_name>.json", defaults={"status": ""})
+@integrations.route(
+    "/integrations/<interface_name>.json", defaults={"status": ""}
+)
 @integrations.route("/integrations/<interface_name>/<status>.json")
 def get_single_interface(interface_name, status):
     repo_has_interface = interface_logic.repo_has_interface(interface_name)

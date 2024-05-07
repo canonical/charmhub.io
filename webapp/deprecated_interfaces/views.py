@@ -1,14 +1,9 @@
-from datetime import datetime
-
 from flask import (
     Blueprint,
     render_template,
     make_response,
-    current_app as app,
     redirect,
-    abort,
 )
-from flask.json import jsonify
 from github import Github
 from os import getenv
 
@@ -74,7 +69,8 @@ def all_interfaces(path):
 def deprecated_single_interface(path):
     return redirect(f"/integrations/{path}")
 
+
 @interfaces.route("/interfaces/<interface_name>.json", defaults={"status": ""})
 @interfaces.route("/interfaces/<interface_name>/<status>.json")
 def deprecated_get_single_interface(interface_name, status):
-   return redirect(f"/integrations/{interface_name}/{status}.json")
+    return redirect(f"/integrations/{interface_name}/{status}.json")
