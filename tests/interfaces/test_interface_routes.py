@@ -16,8 +16,8 @@ class TestInterfaceRoutes(TestCase):
     def tearDown(self):
         self.context.pop()
 
-    @patch("webapp.interfaces.logic.Interfaces.get_interfaces")
-    @patch("webapp.interfaces.logic.github_client.get_repo")
+    @patch("webapp.integrations.logic.Interfaces.get_interfaces")
+    @patch("webapp.integrations.logic.github_client.get_repo")
     def test_get_interfaces(self, mock_get_repo, mock_get_interfaces):
         mock_get_interfaces.return_value = [
             {
@@ -61,7 +61,7 @@ class TestInterfaceRoutes(TestCase):
                 "Interface status does not match expected value",
             )
 
-    @patch("webapp.interfaces.views.get_single_interface")
+    @patch("webapp.integrations.views.get_single_interface")
     def test_single_interface_success(self, mock_get_single_interface):
         mock_response = MagicMock()
         mock_response.data.decode.return_value = (
@@ -70,13 +70,13 @@ class TestInterfaceRoutes(TestCase):
         mock_get_single_interface.return_value = mock_response
 
         response = self.client.get(
-            url_for("interfaces.single_interface", path="test_interface")
+            url_for("integrations.single_interface", path="test_interface")
         )
 
         self.assertEqual(response.status_code, 200)
         mock_get_single_interface.assert_called_with("test_interface", "")
 
-    @patch("webapp.interfaces.views.get_single_interface")
+    @patch("webapp.integrations.views.get_single_interface")
     def test_single_interface_draft_redirect(self, mock_get_single_interface):
         mock_response = MagicMock()
         mock_response.data.decode.return_value = (
@@ -85,13 +85,13 @@ class TestInterfaceRoutes(TestCase):
         mock_get_single_interface.return_value = mock_response
 
         response = self.client.get(
-            url_for("interfaces.single_interface", path="test_interface")
+            url_for("integrations.single_interface", path="test_interface")
         )
 
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response.location.endswith("test_interface/draft"))
 
-    @patch("webapp.interfaces.views.get_single_interface")
+    @patch("webapp.integrations.views.get_single_interface")
     def test_single_interface_not_found(self, mock_get_single_interface):
         mock_response = MagicMock()
         mock_response.data.decode.return_value = (
@@ -101,7 +101,7 @@ class TestInterfaceRoutes(TestCase):
 
         response = self.client.get(
             url_for(
-                "interfaces.single_interface", path="nonexistent_interface"
+                "integrations.single_interface", path="nonexistent_interface"
             )
         )
         self.assertEqual(response.status_code, 404)
