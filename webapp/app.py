@@ -13,6 +13,7 @@ from webapp.topics.views import topics
 from webapp.publisher.views import publisher
 from webapp.store.views import store
 from webapp.integrations.views import integrations
+from webapp.deprecated_interfaces.views import interfaces
 from webapp.search.views import search
 from webapp.search.logic import cache
 from webapp.helpers import markdown_to_html
@@ -57,6 +58,7 @@ app.register_blueprint(store)
 app.register_blueprint(login)
 app.register_blueprint(topics)
 app.register_blueprint(integrations)
+app.register_blueprint(interfaces)
 app.register_blueprint(search)
 
 
