@@ -136,7 +136,7 @@ export const InterfaceItem = ({
           <span className="u-text--muted"> endpoint</span>
         </div>
         <div>
-          <a href={`/interfaces/${interfaceData.interface}`}>
+          <a href={`/integrations/${interfaceData.interface}`}>
             {interfaceData.interface}
           </a>
           <span className="u-text--muted"> interface </span>
@@ -151,7 +151,7 @@ export const InterfaceItem = ({
               The <b>{interfaceData.key}</b> endpoint
               <b>{interfaceType === "requires" ? " requires " : " provides "}</b> 
               an integration over the {" "}
-              <a href={`/interfaces/${interfaceData.interface}`}>
+              <a href={`/integrations/${interfaceData.interface}`}>
                 {interfaceData.interface}
               </a> 
               {" "} interface

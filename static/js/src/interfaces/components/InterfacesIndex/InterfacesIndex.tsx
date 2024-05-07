@@ -201,7 +201,7 @@ function InterfacesIndex({ interfacesList }: Props) {
                         }}
                       >
                         {item?.status === "Live" && (
-                          <Link to={`/interfaces/${item?.name}`}>
+                          <Link to={`/integrations/${item?.name}`}>
                             {item?.name}
                           </Link>
                         )}
@@ -211,7 +211,7 @@ function InterfacesIndex({ interfacesList }: Props) {
                               {item?.status}
                             </StatusLabel>
                             <Link
-                              to={`/interfaces/${
+                              to={`/integrations/${
                                 item?.name
                               }/${item?.status.toLowerCase()}`}
                             >
