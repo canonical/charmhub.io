@@ -10,7 +10,6 @@ overview: https://juju.is/about
 kubeflow-charmers-kubeflow-edge: kubeflow-edge
 openstack-charmers-keystone-saml-mellon: keystone-saml-mellon
 containers-etcd: etcd
-canonical-kubernetes: charmed-kubernetes
 search\??(?P<search>.*)?/?: /?{search}
 /(?P<charm>[A-Za-z0-9-]*[A-Za-z][A-Za-z0-9-]*)/configure: /{charm}/configuration
 
