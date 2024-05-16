@@ -27,11 +27,11 @@ function pageArray(items: Array<any>, count: number) {
 }
 
 function sortInterfaces(a: InterfaceItem, b: InterfaceItem) {
-  if (a.status === "Live" && b.status !== "Live") {
+  if (a.status === "live" && b.status !== "live") {
     return -1;
   }
 
-  if (a.status !== "Live" && b.status === "Live") {
+  if (a.status !== "live" && b.status === "live") {
     return 1;
   }
 
@@ -165,26 +165,12 @@ function InterfacesIndex({ interfacesList }: Props) {
             {
               content: "Interface name",
               heading: "Interface name",
-              style: {
-                width: "25%",
-              },
             },
             {
               content: "Version",
               heading: "Version",
               style: {
                 width: "80px",
-              },
-            },
-            {
-              content: "Category",
-              heading: "Category",
-            },
-            {
-              content: "Overview",
-              heading: "Overview",
-              style: {
-                width: "45%",
               },
             },
           ]}
@@ -200,12 +186,12 @@ function InterfacesIndex({ interfacesList }: Props) {
                           display: "flex",
                         }}
                       >
-                        {item?.status === "Live" && (
+                        {item?.status === "live" && (
                           <Link to={`/integrations/${item?.name}`}>
                             {item?.name}
                           </Link>
                         )}
-                        {item?.status !== "Live" && (
+                        {item?.status !== "live" && (
                           <>
                             <StatusLabel style={{ marginRight: "1rem" }}>
                               {item?.status}
@@ -213,7 +199,7 @@ function InterfacesIndex({ interfacesList }: Props) {
                             <Link
                               to={`/integrations/${
                                 item?.name
-                              }/${item?.status.toLowerCase()}`}
+                              }/${item?.status}`}
                             >
                               {item?.name}
                             </Link>
@@ -225,12 +211,6 @@ function InterfacesIndex({ interfacesList }: Props) {
                   {
                     content: item?.version,
                     className: "u-align--right",
-                  },
-                  {
-                    content: item?.category,
-                  },
-                  {
-                    content: item?.description.split(".")[0],
                   },
                 ],
               };
