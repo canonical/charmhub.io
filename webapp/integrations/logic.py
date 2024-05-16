@@ -4,9 +4,8 @@ from github import Github
 from os import getenv
 
 import requests
-from mistune import html
 
-from webapp.helpers import get_soup, get_yaml_loader
+from webapp.helpers import get_yaml_loader
 
 GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 
@@ -28,38 +27,49 @@ class Interfaces:
         if (
             len(self.interfaces) == 0
             or not self.last_fetch
-            or time.time() - self.last_fetch > 3600
+            or time.time() - self.last_fetch > 172800
         ):
-            readme = self.repo.get_contents(
-                "README.md"
-            ).decoded_content.decode("utf-8")
-            # the readme fetched here is for all interfaces
-            self.interfaces = self.get_interfaces_from_readme(readme)
+
+            interfaces_contents = self.repo.get_contents("interfaces")
+            interfaces_table = []
+
+            for interface in interfaces_contents:
+                if interface.name.startswith("__"):
+                    continue
+                interface_content = self.repo.get_contents(
+                    f"interfaces/{interface.name}"
+                )
+                for version in interface_content:
+                    interface_details = {}
+                    version_content = self.repo.get_contents(
+                        f"interfaces/{interface.name}/{version.name}"
+                    )
+                    for details in version_content:
+                        if details.name == "interface.yaml":
+                            interface_yaml = yaml.load(
+                                details.decoded_content.decode("utf-8")
+                            )
+                            interface_details["name"] = interface_yaml.get(
+                                "name", interface.name
+                            )
+
+                            if interface_yaml.get("status") == "published":
+                                interface_details["status"] = "live"
+                            elif interface_yaml.get("status") == "draft":
+                                interface_details["status"] = "draft"
+                            interface_details["version"] = interface_yaml.get(
+                                "version", version.name[1:]
+                            )
+                        if details.name == "README.md":
+                            interface_details["readme_path"] = details.html_url
+                    if interface_details.get("status", "") in [
+                        "live",
+                        "draft",
+                    ]:
+                        interfaces_table.append(interface_details)
+            self.interfaces = interfaces_table
             self.last_fetch = time.time()
-
         return self.interfaces
-
-    def get_interface_list(self, interface):
-        """
-        return all versions of a particular interface from the interfaces list
-        """
-        interfaces = self.get_interfaces()
-        return [i for i in interfaces if i["name"] == interface]
-
-    def get_interface_status(self, interface, status):
-        interfaces = self.get_interface_list(interface)
-        inter = [i for i in interfaces if i["status"].lower() == status]
-        return inter
-
-    def get_interface_latest_version(self, interface, status):
-        interface_has_status = self.get_interface_status(interface, status)
-        if interface_has_status:
-            latest_version = min(
-                interface_has_status, key=lambda x: x["version"]
-            )
-            return latest_version["version"]
-        else:
-            return None
 
     def get_interface_cont_from_repo(
         self, interface, status, content_type, version=None
@@ -76,48 +86,6 @@ class Interfaces:
             if path.path.endswith(content_type)
         ]
         return content
-
-    def get_interface_yml(self, interface, status):
-        content = self.get_interface_cont_from_repo(
-            interface, status, "charms.yaml"
-        )
-        if content:
-            cont = content[0].decoded_content.decode("utf-8")
-            charms = yaml.load(cont)
-            active_providers = []
-            active_requirers = []
-            url = "https://charmhub.io/"
-            if "providers" in charms and charms["providers"]:
-                for provider in charms["providers"]:
-                    try:
-                        p = requests.get(f"{url}/{provider['name']}")
-                        if p.status_code != 404:
-                            active_providers.append(provider)
-                    except Exception:
-                        continue
-
-                charms["providers"] = active_providers
-            if "requirers" in charms and charms["requirers"]:
-                for requirer in charms["requirers"]:
-                    try:
-                        c = requests.get(f"{url}/{requirer['name']}")
-                        if c.status_code != 404:
-                            active_requirers.append(requirer)
-                    except Exception:
-                        continue
-                charms["requirers"] = active_requirers
-
-        else:
-            charms = {"providers": [], "requirers": []}
-        return charms
-
-    def find_between(self, s, first, last):
-        try:
-            start = s.index(first) + len(first)
-            end = s.index(last, start)
-            return s[start:end]
-        except ValueError:
-            return ""
 
     def repo_has_interface(self, interface):
         try:
@@ -171,92 +139,6 @@ class Interfaces:
 
         return interface
 
-    def get_interfaces_from_path(self):
-        interface_paths = self.repo.get_contents("interfaces")
-
-        interfaces = []
-        for i, row in enumerate(interface_paths):
-            path = row.path.replace("interfaces/", "")
-            if row.type == "dir" and not path.startswith("__"):
-                interface = {}
-                interface["name"] = path
-                interface["readme_path"] = (
-                    "https://github.com/canonical/charm-relation-interfaces/"
-                    + row.path
-                    + "/README.md"
-                )
-                interface["status"] = "draft"
-                interfaces.append(interface)
-
-        return interfaces
-
-    def get_interfaces_from_readme(self, readme):
-        return None
-        html_text = get_soup(html(readme))
-        interface_table = html_text.find("table")
-
-        interfaces = []
-        for i, row in enumerate(interface_table.find_all("tr")):
-            if i == 0:
-                keys = [th.text.lower() for th in row.find_all("th")]
-            else:
-                interface = {}
-                for j, key in enumerate(keys):
-                    cols = row.find_all("td")
-                    if key == "interface":
-                        interface["name"] = cols[j].text
-                    else:
-                        interface[key] = cols[j].text
-                    interface["readme_path"] = cols[1].find("a")["href"]
-                    interface["status"] = (
-                        cols[2].find("img")["alt"].split(":")[1].strip()
-                    )
-                if interface:
-                    interfaces.append(interface)
-
-        # Curate data for the interface
-        category_cache = ""
-        for interface in interfaces:
-            name_data = interface["name"]
-            version = None
-
-            if "/" in name_data:
-                splitted_name = name_data.split("/")
-                version = splitted_name[1].replace("v", "")
-                interface["name"] = splitted_name[0]
-
-            if not version and interface["readme_path"]:
-                version = (
-                    interface["readme_path"].split("/")[2].replace("v", "")
-                )
-            interface["version"] = version
-
-            if interface["category"]:
-                category = interface["category"]
-                category_cache = category
-            else:
-                interface["category"] = category_cache
-
-        return interfaces
-
-    def filter_interfaces_by_status(self, status):
-        interfaces = self.get_interfaces()
-        return list(
-            filter(lambda item: (item["status"] == status), interfaces)
-        )
-
-    def strip_str(self, string):
-        return re.sub(r"[^a-zA-Z0-9 ().,!-_/:;`]", "", string)
-
-    def get_short_description_from_readme(self, readme):
-        lines = readme.split("\n")
-
-        for line in lines:
-            if line and line[0].isalpha():
-                return line
-
-        return None
-
     def get_h_content(self, text, pattern):
         start_index = text.index(pattern)
         return [start_index, start_index + len(pattern)]
@@ -283,13 +165,6 @@ class Interfaces:
 
             result.append([current_heading.strip(), body.strip()])
         return result
-
-    def get_schema_url(self, interface, version, schema):
-        base_link = (
-            "{}https://github.com/canonical/"
-            "charm-relation-interfaces/blob/main/interfaces/{}/v{}"
-        ).format("(", interface, version)
-        return base_link.join(schema.split("(."))
 
     def parse_text(self, interface, version, text):
         base_link = (

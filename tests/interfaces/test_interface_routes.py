@@ -4,7 +4,7 @@ from webapp.app import app
 from flask import url_for
 
 
-class TestInterfaceRoutes(TestCase):
+class TestIntegrationRoutes(TestCase):
     def setUp(self):
         self.app = app
         self.app.config["TESTING"] = True
@@ -34,15 +34,13 @@ class TestInterfaceRoutes(TestCase):
         mock_repo.get_contents.return_value = mock_content
         mock_get_repo.return_value = mock_repo
 
-        response = self.client.get("/interfaces.json")
+        response = self.client.get("/integrations.json")
         self.assertEqual(response.status_code, 200)
         json_data = response.json
 
         self.assertIn("interfaces", json_data)
         self.assertIsInstance(json_data["interfaces"], list)
-        for interface in json_data["interfaces"]:
-            self.assertIn("description", interface)
-            self.assertIsInstance(interface["description"], str)
+
         self.assertEqual(
             len(json_data["interfaces"]),
             1,
@@ -60,6 +58,11 @@ class TestInterfaceRoutes(TestCase):
                 "live",
                 "Interface status does not match expected value",
             )
+
+    def test_interfaces_redirect_to_integrations(self):
+        response = self.client.get("/interfaces")
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.location.endswith("/integrations"))
 
     @patch("webapp.integrations.views.get_single_interface")
     def test_single_interface_success(self, mock_get_single_interface):

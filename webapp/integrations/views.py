@@ -28,6 +28,31 @@ GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 github_client = Github(GITHUB_TOKEN)
 
 
+def get_interfaces():
+    interfaces = interface_logic.get_interfaces()
+
+    response = {
+        "interfaces": interfaces,
+        "size": len(interfaces),
+    }
+    return response
+
+
+@integrations.route("/integrations.json")
+def interfaces_json():
+    return get_interfaces()
+
+
+@integrations.route("/integrations", defaults={"path": ""})
+def all_interfaces(path):
+    if not getenv("ENVIRONMENT") in ["devel", "staging"]:
+        return render_template("404.html")
+
+    response = get_interfaces()
+    context = {"interfaces": response["interfaces"]}
+    return render_template("interfaces/index.html", **context)
+
+
 @integrations.route("/integrations/<path:path>")
 def single_interface(path):
     is_draft = path.endswith("draft")
