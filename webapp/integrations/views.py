@@ -106,14 +106,14 @@ def get_single_interface(interface_name, status):
 
     interface = interface_logic.get_interface_from_path(interface_name)
 
-    readme_contentfile = interface_logic.get_interface_cont_from_repo(
-        interface_name, status, "README.md", interface["version"]
+    readme_contentfile = interface_logic.repo.get_contents(
+        f"interfaces/{interface_name}/v{interface["version"]}/README.md"
     )
-    last_modified = datetime.strptime(
-        readme_contentfile[0].last_modified, "%a, %d %b %Y %H:%M:%S %Z"
-    ).isoformat()
+    readme = readme_contentfile.decoded_content.decode("utf-8")
 
-    readme = readme_contentfile[0].decoded_content.decode("utf-8")
+    last_modified = datetime.strptime(
+        readme_contentfile.last_modified, "%a, %d %b %Y %H:%M:%S %Z"
+    ).isoformat()
 
     res["body"] = interface_logic.convert_readme(
         interface_name, f"v{interface['version']}", readme, 2
@@ -135,5 +135,5 @@ def get_single_interface(interface_name, status):
     }
 
     response = make_response(res)
-    response.cache_control.max_age = "3600"
+    response.cache_control.max_age = "76800"
     return response
