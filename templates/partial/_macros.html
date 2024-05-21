@@ -20,10 +20,10 @@
         {% if element.children %}
           <button class="p-side-navigation__expand" aria-expanded={% if element.is_active or element.has_active_child %}"true"{% else %}"false"{% endif %} aria-label="show submenu for {{ element.navlink_text }}"></button>
         {% endif %}
-        {{ create_navigation(element.children, expandable, element.is_active or element.has_active_child) }}
+        {{ create_navigation(element.children, channel_requested, expandable, element.is_active or element.has_active_child) }}
       {% else %}
         {% if element.children %}
-          {{ create_navigation(element.children, expandable) }}
+          {{ create_navigation(element.children, channel_requested, expandable) }}
         {% endif %}
       {% endif %}
     </li>
