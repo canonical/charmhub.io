@@ -107,7 +107,7 @@ def get_single_interface(interface_name, status):
     interface = interface_logic.get_interface_from_path(interface_name)
 
     readme_contentfile = interface_logic.repo.get_contents(
-        f"interfaces/{interface_name}/v{interface["version"]}/README.md"
+        f"interfaces/{interface_name}/v{interface['version']}/README.md"
     )
     readme = readme_contentfile.decoded_content.decode("utf-8")
 
