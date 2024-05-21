@@ -71,22 +71,6 @@ class Interfaces:
             self.last_fetch = time.time()
         return self.interfaces
 
-    def get_interface_cont_from_repo(
-        self, interface, status, content_type, version=None
-    ):
-        if version is None:
-            version = self.get_interface_latest_version(interface, status)
-
-        interface_path = "interfaces/{}/v{}".format(interface, version)
-        interface_content = self.repo.get_contents(interface_path)
-
-        content = [
-            path
-            for path in interface_content
-            if path.path.endswith(content_type)
-        ]
-        return content
-
     def repo_has_interface(self, interface):
         try:
             self.repo.get_contents("interfaces/{}".format(interface))
