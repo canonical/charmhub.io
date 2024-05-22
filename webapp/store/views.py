@@ -183,20 +183,9 @@ def details_overview(entity_name):
     description = None
     summary = None
 
-    if not package["store_front"]["docs_topic"]:
-        navigation = None
+    docs_topic = package["store_front"].get("docs_topic")
 
-        if package["type"] == "bundle":
-            description = package["store_front"]["bundle"].get(
-                "description", None
-            )
-            summary = package["store_front"]["bundle"].get("summary", None)
-        else:
-            description = package["store_front"]["metadata"].get(
-                "description", None
-            )
-            summary = package["store_front"]["metadata"].get("summary", None)
-    else:
+    if docs_topic:
         docs_url_prefix = f"/{package['name']}/docs"
 
         docs = DocParser(
@@ -204,52 +193,64 @@ def details_overview(entity_name):
             index_topic_id=package["store_front"]["docs_topic"],
             url_prefix=docs_url_prefix,
         )
-        docs.parse()
-        topic = docs.index_topic
+        try:
+            docs.parse()
+            topic = docs.index_topic
+            docs_content = docs.parse_topic(topic)
+            description = docs_content.get("body_html", "")
 
-        docs_content = docs.parse_topic(topic)
-        description = docs_content.get("body_html", "")
+            navigation = docs.navigation
 
-        navigation = docs.navigation
+            overview = {
+                "hidden": False,
+                "level": 1,
+                "path": "",
+                "navlink_href": f"/{entity_name}",
+                "navlink_fragment": "",
+                "navlink_text": "Overview",
+                "is_active": True,
+                "has_active_child": False,
+                "children": [],
+            }
 
-        overview = {
-            "hidden": False,
-            "level": 1,
-            "path": "",
-            "navlink_href": f"/{entity_name}",
-            "navlink_fragment": "",
-            "navlink_text": "Overview",
-            "is_active": True,
-            "has_active_child": False,
-            "children": [],
-        }
+            if len(navigation["nav_items"]) > 0:
+                navigation["nav_items"][0]["children"].insert(0, overview)
+                # If the first item in docs nav is "overview",
+                # prefix with "Docs - "
+                if (
+                    len(navigation["nav_items"][0]["children"]) > 1
+                    and navigation["nav_items"][0]["children"][1][
+                        "navlink_text"
+                    ]
+                    == "Overview"
+                ):
+                    del navigation["nav_items"][0]["children"][1]
+            else:
+                # If there is no navigation but we've got here, there are docs
+                # So add a top level "Docs item". Example: /easyrsa
+                navigation["nav_items"] = [
+                    {
+                        "level": 0,
+                        "children": [
+                            overview,
+                        ],
+                    }
+                ]
 
-        if len(navigation["nav_items"]) > 0:
-            navigation["nav_items"][0]["children"].insert(0, overview)
-            # If the first item in docs nav is "overview",
-            # prefix with "Docs - "
-            if (
-                len(navigation["nav_items"][0]["children"]) > 1
-                and navigation["nav_items"][0]["children"][1]["navlink_text"]
-                == "Overview"
-            ):
-                del navigation["nav_items"][0]["children"][1]
-        else:
-            # If there is no navigation but we've got here, there are docs
-            # So add a top level "Docs item". Example: /easyrsa
-            navigation["nav_items"] = [
-                {
-                    "level": 0,
-                    "children": [
-                        overview,
-                    ],
-                }
-            ]
+            context["navigation"] = navigation
+            context["forum_url"] = docs.api.base_url
+            context["last_update"] = docs_content["updated"]
+            context["topic_path"] = docs_content["topic_path"]
+        except Exception as e:
+            if e.response.status_code == 404:
+                navigation = None
+                description, summary = logic.add_description_and_summary(
+                    package
+                )
 
-        context["navigation"] = navigation
-        context["forum_url"] = docs.api.base_url
-        context["last_update"] = docs_content["updated"]
-        context["topic_path"] = docs_content["topic_path"]
+    else:
+        navigation = None
+        description, summary = logic.add_description_and_summary(package)
 
     context["description"] = description
     context["summary"] = summary
