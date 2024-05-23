@@ -20,6 +20,32 @@ PLATFORMS = {
 }
 
 
+def add_description_and_summary(package):
+    if package["type"] == "bundle":
+        description = (
+            package.get("store_front", {})
+            .get("bundle", {})
+            .get("description", None)
+        )
+        summary = (
+            package.get("store_front", {})
+            .get("bundle", {})
+            .get("summary", None)
+        )
+    else:
+        description = (
+            package.get("store_front", {})
+            .get("metadata", {})
+            .get("description", None)
+        )
+        summary = (
+            package.get("store_front", {})
+            .get("metadata", {})
+            .get("summary", None)
+        )
+    return description, summary
+
+
 def get_banner_url(media):
     """
     Get banner url from media object
