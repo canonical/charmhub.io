@@ -1,5 +1,7 @@
 # ![charmhub.io](https://user-images.githubusercontent.com/6353928/94026467-9dff1480-fdb1-11ea-8026-e866246815fc.png "Charmhub") charmhub.io codebase
 
+[Python Coverage](https://canonical.github.com/charmhub.io/coverage/python) | [JavaScript Coverage](https://canonical.github.com/charmhub.io/js)
+
 ![Github Actions Status](https://github.com/canonical-web-and-design/charmhub.io/workflows/PR%20checks/badge.svg?branch=main) [![Code coverage](https://codecov.io/gh/canonical-web-and-design/charmhub.io/branch/main/graph/badge.svg)](https://codecov.io/gh/canonical-web-and-design/charmhub.io)
 
 A charm is a software package that bundles an operator together with metadata that supports the integration of many operators in a coherent aggregated system.
