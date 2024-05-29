@@ -432,7 +432,7 @@ def register_name_dispute_thank_you():
     )
 
 
-@publisher.route("/<package_name>", methods=["DELETE"])
+@publisher.route("/packages/<package_name>", methods=["DELETE"])
 @login_required
 def delete_package(package_name):
     resp = publisher_api.unregister_package_name(

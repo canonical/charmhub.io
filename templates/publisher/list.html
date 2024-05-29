@@ -338,7 +338,7 @@
       const formData = new FormData();
       formData.set("csrf_token", "{{ csrf_token() }}");
         
-      const response = await fetch(`/${currentPackage}`, {
+      const response = await fetch(`/packages/${currentPackage}`, {
         method: "DELETE",
         body: formData,
       });
