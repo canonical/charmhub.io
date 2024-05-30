@@ -307,9 +307,6 @@ def revoke_invite(entity_name):
             for error in error_list.errors
         ]
         res["message"] = (" ").join(messages)
-    except Exception:
-        res["success"] = False
-        res["message"] = "An error occurred"
 
     return make_response(res, 500)
 
