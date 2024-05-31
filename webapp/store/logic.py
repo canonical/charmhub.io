@@ -190,7 +190,7 @@ def extract_default_release_architectures(channel):
 
 def extract_all_arch(channel_map, parent_dict):
     all_archy = set()
-    all_channel_bases = []
+    all_channel_bases = {}
 
     if channel_map.get("latest"):
         channel_map_all = list(channel_map["latest"].items())
@@ -200,24 +200,17 @@ def extract_all_arch(channel_map, parent_dict):
             channel_map_all = list(version_data.items())
             break
 
-    for channel, channel_data in channel_map_all:
-        bases = set()
-        name = ""
-        for _, release in channel_data["releases"].items():
+    for _, channel_data in channel_map_all:
+        for release in channel_data["releases"].values():
             all_archy = all_archy.union(release["architectures"])
-            bases = bases.union(release["bases"])
 
-        if channel_data["latest"]["channel_bases"]:
-            for base in channel_data["latest"]["channel_bases"]:
-                name = base["name"]
+            for base in release["channel_bases"]:
+                for series in base["channels"]:
+                    platform = PLATFORMS.get(base["name"], base["name"])
 
-        bases = sorted(
-            bases, key=lambda k: k.replace("Ubuntu ", ""), reverse=True
-        )
-
-        all_channel_bases.append(
-            {"channel": channel, "bases": bases, "name": name}
-        )
+                    all_channel_bases[base["name"] + series] = (
+                        f"{platform} {series}"
+                    )
 
     parent_dict["all_architectures"] = all_archy
     parent_dict["all_channel_bases"] = all_channel_bases
