@@ -120,6 +120,7 @@ def convert_channel_maps(channel_map):
             "revision": channel["revision"],
             "architectures": set(),
         }
+        print(info["channel_bases"])
 
         if channel["channel"]["base"]:
             info["architectures"].add(
@@ -197,28 +198,24 @@ def extract_all_arch(channel_map, parent_dict):
     all_archy = set()
     all_channel_bases = {}
 
-    if channel_map.get("latest"):
-        channel_map_all = list(channel_map["latest"].items())
-    # for charms without the latest revision
-    else:
-        for version, version_data in channel_map.items():
-            channel_map_all = list(version_data.items())
-            break
+    for version_data in channel_map.values():
+        channel_map_all = list(version_data.items())
+        for _, channel_data in channel_map_all:
+            for release in channel_data["releases"].values():
+                all_archy = all_archy.union(release["architectures"])
 
-    for _, channel_data in channel_map_all:
-        for release in channel_data["releases"].values():
-            all_archy = all_archy.union(release["architectures"])
+                for base in release["channel_bases"]:
+                    for series in base["channels"]:
+                        platform = PLATFORMS.get(base["name"], base["name"])
 
-            for base in release["channel_bases"]:
-                for series in base["channels"]:
-                    platform = PLATFORMS.get(base["name"], base["name"])
+                        all_channel_bases[base["name"] + series] = (
+                            f"{platform} {series}"
+                        )
 
-                    all_channel_bases[base["name"] + series] = (
-                        f"{platform} {series}"
-                    )
-
-    parent_dict["all_architectures"] = all_archy
-    parent_dict["all_channel_bases"] = all_channel_bases
+    parent_dict["all_architectures"] = sorted(all_archy)
+    parent_dict["all_channel_bases"] = dict(
+        sorted(all_channel_bases.items(), reverse=True)
+    )
 
     return
 
