@@ -109,7 +109,8 @@ def convert_channel_maps(channel_map):
             continue
 
         info = {
-            "released_at": convert_date(channel["channel"]["released-at"]),
+            "released_at": channel["channel"]["released-at"],
+            "release_date": convert_date(channel["channel"]["released-at"]),
             "version": channel["revision"]["version"],
             "channel": channel["channel"]["name"],
             "risk": channel["channel"]["risk"],
@@ -146,7 +147,11 @@ def convert_channel_maps(channel_map):
         # Order releases by revision
         for risk, data in result[track].items():
             result[track][risk]["releases"] = OrderedDict(
-                sorted(result[track][risk]["releases"].items(), reverse=True)
+                sorted(
+                    result[track][risk]["releases"].items(),
+                    key=lambda release: release[1]["released_at"],
+                    reverse=True,
+                )
             )
 
             result[track][risk]["latest"] = result[track][risk]["releases"][

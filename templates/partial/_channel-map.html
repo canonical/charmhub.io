@@ -53,7 +53,7 @@
               <tr data-channel-map-track="{{ track }}" data-channel-map-channel="{{ channel }}" data-channel-map-version="{{ release_data.version }}" data-channel-map-arch-filter="{% for arch in release_data.architectures %} {{ arch }} {% endfor %}" data-channel-map-base-filter=" {% for channel_base in release_data.channel_bases %} {% for series in channel_base.channels %} {{ channel_base.name }}{{ series }} {% endfor %}{% endfor %}">
                 <td data-heading="Channel">{{ track }}/{{ channel }}</td>
                 <td data-heading="Revision">{{ release_data.revision.revision }}</td>
-                <td data-heading="Published">{{ release_data.released_at }}</td>
+                <td data-heading="Published">{{ release_data.release_date }}</td>
                 <td data-heading="Runs on">
                   <div class="series-tags u-no-margin--top">
                     {% for base in release_data.bases %}
