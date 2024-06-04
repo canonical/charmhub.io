@@ -88,6 +88,7 @@ converted_sample_channel_map = OrderedDict(
                     (
                         "stable",
                         {
+                            "all_bases": ["Ubuntu 14.04", "Ubuntu 12.04"],
                             "latest": {
                                 "architectures": {"all"},
                                 "bases": ["Ubuntu 14.04", "Ubuntu 12.04"],
@@ -194,6 +195,7 @@ converted_sample_channel_map = OrderedDict(
                     (
                         "stable",
                         {
+                            "all_bases": ["Ubuntu 20.04", "Ubuntu 18.04"],
                             "latest": {
                                 "architectures": {"amd"},
                                 "bases": ["Ubuntu 20.04", "Ubuntu 18.04"],

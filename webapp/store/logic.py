@@ -120,7 +120,6 @@ def convert_channel_maps(channel_map):
             "revision": channel["revision"],
             "architectures": set(),
         }
-        print(info["channel_bases"])
 
         if channel["channel"]["base"]:
             info["architectures"].add(
@@ -155,10 +154,21 @@ def convert_channel_maps(channel_map):
                 )
             )
 
+            # Collect all the bases available across all releases
+            result[track][risk]["all_bases"] = sorted(
+                list(
+                    set(
+                        base
+                        for release in result[track][risk]["releases"].values()
+                        for base in release["bases"]
+                    )
+                ),
+                reverse=True,
+            )
+
             result[track][risk]["latest"] = result[track][risk]["releases"][
                 max(result[track][risk]["releases"].keys())
             ]
-
     return result
 
 
