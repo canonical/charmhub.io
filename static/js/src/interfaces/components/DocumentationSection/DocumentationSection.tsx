@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { Row, Col } from "@canonical/react-components";
 import mermaid from 'mermaid';
