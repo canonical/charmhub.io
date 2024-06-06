@@ -257,7 +257,7 @@ def extract_bases(channel):
 
     for i in bases:
         if i is None:
-            return
+            return []
 
         has_base = False
 
