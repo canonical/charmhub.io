@@ -99,9 +99,9 @@
                     {% endif %}
                   </div>
                   <div>
-                    {% for channel in channel_data.latest.bases %}
+                    {% for base in package.store_front.all_channel_bases.values() %}
                       <span class="series-tag">
-                        {{ channel.replace("Ubuntu ", "") }}
+                        {{ base.replace("Ubuntu ", "") }}
                       </span>
                     {% endfor %}
                   </div>
