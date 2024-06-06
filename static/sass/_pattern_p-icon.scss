@@ -123,21 +123,19 @@
 
   .p-icon--exposed {
     @extend %icon;
-
     @include vf-icon-exposed($color-mid-dark);
   }
 
   .p-icon--github-grey {
     @extend %icon;
-
     @include vf-icon-github($color-mid-dark);
-    width: 16px;
+
     height: 16px;
+    width: 16px;
   }
 
   .p-icon--user-grey {
     @extend %icon;
-
     @include vf-icon-user($color-mid-dark);
   }
 }
