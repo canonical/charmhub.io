@@ -74,62 +74,71 @@
   <hr class="p-separator--shallow">
 {% endif %}
 
-{% if package.result.website or package.result.repository or package.result.contact or package.result["bugs-url"] %}
-  <h4 class="p-heading--5 u-no-margin--bottom">Relevant links</h4>
+{% if package.result.repository or package["store_front"]["metadata"]["source"] or package["result"]["links"]["website"] or package.result.website or juju_version %}
+  <h4 class="p-heading--5">Charm details</h4>
   <ul class="p-list">
-    {% if package.result.website %}
-      <li class="p-list__item u-no-margin--bottom">
-        <a href="{{ package.result.website }}"><i class="p-icon--home"></i>&nbsp;&nbsp;Homepage</a>
-      </li>
-    {% endif %}
     {% if package.result.repository %}
       <li class="p-list__item">
-        <a href="{{ package.result.repository }}"><i class="p-icon--repository"></i>&nbsp;&nbsp;Repository</a>
+        <a href="{{ package.result.repository }}"><i class="p-icon--github"></i>&nbsp;&nbsp;Charm repository</a>
+      </li>
+    {% elif package["store_front"]["metadata"]["source"] %}
+      <li class="p-list__item">
+        <a href="{{ package["store_front"]["metadata"]["source"] }}"><i class="p-icon--github-grey"></i>&nbsp;&nbsp;Charm repository</a>
       </li>
     {% endif %}
-    {% if package["store_front"]["metadata"]["issues"] %}
+    {% if package["result"]["links"]["website"] %}
+      <ul class="p-list u-no-margin--bottom">
+        {% for website in package["result"]["links"]["website"] %}
+        <li class="p-list__item">
+          <a href="{{ website }}"><i class="p-icon--exposed"></i>&nbsp;&nbsp;Charm product page</a>
+        </li>
+        {% endfor %}
+      </ul>
+    {% elif package.result.website %}
       <li class="p-list__item">
-        <a href="{{ package["store_front"]["metadata"]["issues"][0] }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
-      </li>
-    {% elif package.result["bugs-url"] %}
-      <li class="p-list__item">
-        <a href="{{ package.result["bugs-url"] }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
+        <a href="{{ package.result.website }}"><i class="p-icon--exposed"></i>&nbsp;&nbsp;Charm product page</a>
       </li>
     {% endif %}
-    {% if package.result.contact %}
+    {% if juju_version %}
       <li class="p-list__item">
-        <a href="{{ package.result.contact }}"><i class="p-icon--contact"></i>&nbsp;&nbsp;Contact</a>
+        <p class="side-nav-muted-text u-text--muted">JUJU VERSION</p>
+        <p class="u-no-margin--bottom">{{ juju_version }}</p>
       </li>
     {% endif %}
   </ul>
   <hr class="p-separator--shallow" />
 {% endif %}
-<!-- Once `links` is fully ready we can remove the `request.args` check -->
-{% if package["result"]["links"] and request.args.get("show_metadata_links") %}
-  {% if package["result"]["links"]["website"] %}
-  <h2 class="p-heading--5 u-no-margin--bottom">Websites</h2>
-    <ul class="p-list">
-      {% for contact in package["result"]["links"]["website"] %}
-      <li><a href="{{ website }}">{{ website }}</a></li>
-      {% endfor %}
-    </ul>
-    <hr class="p-separator--shallow" />
-  {% endif %}
+{% if package["result"]["links"]["contact"] or package["store_front"]["metadata"]["maintainers"] or package["store_front"]["metadata"]["issues"] or package.result["bugs-url"] %}
+  <h4 class="p-heading--5">Contacts</h4>
   {% if package["result"]["links"]["contact"] %}
-    <h2 class="p-heading--5 u-no-margin--bottom">Contact</h2>
-    <ul class="p-list">
-      {% for contact in package["result"]["links"]["contact"] %}
-      <li><a href="{{ contact }}">{{ contact|replace('mailto:', '') }}</a></li>
+    <p class="side-nav-muted-text u-text--muted">MAINTAINERS</p>
+    <ul class="p-list contact-lists">
+      {% for contact in contacts %}
+      <li><a href="mailto:{{ contact.email }}"><i class="p-icon--user-grey"></i>&nbsp;&nbsp;{{ contact.name }}</a></li>
       {% endfor %}
     </ul>
-    <hr class="p-separator--shallow" />
+  {% elif package["store_front"]["metadata"]["maintainers"] %}
+    <p class="side-nav-muted-text u-text--muted">MAINTAINERS</p>
+    <ul class="p-list contact-lists">
+      {% for maintainer in maintainers %}
+      <li><a href="mailto:{{ maintainer.email }}"><i class="p-icon--user-grey"></i>&nbsp;&nbsp;{{ maintainer.name }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  {% if package["store_front"]["metadata"]["issues"] %}
+    <li class="p-list__item submit-bug-list">
+      <a href="{{ package["store_front"]["metadata"]["issues"][0] }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
+    </li>
+  {% elif package.result["bugs-url"] %}
+    <li class="p-list__item submit-bug-list">
+      <a href="{{ package.result["bugs-url"] }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
+    </li>
   {% endif %}
 {% endif %}
 {% if not navigation %}
   <a class="p-button--positive u-no-margin--bottom" href="https://juju.is/docs/sdk/add-docs-to-your-charmhub-page">Add docs to a charm</a>
   <hr class="p-separator--shallow" />
 {% endif %}
-<h4 class="p-heading--5 u-no-margin--bottom">Discuss this {{ package.type }}</h4>
 <p>Share your thoughts on this charm with the community on discourse.</p>
 <p><a class="p-button" href="https://discourse.charmhub.io/">Join the discussion</a></p>
 

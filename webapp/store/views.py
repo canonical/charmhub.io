@@ -147,6 +147,28 @@ def get_package(entity_name, channel_request=None, fields=FIELDS):
     return package
 
 
+def extract_juju_version(assumes_list):
+    for assumption in assumes_list:
+        if assumption.startswith("juju"):
+            return assumption.split("juju")[-1].strip()
+    return None
+
+
+def process_contacts(contact_list):
+    processed_contacts = []
+    for contact in contact_list:
+        try:
+            if contact.startswith("mailto:"):
+                contact = contact.replace("mailto:", "")
+            name, email = contact.split(" <")
+            email = email.rstrip(">")
+            processed_contacts.append({"name": name, "email": email})
+            print(f"Processed contact: name={name}, email={email}")
+        except ValueError as e:
+            print(f"Error processing contact '{contact}': {e}")
+    return processed_contacts
+
+
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs')
 @store_maintenance
@@ -171,6 +193,17 @@ def details_overview(entity_name):
         entity_name, channel_request, FIELDS.copy() + extra_fields
     )
 
+    assumes_list = package["store_front"]["metadata"].get("assumes", [])
+    juju_version = extract_juju_version(assumes_list)
+
+    maintainers_list = package["store_front"]["metadata"].get(
+        "maintainers", []
+    )
+    maintainers = process_contacts(maintainers_list)
+
+    contacts_list = package["result"]["links"].get("contact", [])
+    contacts = process_contacts(contacts_list)
+
     context = {
         "package": package,
         "channel_requested": channel_request,
@@ -178,6 +211,9 @@ def details_overview(entity_name):
         "last_update": None,
         "forum_url": None,
         "topic_path": None,
+        "juju_version": juju_version,
+        "maintainers": maintainers,
+        "contacts": contacts,
     }
 
     description = None
