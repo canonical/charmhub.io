@@ -1,3 +1,4 @@
+from venv import logger
 import humanize
 import talisker
 from canonicalwebteam.discourse import DocParser
@@ -163,9 +164,8 @@ def process_contacts(contact_list):
             name, email = contact.split(" <")
             email = email.rstrip(">")
             processed_contacts.append({"name": name, "email": email})
-            print(f"Processed contact: name={name}, email={email}")
         except ValueError as e:
-            print(f"Error processing contact '{contact}': {e}")
+            logger.error(f"Error processing contact '{contact}': {e}")
     return processed_contacts
 
 
