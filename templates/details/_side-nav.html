@@ -101,7 +101,7 @@
     {% endif %}
     {% if juju_version %}
       <li class="p-list__item">
-        <p class="side-nav-muted-text u-text--muted">JUJU VERSION</p>
+        <h5 class="side-nav-muted-text u-text--muted">JUJU VERSION</h5>
         <p class="u-no-margin--bottom">{{ juju_version }}</p>
       </li>
     {% endif %}
@@ -110,30 +110,32 @@
 {% endif %}
 {% if package["result"]["links"]["contact"] or package["store_front"]["metadata"]["maintainers"] or package["store_front"]["metadata"]["issues"] or package.result["bugs-url"] %}
   <h4 class="p-heading--5">Contacts</h4>
-  {% if package["result"]["links"]["contact"] %}
-    <p class="side-nav-muted-text u-text--muted">MAINTAINERS</p>
-    <ul class="p-list contact-lists">
-      {% for contact in contacts %}
-      <li><a href="mailto:{{ contact.email }}"><i class="p-icon--user-grey"></i>&nbsp;&nbsp;{{ contact.name }}</a></li>
-      {% endfor %}
+    <ul class="p-list">
+      {% if package["result"]["links"]["contact"] %}
+        <h5 class="side-nav-muted-text u-text--muted">MAINTAINERS</h5>
+        <ul class="p-list contact-lists">
+          {% for contact in contacts %}
+          <li class="p-list__item"><a href="mailto:{{ contact.email }}"><i class="p-icon--user-grey"></i>&nbsp;&nbsp;{{ contact.name }}</a></li>
+          {% endfor %}
+        </ul>
+      {% elif package["store_front"]["metadata"]["maintainers"] %}
+        <h5 class="side-nav-muted-text u-text--muted">MAINTAINERS</h5>
+        <ul class="p-list contact-lists">
+          {% for maintainer in maintainers %}
+          <li class="p-list__item"><a href="mailto:{{ maintainer.email }}"><i class="p-icon--user-grey"></i>&nbsp;&nbsp;{{ maintainer.name }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      {% if package["store_front"]["metadata"]["issues"] %}
+        <li class="p-list__item">
+          <a href="{{ package["store_front"]["metadata"]["issues"][0] }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
+        </li>
+      {% elif package.result["bugs-url"] %}
+        <li class="p-list__item">
+          <a href="{{ package.result["bugs-url"] }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
+        </li>
+      {% endif %}
     </ul>
-  {% elif package["store_front"]["metadata"]["maintainers"] %}
-    <p class="side-nav-muted-text u-text--muted">MAINTAINERS</p>
-    <ul class="p-list contact-lists">
-      {% for maintainer in maintainers %}
-      <li><a href="mailto:{{ maintainer.email }}"><i class="p-icon--user-grey"></i>&nbsp;&nbsp;{{ maintainer.name }}</a></li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-  {% if package["store_front"]["metadata"]["issues"] %}
-    <li class="p-list__item submit-bug-list">
-      <a href="{{ package["store_front"]["metadata"]["issues"][0] }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
-    </li>
-  {% elif package.result["bugs-url"] %}
-    <li class="p-list__item submit-bug-list">
-      <a href="{{ package.result["bugs-url"] }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
-    </li>
-  {% endif %}
 {% endif %}
 {% if not navigation %}
   <a class="p-button--positive u-no-margin--bottom" href="https://juju.is/docs/sdk/add-docs-to-your-charmhub-page">Add docs to a charm</a>
