@@ -19,6 +19,8 @@ PLATFORMS = {
     "centos": "CentOS",
 }
 
+ARCHITECTURES = ["amd64", "arm64", "ppc64el", "riscv64", "s390x"]
+
 
 def add_description_and_summary(package):
     if package["type"] == "bundle":
@@ -103,9 +105,16 @@ def convert_channel_maps(channel_map):
 
         # same revision but for a different arch
         if revision_number in result[track][risk]["releases"]:
-            result[track][risk]["releases"][revision_number][
-                "architectures"
-            ].add(channel["channel"]["base"]["architecture"])
+            arch = channel["channel"]["base"]["architecture"]
+
+            if arch == "all":
+                result[track][risk]["releases"][revision_number][
+                    "architectures"
+                ].update(ARCHITECTURES)
+            else:
+                result[track][risk]["releases"][revision_number][
+                    "architectures"
+                ].add(arch)
             continue
 
         info = {
@@ -122,9 +131,11 @@ def convert_channel_maps(channel_map):
         }
 
         if channel["channel"]["base"]:
-            info["architectures"].add(
-                channel["channel"]["base"]["architecture"]
-            )
+            arch = channel["channel"]["base"]["architecture"]
+            if arch == "all":
+                info["architectures"].update(ARCHITECTURES)
+            else:
+                info["architectures"].add(arch)
 
         result[track][risk]["releases"][revision_number] = info
 
