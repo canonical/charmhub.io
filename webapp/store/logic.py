@@ -126,7 +126,7 @@ def convert_channel_maps(channel_map):
             "size": channel["revision"]["download"]["size"],
             "bases": extract_series(channel, True),
             "channel_bases": extract_bases(channel),
-            "revision": channel["revision"],
+            "revision": process_revision(channel["revision"]),
             "architectures": set(),
         }
 
@@ -183,6 +183,18 @@ def convert_channel_maps(channel_map):
     return result
 
 
+def process_revision(revision):
+    bases = []
+
+    for base in revision["bases"]:
+        if "architecture" in base and base["architecture"] == "all":
+            for arch in ARCHITECTURES:
+                bases.append({**base, "architecture": arch})
+        else:
+            bases.append(base)
+    return {**revision, "bases": bases}
+
+
 def extract_resources(channel):
     """
     Extract resources from channel map
@@ -210,7 +222,11 @@ def extract_default_release_architectures(channel):
         if not base or base["architecture"] in architectures:
             continue
 
-        architectures.add(base["architecture"])
+        arch = base["architecture"]
+        if arch == "all":
+            architectures.update(ARCHITECTURES)
+        else:
+            architectures.add(arch)
 
     return sorted(architectures)
 
