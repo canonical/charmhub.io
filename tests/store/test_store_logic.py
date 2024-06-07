@@ -8,6 +8,7 @@ from webapp.store.logic import (
     get_library,
     process_libraries,
     add_store_front_data,
+    process_revision,
 )
 from mock_data.mock_store_logic import (
     sample_channel_map,
@@ -130,3 +131,58 @@ class TestFormatslug(TestCase):
         self.assertEqual(format_slug(sample_slug2), "Sample Slug2")
         self.assertEqual(format_slug(sample_slug3), "Sample and Slug3")
         self.assertEqual(format_slug(sample_slug4), "Sample IoT Slug4")
+
+
+class TestProcessRevision(TestCase):
+    def test_process_revision(self):
+        revision = {
+            "bases": [
+                {"architecture": "all", "channel": "12.04", "name": "ubuntu"},
+                {"architecture": "xyz", "channel": "14.04", "name": "ubuntu"},
+            ],
+            "created-at": "2024-06-7",
+            "download": {
+                "hash-sha-256": "qwerty",
+                "url": "some-random-url",
+                "size": 1024,
+            },
+        }
+
+        processed_revision = {
+            "bases": [
+                {
+                    "architecture": "amd64",
+                    "channel": "12.04",
+                    "name": "ubuntu",
+                },
+                {
+                    "architecture": "arm64",
+                    "channel": "12.04",
+                    "name": "ubuntu",
+                },
+                {
+                    "architecture": "ppc64el",
+                    "channel": "12.04",
+                    "name": "ubuntu",
+                },
+                {
+                    "architecture": "riscv64",
+                    "channel": "12.04",
+                    "name": "ubuntu",
+                },
+                {
+                    "architecture": "s390x",
+                    "channel": "12.04",
+                    "name": "ubuntu",
+                },
+                {"architecture": "xyz", "channel": "14.04", "name": "ubuntu"},
+            ],
+            "created-at": "2024-06-7",
+            "download": {
+                "hash-sha-256": "qwerty",
+                "url": "some-random-url",
+                "size": 1024,
+            },
+        }
+
+        self.assertEqual(process_revision(revision), processed_revision)
