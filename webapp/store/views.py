@@ -879,7 +879,6 @@ def get_charms_from_bundle(entity_name):
 
 
 @store.route("/")
-def beta_store_index():
+def store_index():
     response = make_response(render_template("store.html"))
-    response.headers["X-Robots-Tag"] = "noindex"
     return response
