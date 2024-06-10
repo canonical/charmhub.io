@@ -162,13 +162,15 @@ export const InterfaceItem = ({
           </div>
           <Row>
             {charms.map((charm: ICharm) => (
-              <Col
-              size={3}
-              style={{ marginBottom: "1.5rem" }}
-              key={charm.package["display_name"]}
-              >
-                <IntegrationCard data={charm} />
-              </Col>
+              <>
+                <Col
+                size={3}
+                style={{ marginBottom: "1.5rem" }}
+                key={charm.package["display_name"]}
+                >
+                  <IntegrationCard data={charm} />
+                </Col>
+              </>
             ))}
           </Row>
         </>
