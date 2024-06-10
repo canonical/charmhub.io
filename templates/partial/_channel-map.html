@@ -43,7 +43,9 @@
                 <th>Channel</th>
                 <th>Revision</th>
                 <th>Published</th>
-                <th>Runs on</th>
+                {% if package.type == "charm" %}
+                  <th>Runs on</th>
+                {% endif %}
               </tr>
             </thead>
             <tbody>
@@ -54,13 +56,15 @@
                 <td data-heading="Channel">{{ track }}/{{ channel }}</td>
                 <td data-heading="Revision">{{ release_data.revision.revision }}</td>
                 <td data-heading="Published">{{ release_data.release_date }}</td>
-                <td data-heading="Runs on">
-                  <div class="series-tags u-no-margin--top">
-                    {% for base in channel_data.all_bases %}
-                      <span class="series-tag">{{ base }}</span>
-                      {% endfor %}
-                  </div>
-                </td>
+                {% if package.type == "charm" %}
+                  <td data-heading="Runs on">
+                    <div class="series-tags u-no-margin--top">
+                      {% for base in channel_data.all_bases %}
+                        <span class="series-tag">{{ base }}</span>
+                        {% endfor %}
+                    </div>
+                  </td>
+                {% endif %}
               </tr>
               {% endfor %}
               {% endfor %}
