@@ -12,7 +12,14 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { filterChipsSelector, filterState } from "../../state";
 
 const getIntegrations = async (charm: string): Promise<IInterfaceData[]> => {
-  const resp = await fetch(`/${charm}/integrations.json`);
+  let resp;
+  const url = new URL(document.location.href);
+  const selectedChannel = url.searchParams.get("channel");
+  if (selectedChannel) {
+    resp = await fetch(`/${charm}/integrations.json?channel=${selectedChannel}`);
+  } else {
+    resp = await fetch(`/${charm}/integrations.json`);
+  }
   const json = await resp.json();
   if (!json.grouped_relations) {
     return [];
