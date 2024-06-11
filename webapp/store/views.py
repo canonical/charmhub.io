@@ -587,11 +587,11 @@ def details_integrations_data(entity_name):
 
     provides = add_optional_fields(
         package["store_front"]["metadata"].get("provides", {}),
-        relations.get("provides", {})
+        relations.get("provides", {}),
     )
     requires = add_optional_fields(
         package["store_front"]["metadata"].get("requires", {}),
-        relations.get("requires", {})
+        relations.get("requires", {}),
     )
 
     grouped_relations = {
