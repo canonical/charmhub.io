@@ -143,7 +143,7 @@ export const InterfaceItem = ({
             />
           )}
         </div>
-        <div>
+        <div style={{ display: "flex", alignItems: "center" }}>
           <a href={`/integrations/${interfaceData.interface}`}>
             {interfaceData.interface}
           </a>
