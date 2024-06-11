@@ -4,7 +4,7 @@ function initTopicFilters() {
   @param {HTMLElement} sideNavigation The side navigation element.
   @param {Boolean} show Whether to show or hide the drawer.
 */
-  function toggleDrawer(sideNavigation, show) {
+  function toggleDrawer(sideNavigation: HTMLElement, show: boolean) {
     if (sideNavigation) {
       if (show) {
         sideNavigation.classList.remove("is-collapsed");
@@ -20,8 +20,8 @@ function initTopicFilters() {
   Attaches event listeners for the side navigation toggles
   @param {HTMLElement} sideNavigation The side navigation element.
 */
-  function setupSideNavigation(sideNavigation) {
-    var toggles = [].slice.call(
+  function setupSideNavigation(sideNavigation: HTMLElement) {
+    var toggles: HTMLElement[] = [].slice.call(
       sideNavigation.querySelectorAll(".js-drawer-toggle")
     );
 
@@ -29,7 +29,7 @@ function initTopicFilters() {
       toggle.addEventListener("click", function (event) {
         event.preventDefault();
         var sideNav = document.getElementById(
-          toggle.getAttribute("aria-controls")
+          toggle.getAttribute("aria-controls") || ""
         );
 
         if (sideNav) {
@@ -43,7 +43,7 @@ function initTopicFilters() {
   Attaches event listeners for all the side navigations in the document.
   @param {String} sideNavigationSelector The CSS selector matching side navigation elements.
 */
-  function setupSideNavigations(sideNavigationSelector) {
+  function setupSideNavigations(sideNavigationSelector: string) {
     // Setup all side navigations on the page.
     var sideNavigations = [].slice.call(
       document.querySelectorAll(sideNavigationSelector)
@@ -54,17 +54,17 @@ function initTopicFilters() {
 
   function initFilters() {
     var urlParams = new URLSearchParams(window.location.search);
-    var checkboxes = [].slice.call(
+    var checkboxes: HTMLInputElement[] = [].slice.call(
       document.querySelectorAll("[data-js='filter']")
     );
-    var topics = [].slice.call(document.querySelectorAll("[data-js='item']"));
+    var topics: HTMLElement[] = [].slice.call(document.querySelectorAll("[data-js='item']"));
     var closeFiltersButtonMobile = document.querySelector(
       "[data-js='filter-button-mobile-close']"
-    );
-    var filters = [];
+    ) as HTMLElement;
+    var filters: string[] = [];
 
     if (urlParams.get("filters")) {
-      filters = urlParams.get("filters").split(",");
+      filters = urlParams.get("filters")?.split(",") ?? [];
     }
 
     populateCheckboxes();
@@ -80,8 +80,8 @@ function initTopicFilters() {
       // Dedupe with a set and convert back to an array
       var topicValues = Array.from(
         new Set(
-          topics.flatMap(function (topic) {
-            return topic.dataset.filter.split(",");
+          topics.flatMap(function (topic: HTMLElement) {
+            return topic.dataset.filter?.split(",");
           })
         )
       );
@@ -95,7 +95,7 @@ function initTopicFilters() {
       if (filters) {
         filters.forEach(function (filter) {
           var selector = "[aria-labelledby='" + filter + "-filter']";
-          var checkboxObject = document.querySelector(selector);
+          var checkboxObject = document.querySelector(selector) as HTMLInputElement;
           if (checkboxObject) {
             var checkboxDisabled = checkboxObject.getAttribute("disabled");
             if (checkboxDisabled) {
@@ -109,7 +109,7 @@ function initTopicFilters() {
     }
 
     // Check if element should be filtered
-    function filterCheck(filterText) {
+    function filterCheck(filterText: string) {
       var match = false;
 
       return !!filters.find(function (filter) {
@@ -126,7 +126,8 @@ function initTopicFilters() {
       } else if (topics) {
         closeFiltersButtonMobile.innerHTML = "Apply filters";
         topics.forEach(function (topic) {
-          if (filterCheck(topic.getAttribute("data-filter"))) {
+          const filterText = topic.getAttribute("data-filter");
+          if (filterText && filterCheck(filterText)) {
             topic.classList.remove("u-hide");
           } else {
             topic.classList.add("u-hide");
@@ -156,25 +157,26 @@ function initTopicFilters() {
       }
     }
 
-    function addFilter(filter) {
+    function addFilter(filter: string) {
       filters.push(filter);
 
       filterDom();
       updateUrl();
     }
 
-    function removeFilter(filter) {
+    function removeFilter(filter: string) {
       filters.splice(filters.indexOf(filter), 1);
 
       filterDom();
       updateUrl();
     }
 
-    function filterHandler(e) {
-      if (e.target.checked) {
-        addFilter(e.target.value);
+    function filterHandler(e: Event) {
+      let target = e.target as HTMLInputElement;
+      if (target.checked) {
+        addFilter(target.value);
       } else {
-        removeFilter(e.target.value);
+        removeFilter(target.value);
       }
     }
   }

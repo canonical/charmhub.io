@@ -6,7 +6,7 @@ import { useEffect, useMemo } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { useQuery } from "react-query";
 
-import { Row, Col, Spinner, Icon } from "@canonical/react-components";
+import { Row, Col, Spinner } from "@canonical/react-components";
 
 import { filterChipsSelector, filterState } from "../state";
 

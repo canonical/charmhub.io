@@ -130,6 +130,9 @@ export const App = () => {
               </li>
             );
           }
+          else {
+            return <></>;
+          }
         })}
       </>;
     }
