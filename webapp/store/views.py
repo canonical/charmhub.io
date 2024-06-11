@@ -586,10 +586,12 @@ def details_integrations_data(entity_name):
     )
 
     provides = add_optional_fields(
-        package["store_front"]["metadata"].get("provides", {}), relations.get("provides", {})
+        package["store_front"]["metadata"].get("provides", {}),
+        relations.get("provides", {})
     )
     requires = add_optional_fields(
-        package["store_front"]["metadata"].get("requires", {}), relations.get("requires", {})
+        package["store_front"]["metadata"].get("requires", {}),
+        relations.get("requires", {})
     )
 
     grouped_relations = {
@@ -605,7 +607,7 @@ def add_optional_fields(metadata_relations, relations):
         {
             **relations[key],
             "key": key,
-            "optional": metadata_relations[key].get("optional", False)
+            "optional": metadata_relations[key].get("optional", False),
         }
         for key in relations.keys()
     ]
