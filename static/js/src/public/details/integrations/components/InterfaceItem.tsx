@@ -131,7 +131,7 @@ export const InterfaceItem = ({
     <>
       <hr />
       <h3 className="p-heading--4 u-no-margin--bottom" id={interfaceData.key}>
-        <div>
+        <div style={{ display: "flex", alignItems: "center" }}>
           {interfaceData.key}
           <span className="u-text--muted"> endpoint</span>
           {interfaceData.optional && (
@@ -143,7 +143,7 @@ export const InterfaceItem = ({
             />
           )}
         </div>
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div>
           <a href={`/integrations/${interfaceData.interface}`}>
             {interfaceData.interface}
           </a>
