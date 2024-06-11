@@ -134,7 +134,7 @@ export const InterfaceItem = ({
         <div>
           {interfaceData.key}
           <span className="u-text--muted"> endpoint</span>
-          {interfaceData.optional === "true" && (
+          {interfaceData.optional && (
             <Chip
               value="Required"
               appearance="negative"

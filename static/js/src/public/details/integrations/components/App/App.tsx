@@ -134,7 +134,7 @@ export const App = () => {
                   }}
                 >
                   {`${interfaceItem.key}`}
-                  {interfaceItem.optional === "true" && (
+                  {interfaceItem.optional && (
                   <Chip
                     value="Required"
                     appearance="negative"
