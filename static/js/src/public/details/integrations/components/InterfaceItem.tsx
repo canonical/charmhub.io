@@ -6,7 +6,7 @@ import { useEffect, useMemo } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { useQuery } from "react-query";
 
-import { Row, Col, Spinner } from "@canonical/react-components";
+import { Row, Col, Spinner, Chip } from "@canonical/react-components";
 
 import { filterChipsSelector, filterState } from "../state";
 
@@ -134,6 +134,14 @@ export const InterfaceItem = ({
         <div>
           {interfaceData.key}
           <span className="u-text--muted"> endpoint</span>
+          {interfaceData.optional === "true" && (
+            <Chip
+              value="Required"
+              appearance="negative"
+              className="u-no-margin--bottom"
+              style={{ marginLeft: '10px' }}
+            />
+          )}
         </div>
         <div>
           <a href={`/integrations/${interfaceData.interface}`}>
@@ -149,11 +157,11 @@ export const InterfaceItem = ({
           <div style={{ paddingTop: "0.5rem" }}>
             <p className="u-fixed-width u-no-margin--bottom">
               The <b>{interfaceData.key}</b> endpoint
-              <b>{interfaceType === "requires" ? " requires " : " provides "}</b> 
+              <b>{interfaceType === "requires" ? " requires " : " provides "}</b>
               an integration over the {" "}
               <a href={`/integrations/${interfaceData.interface}`}>
                 {interfaceData.interface}
-              </a> 
+              </a>
               {" "} interface
             </p>
             <p>
