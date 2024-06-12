@@ -31,7 +31,7 @@
     "@canonical/cookie-policy": "3.5.0",
     "@canonical/global-nav": "3.6.4",
     "@canonical/react-components": "0.50.5",
-    "@canonical/store-components": "0.48.0",
+    "@canonical/store-components": "0.50.1",
     "@sentry/react": "7.113.0",
     "@testing-library/jest-dom": "6.4.2",
     "@testing-library/react": "14.2.1",
