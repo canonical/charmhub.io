@@ -84,31 +84,25 @@
           </div>
         </div>
       {% else %}
-        {% for track, track_data in package.store_front.channel_map.items() %}
-          {% for channel, channel_data in track_data.items() %}
-            {% for base in package.store_front.all_channel_bases %}
-              {% if track == package["default-release"].channel.track and channel == package["default-release"].channel.risk and loop.index == 1 %}
-                <div class="series-base">
-                  <div class="series-base__title">
-                    {% if base.startswith("ubuntu") %}
+        {% for platform,bases in package.store_front.all_platforms.items() %}
+              <div class="series-base">
+                <div class="series-base__title">
+                    {% if platform.startswith("ubuntu") %}
                       <img src="https://assets.ubuntu.com/v1/adac6928-ubuntu.svg" alt="Ubuntu" width="89" height="20" class="p-image--base">
-                    {% elif base.startswith("centos") %}
+                    {% elif platform.startswith("centos") %}
                       <img src="https://assets.ubuntu.com/v1/fd5cc5d8-CentOS.svg" alt="CentOS" width="85" height="24" class="p-image--base">
                     {% else %}
-                      {{ base["name"] }}
+                      {{ platform }}
                     {% endif %}
-                  </div>
-                  <div>
-                    {% for base in package.store_front.all_channel_bases.values() %}
-                      <span class="series-tag">
-                        {{ base.replace("Ubuntu ", "") }}
-                      </span>
-                    {% endfor %}
-                  </div>
                 </div>
-              {% endif %}
-            {% endfor %}
-          {% endfor %}
+                <div>
+                  {% for base in bases %}
+                      <span class="series-tag">
+                        {{ base }}
+                      </span>
+                  {% endfor %}
+                </div>
+              </div>
         {% endfor %}
       {% endif %}
     </div>

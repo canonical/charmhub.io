@@ -234,6 +234,7 @@ def extract_default_release_architectures(channel):
 def extract_all_arch(channel_map, parent_dict):
     all_archy = set()
     all_channel_bases = {}
+    platforms = {}
 
     for version_data in channel_map.values():
         channel_map_all = list(version_data.items())
@@ -245,11 +246,16 @@ def extract_all_arch(channel_map, parent_dict):
                     for series in base["channels"]:
                         platform = PLATFORMS.get(base["name"], base["name"])
 
+                        if base["name"] not in platforms:
+                            platforms[base["name"]] = set()
+                        platforms[base["name"]].add(series)
+
                         all_channel_bases[base["name"] + series] = (
                             f"{platform} {series}"
                         )
 
     parent_dict["all_architectures"] = sorted(all_archy)
+    parent_dict["all_platforms"] = platforms
     parent_dict["all_channel_bases"] = dict(
         sorted(all_channel_bases.items(), reverse=True)
     )
