@@ -1,9 +1,10 @@
 import { select } from "d3-selection";
-import Swiper, { Navigation, Pagination } from "swiper";
+import Swiper from "swiper";
+import { Navigation, Pagination } from "swiper/modules";
 import debounce from "../../../libs/debounce";
 import "swiper/swiper-bundle.css";
 
-function buildChart(data) {
+function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
   // set dimensions
   const chartWidth = window.innerWidth > 1175 ? 960 : window.innerWidth * 0.8;
   const chartHeight = 280;
@@ -89,7 +90,7 @@ function buildChart(data) {
     .attr("width", nodeWidth)
     .attr("height", nodeWidth)
     .attr("fill", "#cdcdcd")
-    .attr("transform", (d, i) => {
+    .attr("transform", (d: any, i: number) => {
       const angle = 102 - nodeWidth * data.groups.length;
 
       return `rotate(${angle + i * nodeRadius * 4}, ${
@@ -104,7 +105,7 @@ function buildChart(data) {
     .enter()
     .append("path")
     .attr("class", "left-node-line")
-    .attr("d", (d, i) => {
+    .attr("d", (d: any, i: number) => {
       let leftNodeYEndPos = chartHeight / 2;
 
       if (data.groups.length === 5) {
@@ -123,7 +124,7 @@ function buildChart(data) {
     })
     .attr("stroke", "#cdcdcd")
     .attr("stroke-width", "1")
-    .attr("transform", (d, i) => {
+    .attr("transform", (d: any, i: number) => {
       const angle = 12 - nodeWidth * data.groups.length;
 
       return `rotate(${angle + i * nodeRadius * 4}, ${
@@ -170,7 +171,7 @@ function buildChart(data) {
     .attr("width", nodeWidth)
     .attr("height", nodeWidth)
     .attr("fill", "#cdcdcd")
-    .attr("transform", (d, i) => {
+    .attr("transform", (d: any, i: number) => {
       const angle = 102 - nodeWidth * data.groups.length;
 
       return `rotate(-${angle + i * nodeRadius * 4}, ${
@@ -185,7 +186,7 @@ function buildChart(data) {
     .enter()
     .append("path")
     .attr("class", "right-node-line")
-    .attr("d", (d, i) => {
+    .attr("d", (d: any, i: number) => {
       let rightNodeYEndPos = chartHeight / 2;
 
       if (data.groups.length === 5) {
@@ -204,7 +205,7 @@ function buildChart(data) {
     })
     .attr("stroke", "#cdcdcd")
     .attr("stroke-width", 1)
-    .attr("transform", (d, i) => {
+    .attr("transform", (d: any, i: number) => {
       const angle = 12 - nodeWidth * data.groups.length;
 
       return `rotate(${angle + i * nodeRadius * 4}, ${
@@ -247,7 +248,7 @@ function buildChart(data) {
     )
     .attr("stroke", "#cdcdcd")
     .attr("stroke-width", "1")
-    .attr("transform", (d, i) => {
+    .attr("transform", (d: any, i: number) => {
       return `translate(0, ${40 * i})`;
     });
 
@@ -283,7 +284,7 @@ function buildChart(data) {
     );
 
   // connecting lines text
-  data.groups.forEach((group, i) => {
+  data.groups.forEach((group: any, i: number) => {
     const textGroup = bounds.append("g").attr("transform", () => {
       const yPos = (40 * data.groups.length) / 2 - 21;
 
@@ -407,21 +408,9 @@ function buildChart(data) {
   });
 }
 
-const init = (packageName, integrationPackage) => {
+const init = (packageName: string, integrationPackage: string) => {
   Swiper.use([Navigation, Pagination]);
 
-  const swiper = new Swiper(".swiper-container", {
-    pagination: {
-      el: ".swiper-pagination",
-    },
-
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-  });
-
-  // TOTO: THIS IS THE DATA!!!!!!
   const data = {
     groups: [["websso-trusted-dashboard", "identity-service", "keystone"]],
     packageOne: {
@@ -484,15 +473,26 @@ const init = (packageName, integrationPackage) => {
     data.groups = groups5;
   }
 
-  document.getElementById("integration-chart-wrapper").innerHTML = "";
+  const integrationChartWrapper = document.getElementById("integration-chart-wrapper");
+  if (integrationChartWrapper) {
+    integrationChartWrapper.innerHTML = "";
+  }
+
   buildChart(data);
 
-  const resize = debounce(() => {
-    if (window.innerWidth >= 1036) {
-      document.getElementById("integration-chart-wrapper").innerHTML = "";
-      buildChart(data);
-    }
-  }, 100);
+  const resize = debounce(
+    () => {
+      if (window.innerWidth >= 1036) {
+        const integrationChartWrapper = document.getElementById("integration-chart-wrapper");
+        if (integrationChartWrapper) {
+          integrationChartWrapper.innerHTML = "";
+        }
+        buildChart(data);
+      }
+    },
+    100,
+    false
+  );
 
   window.addEventListener("resize", resize);
 };

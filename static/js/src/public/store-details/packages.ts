@@ -1,8 +1,32 @@
 import buildPackageCard from "./buildPackageCard";
 import debounce from "../../libs/debounce";
+import { SyntheticExpression } from "typescript";
+
+type Entity = {
+  type: string;
+  name: string;
+  store_front: {
+    icons: string[];
+    "display-name": string;
+    "deployable-on": string[];
+    categories: { slug: string }[];
+  };
+  result: {
+    publisher: { "display-name": string };
+    summary: string;
+  };
+  apps: { name: string; title: string }[];
+};
 
 /** Store page filters */
 class initPackages {
+  allPackages: any[];
+  searchCache: string;
+  _filters: { [key: string]: any };
+  domEl: any;
+  filteredPackagesAllCategories: any;
+  packages: any;
+
   static async initialize() {
     const packageData = await initPackages.fetchPackageList();
 
@@ -12,7 +36,7 @@ class initPackages {
   }
 
   static getUrlFilters() {
-    const filters = {};
+    const filters: { [key: string]: any } = {};
 
     if (window.location.search) {
       const searchParams = new URLSearchParams(window.location.search);
@@ -53,7 +77,7 @@ class initPackages {
     }
   }
 
-  static async getBundleApps(bundleName) {
+  static async getBundleApps(bundleName: string) {
     const response = await fetch(`/${bundleName}/charms.json`);
 
     if (response.ok) {
@@ -63,9 +87,9 @@ class initPackages {
     }
   }
 
-  static async addBundleApps(packages) {
+  static async addBundleApps(packages: any[]) {
     return Promise.all(
-      packages.map(async (entity) => {
+      packages.map(async (entity: Entity) => {
         if (entity.type === "bundle") {
           const charms = await initPackages.getBundleApps(entity.name);
           entity.apps = charms.charms;
@@ -75,7 +99,7 @@ class initPackages {
     );
   }
 
-  constructor(packages) {
+  constructor(packages: any[]) {
     this.allPackages = packages;
     this.selectElements();
     this.togglePlaceholderContainer(true);
@@ -182,7 +206,7 @@ class initPackages {
 
   handleShowAllPackagesButton() {
     if (this.domEl.showAllPackagesButton.el) {
-      this.domEl.showAllPackagesButton.el.addEventListener("click", (e) => {
+      this.domEl.showAllPackagesButton.el.addEventListener("click", (e: Event) => {
         e.preventDefault();
         this.togglePackageContainer(true);
         this.renderPackages();
@@ -200,7 +224,7 @@ class initPackages {
     }
   }
 
-  renderResultsCount(featured) {
+  renderResultsCount(featured: boolean = false) {
     if (!("content" in document.createElement("template"))) {
       return;
     }
@@ -248,7 +272,7 @@ class initPackages {
 
       history.pushState(
         { filters: this._filters },
-        null,
+        '',
         decodeURIComponent(newUrl)
       );
     }
@@ -256,8 +280,8 @@ class initPackages {
 
   handlePlatformChange() {
     if (this.domEl.baseSwitcher.el) {
-      this.domEl.baseSwitcher.el.addEventListener("change", (e) => {
-        this._filters.base[0] = e.target.value;
+      this.domEl.baseSwitcher.el.addEventListener("change", (e: Event) => {
+        this._filters.base[0] = (e.target as HTMLInputElement).value;
 
         this.filterPackages();
         this.updateEnabledCategories();
@@ -279,8 +303,8 @@ class initPackages {
 
   handlePackageTypeChange() {
     if (this.domEl.packageTypeSwitcher.el) {
-      this.domEl.packageTypeSwitcher.el.addEventListener("change", (e) => {
-        this._filters.type[0] = e.target.value;
+      this.domEl.packageTypeSwitcher.el.addEventListener("change", (e: Event) => {
+        this._filters.type[0] = (e.target as HTMLInputElement).value;
 
         this.filterPackages();
         this.updateEnabledCategories();
@@ -302,7 +326,7 @@ class initPackages {
 
   handleFilterClick() {
     if (this.domEl.categoryFilters.el) {
-      this.domEl.categoryFilters.el.forEach((categoryFilter) => {
+      this.domEl.categoryFilters.el.forEach((categoryFilter: HTMLInputElement) => {
         if (
           this._filters.filter.length > 0 &&
           this._filters.filter.indexOf(categoryFilter.value) !== -1
@@ -317,7 +341,7 @@ class initPackages {
             this._filters.filter.push(categoryFilter.value);
           } else {
             this._filters.filter = this._filters.filter.filter(
-              (el) => el !== categoryFilter.value
+              (el: string) => el !== categoryFilter.value
             );
           }
 
@@ -343,7 +367,7 @@ class initPackages {
 
   updateEnabledCategories() {
     // Enable all categories by default
-    this.domEl.categoryFilters.el.forEach((filter) => {
+    this.domEl.categoryFilters.el.forEach((filter: { disabled: boolean; }) => {
       filter.disabled = false;
     });
 
@@ -353,9 +377,9 @@ class initPackages {
       this._filters.base[0] !== "all" ||
       this._filters.type[0] !== "all"
     ) {
-      const categories = [];
+      const categories: any[] = [];
 
-      this.filteredPackagesAllCategories.forEach((entity) => {
+      this.filteredPackagesAllCategories.forEach((entity: Entity) => {
         if (entity.store_front.categories) {
           entity.store_front.categories.forEach((cat) => {
             if (!categories.includes(cat.slug)) {
@@ -366,7 +390,7 @@ class initPackages {
       });
 
       // We hide categories without results
-      this.domEl.categoryFilters.el.forEach((filter) => {
+      this.domEl.categoryFilters.el.forEach((filter: { value: any; disabled: boolean; }) => {
         if (categories.includes(filter.value)) {
           filter.disabled = false;
         } else {
@@ -376,7 +400,7 @@ class initPackages {
     }
   }
 
-  togglePlaceholderContainer(visibility) {
+  togglePlaceholderContainer(visibility: boolean = false) {
     if (this.domEl.placeholderContainer.el) {
       if (visibility) {
         this.domEl.placeholderContainer.el.classList.remove("u-hide");
@@ -390,7 +414,7 @@ class initPackages {
     }
   }
 
-  togglePackageContainer(visibility) {
+  togglePackageContainer(visibility: boolean = false) {
     if (this.domEl.packageContainer.el) {
       if (visibility) {
         this.domEl.packageContainer.el.classList.remove("u-hide");
@@ -404,7 +428,7 @@ class initPackages {
     }
   }
 
-  toggleFeaturedContainer(visibility) {
+  toggleFeaturedContainer(visibility: boolean = false) {
     if (this.domEl.featuredContainer.el) {
       if (visibility) {
         this.domEl.featuredContainer.el.classList.remove("u-hide");
@@ -422,13 +446,13 @@ class initPackages {
     this.packages = this.allPackages;
 
     if (this._filters.base[0] !== "all") {
-      this.packages = this.packages.filter((entity) =>
+      this.packages = this.packages.filter((entity: Entity) =>
         entity.store_front["deployable-on"].includes(this._filters.base[0])
       );
     }
 
     if (this._filters.type[0] !== "all") {
-      this.packages = this.packages.filter((entity) =>
+      this.packages = this.packages.filter((entity: Entity) =>
         entity["type"].includes(this._filters.type[0])
       );
     }
@@ -436,14 +460,14 @@ class initPackages {
     this.filteredPackagesAllCategories = this.packages;
 
     if (this._filters.filter.length > 0) {
-      this.packages = this.packages.filter((entity) =>
+      this.packages = this.packages.filter((entity: Entity) =>
         this.filterByCategory(entity)
       );
     }
   }
 
-  filterByCategory(entity) {
-    let packageCategories = [];
+  filterByCategory(entity: Entity) {
+    let packageCategories: string[] = [];
 
     if (entity.store_front.categories) {
       packageCategories = entity.store_front.categories.map((cat) => {
@@ -451,7 +475,7 @@ class initPackages {
       });
     }
 
-    const cats = this._filters.filter.filter((cat) => {
+    const cats = this._filters.filter.filter((cat: string) => {
       if (packageCategories.includes(cat)) {
         return cat;
       }
@@ -470,7 +494,7 @@ class initPackages {
     if (this.domEl.packageContainer.el) {
       this.domEl.packageContainer.el.innerHTML = "";
 
-      this.packages.forEach((entity) => {
+      this.packages.forEach((entity: Entity) => {
         this.domEl.packageContainer.el.appendChild(buildPackageCard(entity));
       });
 
@@ -494,7 +518,7 @@ class initPackages {
     }
   }
 
-  toggleShowAllPackagesButton(visibility) {
+  toggleShowAllPackagesButton(visibility: boolean = false) {
     if (this.domEl.showAllPackagesButton.el) {
       if (visibility) {
         this.domEl.showAllPackagesButton.el.classList.remove("u-hide");
@@ -569,7 +593,7 @@ class initPackages {
  * in the container. This function hides icons that don't fit and
  * adds a count of "missing" icons.
  */
-function handleBundleIcons(container) {
+function handleBundleIcons(container: HTMLElement) {
   const contents = container.querySelectorAll(".p-card__content");
 
   const ensureBundleCharmsFit = () => {
@@ -579,7 +603,7 @@ function handleBundleIcons(container) {
       const clientHeight = content.clientHeight;
 
       // Get all the icons
-      const icons = Array.from(content.querySelectorAll(".p-bundle-icon"));
+      const icons: HTMLElement[] = Array.from(content.querySelectorAll(".p-bundle-icon"));
 
       // If there aren't any icons, skip to the next content area
       if (!icons[0]) {
@@ -629,15 +653,17 @@ function handleBundleIcons(container) {
             "p-bundle-icons__count u-text--muted"
           );
 
-          // Add the element
-          icons[0].parentNode.appendChild(hiddenCount);
+          // Add the element if the parent node exists
+          if (icons[0].parentNode) {
+            icons[0].parentNode.appendChild(hiddenCount);
+          }
         }
 
         // Set the count of missing icons
         hiddenCount.innerHTML = `+${hiddenIcons}`;
       } else {
         // If there aren't any missing icons, remove the container
-        if (hiddenCount) {
+        if (hiddenCount && hiddenCount.parentNode) {
           hiddenCount.parentNode.removeChild(hiddenCount);
         }
       }
@@ -650,7 +676,7 @@ function handleBundleIcons(container) {
     ensureBundleCharmsFit();
 
     // We don't need to do this on every single window resize event, just every so often.
-    const debounced = debounce(ensureBundleCharmsFit, 50);
+    const debounced = debounce(ensureBundleCharmsFit, 50, false);
 
     // Remove the resize listener (to avoid duplicate events on subsequent runs)
     window.removeEventListener("resize", debounced);
@@ -661,12 +687,12 @@ function handleBundleIcons(container) {
 }
 
 function loadBundleIcons() {
-  const bundleIcons = document.querySelectorAll(".p-bundle-icon");
+  const bundleIcons = document.querySelectorAll(".p-bundle-icon") as NodeListOf<HTMLElement>;
   if (bundleIcons.length > 0) {
     bundleIcons.forEach((bundleIcon) => {
-      const title = bundleIcon.getAttribute("title");
+      const title = bundleIcon.getAttribute("title") || "";
       const initials = bundleIcon.innerHTML;
-      const name = bundleIcon.getAttribute("alt");
+      const name = bundleIcon.getAttribute("alt") || "";
 
       const icon = new Image();
       icon.alt = name;
