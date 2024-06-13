@@ -84,7 +84,7 @@
           </div>
         </div>
       {% else %}
-        {% for platform,bases in package.store_front.all_platforms.items() %}
+        {% for platform, bases in package.store_front.all_platforms.items() %}
               <div class="series-base">
                 <div class="series-base__title">
                     {% if platform.startswith("ubuntu") %}
@@ -96,10 +96,16 @@
                     {% endif %}
                 </div>
                 <div>
-                  {% for base in bases %}
+                  {% for base in bases | sort(reverse=True)  %}
+                      {% if loop.index <= 8 %}
                       <span class="series-tag">
                         {{ base }}
                       </span>
+                      {% elif loop.index == 9 %}
+                      <span class="series-tag">
+                        +{{ loop.revindex }}
+                      </span>
+                      {% endif %}
                   {% endfor %}
                 </div>
               </div>
