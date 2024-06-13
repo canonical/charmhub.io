@@ -133,7 +133,7 @@ export const InterfaceItem = ({
       <h3 className="p-heading--4 u-no-margin--bottom" id={interfaceData.key}>
         <div style={{ display: "flex", alignItems: "center" }}>
           {interfaceData.key}
-          <span className="u-text--muted"> endpoint</span>
+          <span className="u-text--muted">&nbsp;endpoint</span>
           {interfaceData.optional && (
             <Chip
               value="Required"
@@ -147,7 +147,7 @@ export const InterfaceItem = ({
           <a href={`/integrations/${interfaceData.interface}`}>
             {interfaceData.interface}
           </a>
-          <span className="u-text--muted"> interface </span>
+          <span className="u-text--muted">&nbsp;interface</span>
         </div>
       </h3>
       {interfaceData.description && <p>{interfaceData.description}</p>}
