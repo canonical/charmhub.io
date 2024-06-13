@@ -187,7 +187,7 @@ def process_revision(revision):
     bases = []
 
     for base in revision["bases"]:
-        if "architecture" in base and base["architecture"] == "all":
+        if base and base.get("architecture") == "all":
             for arch in ARCHITECTURES:
                 bases.append({**base, "architecture": arch})
         else:

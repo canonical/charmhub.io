@@ -10,6 +10,7 @@
       <div class="p-channel-map__mask">
       </div>
       <div class="p-card--highlighted p-channel-map__content">
+        {% if package.type == "charm" %}
         <div class="u-fixed-width">
           <div class="p-form p-form--inline">
             <div class="p-form__group">
@@ -36,6 +37,7 @@
             </div>
           </div>
         </div>
+        {% endif %}
         <div class="u-fixed-width">
           <table class="p-table--mobile-card">
             <thead>
