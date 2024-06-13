@@ -6,7 +6,7 @@ import { useEffect, useMemo } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { useQuery } from "react-query";
 
-import { Row, Col, Spinner, Icon } from "@canonical/react-components";
+import { Row, Col, Spinner } from "@canonical/react-components";
 
 import { filterChipsSelector, filterState } from "../state";
 
@@ -162,13 +162,15 @@ export const InterfaceItem = ({
           </div>
           <Row>
             {charms.map((charm: ICharm) => (
-              <Col
-              size={3}
-              style={{ marginBottom: "1.5rem" }}
-              key={charm.package["display_name"]}
-              >
-                <IntegrationCard data={charm} />
-              </Col>
+              <>
+                <Col
+                size={3}
+                style={{ marginBottom: "1.5rem" }}
+                key={charm.package["display_name"]}
+                >
+                  <IntegrationCard data={charm} />
+                </Col>
+              </>
             ))}
           </Row>
         </>

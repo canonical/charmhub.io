@@ -1,13 +1,20 @@
+import { HistoryState } from "./historyState";
+
 class TableOfContents {
-  constructor(el, historyState) {
+  el: HTMLElement;
+  instanceName: string;
+  tabs: any;
+  historyState: HistoryState;
+
+  constructor(el: HTMLElement, historyState: HistoryState) {
     this.el = el;
-    this.instanceName = el.dataset.js;
+    this.instanceName = el.dataset.js as string;
     this.tabs = {};
     this.historyState = historyState;
 
     const tabLinks = this.el.querySelectorAll("[role='tab']");
 
-    tabLinks.forEach((tabLink, i) => {
+    tabLinks.forEach((tabLink: any, i: any) => {
       const name = tabLink.getAttribute("aria-controls");
       let isSelected = tabLink.hasAttribute("aria-selected");
       const controls = document.querySelector(`#${name}`);
@@ -39,11 +46,11 @@ class TableOfContents {
   focus() {
     this.historyState.updatePath(0, [
       this.instanceName,
-      this.getSelected().name,
+      (this.getSelected() as any).name,
     ]);
   }
 
-  popHandler(state) {
+  popHandler(state: Array<string>) {
     if (state) {
       if (state.length === 2 && this.instanceName === state[0]) {
         Object.keys(this.tabs).forEach((tab) => {
@@ -91,7 +98,7 @@ class TableOfContents {
 
   updateUI() {
     this.resetTabUI();
-    const selectedTab = this.getSelected();
+    const selectedTab = this.getSelected() as any;
 
     if (selectedTab) {
       selectedTab.tabEl.setAttribute("aria-selected", true);
@@ -103,7 +110,7 @@ class TableOfContents {
   initEvents() {
     this.el.addEventListener("click", (e) => {
       e.preventDefault();
-      const clickedTab = e.target.getAttribute("aria-controls");
+      const clickedTab = (e.target as HTMLElement).getAttribute("aria-controls");
       if (clickedTab) {
         Object.keys(this.tabs).forEach((tab) => {
           if (tab === clickedTab) {

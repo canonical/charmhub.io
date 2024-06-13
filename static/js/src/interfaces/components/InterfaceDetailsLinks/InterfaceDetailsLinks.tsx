@@ -1,4 +1,3 @@
-import React from "react";
 import { Icon } from "@canonical/react-components";
 
 type Props = {

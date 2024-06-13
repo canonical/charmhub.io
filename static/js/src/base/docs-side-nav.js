@@ -119,7 +119,6 @@
   // Setup expandable side navigation
 
   var expandToggles = document.querySelectorAll(".p-side-navigation__expand");
-  var navigationLinks = document.querySelectorAll(".p-side-navigation__link");
 
   // setup default values of aria-expanded for the toggle button, list title and list itself
   const setup = (toggle) => {

@@ -1,31 +1,30 @@
-const init = (packageName, channelMapButton) => {
+const init = (packageName: string, channelMapButton: HTMLElement) => {
   const currentChannel = channelMapButton.querySelector(
     "[data-js='channel-map-selected']"
-  );
-  const channelCli = document.querySelector("[data-js='channel-cli']");
+  ) as HTMLElement;
   const channelMapState = {
-    channel: currentChannel.innerText.split(" ")[0],
-    version: currentChannel.innerText.split(" ")[1],
+    channel: currentChannel?.innerText.split(" ")[0],
+    version: currentChannel?.innerText.split(" ")[1],
     packageName,
   };
 
   const channelMap = document.querySelector(".p-channel-map");
 
-  const mask = channelMap.querySelector(".p-channel-map__mask");
+  const mask = channelMap?.querySelector(".p-channel-map__mask");
 
-  const channelMapContent = channelMap.querySelector(".p-channel-map__content");
+  const channelMapContent = channelMap?.querySelector(".p-channel-map__content") as HTMLElement;
 
-  const channelMapArchFilter = channelMap.querySelector(
+  const channelMapArchFilter = channelMap?.querySelector(
     "[data-js='channel-map-arch-filter']"
-  );
-  const channelMapBaseFilter = channelMap.querySelector(
+  ) as HTMLSelectElement;
+  const channelMapBaseFilter = channelMap?.querySelector(
     "[data-js='channel-map-base-filter']"
-  );
-  const channelsToBeFiltered = channelMap.querySelectorAll(
+  ) as HTMLSelectElement;
+  const channelsToBeFiltered = channelMap?.querySelectorAll(
     "[data-channel-map-channel]"
-  );
+  ) as NodeListOf<Element>;
 
-  const selectChannel = (track, channel) => {
+  const selectChannel = (track: string, channel: string) => {
     var page = window.location.pathname;
 
     if (track === "latest" && channel === "stable") {
@@ -36,7 +35,7 @@ const init = (packageName, channelMapButton) => {
   };
 
   const showChannelMap = () => {
-    channelMap.classList.remove("u-hide");
+    channelMap?.classList.remove("u-hide");
     channelMapButton.setAttribute("aria-expanded", "true");
 
     var track = "latest";
@@ -51,11 +50,11 @@ const init = (packageName, channelMapButton) => {
       `[data-channel-map-track="${track}"][data-channel-map-channel="${channel}"]`
     );
 
-    selected.classList.add("is-active");
+    selected?.classList.add("is-active");
   };
 
   const hideChannelMap = () => {
-    channelMap.classList.add("u-hide");
+    channelMap?.classList.add("u-hide");
     channelMapButton.removeAttribute("aria-expanded");
   };
 
@@ -67,7 +66,7 @@ const init = (packageName, channelMapButton) => {
     }
   };
 
-  mask.addEventListener("click", () => {
+  mask?.addEventListener("click", () => {
     hideChannelMap();
   });
 
@@ -76,7 +75,7 @@ const init = (packageName, channelMapButton) => {
   });
 
   channelMapContent.addEventListener("click", (e) => {
-    let row = e.target;
+    let row = e.target as HTMLElement;
 
     while (
       row.dataset &&
@@ -84,14 +83,13 @@ const init = (packageName, channelMapButton) => {
       row.parentNode &&
       row.nodeName !== "TABLE"
     ) {
-      row = row.parentNode;
+      row = row.parentNode as HTMLElement;
     }
 
-    if (row.dataset && row.dataset.channelMapChannel) {
+    if (row.dataset && row.dataset.channelMapChannel && row.dataset.channelMapTrack) {
       selectChannel(
         row.dataset.channelMapTrack,
         row.dataset.channelMapChannel,
-        row.dataset.channelMapVersion
       );
     }
   });
@@ -118,10 +116,10 @@ const init = (packageName, channelMapButton) => {
 
     channelsToBeFiltered.forEach((el) => {
       const matchesArch =
-        el.getAttribute("data-channel-map-arch-filter").includes(archValue) ||
+        el?.getAttribute("data-channel-map-arch-filter")?.includes(archValue) ||
         archValue === "any";
       const matchesBase =
-        el.getAttribute("data-channel-map-base-filter").includes(baseValue) ||
+        el?.getAttribute("data-channel-map-base-filter")?.includes(baseValue) ||
         baseValue === "any";
 
       if (matchesArch && matchesBase) {

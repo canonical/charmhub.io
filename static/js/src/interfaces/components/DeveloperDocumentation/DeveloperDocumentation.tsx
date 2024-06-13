@@ -1,4 +1,3 @@
-import React from "react";
 import { Strip } from "@canonical/react-components";
 
 import DocumentationSection from "../DocumentationSection";

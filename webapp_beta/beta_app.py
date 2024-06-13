@@ -9,7 +9,6 @@ from canonicalwebteam.candid import CandidClient
 from webapp_beta.charmhub_bp import charmhub_bp
 from webapp.decorators import login_required
 from webapp.handlers import charmhub_utility_processor
-from webapp.decorators import login_required
 
 # beta charmhub configiuration
 app = create_app(
