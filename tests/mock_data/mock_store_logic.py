@@ -88,6 +88,7 @@ converted_sample_channel_map = OrderedDict(
                     (
                         "stable",
                         {
+                            "all_bases": ["Ubuntu 14.04", "Ubuntu 12.04"],
                             "latest": {
                                 "architectures": {"all"},
                                 "bases": ["Ubuntu 14.04", "Ubuntu 12.04"],
@@ -98,7 +99,10 @@ converted_sample_channel_map = OrderedDict(
                                         "name": "ubuntu",
                                     }
                                 ],
-                                "released_at": "21 Oct 2021",
+                                "released_at": (
+                                    "2021-10-21" "T16:45:42.323000+00:00"
+                                ),
+                                "release_date": "21 Oct 2021",
                                 "revision": {
                                     "bases": [
                                         {
@@ -145,7 +149,11 @@ converted_sample_channel_map = OrderedDict(
                                                     "name": "ubuntu",
                                                 }
                                             ],
-                                            "released_at": "21 Oct 2021",
+                                            "released_at": (
+                                                "2021-10-21"
+                                                "T16:45:42.323000+00:00"
+                                            ),
+                                            "release_date": "21 Oct 2021",
                                             "revision": {
                                                 "bases": [
                                                     {
@@ -187,6 +195,7 @@ converted_sample_channel_map = OrderedDict(
                     (
                         "stable",
                         {
+                            "all_bases": ["Ubuntu 20.04", "Ubuntu 18.04"],
                             "latest": {
                                 "architectures": {"amd"},
                                 "bases": ["Ubuntu 20.04", "Ubuntu 18.04"],
@@ -197,7 +206,10 @@ converted_sample_channel_map = OrderedDict(
                                         "name": "ubuntu",
                                     }
                                 ],
-                                "released_at": "21 Oct 2022",
+                                "released_at": (
+                                    "2022-10-21" "T16:45:42.323000+00:00"
+                                ),
+                                "release_date": "21 Oct 2022",
                                 "revision": {
                                     "bases": [
                                         {
@@ -247,9 +259,13 @@ converted_sample_channel_map = OrderedDict(
                                                         "18.04",
                                                     ],
                                                     "name": "ubuntu",
-                                                },
+                                                }
                                             ],
-                                            "released_at": "21 Oct 2022",
+                                            "released_at": (
+                                                "2022-10-21"
+                                                "T16:45:42.323000+00:00"
+                                            ),
+                                            "release_date": "21 Oct 2022",
                                             "revision": {
                                                 "bases": [
                                                     {

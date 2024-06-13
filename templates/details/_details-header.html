@@ -90,9 +90,9 @@
               {% if track == package["default-release"].channel.track and channel == package["default-release"].channel.risk and loop.index == 1 %}
                 <div class="series-base">
                   <div class="series-base__title">
-                    {% if base["name"] == "ubuntu" %}
+                    {% if base.startswith("ubuntu") %}
                       <img src="https://assets.ubuntu.com/v1/adac6928-ubuntu.svg" alt="Ubuntu" width="89" height="20" class="p-image--base">
-                    {% elif base["name"] == "centos" %}
+                    {% elif base.startswith("centos") %}
                       <img src="https://assets.ubuntu.com/v1/fd5cc5d8-CentOS.svg" alt="CentOS" width="85" height="24" class="p-image--base">
                     {% else %}
                       {{ base["name"] }}

@@ -109,7 +109,8 @@ def convert_channel_maps(channel_map):
             continue
 
         info = {
-            "released_at": convert_date(channel["channel"]["released-at"]),
+            "released_at": channel["channel"]["released-at"],
+            "release_date": convert_date(channel["channel"]["released-at"]),
             "version": channel["revision"]["version"],
             "channel": channel["channel"]["name"],
             "risk": channel["channel"]["risk"],
@@ -146,13 +147,28 @@ def convert_channel_maps(channel_map):
         # Order releases by revision
         for risk, data in result[track].items():
             result[track][risk]["releases"] = OrderedDict(
-                sorted(result[track][risk]["releases"].items(), reverse=True)
+                sorted(
+                    result[track][risk]["releases"].items(),
+                    key=lambda release: release[1]["released_at"],
+                    reverse=True,
+                )
+            )
+
+            # Collect all the bases available across all releases
+            result[track][risk]["all_bases"] = sorted(
+                list(
+                    set(
+                        base
+                        for release in result[track][risk]["releases"].values()
+                        for base in release["bases"]
+                    )
+                ),
+                reverse=True,
             )
 
             result[track][risk]["latest"] = result[track][risk]["releases"][
                 max(result[track][risk]["releases"].keys())
             ]
-
     return result
 
 
@@ -190,37 +206,26 @@ def extract_default_release_architectures(channel):
 
 def extract_all_arch(channel_map, parent_dict):
     all_archy = set()
-    all_channel_bases = []
+    all_channel_bases = {}
 
-    if channel_map.get("latest"):
-        channel_map_all = list(channel_map["latest"].items())
-    # for charms without the latest revision
-    else:
-        for version, version_data in channel_map.items():
-            channel_map_all = list(version_data.items())
-            break
+    for version_data in channel_map.values():
+        channel_map_all = list(version_data.items())
+        for _, channel_data in channel_map_all:
+            for release in channel_data["releases"].values():
+                all_archy = all_archy.union(release["architectures"])
 
-    for channel, channel_data in channel_map_all:
-        bases = set()
-        name = ""
-        for _, release in channel_data["releases"].items():
-            all_archy = all_archy.union(release["architectures"])
-            bases = bases.union(release["bases"])
+                for base in release["channel_bases"]:
+                    for series in base["channels"]:
+                        platform = PLATFORMS.get(base["name"], base["name"])
 
-        if channel_data["latest"]["channel_bases"]:
-            for base in channel_data["latest"]["channel_bases"]:
-                name = base["name"]
+                        all_channel_bases[base["name"] + series] = (
+                            f"{platform} {series}"
+                        )
 
-        bases = sorted(
-            bases, key=lambda k: k.replace("Ubuntu ", ""), reverse=True
-        )
-
-        all_channel_bases.append(
-            {"channel": channel, "bases": bases, "name": name}
-        )
-
-    parent_dict["all_architectures"] = all_archy
-    parent_dict["all_channel_bases"] = all_channel_bases
+    parent_dict["all_architectures"] = sorted(all_archy)
+    parent_dict["all_channel_bases"] = dict(
+        sorted(all_channel_bases.items(), reverse=True)
+    )
 
     return
 
@@ -252,7 +257,7 @@ def extract_bases(channel):
 
     for i in bases:
         if i is None:
-            return
+            return []
 
         has_base = False
 

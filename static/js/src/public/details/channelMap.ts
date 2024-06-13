@@ -14,11 +14,14 @@ const init = (packageName: string, channelMapButton: HTMLElement) => {
 
   const channelMapContent = channelMap?.querySelector(".p-channel-map__content") as HTMLElement;
 
-  const channelMapFilter = channelMap?.querySelector(
-    "[data-js='channel-map-filter']"
+  const channelMapArchFilter = channelMap?.querySelector(
+    "[data-js='channel-map-arch-filter']"
+  ) as HTMLSelectElement;
+  const channelMapBaseFilter = channelMap?.querySelector(
+    "[data-js='channel-map-base-filter']"
   ) as HTMLSelectElement;
   const channelsToBeFiltered = channelMap?.querySelectorAll(
-    "[data-channel-map-filter]"
+    "[data-channel-map-channel]"
   ) as NodeListOf<Element>;
 
   const selectChannel = (track: string, channel: string) => {
@@ -91,19 +94,47 @@ const init = (packageName: string, channelMapButton: HTMLElement) => {
     }
   });
 
-  channelMapFilter.addEventListener("change", (e: Event) => {
-    let target = e.target as HTMLSelectElement
-    channelsToBeFiltered.forEach((el: Element) => { 
-      if (
-        el?.getAttribute("data-channel-map-filter")?.includes(target?.value) ||
-        target.value === "any"
-      ) {
+  function hideOlderChannels() {
+    const seen = new Set();
+    channelsToBeFiltered.forEach((el) => {
+      const track = `${el.getAttribute("data-channel-map-track")}${el.getAttribute("data-channel-map-channel")}`;
+      if (el.classList.contains("u-hide")) {
+        return;
+      }
+
+      if (seen.has(track)) {
+        el.classList.add("u-hide");
+      } else {
+        seen.add(track);
+      }
+    });
+  }
+
+  function handleFilterChange() {
+    const archValue = channelMapArchFilter.value;
+    const baseValue = channelMapBaseFilter.value;
+
+    channelsToBeFiltered.forEach((el) => {
+      const matchesArch =
+        el?.getAttribute("data-channel-map-arch-filter")?.includes(archValue) ||
+        archValue === "any";
+      const matchesBase =
+        el?.getAttribute("data-channel-map-base-filter")?.includes(baseValue) ||
+        baseValue === "any";
+
+      if (matchesArch && matchesBase) {
         el.classList.remove("u-hide");
       } else {
         el.classList.add("u-hide");
       }
     });
-  });
+
+    hideOlderChannels();
+  }
+
+  channelMapArchFilter.addEventListener("change", handleFilterChange);
+  channelMapBaseFilter.addEventListener("change", handleFilterChange);
+  hideOlderChannels();
 };
 
 export { init as channelMap };
