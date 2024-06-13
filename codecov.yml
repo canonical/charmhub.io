@@ -15,11 +15,11 @@ coverage:
     project:
       javascript:
         target: auto
-        threshold: 0%
+        threshold: 20%
         flags:
           - javascript
       python:
         target: auto
-        threshold: 0%
+        threshold: 44%
         flags:
           - python
