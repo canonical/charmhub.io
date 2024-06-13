@@ -19,6 +19,8 @@ PLATFORMS = {
     "centos": "CentOS",
 }
 
+ARCHITECTURES = ["amd64", "arm64", "ppc64el", "riscv64", "s390x"]
+
 
 def add_description_and_summary(package):
     if package["type"] == "bundle":
@@ -103,9 +105,16 @@ def convert_channel_maps(channel_map):
 
         # same revision but for a different arch
         if revision_number in result[track][risk]["releases"]:
-            result[track][risk]["releases"][revision_number][
-                "architectures"
-            ].add(channel["channel"]["base"]["architecture"])
+            arch = channel["channel"]["base"]["architecture"]
+
+            if arch == "all":
+                result[track][risk]["releases"][revision_number][
+                    "architectures"
+                ].update(ARCHITECTURES)
+            else:
+                result[track][risk]["releases"][revision_number][
+                    "architectures"
+                ].add(arch)
             continue
 
         info = {
@@ -117,14 +126,16 @@ def convert_channel_maps(channel_map):
             "size": channel["revision"]["download"]["size"],
             "bases": extract_series(channel, True),
             "channel_bases": extract_bases(channel),
-            "revision": channel["revision"],
+            "revision": process_revision(channel["revision"]),
             "architectures": set(),
         }
 
         if channel["channel"]["base"]:
-            info["architectures"].add(
-                channel["channel"]["base"]["architecture"]
-            )
+            arch = channel["channel"]["base"]["architecture"]
+            if arch == "all":
+                info["architectures"].update(ARCHITECTURES)
+            else:
+                info["architectures"].add(arch)
 
         result[track][risk]["releases"][revision_number] = info
 
@@ -172,6 +183,18 @@ def convert_channel_maps(channel_map):
     return result
 
 
+def process_revision(revision):
+    bases = []
+
+    for base in revision["bases"]:
+        if "architecture" in base and base["architecture"] == "all":
+            for arch in ARCHITECTURES:
+                bases.append({**base, "architecture": arch})
+        else:
+            bases.append(base)
+    return {**revision, "bases": bases}
+
+
 def extract_resources(channel):
     """
     Extract resources from channel map
@@ -199,7 +222,11 @@ def extract_default_release_architectures(channel):
         if not base or base["architecture"] in architectures:
             continue
 
-        architectures.add(base["architecture"])
+        arch = base["architecture"]
+        if arch == "all":
+            architectures.update(ARCHITECTURES)
+        else:
+            architectures.add(arch)
 
     return sorted(architectures)
 

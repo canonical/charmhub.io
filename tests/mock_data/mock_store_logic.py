@@ -90,7 +90,13 @@ converted_sample_channel_map = OrderedDict(
                         {
                             "all_bases": ["Ubuntu 14.04", "Ubuntu 12.04"],
                             "latest": {
-                                "architectures": {"all"},
+                                "architectures": {
+                                    "amd64",
+                                    "arm64",
+                                    "ppc64el",
+                                    "riscv64",
+                                    "s390x",
+                                },
                                 "bases": ["Ubuntu 14.04", "Ubuntu 12.04"],
                                 "channel": "latest/stable",
                                 "channel_bases": [
@@ -106,7 +112,27 @@ converted_sample_channel_map = OrderedDict(
                                 "revision": {
                                     "bases": [
                                         {
-                                            "architecture": "all",
+                                            "architecture": "amd64",
+                                            "channel": "12.04",
+                                            "name": "ubuntu",
+                                        },
+                                        {
+                                            "architecture": "arm64",
+                                            "channel": "12.04",
+                                            "name": "ubuntu",
+                                        },
+                                        {
+                                            "architecture": "ppc64el",
+                                            "channel": "12.04",
+                                            "name": "ubuntu",
+                                        },
+                                        {
+                                            "architecture": "riscv64",
+                                            "channel": "12.04",
+                                            "name": "ubuntu",
+                                        },
+                                        {
+                                            "architecture": "s390x",
                                             "channel": "12.04",
                                             "name": "ubuntu",
                                         },
@@ -134,7 +160,13 @@ converted_sample_channel_map = OrderedDict(
                                     (
                                         1,
                                         {
-                                            "architectures": {"all"},
+                                            "architectures": {
+                                                "amd64",
+                                                "arm64",
+                                                "ppc64el",
+                                                "riscv64",
+                                                "s390x",
+                                            },
                                             "bases": [
                                                 "Ubuntu 14.04",
                                                 "Ubuntu 12.04",
@@ -157,7 +189,32 @@ converted_sample_channel_map = OrderedDict(
                                             "revision": {
                                                 "bases": [
                                                     {
-                                                        "architecture": "all",
+                                                        "arch"
+                                                        "itecture": "amd64",
+                                                        "channel": "12.04",
+                                                        "name": "ubuntu",
+                                                    },
+                                                    {
+                                                        "arch"
+                                                        "itecture": "arm64",
+                                                        "channel": "12.04",
+                                                        "name": "ubuntu",
+                                                    },
+                                                    {
+                                                        "arch"
+                                                        "itecture": "ppc64el",
+                                                        "channel": "12.04",
+                                                        "name": "ubuntu",
+                                                    },
+                                                    {
+                                                        "arch"
+                                                        "itecture": "riscv64",
+                                                        "channel": "12.04",
+                                                        "name": "ubuntu",
+                                                    },
+                                                    {
+                                                        "arch"
+                                                        "itecture": "s390x",
                                                         "channel": "12.04",
                                                         "name": "ubuntu",
                                                     },
