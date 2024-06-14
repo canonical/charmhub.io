@@ -607,7 +607,7 @@ def add_optional_fields(metadata_relations, relations):
         {
             **relations[key],
             "key": key,
-            "optional": metadata_relations[key].get("optional", False),
+            "optional": metadata_relations[key].get("optional", "false"),
         }
         for key in relations.keys()
     ]

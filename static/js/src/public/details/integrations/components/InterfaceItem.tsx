@@ -134,7 +134,7 @@ export const InterfaceItem = ({
         <div style={{ display: "flex", alignItems: "center" }}>
           {interfaceData.key}
           <span className="u-text--muted">&nbsp;endpoint</span>
-          {interfaceData.optional && (
+          {interfaceData.optional === "true" && (
             <Chip
               value="Required"
               appearance="negative"
