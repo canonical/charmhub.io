@@ -3,7 +3,7 @@ export interface IInterfaceData {
   interface: string;
   description: string;
   type?: "provides" | "requires";
-  optional?: "true" | "false";
+  required?: boolean;
 }
 
 export interface IFilterChip {

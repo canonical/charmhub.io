@@ -585,11 +585,11 @@ def details_integrations_data(entity_name):
         .get("relations", {})
     )
 
-    provides = add_optional_fields(
+    provides = add_required_fields(
         package["store_front"]["metadata"].get("provides", {}),
         relations.get("provides", {}),
     )
-    requires = add_optional_fields(
+    requires = add_required_fields(
         package["store_front"]["metadata"].get("requires", {}),
         relations.get("requires", {}),
     )
@@ -602,12 +602,12 @@ def details_integrations_data(entity_name):
     return jsonify({"grouped_relations": grouped_relations})
 
 
-def add_optional_fields(metadata_relations, relations):
+def add_required_fields(metadata_relations, relations):
     processed_relations = [
         {
             **relations[key],
             "key": key,
-            "optional": metadata_relations[key].get("optional", "false"),
+            "required": metadata_relations[key].get("required", False),
         }
         for key in relations.keys()
     ]

@@ -11,13 +11,13 @@ const mockData = {
   key: "test-key",
   interface: "test_interface",
   description: "This is a test description.",
-  optional: true,
+  required: true,
 };
 
 const mockCharmName = "test-charm";
 
 describe("InterfaceItem Component", () => {
-  test("renders with the 'Required' chip when optional is set to true", async () => {
+  test("renders with the 'Required' chip when required is set to true", async () => {
     await act(async () => {
       render(
         <RecoilRoot>
@@ -37,8 +37,8 @@ describe("InterfaceItem Component", () => {
     expect(screen.getByText("Required")).toBeInTheDocument();
   });
 
-  test("renders without the 'Required' chip when optional is set to false", async () => {
-    const dataWithoutOptional = { ...mockData, optional: false };
+  test("renders without the 'Required' chip when required is set to false", async () => {
+    const dataWithoutRequired = { ...mockData, required: false };
 
     await act(async () => {
       render(
@@ -46,7 +46,7 @@ describe("InterfaceItem Component", () => {
           <QueryClientProvider client={queryClient}>
             <InterfaceItem
               interfaceType="provides"
-              interfaceData={dataWithoutOptional}
+              interfaceData={dataWithoutRequired}
               charmName={mockCharmName}
             />
           </QueryClientProvider>
