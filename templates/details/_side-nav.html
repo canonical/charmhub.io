@@ -88,11 +88,9 @@
     {% endif %}
     {% if package["result"]["links"]["website"] %}
       <ul class="p-list u-no-margin--bottom">
-        {% for website in package["result"]["links"]["website"] %}
         <li class="p-list__item">
-          <a href="{{ website }}"><i class="p-icon--exposed"></i>&nbsp;&nbsp;Charm product page</a>
+          <a href="{{ package["result"]["links"]["website"][0] }}"><i class="p-icon--exposed"></i>&nbsp;&nbsp;Charm product page</a>
         </li>
-        {% endfor %}
       </ul>
     {% elif package.result.website %}
       <li class="p-list__item">
