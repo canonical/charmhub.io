@@ -6,6 +6,7 @@ import {
   Col,
   Spinner,
   SearchAndFilter,
+  Chip
 } from "@canonical/react-components";
 import { InterfaceItem } from "../InterfaceItem";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -122,7 +123,7 @@ export const App = () => {
                     e.preventDefault();
                     const target = e.target as HTMLLinkElement;
                     const targetElId = target.getAttribute("href");
-  
+
                     if (targetElId) {
                       const targetEl = document.querySelector(targetElId);
                       targetEl?.scrollIntoView();
@@ -133,6 +134,14 @@ export const App = () => {
                   }}
                 >
                   {`${interfaceItem.key}`}
+                  {interfaceItem.required === true && (
+                  <Chip
+                    value="Required"
+                    appearance="negative"
+                    className="u-no-margin--bottom"
+                    style={{ marginLeft: '10px' }}
+                  />
+                )}
                 </a>
               </li>
             );

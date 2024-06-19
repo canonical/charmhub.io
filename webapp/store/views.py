@@ -555,7 +555,10 @@ def details_history(entity_name):
 @redirect_uppercase_to_lowercase
 def details_integrations(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request, FIELDS)
+    extra_fields = [
+        "default-release.revision.metadata-yaml",
+    ]
+    package = get_package(entity_name, channel_request, FIELDS + extra_fields)
 
     return render_template(
         "details/integrations.html",
@@ -571,7 +574,10 @@ def details_integrations(entity_name):
 @redirect_uppercase_to_lowercase
 def details_integrations_data(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request, FIELDS)
+    extra_fields = [
+        "default-release.revision.metadata-yaml",
+    ]
+    package = get_package(entity_name, channel_request, FIELDS + extra_fields)
 
     relations = (
         package.get("default-release", {})
@@ -579,18 +585,33 @@ def details_integrations_data(entity_name):
         .get("relations", {})
     )
 
+    provides = add_required_fields(
+        package["store_front"]["metadata"].get("provides", {}),
+        relations.get("provides", {}),
+    )
+    requires = add_required_fields(
+        package["store_front"]["metadata"].get("requires", {}),
+        relations.get("requires", {}),
+    )
+
     grouped_relations = {
-        "provides": [
-            {**provide[1], "key": provide[0]}
-            for provide in list(relations["provides"].items())
-        ],
-        "requires": [
-            {**require[1], "key": require[0]}
-            for require in list(relations["requires"].items())
-        ],
+        "provides": provides,
+        "requires": requires,
     }
 
     return jsonify({"grouped_relations": grouped_relations})
+
+
+def add_required_fields(metadata_relations, relations):
+    processed_relations = [
+        {
+            **relations[key],
+            "key": key,
+            "required": metadata_relations[key].get("required", False),
+        }
+        for key in relations.keys()
+    ]
+    return processed_relations
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/resources')
