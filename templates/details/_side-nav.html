@@ -79,11 +79,11 @@
   <ul class="p-list">
     {% if package.result.repository %}
       <li class="p-list__item">
-        <a href="{{ package.result.repository }}"><i class="p-icon--github"></i>&nbsp;&nbsp;Charm repository</a>
+        <a href="{{ package.result.repository }}"><i class="p-icon--github icon-spacing"></i>Charm repository</a>
       </li>
     {% elif package["store_front"]["metadata"]["source"] %}
       <li class="p-list__item">
-        <a href="{{ package["store_front"]["metadata"]["source"] }}"><i class="p-icon--github-grey"></i>&nbsp;&nbsp;Charm repository</a>
+        <a href="{{ package["store_front"]["metadata"]["source"] }}"><i class="p-icon--github-grey icon-spacing"></i>Charm repository</a>
       </li>
     {% endif %}
     {% if package["result"]["links"]["website"] %}
@@ -91,14 +91,14 @@
       {% if not website.startswith("https://charmhub.io") %}
         <ul class="p-list u-no-margin--bottom">
           <li class="p-list__item">
-            <a href="{{ website }}"><i class="p-icon--exposed"></i>&nbsp;&nbsp;Charm product page</a>
+            <a href="{{ website }}"><i class="p-icon--exposed icon-spacing"></i>Charm product page</a>
           </li>
         </ul>
       {% endif %}
     {% elif package.result.website %}
       {% if not package.result.website.startswith("https://charmhub.io") %}
         <li class="p-list__item">
-          <a href="{{ package.result.website }}"><i class="p-icon--exposed"></i>&nbsp;&nbsp;Charm product page</a>
+          <a href="{{ package.result.website }}"><i class="p-icon--exposed icon-spacing"></i>Charm product page</a>
         </li>
       {% endif %}
     {% endif %}
@@ -118,24 +118,24 @@
         <h5 class="side-nav-muted-text u-text--muted">MAINTAINERS</h5>
         <ul class="p-list contact-lists">
           {% for contact in contacts %}
-          <li class="p-list__item"><a href="mailto:{{ contact.email }}"><i class="p-icon--user-grey"></i>&nbsp;&nbsp;{{ contact.name }}</a></li>
+          <li class="p-list__item"><a href="mailto:{{ contact.email }}"><i class="p-icon--user-grey icon-spacing"></i>{{ contact.name }}</a></li>
           {% endfor %}
         </ul>
       {% elif package["store_front"]["metadata"]["maintainers"] %}
         <h5 class="side-nav-muted-text u-text--muted">MAINTAINERS</h5>
         <ul class="p-list contact-lists">
           {% for maintainer in maintainers %}
-          <li class="p-list__item"><a href="mailto:{{ maintainer.email }}"><i class="p-icon--user-grey"></i>&nbsp;&nbsp;{{ maintainer.name }}</a></li>
+          <li class="p-list__item"><a href="mailto:{{ maintainer.email }}"><i class="p-icon--user-grey icon-spacing"></i>{{ maintainer.name }}</a></li>
           {% endfor %}
         </ul>
       {% endif %}
       {% if package["store_front"]["metadata"]["issues"] %}
         <li class="p-list__item">
-          <a href="{{ package["store_front"]["metadata"]["issues"][0] }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
+          <a href="{{ package["store_front"]["metadata"]["issues"][0] }}"><i class="p-icon--bug icon-spacing"></i>Submit a bug</a>
         </li>
       {% elif package.result["bugs-url"] %}
         <li class="p-list__item">
-          <a href="{{ package.result["bugs-url"] }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
+          <a href="{{ package.result["bugs-url"] }}"><i class="p-icon--bug icon-spacing"></i>Submit a bug</a>
         </li>
       {% endif %}
     </ul>

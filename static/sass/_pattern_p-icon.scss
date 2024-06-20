@@ -138,6 +138,10 @@
     @extend %icon;
     @include vf-icon-user($color-mid-dark);
   }
+
+  .icon-spacing {
+    margin-right: 0.5rem;
+  }
 }
 
 @mixin charmhub-p-icon-chat {
