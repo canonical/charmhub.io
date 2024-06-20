@@ -87,15 +87,20 @@
       </li>
     {% endif %}
     {% if package["result"]["links"]["website"] %}
-      <ul class="p-list u-no-margin--bottom">
-        <li class="p-list__item">
-          <a href="{{ package["result"]["links"]["website"][0] }}"><i class="p-icon--exposed"></i>&nbsp;&nbsp;Charm product page</a>
-        </li>
-      </ul>
+      {% set website = package["result"]["links"]["website"][0] %}
+      {% if not website.startswith("https://charmhub.io") %}
+        <ul class="p-list u-no-margin--bottom">
+          <li class="p-list__item">
+            <a href="{{ website }}"><i class="p-icon--exposed"></i>&nbsp;&nbsp;Charm product page</a>
+          </li>
+        </ul>
+      {% endif %}
     {% elif package.result.website %}
-      <li class="p-list__item">
-        <a href="{{ package.result.website }}"><i class="p-icon--exposed"></i>&nbsp;&nbsp;Charm product page</a>
-      </li>
+      {% if not package.result.website.startswith("https://charmhub.io") %}
+        <li class="p-list__item">
+          <a href="{{ package.result.website }}"><i class="p-icon--exposed"></i>&nbsp;&nbsp;Charm product page</a>
+        </li>
+      {% endif %}
     {% endif %}
     {% if juju_version %}
       <li class="p-list__item">
