@@ -1,40 +1,49 @@
 import { utcParse } from "d3-time-format";
 import { scaleLinear, scaleTime } from "d3-scale";
 import { extent } from "d3-array";
+import { WeeklyActiveDevicesTrend } from "./activeDevices";
 
-function prepareLineData() {
-  const _data = [];
-  const _keys = [];
-  const data = [];
+type Data = {
+  date?: Date;
+  name: string,
+  values: { date: Date, value: number }[],
+}
 
-  this.rawData.series.forEach((series) => {
+function prepareLineData(this: WeeklyActiveDevicesTrend) {
+  const _data: { [key: string]: string | Date }[] = [];
+  const _keys: string[] = [];
+  const data: Data[] = [];
+
+  this.rawData.series.forEach((series: {name: string, values: number[]}) => {
     _keys.push(series.name);
-    const obj = {
+    const obj: Data = {
       name: series.name,
       values: [],
     };
     series.values.forEach((value, index) => {
       obj.values.push({
-        date: utcParse("%Y-%m-%d")(this.rawData.buckets[index]),
+        date: utcParse("%Y-%m-%d")(this.rawData.buckets[index]) as Date,
         value: value,
       });
     });
     data.push(obj);
   });
 
-  this.rawData.buckets.forEach((bucket, i) => {
-    const obj = {
-      date: utcParse("%Y-%m-%d")(bucket),
+  this.rawData.buckets.forEach((bucket: string, i: number) => {
+    const obj: {
+      [key: string]: string | Date,
+    } = {
+      date: utcParse("%Y-%m-%d")(bucket) as Date,
     };
 
     data.forEach((series) => {
-      obj[series.name] = series.values[i].value;
+      obj[series.name] = series.values[i].value as unknown as string;
     });
 
     _data.push(obj);
   });
 
-  const values = this.rawData.series.reduce((acc, current) => {
+  const values = this.rawData.series.reduce((acc: number[], current: {values: number[]}) => {
     return acc.concat(current.values);
   }, []);
 
@@ -46,16 +55,16 @@ function prepareLineData() {
       ? this.colorPositive
       : this.colorNegative;
 
-  this.data = _data;
+  this.data = _data ;
   this.keys = _keys;
   this.maxYValue = Math.max(...values);
   this.transformedData = data;
 }
 
-function prepareScales() {
+function prepareScales(this: WeeklyActiveDevicesTrend) { 
   this.xScale = scaleTime()
     .rangeRound([0, this.width])
-    .domain(extent(this.data, (d) => d.date));
+    .domain(extent(this.data, (d) => new Date(d.date)) as [Date, Date]);
   this.yScale = scaleLinear()
     .rangeRound([this.height, 0])
     .nice()
