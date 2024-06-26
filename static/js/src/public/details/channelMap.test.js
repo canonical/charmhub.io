@@ -7,7 +7,8 @@ describe("channelMap", () => {
     channelMapContentEl,
     channelMapEl,
     selectedEl,
-    filterEl,
+    archFilterEl,
+    baseFilterEl,
     maskEl;
 
   beforeEach(() => {
@@ -27,14 +28,18 @@ describe("channelMap", () => {
     selectedEl = document.createElement("div");
     selectedEl.setAttribute("data-channel-map-track", "latest");
     selectedEl.setAttribute("data-channel-map-channel", "stable");
-    selectedEl.setAttribute("data-channel-map-filter", "14.04 LTS");
+    selectedEl.setAttribute("data-channel-map-arch-filter", "arm64");
 
-    filterEl = document.createElement("select");
-    filterEl.setAttribute("data-js", "channel-map-filter");
+    archFilterEl = document.createElement("select");
+    archFilterEl.setAttribute("data-js", "channel-map-arch-filter");
+
+    baseFilterEl = document.createElement("select");
+    baseFilterEl.setAttribute("data-js", "channel-map-base-filter");
 
     buttonEl.appendChild(selectedChannelEl);
     channelMapEl.appendChild(maskEl);
-    channelMapEl.appendChild(filterEl);
+    channelMapEl.appendChild(archFilterEl);
+    channelMapEl.appendChild(baseFilterEl);
     channelMapEl.appendChild(channelMapContentEl);
 
     document.body.appendChild(buttonEl);

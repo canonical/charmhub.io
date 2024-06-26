@@ -18,7 +18,7 @@
       <tbody data-js="table-body">
         {% for release in package.store_front.channel_map["latest"]["stable"] %}
         <tr role="row">
-          <td role="rowheader" aria-label="Date">{{ release.released_at }}</td>
+          <td role="rowheader" aria-label="Date">{{ release.release_date }}</td>
           <td role="gridcell" aria-label="Charm version" class="u-align--right">{{ release.version }}</td>
           {% for resource in package.store_front.resources %}
           <td role="gridcell" aria-label="Charm version" class="u-align--right">{{ release.resources[resource]["revision"] }}</td>

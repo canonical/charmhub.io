@@ -3,19 +3,21 @@ function handleTogglePanels() {
 
   panelToggleButtons.forEach((panelToggleButton) => {
     panelToggleButton.addEventListener("click", (e) => {
-      const target = e.target;
-      const panel = document.getElementById(
-        target.getAttribute("aria-controls")
-      );
+      const target = e.target as HTMLElement;
+      const panelId = target.getAttribute("aria-controls") || "";
+      const panel = document.getElementById(panelId);
 
-      target.classList.toggle("is-active");
-      panel.classList.toggle("is-open");
+      if (panelId && panel) {
+        target.classList.toggle("is-active");
+        panel.classList.toggle("is-open");
 
-      if (panel.classList.contains("is-open")) {
-        panel.querySelector("[readonly]").focus();
-        panel.setAttribute("role", "dialog");
-      } else {
-        panel.removeAttribute("role");
+        if (panel.classList.contains("is-open")) {
+          const panelInput = panel.querySelector("[readonly]") as HTMLElement;
+          panelInput.focus();
+          panel.setAttribute("role", "dialog");
+        } else {
+          panel.removeAttribute("role");
+        }
       }
     });
   });
@@ -26,7 +28,7 @@ function handleTogglePanels() {
 
     const openPanelToggle = document.querySelector(
       ".js-panel-toggle.is-active"
-    );
+    ) as HTMLElement;
 
     const openPanel = document.querySelector("[readonly]");
 
@@ -37,7 +39,7 @@ function handleTogglePanels() {
       }
 
       if (openPanel) {
-        openPanel.parentElement.classList.remove("is-open");
+        openPanel?.parentElement?.classList.remove("is-open");
       }
     }
   });
@@ -52,7 +54,7 @@ function handleTogglePanels() {
 
     if (openPanel) {
       if (target !== openPanelToggle && target !== openPanelInput) {
-        openPanelToggle.classList.remove("is-active");
+        openPanelToggle?.classList.remove("is-active");
         openPanel.classList.remove("is-open");
         openPanel.removeAttribute("role");
       }
