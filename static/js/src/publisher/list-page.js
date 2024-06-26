@@ -95,11 +95,15 @@ const init = () => {
     );
   });
 
-  const resize = debounce(() => {
-    graphElements.forEach((el) => {
-      el._prepareSVG()._prepareData().render();
-    });
-  }, 100);
+  const resize = debounce(
+    () => {
+      graphElements.forEach((el) => {
+        el._prepareSVG()._prepareData().render();
+      });
+    },
+    100,
+    false
+  );
 
   window.addEventListener("resize", resize);
 

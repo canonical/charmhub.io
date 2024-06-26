@@ -9,9 +9,25 @@ const URL_REGEXP =
 const MAILTO_REGEXP = /[^@]+@[^@]+\.[^@]+/;
 const ALLOWED_KEYS = ["title", "summary", "website", "contact"];
 
+type Validation = {
+  isValid: boolean;
+  maxLength?: number;
+  required?: boolean;
+  url?: boolean;
+  mailto?: boolean;
+  counterEl?: HTMLElement;
+};
+
 class ListingForm {
-  constructor(selector, initialState) {
-    this.formEl = document.querySelector(selector);
+  formEl: HTMLInputElement;
+  validation: { [key: string]: Validation};
+  prefixableFields: string[];
+  allInputs: HTMLInputElement[];
+  initialState: { [key: string]: string };
+  currentState: { [key: string]: string };
+
+  constructor(selector: string, initialState: object) {
+    this.formEl = document.querySelector(selector) as HTMLInputElement;
 
     if (this.formEl) {
       this.validation = {};
@@ -31,7 +47,7 @@ class ListingForm {
 
   init() {
     this.allInputs.forEach((input) => {
-      const inputValidation = { isValid: true };
+      const inputValidation: Validation = { isValid: true };
 
       if (input.maxLength > 0) {
         // save max length, but remove it from input so more chars can be entered
@@ -41,7 +57,7 @@ class ListingForm {
         const counter = document.createElement("p");
         counter.className = "p-form-help-text";
         inputValidation.counterEl = counter;
-        input.parentNode.appendChild(counter);
+        (input.parentNode as HTMLElement).appendChild(counter);
       }
 
       if (input.required) {
@@ -61,17 +77,19 @@ class ListingForm {
     }, this);
 
     // validate inputs on change
-    this.formEl.addEventListener("input", (event) => {
-      this.validateInput(event.target);
-      this.updateCurrentState(event.target);
+    this.formEl.addEventListener("input", (event: Event) => {
+      let target = event.target as HTMLInputElement;
+      this.validateInput(target);
+      this.updateCurrentState(target);
     });
 
     this.prefixableFields.forEach((inputName) => {
-      const input = this.formEl[inputName];
+      const input = this.formEl[inputName as keyof ListingForm["formEl"]];
       if (input) {
-        input.addEventListener("blur", (event) => {
-          this.prefixInput(event.target);
-          this.updateCurrentState(event.target);
+        (input as HTMLElement).addEventListener("blur", (event: Event) => {
+          let target = event.target as HTMLInputElement;
+          this.prefixInput(target);
+          this.updateCurrentState(target);
         });
       }
     }, this);
@@ -104,10 +122,10 @@ class ListingForm {
     return !deepEqual(diff, this.initialState);
   }
 
-  updateCurrentState(target) {
+  updateCurrentState(target: HTMLInputElement) {
     const key = target.getAttribute("id");
     if (key && ALLOWED_KEYS.includes(key)) {
-      this.currentState[key] = target.value || null;
+      this.currentState[key] = target.value || "";
     }
 
     const diff = this.diffState();
@@ -115,17 +133,17 @@ class ListingForm {
 
     actionButtons.forEach((button) => {
       if (diff) {
-        button.disabled = false;
+        (button as HTMLButtonElement).disabled = false;
         button.classList.remove("is-disabled");
       } else {
-        button.disabled = true;
+        (button as HTMLButtonElement).disabled = true;
         button.classList.add("is-disabled");
       }
     });
   }
 
   // Prefix field field on blur if the user doesn't provide the protocol
-  prefixInput(input) {
+  prefixInput(input: HTMLInputElement) {
     if (["website", "contact"].includes(input.name)) {
       if (
         this.validation[input.name].isValid &&
@@ -146,7 +164,7 @@ class ListingForm {
     }
   }
 
-  validateInput(input) {
+  validateInput(input: HTMLInputElement) {
     const field = input.closest(".p-form-validation");
 
     if (field) {
@@ -168,11 +186,11 @@ class ListingForm {
 
       if (inputValidation.maxLength) {
         if (this.validation[input.name].maxLength === input.value.length) {
-          inputValidation.counterEl.innerHTML = `The maximum number of characters for this field is ${
+          (inputValidation.counterEl as HTMLElement).innerHTML = `The maximum number of characters for this field is ${
             this.validation[input.name].maxLength
           }.`;
         } else {
-          inputValidation.counterEl.innerHTML = "";
+          (inputValidation.counterEl as HTMLElement).innerHTML = "";
         }
       }
 
@@ -205,12 +223,11 @@ class ListingForm {
   isFormValid() {
     // form is valid if every validated input is valid
     return Object.keys(this.validation)
-      .every((name) => this.validation[name].isValid)
-      .bind(this);
+      .every((name) => this.validation[name].isValid);
   }
 }
 
-function init(initialState) {
+function init(initialState: { [key: string]: string }) {
   new ListingForm("#market-form", initialState);
 }
 

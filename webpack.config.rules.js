@@ -73,7 +73,7 @@ module.exports = [
   },
   {
     test: require.resolve(
-      __dirname + "/static/js/src/publisher/listing-page.js"
+      __dirname + "/static/js/src/publisher/listing-page.ts"
     ),
     use: ["expose-loader?exposes=charmhub.publisher.listing", "babel-loader"],
   },
