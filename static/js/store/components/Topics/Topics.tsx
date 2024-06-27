@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { Row, Col } from "@canonical/react-components";
 import { TopicCard, LoadingCard } from "@canonical/store-components";
@@ -37,7 +37,7 @@ function Topics({ topicsQuery }: Props) {
 
       <Row>
         {isFetching &&
-          [...Array(3)].map((item, index) => (
+          [...Array(3)].map((_item, index) => (
             <Col size={3} key={index}>
               <LoadingCard height={180} />
             </Col>

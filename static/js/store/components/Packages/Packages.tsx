@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery } from "react-query";
 import { useLocation, useSearchParams } from "react-router-dom";
 import {
@@ -173,7 +173,7 @@ function Packages() {
             )}
             <Row>
               {isFetching &&
-                [...Array(ITEMS_PER_PAGE)].map((item, index) => (
+                [...Array(ITEMS_PER_PAGE)].map((_item, index) => (
                   <Col size={3} key={index}>
                     <LoadingCard />
                   </Col>
