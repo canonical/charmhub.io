@@ -4,7 +4,7 @@
   "scripts": {
     "clean": "rm -rf node_modules yarn-error.log css static/css *.log *.sqlite _site/ build/ .jekyll-metadata .bundle",
     "watch": "watch -p 'static/sass/**/*' -p 'static/js/**/*.js' -p 'static/js/**/*.tsx' -c 'yarn run build'",
-    "watch-js": "webpack --watch",
+    "watch-js": "webpack --watch --mode development",
     "watch-scss": "watch -p 'static/sass/**/*.scss' -c 'yarn run build-css'",
     "build": "yarn run build-css && yarn run build-js",
     "build-css": "sass static/sass/styles.scss:static/css/styles.css static/sass/styles-embedded.scss:static/css/styles-embedded.css --load-path=node_modules --style=compressed && postcss --map false --use autoprefixer --replace 'static/css/**/*.css'",
@@ -16,7 +16,7 @@
     "lint-js": "eslint static/js/src/**/*.js",
     "lint-scss": "stylelint static/**/*.scss",
     "serve": "./entrypoint 0.0.0.0:${PORT}",
-    "start": "yarn run build && concurrently --raw 'yarn run watch' 'yarn run serve'",
+    "start": "yarn run build && concurrently --raw 'yarn run watch-scss' 'yarn run watch-js' 'yarn run serve'",
     "test": "yarn run lint-scss && yarn run lint-js && yarn run test-js && yarn run lint-python && yarn run test-python",
     "test-python": "python3 -m unittest discover tests",
     "test-js": "jest",
