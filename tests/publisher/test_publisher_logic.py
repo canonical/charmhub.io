@@ -20,7 +20,7 @@ class TestProcessReleases(TestCase):
                     }
                 ],
                 "created-at": "2021-01-01T00:00:00Z",
-                "sha3-384": "dummyhash1",
+                "sha3-384": "samplehash1",
                 "size": 123456,
                 "status": "released",
                 "version": "1.0.0",
@@ -36,7 +36,7 @@ class TestProcessReleases(TestCase):
                     }
                 ],
                 "created-at": "2021-01-02T00:00:00Z",
-                "sha3-384": "dummyhash2",
+                "sha3-384": "samplehash2",
                 "size": 654321,
                 "status": "released",
                 "version": "2.0.0-beta",
