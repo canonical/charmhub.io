@@ -14,6 +14,7 @@ from flask import (
 from flask.json import jsonify
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import login_required, cached_redirect
+from webapp.publisher.logic import process_releases
 
 publisher = Blueprint(
     "publisher",
@@ -463,3 +464,35 @@ def post_create_track(charm_name):
             response.status_code,
         )
     return response.json(), response.status_code
+
+
+@publisher.route(
+    '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/releases',
+)
+@login_required
+def get_releases(entity_name: str):
+    res = {}
+
+    try:
+        release_data = publisher_api.get_releases(
+            session["account-auth"], entity_name
+        )
+        res["success"] = True
+
+        res["data"] = process_releases(
+            release_data["channel-map"],
+            release_data["package"]["channels"],
+            release_data["revisions"],
+        )
+        response = make_response(res, 200)
+
+    except StoreApiResponseErrorList as error_list:
+        error_messages = [
+            f"{error.get('message', 'An error occured')}"
+            for error in error_list.errors
+        ]
+        res["message"] = " ".join(error_messages)
+        res["success"] = False
+        response = make_response(res, 500)
+
+    return response
