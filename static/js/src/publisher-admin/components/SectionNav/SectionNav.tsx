@@ -1,4 +1,5 @@
 import { useParams, useLocation, NavLink } from "react-router-dom";
+import { usePackage } from "../../hooks";
 
 function SectionNav() {
   const { packageName } = useParams();
@@ -7,6 +8,8 @@ function SectionNav() {
   const isSelected = (sectionPath: string) => {
     return location.pathname === sectionPath;
   };
+
+  const { data: packageData } = usePackage(packageName);
 
   return (
     <nav className="p-tabs">
@@ -20,17 +23,19 @@ function SectionNav() {
             Listing
           </NavLink>
         </li>
-        <li className="p-tabs__item" role="presentation">
-          <NavLink
-            to={`/${packageName}/releases`}
-            className="p-tabs__link"
-            aria-selected={
-              isSelected(`/${packageName}/releases`)
-            }
-          >
-            Releases
-          </NavLink>
-        </li>
+        {packageData?.type === "charm" && (
+          <li className="p-tabs__item" role="presentation">
+            <NavLink
+              to={`/${packageName}/releases`}
+              className="p-tabs__link"
+              aria-selected={
+                isSelected(`/${packageName}/releases`)
+              }
+            >
+              Releases
+            </NavLink>
+          </li>
+        )}
         <li className="p-tabs__item" role="presentation">
           <NavLink
             to={`/${packageName}/publicise`}
