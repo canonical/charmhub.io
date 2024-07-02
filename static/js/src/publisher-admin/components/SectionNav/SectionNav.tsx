@@ -22,6 +22,17 @@ function SectionNav() {
         </li>
         <li className="p-tabs__item" role="presentation">
           <NavLink
+            to={`/${packageName}/releases`}
+            className="p-tabs__link"
+            aria-selected={
+              isSelected(`/${packageName}/releases`)
+            }
+          >
+            Releases
+          </NavLink>
+        </li>
+        <li className="p-tabs__item" role="presentation">
+          <NavLink
             to={`/${packageName}/publicise`}
             className="p-tabs__link"
             aria-selected={
