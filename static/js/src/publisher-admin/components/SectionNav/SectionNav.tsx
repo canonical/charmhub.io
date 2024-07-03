@@ -1,5 +1,8 @@
 import { useParams, useLocation, NavLink } from "react-router-dom";
 import { usePackage } from "../../hooks";
+import { packageDataState } from "../../state/atoms";
+import { Package } from "../../types";
+import { useRecoilValue } from "recoil";
 
 function SectionNav() {
   const { packageName } = useParams();
@@ -9,7 +12,8 @@ function SectionNav() {
     return location.pathname === sectionPath;
   };
 
-  const { data: packageData } = usePackage(packageName);
+  const packageData = useRecoilValue<Package | undefined>(packageDataState);
+
 
   return (
     <nav className="p-tabs">
