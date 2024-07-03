@@ -1,5 +1,4 @@
 import { useParams, useLocation, NavLink } from "react-router-dom";
-import { usePackage } from "../../hooks";
 import { packageDataState } from "../../state/atoms";
 import { Package } from "../../types";
 import { useRecoilValue } from "recoil";

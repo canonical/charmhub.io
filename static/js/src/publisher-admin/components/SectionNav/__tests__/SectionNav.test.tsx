@@ -4,6 +4,10 @@ import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
 import SectionNav from "../SectionNav";
+import { MutableSnapshot, RecoilRoot } from "recoil";
+import { packageDataState } from "../../../state/atoms";
+import { Package } from "../../../types";
+import { mockPackage } from "../../../mocks";
 
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
@@ -12,18 +16,28 @@ jest.mock("react-router-dom", () => ({
   }),
 }));
 
-const renderComponent = () => {
+
+
+const renderComponent = (mockPackageData?: Package) => {
   render(
     <BrowserRouter>
-      <SectionNav />
+      <RecoilRoot
+        initializeState={(snapshot: MutableSnapshot) => {
+          return snapshot.set(packageDataState, mockPackageData);
+        }}
+
+      >
+        <SectionNav />
+      </RecoilRoot>
     </BrowserRouter>
   );
 };
 
 describe("SectionNav", () => {
-  test("highlights releases nav link", async () => {
+  test("shows releases tab for charms", async () => {
     const user = userEvent.setup();
-    renderComponent();
+    renderComponent(mockPackage);
+
 
     await user.click(screen.getByText("Releases"));
 
@@ -31,11 +45,19 @@ describe("SectionNav", () => {
       "aria-selected",
       "true"
     );
+
+  });
+
+  test("hides releases tab by default", async () => {
+    renderComponent();
+
+    expect(screen.queryByText("Releases")).not.toBeInTheDocument();
   });
 
   test("highlights publicise nav link", async () => {
     const user = userEvent.setup();
     renderComponent();
+
 
     await user.click(screen.getByText("Publicise"));
 
