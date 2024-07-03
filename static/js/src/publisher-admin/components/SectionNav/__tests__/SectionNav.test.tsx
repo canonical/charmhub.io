@@ -21,6 +21,18 @@ const renderComponent = () => {
 };
 
 describe("SectionNav", () => {
+  test("highlights releases nav link", async () => {
+    const user = userEvent.setup();
+    renderComponent();
+
+    await user.click(screen.getByText("Releases"));
+
+    expect(screen.getByText("Releases")).toHaveAttribute(
+      "aria-selected",
+      "true"
+    );
+  });
+
   test("highlights publicise nav link", async () => {
     const user = userEvent.setup();
     renderComponent();
@@ -32,6 +44,7 @@ describe("SectionNav", () => {
       "true"
     );
   });
+
 
   test("highlights settings nav link", async () => {
     const user = userEvent.setup();
