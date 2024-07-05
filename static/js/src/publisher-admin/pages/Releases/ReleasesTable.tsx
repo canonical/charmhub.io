@@ -1,22 +1,31 @@
 import React, { useState } from "react";
 import { ReleaseMap } from "../../hooks/useReleases";
-import { List, MainTable } from "@canonical/react-components";
+import { MainTable } from "@canonical/react-components";
 import { generateReleaseChannelRows } from "../../utils/generateReleaseChannelRows";
 
 type ReleasesTableProps = {
   releaseMap: ReleaseMap;
+  arch: string;
 };
 
-
-export default function ReleasesTable({ releaseMap }: ReleasesTableProps) {
+export default function ReleasesTable({
+  releaseMap,
+  arch,
+}: ReleasesTableProps) {
   const [expandedChannel, setExpandedChannel] = useState<string | null>(null);
 
   const rows = Object.values(releaseMap).flatMap((releaseChannel) =>
-    generateReleaseChannelRows(releaseChannel, expandedChannel, setExpandedChannel)
+    generateReleaseChannelRows(
+      releaseChannel,
+      arch,
+      expandedChannel,
+      setExpandedChannel
+    )
   );
 
   return (
     <MainTable
+      responsive
       className="u-table-layout--auto"
       headers={[
         { content: "Release Channel" },

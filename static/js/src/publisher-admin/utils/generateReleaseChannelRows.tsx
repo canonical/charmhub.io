@@ -1,8 +1,8 @@
 import { List } from "@canonical/react-components";
 
-// TODO: this should filter by selected architecture
 export function generateReleaseChannelRows(
   releaseChannel: ReleaseChannel,
+  arch: string,
   openChannel: string | null,
   setOpenChannel: (channel: string | null) => void
 ) {
@@ -14,17 +14,16 @@ export function generateReleaseChannelRows(
     ? releaseChannel.releases
     : releaseChannel.releases.slice(0, 1);
 
-  return releases.map((release, i) => {
+  const filteredReleases = releases.filter((release) =>
+    release.revision.bases.some((base) => base.architecture === arch)
+  );
+
+  return filteredReleases.map((release, i) => {
     const columns = [];
 
     if (i === 0) {
       columns.push({
-        style: {
-          display: "table-cell",
-          border: "inherit",
-          borderRight: "1px solid var(--vf-color-border-low-contrast)",
-        },
-        className: "u-align--left p-button--base has-icon",
+        className: "u-align--left release-channel ",
         content: (
           <>
             <i className={`p-icon--chevron-${isOpen ? "down" : "right"}`} />
@@ -39,8 +38,19 @@ export function generateReleaseChannelRows(
 
     columns.push(
       ...[
-        { content: i == 0 ? <strong>{release.revision.version}</strong> : release.revision.version, className: "u-align--center" },
-        { content: new Date(release.revision["created-at"]).toLocaleDateString() },
+        {
+          content:
+            i == 0 ? (
+              <strong>{release.revision.version}</strong>
+            ) : (
+              release.revision.version
+            ),
+        },
+        {
+          content: new Date(
+            release.revision["created-at"]
+          ).toLocaleDateString(),
+        },
         {
           content: <ResourcesCell resources={release.resources} />,
         },
@@ -102,7 +112,6 @@ const PLATFORM_ICONS: { [key: string]: JSX.Element } = {
 } as const;
 
 function BasesCell({ bases }: { bases: Base[] }) {
-
   // Group bases by base name
   const baseGroups: Record<string, Set<string>> = {};
 
@@ -118,12 +127,14 @@ function BasesCell({ bases }: { bases: Base[] }) {
       {Object.entries(baseGroups).map(([platform, bases]) => {
         const icon = PLATFORM_ICONS?.[platform];
 
+        const sortedBases = [...bases].sort((a, b) => b.localeCompare(a));
+
         return (
           <div className="series-base" key={platform}>
             <div className="series-base__title">{icon}</div>
 
             <div>
-              {[...bases].map((base) => (
+              {sortedBases.map((base) => (
                 <span key={base} className="series-tag">
                   {base}
                 </span>
