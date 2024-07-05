@@ -14,7 +14,7 @@ from flask import (
 from flask.json import jsonify
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import login_required, cached_redirect
-from webapp.publisher.logic import process_releases
+from webapp.publisher.logic import get_all_architectures, process_releases
 
 publisher = Blueprint(
     "publisher",
@@ -479,10 +479,15 @@ def get_releases(entity_name: str):
         )
         res["success"] = True
 
-        res["data"] = process_releases(
+        res["data"] = {}
+
+        res["data"]["releases"] = process_releases(
             release_data["channel-map"],
             release_data["package"]["channels"],
             release_data["revisions"],
+        )
+        res["data"]["all_architectures"] = get_all_architectures(
+            res["data"]["releases"]
         )
         response = make_response(res, 200)
 

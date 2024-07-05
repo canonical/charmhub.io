@@ -20,7 +20,7 @@ function useReleases(packageName: string | undefined) {
       throw new Error(releaseData?.message);
     }
 
-    return releaseData.data as ReleaseMap;
+    return releaseData.data as { releases: ReleaseMap, all_architectures: string[] };
   });
 }
 
