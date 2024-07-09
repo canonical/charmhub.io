@@ -90,7 +90,7 @@ function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
     .attr("width", nodeWidth)
     .attr("height", nodeWidth)
     .attr("fill", "#cdcdcd")
-    .attr("transform", (d: any, i: number) => {
+    .attr("transform", (_d: any, i: number) => {
       const angle = 102 - nodeWidth * data.groups.length;
 
       return `rotate(${angle + i * nodeRadius * 4}, ${
@@ -105,7 +105,7 @@ function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
     .enter()
     .append("path")
     .attr("class", "left-node-line")
-    .attr("d", (d: any, i: number) => {
+    .attr("d", (_d: any, i: number) => {
       let leftNodeYEndPos = chartHeight / 2;
 
       if (data.groups.length === 5) {
@@ -124,7 +124,7 @@ function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
     })
     .attr("stroke", "#cdcdcd")
     .attr("stroke-width", "1")
-    .attr("transform", (d: any, i: number) => {
+    .attr("transform", (_d: any, i: number) => {
       const angle = 12 - nodeWidth * data.groups.length;
 
       return `rotate(${angle + i * nodeRadius * 4}, ${
@@ -171,7 +171,7 @@ function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
     .attr("width", nodeWidth)
     .attr("height", nodeWidth)
     .attr("fill", "#cdcdcd")
-    .attr("transform", (d: any, i: number) => {
+    .attr("transform", (_d: any, i: number) => {
       const angle = 102 - nodeWidth * data.groups.length;
 
       return `rotate(-${angle + i * nodeRadius * 4}, ${
@@ -186,7 +186,7 @@ function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
     .enter()
     .append("path")
     .attr("class", "right-node-line")
-    .attr("d", (d: any, i: number) => {
+    .attr("d", (_d: any, i: number) => {
       let rightNodeYEndPos = chartHeight / 2;
 
       if (data.groups.length === 5) {
@@ -205,7 +205,7 @@ function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
     })
     .attr("stroke", "#cdcdcd")
     .attr("stroke-width", 1)
-    .attr("transform", (d: any, i: number) => {
+    .attr("transform", (_d: any, i: number) => {
       const angle = 12 - nodeWidth * data.groups.length;
 
       return `rotate(${angle + i * nodeRadius * 4}, ${
@@ -248,7 +248,7 @@ function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
     )
     .attr("stroke", "#cdcdcd")
     .attr("stroke-width", "1")
-    .attr("transform", (d: any, i: number) => {
+    .attr("transform", (_d: any, i: number) => {
       return `translate(0, ${40 * i})`;
     });
 
@@ -284,7 +284,7 @@ function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
     );
 
   // connecting lines text
-  data.groups.forEach((group: any, i: number) => {
+  data.groups.forEach((_group: any, i: number) => {
     const textGroup = bounds.append("g").attr("transform", () => {
       const yPos = (40 * data.groups.length) / 2 - 21;
 
