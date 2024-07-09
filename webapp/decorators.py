@@ -95,6 +95,8 @@ def redirect_uppercase_to_lowercase(func):
                     (ENV == "staging" and redirect.startswith("https://staging.charmhub.io/"))
                 ):
                 return flask.redirect(redirect)
+            else:
+                flask.abort(404)
 
         return func(*args, **kwargs)
 
