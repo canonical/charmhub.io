@@ -1,6 +1,5 @@
 import buildPackageCard from "./buildPackageCard";
 import debounce from "../../libs/debounce";
-import { SyntheticExpression } from "typescript";
 
 type Entity = {
   type: string;
@@ -31,8 +30,6 @@ class initPackages {
     const packageData = await initPackages.fetchPackageList();
 
     const allPackages = await initPackages.addBundleApps(packageData.packages);
-
-    const _class = new initPackages(allPackages);
   }
 
   static getUrlFilters() {
@@ -473,16 +470,22 @@ class initPackages {
       packageCategories = entity.store_front.categories.map((cat) => {
         return cat.slug;
       });
+    } else {
+      return null;
     }
 
     const cats = this._filters.filter.filter((cat: string) => {
       if (packageCategories.includes(cat)) {
         return cat;
+      } else {
+        return null;
       }
     });
 
     if (cats.length) {
       return entity;
+    } else {
+      return null;
     }
   }
 
