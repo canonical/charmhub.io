@@ -83,8 +83,18 @@ def redirect_uppercase_to_lowercase(func):
     def is_uppercase(*args, **kwargs):
         name = kwargs["entity_name"]
 
+        ENV = os.getenv("ENVIRONMENT", "devel").strip()
+        redirect = flask.request.url.lower()
+
         if any(char.isupper() for char in name):
-            return flask.redirect(flask.request.url.lower())
+            if (
+                    (ENV == "devel" and redirect.startswith("http://localhost:"))
+                    or
+                    (ENV == "production" and redirect.startswith("https://charmhub.io/"))
+                    or
+                    (ENV == "staging" and redirect.startswith("https://staging.charmhub.io/"))
+                ):
+                return flask.redirect(redirect)
 
         return func(*args, **kwargs)
 
