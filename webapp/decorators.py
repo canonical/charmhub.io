@@ -88,12 +88,16 @@ def redirect_uppercase_to_lowercase(func):
 
         if any(char.isupper() for char in name):
             if (
-                    (ENV == "devel" and redirect.startswith("http://localhost:"))
-                    or
-                    (ENV == "production" and redirect.startswith("https://charmhub.io/"))
-                    or
-                    (ENV == "staging" and redirect.startswith("https://staging.charmhub.io/"))
-                ):
+                (ENV == "devel" and redirect.startswith("http://localhost:"))
+                or (
+                    ENV == "production"
+                    and redirect.startswith("https://charmhub.io/")
+                )
+                or (
+                    ENV == "staging"
+                    and redirect.startswith("https://staging.charmhub.io/")
+                )
+            ):
                 return flask.redirect(redirect)
             else:
                 flask.abort(404)
