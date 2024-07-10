@@ -80,3 +80,5 @@ if (navAccountContainer) {
 }
 
 initNavDropdowns(".p-navigation__item--dropdown-toggle");
+
+export {};
