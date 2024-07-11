@@ -9,8 +9,6 @@ import { selectAll } from "d3-selection";
 import { D3Element } from "mermaid/dist/mermaidAPI";
 
 
-type SvgHtml = HTMLElement & SVGElement;
-
 class WeeklyActiveDevicesTrend {
   /**
    *
@@ -37,9 +35,9 @@ class WeeklyActiveDevicesTrend {
   maxYValue: number;
   transformedData: { values: { date: Date; value: number; }[]; }[];
   
-  constructor(holderEl: object, holderSvgSelector: string, rawData: object) {
+  constructor(holderEl: object, holderSvgSelector: string, rawData: { buckets: string[]; series: { name: string; values: number[] }[] }) {
     this.holder = holderEl;
-    this.rawData = { buckets: [], series: [] };
+    this.rawData = rawData ?? { buckets: [], series: [] };
 
     this.svg = select(`${holderSvgSelector} svg`);
 
