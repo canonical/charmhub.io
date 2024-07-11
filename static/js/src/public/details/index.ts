@@ -5,10 +5,9 @@ import { channelMap } from "./channelMap";
 const init = (packageName: string) => {
   const historyState = new HistoryState();
 
-  let configuration: TableOfContents | undefined;
   const configurationEl = document.querySelector<HTMLElement>("[data-js='configuration']");
   if (configurationEl) {
-    configuration = new TableOfContents(configurationEl, historyState);
+    new TableOfContents(configurationEl, historyState);
   }
 
   const actions = document.querySelector("[data-js='actions']");
@@ -45,10 +44,9 @@ const init = (packageName: string) => {
     });
   }
 
-  let docs: TableOfContents | undefined;
   const docsEl = document.querySelector<HTMLElement>("[data-js='docs']");
   if (docsEl) {
-    docs = new TableOfContents(docsEl, historyState);
+    new TableOfContents(docsEl, historyState);
   }
 
   const channelMapButton = document.querySelector<HTMLElement>("[data-js='channel-map']");

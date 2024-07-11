@@ -29,7 +29,7 @@ class initPackages {
   static async initialize() {
     const packageData = await initPackages.fetchPackageList();
 
-    const allPackages = await initPackages.addBundleApps(packageData.packages);
+    await initPackages.addBundleApps(packageData.packages);
   }
 
   static getUrlFilters() {
