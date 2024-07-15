@@ -30,7 +30,7 @@ export function generateReleaseChannelRows(
             <span>{channelName}</span>
           </>
         ),
-        rowSpan: releaseChannel.releases.length,
+        rowSpan: isOpen ? releaseChannel.releases.length : 1,
         onClick: () =>
           isOpen ? setOpenChannel(null) : setOpenChannel(channelName),
       });
@@ -47,9 +47,9 @@ export function generateReleaseChannelRows(
             ),
         },
         {
-          content: new Date(
+          content:
             release.revision["created-at"]
-          ).toLocaleDateString(),
+          ,
         },
         {
           content: <ResourcesCell resources={release.resources} />,
@@ -67,25 +67,29 @@ export function generateReleaseChannelRows(
 }
 
 function ResourcesCell({ resources }: { resources: Resource[] }) {
+  const items = resources.map((resource) => {
+    const type = resource.type === "oci" ? "OCI Image" : "File";
+
+    return (
+      <>
+        {resource.name} | {type}
+        {resource.revision && (
+          <>
+            {": "}
+            <span className="u-text--muted">
+              revision {resource.revision}
+            </span>
+          </>
+        )}
+      </>
+    );
+  })
+
+  if (items.length === 0) return "-"
+
   return (
     <List
-      items={resources.map((resource) => {
-        const type = resource.type === "oci" ? "OCI Image" : "File";
-
-        return (
-          <>
-            {resource.name} | {type}
-            {resource.revision && (
-              <>
-                {": "}
-                <span className="u-text--muted">
-                  revision {resource.revision}
-                </span>
-              </>
-            )}
-          </>
-        );
-      })}
+      items={items}
     />
   );
 }
@@ -112,7 +116,6 @@ const PLATFORM_ICONS: { [key: string]: JSX.Element } = {
 } as const;
 
 function BasesCell({ bases }: { bases: Base[] }) {
-  // Group bases by base name
   const baseGroups: Record<string, Set<string>> = {};
 
   bases.forEach((base) => {
