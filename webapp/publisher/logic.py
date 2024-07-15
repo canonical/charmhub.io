@@ -1,4 +1,5 @@
 from typing import TypedDict, List, Union, Dict
+from datetime import datetime
 from webapp.store.logic import process_revision
 
 Error = TypedDict("Error", {"code": str, "message": str})
@@ -23,9 +24,7 @@ Resource = TypedDict(
     "Resource", {"name": str, "revision": Union[int, None], "type": str}
 )
 
-Release = TypedDict(
-    "Release", {"revision": Revision, "resources": List[Resource]}
-)
+Release = TypedDict("Release", {"revision": Revision, "resources": List[Resource]})
 
 ReleaseMap = TypedDict(
     "ReleaseMap",
@@ -74,7 +73,16 @@ def process_releases(
         }
 
     for channel in res:
-        res[channel]["releases"] = list(res[channel]["releases"].values())
+        releases = list(res[channel]["releases"].values())
+
+        releases.sort(
+            key=lambda x: datetime.strptime(
+                x["revision"]["created-at"], "%Y-%m-%dT%H:%M:%SZ"
+            ),
+            reverse=True,
+        )
+
+        res[channel]["releases"] = releases
 
     return res
 

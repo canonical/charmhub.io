@@ -25,7 +25,6 @@ export default function ReleasesTable({
 
   return (
     <MainTable
-      responsive
       className="u-table-layout--auto"
       headers={[
         { content: "Release Channel" },
