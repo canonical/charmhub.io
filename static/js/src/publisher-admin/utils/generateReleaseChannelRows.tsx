@@ -18,16 +18,14 @@ export function generateReleaseChannelRows(
 
   const toggleOpenChannel = () => {
     setOpenChannel(isOpen ? null : channelName);
-    setShowAll(false)
-  }
+    setShowAll(false);
+  };
 
   const filteredReleases = releaseChannel.releases.filter((release) =>
     release.revision.bases.some((base) => base.architecture === arch)
   );
 
-  let releases = isOpen
-    ? filteredReleases
-    : filteredReleases.slice(0, 1);
+  let releases = isOpen ? filteredReleases : filteredReleases.slice(0, 1);
 
   if (!showAll && releases.length > SHOW_MORE_THRESHOLD) {
     releases = releases.slice(0, SHOW_MORE_THRESHOLD);
@@ -41,12 +39,18 @@ export function generateReleaseChannelRows(
         className: "u-align--left release-channel",
         content: (
           <>
-            {filteredReleases.length > 1 && <i className={`p-icon--chevron-${isOpen ? "down" : "right"}`} />}
+            {filteredReleases.length > 1 && (
+              <i className={`p-icon--chevron-${isOpen ? "down" : "right"}`} />
+            )}
             <span>{channelName}</span>
           </>
         ),
-        rowSpan: filteredReleases.length > SHOW_MORE_THRESHOLD ? releases.length + 1 : releases.length,
-        onClick: () => filteredReleases.length > 1 ? toggleOpenChannel() : undefined,
+        rowSpan:
+          filteredReleases.length > SHOW_MORE_THRESHOLD
+            ? releases.length + 1
+            : releases.length,
+        onClick: () =>
+          filteredReleases.length > 1 ? toggleOpenChannel() : undefined,
       });
     }
 
@@ -61,8 +65,7 @@ export function generateReleaseChannelRows(
             ),
         },
         {
-          content: formatDate(release.revision["created-at"])
-          ,
+          content: formatDate(release.revision["created-at"]),
         },
         {
           content: <ResourcesCell resources={release.resources} />,
@@ -84,21 +87,24 @@ export function generateReleaseChannelRows(
         {
           content: (
             <>
-              Showing {SHOW_MORE_THRESHOLD} of {filteredReleases.length} releases. <Button appearance="link" onClick={() => setShowAll(true)}>Show more</Button>
+              Showing {SHOW_MORE_THRESHOLD} of {filteredReleases.length}{" "}
+              releases.{" "}
+              <Button appearance="link" onClick={() => setShowAll(true)}>
+                Show more
+              </Button>
             </>
           ),
           colSpan: 4,
-          className: "u-align--right"
+          className: "u-align--right",
         },
       ],
     });
-
   }
 
-  return rows
+  return rows;
 }
 
-function ResourcesCell({ resources }: { resources: Resource[] }) {
+export function ResourcesCell({ resources }: { resources: Resource[] }) {
   const items = resources.map((resource) => {
     const type = resource.type === "oci" ? "OCI Image" : "File";
 
@@ -108,22 +114,16 @@ function ResourcesCell({ resources }: { resources: Resource[] }) {
         {resource.revision !== null && (
           <>
             {": "}
-            <span className="u-text--muted">
-              revision {resource.revision}
-            </span>
+            <span className="u-text--muted">revision {resource.revision}</span>
           </>
         )}
       </>
     );
-  })
+  });
 
-  if (items.length === 0) return "-"
+  if (items.length === 0) return "-";
 
-  return (
-    <List
-      items={items}
-    />
-  );
+  return <List items={items} />;
 }
 
 const PLATFORM_ICONS: { [key: string]: JSX.Element } = {
@@ -147,7 +147,7 @@ const PLATFORM_ICONS: { [key: string]: JSX.Element } = {
   ),
 } as const;
 
-function BasesCell({ bases }: { bases: Base[] }) {
+export function BasesCell({ bases }: { bases: Base[] }) {
   const baseGroups: Record<string, Set<string>> = {};
 
   bases.forEach((base) => {

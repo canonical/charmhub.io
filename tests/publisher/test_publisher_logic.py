@@ -1,6 +1,10 @@
 from typing import List
 from unittest import TestCase
-from webapp.publisher.logic import Revision, process_releases, get_all_architectures
+from webapp.publisher.logic import (
+    Revision,
+    process_releases,
+    get_all_architectures,
+)
 from tests.mock_data.mock_publisher_logic import test_case_basic_flow
 
 
@@ -58,7 +62,9 @@ class TestProcessReleases(TestCase):
             "latest/stable": {
                 "track": "latest",
                 "risk": "stable",
-                "releases": [{"revision": self.mock_revisions[0], "resources": []}],
+                "releases": [
+                    {"revision": self.mock_revisions[0], "resources": []}
+                ],
             }
         }
         result = process_releases(
@@ -75,12 +81,16 @@ class TestProcessReleases(TestCase):
             "latest/stable": {
                 "track": "latest",
                 "risk": "stable",
-                "releases": [{"revision": self.mock_revisions[0], "resources": []}],
+                "releases": [
+                    {"revision": self.mock_revisions[0], "resources": []}
+                ],
             },
             "latest/edge": {
                 "track": "latest",
                 "risk": "edge",
-                "releases": [{"revision": self.mock_revisions[1], "resources": []}],
+                "releases": [
+                    {"revision": self.mock_revisions[1], "resources": []}
+                ],
             },
         }
         result = process_releases(

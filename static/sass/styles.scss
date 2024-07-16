@@ -544,13 +544,13 @@ h3 {
 }
 
 .release-channel{
-  display: table-cell;
   border:inherit;
   border-right: 1px solid var(--vf-color-border-low-contrast);
+  display: table-cell;
 
   &:hover {
-    cursor: pointer;
     background-color: var(--vf-color-background-hover);
+    cursor: pointer;
   }
 
   & > [class^="p-icon"] {
