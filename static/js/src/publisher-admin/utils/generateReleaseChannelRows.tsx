@@ -1,38 +1,52 @@
-import { List } from "@canonical/react-components";
+import { Button, List } from "@canonical/react-components";
+import { formatDate } from "./formatDate";
+import { MainTableRow } from "@canonical/react-components/dist/components/MainTable/MainTable";
+
+const SHOW_MORE_THRESHOLD = 5;
 
 export function generateReleaseChannelRows(
   releaseChannel: ReleaseChannel,
   arch: string,
   openChannel: string | null,
-  setOpenChannel: (channel: string | null) => void
+  setOpenChannel: (channel: string | null) => void,
+  showAll: boolean,
+  setShowAll: (showMore: boolean) => void
 ) {
   const channelName = `${releaseChannel.track}/${releaseChannel.risk}`;
 
   const isOpen = openChannel === channelName;
 
-  const releases = isOpen
-    ? releaseChannel.releases
-    : releaseChannel.releases.slice(0, 1);
+  const toggleOpenChannel = () => {
+    setOpenChannel(isOpen ? null : channelName);
+    setShowAll(false)
+  }
 
-  const filteredReleases = releases.filter((release) =>
+  const filteredReleases = releaseChannel.releases.filter((release) =>
     release.revision.bases.some((base) => base.architecture === arch)
   );
 
-  return filteredReleases.map((release, i) => {
+  let releases = isOpen
+    ? filteredReleases
+    : filteredReleases.slice(0, 1);
+
+  if (!showAll && releases.length > SHOW_MORE_THRESHOLD) {
+    releases = releases.slice(0, SHOW_MORE_THRESHOLD);
+  }
+
+  const rows: MainTableRow[] = releases.map((release, i) => {
     const columns = [];
 
     if (i === 0) {
       columns.push({
-        className: "u-align--left release-channel ",
+        className: "u-align--left release-channel",
         content: (
           <>
-            <i className={`p-icon--chevron-${isOpen ? "down" : "right"}`} />
+            {filteredReleases.length > 1 && <i className={`p-icon--chevron-${isOpen ? "down" : "right"}`} />}
             <span>{channelName}</span>
           </>
         ),
-        rowSpan: isOpen ? releaseChannel.releases.length : 1,
-        onClick: () =>
-          isOpen ? setOpenChannel(null) : setOpenChannel(channelName),
+        rowSpan: filteredReleases.length > SHOW_MORE_THRESHOLD ? releases.length + 1 : releases.length,
+        onClick: () => filteredReleases.length > 1 ? toggleOpenChannel() : undefined,
       });
     }
 
@@ -47,8 +61,7 @@ export function generateReleaseChannelRows(
             ),
         },
         {
-          content:
-            release.revision["created-at"]
+          content: formatDate(release.revision["created-at"])
           ,
         },
         {
@@ -64,6 +77,25 @@ export function generateReleaseChannelRows(
       columns,
     };
   });
+
+  if (!showAll && isOpen && filteredReleases.length > SHOW_MORE_THRESHOLD) {
+    rows.push({
+      columns: [
+        {
+          content: (
+            <>
+              Showing {SHOW_MORE_THRESHOLD} of {filteredReleases.length} releases. <Button appearance="link" onClick={() => setShowAll(true)}>Show more</Button>
+            </>
+          ),
+          colSpan: 4,
+          className: "u-align--right"
+        },
+      ],
+    });
+
+  }
+
+  return rows
 }
 
 function ResourcesCell({ resources }: { resources: Resource[] }) {
@@ -73,7 +105,7 @@ function ResourcesCell({ resources }: { resources: Resource[] }) {
     return (
       <>
         {resource.name} | {type}
-        {resource.revision && (
+        {resource.revision !== null && (
           <>
             {": "}
             <span className="u-text--muted">

@@ -13,13 +13,16 @@ export default function ReleasesTable({
   arch,
 }: ReleasesTableProps) {
   const [expandedChannel, setExpandedChannel] = useState<string | null>(null);
+  const [showAll, setShowAll] = useState<boolean>(false);
 
   const rows = Object.values(releaseMap).flatMap((releaseChannel) =>
     generateReleaseChannelRows(
       releaseChannel,
       arch,
       expandedChannel,
-      setExpandedChannel
+      setExpandedChannel,
+      showAll,
+      setShowAll
     )
   );
 
