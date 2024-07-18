@@ -2,43 +2,11 @@ import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import { render, screen } from "@testing-library/react";
 import ReleasesTable from "../ReleasesTable";
+import { mockReleaseChannel } from "../../../mocks/mockReleaseChannel";
 
 describe("ReleasesTable", () => {
-  const latestStable: ReleaseChannel = {
-    track: "latest",
-    risk: "stable",
-    releases: [
-      {
-        revision: {
-          version: "1.0",
-          bases: [{ name: "ubuntu", channel: "18.04", architecture: "amd64" }],
-          "created-at": "2022-01-01",
-          "sha3-384": "123456",
-          errors: null,
-          revision: 1,
-          size: 12345,
-          status: "published",
-        },
-        resources: [
-          { name: "resource1", type: "oci", revision: 2 },
-          { name: "resource2", type: "file", revision: null },
-        ],
-      },
-      {
-        revision: {
-          version: "2.0",
-          bases: [{ name: "ubuntu", channel: "20.04", architecture: "amd64" }],
-          "created-at": "2022-01-01",
-          "sha3-384": "123456",
-          errors: null,
-          revision: 2,
-          size: 12345,
-          status: "published",
-        },
-        resources: [],
-      },
-    ],
-  };
+
+  const latestStable = mockReleaseChannel
 
   const latestBeta: ReleaseChannel = {
     track: "latest",
@@ -76,41 +44,6 @@ describe("ReleasesTable", () => {
     ],
   };
 
-  const legacyStable: ReleaseChannel = {
-    track: "legacy",
-    risk: "Stable",
-    releases: [
-      {
-        revision: {
-          version: "1.0",
-          bases: [{ name: "ubuntu", channel: "18.04", architecture: "amd64" }],
-          "created-at": "2022-01-01",
-          "sha3-384": "123456",
-          errors: null,
-          revision: 5,
-          size: 12345,
-          status: "published",
-        },
-        resources: [
-          { name: "resource1", type: "oci", revision: 2 },
-          { name: "resource2", type: "file", revision: null },
-        ],
-      },
-      {
-        revision: {
-          version: "2.0",
-          bases: [{ name: "ubuntu", channel: "20.04", architecture: "amd64" }],
-          "created-at": "2022-01-01",
-          "sha3-384": "123456",
-          errors: null,
-          revision: 6,
-          size: 12345,
-          status: "published",
-        },
-        resources: [],
-      },
-    ],
-  };
 
   test("renders release channel rows correctly", () => {
     const releaseMap = {
