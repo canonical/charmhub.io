@@ -24,9 +24,7 @@ Resource = TypedDict(
     "Resource", {"name": str, "revision": Union[int, None], "type": str}
 )
 
-Release = TypedDict(
-    "Release", {"revision": Revision, "resources": List[Resource]}
-)
+Release = TypedDict("Release", {"revision": Revision, "resources": List[Resource]})
 
 ReleaseMap = TypedDict(
     "ReleaseMap",
@@ -74,7 +72,7 @@ def process_releases(
             "resources": resources,
         }
 
-    for channel in res:
+    for channel in list(res):
         releases = list(res[channel]["releases"].values())
 
         releases.sort(
@@ -84,7 +82,10 @@ def process_releases(
             reverse=True,
         )
 
-        res[channel]["releases"] = releases
+        if len(releases) > 0:
+            res[channel]["releases"] = releases
+        else:
+            del res[channel]
 
     return res
 

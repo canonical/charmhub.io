@@ -20,6 +20,10 @@ export default function Releases() {
     return <Spinner text="Loading..." />;
   }
 
+  if (Object.keys(data.releases).length === 0) {
+    return <p className="p-heading--4">No releases available</p>;
+  }
+
   const { releases: releaseData, all_architectures } = data;
 
   return (
