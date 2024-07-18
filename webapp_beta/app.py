@@ -4,4 +4,3 @@ from webapp.app import app as main_app
 
 
 app = DispatcherMiddleware(main_app, {"/beta": beta_app})
-

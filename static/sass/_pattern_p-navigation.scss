@@ -1,4 +1,8 @@
 @mixin p-charmhub-navigation {
+  .p-navigation__items {
+    flex-wrap: nowrap;
+  }
+
   .p-navigation__dropdown {
     .is-title {
       padding-bottom: 0;

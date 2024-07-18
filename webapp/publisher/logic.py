@@ -1,4 +1,5 @@
 from typing import TypedDict, List, Union, Dict
+from datetime import datetime
 from webapp.store.logic import process_revision
 
 Error = TypedDict("Error", {"code": str, "message": str})
@@ -15,7 +16,7 @@ Revision = TypedDict(
         "size": int,
         "status": str,
         "version": str,
-        "errors": Union[Error, None],
+        "errors": Union[List[Error], None],
     },
 )
 
@@ -58,7 +59,7 @@ def process_releases(
         res[channel["name"]] = {}
         res[channel["name"]]["track"] = channel["track"]
         res[channel["name"]]["risk"] = channel["risk"]
-        res[channel["name"]]["releases"] = []
+        res[channel["name"]]["releases"] = {}
 
     revision_map = {}
 
@@ -68,8 +69,43 @@ def process_releases(
     for channel in channel_map:
         revision = revision_map[channel["revision"]]
         resources = channel["resources"]
-        res[channel["channel"]]["releases"].append(
-            {"revision": revision, "resources": resources}
+        res[channel["channel"]]["releases"][revision["revision"]] = {
+            "revision": revision,
+            "resources": resources,
+        }
+
+    for channel in list(res):
+        releases = list(res[channel]["releases"].values())
+
+        releases.sort(
+            key=lambda x: datetime.strptime(
+                x["revision"]["created-at"], "%Y-%m-%dT%H:%M:%SZ"
+            ),
+            reverse=True,
         )
 
+        if len(releases) > 0:
+            res[channel]["releases"] = releases
+        else:
+            del res[channel]
+
     return res
+
+
+def get_all_architectures(releases: Dict[str, ReleaseMap]) -> List[str]:
+    """
+    Get all architectures from the releases
+
+    Args:
+    releases: Dictionary with channel name as key
+    and a list of releases as value
+
+    Returns:
+    List of architectures
+    """
+    architectures = set()
+    for channel in releases:
+        for release in releases[channel]["releases"]:
+            for base in release["revision"]["bases"]:
+                architectures.add(base["architecture"])
+    return sorted(list(architectures))
