@@ -1,5 +1,10 @@
+from typing import List
 from unittest import TestCase
-from webapp.publisher.logic import process_releases
+from webapp.publisher.logic import (
+    Revision,
+    process_releases,
+    get_all_architectures,
+)
 from tests.mock_data.mock_publisher_logic import test_case_basic_flow
 
 
@@ -9,7 +14,7 @@ class TestProcessReleases(TestCase):
             {"name": "latest/stable", "track": "latest", "risk": "stable"},
             {"name": "latest/edge", "track": "latest", "risk": "edge"},
         ]
-        self.mock_revisions = [
+        self.mock_revisions: List[Revision] = [
             {
                 "revision": 1,
                 "bases": [
@@ -99,3 +104,13 @@ class TestProcessReleases(TestCase):
         params, expected_output = test_case_basic_flow
         result = process_releases(*params)
         self.assertEqual(result, expected_output)
+
+
+class TestGetAllArchitectures(TestCase):
+    def test_get_all_architectures(
+        self,
+    ):
+        _, releases = test_case_basic_flow
+        result = get_all_architectures(releases)
+        expected_result = ["amd64", "arm64", "ppc64el", "riscv64", "s390x"]
+        self.assertEqual(result, expected_result)
