@@ -59,9 +59,9 @@ export function generateReleaseChannelRows(
         {
           content:
             i == 0 ? (
-              <strong>{release.revision.version}</strong>
+              <strong>{release.revision.revision}</strong>
             ) : (
-              release.revision.version
+              release.revision.revision
             ),
         },
         {
