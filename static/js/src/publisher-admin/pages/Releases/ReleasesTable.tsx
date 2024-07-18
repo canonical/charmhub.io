@@ -6,16 +6,18 @@ import { generateReleaseChannelRows } from "../../utils/generateReleaseChannelRo
 type ReleasesTableProps = {
   releaseMap: ReleaseMap;
   arch: string;
+  track: string;
 };
 
 export default function ReleasesTable({
   releaseMap,
   arch,
+  track
 }: ReleasesTableProps) {
   const [expandedChannel, setExpandedChannel] = useState<string | null>(null);
   const [showAll, setShowAll] = useState<boolean>(false);
 
-  const rows = Object.values(releaseMap).flatMap((releaseChannel) =>
+  const rows = Object.values(releaseMap).filter(releaseChannel => releaseChannel.track === track).flatMap((releaseChannel) =>
     generateReleaseChannelRows(
       releaseChannel,
       arch,

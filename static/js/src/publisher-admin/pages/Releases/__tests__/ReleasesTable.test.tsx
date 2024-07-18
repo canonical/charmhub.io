@@ -51,7 +51,7 @@ describe("ReleasesTable", () => {
       "latest/beta": latestBeta,
     } as const;
 
-    render(<ReleasesTable releaseMap={releaseMap} arch="amd64" />);
+    render(<ReleasesTable releaseMap={releaseMap} track="latest" arch="amd64" />);
 
     expect(screen.getByText("latest/stable")).toBeInTheDocument();
 
@@ -68,7 +68,7 @@ describe("ReleasesTable", () => {
 
     const user = userEvent.setup();
 
-    render(<ReleasesTable releaseMap={releaseMap} arch="amd64" />);
+    render(<ReleasesTable releaseMap={releaseMap} track="latest" arch="amd64" />);
 
     await user.click(screen.getByText("latest/stable"));
 
@@ -88,7 +88,7 @@ describe("ReleasesTable", () => {
 
     const user = userEvent.setup();
 
-    render(<ReleasesTable releaseMap={releaseMap} arch="amd64" />);
+    render(<ReleasesTable releaseMap={releaseMap} track="latest" arch="amd64" />);
 
     await user.click(screen.getByText("latest/stable"));
 
