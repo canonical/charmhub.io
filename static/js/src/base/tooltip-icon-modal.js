@@ -2,7 +2,7 @@
   Toggles visibility of modal dialog.
   @param {HTMLElement} modal Modal dialog to show or hide.
 */
-function toggleModal(modal) {
+export function toggleModal(modal) {
   if (modal && modal.classList.contains("p-tooltip__modal")) {
     if (modal.style.display === "none") {
       modal.style.display = "flex";
