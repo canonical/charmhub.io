@@ -81,4 +81,4 @@ if (navAccountContainer) {
 
 initNavDropdowns(".p-navigation__item--dropdown-toggle");
 
-export {};
+export { toggleDropdown, closeAllDropdowns, handleClickOutside, initNavDropdowns };
