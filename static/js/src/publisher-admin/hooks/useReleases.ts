@@ -1,6 +1,5 @@
 
 import { useQuery } from "react-query";
-import { Release } from "../types";
 
 export type ReleaseMap = {
   [key: string]: ReleaseChannel;

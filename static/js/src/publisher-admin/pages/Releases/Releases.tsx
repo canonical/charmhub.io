@@ -54,6 +54,7 @@ export default function Releases() {
 
   const tracks = [...new Set(Object.values(releases).map((release) => release.track))];
 
+  availableArchitectures.sort((a, b) => all_architectures.indexOf(a) - all_architectures.indexOf(b));
 
 
   return (
