@@ -46,12 +46,9 @@ describe("ReleasesTable", () => {
 
 
   test("renders release channel rows correctly", () => {
-    const releaseMap = {
-      "latest/stable": latestStable,
-      "latest/beta": latestBeta,
-    } as const;
+    const releases = [latestStable, latestBeta]
 
-    render(<ReleasesTable releaseMap={releaseMap} track="latest" arch="amd64" />);
+    render(<ReleasesTable releaseMap={releases} arch="amd64" />);
 
     expect(screen.getByText("latest/stable")).toBeInTheDocument();
 
@@ -62,13 +59,11 @@ describe("ReleasesTable", () => {
   });
 
   test("clicking on a channel displays all rows", async () => {
-    const releaseMap = {
-      "latest/stable": latestStable,
-    } as const;
+    const releases = [latestStable]
 
     const user = userEvent.setup();
 
-    render(<ReleasesTable releaseMap={releaseMap} track="latest" arch="amd64" />);
+    render(<ReleasesTable releaseMap={releases} arch="amd64" />);
 
     await user.click(screen.getByText("latest/stable"));
 
@@ -82,13 +77,12 @@ describe("ReleasesTable", () => {
       ...latestStable.releases,
       ...latestStable.releases,
     ];
-    const releaseMap = {
-      "latest/stable": { ...latestStable, releases },
-    } as const;
+    const releaseChannel = [
+      { ...latestStable, releases }]
 
     const user = userEvent.setup();
 
-    render(<ReleasesTable releaseMap={releaseMap} track="latest" arch="amd64" />);
+    render(<ReleasesTable releaseMap={releaseChannel} arch="amd64" />);
 
     await user.click(screen.getByText("latest/stable"));
 
