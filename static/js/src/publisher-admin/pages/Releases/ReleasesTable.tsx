@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { MainTable } from "@canonical/react-components";
 import { generateReleaseChannelRows } from "../../utils/generateReleaseChannelRows";
 
@@ -27,6 +27,7 @@ export default function ReleasesTable({
 
   return (
     <MainTable
+      role="table"
       className="u-table-layout--auto"
       headers={[
         { content: "Release Channel" },

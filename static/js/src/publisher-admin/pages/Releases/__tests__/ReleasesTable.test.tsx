@@ -5,8 +5,7 @@ import ReleasesTable from "../ReleasesTable";
 import { mockReleaseChannel } from "../../../mocks/mockReleaseChannel";
 
 describe("ReleasesTable", () => {
-
-  const latestStable = mockReleaseChannel
+  const latestStable = mockReleaseChannel;
 
   const latestBeta: ReleaseChannel = {
     track: "latest",
@@ -44,9 +43,8 @@ describe("ReleasesTable", () => {
     ],
   };
 
-
   test("renders release channel rows correctly", () => {
-    const releases = [latestStable, latestBeta]
+    const releases = [latestStable, latestBeta];
 
     render(<ReleasesTable releaseMap={releases} arch="amd64" />);
 
@@ -59,7 +57,7 @@ describe("ReleasesTable", () => {
   });
 
   test("clicking on a channel displays all rows", async () => {
-    const releases = [latestStable]
+    const releases = [latestStable];
 
     const user = userEvent.setup();
 
@@ -77,8 +75,7 @@ describe("ReleasesTable", () => {
       ...latestStable.releases,
       ...latestStable.releases,
     ];
-    const releaseChannel = [
-      { ...latestStable, releases }]
+    const releaseChannel = [{ ...latestStable, releases }];
 
     const user = userEvent.setup();
 
@@ -90,5 +87,12 @@ describe("ReleasesTable", () => {
     await user.click(screen.getByText("Show more"));
 
     expect(screen.getAllByRole("row")).toHaveLength(7);
+  });
+  test("renders release channel rows correctly for different architectures", () => {
+    const releases = [latestStable, latestBeta];
+    render(<ReleasesTable releaseMap={releases} arch="arm64" />);
+    expect(screen.queryByText("latest/stable")).not.toBeInTheDocument();
+    expect(screen.getByText("latest/beta")).toBeInTheDocument();
+    expect(screen.getAllByRole("row")).toHaveLength(2);
   });
 });

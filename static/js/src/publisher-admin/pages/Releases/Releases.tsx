@@ -17,10 +17,15 @@ export default function Releases() {
     if (releaseData && packageData) {
       setSelectedArch(releaseData.all_architectures[0]);
 
-      const tracks = Object.values(releaseData.releases).map((release) => release.track);
+      const tracks = Object.values(releaseData.releases).map(
+        (release) => release.track
+      );
 
-      setSelectedTrack(packageData["default-track"] || tracks.includes("latest") ? "latest" : tracks[0]);
-
+      setSelectedTrack(
+        packageData["default-track"] || tracks.includes("latest")
+          ? "latest"
+          : tracks[0]
+      );
     }
   }, [releaseData, packageData]);
 
@@ -37,7 +42,7 @@ export default function Releases() {
         )
       )
     ),
-  ]
+  ];
 
   useEffect(() => {
     if (!availableArchitectures.includes(selectedArch)) {
@@ -45,25 +50,26 @@ export default function Releases() {
     }
   }, [selectedTrack, availableArchitectures, selectedArch]);
 
-
   if (!releaseData) {
     return <Spinner text="Loading..." />;
   }
 
-  const { releases, all_architectures } = releaseData;
-
-
-  if (Object.keys(releases).length === 0) {
+  if (Object.keys(releaseData.releases).length === 0) {
     return <p className="p-heading--4">No releases available</p>;
   }
 
-  const tracks = [...new Set(Object.values(releases).map((release) => release.track))];
+  const { releases, all_architectures } = releaseData;
 
-  availableArchitectures.sort((a, b) => all_architectures.indexOf(a) - all_architectures.indexOf(b));
+  const tracks = [
+    ...new Set(Object.values(releases).map((release) => release.track)),
+  ];
 
+  availableArchitectures.sort(
+    (a, b) => all_architectures.indexOf(a) - all_architectures.indexOf(b)
+  );
 
   return (
-    <div>
+    <>
       <h2 className="p-heading--4">Releases available to install</h2>
       <Form inline>
         <Select
@@ -87,14 +93,13 @@ export default function Releases() {
           onChange={(e) => {
             setSelectedArch(e.target.value);
           }}
-          options={availableArchitectures
-            .map((arch) => ({
-              label: arch,
-              value: arch,
-            }))}
+          options={availableArchitectures.map((arch) => ({
+            label: arch,
+            value: arch,
+          }))}
         />
       </Form>
       <ReleasesTable releaseMap={channels} arch={selectedArch} />
-    </div>
+    </>
   );
 }
