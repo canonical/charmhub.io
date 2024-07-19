@@ -3,26 +3,32 @@ import ReleasesTable from "./ReleasesTable";
 import useReleases from "../../hooks/useReleases";
 import { useEffect, useState } from "react";
 import { Form, Select, Spinner } from "@canonical/react-components";
+import { usePackage } from "../../hooks";
 
 export default function Releases() {
   const { packageName } = useParams();
-  const { data } = useReleases(packageName);
+  const { data: releaseData } = useReleases(packageName);
+  const { data: packageData } = usePackage(packageName);
 
   const [selectedTrack, setSelectedTrack] = useState<string>("");
   const [selectedArch, setSelectedArch] = useState<string>("");
 
   useEffect(() => {
-    if (data) {
-      setSelectedArch(data.all_architectures[0]);
-      const tracks = Object.values(data.releases).map((release) => release.track);
-      setSelectedTrack(tracks.includes("latest") ? "latest" : tracks[0]);
-    }
-  }, [data]);
+    if (releaseData && packageData) {
+      setSelectedArch(releaseData.all_architectures[0]);
 
-  const channels = Object.values(data?.releases || {}).filter(
+      const tracks = Object.values(releaseData.releases).map((release) => release.track);
+
+      setSelectedTrack(packageData["default-track"] || tracks.includes("latest") ? "latest" : tracks[0]);
+
+    }
+  }, [releaseData, packageData]);
+
+  const channels = Object.values(releaseData?.releases || {}).filter(
     (channel) => channel.track === selectedTrack
   );
 
+  // sort by the architecture index in all_architectures
   const availableArchitectures = [
     ...new Set(
       channels.flatMap((channel) =>
@@ -31,22 +37,21 @@ export default function Releases() {
         )
       )
     ),
-  ];
+  ]
 
   useEffect(() => {
-
-    const isPreviouslySelectedArchAvailable = availableArchitectures.includes(selectedArch);
-    if (!isPreviouslySelectedArchAvailable) {
+    if (!availableArchitectures.includes(selectedArch)) {
       setSelectedArch(availableArchitectures[0]);
     }
-  }, [selectedTrack, data]);
+  }, [selectedTrack, availableArchitectures, selectedArch]);
 
 
-  if (!data) {
+  if (!releaseData) {
     return <Spinner text="Loading..." />;
   }
 
-  const { releases, all_architectures } = data;
+  const { releases, all_architectures } = releaseData;
+
 
   if (Object.keys(releases).length === 0) {
     return <p className="p-heading--4">No releases available</p>;
