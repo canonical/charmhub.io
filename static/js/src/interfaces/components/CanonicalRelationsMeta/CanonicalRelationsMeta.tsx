@@ -6,6 +6,9 @@ type Props = {
 };
 
 function CanonicalRelationsMeta({ interfaceName, interfaceVersion }: Props) {
+  // Fallback URL if interfaceName is undefined
+  const url = `https://github.com/canonical/charm-relation-interfaces/blob/main/interfaces/${interfaceName ? interfaceName + '/' : ''}v${interfaceVersion}/README.md`;
+
   return (
     <>
       <h2 className="p-muted-heading">Help us improve this page</h2>
@@ -16,7 +19,7 @@ function CanonicalRelationsMeta({ interfaceName, interfaceVersion }: Props) {
       <p>
         <Button
           element="a"
-          href={`https://github.com/canonical/charm-relation-interfaces/blob/main/interfaces/${interfaceName}/v${interfaceVersion}/README.md`}
+          href={url}
           appearance="positive"
         >
           Contribute
