@@ -120,6 +120,28 @@
 
     background-image: url("https://assets.ubuntu.com/v1/da36d07a-topic.svg");
   }
+
+  .p-icon--exposed {
+    @extend %icon;
+    @include vf-icon-exposed($color-mid-dark);
+  }
+
+  .p-icon--github-grey {
+    @extend %icon;
+    @include vf-icon-github($color-mid-dark);
+
+    height: 16px;
+    width: 16px;
+  }
+
+  .p-icon--user-grey {
+    @extend %icon;
+    @include vf-icon-user($color-mid-dark);
+  }
+
+  .icon-spacing {
+    margin-right: 0.5rem;
+  }
 }
 
 @mixin charmhub-p-icon-chat {
