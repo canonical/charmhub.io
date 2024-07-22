@@ -542,3 +542,22 @@ h3 {
   display: flex;
   justify-content: center;
 }
+
+.release-channel{
+  border:inherit;
+  border-right: 1px solid var(--vf-color-border-low-contrast);
+  display: table-cell;
+
+  &:hover {
+    background-color: var(--vf-color-background-hover);
+    cursor: pointer;
+  }
+
+  & > [class^="p-icon"] {
+    margin-right: 0.5rem;
+  }
+
+  @media screen and (max-width: $breakpoint-large) {
+    border: none;
+  }
+}

@@ -1,3 +1,7 @@
+from typing import Dict, List
+from webapp.publisher.logic import ReleaseMap, Revision
+
+
 channel_map_basic = [
     {
         "base": {"architecture": "all", "channel": "14.04", "name": "ubuntu"},
@@ -50,7 +54,7 @@ channels_basic = [
         "track": "latest",
     },
 ]
-revisions_basic = [
+revisions_basic: List[Revision] = [
     {
         "bases": [
             {"architecture": "all", "channel": "14.04", "name": "ubuntu"}
@@ -66,7 +70,7 @@ revisions_basic = [
 ]
 
 
-expected_result_basic = {
+expected_result_basic: Dict[str, ReleaseMap] = {
     "latest/stable": {
         "track": "latest",
         "risk": "stable",

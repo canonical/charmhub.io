@@ -18,6 +18,7 @@ import Publicise from "./pages/Publicise";
 import Settings from "./pages/Settings";
 import Listing from "./pages/Listing";
 import Collaboration from "./pages/Collaboration";
+import Releases from "./pages/Releases";
 
 Sentry.init({
   dsn: window.SENTRY_DSN,
@@ -40,6 +41,8 @@ Sentry.init({
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      staleTime: 1000 * 60 * 60,   // 1 hour in ms
+      cacheTime: 1000 * 60 * 60,   // 1 hour in ms
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
     },
@@ -69,6 +72,10 @@ const router = createBrowserRouter([
       {
         path: "/:packageName/settings",
         element: <Settings />,
+      },
+      {
+        path: "/:packageName/releases",
+        element: <Releases />,
       },
       {
         path: "/:packageName/listing",
