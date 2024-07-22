@@ -1,4 +1,5 @@
 import { useQuery } from "react-query";
+import { Package } from "../types";
 
 function usePackage(packageName: string | undefined) {
   return useQuery("packageData", async () => {
@@ -14,7 +15,7 @@ function usePackage(packageName: string | undefined) {
       throw new Error(packageData?.message);
     }
 
-    return packageData.data;
+    return packageData.data as Package;
   });
 }
 
