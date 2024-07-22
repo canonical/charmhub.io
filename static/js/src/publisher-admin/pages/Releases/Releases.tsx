@@ -2,8 +2,9 @@ import { useParams } from "react-router-dom";
 import ReleasesTable from "./ReleasesTable";
 import useReleases from "../../hooks/useReleases";
 import { useEffect, useState } from "react";
-import { Form, Select, Spinner } from "@canonical/react-components";
+import { Form, Select, Spinner, Tooltip } from "@canonical/react-components";
 import { usePackage } from "../../hooks";
+import { TrackInfo } from "./TrackInfo";
 
 export default function Releases() {
   const { packageName } = useParams();
@@ -33,7 +34,6 @@ export default function Releases() {
     (channel) => channel.track === selectedTrack
   );
 
-  // sort by the architecture index in all_architectures
   const availableArchitectures = [
     ...new Set(
       channels.flatMap((channel) =>
@@ -67,6 +67,13 @@ export default function Releases() {
   availableArchitectures.sort(
     (a, b) => all_architectures.indexOf(a) - all_architectures.indexOf(b)
   );
+  const trackData = packageData?.tracks.find(
+    (track) => track.name === selectedTrack
+  );
+
+  const versionPattern = trackData?.["version-pattern"] || null;
+  const automaticPhasingPercentage =
+    trackData?.["automatic-phasing-percentage"] || null;
 
   return (
     <>
@@ -99,6 +106,10 @@ export default function Releases() {
           }))}
         />
       </Form>
+      <TrackInfo
+        versionPattern={versionPattern}
+        automaticPhasingPercentage={automaticPhasingPercentage}
+      />
       <ReleasesTable releaseMap={channels} arch={selectedArch} />
     </>
   );
