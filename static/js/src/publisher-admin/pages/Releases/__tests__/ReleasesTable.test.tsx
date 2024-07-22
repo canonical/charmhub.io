@@ -5,8 +5,7 @@ import ReleasesTable from "../ReleasesTable";
 import { mockReleaseChannel } from "../../../mocks/mockReleaseChannel";
 
 describe("ReleasesTable", () => {
-
-  const latestStable = mockReleaseChannel
+  const latestStable = mockReleaseChannel;
 
   const latestBeta: ReleaseChannel = {
     track: "latest",
@@ -44,14 +43,10 @@ describe("ReleasesTable", () => {
     ],
   };
 
-
   test("renders release channel rows correctly", () => {
-    const releaseMap = {
-      "latest/stable": latestStable,
-      "latest/beta": latestBeta,
-    } as const;
+    const releases = [latestStable, latestBeta];
 
-    render(<ReleasesTable releaseMap={releaseMap} arch="amd64" />);
+    render(<ReleasesTable releaseMap={releases} arch="amd64" />);
 
     expect(screen.getByText("latest/stable")).toBeInTheDocument();
 
@@ -62,13 +57,11 @@ describe("ReleasesTable", () => {
   });
 
   test("clicking on a channel displays all rows", async () => {
-    const releaseMap = {
-      "latest/stable": latestStable,
-    } as const;
+    const releases = [latestStable];
 
     const user = userEvent.setup();
 
-    render(<ReleasesTable releaseMap={releaseMap} arch="amd64" />);
+    render(<ReleasesTable releaseMap={releases} arch="amd64" />);
 
     await user.click(screen.getByText("latest/stable"));
 
@@ -82,13 +75,11 @@ describe("ReleasesTable", () => {
       ...latestStable.releases,
       ...latestStable.releases,
     ];
-    const releaseMap = {
-      "latest/stable": { ...latestStable, releases },
-    } as const;
+    const releaseChannel = [{ ...latestStable, releases }];
 
     const user = userEvent.setup();
 
-    render(<ReleasesTable releaseMap={releaseMap} arch="amd64" />);
+    render(<ReleasesTable releaseMap={releaseChannel} arch="amd64" />);
 
     await user.click(screen.getByText("latest/stable"));
 
@@ -96,5 +87,12 @@ describe("ReleasesTable", () => {
     await user.click(screen.getByText("Show more"));
 
     expect(screen.getAllByRole("row")).toHaveLength(7);
+  });
+  test("renders release channel rows correctly for different architectures", () => {
+    const releases = [latestStable, latestBeta];
+    render(<ReleasesTable releaseMap={releases} arch="arm64" />);
+    expect(screen.queryByText("latest/stable")).not.toBeInTheDocument();
+    expect(screen.getByText("latest/beta")).toBeInTheDocument();
+    expect(screen.getAllByRole("row")).toHaveLength(2);
   });
 });

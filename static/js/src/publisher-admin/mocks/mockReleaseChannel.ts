@@ -7,7 +7,7 @@ export const mockReleaseChannel: ReleaseChannel = {
         version: "1.0",
         bases: [
           { name: "ubuntu", channel: "18.04", architecture: "amd64" },
-          { name: "centos", channel: "7", architecture: "x86_64" },
+          { name: "centos", channel: "7", architecture: "amd64" },
         ],
         "created-at": "2022-01-01",
         "sha3-384": "123456",
@@ -26,7 +26,7 @@ export const mockReleaseChannel: ReleaseChannel = {
         version: "2.0",
         bases: [
           { name: "ubuntu", channel: "20.04", architecture: "amd64" },
-          { name: "centos", channel: "8", architecture: "x86_64" },
+          { name: "centos", channel: "8", architecture: "amd64" },
         ],
         "created-at": "2022-01-01",
         "sha3-384": "123456",

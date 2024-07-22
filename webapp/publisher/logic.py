@@ -1,4 +1,5 @@
 from typing import TypedDict, List, Union, Dict
+from collections import Counter
 from datetime import datetime
 from webapp.store.logic import process_revision
 
@@ -101,11 +102,13 @@ def get_all_architectures(releases: Dict[str, ReleaseMap]) -> List[str]:
     and a list of releases as value
 
     Returns:
-    List of architectures
+    List of architectures, sorted by frequency
+
     """
-    architectures = set()
+    architectures = Counter()
     for channel in releases:
         for release in releases[channel]["releases"]:
             for base in release["revision"]["bases"]:
-                architectures.add(base["architecture"])
-    return sorted(list(architectures))
+                architectures.update([base["architecture"]])
+
+    return [arch for arch, _ in architectures.most_common()]
