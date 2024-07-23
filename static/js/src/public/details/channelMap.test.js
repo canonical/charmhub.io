@@ -61,7 +61,7 @@ describe("channelMap", () => {
   });
 
   it("should toggle the 'u-hide' class", () => {
-    const testChannelMap = new channelMap(
+    new channelMap(
       "test-package",
       document.querySelector("[data-js='channel-map']")
     );
@@ -80,7 +80,7 @@ describe("channelMap", () => {
   });
 
   it("should add the 'is-active' class to the 'latest' channel", () => {
-    const testChannelMap = new channelMap(
+    new channelMap(
       "test-package",
       document.querySelector("[data-js='channel-map']")
     );
