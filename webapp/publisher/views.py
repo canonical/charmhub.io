@@ -32,7 +32,10 @@ def get_account_details():
 
 
 @publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/<path:path>',
+    '/<regex("'
+    + DETAILS_VIEW_REGEX
+    + '"):entity_name>/'
+    + '<regex("listing|releases|publicise|collaboration|settings"):path>'
 )
 @login_required
 def get_publisher(entity_name, path):
