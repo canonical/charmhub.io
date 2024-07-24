@@ -22,3 +22,5 @@ if (window.location.hash) {
 }
 
 window.addEventListener("hashchange", setActiveNavItem);
+
+export { getActiveNavItem, setActiveNavItem };
