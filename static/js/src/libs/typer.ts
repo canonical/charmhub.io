@@ -25,7 +25,7 @@ interface Cursor {
   updateBlinkState(): void;
 }
 
-function createTyper(element: HTMLElement): Typer {
+export function createTyper(element: HTMLElement): Typer {
   const delim = element.dataset.delim || ",";
   const words = element.dataset.words || "override these,sample typing";
   const typer: Typer = {
@@ -126,7 +126,7 @@ function createTyper(element: HTMLElement): Typer {
   return typer;
 }
 
-function TyperSetup() {
+export function TyperSetup() {
   const typers: { [key: string]: Typer } = {};
   const typerElements = document.getElementsByClassName("typer");
   for (let i = 0; i < typerElements.length; i++) {
