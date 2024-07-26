@@ -12,7 +12,7 @@ import { InterfaceItem } from "../InterfaceItem";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { filterChipsSelector, filterState } from "../../state";
 
-const getIntegrations = async (charm: string): Promise<IInterfaceData[]> => {
+export const getIntegrations = async (charm: string): Promise<IInterfaceData[]> => {
   let resp;
   const url = new URL(document.location.href);
   const selectedChannel = url.searchParams.get("channel");
@@ -229,19 +229,31 @@ export const App = () => {
           </Col>
         </Row>
       )}
-      {data && integrationCount === 0 && (
-        <div className="p-strip u-no-padding--top">
-          <div className="u-fixed-width u-equal-height">
-            <div className="charm-empty-docs-icon u-vertically-center">
-              <img src="https://assets.ubuntu.com/v1/8acd8f55-Integrations.svg" alt="" width="121" height="121" />
-            </div>
-            <div className="col-9 charm-empty-docs-content">
-              <h4>No Integrations have been added for this charm</h4>
-              <p>Integration is a connection an application supports by virtue of having a particular endpoint.</p>
-              <p className="u-no-margin--bottom"><a className="p-button--positive u-no-margin--bottom" href="https://juju.is/docs/juju/relation">Learn how to manage charm integrations</a></p>
+      {!data && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "10rem",
+          }}
+        >
+          <Spinner text="Loading..." />
+        </div>
+      )}
+      {integrationCount === 0 && (
+          <div className="p-strip u-no-padding--top">
+            <div className="u-fixed-width u-equal-height">
+              <div className="charm-empty-docs-icon u-vertically-center">
+                <img src="https://assets.ubuntu.com/v1/8acd8f55-Integrations.svg" alt="" width="121" height="121" />
+              </div>
+              <div className="col-9 charm-empty-docs-content">
+                <h4>No Integrations have been added for this charm</h4>
+                <p>Integration is a connection an application supports by virtue of having a particular endpoint.</p>
+                <p className="u-no-margin--bottom"><a className="p-button--positive u-no-margin--bottom" href="https://juju.is/docs/juju/relation">Learn how to manage charm integrations</a></p>
+              </div>
             </div>
           </div>
-        </div>
       )}
     </Col>
   );
