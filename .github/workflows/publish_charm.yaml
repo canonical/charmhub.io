@@ -1,0 +1,22 @@
+name: Build and publish charm
+on:
+  push:
+    branches:
+      - charming-charmhub # TODO(mhdisk): Change this to main once we are ready to deploy
+env:
+
+  CHARMCRAFT_ENABLE_EXPERIMENTAL_EXTENSIONS: true
+  ROCKCRAFT_ENABLE_EXPERIMENTAL_EXTENSIONS: true
+
+jobs:
+  upload-charm:
+    name: Build and upload charm to charmhub
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Upload charm to charmhub
+        uses: canonical/charming-actions/upload-charm@1.0.0
+        with:
+          charm-path: ./charm/
+          credentials: ${{ secrets.CHARMHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
