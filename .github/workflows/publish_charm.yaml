@@ -1,0 +1,91 @@
+name: Build and publish charm
+on:
+  push:
+    branches:
+      - charming-charmhub # TODO(mhdisk): Change this to main once we are ready to deploy
+env:
+  CHARMCRAFT_ENABLE_EXPERIMENTAL_EXTENSIONS: true
+  ROCKCRAFT_ENABLE_EXPERIMENTAL_EXTENSIONS: true
+
+jobs:
+  pack-charm:
+    # only run when ./charm content changes
+    #if: ${{ github.event_name == 'push' && contains(github.event.commits.*.added, 'charm') || contains(github.event.commits.*.modified, 'charm') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup LXD
+        uses: canonical/setup-lxd@main
+
+      - name: Setup charmcraft
+        run: sudo snap install charmcraft --classic --channel=latest/edge
+
+      - name: Fetch libs
+        run: |
+             cd ./charm 
+             charmcraft fetch-libs
+
+      - name: Pack charm
+        run: charmcraft pack -v --project-dir ./charm
+
+      - name: Upload charm
+        env:
+          CHARMCRAFT_AUTH: ${{ secrets.CHARMHUB_TOKEN }}
+        run: charmcraft upload ./*.charm
+
+  pack-rock:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+
+      - name: Build assets
+        run: |
+          yarn install
+          yarn run build
+
+      - name: Setup LXD
+        uses: canonical/setup-lxd@main
+
+      - name: Setup rockcraft
+        run: sudo snap install rockcraft --classic --channel=latest/edge
+
+      - name: Pack rock
+        run: rockcraft pack
+
+      - name: Upload rock
+        uses: actions/upload-artifact@v3
+        with:
+          name: charmhub-io-rock
+          path: ./*.rock
+
+  publish-image:
+    runs-on: ubuntu-latest
+    needs: pack-rock
+    outputs:
+      image_url: ${{ steps.set_image_url.outputs.image_url }}
+      image_digest: ${{ steps.set_image_digest.outputs.image_url }}
+    steps:
+      - name: Get Rock
+        uses: actions/download-artifact@v3
+        with:
+          name: charmhub-io-rock
+
+      - name: Set image URL
+        id: set_image_url
+        run: echo "image_url=ghcr.io/canonical/charmhub.io:$(date +%s)-${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT
+
+      - name: Push to GHCR
+        run: skopeo --insecure-policy copy oci-archive:$(ls *.rock) docker://${{ steps.set_image_url.outputs.image_url }} --dest-creds "canonical:${{ secrets.GITHUB_TOKEN }}"
+      - name: get image digest
+        id: set_image_digest
+        run: skopeo inspect --creds "canonical:${{ secrets.GITHUB_TOKEN }}" docker://${{ steps.set_image_url.outputs.image_url }} | jq -r '.Digest' >> $GITHUB_OUTPUT
+      - name: upload flask OCI image
+        env:
+          CHARMCRAFT_AUTH: ${{ secrets.CHARMHUB_TOKEN }}
+        run: charmcraft upload-resource charmhub-io flask-app-image --image=${{ needs.publish-image.outputs.image_url }} --verbosity=trace
