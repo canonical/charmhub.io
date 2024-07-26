@@ -16,7 +16,10 @@ class TableShowMore {
 
     this.showTotal.innerHTML = this.rows.length;
 
-    if (this.rowsToShow < this.rows.length) {
+    // Add logic to hide footer if all rows are already visible
+    if (this.rowsToShow >= this.rows.length) {
+      this.tableFooter.classList.add("u-hide");
+    } else {
       this.tableFooter.classList.remove("u-hide");
     }
 
@@ -34,13 +37,15 @@ class TableShowMore {
 
       if (numberOfRows >= this.rows.length) {
         this.tableFooter.classList.add("u-hide");
+      } else {
+        this.tableFooter.classList.remove("u-hide");
       }
 
       for (const [i, el] of this.rows.entries()) {
         if (i < numberOfRows) {
           el.classList.remove("u-hide");
         } else {
-          break;
+          el.classList.add("u-hide");
         }
       }
     } else {
