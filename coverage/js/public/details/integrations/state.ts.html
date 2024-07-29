@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">21.05% </span>
+                <span class="strong">94.73% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/19</span>
+                <span class='fraction'>18/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">14.28% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/7</span>
+                <span class='fraction'>6/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">22.22% </span>
+                <span class="strong">94.44% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/18</span>
+                <span class='fraction'>17/18</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -130,35 +130,35 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { atom, selector } from "recoil";
@@ -178,36 +178,36 @@ export const filterChipsAtom = atom&lt;ISearchAndFilter[]&gt;({
 export const filterChipsSelector = selector({
   key: "filterChipsSelector",
   get: ({ get }) =&gt; get(filterChipsAtom),
-  set: <span class="fstat-no" title="function not covered" >({</span> set, get }, newValue) =&gt; {
-    const current = <span class="cstat-no" title="statement not covered" >get(filterChipsAtom);</span>
+  set: ({ set, get }, newValue) =&gt; {
+    const current = get(filterChipsAtom);
     // reduce newValue by id
-    const newValues = <span class="cstat-no" title="statement not covered" >(newValue as ISearchAndFilter[]).reduce(</span>
-<span class="fstat-no" title="function not covered" >      (a</span>cc, value) =&gt; {
+    const newValues = (newValue as ISearchAndFilter[]).reduce(
+      (acc, value) =&gt; {
         // Reduce on ID
-        const match = <span class="cstat-no" title="statement not covered" >acc.find(<span class="fstat-no" title="function not covered" >(a</span>ccItem) =&gt; <span class="cstat-no" title="statement not covered" >accItem.id === value.id)</span>;</span>
-<span class="cstat-no" title="statement not covered" >        if (!match) {</span>
-<span class="cstat-no" title="statement not covered" >          acc.push(value);</span>
+        const match = acc.find((accItem) =&gt; accItem.id === value.id);
+        if (!match) {
+          acc.push(value);
         } else {
           // Reduce chips by value
-<span class="cstat-no" title="statement not covered" >          match.chips = [...match.chips, ...value.chips].reduce(</span>
-<span class="fstat-no" title="function not covered" >            (c</span>hipAcc, chipValue) =&gt; {
-              const chipMatch = <span class="cstat-no" title="statement not covered" >chipAcc.find(</span>
-<span class="fstat-no" title="function not covered" >                (c</span>hipAccItem) =&gt; <span class="cstat-no" title="statement not covered" >chipAccItem.value === chipValue.value</span>
+          match.chips = [...match.chips, ...value.chips].reduce(
+            (chipAcc, chipValue) =&gt; {
+              const chipMatch = chipAcc.find(
+                (chipAccItem) =&gt; chipAccItem.value === chipValue.value
               );
-<span class="cstat-no" title="statement not covered" >              if (!chipMatch) {</span>
-<span class="cstat-no" title="statement not covered" >                chipAcc.push(chipValue);</span>
+              if (!chipMatch) {
+                chipAcc.push(chipValue);
               }
-<span class="cstat-no" title="statement not covered" >              return chipAcc;</span>
+              return chipAcc;
             },
             [] as IFilterChip[]
           );
         }
-<span class="cstat-no" title="statement not covered" >        return acc;</span>
+        return acc;
       },
       current.map(<span class="fstat-no" title="function not covered" >(i</span>tem: ISearchAndFilter) =&gt; (<span class="cstat-no" title="statement not covered" >{ ...item })</span>)
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    set(filterChipsAtom, newValues);</span>
+    set(filterChipsAtom, newValues);
   },
 });
 &nbsp;</pre></td></tr></table></pre>
@@ -217,7 +217,7 @@ export const filterChipsSelector = selector({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-28T22:07:00.412Z
+                at 2024-07-29T22:07:26.322Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
