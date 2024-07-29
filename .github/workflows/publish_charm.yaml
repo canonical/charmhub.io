@@ -10,7 +10,7 @@ env:
 jobs:
   pack-charm:
     # only run when ./charm content changes
-    #if: ${{ github.event_name == 'push' && contains(github.event.commits.*.added, 'charm') || contains(github.event.commits.*.modified, 'charm') }}
+    if: ${{ github.event_name == 'push' && contains(github.event.commits.*.added, 'charm') || contains(github.event.commits.*.modified, 'charm') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -37,6 +37,7 @@ jobs:
 
   pack-rock:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -69,7 +70,6 @@ jobs:
     needs: pack-rock
     outputs:
       image_url: ${{ steps.set_image_url.outputs.image_url }}
-      image_digest: ${{ steps.set_image_digest.outputs.image_url }}
     steps:
       - name: Get Rock
         uses: actions/download-artifact@v3
@@ -82,10 +82,13 @@ jobs:
 
       - name: Push to GHCR
         run: skopeo --insecure-policy copy oci-archive:$(ls *.rock) docker://${{ steps.set_image_url.outputs.image_url }} --dest-creds "canonical:${{ secrets.GITHUB_TOKEN }}"
-      - name: get image digest
-        id: set_image_digest
-        run: skopeo inspect --creds "canonical:${{ secrets.GITHUB_TOKEN }}" docker://${{ steps.set_image_url.outputs.image_url }} | jq -r '.Digest' >> $GITHUB_OUTPUT
-      - name: upload flask OCI image
+
+      - name: pull image into registry
+        run: docker pull ${{ steps.set_image_url.outputs.image_url }}
+
+      - name: Upload flask app OCI image
         env:
           CHARMCRAFT_AUTH: ${{ secrets.CHARMHUB_TOKEN }}
-        run: charmcraft upload-resource charmhub-io flask-app-image --image=${{ needs.publish-image.outputs.image_url }} --verbosity=trace
+        run: |
+            sudo snap install charmcraft --classic --channel=latest/edge
+            charmcraft upload-resource charmhub-io flask-app-image --image=`docker images --format "{{.ID}}" | head -n 1` --verbosity=trace
