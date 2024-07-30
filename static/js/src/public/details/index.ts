@@ -5,14 +5,15 @@ import { channelMap } from "./channelMap";
 const init = (packageName: string) => {
   const historyState = new HistoryState();
 
-  const configurationEl = document.querySelector<HTMLElement>("[data-js='configuration']");
+  const configurationEl = document.querySelector<HTMLElement>(
+    "[data-js='configuration']"
+  );
   if (configurationEl) {
     new TableOfContents(configurationEl, historyState);
   }
 
   const actions = document.querySelector("[data-js='actions']");
   if (actions) {
-    const actionButtons = actions.querySelectorAll<HTMLElement>("[role='tab']");
     const toggleAccordion = (button: HTMLElement) => {
       const controls = button.parentElement!.querySelector<HTMLElement>(
         `#${button.getAttribute("aria-controls")}`
@@ -26,10 +27,6 @@ const init = (packageName: string) => {
         controls.setAttribute("aria-hidden", (!show).toString());
       }
     };
-
-    actionButtons.forEach((actionButton) => {
-      toggleAccordion(actionButton as HTMLElement);
-    });
 
     actions.addEventListener("click", (e: Event) => {
       let target = e.target as HTMLElement;
@@ -49,7 +46,9 @@ const init = (packageName: string) => {
     new TableOfContents(docsEl, historyState);
   }
 
-  const channelMapButton = document.querySelector<HTMLElement>("[data-js='channel-map']");
+  const channelMapButton = document.querySelector<HTMLElement>(
+    "[data-js='channel-map']"
+  );
   if (channelMapButton) {
     channelMap(packageName, channelMapButton);
   }
