@@ -44,11 +44,14 @@ class TableOfContents {
   }
 
   focus() {
-    this.historyState.updatePath(0, [
-      this.instanceName,
-      (this.getSelected() as any).name,
-    ]);
-  }
+    const selectedTab = this.getSelected() as any;
+    if (selectedTab) {
+      this.historyState.updatePath(0, [
+        this.instanceName,
+        selectedTab.name,
+      ]);
+    }
+  }  
 
   popHandler(state: Array<string>) {
     if (state) {
@@ -67,7 +70,7 @@ class TableOfContents {
   }
 
   getSelected() {
-    let selected;
+    let selected: { name: string; tabEl: HTMLElement; selected: boolean; index: number; contentEl: HTMLElement | null } | undefined;
 
     Object.keys(this.tabs).forEach((tab) => {
       if (this.tabs[tab].selected) {
@@ -88,10 +91,13 @@ class TableOfContents {
 
   resetTabUI() {
     Object.keys(this.tabs).forEach((tab) => {
-      this.tabs[tab].tabEl.removeAttribute("aria-selected");
-      this.tabs[tab].tabEl.classList.remove("is-active");
-      if (this.tabs[tab].contentEl) {
-        this.tabs[tab].contentEl.classList.add("u-hide");
+      const tabData = this.tabs[tab];
+      if (tabData.tabEl) {
+        tabData.tabEl.removeAttribute("aria-selected");
+        tabData.tabEl.classList.remove("is-active");
+      }
+      if (tabData.contentEl) {
+        tabData.contentEl.classList.add("u-hide");
       }
     });
   }
@@ -101,9 +107,13 @@ class TableOfContents {
     const selectedTab = this.getSelected() as any;
 
     if (selectedTab) {
-      selectedTab.tabEl.setAttribute("aria-selected", true);
-      selectedTab.tabEl.classList.add("is-active");
-      selectedTab.contentEl.classList.remove("u-hide");
+      if (selectedTab.tabEl) {
+        selectedTab.tabEl.setAttribute("aria-selected", "true");
+        selectedTab.tabEl.classList.add("is-active");
+      }
+      if (selectedTab.contentEl) {
+        selectedTab.contentEl.classList.remove("u-hide");
+      }
     }
   }
 
