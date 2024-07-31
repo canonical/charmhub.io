@@ -29,28 +29,19 @@
       box-shadow: 0 3px 3px rgba(51, 51, 51, 0.2);
       display: flex;
       flex-direction: column;
-      margin: $sp-small 0 $sp-small 0;
       max-height: 250px;
       min-width: 150px;
       order: 1;
       overflow-y: auto;
       position: absolute;
       width: auto;
-      z-index: 1000;
+      z-index: 5;
 
     @media only screen and (max-width: $breakpoint-large) {
       width: 96%;
     }
   }
-
-  .dropdown-menu.padding-bottom {
-    padding: $sp-small;
-  }
   
-  .dropdown-menu.no-padding-bottom {
-    padding: $sp-small $sp-small 0 $sp-small;
-  }
-
   .dropdown-item {
       align-items: center;
       cursor: pointer;
@@ -75,6 +66,7 @@
     border: none;
     height: 100%;
     margin: 0;
+    padding: $sp-small 0 $sp-small 0;
     width: 100%;
 
     &:hover {
@@ -89,7 +81,7 @@
     bottom: 0;
     height: 100%;
     margin-top: $spv--x-small;
-    padding: $sp-small 0 $sp-small 0;
+    padding-top: $spv--x-small;
     position: sticky;
     width: 100%;
   }
@@ -97,7 +89,6 @@
   .track-button-wrapper {
     background-color: $color-x-light;
     bottom: 0;
-    margin-top: auto;
     padding: none;
     position: sticky;
   }

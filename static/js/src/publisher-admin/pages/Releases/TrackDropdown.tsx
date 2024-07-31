@@ -7,6 +7,8 @@ type TrackDropdownProps = {
   selectedTrack: string;
   setSelectedTrack: Dispatch<React.SetStateAction<string>>;
   hasGuardrails?: boolean;
+  onAddTrack?: () => void;
+  onRequestTrack?: () => void;
 };
 
 export function TrackDropdown({
@@ -15,6 +17,8 @@ export function TrackDropdown({
   selectedTrack,
   setSelectedTrack,
   hasGuardrails,
+  onAddTrack,
+  onRequestTrack,
 }: TrackDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -58,18 +62,21 @@ export function TrackDropdown({
                 </div>
               ))}
             </div>
-            <div className="track-button-wrapper">
-              <div className="track-button">
-                <Button
-                  className="p-button has-icon new-track-button"
-                  onClick={() => {
-                    // TODO: open aside depending on hasGuardrails
-                  }}
-                >
-                  <i className="p-icon--plus"></i>
-                  <span>{hasGuardrails ? "Add" : "Request"} track</span>
-                </Button>
-              </div>
+            <div className="track-button">
+              <Button
+                className="p-button has-icon new-track-button"
+                type="button"
+                onClick={() => {
+                  if (hasGuardrails) {
+                    onAddTrack?.();
+                  } else {
+                    onRequestTrack?.();
+                  }
+                }}
+              >
+                <i className="p-icon--plus"></i>
+                <span>{hasGuardrails ? "Add" : "Request"} track</span>
+              </Button>
             </div>
           </div>
         )}
