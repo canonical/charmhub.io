@@ -2,9 +2,16 @@ import { useParams } from "react-router-dom";
 import ReleasesTable from "./ReleasesTable";
 import useReleases from "../../hooks/useReleases";
 import { useEffect, useState } from "react";
-import { Form, Select, Spinner, Tooltip } from "@canonical/react-components";
+import {
+  Button,
+  Form,
+  Select,
+  Spinner,
+  Tooltip,
+} from "@canonical/react-components";
 import { usePackage } from "../../hooks";
 import { TrackInfo } from "./TrackInfo";
+import { TrackDropdown } from "./TrackDropdown";
 
 export default function Releases() {
   const { packageName } = useParams();
@@ -13,6 +20,7 @@ export default function Releases() {
 
   const [selectedTrack, setSelectedTrack] = useState<string>("");
   const [selectedArch, setSelectedArch] = useState<string>("");
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (releaseData && packageData) {
@@ -62,7 +70,7 @@ export default function Releases() {
 
   const tracks = [
     ...new Set(Object.values(releases).map((release) => release.track)),
-  ];
+  ].sort((a, b) => b.localeCompare(a));
 
   availableArchitectures.sort(
     (a, b) => all_architectures.indexOf(a) - all_architectures.indexOf(b)
@@ -75,22 +83,18 @@ export default function Releases() {
   const automaticPhasingPercentage =
     trackData?.["automatic-phasing-percentage"] || null;
 
+  const guardRails = packageData?.["track-guardrails"];
+
   return (
     <>
       <h2 className="p-heading--4">Releases available to install</h2>
       <Form inline>
-        <Select
-          label="Track:"
-          name="track"
-          disabled={tracks.length === 1}
-          value={selectedTrack}
-          onChange={(e) => {
-            setSelectedTrack(e.target.value);
-          }}
-          options={tracks.map((track) => ({
-            label: track,
-            value: track,
-          }))}
+        <TrackDropdown
+          defaultTrack={packageData?.["default-track"]}
+          tracks={tracks}
+          selectedTrack={selectedTrack}
+          setSelectedTrack={setSelectedTrack}
+          hasGuardrails={guardRails && guardRails.length > 0}
         />
         <Select
           label="Architecture:"

@@ -87,19 +87,6 @@ describe("Releases", () => {
     });
   });
 
-  test("disables track dropdown when only one track is available", async () => {
-    mockUseReleases.mockReturnValue({
-      data: {
-        all_architectures: ["amd64"],
-        releases,
-      },
-    });
-    renderComponent();
-    await waitFor(() => {
-      expect(screen.getByLabelText("Track:")).toBeDisabled();
-    });
-  });
-
   test("disables architecture dropdown when only one architecture is available", async () => {
     mockUseReleases.mockReturnValue({
       data: {
@@ -120,19 +107,24 @@ describe("Releases", () => {
         all_architectures: ["amd64"],
         releases: {
           "latest/stable": { ...mockReleaseChannel, track: "latest" },
-          "1/stable": { ...mockReleaseChannel, track: "1" },
+          "legacy/stable": { ...mockReleaseChannel, track: "legacy" },
         },
       },
     });
-    renderComponent();
+    const { container } = renderComponent();
     await waitFor(() => {
       expect(screen.getByText("latest/stable")).toBeInTheDocument();
     });
-    // Switch to a different track
-    const trackSelect = screen.getByLabelText("Track:");
-    user.selectOptions(trackSelect, "1");
+
     await waitFor(() => {
-      expect(screen.getByText("1/stable")).toBeInTheDocument();
+      user.click(document.querySelector(".dropdown-toggle") as Element);
+    });
+    await waitFor(() => {
+      user.click(screen.getByText("legacy"));
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("legacy/stable")).toBeInTheDocument();
       expect(screen.queryByText("latest/stable")).not.toBeInTheDocument();
     });
   });
