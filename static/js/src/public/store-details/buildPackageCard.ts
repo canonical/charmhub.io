@@ -66,14 +66,20 @@ function buildPackageCard(entity: Entity) {
     }
   } else {
     const bundleIconsWrapper = clone.querySelector(".p-bundle-icons") as HTMLElement;
-    const bundleIcons = bundleIconsWrapper.querySelector("img") as HTMLElement;
+    const bundleIcons = bundleIconsWrapper.querySelector("img") as HTMLImageElement | null;
 
     if (!entity.apps || entity.apps.length === 0) {
       const icon = document.createElement("span");
       icon.setAttribute("class", "p-bundle-icon");
       icon.style.backgroundImage =
         "url(https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg)";
-      bundleIcons.replaceWith(icon);
+      if (bundleIcons) {
+        bundleIcons.replaceWith(icon);
+      } else {
+        const newIconWrapper = document.createElement("div");
+        newIconWrapper.appendChild(icon);
+        bundleIconsWrapper.appendChild(newIconWrapper);
+      }
     } else {
       const icons: HTMLSpanElement[] = [];
       entity.apps.forEach((app) => {
@@ -96,7 +102,9 @@ function buildPackageCard(entity: Entity) {
         icons.push(iconWrapper);
       });
 
-      bundleIconsWrapper.removeChild(bundleIcons);
+      if (bundleIcons) {
+        bundleIconsWrapper.removeChild(bundleIcons);
+      }
 
       icons.forEach((icon) => {
         bundleIconsWrapper.prepend(icon);
