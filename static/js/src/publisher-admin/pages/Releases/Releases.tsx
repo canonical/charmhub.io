@@ -2,16 +2,16 @@ import { useParams } from "react-router-dom";
 import ReleasesTable from "./ReleasesTable";
 import useReleases from "../../hooks/useReleases";
 import { useEffect, useState } from "react";
-import {
-  Button,
-  Form,
-  Select,
-  Spinner,
-  Tooltip,
-} from "@canonical/react-components";
+import { Form, Select, Spinner, AppAside } from "@canonical/react-components";
 import { usePackage } from "../../hooks";
 import { TrackInfo } from "./TrackInfo";
 import { TrackDropdown } from "./TrackDropdown";
+import RequestTrackPanel from "./RequestTrackPanel";
+
+enum SidePanelType {
+  RequestTrack = "RequestTrack",
+  AddTrack = "AddTrack",
+}
 
 export default function Releases() {
   const { packageName } = useParams();
@@ -20,7 +20,9 @@ export default function Releases() {
 
   const [selectedTrack, setSelectedTrack] = useState<string>("");
   const [selectedArch, setSelectedArch] = useState<string>("");
-  const [isOpen, setIsOpen] = useState(false);
+  const [showSidePanel, setShowSidePanel] = useState<boolean | SidePanelType>(
+    false
+  );
 
   useEffect(() => {
     if (releaseData && packageData) {
@@ -95,6 +97,12 @@ export default function Releases() {
           selectedTrack={selectedTrack}
           setSelectedTrack={setSelectedTrack}
           hasGuardrails={guardRails && guardRails.length > 0}
+          onRequestTrack={() => {
+            setShowSidePanel(SidePanelType.RequestTrack);
+          }}
+          onAddTrack={() => {
+            setShowSidePanel(SidePanelType.AddTrack);
+          }}
         />
         <Select
           label="Architecture:"
@@ -115,6 +123,18 @@ export default function Releases() {
         automaticPhasingPercentage={automaticPhasingPercentage}
       />
       <ReleasesTable releaseMap={channels} arch={selectedArch} />
+      {showSidePanel && (
+        <div
+          className="l-aside__overlay"
+          onClick={() => setShowSidePanel(false)}
+        />
+      )}
+      <AppAside className={`${!showSidePanel && "is-collapsed"}`}>
+        <RequestTrackPanel
+          charmName={packageName || ""}
+          onClose={() => setShowSidePanel(false)}
+        />
+      </AppAside>
     </>
   );
 }

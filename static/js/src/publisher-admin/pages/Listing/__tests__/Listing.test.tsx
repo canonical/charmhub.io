@@ -60,8 +60,14 @@ describe("Listing", () => {
 
   test("disables 'Revert' and 'Save' buttons by default", () => {
     renderComponent(mockPackage);
-    expect(screen.getByRole("button", { name: "Revert" })).toBeDisabled();
-    expect(screen.getByRole("button", { name: "Save" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Revert" })).toHaveAttribute(
+      "aria-disabled",
+      "true"
+    );
+    expect(screen.getByRole("button", { name: "Save" })).toHaveAttribute(
+      "aria-disabled",
+      "true"
+    );
   });
 
   test("enables 'Revert' and 'Save' buttons if data changes", async () => {

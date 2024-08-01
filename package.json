@@ -30,7 +30,7 @@
     "@babel/preset-typescript": "7.23.3",
     "@canonical/cookie-policy": "3.5.0",
     "@canonical/global-nav": "3.6.4",
-    "@canonical/react-components": "0.50.5",
+    "@canonical/react-components": "0.59.1",
     "@canonical/store-components": "0.50.1",
     "@sentry/react": "7.113.0",
     "@testing-library/jest-dom": "6.4.2",
