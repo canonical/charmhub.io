@@ -60,6 +60,8 @@
 
   .options-container {
     flex-grow: 1;
+    padding: 0 $sp-x-small;
+    padding-top: $sp-x-small;
   }
 
   .new-track-button {
@@ -81,7 +83,7 @@
     bottom: 0;
     height: 100%;
     margin-top: $spv--x-small;
-    padding-top: $spv--x-small;
+    padding: $sp-x-small;
     position: sticky;
     width: 100%;
   }
