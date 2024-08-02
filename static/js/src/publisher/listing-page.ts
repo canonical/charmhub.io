@@ -231,4 +231,4 @@ function init(initialState: { [key: string]: string }) {
   new ListingForm("#market-form", initialState);
 }
 
-export { init };
+export { init, ListingForm };
