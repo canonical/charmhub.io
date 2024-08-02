@@ -7,6 +7,7 @@ import { usePackage } from "../../hooks";
 import { TrackInfo } from "./TrackInfo";
 import { TrackDropdown } from "./TrackDropdown";
 import RequestTrackPanel from "./RequestTrackPanel";
+import AddTrackPanel from "./AddTrackPanel";
 
 enum SidePanelType {
   RequestTrack = "RequestTrack",
@@ -21,7 +22,7 @@ export default function Releases() {
   const [selectedTrack, setSelectedTrack] = useState<string>("");
   const [selectedArch, setSelectedArch] = useState<string>("");
   const [showSidePanel, setShowSidePanel] = useState<boolean | SidePanelType>(
-    false
+    SidePanelType.AddTrack
   );
 
   useEffect(() => {
@@ -68,11 +69,9 @@ export default function Releases() {
     return <p className="p-heading--4">No releases available</p>;
   }
 
-  const { releases, all_architectures } = releaseData;
+  const { all_architectures } = releaseData;
 
-  const tracks = [
-    ...new Set(Object.values(releases).map((release) => release.track)),
-  ].sort((a, b) => b.localeCompare(a));
+  const tracks = packageData?.tracks.map((track) => track.name) || [];
 
   availableArchitectures.sort(
     (a, b) => all_architectures.indexOf(a) - all_architectures.indexOf(b)
@@ -107,7 +106,7 @@ export default function Releases() {
         <Select
           label="Architecture:"
           name="arch"
-          disabled={availableArchitectures.length === 1}
+          disabled={availableArchitectures.length <= 1}
           value={selectedArch}
           onChange={(e) => {
             setSelectedArch(e.target.value);
@@ -130,10 +129,18 @@ export default function Releases() {
         />
       )}
       <AppAside className={`${!showSidePanel && "is-collapsed"}`}>
-        <RequestTrackPanel
-          charmName={packageName || ""}
-          onClose={() => setShowSidePanel(false)}
-        />
+        {showSidePanel === SidePanelType.RequestTrack && (
+          <RequestTrackPanel
+            charmName={packageName || ""}
+            onClose={() => setShowSidePanel(false)}
+          />
+        )}
+        {showSidePanel === SidePanelType.AddTrack && (
+          <AddTrackPanel
+            charmName={packageName || ""}
+            onClose={() => setShowSidePanel(false)}
+          />
+        )}
       </AppAside>
     </>
   );
