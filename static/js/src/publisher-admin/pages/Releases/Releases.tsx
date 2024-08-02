@@ -29,17 +29,19 @@ export default function Releases() {
     if (releaseData && packageData) {
       setSelectedArch(releaseData.all_architectures[0]);
 
-      const tracks = Object.values(releaseData.releases).map(
-        (release) => release.track
-      );
+      if (!selectedTrack) {
+        const tracks = Object.values(releaseData.releases).map(
+          (release) => release.track
+        );
 
-      setSelectedTrack(
-        packageData["default-track"] || tracks.includes("latest")
-          ? "latest"
-          : tracks[0]
-      );
+        setSelectedTrack(
+          packageData["default-track"] || tracks.includes("latest")
+            ? "latest"
+            : tracks[0]
+        );
+      }
     }
-  }, [releaseData, packageData]);
+  }, [releaseData, packageData, selectedTrack]);
 
   const channels = Object.values(releaseData?.releases || {}).filter(
     (channel) => channel.track === selectedTrack
@@ -139,6 +141,7 @@ export default function Releases() {
           <AddTrackPanel
             charmName={packageName || ""}
             onClose={() => setShowSidePanel(false)}
+            setSelectedTrack={setSelectedTrack}
           />
         )}
       </AppAside>

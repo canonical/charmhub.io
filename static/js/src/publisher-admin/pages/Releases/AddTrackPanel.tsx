@@ -1,18 +1,30 @@
-import { Accordion, Button, Input, Panel } from "@canonical/react-components";
+import {
+  Accordion,
+  Button,
+  Input,
+  Panel,
+  Spinner,
+} from "@canonical/react-components";
 import { useState } from "react";
+import { useRecoilState } from "recoil";
+import { packageDataState } from "../../state/atoms";
+import { usePackage } from "../../hooks";
 
 type AddTrackPanelProps = {
   charmName: string;
   onClose: () => void;
+  setSelectedTrack: (track: string) => void;
 };
 
 export default function AddTrackPanel({
   charmName,
   onClose,
+  setSelectedTrack,
 }: AddTrackPanelProps) {
   const [trackName, setTrackName] = useState("");
   const [versionPattern, setVersionPattern] = useState("");
   const [phasingPercentage, setPhasingPercentage] = useState("");
+  const { refetch } = usePackage(charmName);
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string | undefined }>(
@@ -36,6 +48,15 @@ export default function AddTrackPanel({
       method: "POST",
       body: formData,
     });
+
+    const responseData = await response.json();
+
+    if (response.ok) {
+      refetch();
+      setSelectedTrack(trackName);
+    } else {
+      setErrors({ trackName: responseData.error });
+    }
     setLoading(false);
   };
 
@@ -59,8 +80,10 @@ export default function AddTrackPanel({
           type="text"
           onChange={(e) => {
             setTrackName(e.target.value);
+            setErrors({ ...errors, trackName: undefined });
           }}
           value={trackName}
+          error={errors?.trackName}
         />
         <Accordion
           sections={[
@@ -139,13 +162,14 @@ export default function AddTrackPanel({
           <Button
             appearance="positive"
             onClick={submit}
+            hasIcon={loading}
             disabled={
               loading ||
               !trackName ||
               !!Object.keys(errors).filter((key) => errors[key]).length
             }
           >
-            Add Track
+            {loading ? <Spinner text="Add track" /> : "Add Track"}
           </Button>
         </div>
       </div>

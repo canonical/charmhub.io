@@ -41,8 +41,6 @@ Sentry.init({
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 60,   // 1 hour in ms
-      cacheTime: 1000 * 60 * 60,   // 1 hour in ms
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
     },
