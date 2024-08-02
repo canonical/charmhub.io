@@ -19,9 +19,9 @@ function Listing() {
   const [packageData, setPackageData] = useRecoilState(packageDataState);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [showSuccessNotifcation, setShowSuccessNotification] =
+  const [showSuccessNotification, setShowSuccessNotification] =
     useState<boolean>(false);
-  const [showErrorNotifcation, setShowErrorNotification] =
+  const [showErrorNotification, setShowErrorNotification] =
     useState<boolean>(false);
   const [formData, setFormData] = useState<{
     title: string | null;
@@ -182,7 +182,7 @@ function Listing() {
 
       <hr className="u-no-margin--bottom" />
 
-      {showSuccessNotifcation && (
+      {showSuccessNotification && (
         <Notification
           severity="positive"
           className="u-no-margin--bottom"
@@ -196,7 +196,7 @@ function Listing() {
         </Notification>
       )}
 
-      {showErrorNotifcation && (
+      {showErrorNotification && (
         <Notification
           severity="negative"
           className="u-no-margin--bottom"
