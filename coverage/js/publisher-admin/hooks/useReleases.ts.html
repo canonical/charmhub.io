@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>6/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>6/8</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -97,20 +97,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -122,21 +122,21 @@ export type ReleaseMap = {
   [key: string]: ReleaseChannel;
 }
 &nbsp;
-function <span class="fstat-no" title="function not covered" >useReleases(</span>packageName: string | undefined) {
-<span class="cstat-no" title="statement not covered" >  return useQuery(["releaseData", packageName], <span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-    const response = <span class="cstat-no" title="statement not covered" >await fetch(`/api/packages/${packageName}/releases`);</span>
+function useReleases(packageName: string | undefined) {
+  return useQuery(["releaseData", packageName], async () =&gt; {
+    const response = await fetch(`/api/packages/${packageName}/releases`);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!response.ok) {</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!response.ok) {
 <span class="cstat-no" title="statement not covered" >      throw new Error("There was a problem fetching releases");</span>
     }
 &nbsp;
-    const releaseData = <span class="cstat-no" title="statement not covered" >await response.json();</span>
+    const releaseData = await response.json();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!releaseData.success) {</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!releaseData.success) {
 <span class="cstat-no" title="statement not covered" >      throw new Error(releaseData?.message);</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return releaseData.data as { releases: ReleaseMap, all_architectures: string[] };</span>
+    return releaseData.data as { releases: ReleaseMap, all_architectures: string[] };
   });
 }
 &nbsp;
@@ -148,7 +148,7 @@ export default useReleases;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-01T22:06:37.359Z
+                at 2024-08-02T22:07:00.301Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
