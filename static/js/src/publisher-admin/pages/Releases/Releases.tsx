@@ -22,7 +22,7 @@ export default function Releases() {
   const [selectedTrack, setSelectedTrack] = useState<string>("");
   const [selectedArch, setSelectedArch] = useState<string>("");
   const [showSidePanel, setShowSidePanel] = useState<boolean | SidePanelType>(
-    SidePanelType.AddTrack
+    false
   );
 
   useEffect(() => {

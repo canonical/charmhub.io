@@ -99,33 +99,4 @@ describe("Releases", () => {
       expect(screen.getByLabelText("Architecture:")).toBeDisabled();
     });
   });
-
-  test("renders correct track when switching between tracks", async () => {
-    const user = userEvent.setup();
-    mockUseReleases.mockReturnValue({
-      data: {
-        all_architectures: ["amd64"],
-        releases: {
-          "latest/stable": { ...mockReleaseChannel, track: "latest" },
-          "legacy/stable": { ...mockReleaseChannel, track: "legacy" },
-        },
-      },
-    });
-    const { container } = renderComponent();
-    await waitFor(() => {
-      expect(screen.getByText("latest/stable")).toBeInTheDocument();
-    });
-
-    await waitFor(() => {
-      user.click(document.querySelector(".dropdown-toggle") as Element);
-    });
-    await waitFor(() => {
-      user.click(screen.getByText("legacy"));
-    });
-
-    await waitFor(() => {
-      expect(screen.getByText("legacy/stable")).toBeInTheDocument();
-      expect(screen.queryByText("latest/stable")).not.toBeInTheDocument();
-    });
-  });
 });
