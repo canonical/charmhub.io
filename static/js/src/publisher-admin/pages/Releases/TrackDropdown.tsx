@@ -72,6 +72,7 @@ export function TrackDropdown({
                   } else {
                     onRequestTrack?.();
                   }
+                  setIsOpen(false);
                 }}
               >
                 <i className="p-icon--plus"></i>

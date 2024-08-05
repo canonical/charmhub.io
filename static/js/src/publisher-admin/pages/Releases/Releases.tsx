@@ -2,7 +2,13 @@ import { useParams } from "react-router-dom";
 import ReleasesTable from "./ReleasesTable";
 import useReleases from "../../hooks/useReleases";
 import { useEffect, useState } from "react";
-import { Form, Select, Spinner, AppAside } from "@canonical/react-components";
+import {
+  Form,
+  Select,
+  Spinner,
+  AppAside,
+  Notification,
+} from "@canonical/react-components";
 import { usePackage } from "../../hooks";
 import { TrackInfo } from "./TrackInfo";
 import { TrackDropdown } from "./TrackDropdown";
@@ -24,6 +30,7 @@ export default function Releases() {
   const [showSidePanel, setShowSidePanel] = useState<boolean | SidePanelType>(
     false
   );
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   useEffect(() => {
     if (releaseData && packageData) {
@@ -96,7 +103,10 @@ export default function Releases() {
           defaultTrack={packageData?.["default-track"]}
           tracks={tracks}
           selectedTrack={selectedTrack}
-          setSelectedTrack={setSelectedTrack}
+          setSelectedTrack={(track) => {
+            setShowSuccessMessage(false);
+            setSelectedTrack(track);
+          }}
           hasGuardrails={guardRails && guardRails.length > 0}
           onRequestTrack={() => {
             setShowSidePanel(SidePanelType.RequestTrack);
@@ -119,6 +129,11 @@ export default function Releases() {
           }))}
         />
       </Form>
+      {showSuccessMessage && (
+        <Notification severity="positive">
+          Track {selectedTrack} added successfully
+        </Notification>
+      )}
       <TrackInfo
         versionPattern={versionPattern}
         automaticPhasingPercentage={automaticPhasingPercentage}
@@ -142,6 +157,9 @@ export default function Releases() {
             charmName={packageName || ""}
             onClose={() => setShowSidePanel(false)}
             setSelectedTrack={setSelectedTrack}
+            onSuccess={() => {
+              setShowSuccessMessage(true);
+            }}
           />
         )}
       </AppAside>

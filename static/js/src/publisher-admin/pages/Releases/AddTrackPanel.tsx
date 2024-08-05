@@ -14,12 +14,14 @@ type AddTrackPanelProps = {
   charmName: string;
   onClose: () => void;
   setSelectedTrack: (track: string) => void;
+  onSuccess?: () => void;
 };
 
 export default function AddTrackPanel({
   charmName,
   onClose,
   setSelectedTrack,
+  onSuccess,
 }: AddTrackPanelProps) {
   const [trackName, setTrackName] = useState("");
   const [versionPattern, setVersionPattern] = useState("");
@@ -54,6 +56,8 @@ export default function AddTrackPanel({
     if (response.ok) {
       refetch();
       setSelectedTrack(trackName);
+      onClose();
+      onSuccess?.();
     } else {
       setErrors({ trackName: responseData.error });
     }
@@ -169,7 +173,7 @@ export default function AddTrackPanel({
               !!Object.keys(errors).filter((key) => errors[key]).length
             }
           >
-            {loading ? <Spinner text="Add track" /> : "Add Track"}
+            {loading ? <Spinner text="Loading..." /> : "Add Track"}
           </Button>
         </div>
       </div>
