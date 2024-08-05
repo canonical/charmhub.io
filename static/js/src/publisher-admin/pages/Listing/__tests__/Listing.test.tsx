@@ -1,3 +1,4 @@
+import React from "react";
 import { MutableSnapshot, RecoilRoot } from "recoil";
 import { render, screen, waitFor } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
@@ -107,6 +108,60 @@ describe("Listing", () => {
       expect(
         screen.getByText(`There was a problem updating ${mockPackage.name}`)
       ).toBeInTheDocument();
+    });
+  });
+
+  test("initialises form data correctly", () => {
+    renderComponent(mockPackage);
+    expect(screen.getByLabelText("Title:")).toHaveValue(mockPackage.title);
+    expect(screen.getByLabelText("Summary:")).toHaveValue(mockPackage.summary);
+    expect(screen.getByLabelText("Project homepage:")).toHaveValue(
+      mockPackage.links.website?.[0] || ""
+    );
+    expect(screen.getByLabelText("Contact:")).toHaveValue(
+      mockPackage.links.contact?.[0] || ""
+    );
+  });
+
+  test("disables 'Revert' button if no changes are made", () => {
+    renderComponent(mockPackage);
+    expect(screen.getByRole("button", { name: "Revert" })).toBeDisabled();
+  });
+
+  test("disables 'Save' button if no changes are made", () => {
+    renderComponent(mockPackage);
+    expect(screen.getByRole("button", { name: "Save" })).toBeDisabled();
+  });
+
+  test("updates form fields correctly when user types input", () => {
+    const user = userEvent.setup();
+    renderComponent(mockPackage);
+
+    user.type(screen.getByLabelText("Title:"), "Updated Title");
+    waitFor(() => {
+      expect(screen.getByLabelText("Title:")).toHaveValue("Updated Title");
+    });
+
+    user.type(screen.getByLabelText("Summary:"), "Updated Summary");
+    waitFor(() => {
+      expect(screen.getByLabelText("Summary:")).toHaveValue("Updated Summary");
+    });
+
+    user.type(
+      screen.getByLabelText("Project homepage:"),
+      "https://new-homepage.com"
+    );
+    waitFor(() => {
+      expect(screen.getByLabelText("Project homepage:")).toHaveValue(
+        "https://new-homepage.com"
+      );
+    });
+
+    user.type(screen.getByLabelText("Contact:"), "new-contact@example.com");
+    waitFor(() => {
+      expect(screen.getByLabelText("Contact:")).toHaveValue(
+        "new-contact@example.com"
+      );
     });
   });
 });
