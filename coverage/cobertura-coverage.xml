@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="1905" lines-covered="1437" line-rate="0.7543000000000001" branches-valid="1046" branches-covered="661" branch-rate="0.6319" timestamp="1722809266240" complexity="0" version="0.1">
+<coverage lines-valid="1978" lines-covered="1496" line-rate="0.7563" branches-valid="1107" branches-covered="700" branch-rate="0.6323" timestamp="1722895614928" complexity="0" version="0.1">
   <sources>
     <source>/home/runner/work/charmhub.io/charmhub.io</source>
   </sources>
   <packages>
-    <package name="base" line-rate="0.45659999999999995" branch-rate="0.3563">
+    <package name="src.base" line-rate="0.45659999999999995" branch-rate="0.3563">
       <classes>
         <class name="docs-side-nav.ts" filename="static/js/src/base/docs-side-nav.ts" line-rate="0.5440999999999999" branch-rate="0.22719999999999999">
           <methods>
@@ -527,7 +527,7 @@
         </class>
       </classes>
     </package>
-    <package name="interfaces.components" line-rate="1" branch-rate="1">
+    <package name="src.interfaces.components" line-rate="1" branch-rate="1">
       <classes>
         <class name="testUtils.ts" filename="static/js/src/interfaces/components/testUtils.ts" line-rate="1" branch-rate="1">
           <methods>
@@ -540,7 +540,7 @@
         </class>
       </classes>
     </package>
-    <package name="interfaces.components.CanonicalRelationsMeta" line-rate="1" branch-rate="1">
+    <package name="src.interfaces.components.CanonicalRelationsMeta" line-rate="1" branch-rate="1">
       <classes>
         <class name="CanonicalRelationsMeta.tsx" filename="static/js/src/interfaces/components/CanonicalRelationsMeta/CanonicalRelationsMeta.tsx" line-rate="1" branch-rate="1">
           <methods>
@@ -557,7 +557,7 @@
         </class>
       </classes>
     </package>
-    <package name="interfaces.components.CommunityRelationsMeta" line-rate="1" branch-rate="1">
+    <package name="src.interfaces.components.CommunityRelationsMeta" line-rate="1" branch-rate="1">
       <classes>
         <class name="CommunityRelationsMeta.tsx" filename="static/js/src/interfaces/components/CommunityRelationsMeta/CommunityRelationsMeta.tsx" line-rate="1" branch-rate="1">
           <methods>
@@ -573,7 +573,7 @@
         </class>
       </classes>
     </package>
-    <package name="interfaces.components.DeveloperDocumentation" line-rate="1" branch-rate="1">
+    <package name="src.interfaces.components.DeveloperDocumentation" line-rate="1" branch-rate="1">
       <classes>
         <class name="DeveloperDocumentation.tsx" filename="static/js/src/interfaces/components/DeveloperDocumentation/DeveloperDocumentation.tsx" line-rate="1" branch-rate="1">
           <methods>
@@ -602,7 +602,7 @@
         </class>
       </classes>
     </package>
-    <package name="interfaces.components.DocumentationSection" line-rate="1" branch-rate="1">
+    <package name="src.interfaces.components.DocumentationSection" line-rate="1" branch-rate="1">
       <classes>
         <class name="index.ts" filename="static/js/src/interfaces/components/DocumentationSection/index.ts" line-rate="0" branch-rate="0">
           <methods>
@@ -612,7 +612,7 @@
         </class>
       </classes>
     </package>
-    <package name="interfaces.components.InterfaceDetailsLinks" line-rate="1" branch-rate="1">
+    <package name="src.interfaces.components.InterfaceDetailsLinks" line-rate="1" branch-rate="1">
       <classes>
         <class name="InterfaceDetailsLinks.tsx" filename="static/js/src/interfaces/components/InterfaceDetailsLinks/InterfaceDetailsLinks.tsx" line-rate="1" branch-rate="1">
           <methods>
@@ -628,7 +628,7 @@
         </class>
       </classes>
     </package>
-    <package name="interfaces.components.InterfaceDetailsNav" line-rate="1" branch-rate="1">
+    <package name="src.interfaces.components.InterfaceDetailsNav" line-rate="1" branch-rate="1">
       <classes>
         <class name="InterfaceDetailsNav.tsx" filename="static/js/src/interfaces/components/InterfaceDetailsNav/InterfaceDetailsNav.tsx" line-rate="1" branch-rate="1">
           <methods>
@@ -644,7 +644,7 @@
         </class>
       </classes>
     </package>
-    <package name="interfaces.components.InterfaceDiscussion" line-rate="1" branch-rate="1">
+    <package name="src.interfaces.components.InterfaceDiscussion" line-rate="1" branch-rate="1">
       <classes>
         <class name="InterfaceDiscussion.tsx" filename="static/js/src/interfaces/components/InterfaceDiscussion/InterfaceDiscussion.tsx" line-rate="1" branch-rate="1">
           <methods>
@@ -660,7 +660,7 @@
         </class>
       </classes>
     </package>
-    <package name="interfaces.components.InterfacesIndex" line-rate="0.64" branch-rate="0.6129">
+    <package name="src.interfaces.components.InterfacesIndex" line-rate="0.64" branch-rate="0.6129">
       <classes>
         <class name="InterfacesIndex.tsx" filename="static/js/src/interfaces/components/InterfacesIndex/InterfacesIndex.tsx" line-rate="0.64" branch-rate="0.6129">
           <methods>
@@ -790,7 +790,7 @@
         </class>
       </classes>
     </package>
-    <package name="interfaces.components.MermaidDiagram" line-rate="1" branch-rate="0.5">
+    <package name="src.interfaces.components.MermaidDiagram" line-rate="1" branch-rate="0.5">
       <classes>
         <class name="MermaidDiagram.tsx" filename="static/js/src/interfaces/components/MermaidDiagram/MermaidDiagram.tsx" line-rate="1" branch-rate="0.5">
           <methods>
@@ -827,7 +827,7 @@
         </class>
       </classes>
     </package>
-    <package name="interfaces.components.ProvidingCharms" line-rate="1" branch-rate="1">
+    <package name="src.interfaces.components.ProvidingCharms" line-rate="1" branch-rate="1">
       <classes>
         <class name="ProvidingCharms.tsx" filename="static/js/src/interfaces/components/ProvidingCharms/ProvidingCharms.tsx" line-rate="1" branch-rate="1">
           <methods>
@@ -855,7 +855,7 @@
         </class>
       </classes>
     </package>
-    <package name="interfaces.components.RequiringCharms" line-rate="1" branch-rate="1">
+    <package name="src.interfaces.components.RequiringCharms" line-rate="1" branch-rate="1">
       <classes>
         <class name="RequiringCharms.tsx" filename="static/js/src/interfaces/components/RequiringCharms/RequiringCharms.tsx" line-rate="1" branch-rate="1">
           <methods>
@@ -883,7 +883,7 @@
         </class>
       </classes>
     </package>
-    <package name="libs" line-rate="0.9791" branch-rate="0.88">
+    <package name="src.libs" line-rate="0.9791" branch-rate="0.88">
       <classes>
         <class name="arrays.js" filename="static/js/src/libs/arrays.js" line-rate="1" branch-rate="1">
           <methods>
@@ -1035,7 +1035,7 @@
         </class>
       </classes>
     </package>
-    <package name="public.about" line-rate="1" branch-rate="0.75">
+    <package name="src.public.about" line-rate="1" branch-rate="0.75">
       <classes>
         <class name="side-navigation.js" filename="static/js/src/public/about/side-navigation.js" line-rate="1" branch-rate="0.75">
           <methods>
@@ -1098,7 +1098,7 @@
         </class>
       </classes>
     </package>
-    <package name="public.details" line-rate="0.9493" branch-rate="0.7011">
+    <package name="src.public.details" line-rate="0.9493" branch-rate="0.7011">
       <classes>
         <class name="channelMap.ts" filename="static/js/src/public/details/channelMap.ts" line-rate="0.9508" branch-rate="0.7931">
           <methods>
@@ -1454,7 +1454,7 @@
         </class>
       </classes>
     </package>
-    <package name="public.details.history" line-rate="1" branch-rate="1">
+    <package name="src.public.details.history" line-rate="1" branch-rate="1">
       <classes>
         <class name="index.js" filename="static/js/src/public/details/history/index.js" line-rate="1" branch-rate="1">
           <methods>
@@ -1528,7 +1528,7 @@
         </class>
       </classes>
     </package>
-    <package name="public.details.integrate" line-rate="0.6851" branch-rate="0.409">
+    <package name="src.public.details.integrate" line-rate="0.6851" branch-rate="0.409">
       <classes>
         <class name="index.ts" filename="static/js/src/public/details/integrate/index.ts" line-rate="0.6851" branch-rate="0.409">
           <methods>
@@ -1711,7 +1711,7 @@
         </class>
       </classes>
     </package>
-    <package name="public.details.integrations" line-rate="0.9444" branch-rate="1">
+    <package name="src.public.details.integrations" line-rate="0.9444" branch-rate="1">
       <classes>
         <class name="state.ts" filename="static/js/src/public/details/integrations/state.ts" line-rate="0.9444" branch-rate="1">
           <methods>
@@ -1774,7 +1774,7 @@
         </class>
       </classes>
     </package>
-    <package name="public.details.integrations.components" line-rate="0.8478" branch-rate="0.7619">
+    <package name="src.public.details.integrations.components" line-rate="0.8478" branch-rate="0.7619">
       <classes>
         <class name="InterfaceItem.tsx" filename="static/js/src/public/details/integrations/components/InterfaceItem.tsx" line-rate="0.8478" branch-rate="0.7619">
           <methods>
@@ -1900,7 +1900,7 @@
         </class>
       </classes>
     </package>
-    <package name="public.details.integrations.components.App" line-rate="0.6884999999999999" branch-rate="0.7547">
+    <package name="src.public.details.integrations.components.App" line-rate="0.6884999999999999" branch-rate="0.7547">
       <classes>
         <class name="App.tsx" filename="static/js/src/public/details/integrations/components/App/App.tsx" line-rate="0.6884999999999999" branch-rate="0.7547">
           <methods>
@@ -2066,7 +2066,7 @@
         </class>
       </classes>
     </package>
-    <package name="public.details.overview" line-rate="1" branch-rate="0.7">
+    <package name="src.public.details.overview" line-rate="1" branch-rate="0.7">
       <classes>
         <class name="index.js" filename="static/js/src/public/details/overview/index.js" line-rate="1" branch-rate="0.7">
           <methods>
@@ -2150,7 +2150,7 @@
         </class>
       </classes>
     </package>
-    <package name="public.details.resources" line-rate="1" branch-rate="0.8181">
+    <package name="src.public.details.resources" line-rate="1" branch-rate="0.8181">
       <classes>
         <class name="index.ts" filename="static/js/src/public/details/resources/index.ts" line-rate="1" branch-rate="0.8181">
           <methods>
@@ -2226,7 +2226,7 @@
         </class>
       </classes>
     </package>
-    <package name="public.store-details" line-rate="0.8078" branch-rate="0.6444">
+    <package name="src.public.store-details" line-rate="0.8078" branch-rate="0.6444">
       <classes>
         <class name="buildPackageCard.ts" filename="static/js/src/public/store-details/buildPackageCard.ts" line-rate="0.8674" branch-rate="0.7333">
           <methods>
@@ -2616,7 +2616,7 @@
         </class>
       </classes>
     </package>
-    <package name="public.topics" line-rate="0.7594" branch-rate="0.5526">
+    <package name="src.public.topics" line-rate="0.7594" branch-rate="0.5526">
       <classes>
         <class name="filter.ts" filename="static/js/src/public/topics/filter.ts" line-rate="0.7594" branch-rate="0.5526">
           <methods>
@@ -2815,7 +2815,7 @@
         </class>
       </classes>
     </package>
-    <package name="publisher" line-rate="0.6428" branch-rate="0.5285">
+    <package name="src.publisher" line-rate="0.6428" branch-rate="0.5285">
       <classes>
         <class name="list-page.js" filename="static/js/src/publisher/list-page.js" line-rate="0.8" branch-rate="0.5">
           <methods>
@@ -3033,7 +3033,7 @@
         </class>
       </classes>
     </package>
-    <package name="publisher-admin.components.SectionHeader" line-rate="1" branch-rate="1">
+    <package name="src.publisher-admin.components.SectionHeader" line-rate="1" branch-rate="1">
       <classes>
         <class name="SectionHeader.tsx" filename="static/js/src/publisher-admin/components/SectionHeader/SectionHeader.tsx" line-rate="1" branch-rate="1">
           <methods>
@@ -3050,7 +3050,7 @@
         </class>
       </classes>
     </package>
-    <package name="publisher-admin.components.SectionNav" line-rate="1" branch-rate="1">
+    <package name="src.publisher-admin.components.SectionNav" line-rate="1" branch-rate="1">
       <classes>
         <class name="SectionNav.tsx" filename="static/js/src/publisher-admin/components/SectionNav/SectionNav.tsx" line-rate="1" branch-rate="1">
           <methods>
@@ -3076,7 +3076,7 @@
         </class>
       </classes>
     </package>
-    <package name="publisher-admin.hooks" line-rate="0.8356" branch-rate="0.6666">
+    <package name="src.publisher-admin.hooks" line-rate="0.8356" branch-rate="0.6666">
       <classes>
         <class name="index.ts" filename="static/js/src/publisher-admin/hooks/index.ts" line-rate="0" branch-rate="0">
           <methods>
@@ -3275,7 +3275,7 @@
         </class>
       </classes>
     </package>
-    <package name="publisher-admin.mocks" line-rate="1" branch-rate="1">
+    <package name="src.publisher-admin.mocks" line-rate="1" branch-rate="1">
       <classes>
         <class name="index.ts" filename="static/js/src/publisher-admin/mocks/index.ts" line-rate="0" branch-rate="0">
           <methods>
@@ -3299,7 +3299,7 @@
         </class>
       </classes>
     </package>
-    <package name="publisher-admin.pages.Collaboration" line-rate="0.746" branch-rate="0.5813">
+    <package name="src.publisher-admin.pages.Collaboration" line-rate="0.746" branch-rate="0.5813">
       <classes>
         <class name="Collaboration.tsx" filename="static/js/src/publisher-admin/pages/Collaboration/Collaboration.tsx" line-rate="0.7142000000000001" branch-rate="0.5">
           <methods>
@@ -3620,13 +3620,13 @@
         </class>
       </classes>
     </package>
-    <package name="publisher-admin.pages.Listing" line-rate="0.5" branch-rate="0.6595">
+    <package name="src.publisher-admin.pages.Listing" line-rate="0.5" branch-rate="0.6595">
       <classes>
         <class name="Listing.tsx" filename="static/js/src/publisher-admin/pages/Listing/Listing.tsx" line-rate="0.4814" branch-rate="0.6279">
           <methods>
-            <method name="Listing" hits="41" signature="()V">
+            <method name="Listing" hits="49" signature="()V">
               <lines>
-                <line number="17" hits="41"/>
+                <line number="17" hits="49"/>
               </lines>
             </method>
             <method name="(anonymous_1)" hits="26" signature="()V">
@@ -3634,14 +3634,14 @@
                 <line number="45" hits="26"/>
               </lines>
             </method>
-            <method name="(anonymous_2)" hits="82" signature="()V">
+            <method name="(anonymous_2)" hits="98" signature="()V">
               <lines>
-                <line number="54" hits="82"/>
+                <line number="54" hits="98"/>
               </lines>
             </method>
-            <method name="(anonymous_3)" hits="41" signature="()V">
+            <method name="(anonymous_3)" hits="49" signature="()V">
               <lines>
-                <line number="74" hits="41"/>
+                <line number="74" hits="49"/>
               </lines>
             </method>
             <method name="(anonymous_4)" hits="0" signature="()V">
@@ -3654,9 +3654,9 @@
                 <line number="122" hits="0"/>
               </lines>
             </method>
-            <method name="(anonymous_6)" hits="7" signature="()V">
+            <method name="(anonymous_6)" hits="11" signature="()V">
               <lines>
-                <line number="128" hits="7"/>
+                <line number="128" hits="11"/>
               </lines>
             </method>
             <method name="(anonymous_7)" hits="0" signature="()V">
@@ -3681,32 +3681,32 @@
             </method>
           </methods>
           <lines>
-            <line number="18" hits="41" branch="false"/>
-            <line number="19" hits="41" branch="false"/>
-            <line number="20" hits="41" branch="false"/>
-            <line number="21" hits="41" branch="false"/>
-            <line number="23" hits="41" branch="false"/>
-            <line number="25" hits="41" branch="false"/>
-            <line number="26" hits="41" branch="false"/>
-            <line number="38" hits="41" branch="false"/>
-            <line number="45" hits="41" branch="false"/>
+            <line number="18" hits="49" branch="false"/>
+            <line number="19" hits="49" branch="false"/>
+            <line number="20" hits="49" branch="false"/>
+            <line number="21" hits="49" branch="false"/>
+            <line number="23" hits="49" branch="false"/>
+            <line number="25" hits="49" branch="false"/>
+            <line number="26" hits="49" branch="false"/>
+            <line number="38" hits="49" branch="false"/>
+            <line number="45" hits="49" branch="false"/>
             <line number="50" hits="26" branch="false"/>
             <line number="51" hits="26" branch="false"/>
-            <line number="54" hits="41" branch="false"/>
-            <line number="55" hits="82" branch="true" condition-coverage="100% (2/2)"/>
-            <line number="56" hits="66" branch="false"/>
-            <line number="59" hits="16" branch="true" condition-coverage="50% (1/2)"/>
+            <line number="54" hits="49" branch="false"/>
+            <line number="55" hits="98" branch="true" condition-coverage="100% (2/2)"/>
+            <line number="56" hits="74" branch="false"/>
+            <line number="59" hits="24" branch="true" condition-coverage="50% (1/2)"/>
             <line number="60" hits="0" branch="false"/>
-            <line number="63" hits="16" branch="true" condition-coverage="50% (1/2)"/>
+            <line number="63" hits="24" branch="true" condition-coverage="50% (1/2)"/>
             <line number="64" hits="0" branch="false"/>
-            <line number="67" hits="16" branch="true" condition-coverage="50% (1/2)"/>
+            <line number="67" hits="24" branch="true" condition-coverage="50% (1/2)"/>
             <line number="68" hits="0" branch="false"/>
-            <line number="71" hits="16" branch="false"/>
-            <line number="74" hits="41" branch="false"/>
-            <line number="75" hits="41" branch="true" condition-coverage="50% (1/2)"/>
-            <line number="81" hits="41" branch="false"/>
+            <line number="71" hits="24" branch="false"/>
+            <line number="74" hits="49" branch="false"/>
+            <line number="75" hits="49" branch="true" condition-coverage="50% (1/2)"/>
+            <line number="81" hits="49" branch="false"/>
             <line number="84" hits="0" branch="false"/>
-            <line number="87" hits="41" branch="false"/>
+            <line number="87" hits="49" branch="false"/>
             <line number="88" hits="0" branch="false"/>
             <line number="90" hits="0" branch="false"/>
             <line number="91" hits="0" branch="false"/>
@@ -3728,9 +3728,9 @@
             <line number="122" hits="0" branch="false"/>
             <line number="123" hits="0" branch="false"/>
             <line number="124" hits="0" branch="false"/>
-            <line number="128" hits="41" branch="false"/>
-            <line number="129" hits="7" branch="false"/>
-            <line number="132" hits="41" branch="false"/>
+            <line number="128" hits="49" branch="false"/>
+            <line number="129" hits="11" branch="false"/>
+            <line number="132" hits="49" branch="false"/>
             <line number="137" hits="0" branch="false"/>
             <line number="160" hits="1" branch="false"/>
             <line number="190" hits="0" branch="false"/>
@@ -3739,9 +3739,9 @@
         </class>
         <class name="ListingInputField.tsx" filename="static/js/src/publisher-admin/pages/Listing/ListingInputField.tsx" line-rate="1" branch-rate="1">
           <methods>
-            <method name="ListingInputField" hits="167" signature="()V">
+            <method name="ListingInputField" hits="199" signature="()V">
               <lines>
-                <line number="13" hits="167"/>
+                <line number="13" hits="199"/>
               </lines>
             </method>
             <method name="(anonymous_1)" hits="41" signature="()V">
@@ -3751,13 +3751,13 @@
             </method>
           </methods>
           <lines>
-            <line number="22" hits="167" branch="false"/>
+            <line number="22" hits="199" branch="false"/>
             <line number="39" hits="41" branch="false"/>
           </lines>
         </class>
       </classes>
     </package>
-    <package name="publisher-admin.pages.NotFound" line-rate="1" branch-rate="1">
+    <package name="src.publisher-admin.pages.NotFound" line-rate="1" branch-rate="1">
       <classes>
         <class name="NotFound.tsx" filename="static/js/src/publisher-admin/pages/NotFound/NotFound.tsx" line-rate="1" branch-rate="1">
           <methods>
@@ -3773,7 +3773,7 @@
         </class>
       </classes>
     </package>
-    <package name="publisher-admin.pages.Publicise" line-rate="0.9722" branch-rate="1">
+    <package name="src.publisher-admin.pages.Publicise" line-rate="0.9722" branch-rate="1">
       <classes>
         <class name="Publicise.tsx" filename="static/js/src/publisher-admin/pages/Publicise/Publicise.tsx" line-rate="1" branch-rate="1">
           <methods>
@@ -3897,7 +3897,7 @@
         </class>
       </classes>
     </package>
-    <package name="publisher-admin.pages.Releases" line-rate="0.9555" branch-rate="0.9393">
+    <package name="src.publisher-admin.pages.Releases" line-rate="0.9555" branch-rate="0.9393">
       <classes>
         <class name="Releases.tsx" filename="static/js/src/publisher-admin/pages/Releases/Releases.tsx" line-rate="0.9459000000000001" branch-rate="0.9">
           <methods>
@@ -4054,7 +4054,7 @@
         </class>
       </classes>
     </package>
-    <package name="publisher-admin.pages.Settings" line-rate="1" branch-rate="1">
+    <package name="src.publisher-admin.pages.Settings" line-rate="1" branch-rate="1">
       <classes>
         <class name="Settings.tsx" filename="static/js/src/publisher-admin/pages/Settings/Settings.tsx" line-rate="1" branch-rate="1">
           <methods>
@@ -4071,20 +4071,47 @@
         </class>
       </classes>
     </package>
-    <package name="publisher-admin.state" line-rate="1" branch-rate="1">
+    <package name="src.publisher-admin.routes" line-rate="1" branch-rate="1">
+      <classes>
+        <class name="root.tsx" filename="static/js/src/publisher-admin/routes/root.tsx" line-rate="1" branch-rate="1">
+          <methods>
+            <method name="Root" hits="5" signature="()V">
+              <lines>
+                <line number="10" hits="5"/>
+              </lines>
+            </method>
+            <method name="(anonymous_1)" hits="5" signature="()V">
+              <lines>
+                <line number="16" hits="5"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="11" hits="5" branch="false"/>
+            <line number="12" hits="5" branch="false"/>
+            <line number="14" hits="5" branch="false"/>
+            <line number="16" hits="5" branch="false"/>
+            <line number="17" hits="5" branch="true" condition-coverage="100% (2/2)"/>
+            <line number="18" hits="2" branch="false"/>
+            <line number="22" hits="5" branch="false"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package name="src.publisher-admin.state" line-rate="1" branch-rate="1">
       <classes>
         <class name="atoms.ts" filename="static/js/src/publisher-admin/state/atoms.ts" line-rate="1" branch-rate="1">
           <methods>
           </methods>
           <lines>
-            <line number="5" hits="13" branch="false"/>
-            <line number="10" hits="13" branch="false"/>
-            <line number="15" hits="13" branch="false"/>
-            <line number="20" hits="13" branch="false"/>
-            <line number="25" hits="13" branch="false"/>
-            <line number="30" hits="13" branch="false"/>
-            <line number="35" hits="13" branch="false"/>
-            <line number="40" hits="13" branch="false"/>
+            <line number="5" hits="14" branch="false"/>
+            <line number="10" hits="14" branch="false"/>
+            <line number="15" hits="14" branch="false"/>
+            <line number="20" hits="14" branch="false"/>
+            <line number="25" hits="14" branch="false"/>
+            <line number="30" hits="14" branch="false"/>
+            <line number="35" hits="14" branch="false"/>
+            <line number="40" hits="14" branch="false"/>
           </lines>
         </class>
         <class name="selectors.ts" filename="static/js/src/publisher-admin/state/selectors.ts" line-rate="1" branch-rate="1">
@@ -4113,7 +4140,7 @@
         </class>
       </classes>
     </package>
-    <package name="publisher-admin.utils" line-rate="0.8061" branch-rate="0.6304">
+    <package name="src.publisher-admin.utils" line-rate="0.8061" branch-rate="0.6304">
       <classes>
         <class name="QueryProvider.tsx" filename="static/js/src/publisher-admin/utils/QueryProvider.tsx" line-rate="1" branch-rate="1">
           <methods>
@@ -4206,16 +4233,16 @@
         </class>
         <class name="capitalize.ts" filename="static/js/src/publisher-admin/utils/capitalize.ts" line-rate="1" branch-rate="1">
           <methods>
-            <method name="capitalize" hits="44" signature="()V">
+            <method name="capitalize" hits="52" signature="()V">
               <lines>
-                <line number="1" hits="44"/>
+                <line number="1" hits="52"/>
               </lines>
             </method>
           </methods>
           <lines>
-            <line number="2" hits="44" branch="true" condition-coverage="100% (2/2)"/>
+            <line number="2" hits="52" branch="true" condition-coverage="100% (2/2)"/>
             <line number="3" hits="1" branch="false"/>
-            <line number="6" hits="43" branch="false"/>
+            <line number="6" hits="51" branch="false"/>
           </lines>
         </class>
         <class name="formatDate.ts" filename="static/js/src/publisher-admin/utils/formatDate.ts" line-rate="1" branch-rate="1">
@@ -4501,7 +4528,7 @@
         </class>
       </classes>
     </package>
-    <package name="publisher.components" line-rate="0.5038" branch-rate="0.34840000000000004">
+    <package name="src.publisher.components" line-rate="0.5038" branch-rate="0.34840000000000004">
       <classes>
         <class name="multiselect.tsx" filename="static/js/src/publisher/components/multiselect.tsx" line-rate="0.5038" branch-rate="0.34840000000000004">
           <methods>
@@ -4825,7 +4852,7 @@
         </class>
       </classes>
     </package>
-    <package name="publisher.graphs" line-rate="0.9152" branch-rate="0.4">
+    <package name="src.publisher.graphs" line-rate="0.9152" branch-rate="0.4">
       <classes>
         <class name="activeDevices.ts" filename="static/js/src/publisher/graphs/activeDevices.ts" line-rate="0.8823000000000001" branch-rate="0.375">
           <methods>
@@ -4981,6 +5008,228 @@
             <line number="65" hits="1" branch="false"/>
             <line number="67" hits="0" branch="false"/>
             <line number="68" hits="1" branch="false"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package name="store.components.Banner" line-rate="1" branch-rate="0.9">
+      <classes>
+        <class name="Banner.tsx" filename="static/js/store/components/Banner/Banner.tsx" line-rate="1" branch-rate="0.9">
+          <methods>
+            <method name="Banner" hits="6" signature="()V">
+              <lines>
+                <line number="10" hits="6"/>
+              </lines>
+            </method>
+            <method name="(anonymous_1)" hits="3" signature="()V">
+              <lines>
+                <line number="20" hits="3"/>
+              </lines>
+            </method>
+            <method name="(anonymous_2)" hits="1" signature="()V">
+              <lines>
+                <line number="51" hits="1"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="11" hits="6" branch="false"/>
+            <line number="13" hits="6" branch="false"/>
+            <line number="21" hits="3" branch="false"/>
+            <line number="23" hits="3" branch="true" condition-coverage="100% (4/4)"/>
+            <line number="24" hits="1" branch="false"/>
+            <line number="25" hits="1" branch="false"/>
+            <line number="26" hits="1" branch="false"/>
+            <line number="29" hits="3" branch="true" condition-coverage="75% (3/4)"/>
+            <line number="30" hits="3" branch="false"/>
+            <line number="52" hits="1" branch="false"/>
+            <line number="53" hits="1" branch="false"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package name="store.components.Packages" line-rate="0.6744" branch-rate="0.5115999999999999">
+      <classes>
+        <class name="Packages.tsx" filename="static/js/store/components/Packages/Packages.tsx" line-rate="0.6744" branch-rate="0.5115999999999999">
+          <methods>
+            <method name="Packages" hits="15" signature="()V">
+              <lines>
+                <line number="24" hits="15"/>
+              </lines>
+            </method>
+            <method name="(anonymous_1)" hits="1" signature="()V">
+              <lines>
+                <line number="27" hits="1"/>
+              </lines>
+            </method>
+            <method name="(anonymous_2)" hits="0" signature="()V">
+              <lines>
+                <line number="30" hits="0"/>
+              </lines>
+            </method>
+            <method name="(anonymous_3)" hits="12" signature="()V">
+              <lines>
+                <line number="57" hits="12"/>
+              </lines>
+            </method>
+            <method name="(anonymous_4)" hits="1" signature="()V">
+              <lines>
+                <line number="73" hits="1"/>
+              </lines>
+            </method>
+            <method name="(anonymous_5)" hits="0" signature="()V">
+              <lines>
+                <line number="84" hits="0"/>
+              </lines>
+            </method>
+            <method name="(anonymous_6)" hits="1" signature="()V">
+              <lines>
+                <line number="98" hits="1"/>
+              </lines>
+            </method>
+            <method name="(anonymous_7)" hits="1" signature="()V">
+              <lines>
+                <line number="113" hits="1"/>
+              </lines>
+            </method>
+            <method name="(anonymous_8)" hits="1" signature="()V">
+              <lines>
+                <line number="125" hits="1"/>
+              </lines>
+            </method>
+            <method name="(anonymous_9)" hits="1" signature="()V">
+              <lines>
+                <line number="132" hits="1"/>
+              </lines>
+            </method>
+            <method name="(anonymous_10)" hits="0" signature="()V">
+              <lines>
+                <line number="153" hits="0"/>
+              </lines>
+            </method>
+            <method name="(anonymous_11)" hits="168" signature="()V">
+              <lines>
+                <line number="176" hits="168"/>
+              </lines>
+            </method>
+            <method name="(anonymous_12)" hits="0" signature="()V">
+              <lines>
+                <line number="185" hits="0"/>
+              </lines>
+            </method>
+            <method name="(anonymous_13)" hits="0" signature="()V">
+              <lines>
+                <line number="208" hits="0"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="25" hits="15" branch="false"/>
+            <line number="27" hits="15" branch="false"/>
+            <line number="28" hits="1" branch="false"/>
+            <line number="29" hits="0" branch="false"/>
+            <line number="30" hits="0" branch="false"/>
+            <line number="31" hits="0" branch="false"/>
+            <line number="37" hits="0" branch="false"/>
+            <line number="45" hits="15" branch="false"/>
+            <line number="46" hits="14" branch="false"/>
+            <line number="48" hits="14" branch="false"/>
+            <line number="49" hits="14" branch="true" condition-coverage="100% (2/2)"/>
+            <line number="50" hits="14" branch="false"/>
+            <line number="52" hits="14" branch="true" condition-coverage="50% (1/2)"/>
+            <line number="54" hits="14" branch="false"/>
+            <line number="55" hits="14" branch="false"/>
+            <line number="57" hits="14" branch="false"/>
+            <line number="58" hits="12" branch="false"/>
+            <line number="61" hits="14" branch="false"/>
+            <line number="63" hits="14" branch="false"/>
+            <line number="65" hits="14" branch="false"/>
+            <line number="74" hits="1" branch="false"/>
+            <line number="85" hits="0" branch="false"/>
+            <line number="99" hits="1" branch="false"/>
+            <line number="114" hits="1" branch="true" condition-coverage="50% (1/2)"/>
+            <line number="115" hits="1" branch="false"/>
+            <line number="117" hits="0" branch="false"/>
+            <line number="120" hits="1" branch="false"/>
+            <line number="121" hits="1" branch="false"/>
+            <line number="126" hits="1" branch="false"/>
+            <line number="127" hits="1" branch="false"/>
+            <line number="128" hits="1" branch="false"/>
+            <line number="133" hits="1" branch="false"/>
+            <line number="134" hits="1" branch="false"/>
+            <line number="135" hits="1" branch="false"/>
+            <line number="154" hits="0" branch="false"/>
+            <line number="155" hits="0" branch="false"/>
+            <line number="156" hits="0" branch="false"/>
+            <line number="158" hits="0" branch="true" condition-coverage="0% (0/2)"/>
+            <line number="159" hits="0" branch="false"/>
+            <line number="177" hits="168" branch="false"/>
+            <line number="186" hits="0" branch="false"/>
+            <line number="209" hits="0" branch="false"/>
+            <line number="210" hits="0" branch="false"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package name="store.components.Topics" line-rate="1" branch-rate="1">
+      <classes>
+        <class name="Topics.tsx" filename="static/js/store/components/Topics/Topics.tsx" line-rate="1" branch-rate="1">
+          <methods>
+            <method name="Topics" hits="6" signature="()V">
+              <lines>
+                <line number="18" hits="6"/>
+              </lines>
+            </method>
+            <method name="(anonymous_1)" hits="4" signature="()V">
+              <lines>
+                <line number="19" hits="4"/>
+              </lines>
+            </method>
+            <method name="(anonymous_2)" hits="4" signature="()V">
+              <lines>
+                <line number="30" hits="4"/>
+              </lines>
+            </method>
+            <method name="(anonymous_3)" hits="15" signature="()V">
+              <lines>
+                <line number="40" hits="15"/>
+              </lines>
+            </method>
+            <method name="(anonymous_4)" hits="3" signature="()V">
+              <lines>
+                <line number="49" hits="3"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="19" hits="6" branch="false"/>
+            <line number="20" hits="4" branch="false"/>
+            <line number="21" hits="3" branch="false"/>
+            <line number="23" hits="3" branch="false"/>
+            <line number="28" hits="6" branch="false"/>
+            <line number="30" hits="6" branch="false"/>
+            <line number="31" hits="4" branch="false"/>
+            <line number="34" hits="6" branch="false"/>
+            <line number="41" hits="15" branch="false"/>
+            <line number="50" hits="3" branch="false"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package name="store.data" line-rate="1" branch-rate="1">
+      <classes>
+        <class name="package-types.js" filename="static/js/store/data/package-types.js" line-rate="1" branch-rate="1">
+          <methods>
+          </methods>
+          <lines>
+            <line number="1" hits="1" branch="false"/>
+          </lines>
+        </class>
+        <class name="platforms.js" filename="static/js/store/data/platforms.js" line-rate="1" branch-rate="1">
+          <methods>
+          </methods>
+          <lines>
+            <line number="1" hits="1" branch="false"/>
           </lines>
         </class>
       </classes>
