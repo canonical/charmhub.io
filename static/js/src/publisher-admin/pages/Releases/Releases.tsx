@@ -2,11 +2,18 @@ import { useParams } from "react-router-dom";
 import ReleasesTable from "./ReleasesTable";
 import useReleases from "../../hooks/useReleases";
 import { useEffect, useState } from "react";
-import { Form, Select, Spinner, AppAside } from "@canonical/react-components";
+import {
+  Form,
+  Select,
+  Spinner,
+  AppAside,
+  Notification,
+} from "@canonical/react-components";
 import { usePackage } from "../../hooks";
 import { TrackInfo } from "./TrackInfo";
 import { TrackDropdown } from "./TrackDropdown";
 import RequestTrackPanel from "./RequestTrackPanel";
+import AddTrackPanel from "./AddTrackPanel";
 
 enum SidePanelType {
   RequestTrack = "RequestTrack",
@@ -23,22 +30,25 @@ export default function Releases() {
   const [showSidePanel, setShowSidePanel] = useState<boolean | SidePanelType>(
     false
   );
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   useEffect(() => {
     if (releaseData && packageData) {
       setSelectedArch(releaseData.all_architectures[0]);
 
-      const tracks = Object.values(releaseData.releases).map(
-        (release) => release.track
-      );
+      if (!selectedTrack) {
+        const tracks = Object.values(releaseData.releases).map(
+          (release) => release.track
+        );
 
-      setSelectedTrack(
-        packageData["default-track"] || tracks.includes("latest")
-          ? "latest"
-          : tracks[0]
-      );
+        setSelectedTrack(
+          packageData["default-track"] || tracks.includes("latest")
+            ? "latest"
+            : tracks[0]
+        );
+      }
     }
-  }, [releaseData, packageData]);
+  }, [releaseData, packageData, selectedTrack]);
 
   const channels = Object.values(releaseData?.releases || {}).filter(
     (channel) => channel.track === selectedTrack
@@ -68,11 +78,9 @@ export default function Releases() {
     return <p className="p-heading--4">No releases available</p>;
   }
 
-  const { releases, all_architectures } = releaseData;
+  const { all_architectures } = releaseData;
 
-  const tracks = [
-    ...new Set(Object.values(releases).map((release) => release.track)),
-  ].sort((a, b) => b.localeCompare(a));
+  const tracks = packageData?.tracks.map((track) => track.name) || [];
 
   availableArchitectures.sort(
     (a, b) => all_architectures.indexOf(a) - all_architectures.indexOf(b)
@@ -95,7 +103,10 @@ export default function Releases() {
           defaultTrack={packageData?.["default-track"]}
           tracks={tracks}
           selectedTrack={selectedTrack}
-          setSelectedTrack={setSelectedTrack}
+          setSelectedTrack={(track) => {
+            setShowSuccessMessage(false);
+            setSelectedTrack(track);
+          }}
           hasGuardrails={guardRails && guardRails.length > 0}
           onRequestTrack={() => {
             setShowSidePanel(SidePanelType.RequestTrack);
@@ -107,7 +118,7 @@ export default function Releases() {
         <Select
           label="Architecture:"
           name="arch"
-          disabled={availableArchitectures.length === 1}
+          disabled={availableArchitectures.length <= 1}
           value={selectedArch}
           onChange={(e) => {
             setSelectedArch(e.target.value);
@@ -118,6 +129,11 @@ export default function Releases() {
           }))}
         />
       </Form>
+      {showSuccessMessage && (
+        <Notification severity="positive">
+          Track {selectedTrack} added successfully
+        </Notification>
+      )}
       <TrackInfo
         versionPattern={versionPattern}
         automaticPhasingPercentage={automaticPhasingPercentage}
@@ -130,10 +146,22 @@ export default function Releases() {
         />
       )}
       <AppAside className={`${!showSidePanel && "is-collapsed"}`}>
-        <RequestTrackPanel
-          charmName={packageName || ""}
-          onClose={() => setShowSidePanel(false)}
-        />
+        {showSidePanel === SidePanelType.RequestTrack && (
+          <RequestTrackPanel
+            charmName={packageName || ""}
+            onClose={() => setShowSidePanel(false)}
+          />
+        )}
+        {showSidePanel === SidePanelType.AddTrack && (
+          <AddTrackPanel
+            charmName={packageName || ""}
+            onClose={() => setShowSidePanel(false)}
+            setSelectedTrack={setSelectedTrack}
+            onSuccess={() => {
+              setShowSuccessMessage(true);
+            }}
+          />
+        )}
       </AppAside>
     </>
   );
