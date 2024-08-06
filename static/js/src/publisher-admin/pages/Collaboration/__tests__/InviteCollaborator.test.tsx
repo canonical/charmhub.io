@@ -32,7 +32,7 @@ describe("InviteCollaborator", () => {
   it("disables 'Add collaborator' button if no email value", () => {
     renderComponent({});
     const component = screen.getByRole("button", { name: "Add collaborator" });
-    expect(component).toBeDisabled();
+    expect(component).toHaveAttribute("aria-disabled", "true");
   });
 
   it("enables 'Add collaborator' button is there is an email value", async () => {

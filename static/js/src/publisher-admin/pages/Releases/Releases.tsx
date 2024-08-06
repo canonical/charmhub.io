@@ -2,9 +2,25 @@ import { useParams } from "react-router-dom";
 import ReleasesTable from "./ReleasesTable";
 import useReleases from "../../hooks/useReleases";
 import { useEffect, useState } from "react";
-import { Form, Select, Spinner, Tooltip } from "@canonical/react-components";
+import {
+  Form,
+  Select,
+  Spinner,
+  AppAside,
+  Notification,
+  EmptyState,
+  Button,
+} from "@canonical/react-components";
 import { usePackage } from "../../hooks";
 import { TrackInfo } from "./TrackInfo";
+import { TrackDropdown } from "./TrackDropdown";
+import RequestTrackPanel from "./RequestTrackPanel";
+import AddTrackPanel from "./AddTrackPanel";
+
+enum SidePanelType {
+  RequestTrack = "RequestTrack",
+  AddTrack = "AddTrack",
+}
 
 export default function Releases() {
   const { packageName } = useParams();
@@ -13,22 +29,28 @@ export default function Releases() {
 
   const [selectedTrack, setSelectedTrack] = useState<string>("");
   const [selectedArch, setSelectedArch] = useState<string>("");
+  const [showSidePanel, setShowSidePanel] = useState<boolean | SidePanelType>(
+    false
+  );
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   useEffect(() => {
     if (releaseData && packageData) {
       setSelectedArch(releaseData.all_architectures[0]);
 
-      const tracks = Object.values(releaseData.releases).map(
-        (release) => release.track
-      );
+      if (!selectedTrack) {
+        const tracks = Object.values(releaseData.releases).map(
+          (release) => release.track
+        );
 
-      setSelectedTrack(
-        packageData["default-track"] || tracks.includes("latest")
-          ? "latest"
-          : tracks[0]
-      );
+        setSelectedTrack(
+          packageData["default-track"] || tracks.includes("latest")
+            ? "latest"
+            : tracks[0]
+        );
+      }
     }
-  }, [releaseData, packageData]);
+  }, [releaseData, packageData, selectedTrack]);
 
   const channels = Object.values(releaseData?.releases || {}).filter(
     (channel) => channel.track === selectedTrack
@@ -55,14 +77,21 @@ export default function Releases() {
   }
 
   if (Object.keys(releaseData.releases).length === 0) {
-    return <p className="p-heading--4">No releases available</p>;
+    return <EmptyState
+      title="No releases have been added for this charm yet"
+      image={<img src="https://assets.ubuntu.com/v1/3234f995-Generic_chamhub_NoDocs.svg" alt="" />}>
+      <p>Charm or bundle revisions are not published for anybody else until you release them in a channel.</p>
+      <Button appearance="positive" onClick={() =>
+        window.open('https://juju.is/docs/sdk/publishing#heading--release-the-charm', '_blank')
+      } >
+        Learn how to release a charm
+      </Button>
+    </EmptyState>
   }
 
-  const { releases, all_architectures } = releaseData;
+  const { all_architectures } = releaseData;
 
-  const tracks = [
-    ...new Set(Object.values(releases).map((release) => release.track)),
-  ];
+  const tracks = packageData?.tracks.map((track) => track.name) || [];
 
   availableArchitectures.sort(
     (a, b) => all_architectures.indexOf(a) - all_architectures.indexOf(b)
@@ -75,27 +104,32 @@ export default function Releases() {
   const automaticPhasingPercentage =
     trackData?.["automatic-phasing-percentage"] || null;
 
+  const guardRails = packageData?.["track-guardrails"];
+
   return (
     <>
       <h2 className="p-heading--4">Releases available to install</h2>
       <Form inline>
-        <Select
-          label="Track:"
-          name="track"
-          disabled={tracks.length === 1}
-          value={selectedTrack}
-          onChange={(e) => {
-            setSelectedTrack(e.target.value);
+        <TrackDropdown
+          defaultTrack={packageData?.["default-track"]}
+          tracks={tracks}
+          selectedTrack={selectedTrack}
+          setSelectedTrack={(track) => {
+            setShowSuccessMessage(false);
+            setSelectedTrack(track);
           }}
-          options={tracks.map((track) => ({
-            label: track,
-            value: track,
-          }))}
+          hasGuardrails={guardRails && guardRails.length > 0}
+          onRequestTrack={() => {
+            setShowSidePanel(SidePanelType.RequestTrack);
+          }}
+          onAddTrack={() => {
+            setShowSidePanel(SidePanelType.AddTrack);
+          }}
         />
         <Select
           label="Architecture:"
           name="arch"
-          disabled={availableArchitectures.length === 1}
+          disabled={availableArchitectures.length <= 1}
           value={selectedArch}
           onChange={(e) => {
             setSelectedArch(e.target.value);
@@ -106,11 +140,47 @@ export default function Releases() {
           }))}
         />
       </Form>
+      {showSuccessMessage && (
+        <Notification severity="positive">
+          Track {selectedTrack} added successfully
+        </Notification>
+      )}
       <TrackInfo
         versionPattern={versionPattern}
         automaticPhasingPercentage={automaticPhasingPercentage}
       />
-      <ReleasesTable releaseMap={channels} arch={selectedArch} />
+      {
+        channels.length === 0 ?
+          <Notification severity="information">No Releases have been added for this track yet</Notification>
+          :
+          (
+            <ReleasesTable releaseMap={channels} arch={selectedArch} />
+          )
+      }
+      {showSidePanel && (
+        <div
+          className="l-aside__overlay"
+          onClick={() => setShowSidePanel(false)}
+        />
+      )}
+      <AppAside className={`${!showSidePanel && "is-collapsed"}`}>
+        {showSidePanel === SidePanelType.RequestTrack && (
+          <RequestTrackPanel
+            charmName={packageName || ""}
+            onClose={() => setShowSidePanel(false)}
+          />
+        )}
+        {showSidePanel === SidePanelType.AddTrack && (
+          <AddTrackPanel
+            charmName={packageName || ""}
+            onClose={() => setShowSidePanel(false)}
+            setSelectedTrack={setSelectedTrack}
+            onSuccess={() => {
+              setShowSuccessMessage(true);
+            }}
+          />
+        )}
+      </AppAside>
     </>
   );
 }

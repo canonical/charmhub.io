@@ -450,9 +450,19 @@ def delete_package(package_name):
 @publisher.route("/<charm_name>/create-track", methods=["POST"])
 @login_required
 def post_create_track(charm_name):
-    track_name = request.form["track-name"]
+    track_name = request.form.get("track-name")
+    version_pattern = request.form.get("version-pattern")
+    auto_phasing_percentage = request.form.get("auto-phasing-percentage")
+
+    if auto_phasing_percentage is not None:
+        auto_phasing_percentage = float(auto_phasing_percentage)
+
     response = publisher_api.create_track(
-        session["account-auth"], charm_name, track_name
+        session["account-auth"],
+        charm_name,
+        track_name,
+        version_pattern,
+        auto_phasing_percentage,
     )
     if response.status_code == 201:
         return response.json(), response.status_code

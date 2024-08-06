@@ -1,0 +1,102 @@
+@include vf-p-icon-task-outstanding;
+
+@mixin charmhub-releases {
+  .track-dropdown {
+    background-color: var(--vf-color-background-hover);
+    border-bottom: 1px solid $color-mid-dark;
+    display: inline-block;
+    height: 35px;
+    margin-right: 1rem;
+    min-width: 150px;
+    width: auto;
+
+    @media only screen and (max-width: $breakpoint-large) {
+      width: 100%;
+    }
+  }
+    
+  .dropdown-toggle {
+      align-items: center;
+      cursor: pointer;
+      display: flex;
+      height: inherit;
+      justify-content: space-between;
+      padding: $sp-small;
+  }
+    
+  .dropdown-menu {
+      background-color: $color-x-light;
+      box-shadow: 0 3px 3px rgba(51, 51, 51, 0.2);
+      display: flex;
+      flex-direction: column;
+      max-height: 250px;
+      min-width: 150px;
+      order: 1;
+      overflow-y: auto;
+      position: absolute;
+      width: auto;
+      z-index: 5;
+
+    @media only screen and (max-width: $breakpoint-large) {
+      width: 96%;
+    }
+  }
+  
+  .dropdown-item {
+      align-items: center;
+      cursor: pointer;
+      display: flex;
+      flex: 1;
+      height: inherit;
+      justify-content: space-between;
+      padding: $sp-small;
+      width: 100%;
+      
+      &:hover {
+          background-color: $color-mid-light;
+          border-radius: 4px;
+      }
+  }
+
+  .options-container {
+    flex-grow: 1;
+    padding: 0 $sp-x-small;
+    padding-top: $sp-x-small;
+  }
+
+  .new-track-button {
+    border: none;
+    height: 100%;
+    margin: 0;
+    padding: $sp-small 0 $sp-small 0;
+    width: 100%;
+
+    &:hover {
+      background-color: $color-mid-light;
+      border-radius: 4px;
+    }
+  }
+
+  .track-button {
+    background-color: $color-x-light;
+    border-top: $border;
+    bottom: 0;
+    height: 100%;
+    margin-top: $spv--x-small;
+    padding: $sp-x-small;
+    position: sticky;
+    width: 100%;
+  }
+
+  .track-button-wrapper {
+    background-color: $color-x-light;
+    bottom: 0;
+    padding: none;
+    position: sticky;
+  }
+
+  .p-status-label {
+      margin: 0 $sp-small 0 $sp-small;
+  }
+
+}

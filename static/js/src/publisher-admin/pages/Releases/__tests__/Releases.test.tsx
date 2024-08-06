@@ -66,7 +66,7 @@ describe("Releases", () => {
     });
     renderComponent();
     await waitFor(() => {
-      expect(screen.getByText("No releases available")).toBeInTheDocument();
+      expect(screen.getByText("No releases have been added for this charm yet")).toBeInTheDocument();
     });
   });
 
@@ -87,19 +87,6 @@ describe("Releases", () => {
     });
   });
 
-  test("disables track dropdown when only one track is available", async () => {
-    mockUseReleases.mockReturnValue({
-      data: {
-        all_architectures: ["amd64"],
-        releases,
-      },
-    });
-    renderComponent();
-    await waitFor(() => {
-      expect(screen.getByLabelText("Track:")).toBeDisabled();
-    });
-  });
-
   test("disables architecture dropdown when only one architecture is available", async () => {
     mockUseReleases.mockReturnValue({
       data: {
@@ -110,30 +97,6 @@ describe("Releases", () => {
     renderComponent();
     await waitFor(() => {
       expect(screen.getByLabelText("Architecture:")).toBeDisabled();
-    });
-  });
-
-  test("renders correct track when switching between tracks", async () => {
-    const user = userEvent.setup();
-    mockUseReleases.mockReturnValue({
-      data: {
-        all_architectures: ["amd64"],
-        releases: {
-          "latest/stable": { ...mockReleaseChannel, track: "latest" },
-          "1/stable": { ...mockReleaseChannel, track: "1" },
-        },
-      },
-    });
-    renderComponent();
-    await waitFor(() => {
-      expect(screen.getByText("latest/stable")).toBeInTheDocument();
-    });
-    // Switch to a different track
-    const trackSelect = screen.getByLabelText("Track:");
-    user.selectOptions(trackSelect, "1");
-    await waitFor(() => {
-      expect(screen.getByText("1/stable")).toBeInTheDocument();
-      expect(screen.queryByText("latest/stable")).not.toBeInTheDocument();
     });
   });
 });
