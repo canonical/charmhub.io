@@ -38,11 +38,6 @@ def login_required(func):
     @functools.wraps(func)
     def is_user_logged_in(*args, **kwargs):
         if not authentication.is_authenticated(flask.session):
-            response = None
-            if "beta" in flask.request.url:
-                response = flask.make_response(
-                    flask.redirect("/login?next=/beta" + flask.request.path)
-                )
             response = flask.make_response(
                 flask.redirect("/login?next=" + flask.request.path)
             )

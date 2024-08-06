@@ -24,7 +24,7 @@ const getCharms = async (
   charmName: string
 ): Promise<ICharm[]> => {
   const resp = await fetch(
-    `/beta/store.json?${
+    `/store.json?${
       interfaceType === "provides" ? "requires" : "provides"
     }=${interfaceName}`
   );
@@ -35,9 +35,7 @@ const getCharms = async (
 const filterMap = (charm: ICharm, heading: string) => {
   switch (heading) {
     case "Platform":
-      return charm.package["platforms"][0] === "vm"
-        ? "Linux"
-        : "Kubernetes";
+      return charm.package["platforms"][0] === "vm" ? "Linux" : "Kubernetes";
     case "Stability":
       return charm.package["channel"]["risk"];
     case "Author":
@@ -139,7 +137,7 @@ export const InterfaceItem = ({
               value="Required"
               appearance="negative"
               className="u-no-margin--bottom"
-              style={{ marginLeft: '10px' }}
+              style={{ marginLeft: "10px" }}
             />
           )}
         </div>
@@ -157,24 +155,24 @@ export const InterfaceItem = ({
           <div style={{ paddingTop: "0.5rem" }}>
             <p className="u-fixed-width u-no-margin--bottom">
               The <b>{interfaceData.key}</b> endpoint
-              <b>{interfaceType === "requires" ? " requires " : " provides "}</b>
-              an integration over the {" "}
+              <b>
+                {interfaceType === "requires" ? " requires " : " provides "}
+              </b>
+              an integration over the{" "}
               <a href={`/integrations/${interfaceData.interface}`}>
                 {interfaceData.interface}
-              </a>
-              {" "} interface
+              </a>{" "}
+              interface
             </p>
-            <p>
-              This means it can integrate with:
-            </p>
+            <p>This means it can integrate with:</p>
           </div>
           <Row>
             {charms.map((charm: ICharm) => (
               <>
                 <Col
-                size={3}
-                style={{ marginBottom: "1.5rem" }}
-                key={charm.package["display_name"]}
+                  size={3}
+                  style={{ marginBottom: "1.5rem" }}
+                  key={charm.package["display_name"]}
                 >
                   <IntegrationCard data={charm} />
                 </Col>
