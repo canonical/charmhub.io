@@ -44,9 +44,9 @@ export type InterfaceData = {
 };
 
 export type InterfaceItem = {
-  name: String;
-  description: String;
-  version: String;
-  status: String;
-  category: String;
+  name: string;
+  description: string;
+  version: string;
+  status: string;
+  category: string;
 };

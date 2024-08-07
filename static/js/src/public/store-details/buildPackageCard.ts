@@ -19,7 +19,12 @@ type Entity = {
     title: string;
   }[];
 };
-function buildPlatformIcons(entityCardIcons: Element, altText: string, srcText: string, text: string) {
+function buildPlatformIcons(
+  entityCardIcons: Element,
+  altText: string,
+  srcText: string,
+  text: string
+) {
   const span = document.createElement("span");
   const image = document.createElement("img");
   const tooltip = document.createElement("span");
@@ -40,19 +45,29 @@ function buildPlatformIcons(entityCardIcons: Element, altText: string, srcText: 
 }
 
 function buildPackageCard(entity: Entity) {
-  const entityCard = document.getElementById(`package-card-${entity.type}`) as HTMLTemplateElement;
+  const entityCard = document.getElementById(
+    `package-card-${entity.type}`
+  ) as HTMLTemplateElement;
   const clone = entityCard.content.cloneNode(true) as HTMLElement;
 
-  const entityCardContainer = clone.querySelector("[data-js='card-container']") as HTMLElement;
+  const entityCardContainer = clone.querySelector(
+    "[data-js='card-container']"
+  ) as HTMLElement;
   entityCardContainer.id = entity.name;
 
-  const entityCardButton = clone.querySelector(".p-card--button") as HTMLAnchorElement;
+  const entityCardButton = clone.querySelector(
+    ".p-card--button"
+  ) as HTMLAnchorElement;
   entityCardButton.href = `/${entity.name}`;
 
-  const iconContainer = clone.querySelector(".p-card__thumbnail-container") as HTMLElement;
+  const iconContainer = clone.querySelector(
+    ".p-card__thumbnail-container"
+  ) as HTMLElement;
 
   if (entity.type === "charm") {
-    const charmIcon = iconContainer.querySelector(".p-card__thumbnail") as HTMLImageElement;
+    const charmIcon = iconContainer.querySelector(
+      ".p-card__thumbnail"
+    ) as HTMLImageElement;
     charmIcon.alt = entity.name;
     charmIcon.setAttribute("loading", "lazy");
 
@@ -65,8 +80,12 @@ function buildPackageCard(entity: Entity) {
         "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg";
     }
   } else {
-    const bundleIconsWrapper = clone.querySelector(".p-bundle-icons") as HTMLElement;
-    const bundleIcons = bundleIconsWrapper.querySelector("img") as HTMLImageElement | null;
+    const bundleIconsWrapper = clone.querySelector(
+      ".p-bundle-icons"
+    ) as HTMLElement;
+    const bundleIcons = bundleIconsWrapper.querySelector(
+      "img"
+    ) as HTMLImageElement | null;
 
     if (!entity.apps || entity.apps.length === 0) {
       const icon = document.createElement("span");
@@ -112,7 +131,9 @@ function buildPackageCard(entity: Entity) {
     }
   }
 
-  const entityCardTitle = clone.querySelector(".package-card-title") as HTMLElement;
+  const entityCardTitle = clone.querySelector(
+    ".package-card-title"
+  ) as HTMLElement;
   entityCardTitle.innerText = entity.store_front["display-name"].replace(
     /-/g,
     " "
@@ -122,7 +143,9 @@ function buildPackageCard(entity: Entity) {
     entity.result.publisher["display-name"] = "";
   }
 
-  const entityCardPublisher = clone.querySelector(".package-card-publisher") as HTMLElement;
+  const entityCardPublisher = clone.querySelector(
+    ".package-card-publisher"
+  ) as HTMLElement;
   const newCardPublisherText = truncateString(
     entity.result.publisher["display-name"],
     22
@@ -141,7 +164,9 @@ function buildPackageCard(entity: Entity) {
     entityCardSummary.innerHTML = truncateString(entity.result.summary, 60);
   }
 
-  const entityCardIcons = clone.querySelector(".package-card-icons") as HTMLElement;
+  const entityCardIcons = clone.querySelector(
+    ".package-card-icons"
+  ) as HTMLElement;
   if (entity.store_front["deployable-on"].includes("kubernetes")) {
     buildPlatformIcons(
       entityCardIcons,

@@ -20,7 +20,7 @@ type Validation = {
 
 class ListingForm {
   formEl: HTMLInputElement;
-  validation: { [key: string]: Validation};
+  validation: { [key: string]: Validation };
   prefixableFields: string[];
   allInputs: HTMLInputElement[];
   initialState: { [key: string]: string };
@@ -78,7 +78,7 @@ class ListingForm {
 
     // validate inputs on change
     this.formEl.addEventListener("input", (event: Event) => {
-      let target = event.target as HTMLInputElement;
+      const target = event.target as HTMLInputElement;
       this.validateInput(target);
       this.updateCurrentState(target);
     });
@@ -87,7 +87,7 @@ class ListingForm {
       const input = this.formEl[inputName as keyof ListingForm["formEl"]];
       if (input) {
         (input as HTMLElement).addEventListener("blur", (event: Event) => {
-          let target = event.target as HTMLInputElement;
+          const target = event.target as HTMLInputElement;
           this.prefixInput(target);
           this.updateCurrentState(target);
         });
@@ -98,11 +98,11 @@ class ListingForm {
   diffState() {
     const diff = deepCopy(this.initialState);
 
-    for (let key of ALLOWED_KEYS) {
+    for (const key of ALLOWED_KEYS) {
       diff[key] = this.initialState[key];
     }
 
-    for (let key of ALLOWED_KEYS) {
+    for (const key of ALLOWED_KEYS) {
       if (this.prefixableFields.includes(key)) {
         if (
           this.initialState[key] !== this.currentState[key] &&
@@ -186,9 +186,10 @@ class ListingForm {
 
       if (inputValidation.maxLength) {
         if (this.validation[input.name].maxLength === input.value.length) {
-          (inputValidation.counterEl as HTMLElement).innerHTML = `The maximum number of characters for this field is ${
-            this.validation[input.name].maxLength
-          }.`;
+          (inputValidation.counterEl as HTMLElement).innerHTML =
+            `The maximum number of characters for this field is ${
+              this.validation[input.name].maxLength
+            }.`;
         } else {
           (inputValidation.counterEl as HTMLElement).innerHTML = "";
         }
@@ -222,8 +223,9 @@ class ListingForm {
 
   isFormValid() {
     // form is valid if every validated input is valid
-    return Object.keys(this.validation)
-      .every((name) => this.validation[name].isValid);
+    return Object.keys(this.validation).every(
+      (name) => this.validation[name].isValid
+    );
   }
 }
 

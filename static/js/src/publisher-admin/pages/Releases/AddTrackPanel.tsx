@@ -148,11 +148,19 @@ export default function AddTrackPanel({
       </div>
       <div>
         <p>
-          <a target="_blank" href="https://juju.is/docs/juju/channel">
+          <a
+            target="_blank"
+            href="https://juju.is/docs/juju/channel"
+            rel="noreferrer"
+          >
             Learn about tracks
           </a>{" "}
           or{" "}
-          <a target="_blank" href="https://discourse.charmhub.io">
+          <a
+            target="_blank"
+            href="https://discourse.charmhub.io"
+            rel="noreferrer"
+          >
             contact us
           </a>{" "}
           for help.

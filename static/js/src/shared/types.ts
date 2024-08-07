@@ -16,4 +16,4 @@ export interface ICharm {
     name: string;
     validation?: string;
   };
-};
+}

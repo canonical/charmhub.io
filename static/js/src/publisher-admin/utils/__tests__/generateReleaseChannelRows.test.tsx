@@ -14,9 +14,9 @@ describe("generateReleaseChannelRows", () => {
       mockReleaseChannel,
       "amd64",
       null,
-      () => { },
+      () => {},
       false,
-      () => { }
+      () => {}
     );
 
     render(<MainTable rows={rows} />);
@@ -32,9 +32,9 @@ describe("generateReleaseChannelRows", () => {
       mockReleaseChannel,
       "amd64",
       "latest/stable",
-      () => { },
+      () => {},
       false,
-      () => { }
+      () => {}
     );
     render(<MainTable rows={rows} />);
     expect(screen.getAllByRole("row")).toHaveLength(2);
@@ -45,9 +45,9 @@ describe("generateReleaseChannelRows", () => {
       mockReleaseChannel,
       "amd64",
       null,
-      () => { },
+      () => {},
       false,
-      () => { }
+      () => {}
     );
     render(<MainTable rows={rows} />);
     expect(screen.getAllByRole("row")).toHaveLength(1);
@@ -63,9 +63,9 @@ describe("generateReleaseChannelRows", () => {
       { ...mockReleaseChannel, releases },
       "amd64",
       "latest/stable",
-      () => { },
+      () => {},
       false,
-      () => { }
+      () => {}
     );
     render(<MainTable rows={rows} />);
     expect(screen.getByText("Show more")).toBeInTheDocument();
@@ -81,9 +81,9 @@ describe("generateReleaseChannelRows", () => {
       { ...mockReleaseChannel, releases },
       "amd64",
       "latest/stable",
-      () => { },
+      () => {},
       true,
-      () => { }
+      () => {}
     );
     render(<MainTable rows={rows} />);
     expect(screen.getAllByRole("row")).toHaveLength(6);

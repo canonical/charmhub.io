@@ -203,17 +203,20 @@ class initPackages {
 
   handleShowAllPackagesButton() {
     if (this.domEl.showAllPackagesButton.el) {
-      this.domEl.showAllPackagesButton.el.addEventListener("click", (e: Event) => {
-        e.preventDefault();
-        this.togglePackageContainer(true);
-        this.renderPackages();
-        this.renderResultsCount();
-        this.renderButtonMobileOpen();
-        this.toggleFeaturedContainer();
-        this.toggleShowAllPackagesButton();
-        handleBundleIcons(this.domEl.packageContainer.el);
-        window.scrollTo(0, 0);
-      });
+      this.domEl.showAllPackagesButton.el.addEventListener(
+        "click",
+        (e: Event) => {
+          e.preventDefault();
+          this.togglePackageContainer(true);
+          this.renderPackages();
+          this.renderResultsCount();
+          this.renderButtonMobileOpen();
+          this.toggleFeaturedContainer();
+          this.toggleShowAllPackagesButton();
+          handleBundleIcons(this.domEl.packageContainer.el);
+          window.scrollTo(0, 0);
+        }
+      );
     } else {
       throw new Error(
         `There is no element containing ${this.domEl.showAllPackagesButton.selector} selector.`
@@ -269,7 +272,7 @@ class initPackages {
 
       history.pushState(
         { filters: this._filters },
-        '',
+        "",
         decodeURIComponent(newUrl)
       );
     }
@@ -300,20 +303,23 @@ class initPackages {
 
   handlePackageTypeChange() {
     if (this.domEl.packageTypeSwitcher.el) {
-      this.domEl.packageTypeSwitcher.el.addEventListener("change", (e: Event) => {
-        this._filters.type[0] = (e.target as HTMLInputElement).value;
+      this.domEl.packageTypeSwitcher.el.addEventListener(
+        "change",
+        (e: Event) => {
+          this._filters.type[0] = (e.target as HTMLInputElement).value;
 
-        this.filterPackages();
-        this.updateEnabledCategories();
-        this.renderPackages();
-        this.renderResultsCount();
-        this.renderButtonMobileOpen();
-        this.updateHistory();
-        this.toggleFeaturedContainer();
-        this.toggleShowAllPackagesButton();
-        this.togglePackageContainer(true);
-        handleBundleIcons(this.domEl.packageContainer.el);
-      });
+          this.filterPackages();
+          this.updateEnabledCategories();
+          this.renderPackages();
+          this.renderResultsCount();
+          this.renderButtonMobileOpen();
+          this.updateHistory();
+          this.toggleFeaturedContainer();
+          this.toggleShowAllPackagesButton();
+          this.togglePackageContainer(true);
+          handleBundleIcons(this.domEl.packageContainer.el);
+        }
+      );
     } else {
       throw new Error(
         `There is no element containing ${this.domEl.packageTypeSwitcher.selector} selector.`
@@ -323,38 +329,40 @@ class initPackages {
 
   handleFilterClick() {
     if (this.domEl.categoryFilters.el) {
-      this.domEl.categoryFilters.el.forEach((categoryFilter: HTMLInputElement) => {
-        if (
-          this._filters.filter.length > 0 &&
-          this._filters.filter.indexOf(categoryFilter.value) !== -1
-        ) {
-          categoryFilter.checked = true;
-        } else {
-          categoryFilter.checked = false;
-        }
-
-        categoryFilter.addEventListener("click", () => {
-          if (categoryFilter.checked) {
-            this._filters.filter.push(categoryFilter.value);
+      this.domEl.categoryFilters.el.forEach(
+        (categoryFilter: HTMLInputElement) => {
+          if (
+            this._filters.filter.length > 0 &&
+            this._filters.filter.indexOf(categoryFilter.value) !== -1
+          ) {
+            categoryFilter.checked = true;
           } else {
-            this._filters.filter = this._filters.filter.filter(
-              (el: string) => el !== categoryFilter.value
-            );
+            categoryFilter.checked = false;
           }
 
-          this.filterPackages();
-          this.updateEnabledCategories();
-          this.renderPackages();
-          this.renderResultsCount();
-          this.renderButtonMobileOpen();
-          this.renderButtonMobileClose();
-          this.updateHistory();
-          this.toggleFeaturedContainer();
-          this.toggleShowAllPackagesButton();
-          this.togglePackageContainer(true);
-          handleBundleIcons(this.domEl.packageContainer.el);
-        });
-      });
+          categoryFilter.addEventListener("click", () => {
+            if (categoryFilter.checked) {
+              this._filters.filter.push(categoryFilter.value);
+            } else {
+              this._filters.filter = this._filters.filter.filter(
+                (el: string) => el !== categoryFilter.value
+              );
+            }
+
+            this.filterPackages();
+            this.updateEnabledCategories();
+            this.renderPackages();
+            this.renderResultsCount();
+            this.renderButtonMobileOpen();
+            this.renderButtonMobileClose();
+            this.updateHistory();
+            this.toggleFeaturedContainer();
+            this.toggleShowAllPackagesButton();
+            this.togglePackageContainer(true);
+            handleBundleIcons(this.domEl.packageContainer.el);
+          });
+        }
+      );
     } else {
       throw new Error(
         `There are no elements containing ${this.domEl.categoryFilters.selector} selector.`
@@ -364,7 +372,7 @@ class initPackages {
 
   updateEnabledCategories() {
     // Enable all categories by default
-    this.domEl.categoryFilters.el.forEach((filter: { disabled: boolean; }) => {
+    this.domEl.categoryFilters.el.forEach((filter: { disabled: boolean }) => {
       filter.disabled = false;
     });
 
@@ -387,13 +395,15 @@ class initPackages {
       });
 
       // We hide categories without results
-      this.domEl.categoryFilters.el.forEach((filter: { value: any; disabled: boolean; }) => {
-        if (categories.includes(filter.value)) {
-          filter.disabled = false;
-        } else {
-          filter.disabled = true;
+      this.domEl.categoryFilters.el.forEach(
+        (filter: { value: any; disabled: boolean }) => {
+          if (categories.includes(filter.value)) {
+            filter.disabled = false;
+          } else {
+            filter.disabled = true;
+          }
         }
-      });
+      );
     }
   }
 
@@ -606,7 +616,9 @@ function handleBundleIcons(container: HTMLElement) {
       const clientHeight = content.clientHeight;
 
       // Get all the icons
-      const icons: HTMLElement[] = Array.from(content.querySelectorAll(".p-bundle-icon"));
+      const icons: HTMLElement[] = Array.from(
+        content.querySelectorAll(".p-bundle-icon")
+      );
 
       // If there aren't any icons, skip to the next content area
       if (!icons[0]) {
@@ -690,7 +702,9 @@ function handleBundleIcons(container: HTMLElement) {
 }
 
 function loadBundleIcons() {
-  const bundleIcons = document.querySelectorAll(".p-bundle-icon") as NodeListOf<HTMLElement>;
+  const bundleIcons = document.querySelectorAll(
+    ".p-bundle-icon"
+  ) as NodeListOf<HTMLElement>;
   if (bundleIcons.length > 0) {
     bundleIcons.forEach((bundleIcon) => {
       const title = bundleIcon.getAttribute("title") || "";

@@ -11,7 +11,7 @@ import {
   Strip,
   Button,
   Navigation,
-  Theme
+  Theme,
 } from "@canonical/react-components";
 
 import { useDropzone } from "react-dropzone";
@@ -24,14 +24,10 @@ function App() {
   const [imageSize, setImageSize] = useState<number[]>([0, 0]);
   const [hasConstraints, setHasConstraints] = useState<boolean>(true);
 
-  const {
-    acceptedFiles,
-    getRootProps,
-    getInputProps,
-    isDragAccept,
-  } = useDropzone({
-    maxFiles: 1,
-  });
+  const { acceptedFiles, getRootProps, getInputProps, isDragAccept } =
+    useDropzone({
+      maxFiles: 1,
+    });
 
   const handleReset = useCallback(() => {
     setIcon(null);
@@ -42,12 +38,10 @@ function App() {
     setHasConstraints(true);
   }, []);
 
-  const isValid = useMemo(() => isImage && isSVG && isCorrectSize && hasConstraints, [
-    isImage,
-    isSVG,
-    isCorrectSize,
-    hasConstraints
-  ]);
+  const isValid = useMemo(
+    () => isImage && isSVG && isCorrectSize && hasConstraints,
+    [isImage, isSVG, isCorrectSize, hasConstraints]
+  );
 
   useEffect(() => {
     if (!acceptedFiles.length) {
@@ -87,7 +81,6 @@ function App() {
         const svgElHeight = svgEl?.getAttribute("height");
         const viewBoxSize = svgEl?.getAttribute("viewBox")?.split(" ");
 
-
         if (svgElHeight && svgElWidth) {
           setImageSize([parseInt(svgElWidth), parseInt(svgElHeight)]);
         } else if (viewBoxSize && viewBoxSize[2] && viewBoxSize[2]) {
@@ -121,133 +114,144 @@ function App() {
   }, [acceptedFiles, handleReset]);
   return (
     <>
-    <Row>
-      <Col size={8} emptyLarge={4}>
-        <h1>Charm Icon Validator</h1>
-        <p>
-          Checks are based on the{" "}
-          <a href="https://juju.is/docs/sdk/create-an-icon-for-your-charm">
-            Charm Icon Specification
-          </a>
-          .
-        </p>
-        <p>Drag and drop, or use the file picker to choose your icon.</p>
-        <Form stacked={true} style={{ marginBottom: "1rem" }}>
-          <div
-            {...getRootProps({ className: "dropzone" })}
-            style={{
-              outline: isDragAccept
-                ? "3px dashed #0e8420"
-                : "3px solid transparent",
-              borderRadius: "3px",
-              display: "block",
-            }}
-          >
-            <Input type="file" onClick={(e) => e.preventDefault()} />
-            <input {...getInputProps()} />
-            {icon && (
-              <>
-                <Row>
-                  <Col size={2}>
-                    <img src={icon} style={{ maxWidth: "100%" }} />
-                  </Col>
-                  <Col size={6}>
-                    <p>
-                      <Icon name={isImage ? ICONS.success : ICONS.error} />{" "}
-                      Image
-                    </p>
-                    <p>
-                      <Icon name={isSVG ? ICONS.success : ICONS.error} /> SVG
-                    </p>
-                    <p>
-                      <Icon
-                        name={hasConstraints ? ICONS.success : ICONS.error}
-                      />{" "}
-                      Root <code>svg</code> element has <code>width="100"</code>{" "}
-                      and <code>height="100"</code> attributes or a valid
-                      viewbox of <code>100 100</code>
-                    </p>
-                    <p>
-                      <Icon
-                        name={
-                          imageSize[0] === 100 ? ICONS.success : ICONS.error
-                        }
-                      />{" "}
-                      Image width is {imageSize[0]}px
-                      {imageSize[0] !== 100 ? ", not 100px" : ""}
-                    </p>
-                    <p>
-                      <Icon
-                        name={
-                          imageSize[1] === 100 ? ICONS.success : ICONS.error
-                        }
-                      />{" "}
-                      Image height is {imageSize[1]}px
-                      {imageSize[1] !== 100 ? ", not 100px" : ""}
-                    </p>
-                  </Col>
-                </Row>
-              </>
-            )}
-          </div>
-        </Form>
-        {icon && (
-          <>
-            <Notification
-              severity={isValid ? "positive" : "negative"}
-              title={isValid ? "Valid icon" : "Invalid icon"}
+      <Row>
+        <Col size={8} emptyLarge={4}>
+          <h1>Charm Icon Validator</h1>
+          <p>
+            Checks are based on the{" "}
+            <a href="https://juju.is/docs/sdk/create-an-icon-for-your-charm">
+              Charm Icon Specification
+            </a>
+            .
+          </p>
+          <p>Drag and drop, or use the file picker to choose your icon.</p>
+          <Form stacked={true} style={{ marginBottom: "1rem" }}>
+            <div
+              {...getRootProps({ className: "dropzone" })}
+              style={{
+                outline: isDragAccept
+                  ? "3px dashed #0e8420"
+                  : "3px solid transparent",
+                borderRadius: "3px",
+                display: "block",
+              }}
             >
-              {isValid ? (
+              <Input type="file" onClick={(e) => e.preventDefault()} />
+              <input {...getInputProps()} />
+              {icon && (
                 <>
-                  Based on the automated checks above your icon is valid, but you
-                  should manually check the{" "}
-                  <a href="https://juju.is/docs/sdk/create-an-icon-for-your-charm">
-                    Charm Icon Specification
-                  </a>
-                  .
-                </>
-              ) : (
-                <>
-                  Based on the automated checks above your icon is not valid.
-                  Please check the{" "}
-                  <a href="https://juju.is/docs/sdk/create-an-icon-for-your-charm">
-                    Charm Icon Specification
-                  </a>
-                  , update your icon, and try again.
+                  <Row>
+                    <Col size={2}>
+                      <img src={icon} style={{ maxWidth: "100%" }} />
+                    </Col>
+                    <Col size={6}>
+                      <p>
+                        <Icon name={isImage ? ICONS.success : ICONS.error} />{" "}
+                        Image
+                      </p>
+                      <p>
+                        <Icon name={isSVG ? ICONS.success : ICONS.error} /> SVG
+                      </p>
+                      <p>
+                        <Icon
+                          name={hasConstraints ? ICONS.success : ICONS.error}
+                        />{" "}
+                        Root <code>svg</code> element has{" "}
+                        <code>width="100"</code> and <code>height="100"</code>{" "}
+                        attributes or a valid viewbox of <code>100 100</code>
+                      </p>
+                      <p>
+                        <Icon
+                          name={
+                            imageSize[0] === 100 ? ICONS.success : ICONS.error
+                          }
+                        />{" "}
+                        Image width is {imageSize[0]}px
+                        {imageSize[0] !== 100 ? ", not 100px" : ""}
+                      </p>
+                      <p>
+                        <Icon
+                          name={
+                            imageSize[1] === 100 ? ICONS.success : ICONS.error
+                          }
+                        />{" "}
+                        Image height is {imageSize[1]}px
+                        {imageSize[1] !== 100 ? ", not 100px" : ""}
+                      </p>
+                    </Col>
+                  </Row>
                 </>
               )}
-            </Notification>
-            {isValid && <h2>Charmhub.io Preview</h2>}
-          </>
-        )}
-      </Col>
-    </Row>
-    {icon && isValid && (
-      <>
-        <Navigation theme={Theme.DARK} logo={{src: "https://assets.ubuntu.com/v1/a603c7c9-Favicon - Juju.svg", title: "Charmhub", url: "#"}} />
-        <Strip type="light" shallow>
-          <Row>
-            <Col size={8}>
-              <div className="p-media-object--large">
-                <img src={icon} className="p-media-object__image is-round" />
-                <div className="p-media-object__details">
-                  <h1 className="p-media-object__title">Your Charm</h1>
-                  <div className="p-media-object__content u-no-margin--bottom">
-                    <ul className="p-inline-list--middot">
-                      <li className="p-inline-list__item">By You!</li>
-                    </ul>
+            </div>
+          </Form>
+          {icon && (
+            <>
+              <Notification
+                severity={isValid ? "positive" : "negative"}
+                title={isValid ? "Valid icon" : "Invalid icon"}
+              >
+                {isValid ? (
+                  <>
+                    Based on the automated checks above your icon is valid, but
+                    you should manually check the{" "}
+                    <a href="https://juju.is/docs/sdk/create-an-icon-for-your-charm">
+                      Charm Icon Specification
+                    </a>
+                    .
+                  </>
+                ) : (
+                  <>
+                    Based on the automated checks above your icon is not valid.
+                    Please check the{" "}
+                    <a href="https://juju.is/docs/sdk/create-an-icon-for-your-charm">
+                      Charm Icon Specification
+                    </a>
+                    , update your icon, and try again.
+                  </>
+                )}
+              </Notification>
+              {isValid && <h2>Charmhub.io Preview</h2>}
+            </>
+          )}
+        </Col>
+      </Row>
+      {icon && isValid && (
+        <>
+          <Navigation
+            theme={Theme.DARK}
+            logo={{
+              src: "https://assets.ubuntu.com/v1/a603c7c9-Favicon - Juju.svg",
+              title: "Charmhub",
+              url: "#",
+            }}
+          />
+          <Strip type="light" shallow>
+            <Row>
+              <Col size={8}>
+                <div className="p-media-object--large">
+                  <img src={icon} className="p-media-object__image is-round" />
+                  <div className="p-media-object__details">
+                    <h1 className="p-media-object__title">Your Charm</h1>
+                    <div className="p-media-object__content u-no-margin--bottom">
+                      <ul className="p-inline-list--middot">
+                        <li className="p-inline-list__item">By You!</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div style={{marginLeft: "-1rem"}}>
-                <Button inline styles={{ marginLeft: 0 }}>stable 10</Button>
-                  <code style={{ backgroundColor: "transparent" }}>juju deploy yourcharm --channel stable</code>
-              </div>
-            </Col>
-          </Row>
-        </Strip>
-      </>
-    )}
+                <div style={{ marginLeft: "-1rem" }}>
+                  <Button inline styles={{ marginLeft: 0 }}>
+                    stable 10
+                  </Button>
+                  <code style={{ backgroundColor: "transparent" }}>
+                    juju deploy yourcharm --channel stable
+                  </code>
+                </div>
+              </Col>
+            </Row>
+          </Strip>
+        </>
+      )}
     </>
   );
 }

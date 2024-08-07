@@ -1,5 +1,11 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { App, getIntegrations } from "../App";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -57,7 +63,7 @@ describe("App component", () => {
 
   test("should render loading spinner initially", () => {
     renderWithProviders(<App />);
-    
+
     const spinners = screen.queryAllByText("Loading...");
     expect(spinners.length).toBeGreaterThan(0);
   });
@@ -123,7 +129,9 @@ describe("App component", () => {
   test("should highlight the active link in the sidebar", async () => {
     renderWithProviders(<App />);
 
-    const activeLink = await screen.findByRole("link", { name: /interface-1/i });
+    const activeLink = await screen.findByRole("link", {
+      name: /interface-1/i,
+    });
     expect(activeLink).toHaveClass("is-active");
   });
 });
@@ -169,7 +177,7 @@ describe("Empty App component", () => {
   jest.mock("../App", () => ({
     getIntegrations: jest.fn().mockResolvedValue([]),
   }));
-  
+
   const queryClient = new QueryClient();
 
   test("should display message when no integrations are found", async () => {
@@ -180,9 +188,11 @@ describe("Empty App component", () => {
         </QueryClientProvider>
       </RecoilRoot>
     );
-  
+
     await waitFor(() => {
-      const message = screen.getByText(/No Integrations have been added for this charm/i);
+      const message = screen.getByText(
+        /No Integrations have been added for this charm/i
+      );
       expect(message).toBeInTheDocument();
     });
   });

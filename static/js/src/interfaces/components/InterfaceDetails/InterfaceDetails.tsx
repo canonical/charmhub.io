@@ -24,13 +24,12 @@ const getInterface = async (
       if (response.status === 200) {
         return response.json();
       }
-    }
-    else {
+    } else {
       const response = await fetch(`./${interfaceName}.json`);
       if (response.status === 200) {
         return response.json();
+      }
     }
-  }
   }
 
   throw new Error("Interface is not a tested interface.");
@@ -71,8 +70,8 @@ function InterfaceDetails({ interfaceItem }: Props) {
     interfaceData = interfaceItem;
   }
 
-  let error = interfaceError as Error;
-  let isLoading = interfaceIsLoading;
+  const error = interfaceError as Error;
+  const isLoading = interfaceIsLoading;
 
   const hasDeveloperDocumentation =
     interfaceData && interfaceData.body ? true : false;

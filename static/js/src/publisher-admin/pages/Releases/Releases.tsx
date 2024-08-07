@@ -77,16 +77,33 @@ export default function Releases() {
   }
 
   if (Object.keys(releaseData.releases).length === 0) {
-    return <EmptyState
-      title="No releases have been added for this charm yet"
-      image={<img src="https://assets.ubuntu.com/v1/3234f995-Generic_chamhub_NoDocs.svg" alt="" />}>
-      <p>Charm or bundle revisions are not published for anybody else until you release them in a channel.</p>
-      <Button appearance="positive" onClick={() =>
-        window.open('https://juju.is/docs/sdk/publishing#heading--release-the-charm', '_blank')
-      } >
-        Learn how to release a charm
-      </Button>
-    </EmptyState>
+    return (
+      <EmptyState
+        title="No releases have been added for this charm yet"
+        image={
+          <img
+            src="https://assets.ubuntu.com/v1/3234f995-Generic_chamhub_NoDocs.svg"
+            alt=""
+          />
+        }
+      >
+        <p>
+          Charm or bundle revisions are not published for anybody else until you
+          release them in a channel.
+        </p>
+        <Button
+          appearance="positive"
+          onClick={() =>
+            window.open(
+              "https://juju.is/docs/sdk/publishing#heading--release-the-charm",
+              "_blank"
+            )
+          }
+        >
+          Learn how to release a charm
+        </Button>
+      </EmptyState>
+    );
   }
 
   const { all_architectures } = releaseData;
@@ -149,14 +166,13 @@ export default function Releases() {
         versionPattern={versionPattern}
         automaticPhasingPercentage={automaticPhasingPercentage}
       />
-      {
-        channels.length === 0 ?
-          <Notification severity="information">No Releases have been added for this track yet</Notification>
-          :
-          (
-            <ReleasesTable releaseMap={channels} arch={selectedArch} />
-          )
-      }
+      {channels.length === 0 ? (
+        <Notification severity="information">
+          No Releases have been added for this track yet
+        </Notification>
+      ) : (
+        <ReleasesTable releaseMap={channels} arch={selectedArch} />
+      )}
       {showSidePanel && (
         <div
           className="l-aside__overlay"
