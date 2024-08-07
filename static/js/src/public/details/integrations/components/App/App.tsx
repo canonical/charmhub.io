@@ -11,6 +11,7 @@ import {
 import { InterfaceItem } from "../InterfaceItem";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { filterChipsSelector, filterState } from "../../state";
+import { SearchAndFilterChip } from "@canonical/react-components/dist/components/SearchAndFilter/types";
 
 export const getIntegrations = async (
   charm: string
@@ -219,8 +220,9 @@ export const App = () => {
                 >
                   <div style={{ position: "absolute", width: "100%" }}>
                     <SearchAndFilter
-                      filterPanelData={availableFilters as any}
-                      returnSearchData={(searchData: any) => {
+                      // @ts-expect-error: id mismatch (number instead of string) but doesn't matter in reality
+                      filterPanelData={availableFilters}
+                      returnSearchData={(searchData: SearchAndFilterChip[]) => {
                         setFilterData((prev) =>
                           prev !== searchData
                             ? (searchData as IFilterChip[])

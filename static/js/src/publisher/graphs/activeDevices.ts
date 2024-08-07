@@ -23,11 +23,11 @@ class WeeklyActiveDevicesTrend {
   colorNegative: string;
   lines: object;
   shortValue: (number: number) => string | number;
-  xScale: Function;
-  yScale: Function;
+  xScale: (value: number) => number;
+  yScale: (value: number) => number;
   width: number;
   height: number;
-  g: any;
+  g: unknown;
   lineColor: string;
   data: { [key: string]: string | Date }[];
   keys: string[];

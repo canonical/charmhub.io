@@ -1,5 +1,4 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
-import ReactDOM from "react-dom";
 import {
   Form,
   Input,
@@ -15,6 +14,7 @@ import {
 } from "@canonical/react-components";
 
 import { useDropzone } from "react-dropzone";
+import { createRoot } from "react-dom/client";
 
 function App() {
   const [icon, setIcon] = useState<string | null>(null);
@@ -256,4 +256,4 @@ function App() {
   );
 }
 
-ReactDOM.render(<App />, document.getElementById("main-content"));
+createRoot(document.getElementById("main-content") as Element).render(<App />);

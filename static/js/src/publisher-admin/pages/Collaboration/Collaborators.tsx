@@ -12,7 +12,7 @@ import {
 import { filteredCollaboratorsListState } from "../../state/selectors";
 
 type Props = {
-  setShowRevokeModal: Function;
+  setShowRevokeModal: (showRevokeModal: boolean) => void;
 };
 
 function Collaborators({ setShowRevokeModal }: Props) {

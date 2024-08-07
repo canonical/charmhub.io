@@ -3,16 +3,12 @@ import AddTrackPanel from "../AddTrackPanel";
 import "@testing-library/jest-dom";
 import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "react-query";
-import useReleases from "../../../hooks/useReleases";
 import { usePackage } from "../../../hooks";
 import { mockPackage } from "../../../mocks";
 
 global.fetch = jest.fn();
 
 const queryClient = new QueryClient();
-
-jest.mock("../../../hooks/useReleases");
-const mockUseReleases = useReleases as jest.Mock;
 
 jest.mock("../../../hooks/usePackage");
 const mockUsePackage = usePackage as jest.Mock;

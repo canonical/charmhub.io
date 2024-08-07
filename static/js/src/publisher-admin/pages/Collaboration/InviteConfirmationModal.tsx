@@ -19,9 +19,9 @@ import { useSendMutation, useRevokeMutation } from "../../hooks";
 
 type Props = {
   action: string;
-  setShowModal: Function;
-  setShowSuccess: Function;
-  setShowError: Function;
+  setShowModal: (showModal: boolean) => void;
+  setShowSuccess: (showSuccess: boolean) => void;
+  setShowError: (showError: boolean) => void;
   queryKey?: string;
 };
 

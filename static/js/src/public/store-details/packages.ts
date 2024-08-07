@@ -19,12 +19,13 @@ type Entity = {
 
 /** Store page filters */
 class initPackages {
-  allPackages: any[];
+  allPackages: Entity[];
   searchCache: string;
-  _filters: { [key: string]: any };
+  _filters: { [key: string]: string[] };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   domEl: any;
-  filteredPackagesAllCategories: any;
-  packages: any;
+  filteredPackagesAllCategories: Entity[];
+  packages: Entity[];
 
   static async initialize() {
     const packageData = await initPackages.fetchPackageList();
@@ -33,7 +34,7 @@ class initPackages {
   }
 
   static getUrlFilters() {
-    const filters: { [key: string]: any } = {};
+    const filters: { [key: string]: string[] } = {};
 
     if (window.location.search) {
       const searchParams = new URLSearchParams(window.location.search);
@@ -84,7 +85,7 @@ class initPackages {
     }
   }
 
-  static async addBundleApps(packages: any[]) {
+  static async addBundleApps(packages: Entity[]) {
     return Promise.all(
       packages.map(async (entity: Entity) => {
         if (entity.type === "bundle") {
@@ -96,7 +97,7 @@ class initPackages {
     );
   }
 
-  constructor(packages: any[]) {
+  constructor(packages: Entity[]) {
     this.allPackages = packages;
     this.selectElements();
     this.togglePlaceholderContainer(true);
@@ -382,7 +383,7 @@ class initPackages {
       this._filters.base[0] !== "all" ||
       this._filters.type[0] !== "all"
     ) {
-      const categories: any[] = [];
+      const categories: string[] = [];
 
       this.filteredPackagesAllCategories.forEach((entity: Entity) => {
         if (entity.store_front.categories) {
@@ -396,7 +397,7 @@ class initPackages {
 
       // We hide categories without results
       this.domEl.categoryFilters.el.forEach(
-        (filter: { value: any; disabled: boolean }) => {
+        (filter: { value: string; disabled: boolean }) => {
           if (categories.includes(filter.value)) {
             filter.disabled = false;
           } else {

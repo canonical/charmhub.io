@@ -18,11 +18,7 @@ jest.mock("d3-selection", () => ({
 
 jest.mock("swiper", () => {
   const use = jest.fn();
-  const SwiperMock: any = jest.fn().mockImplementation(() => ({
-    use: use as jest.Mock,
-  }));
-
-  SwiperMock.use = use;
+  const SwiperMock = { use };
 
   return SwiperMock;
 });
@@ -39,8 +35,13 @@ describe("Index", () => {
 
   beforeAll(() => {
     originalLocation = window.location;
-    delete (window as any).location;
-    window.location = { pathname: "" } as Location;
+
+    Object.defineProperty(window, "location", {
+      writable: true,
+      value: {
+        pathname: "",
+      },
+    });
   });
 
   afterAll(() => {

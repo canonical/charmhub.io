@@ -11,7 +11,7 @@ export type SubSectionData = {
 };
 
 export type SectionData = {
-  children: Array<SubSectionData>;
+  children: Array<SubSectionData | string>;
   heading: string;
   level: number;
 };

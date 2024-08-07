@@ -51,7 +51,7 @@ describe("initPackages", () => {
       ok: true,
     });
 
-    let result = await initPackages.getBundleApps("bundle-name");
+    const result = await initPackages.getBundleApps("bundle-name");
     expect(result).toEqual({ charms: [] });
 
     (global.fetch as jest.Mock).mockResolvedValueOnce({ ok: false });

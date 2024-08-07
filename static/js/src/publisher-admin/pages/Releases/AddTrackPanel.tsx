@@ -6,8 +6,6 @@ import {
   Spinner,
 } from "@canonical/react-components";
 import { useState } from "react";
-import { useRecoilState } from "recoil";
-import { packageDataState } from "../../state/atoms";
 import { usePackage } from "../../hooks";
 
 type AddTrackPanelProps = {

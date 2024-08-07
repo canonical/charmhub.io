@@ -70,7 +70,6 @@ describe("PubliciseCards", () => {
   });
 
   test("shows summary if selected", async () => {
-    const user = userEvent.setup();
     renderComponent();
     expect(screen.getByText(/summary=/)).toBeInTheDocument();
   });

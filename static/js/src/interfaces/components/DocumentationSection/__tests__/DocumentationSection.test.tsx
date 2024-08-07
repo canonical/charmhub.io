@@ -13,7 +13,7 @@ jest.mock("../../MermaidDiagram", () => (props: { code: string }) => (
 ));
 
 beforeAll(() => {
-  (global as any).crypto.randomUUID = jest.fn();
+  global.crypto.randomUUID = jest.fn();
 });
 
 const mockSubSubSectionData = {
