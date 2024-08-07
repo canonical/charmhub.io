@@ -16,7 +16,7 @@ import {
 
 import { useDropzone } from "react-dropzone";
 
-function App() {
+export default function App() {
   const [icon, setIcon] = useState<string | null>(null);
   const [isImage, setIsImage] = useState<boolean>(false);
   const [isSVG, setIsSVG] = useState<boolean>(false);
