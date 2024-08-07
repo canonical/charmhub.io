@@ -25,7 +25,7 @@ const getCharms = async (
   charmName: string
 ): Promise<ICharm[]> => {
   const resp = await fetch(
-    `/beta/store.json?${
+    `/store.json?${
       interfaceType === "provides" ? "requires" : "provides"
     }=${interfaceName}`
   );
