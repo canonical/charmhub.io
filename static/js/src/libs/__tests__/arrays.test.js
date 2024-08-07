@@ -1,4 +1,4 @@
-const { arraysMerge } = require("../arrays");
+import { arraysMerge } from "../arrays";
 
 describe("Arrays merge", () => {
   test("should merge two arrays without duplicates", () => {

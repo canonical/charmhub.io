@@ -11,10 +11,7 @@ import {
 import { InterfaceItem } from "../InterfaceItem";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { filterChipsSelector, filterState } from "../../state";
-import {
-  SearchAndFilterChip,
-  SearchAndFilterData,
-} from "@canonical/react-components/dist/components/SearchAndFilter/types";
+import { SearchAndFilterChip } from "@canonical/react-components/dist/components/SearchAndFilter/types";
 
 export const getIntegrations = async (
   charm: string

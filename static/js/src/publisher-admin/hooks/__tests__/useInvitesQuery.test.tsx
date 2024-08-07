@@ -26,7 +26,7 @@ const TestComponent: React.FC<{ packageName?: string }> = ({ packageName }) => {
 };
 
 const queryClient = new QueryClient();
-const Wrapper: React.FC = ({ children }: React.PropsWithChildren<{}>) => (
+const Wrapper: React.FC = ({ children }: React.PropsWithChildren) => (
   <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 );
 

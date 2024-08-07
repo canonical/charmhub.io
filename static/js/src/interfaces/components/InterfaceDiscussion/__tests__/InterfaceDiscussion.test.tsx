@@ -4,7 +4,7 @@ import "@testing-library/jest-dom";
 import InterfaceDiscussion from "../InterfaceDiscussion";
 
 jest.mock("@canonical/react-components", () => ({
-  Button: jest.fn(({ children, element, href }) => (
+  Button: jest.fn(({ children, href }) => (
     <a href={href} className="mock-button">
       {children}
     </a>

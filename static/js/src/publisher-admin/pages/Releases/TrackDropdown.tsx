@@ -1,5 +1,5 @@
 import { Button } from "@canonical/react-components";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, useState } from "react";
 
 type TrackDropdownProps = {
   defaultTrack?: string;

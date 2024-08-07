@@ -1,6 +1,6 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
+import { createRoot } from "react-dom/client";
 
 type MultiSelectProps = {
   value: string[];
@@ -467,13 +467,12 @@ function init(
     }
 
     // do the react
-    ReactDOM.render(
+    createRoot(holder).render(
       <MultiSelect
         value={currentValue}
         values={values}
         updateHandler={updateHandler(input, delimiter)}
-      />,
-      holder
+      />
     );
   }
 }

@@ -51,11 +51,7 @@ function InterfaceDetails({ interfaceItem }: Props) {
 
   let isCommunity = false;
 
-  let {
-    data: interfaceData,
-    error: interfaceError,
-    isLoading: interfaceIsLoading,
-  } = useQuery(
+  const query = useQuery(
     ["interface", interfaceName],
     () => getInterface(interfaceName, interfaceStatus),
     {
@@ -65,6 +61,9 @@ function InterfaceDetails({ interfaceItem }: Props) {
       enabled: shouldFetchData(),
     }
   );
+  const { error: interfaceError, isLoading: interfaceIsLoading } = query;
+
+  let { data: interfaceData } = query;
 
   if (interfaceItem && interfaceItem.name === interfaceName) {
     interfaceData = interfaceItem;

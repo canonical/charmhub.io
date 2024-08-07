@@ -1,8 +1,7 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import Releases from "../Releases";
-import { MutableSnapshot, RecoilRoot, waitForAll } from "recoil";
-import { BrowserRouter } from "react-router-dom";
+import { MutableSnapshot, RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "@testing-library/jest-dom";
 import { mockPackage } from "../../../mocks";
@@ -11,7 +10,6 @@ import { Package } from "../../../types";
 import useReleases, { ReleaseMap } from "../../../hooks/useReleases";
 import { mockReleaseChannel } from "../../../mocks/mockReleaseChannel";
 import { usePackage } from "../../../hooks";
-import userEvent from "@testing-library/user-event";
 
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
