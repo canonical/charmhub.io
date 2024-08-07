@@ -16,6 +16,5 @@ parts:
       - flask/app/.env
       - flask/app/app.py
       - flask/app/webapp
-      - flask/app/webapp_beta
       - flask/app/templates
       - flask/app/static
