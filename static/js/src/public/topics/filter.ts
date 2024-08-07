@@ -21,14 +21,14 @@ function initTopicFilters() {
   @param {HTMLElement} sideNavigation The side navigation element.
 */
   function setupSideNavigation(sideNavigation: HTMLElement) {
-    var toggles: HTMLElement[] = [].slice.call(
+    const toggles: HTMLElement[] = [].slice.call(
       sideNavigation.querySelectorAll(".js-drawer-toggle")
     );
 
     toggles.forEach(function (toggle) {
       toggle.addEventListener("click", function (event) {
         event.preventDefault();
-        var sideNav = document.getElementById(
+        const sideNav = document.getElementById(
           toggle.getAttribute("aria-controls") || ""
         );
 
@@ -45,7 +45,7 @@ function initTopicFilters() {
 */
   function setupSideNavigations(sideNavigationSelector: string) {
     // Setup all side navigations on the page.
-    var sideNavigations = [].slice.call(
+    const sideNavigations = [].slice.call(
       document.querySelectorAll(sideNavigationSelector)
     );
 
@@ -53,15 +53,17 @@ function initTopicFilters() {
   }
 
   function initFilters() {
-    var urlParams = new URLSearchParams(window.location.search);
-    var checkboxes: HTMLInputElement[] = [].slice.call(
+    const urlParams = new URLSearchParams(window.location.search);
+    const checkboxes: HTMLInputElement[] = [].slice.call(
       document.querySelectorAll("[data-js='filter']")
     );
-    var topics: HTMLElement[] = [].slice.call(document.querySelectorAll("[data-js='item']"));
-    var closeFiltersButtonMobile = document.querySelector(
+    const topics: HTMLElement[] = [].slice.call(
+      document.querySelectorAll("[data-js='item']")
+    );
+    const closeFiltersButtonMobile = document.querySelector(
       "[data-js='filter-button-mobile-close']"
     ) as HTMLElement;
-    var filters: string[] = [];
+    let filters: string[] = [];
 
     if (urlParams.get("filters")) {
       filters = urlParams.get("filters")?.split(",") ?? [];
@@ -78,7 +80,7 @@ function initTopicFilters() {
     function populateCheckboxes() {
       // Create a list of topics values
       // Dedupe with a set and convert back to an array
-      var topicValues = Array.from(
+      const topicValues = Array.from(
         new Set(
           topics.flatMap(function (topic: HTMLElement) {
             return topic.dataset.filter?.split(",");
@@ -86,7 +88,7 @@ function initTopicFilters() {
         )
       );
       checkboxes.forEach(function (checkbox) {
-        var value = checkbox.value;
+        const value = checkbox.value;
         if (!topicValues.includes(value)) {
           checkbox.setAttribute("disabled", "disabled");
         }
@@ -94,10 +96,12 @@ function initTopicFilters() {
 
       if (filters) {
         filters.forEach(function (filter) {
-          var selector = "[aria-labelledby='" + filter + "-filter']";
-          var checkboxObject = document.querySelector(selector) as HTMLInputElement;
+          const selector = "[aria-labelledby='" + filter + "-filter']";
+          const checkboxObject = document.querySelector(
+            selector
+          ) as HTMLInputElement;
           if (checkboxObject) {
-            var checkboxDisabled = checkboxObject.getAttribute("disabled");
+            const checkboxDisabled = checkboxObject.getAttribute("disabled");
             if (checkboxDisabled) {
               removeFilter(filter);
             } else {
@@ -110,7 +114,7 @@ function initTopicFilters() {
 
     // Check if element should be filtered
     function filterCheck(filterText: string) {
-      var match = false;
+      const match = false;
 
       return !!filters.find(function (filter) {
         return filterText.includes(filter) && !match;
@@ -137,12 +141,12 @@ function initTopicFilters() {
     }
 
     function updateUrl() {
-      var currentUrl = window.location.href;
-      var baseUrl = currentUrl.split("?")[0];
-      var newUrl = baseUrl;
+      const currentUrl = window.location.href;
+      const baseUrl = currentUrl.split("?")[0];
+      let newUrl = baseUrl;
 
       if (filters.length > 0) {
-        var filtersString = "";
+        let filtersString = "";
         filters.forEach(function (filter, i) {
           if (i === filters.length - 1) {
             filtersString = filtersString + filter;
@@ -172,7 +176,7 @@ function initTopicFilters() {
     }
 
     function filterHandler(e: Event) {
-      let target = e.target as HTMLInputElement;
+      const target = e.target as HTMLInputElement;
       if (target.checked) {
         addFilter(target.value);
       } else {

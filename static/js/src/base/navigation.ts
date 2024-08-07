@@ -18,7 +18,10 @@ function closeAllDropdowns(toggles: HTMLElement[]) {
   });
 }
 
-function handleClickOutside(toggles: HTMLElement[], containerClass: string): void {
+function handleClickOutside(
+  toggles: HTMLElement[],
+  containerClass: string
+): void {
   document.addEventListener("click", (event: MouseEvent) => {
     const target = event.target as HTMLElement;
 
@@ -32,7 +35,8 @@ function handleClickOutside(toggles: HTMLElement[], containerClass: string): voi
 
 function initNavDropdowns(containerClass: string): void {
   const toggles = Array.from(
-    document.querySelectorAll(containerClass + " [aria-controls]")) as HTMLElement[];
+    document.querySelectorAll(containerClass + " [aria-controls]")
+  ) as HTMLElement[];
 
   handleClickOutside(toggles, containerClass);
 
@@ -63,10 +67,9 @@ if (navAccountContainer) {
         const authenticatedMenu = navAccountContainer.querySelector(
           ".js-nav-account--authenticated"
         ) as HTMLElement;
-        const displayName =
-          navAccountContainer.querySelector(
-            ".js-account--name"
-          ) as HTMLElement;
+        const displayName = navAccountContainer.querySelector(
+          ".js-account--name"
+        ) as HTMLElement;
 
         navAccountContainer.classList.add(
           "p-navigation__item--dropdown-toggle"
@@ -81,4 +84,9 @@ if (navAccountContainer) {
 
 initNavDropdowns(".p-navigation__item--dropdown-toggle");
 
-export { toggleDropdown, closeAllDropdowns, handleClickOutside, initNavDropdowns };
+export {
+  toggleDropdown,
+  closeAllDropdowns,
+  handleClickOutside,
+  initNavDropdowns,
+};

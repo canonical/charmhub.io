@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { Row, Col } from "@canonical/react-components";
-import mermaid from 'mermaid';
+import mermaid from "mermaid";
 import MermaidDiagram from "../MermaidDiagram";
 
 import type {
@@ -30,9 +30,7 @@ function SubSubSection({
     <>
       <p>{interfaceData.heading}</p>
       {data.map((item: { id: string; content: string }) => (
-        <ReactMarkdown key={item.id}>
-          {item.content}
-        </ReactMarkdown>
+        <ReactMarkdown key={item.id}>{item.content}</ReactMarkdown>
       ))}
     </>
   );
@@ -49,9 +47,7 @@ function SubSection({ interfaceData }: { interfaceData: SubSectionData }) {
       <Col size={6}>
         {data.map((item: { id: string; content: any }) =>
           typeof item.content === "string" ? (
-            <ReactMarkdown key={item.id}>
-              {item.content}
-            </ReactMarkdown>
+            <ReactMarkdown key={item.id}>{item.content}</ReactMarkdown>
           ) : (
             <SubSubSection key={item.id} interfaceData={item.content} />
           )
@@ -60,7 +56,6 @@ function SubSection({ interfaceData }: { interfaceData: SubSectionData }) {
     </Row>
   );
 }
-
 
 function DocumentationSection({
   interfaceData,
@@ -76,7 +71,7 @@ function DocumentationSection({
   return (
     <>
       <h2 className="p-heading--4">{interfaceData.heading}</h2>
-      {data.map((item: { id: string; content: any }) => (
+      {data.map((item: { id: string; content: any }) =>
         typeof item.content === "string" ? (
           item.content.startsWith("```mermaid") ? (
             <MermaidDiagram key={item.id} code={item.content} />
@@ -86,7 +81,7 @@ function DocumentationSection({
         ) : (
           <SubSection key={item.id} interfaceData={item.content} />
         )
-      ))}
+      )}
     </>
   );
 }

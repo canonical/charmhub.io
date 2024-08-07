@@ -66,7 +66,9 @@ describe("Releases", () => {
     });
     renderComponent();
     await waitFor(() => {
-      expect(screen.getByText("No releases have been added for this charm yet")).toBeInTheDocument();
+      expect(
+        screen.getByText("No releases have been added for this charm yet")
+      ).toBeInTheDocument();
     });
   });
 

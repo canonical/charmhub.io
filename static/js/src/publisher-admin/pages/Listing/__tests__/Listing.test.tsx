@@ -131,12 +131,18 @@ describe("Listing", () => {
 
   test("disables 'Revert' button if no changes are made", () => {
     renderComponent(mockPackage);
-    expect(screen.getByRole("button", { name: "Revert" })).toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByRole("button", { name: "Revert" })).toHaveAttribute(
+      "aria-disabled",
+      "true"
+    );
   });
 
   test("disables 'Save' button if no changes are made", () => {
     renderComponent(mockPackage);
-    expect(screen.getByRole("button", { name: "Save" })).toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByRole("button", { name: "Save" })).toHaveAttribute(
+      "aria-disabled",
+      "true"
+    );
   });
 
   test("updates form fields correctly when user types input", () => {

@@ -117,9 +117,8 @@ function InterfacesIndex({ interfacesList }: Props) {
             <p>
               Interfaces describe the relation between two charms. This
               interface catalogue shows opinionated, standardized interface
-              specifications for charm relations. Each interface
-              outlines the behavior and requirements of charms relating to one
-              another.
+              specifications for charm relations. Each interface outlines the
+              behavior and requirements of charms relating to one another.
             </p>
             <p>
               Most of the content of these pages can be collaboratively
@@ -197,9 +196,7 @@ function InterfacesIndex({ interfacesList }: Props) {
                               {item?.status}
                             </StatusLabel>
                             <Link
-                              to={`/integrations/${
-                                item?.name
-                              }/${item?.status}`}
+                              to={`/integrations/${item?.name}/${item?.status}`}
                             >
                               {item?.name}
                             </Link>

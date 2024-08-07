@@ -46,12 +46,9 @@ class TableOfContents {
   focus() {
     const selectedTab = this.getSelected() as any;
     if (selectedTab) {
-      this.historyState.updatePath(0, [
-        this.instanceName,
-        selectedTab.name,
-      ]);
+      this.historyState.updatePath(0, [this.instanceName, selectedTab.name]);
     }
-  }  
+  }
 
   popHandler(state: Array<string>) {
     if (state) {
@@ -70,7 +67,15 @@ class TableOfContents {
   }
 
   getSelected() {
-    let selected: { name: string; tabEl: HTMLElement; selected: boolean; index: number; contentEl: HTMLElement | null } | undefined;
+    let selected:
+      | {
+          name: string;
+          tabEl: HTMLElement;
+          selected: boolean;
+          index: number;
+          contentEl: HTMLElement | null;
+        }
+      | undefined;
 
     Object.keys(this.tabs).forEach((tab) => {
       if (this.tabs[tab].selected) {
@@ -120,7 +125,9 @@ class TableOfContents {
   initEvents() {
     this.el.addEventListener("click", (e) => {
       e.preventDefault();
-      const clickedTab = (e.target as HTMLElement).getAttribute("aria-controls");
+      const clickedTab = (e.target as HTMLElement).getAttribute(
+        "aria-controls"
+      );
       if (clickedTab) {
         Object.keys(this.tabs).forEach((tab) => {
           if (tab === clickedTab) {

@@ -16,8 +16,6 @@ jest.mock("react-router-dom", () => ({
   }),
 }));
 
-
-
 const renderComponent = (mockPackageData?: Package) => {
   render(
     <BrowserRouter>
@@ -25,7 +23,6 @@ const renderComponent = (mockPackageData?: Package) => {
         initializeState={(snapshot: MutableSnapshot) => {
           return snapshot.set(packageDataState, mockPackageData);
         }}
-
       >
         <SectionNav />
       </RecoilRoot>
@@ -38,14 +35,12 @@ describe("SectionNav", () => {
     const user = userEvent.setup();
     renderComponent(mockPackage);
 
-
     await user.click(screen.getByText("Releases"));
 
     expect(screen.getByText("Releases")).toHaveAttribute(
       "aria-selected",
       "true"
     );
-
   });
 
   test("hides releases tab by default", async () => {
@@ -58,7 +53,6 @@ describe("SectionNav", () => {
     const user = userEvent.setup();
     renderComponent();
 
-
     await user.click(screen.getByText("Publicise"));
 
     expect(screen.getByText("Publicise")).toHaveAttribute(
@@ -66,7 +60,6 @@ describe("SectionNav", () => {
       "true"
     );
   });
-
 
   test("highlights settings nav link", async () => {
     const user = userEvent.setup();

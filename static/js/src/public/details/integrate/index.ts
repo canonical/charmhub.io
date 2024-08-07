@@ -4,7 +4,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import debounce from "../../../libs/debounce";
 import "swiper/swiper-bundle.css";
 
-function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
+function buildChart(data: { groups: any; packageOne: any; packageTwo: any }) {
   // set dimensions
   const chartWidth = window.innerWidth > 1175 ? 960 : window.innerWidth * 0.8;
   const chartHeight = 280;
@@ -473,7 +473,9 @@ const init = (packageName: string, integrationPackage: string) => {
     data.groups = groups5;
   }
 
-  const integrationChartWrapper = document.getElementById("integration-chart-wrapper");
+  const integrationChartWrapper = document.getElementById(
+    "integration-chart-wrapper"
+  );
   if (integrationChartWrapper) {
     integrationChartWrapper.innerHTML = "";
   }
@@ -483,7 +485,9 @@ const init = (packageName: string, integrationPackage: string) => {
   const resize = debounce(
     () => {
       if (window.innerWidth >= 1036) {
-        const integrationChartWrapper = document.getElementById("integration-chart-wrapper");
+        const integrationChartWrapper = document.getElementById(
+          "integration-chart-wrapper"
+        );
         if (integrationChartWrapper) {
           integrationChartWrapper.innerHTML = "";
         }

@@ -123,7 +123,7 @@ function Collaboration() {
             }}
           >
             <p>
-              <a target="_blank" href={inviteEmailLink}>
+              <a target="_blank" href={inviteEmailLink} rel="noreferrer">
                 Send the invite by email
               </a>{" "}
               or copy link:
