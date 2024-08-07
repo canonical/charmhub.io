@@ -32,13 +32,12 @@ export function toggleDrawer(sideNavigation: HTMLElement, show: boolean) {
 }
 
 // throttle util (for window resize event)
-export function throttle(fn: Function, delay: number) {
+export function throttle(fn: (...args: unknown[]) => void, delay: number) {
   let timer: number | null = null;
-  return function (this: any, ...args: any[]) {
-    const context = this;
+  return function (this: unknown, ...args: unknown[]) {
     if (timer) clearTimeout(timer);
     timer = window.setTimeout(() => {
-      fn.apply(context, args);
+      fn.apply(this, args);
     }, delay);
   };
 }

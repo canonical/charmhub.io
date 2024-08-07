@@ -56,7 +56,7 @@ export async function fetchForm(
 // Open the contact us modal
 export function open() {
   updateHash(TRIGGERING_HASH);
-  // @ts-ignore
+  // @ts-expect-error: ga is defined globally
   ga("send", "event", "interactive-forms", "open", window.location.pathname);
 }
 
@@ -119,7 +119,7 @@ export function initialiseForm() {
   };
 
   submitButton?.addEventListener("click", () => {
-    // @ts-ignore
+    // @ts-expect-error: ga is defined globally
     ga(
       "send",
       "event",
@@ -153,7 +153,7 @@ export function initialiseForm() {
         ? -1
         : 1;
       setState(contactIndex);
-      // @ts-ignore
+      // @ts-expect-error: ga is defined globally
       ga(
         "send",
         "event",
@@ -199,7 +199,7 @@ export function initialiseForm() {
     formContainer.classList.add("u-hide");
     formContainer.removeChild(contactModal!);
     updateHash("");
-    // @ts-ignore
+    // @ts-expect-error: ga is defined globally
     ga("send", "event", "interactive-forms", "close", window.location.pathname);
   }
 

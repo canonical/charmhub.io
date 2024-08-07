@@ -28,6 +28,7 @@ module.exports = {
     semi: ["error", "always"],
     "object-curly-spacing": ["error", "always"],
     "react/react-in-jsx-scope": "off",
+    "react/display-name": "off",
     // Disabled for good reason, see: https://typescript-eslint.io/troubleshooting/faqs/eslint/#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
     "no-undef": "off",
   },

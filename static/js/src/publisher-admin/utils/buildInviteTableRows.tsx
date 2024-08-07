@@ -9,14 +9,18 @@ import type { Invite } from "../types";
 function buildInviteTableRows(
   invites: Array<Invite>,
   status: "Pending" | "Expired" | "Revoked",
-  setShowRevokeModal: Function,
-  setShowResendModal: Function,
-  setShowReopenModal: Function
+  setShowRevokeModal: (showRevokeModal: boolean) => void,
+  setShowResendModal: (showResendModal: boolean) => void,
+  setShowReopenModal: (showReopenModal: boolean) => void
 ) {
   const setActiveInviteEmail = useSetRecoilState(activeInviteEmailState);
 
   return invites.map((invite: Invite, index) => {
-    let columns: any[] = [];
+    let columns: {
+      content: React.ReactNode;
+      rowSpan?: number;
+      className?: string;
+    }[] = [];
     let statusColumn;
 
     if (invites.length > 0 && index === 0) {

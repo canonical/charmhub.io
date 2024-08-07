@@ -1,5 +1,6 @@
 const currentOrigin = window.location.href;
-const { dataLayer } = window as any;
+// @ts-expect-error: dataLayer is defined in the global scope
+const { dataLayer } = window;
 
 // Main navigation
 addGANavEvents("#navigation", "charmhub.io-nav-1");

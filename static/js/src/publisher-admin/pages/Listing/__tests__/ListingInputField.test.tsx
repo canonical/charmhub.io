@@ -2,11 +2,13 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
-import ListingInputField from "../ListingInputField";
+import ListingInputField, {
+  ListingInputFieldProps,
+} from "../ListingInputField";
 
 import { mockPackage } from "../../../mocks";
 
-const renderComponent = (props?: any) => {
+const renderComponent = (props?: Partial<ListingInputFieldProps>) => {
   render(
     <ListingInputField
       label="Title"

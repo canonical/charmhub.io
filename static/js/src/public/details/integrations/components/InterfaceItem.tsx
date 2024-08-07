@@ -11,6 +11,7 @@ import { Row, Col, Spinner, Chip } from "@canonical/react-components";
 import { filterChipsSelector, filterState } from "../state";
 
 import { IntegrationCard } from "@canonical/store-components";
+import { Package } from "../../../../publisher-admin/types";
 
 interface InterfaceItemProps {
   interfaceType: string;
@@ -29,7 +30,7 @@ const getCharms = async (
     }=${interfaceName}`
   );
   const json = await resp.json();
-  return json.packages.filter((pkg: any) => pkg.name !== charmName);
+  return json.packages.filter((pkg: Package) => pkg.name !== charmName);
 };
 
 const filterMap = (charm: ICharm, heading: string) => {

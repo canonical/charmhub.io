@@ -1,13 +1,18 @@
 import { Row, Col } from "@canonical/react-components";
+import { SyntheticEvent } from "react";
 
-type Props = {
+export type ListingInputFieldProps = {
   label: string;
   name: string;
   value: string | undefined;
   helpText?: string;
   maxLength?: number;
   placeholder?: string;
-  handleInputChange: Function;
+  handleInputChange: (
+    e: SyntheticEvent<HTMLInputElement> & {
+      target: HTMLInputElement;
+    }
+  ) => void;
 };
 
 function ListingInputField({
@@ -18,7 +23,7 @@ function ListingInputField({
   maxLength,
   placeholder,
   handleInputChange,
-}: Props) {
+}: ListingInputFieldProps) {
   return (
     <Row className="p-form__group p-form-validation">
       <Col size={2}>

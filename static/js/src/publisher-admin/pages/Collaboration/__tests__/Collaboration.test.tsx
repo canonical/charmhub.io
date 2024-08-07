@@ -1,4 +1,4 @@
-import { RecoilRoot } from "recoil";
+import { RecoilRoot, RecoilValue } from "recoil";
 import { BrowserRouter } from "react-router-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
@@ -10,7 +10,13 @@ import {
 } from "../../../state/selectors";
 import { RecoilObserver, QueryProvider } from "../../../utils";
 
-const renderComponent = ({ event, state }: { event: Function; state: any }) => {
+const renderComponent = ({
+  event,
+  state,
+}: {
+  event: () => void;
+  state: RecoilValue<unknown>;
+}) => {
   return render(
     <RecoilRoot>
       <BrowserRouter>

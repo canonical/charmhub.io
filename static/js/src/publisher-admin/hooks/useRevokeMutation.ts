@@ -1,12 +1,12 @@
-import { useMutation } from "react-query";
+import { QueryClient, useMutation } from "react-query";
 
 function useRevokeMutation(
   packageName: string | undefined,
   activeInviteEmail: string | undefined,
   queryKey: string,
-  setShowRevokeSuccess: Function,
-  setShowRevokeError: Function,
-  queryClient: any,
+  setShowRevokeSuccess: (value: boolean) => void,
+  setShowRevokeError: (value: boolean) => void,
+  queryClient: QueryClient,
   csrfToken: string
 ) {
   return useMutation(

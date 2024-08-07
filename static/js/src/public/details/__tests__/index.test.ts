@@ -83,7 +83,7 @@ describe("index.ts", () => {
       .mockImplementation(
         (event: string, listener: EventListenerOrEventListenerObject) => {
           if (event === "click" && typeof listener === "function") {
-            (listener as Function)({
+            listener({
               target: actionButton,
             } as unknown as Event);
           }
