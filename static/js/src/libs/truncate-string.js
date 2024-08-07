@@ -23,9 +23,12 @@ function truncateString(str, len, append = "…") {
     return str;
   }
 
-  str.length + append.length > len
-    ? (newLength = len - append.length)
-    : (newLength = str.length); // if the length of original string and the appended string is greater than the max length, we need to truncate, otherwise, use the original string
+  // if the length of original string and the appended string is greater than the max length, we need to truncate, otherwise, use the original string
+  if (str.length + append.length > len) {
+    newLength = len - append.length;
+  } else {
+    newLength = str.length;
+  }
 
   // If there's no space or if the string has no spaces, truncate directly
   if (str.indexOf(" ") === -1) {

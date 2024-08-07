@@ -8,7 +8,7 @@ import InviteCollaborator from "../InviteCollaborator";
 import { RecoilObserver, QueryProvider } from "../../../utils";
 import { activeInviteEmailState } from "../../../state/atoms";
 
-const renderComponent = ({ event }: { event?: Function }) => {
+const renderComponent = ({ event }: { event?: () => void }) => {
   return render(
     <RecoilRoot>
       <BrowserRouter>

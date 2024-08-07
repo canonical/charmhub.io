@@ -8,7 +8,6 @@ import { renderLines } from "./rendering";
 import { selectAll } from "d3-selection";
 import { D3Element } from "mermaid/dist/mermaidAPI";
 
-
 class WeeklyActiveDevicesTrend {
   /**
    *
@@ -24,18 +23,22 @@ class WeeklyActiveDevicesTrend {
   colorNegative: string;
   lines: object;
   shortValue: (number: number) => string | number;
-  xScale: Function;
-  yScale: Function;
+  xScale: (value: number) => number;
+  yScale: (value: number) => number;
   width: number;
   height: number;
-  g: any;
+  g: unknown;
   lineColor: string;
   data: { [key: string]: string | Date }[];
   keys: string[];
   maxYValue: number;
-  transformedData: { values: { date: Date; value: number; }[]; }[];
-  
-  constructor(holderEl: object, holderSvgSelector: string, rawData: { buckets: string[]; series: { name: string; values: number[] }[] }) {
+  transformedData: { values: { date: Date; value: number }[] }[];
+
+  constructor(
+    holderEl: object,
+    holderSvgSelector: string,
+    rawData: { buckets: string[]; series: { name: string; values: number[] }[] }
+  ) {
     this.holder = holderEl;
     this.rawData = rawData ?? { buckets: [], series: [] };
 
@@ -88,7 +91,10 @@ class WeeklyActiveDevicesTrend {
    * @param {{name: string, values: number[]}[]} data.series The different series to show on the graph
    * @returns {WeeklyActiveDevicesTrend}
    */
-  updateData(data: { buckets: string[]; series: { name: string; values: number[] }[] }) {
+  updateData(data: {
+    buckets: string[];
+    series: { name: string; values: number[] }[];
+  }) {
     if (!this.rawData.series) {
       this.rawData = data;
     } else {

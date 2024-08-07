@@ -13,7 +13,6 @@ function SectionNav() {
 
   const packageData = useRecoilValue<Package | undefined>(packageDataState);
 
-
   return (
     <nav className="p-tabs">
       <ul className="p-tabs__list" role="tablist">
@@ -31,9 +30,7 @@ function SectionNav() {
             <NavLink
               to={`/${packageName}/releases`}
               className="p-tabs__link"
-              aria-selected={
-                isSelected(`/${packageName}/releases`)
-              }
+              aria-selected={isSelected(`/${packageName}/releases`)}
             >
               Releases
             </NavLink>

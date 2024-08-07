@@ -24,13 +24,12 @@ const getInterface = async (
       if (response.status === 200) {
         return response.json();
       }
-    }
-    else {
+    } else {
       const response = await fetch(`./${interfaceName}.json`);
       if (response.status === 200) {
         return response.json();
+      }
     }
-  }
   }
 
   throw new Error("Interface is not a tested interface.");
@@ -52,11 +51,7 @@ function InterfaceDetails({ interfaceItem }: Props) {
 
   let isCommunity = false;
 
-  let {
-    data: interfaceData,
-    error: interfaceError,
-    isLoading: interfaceIsLoading,
-  } = useQuery(
+  const query = useQuery(
     ["interface", interfaceName],
     () => getInterface(interfaceName, interfaceStatus),
     {
@@ -66,13 +61,16 @@ function InterfaceDetails({ interfaceItem }: Props) {
       enabled: shouldFetchData(),
     }
   );
+  const { error: interfaceError, isLoading: interfaceIsLoading } = query;
+
+  let { data: interfaceData } = query;
 
   if (interfaceItem && interfaceItem.name === interfaceName) {
     interfaceData = interfaceItem;
   }
 
-  let error = interfaceError as Error;
-  let isLoading = interfaceIsLoading;
+  const error = interfaceError as Error;
+  const isLoading = interfaceIsLoading;
 
   const hasDeveloperDocumentation =
     interfaceData && interfaceData.body ? true : false;

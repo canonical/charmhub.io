@@ -1,7 +1,13 @@
 import { useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import { RecoilValue, useRecoilValue } from "recoil";
 
-const RecoilObserver = ({ node, event }: { node: any; event: Function }) => {
+const RecoilObserver = ({
+  node,
+  event,
+}: {
+  node: RecoilValue<unknown>;
+  event: (value: unknown) => void;
+}) => {
   const value = useRecoilValue(node);
 
   useEffect(() => {

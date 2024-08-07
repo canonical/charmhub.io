@@ -1,12 +1,12 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
+import { createRoot } from "react-dom/client";
 
 type MultiSelectProps = {
   value: string[];
   values: { name: string; key: string }[];
   updateHandler: (values: { name: string; key: string }[]) => void;
-}
+};
 
 type MultiSelectState = {
   selected: { name: string; key: string }[];
@@ -15,7 +15,7 @@ type MultiSelectState = {
   searchResults: { name: string; key: string }[];
   showSearch: boolean;
   highlightedOption: number;
-}
+};
 
 class MultiSelect extends React.Component<MultiSelectProps, MultiSelectState> {
   searchInput: HTMLInputElement;
@@ -24,7 +24,9 @@ class MultiSelect extends React.Component<MultiSelectProps, MultiSelectState> {
   static propTypes: {
     value: PropTypes.Requireable<string[]>;
     values: PropTypes.Requireable<{ name: string; key: string }[]>;
-    updateHandler: PropTypes.Requireable<(...args: { name: string; key: string }[]) => void>;
+    updateHandler: PropTypes.Requireable<
+      (...args: { name: string; key: string }[]) => void
+    >;
   };
   constructor(props: MultiSelectProps) {
     super(props);
@@ -60,7 +62,7 @@ class MultiSelect extends React.Component<MultiSelectProps, MultiSelectState> {
     this.clearAll = this.clearAll.bind(this);
   }
 
-  sortByName(a: {name: string}, b: {name: string}) {
+  sortByName(a: { name: string }, b: { name: string }) {
     return a.name.localeCompare(b.name);
   }
 
@@ -130,7 +132,10 @@ class MultiSelect extends React.Component<MultiSelectProps, MultiSelectState> {
    * @param searchTerm
    * @returns {{name: string, key: string}[]}
    */
-  filterByTerm(values: {name: string, key: string}[], searchTerm: string = this.state.searchTerm) {
+  filterByTerm(
+    values: { name: string; key: string }[],
+    searchTerm: string = this.state.searchTerm
+  ) {
     searchTerm = searchTerm || this.state.searchTerm;
     return values.filter(
       (item) =>
@@ -179,7 +184,7 @@ class MultiSelect extends React.Component<MultiSelectProps, MultiSelectState> {
   handleKeypress(event: React.KeyboardEvent<HTMLInputElement>) {
     if (this.state.showSearch) {
       let highlighted = this.state.highlightedOption || 0;
-      let results = this.state.searchResults;
+      const results = this.state.searchResults;
 
       switch (event.key) {
         case "ArrowDown":
@@ -268,7 +273,7 @@ class MultiSelect extends React.Component<MultiSelectProps, MultiSelectState> {
    * @param event
    */
   handleClickOutside(event: MouseEvent) {
-    let target = event.target as HTMLElement;
+    const target = event.target as HTMLElement;
     if (this.state.showSearch) {
       if (this.wrapperEl && !this.wrapperEl.contains(target)) {
         this.blur();
@@ -321,8 +326,7 @@ class MultiSelect extends React.Component<MultiSelectProps, MultiSelectState> {
           Clear all
         </a>
       );
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -416,7 +420,7 @@ MultiSelect.propTypes = {
 function updateHandler(input: HTMLInputElement, delimiter: string) {
   const _input = input;
   const _delimiter = delimiter;
-  return function (values: {key: string}[]) {
+  return function (values: { key: string }[]) {
     _input.value = values.map((item) => item.key).join(_delimiter);
     const changeEvent = new Event("change", { bubbles: true });
 
@@ -437,7 +441,11 @@ function updateHandler(input: HTMLInputElement, delimiter: string) {
  * @param {{name: string, key: string}[]} values
  * @param {String} delimiter
  */
-function init(selector: string, values: { name: string; key: string }[], delimiter = ",") {
+function init(
+  selector: string,
+  values: { name: string; key: string }[],
+  delimiter = ","
+) {
   const el = document.querySelector(selector);
 
   if (el) {
@@ -459,13 +467,12 @@ function init(selector: string, values: { name: string; key: string }[], delimit
     }
 
     // do the react
-    ReactDOM.render(
+    createRoot(holder).render(
       <MultiSelect
         value={currentValue}
         values={values}
         updateHandler={updateHandler(input, delimiter)}
-      />,
-      holder
+      />
     );
   }
 }

@@ -24,7 +24,7 @@ const renderComponent = ({
   event,
   filterQuery,
 }: {
-  event?: Function;
+  event?: () => void;
   filterQuery?: string;
 }) => {
   mockSearchParams.filter = filterQuery || "";

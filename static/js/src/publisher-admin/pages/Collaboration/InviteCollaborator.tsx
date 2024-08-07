@@ -23,9 +23,9 @@ import { useSendMutation } from "../../hooks";
 import { Invite } from "../../types";
 
 type Props = {
-  setShowSidePanel: Function;
-  setShowInviteSuccess: Function;
-  setShowInviteError: Function;
+  setShowSidePanel: (showSidePanel: boolean) => void;
+  setShowInviteSuccess: (showInviteSuccess: boolean) => void;
+  setShowInviteError: (showInviteError: boolean) => void;
 };
 
 function InviteCollaborator({

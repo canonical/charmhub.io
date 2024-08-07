@@ -1,9 +1,8 @@
-
 import { useQuery } from "react-query";
 
 export type ReleaseMap = {
   [key: string]: ReleaseChannel;
-}
+};
 
 function useReleases(packageName: string | undefined) {
   return useQuery(["releaseData", packageName], async () => {
@@ -19,7 +18,10 @@ function useReleases(packageName: string | undefined) {
       throw new Error(releaseData?.message);
     }
 
-    return releaseData.data as { releases: ReleaseMap, all_architectures: string[] };
+    return releaseData.data as {
+      releases: ReleaseMap;
+      all_architectures: string[];
+    };
   });
 }
 

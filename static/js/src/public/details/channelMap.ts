@@ -12,7 +12,9 @@ const init = (packageName: string, channelMapButton: HTMLElement) => {
 
   const mask = channelMap?.querySelector(".p-channel-map__mask");
 
-  const channelMapContent = channelMap?.querySelector(".p-channel-map__content") as HTMLElement;
+  const channelMapContent = channelMap?.querySelector(
+    ".p-channel-map__content"
+  ) as HTMLElement;
 
   const channelMapArchFilter = channelMap?.querySelector(
     "[data-js='channel-map-arch-filter']"
@@ -25,7 +27,7 @@ const init = (packageName: string, channelMapButton: HTMLElement) => {
   ) as NodeListOf<Element>;
 
   const selectChannel = (track: string, channel: string) => {
-    var page = window.location.pathname;
+    const page = window.location.pathname;
 
     if (track === "latest" && channel === "stable") {
       window.location.href = `${page}`;
@@ -38,8 +40,8 @@ const init = (packageName: string, channelMapButton: HTMLElement) => {
     channelMap?.classList.remove("u-hide");
     channelMapButton.setAttribute("aria-expanded", "true");
 
-    var track = "latest";
-    var channel = channelMapState.channel;
+    let track = "latest";
+    let channel = channelMapState.channel;
 
     if (channel.includes("/")) {
       track = channel.split("/")[0];
@@ -86,11 +88,12 @@ const init = (packageName: string, channelMapButton: HTMLElement) => {
       row = row.parentNode as HTMLElement;
     }
 
-    if (row.dataset && row.dataset.channelMapChannel && row.dataset.channelMapTrack) {
-      selectChannel(
-        row.dataset.channelMapTrack,
-        row.dataset.channelMapChannel,
-      );
+    if (
+      row.dataset &&
+      row.dataset.channelMapChannel &&
+      row.dataset.channelMapTrack
+    ) {
+      selectChannel(row.dataset.channelMapTrack, row.dataset.channelMapChannel);
     }
   });
 

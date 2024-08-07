@@ -6,9 +6,9 @@ import { getInvitesByStatus, buildInviteTableRows } from "../../utils";
 import { filteredInvitesListState } from "../../state/selectors";
 
 type Props = {
-  setShowRevokeModal: Function;
-  setShowResendModal: Function;
-  setShowReopenModal: Function;
+  setShowRevokeModal: (showRevokeModal: boolean) => void;
+  setShowResendModal: (showResendModal: boolean) => void;
+  setShowReopenModal: (showReopenModal: boolean) => void;
 };
 
 function Invites({

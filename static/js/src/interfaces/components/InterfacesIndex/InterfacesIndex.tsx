@@ -13,8 +13,8 @@ import {
 
 import type { InterfaceItem } from "../../types";
 
-function pageArray(items: Array<any>, count: number) {
-  const result: Array<any> = [];
+function pageArray<T>(items: T[], count: number) {
+  const result: T[][] = [];
 
   for (let i = 0; i < Math.ceil(items.length / count); i++) {
     const start = i * count;
@@ -45,13 +45,12 @@ type Props = {
 function InterfacesIndex({ interfacesList }: Props) {
   const ITEMS_PER_PAGE = 10;
 
-  const [searchParams, setSearchParams]: [URLSearchParams, Function] =
-    useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [interfaces, setInterfaces] = useState<Array<InterfaceItem>>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [currentItems, setCurrentItems] = useState([]);
+  const [currentItems, setCurrentItems] = useState<InterfaceItem[]>([]);
   const [currentPageNumber, setCurrentPageNumber] = useState(
     parseInt(searchParams.get("page") || "1")
   );
@@ -117,9 +116,8 @@ function InterfacesIndex({ interfacesList }: Props) {
             <p>
               Interfaces describe the relation between two charms. This
               interface catalogue shows opinionated, standardized interface
-              specifications for charm relations. Each interface
-              outlines the behavior and requirements of charms relating to one
-              another.
+              specifications for charm relations. Each interface outlines the
+              behavior and requirements of charms relating to one another.
             </p>
             <p>
               Most of the content of these pages can be collaboratively
@@ -197,9 +195,7 @@ function InterfacesIndex({ interfacesList }: Props) {
                               {item?.status}
                             </StatusLabel>
                             <Link
-                              to={`/integrations/${
-                                item?.name
-                              }/${item?.status}`}
+                              to={`/integrations/${item?.name}/${item?.status}`}
                             >
                               {item?.name}
                             </Link>
@@ -230,7 +226,7 @@ function InterfacesIndex({ interfacesList }: Props) {
               setCurrentPageIndex(pageNumber - 1);
 
               if (pageNumber > 1) {
-                setSearchParams({ page: pageNumber });
+                setSearchParams({ page: pageNumber.toString() });
               } else {
                 setSearchParams({});
               }

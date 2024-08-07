@@ -6,18 +6,23 @@ import {
   Col,
   Spinner,
   SearchAndFilter,
-  Chip
+  Chip,
 } from "@canonical/react-components";
 import { InterfaceItem } from "../InterfaceItem";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { filterChipsSelector, filterState } from "../../state";
+import { SearchAndFilterChip } from "@canonical/react-components/dist/components/SearchAndFilter/types";
 
-export const getIntegrations = async (charm: string): Promise<IInterfaceData[]> => {
+export const getIntegrations = async (
+  charm: string
+): Promise<IInterfaceData[]> => {
   let resp;
   const url = new URL(document.location.href);
   const selectedChannel = url.searchParams.get("channel");
   if (selectedChannel) {
-    resp = await fetch(`/${charm}/integrations.json?channel=${selectedChannel}`);
+    resp = await fetch(
+      `/${charm}/integrations.json?channel=${selectedChannel}`
+    );
   } else {
     resp = await fetch(`/${charm}/integrations.json`);
   }
@@ -101,56 +106,66 @@ export const App = () => {
   }
 
   const renderSideNav = (data: IInterfaceData[], type: string) => {
-    const hasItems = data.some((interfaceItem: IInterfaceData) => interfaceItem.type === type);
+    const hasItems = data.some(
+      (interfaceItem: IInterfaceData) => interfaceItem.type === type
+    );
     if (!hasItems) {
       return <></>;
     } else {
-      return <>
-        <h3 className="p-side-navigation__heading" style={{ paddingLeft: 0, paddingTop: 10 }}>{type.toUpperCase()}</h3>
-        {data.map((interfaceItem: IInterfaceData, index) => {
-          if (interfaceItem.type === type) {
-            return (
-              <li
-                key={`${interfaceItem.key}|${interfaceItem.interface}`}
-                className="p-side-navigation__item"
-              >
-                <a
-                  className={`p-side-navigation__link ${
-                    isActive(`#${interfaceItem.key}`, index) ? "is-active" : ""
-                  }`}
-                  href={`#${interfaceItem.key}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const target = e.target as HTMLLinkElement;
-                    const targetElId = target.getAttribute("href");
-
-                    if (targetElId) {
-                      const targetEl = document.querySelector(targetElId);
-                      targetEl?.scrollIntoView();
-                      setFragment(targetElId);
-                      window.location.hash = targetElId;
-                      target.classList.add("is-active");
-                    }
-                  }}
+      return (
+        <>
+          <h3
+            className="p-side-navigation__heading"
+            style={{ paddingLeft: 0, paddingTop: 10 }}
+          >
+            {type.toUpperCase()}
+          </h3>
+          {data.map((interfaceItem: IInterfaceData, index) => {
+            if (interfaceItem.type === type) {
+              return (
+                <li
+                  key={`${interfaceItem.key}|${interfaceItem.interface}`}
+                  className="p-side-navigation__item"
                 >
-                  {`${interfaceItem.key}`}
-                  {interfaceItem.required === true && (
-                  <Chip
-                    value="Required"
-                    appearance="negative"
-                    className="u-no-margin--bottom"
-                    style={{ marginLeft: '10px' }}
-                  />
-                )}
-                </a>
-              </li>
-            );
-          }
-          else {
-            return <></>;
-          }
-        })}
-      </>;
+                  <a
+                    className={`p-side-navigation__link ${
+                      isActive(`#${interfaceItem.key}`, index)
+                        ? "is-active"
+                        : ""
+                    }`}
+                    href={`#${interfaceItem.key}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const target = e.target as HTMLLinkElement;
+                      const targetElId = target.getAttribute("href");
+
+                      if (targetElId) {
+                        const targetEl = document.querySelector(targetElId);
+                        targetEl?.scrollIntoView();
+                        setFragment(targetElId);
+                        window.location.hash = targetElId;
+                        target.classList.add("is-active");
+                      }
+                    }}
+                  >
+                    {`${interfaceItem.key}`}
+                    {interfaceItem.required === true && (
+                      <Chip
+                        value="Required"
+                        appearance="negative"
+                        className="u-no-margin--bottom"
+                        style={{ marginLeft: "10px" }}
+                      />
+                    )}
+                  </a>
+                </li>
+              );
+            } else {
+              return <></>;
+            }
+          })}
+        </>
+      );
     }
   };
 
@@ -176,8 +191,8 @@ export const App = () => {
               style={{ position: "sticky", top: "0" }}
             >
               <ul className="p-side-navigation__list">
-                {filteredData && renderSideNav(filteredData, 'provides')}
-                {filteredData && renderSideNav(filteredData, 'requires')}
+                {filteredData && renderSideNav(filteredData, "provides")}
+                {filteredData && renderSideNav(filteredData, "requires")}
               </ul>
             </div>
           </Col>
@@ -205,8 +220,9 @@ export const App = () => {
                 >
                   <div style={{ position: "absolute", width: "100%" }}>
                     <SearchAndFilter
-                      filterPanelData={availableFilters as any}
-                      returnSearchData={(searchData: any) => {
+                      // @ts-expect-error: id mismatch (number instead of string) but doesn't matter in reality
+                      filterPanelData={availableFilters}
+                      returnSearchData={(searchData: SearchAndFilterChip[]) => {
                         setFilterData((prev) =>
                           prev !== searchData
                             ? (searchData as IFilterChip[])
@@ -242,18 +258,33 @@ export const App = () => {
         </div>
       )}
       {integrationCount === 0 && (
-          <div className="p-strip u-no-padding--top">
-            <div className="u-fixed-width u-equal-height">
-              <div className="charm-empty-docs-icon u-vertically-center">
-                <img src="https://assets.ubuntu.com/v1/8acd8f55-Integrations.svg" alt="" width="121" height="121" />
-              </div>
-              <div className="col-9 charm-empty-docs-content">
-                <h4>No Integrations have been added for this charm</h4>
-                <p>Integration is a connection an application supports by virtue of having a particular endpoint.</p>
-                <p className="u-no-margin--bottom"><a className="p-button--positive u-no-margin--bottom" href="https://juju.is/docs/juju/relation">Learn how to manage charm integrations</a></p>
-              </div>
+        <div className="p-strip u-no-padding--top">
+          <div className="u-fixed-width u-equal-height">
+            <div className="charm-empty-docs-icon u-vertically-center">
+              <img
+                src="https://assets.ubuntu.com/v1/8acd8f55-Integrations.svg"
+                alt=""
+                width="121"
+                height="121"
+              />
+            </div>
+            <div className="col-9 charm-empty-docs-content">
+              <h4>No Integrations have been added for this charm</h4>
+              <p>
+                Integration is a connection an application supports by virtue of
+                having a particular endpoint.
+              </p>
+              <p className="u-no-margin--bottom">
+                <a
+                  className="p-button--positive u-no-margin--bottom"
+                  href="https://juju.is/docs/juju/relation"
+                >
+                  Learn how to manage charm integrations
+                </a>
+              </p>
             </div>
           </div>
+        </div>
       )}
     </Col>
   );

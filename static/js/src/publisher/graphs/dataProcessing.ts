@@ -5,16 +5,16 @@ import { WeeklyActiveDevicesTrend } from "./activeDevices";
 
 type Data = {
   date?: Date;
-  name: string,
-  values: { date: Date, value: number }[],
-}
+  name: string;
+  values: { date: Date; value: number }[];
+};
 
 function prepareLineData(this: WeeklyActiveDevicesTrend) {
   const _data: { [key: string]: string | Date }[] = [];
   const _keys: string[] = [];
   const data: Data[] = [];
 
-  this.rawData.series.forEach((series: {name: string, values: number[]}) => {
+  this.rawData.series.forEach((series: { name: string; values: number[] }) => {
     _keys.push(series.name);
     const obj: Data = {
       name: series.name,
@@ -31,7 +31,7 @@ function prepareLineData(this: WeeklyActiveDevicesTrend) {
 
   this.rawData.buckets.forEach((bucket: string, i: number) => {
     const obj: {
-      [key: string]: string | Date,
+      [key: string]: string | Date;
     } = {
       date: utcParse("%Y-%m-%d")(bucket) as Date,
     };
@@ -43,9 +43,12 @@ function prepareLineData(this: WeeklyActiveDevicesTrend) {
     _data.push(obj);
   });
 
-  const values = this.rawData.series.reduce((acc: number[], current: {values: number[]}) => {
-    return acc.concat(current.values);
-  }, []);
+  const values = this.rawData.series.reduce(
+    (acc: number[], current: { values: number[] }) => {
+      return acc.concat(current.values);
+    },
+    []
+  );
 
   // set line colour to green if the number of active devices went up (day7 - day1 > 0)
   // and red if the number of active devices went down
@@ -55,13 +58,13 @@ function prepareLineData(this: WeeklyActiveDevicesTrend) {
       ? this.colorPositive
       : this.colorNegative;
 
-  this.data = _data ;
+  this.data = _data;
   this.keys = _keys;
   this.maxYValue = Math.max(...values);
   this.transformedData = data;
 }
 
-function prepareScales(this: WeeklyActiveDevicesTrend) { 
+function prepareScales(this: WeeklyActiveDevicesTrend) {
   this.xScale = scaleTime()
     .rangeRound([0, this.width])
     .domain(extent(this.data, (d) => new Date(d.date)) as [Date, Date]);

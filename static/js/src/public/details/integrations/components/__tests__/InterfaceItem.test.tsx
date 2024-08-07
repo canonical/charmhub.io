@@ -26,7 +26,7 @@ const mockCharms: ICharm[] = [
       display_name: "Charm 1",
       name: "test-charm-1",
       platforms: ["vm"],
-      channel: { 
+      channel: {
         name: "test-channel-1",
         risk: "stable",
         track: "latest",
@@ -44,7 +44,7 @@ const mockCharms: ICharm[] = [
       display_name: "Charm 2",
       name: "test-charm-2",
       platforms: ["k8s"],
-      channel: { 
+      channel: {
         name: "test-channel-2",
         risk: "stable",
         track: "latest",
@@ -61,9 +61,7 @@ const mockCharms: ICharm[] = [
 beforeEach(() => {
   jest.resetAllMocks();
   jest.mock("recoil", () => ({
-    useRecoilValue: jest.fn(() => [
-      { lead: "Platform", value: "Kubernetes" },
-    ]),
+    useRecoilValue: jest.fn(() => [{ lead: "Platform", value: "Kubernetes" }]),
     useSetRecoilState: jest.fn(),
   }));
 });
@@ -84,7 +82,9 @@ describe("InterfaceItem Component", () => {
       );
     });
 
-    expect(screen.getByRole("heading", { name: /test-key/ })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /test-key/ })
+    ).toBeInTheDocument();
     expect(screen.getByText("This is a test description.")).toBeInTheDocument();
     expect(screen.getByText("Required")).toBeInTheDocument();
   });
@@ -112,9 +112,7 @@ describe("InterfaceItem Component", () => {
   });
 
   test("shows loading spinner while data is being fetched", async () => {
-    global.fetch = jest.fn(() =>
-      new Promise(() => {})
-    ) as jest.Mock;
+    global.fetch = jest.fn(() => new Promise(() => {})) as jest.Mock;
 
     await act(async () => {
       render(
@@ -130,11 +128,16 @@ describe("InterfaceItem Component", () => {
       );
     });
 
-    expect(screen.getByText(`Loading charms for ${mockData.interface}`)).toBeInTheDocument();
+    expect(
+      screen.getByText(`Loading charms for ${mockData.interface}`)
+    ).toBeInTheDocument();
   });
 
   test("renders 'No charms found' message when no charms are returned and no filters are applied", async () => {
-    const dataWithoutInterface = { ...mockData, interface: "nonexistent_interface" };
+    const dataWithoutInterface = {
+      ...mockData,
+      interface: "nonexistent_interface",
+    };
     global.fetch = jest.fn(() =>
       Promise.resolve({
         json: () => Promise.resolve({ packages: [] }),
@@ -166,7 +169,7 @@ describe("InterfaceItem Component", () => {
         json: () => Promise.resolve({ packages: mockCharms }),
       })
     ) as jest.Mock;
-  
+
     await act(async () => {
       render(
         <RecoilRoot>
@@ -180,11 +183,14 @@ describe("InterfaceItem Component", () => {
         </RecoilRoot>
       );
     });
-  
+
     await waitFor(() => {
       const charms = screen.queryAllByText(/Charm \d/);
       expect(charms).toHaveLength(2);
-      expect(charms.map((el) => el.textContent)).toEqual(["Charm 1", "Charm 2"]);
+      expect(charms.map((el) => el.textContent)).toEqual([
+        "Charm 1",
+        "Charm 2",
+      ]);
     });
-  });  
+  });
 });

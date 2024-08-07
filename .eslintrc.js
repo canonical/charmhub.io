@@ -1,6 +1,6 @@
 module.exports = {
-  parser: "@babel/eslint-parser",
-  plugins: ["jest", "react"],
+  parser: "@typescript-eslint/parser",
+  plugins: ["jest", "react", "@typescript-eslint"],
   globals: {
     ga: "readonly",
   },
@@ -9,10 +9,12 @@ module.exports = {
     es6: true,
     node: true,
     "jest/globals": true,
+    jest: true,
   },
   extends: [
     "eslint:recommended",
     "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
   ],
   parserOptions: {
@@ -25,6 +27,11 @@ module.exports = {
     "linebreak-style": ["error", "unix"],
     semi: ["error", "always"],
     "object-curly-spacing": ["error", "always"],
+    "react/react-in-jsx-scope": "off",
+    "react/display-name": "off",
+    "react/no-unescaped-entities": "off",
+    // Disabled for good reason, see: https://typescript-eslint.io/troubleshooting/faqs/eslint/#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
+    "no-undef": "off",
   },
   settings: {
     react: {

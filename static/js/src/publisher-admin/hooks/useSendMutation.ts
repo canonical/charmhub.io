@@ -1,16 +1,16 @@
-import { useMutation } from "react-query";
+import { QueryClient, useMutation } from "react-query";
 
 function useSendMutation(
   packageName: string | undefined,
   publisherName: string | undefined,
   activeInviteEmail: string | undefined,
-  setInviteLink: Function,
-  setInviteEmailLink: Function,
-  setShowInviteSuccess: Function,
-  setShowInviteError: Function,
-  queryClient: any,
+  setInviteLink: (value: string) => void,
+  setInviteEmailLink: (value: string) => void,
+  setShowInviteSuccess: (value: boolean) => void,
+  setShowInviteError: (value: boolean) => void,
+  queryClient: QueryClient,
   csrfToken: string,
-  setShowSidePanel?: Function
+  setShowSidePanel?: (value: boolean) => void
 ) {
   return useMutation(
     async () => {
