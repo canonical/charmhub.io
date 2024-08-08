@@ -251,7 +251,11 @@
 <a name='L186'></a><a href='#L186'>186</a>
 <a name='L187'></a><a href='#L187'>187</a>
 <a name='L188'></a><a href='#L188'>188</a>
-<a name='L189'></a><a href='#L189'>189</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -311,6 +315,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -349,6 +355,8 @@
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -462,14 +470,14 @@
   @param {HTMLElement} sideNavigation The side navigation element.
 */
   function setupSideNavigation(sideNavigation: HTMLElement) {
-    var toggles: HTMLElement[] = [].slice.call(
+    const toggles: HTMLElement[] = [].slice.call(
       sideNavigation.querySelectorAll(".js-drawer-toggle")
     );
 &nbsp;
     toggles.forEach(<span class="fstat-no" title="function not covered" >fu</span>nction (toggle) {
 <span class="cstat-no" title="statement not covered" >      toggle.addEventListener("click", <span class="fstat-no" title="function not covered" >fu</span>nction (event) {</span>
 <span class="cstat-no" title="statement not covered" >        event.preventDefault();</span>
-        var sideNav = <span class="cstat-no" title="statement not covered" >document.getElementById(</span>
+        const sideNav = <span class="cstat-no" title="statement not covered" >document.getElementById(</span>
           toggle.getAttribute("aria-controls") || ""
         );
 &nbsp;
@@ -486,7 +494,7 @@
 */
   function setupSideNavigations(sideNavigationSelector: string) {
     // Setup all side navigations on the page.
-    var sideNavigations = [].slice.call(
+    const sideNavigations = [].slice.call(
       document.querySelectorAll(sideNavigationSelector)
     );
 &nbsp;
@@ -494,15 +502,17 @@
   }
 &nbsp;
   function initFilters() {
-    var urlParams = new URLSearchParams(window.location.search);
-    var checkboxes: HTMLInputElement[] = [].slice.call(
+    const urlParams = new URLSearchParams(window.location.search);
+    const checkboxes: HTMLInputElement[] = [].slice.call(
       document.querySelectorAll("[data-js='filter']")
     );
-    var topics: HTMLElement[] = [].slice.call(document.querySelectorAll("[data-js='item']"));
-    var closeFiltersButtonMobile = document.querySelector(
+    const topics: HTMLElement[] = [].slice.call(
+      document.querySelectorAll("[data-js='item']")
+    );
+    const closeFiltersButtonMobile = document.querySelector(
       "[data-js='filter-button-mobile-close']"
     ) as HTMLElement;
-    var filters: string[] = [];
+    let filters: string[] = [];
 &nbsp;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (urlParams.get("filters")) {
 <span class="cstat-no" title="statement not covered" >      filters = urlParams.get("filters")?.split(",") ?? [];</span>
@@ -519,7 +529,7 @@
     function populateCheckboxes() {
       // Create a list of topics values
       // Dedupe with a set and convert back to an array
-      var topicValues = Array.from(
+      const topicValues = Array.from(
         new Set(
           topics.flatMap(function (topic: HTMLElement) {
             return topic.dataset.filter?.split(",");
@@ -527,7 +537,7 @@
         )
       );
       checkboxes.forEach(function (checkbox) {
-        var value = checkbox.value;
+        const value = checkbox.value;
         if (!topicValues.includes(value)) {
           checkbox.setAttribute("disabled", "disabled");
         }
@@ -535,10 +545,12 @@
 &nbsp;
       <span class="missing-if-branch" title="else path not taken" >E</span>if (filters) {
         filters.forEach(<span class="fstat-no" title="function not covered" >fu</span>nction (filter) {
-          var selector = <span class="cstat-no" title="statement not covered" >"[aria-labelledby='" + filter + "-filter']";</span>
-          var checkboxObject = <span class="cstat-no" title="statement not covered" >document.querySelector(selector) as HTMLInputElement;</span>
+          const selector = <span class="cstat-no" title="statement not covered" >"[aria-labelledby='" + filter + "-filter']";</span>
+          const checkboxObject = <span class="cstat-no" title="statement not covered" >document.querySelector(</span>
+            selector
+          ) as HTMLInputElement;
 <span class="cstat-no" title="statement not covered" >          if (checkboxObject) {</span>
-            var checkboxDisabled = <span class="cstat-no" title="statement not covered" >checkboxObject.getAttribute("disabled");</span>
+            const checkboxDisabled = <span class="cstat-no" title="statement not covered" >checkboxObject.getAttribute("disabled");</span>
 <span class="cstat-no" title="statement not covered" >            if (checkboxDisabled) {</span>
 <span class="cstat-no" title="statement not covered" >              removeFilter(filter);</span>
             } else {
@@ -551,7 +563,7 @@
 &nbsp;
     // Check if element should be filtered
     function filterCheck(filterText: string) {
-      var match = false;
+      const match = false;
 &nbsp;
       return !!filters.find(function (filter) {
         return filterText.includes(filter) &amp;&amp; !match;
@@ -578,12 +590,12 @@
     }
 &nbsp;
     function updateUrl() {
-      var currentUrl = window.location.href;
-      var baseUrl = currentUrl.split("?")[0];
-      var newUrl = baseUrl;
+      const currentUrl = window.location.href;
+      const baseUrl = currentUrl.split("?")[0];
+      let newUrl = baseUrl;
 &nbsp;
       if (filters.length &gt; 0) {
-        var filtersString = "";
+        let filtersString = "";
         filters.forEach(function (filter, i) {
           if (i === filters.length - 1) {
             filtersString = filtersString + filter;
@@ -613,7 +625,7 @@
     }
 &nbsp;
     function filterHandler(e: Event) {
-      let target = e.target as HTMLInputElement;
+      const target = e.target as HTMLInputElement;
       if (target.checked) {
         addFilter(target.value);
       } else {
@@ -634,7 +646,7 @@ export { initTopicFilters };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-06T22:06:51.076Z
+                at 2024-08-08T22:07:02.433Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

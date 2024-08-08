@@ -536,7 +536,16 @@
 <a name='L471'></a><a href='#L471'>471</a>
 <a name='L472'></a><a href='#L472'>472</a>
 <a name='L473'></a><a href='#L473'>473</a>
-<a name='L474'></a><a href='#L474'>474</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L474'></a><a href='#L474'>474</a>
+<a name='L475'></a><a href='#L475'>475</a>
+<a name='L476'></a><a href='#L476'>476</a>
+<a name='L477'></a><a href='#L477'>477</a>
+<a name='L478'></a><a href='#L478'>478</a>
+<a name='L479'></a><a href='#L479'>479</a>
+<a name='L480'></a><a href='#L480'>480</a>
+<a name='L481'></a><a href='#L481'>481</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -669,6 +678,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -855,7 +867,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -976,22 +987,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -999,6 +1004,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1010,14 +1024,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from "react";
-import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
+import { createRoot } from "react-dom/client";
 &nbsp;
 type MultiSelectProps = {
   value: string[];
   values: { name: string; key: string }[];
   updateHandler: (values: { name: string; key: string }[]) =&gt; void;
-}
+};
 &nbsp;
 type MultiSelectState = {
   selected: { name: string; key: string }[];
@@ -1026,7 +1040,7 @@ type MultiSelectState = {
   searchResults: { name: string; key: string }[];
   showSearch: boolean;
   highlightedOption: number;
-}
+};
 &nbsp;
 class MultiSelect extends React.Component&lt;MultiSelectProps, MultiSelectState&gt; {
   searchInput: HTMLInputElement;
@@ -1035,7 +1049,9 @@ class MultiSelect extends React.Component&lt;MultiSelectProps, MultiSelectState&
   static propTypes: {
     value: PropTypes.Requireable&lt;string[]&gt;;
     values: PropTypes.Requireable&lt;{ name: string; key: string }[]&gt;;
-    updateHandler: PropTypes.Requireable&lt;(...args: { name: string; key: string }[]) =&gt; void&gt;;
+    updateHandler: PropTypes.Requireable&lt;
+      (...args: { name: string; key: string }[]) =&gt; void
+    &gt;;
   };
   constructor(props: MultiSelectProps) {
     super(props);
@@ -1071,7 +1087,7 @@ class MultiSelect extends React.Component&lt;MultiSelectProps, MultiSelectState&
     this.clearAll = this.clearAll.bind(this);
   }
 &nbsp;
-  sortByName(a: {name: string}, b: {name: string}) {
+  sortByName(a: { name: string }, b: { name: string }) {
     return a.name.localeCompare(b.name);
   }
 &nbsp;
@@ -1141,7 +1157,10 @@ class MultiSelect extends React.Component&lt;MultiSelectProps, MultiSelectState&
    * @param searchTerm
    * @returns {{name: string, key: string}[]}
    */
-<span class="fstat-no" title="function not covered" >  fi</span>lterByTerm(values: {name: string, key: string}[], searchTerm: string = <span class="branch-0 cbranch-no" title="branch not covered" >this.state.searchTerm)</span> {
+<span class="fstat-no" title="function not covered" >  fi</span>lterByTerm(
+    values: { name: string; key: string }[],
+    searchTerm: string = <span class="branch-0 cbranch-no" title="branch not covered" >this.state.searchTerm</span>
+  ) {
 <span class="cstat-no" title="statement not covered" >    searchTerm = searchTerm || this.state.searchTerm;</span>
 <span class="cstat-no" title="statement not covered" >    return values.filter(</span>
 <span class="fstat-no" title="function not covered" >      (i</span>tem) =&gt;
@@ -1190,7 +1209,7 @@ class MultiSelect extends React.Component&lt;MultiSelectProps, MultiSelectState&
   handleKeypress(event: React.KeyboardEvent&lt;HTMLInputElement&gt;) {
     <span class="missing-if-branch" title="else path not taken" >E</span>if (this.state.showSearch) {
       let highlighted = this.state.highlightedOption || 0;
-      let results = this.state.searchResults;
+      const results = this.state.searchResults;
 &nbsp;
       switch (event.key) {
         case "ArrowDown":
@@ -1279,7 +1298,7 @@ class MultiSelect extends React.Component&lt;MultiSelectProps, MultiSelectState&
    * @param event
    */
   handleClickOutside(event: MouseEvent) {
-    let target = event.target as HTMLElement;
+    const target = event.target as HTMLElement;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (this.state.showSearch) {
 <span class="cstat-no" title="statement not covered" >      if (this.wrapperEl &amp;&amp; !this.wrapperEl.contains(target)) {</span>
 <span class="cstat-no" title="statement not covered" >        this.blur();</span>
@@ -1332,8 +1351,7 @@ class MultiSelect extends React.Component&lt;MultiSelectProps, MultiSelectState&
           Clear all
         &lt;/a&gt;
       );
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -1427,7 +1445,7 @@ MultiSelect.propTypes = {
 function <span class="fstat-no" title="function not covered" >updateHandler(</span>input: HTMLInputElement, delimiter: string) {
   const _input = <span class="cstat-no" title="statement not covered" >input;</span>
   const _delimiter = <span class="cstat-no" title="statement not covered" >delimiter;</span>
-<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >fu</span>nction (values: {key: string}[]) {</span>
+<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >fu</span>nction (values: { key: string }[]) {</span>
 <span class="cstat-no" title="statement not covered" >    _input.value = values.map(<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.key)</span>.join(_delimiter);</span>
     const changeEvent = <span class="cstat-no" title="statement not covered" >new Event("change", { bubbles: true });</span>
 &nbsp;
@@ -1448,7 +1466,11 @@ function <span class="fstat-no" title="function not covered" >updateHandler(</sp
  * @param {{name: string, key: string}[]} values
  * @param {String} delimiter
  */
-function <span class="fstat-no" title="function not covered" >init(</span>selector: string, values: { name: string; key: string }[], delimiter = <span class="branch-0 cbranch-no" title="branch not covered" >",")</span> {
+function <span class="fstat-no" title="function not covered" >init(</span>
+  selector: string,
+  values: { name: string; key: string }[],
+  delimiter = <span class="branch-0 cbranch-no" title="branch not covered" >","</span>
+) {
   const el = <span class="cstat-no" title="statement not covered" >document.querySelector(selector);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (el) {</span>
@@ -1470,13 +1492,12 @@ function <span class="fstat-no" title="function not covered" >init(</span>select
     }
 &nbsp;
     // do the react
-<span class="cstat-no" title="statement not covered" >    ReactDOM.render(</span>
+<span class="cstat-no" title="statement not covered" >    createRoot(holder).render(</span>
       &lt;MultiSelect
         value={currentValue}
         values={values}
         updateHandler={updateHandler(input, delimiter)}
-      /&gt;,
-      holder
+      /&gt;
     );
   }
 }
@@ -1489,7 +1510,7 @@ export { MultiSelect as default, init as initMultiselect };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-06T22:06:51.076Z
+                at 2024-08-08T22:07:02.433Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

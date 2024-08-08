@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/6</span>
+                <span class='fraction'>4/10</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/13</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
@@ -157,7 +157,11 @@
 <a name='L92'></a><a href='#L92'>92</a>
 <a name='L93'></a><a href='#L93'>93</a>
 <a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -170,9 +174,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">24x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -196,11 +203,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -208,8 +218,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -254,7 +262,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { Row, Col } from "@canonical/react-components";
-import mermaid from 'mermaid';
+import mermaid from "mermaid";
 import MermaidDiagram from "../MermaidDiagram";
 &nbsp;
 import type {
@@ -263,13 +271,16 @@ import type {
   SubSubSectionData,
 } from "../../types";
 &nbsp;
-function addUniqueIds(data: any) {
-  return data.map((item: any) =&gt; {
-    return {
-      content: item,
-      id: crypto.randomUUID(),
-    };
-  });
+interface UniqueIdItem&lt;T&gt; {
+  content: T;
+  id: string;
+}
+&nbsp;
+function addUniqueIds&lt;T&gt;(data: T[]): UniqueIdItem&lt;T&gt;[] {
+  return data.map((item) =&gt; ({
+    content: item,
+    id: crypto.randomUUID(),
+  }));
 }
 &nbsp;
 function SubSubSection({
@@ -282,17 +293,17 @@ function SubSubSection({
   return (
     &lt;&gt;
       &lt;p&gt;{interfaceData.heading}&lt;/p&gt;
-      {data.map((item: { id: string; content: string }) =&gt; (
-        &lt;ReactMarkdown key={item.id}&gt;
-          {item.content}
-        &lt;/ReactMarkdown&gt;
+      {data.map((item) =&gt; (
+        &lt;ReactMarkdown key={item.id}&gt;{item.content}&lt;/ReactMarkdown&gt;
       ))}
     &lt;/&gt;
   );
 }
 &nbsp;
 function SubSection({ interfaceData }: { interfaceData: SubSectionData }) {
-  const data = addUniqueIds(interfaceData.children);
+  const data = Array.isArray(interfaceData.children)
+    ? addUniqueIds(interfaceData.children)
+    : <span class="branch-1 cbranch-no" title="branch not covered" >[];</span>
 &nbsp;
   return (
     &lt;Row&gt;
@@ -300,20 +311,21 @@ function SubSection({ interfaceData }: { interfaceData: SubSectionData }) {
         &lt;h3 className="p-muted-heading"&gt;{interfaceData.heading}&lt;/h3&gt;
       &lt;/Col&gt;
       &lt;Col size={6}&gt;
-        {data.map((item: { id: string; content: any }) =&gt;
-          typeof item.content === "string" ? (
-<span class="branch-0 cbranch-no" title="branch not covered" >            &lt;ReactMarkdown key={item.id}&gt;</span>
-              {item.content}
-            &lt;/ReactMarkdown&gt;
-          ) : (
-            &lt;SubSubSection key={item.id} interfaceData={item.content} /&gt;
+        {typeof interfaceData.children === "string" ? (
+<span class="branch-0 cbranch-no" title="branch not covered" >          &lt;ReactMarkdown&gt;{interfaceData.children}&lt;/ReactMarkdown&gt;</span>
+        ) : (
+          data.map((item) =&gt;
+            typeof item.content === "string" ? (
+<span class="branch-0 cbranch-no" title="branch not covered" >              &lt;ReactMarkdown key={item.id}&gt;{item.content}&lt;/ReactMarkdown&gt;</span>
+            ) : (
+              &lt;SubSubSection key={item.id} interfaceData={item.content} /&gt;
+            )
           )
         )}
       &lt;/Col&gt;
     &lt;/Row&gt;
   );
 }
-&nbsp;
 &nbsp;
 function DocumentationSection({
   interfaceData,
@@ -329,7 +341,7 @@ function DocumentationSection({
   return (
     &lt;&gt;
       &lt;h2 className="p-heading--4"&gt;{interfaceData.heading}&lt;/h2&gt;
-      {data.map((item: { id: string; content: any }) =&gt; (
+      {data.map((item) =&gt;
         typeof item.content === "string" ? (
 <span class="branch-0 cbranch-no" title="branch not covered" >          item.content.startsWith("```mermaid") ? (</span>
             &lt;MermaidDiagram key={item.id} code={item.content} /&gt;
@@ -339,7 +351,7 @@ function DocumentationSection({
         ) : (
           &lt;SubSection key={item.id} interfaceData={item.content} /&gt;
         )
-      ))}
+      )}
     &lt;/&gt;
   );
 }
@@ -352,7 +364,7 @@ export default DocumentationSection;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-06T22:06:51.076Z
+                at 2024-08-08T22:07:02.433Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

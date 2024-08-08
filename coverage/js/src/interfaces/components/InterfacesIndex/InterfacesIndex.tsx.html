@@ -306,11 +306,7 @@
 <a name='L241'></a><a href='#L241'>241</a>
 <a name='L242'></a><a href='#L242'>242</a>
 <a name='L243'></a><a href='#L243'>243</a>
-<a name='L244'></a><a href='#L244'>244</a>
-<a name='L245'></a><a href='#L245'>245</a>
-<a name='L246'></a><a href='#L246'>246</a>
-<a name='L247'></a><a href='#L247'>247</a>
-<a name='L248'></a><a href='#L248'>248</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L244'></a><a href='#L244'>244</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -357,7 +353,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">19x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">19x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">19x</span>
@@ -419,7 +414,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">19x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -536,8 +530,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -572,8 +564,8 @@ import {
 &nbsp;
 import type { InterfaceItem } from "../../types";
 &nbsp;
-function pageArray(items: Array&lt;any&gt;, count: number) {
-  const result: Array&lt;any&gt; = [];
+function pageArray&lt;T&gt;(items: T[], count: number) {
+  const result: T[][] = [];
 &nbsp;
   for (let i = 0; i &lt; Math.ceil(items.length / count); i++) {
     const start = i * count;
@@ -604,13 +596,12 @@ type Props = {
 function InterfacesIndex({ interfacesList }: Props) {
   const ITEMS_PER_PAGE = 10;
 &nbsp;
-  const [searchParams, setSearchParams]: [URLSearchParams, Function] =
-    useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 &nbsp;
   const [interfaces, setInterfaces] = useState&lt;Array&lt;InterfaceItem&gt;&gt;([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [currentItems, setCurrentItems] = useState([]);
+  const [currentItems, setCurrentItems] = useState&lt;InterfaceItem[]&gt;([]);
   const [currentPageNumber, setCurrentPageNumber] = useState(
     parseInt(searchParams.get("page") || "1")
   );
@@ -676,9 +667,8 @@ function InterfacesIndex({ interfacesList }: Props) {
             &lt;p&gt;
               Interfaces describe the relation between two charms. This
               interface catalogue shows opinionated, standardized interface
-              specifications for charm relations. Each interface
-              outlines the behavior and requirements of charms relating to one
-              another.
+              specifications for charm relations. Each interface outlines the
+              behavior and requirements of charms relating to one another.
             &lt;/p&gt;
             &lt;p&gt;
               Most of the content of these pages can be collaboratively
@@ -756,9 +746,7 @@ function InterfacesIndex({ interfacesList }: Props) {
                               {item?.status}
                             &lt;/StatusLabel&gt;
                             &lt;Link
-                              to={`/integrations/${
-                                item?.name
-                              }/${item?.status}`}
+                              to={`/integrations/${item?.name}/${item?.status}`}
                             &gt;
                               {item?.name}
                             &lt;/Link&gt;
@@ -789,7 +777,7 @@ function InterfacesIndex({ interfacesList }: Props) {
 <span class="cstat-no" title="statement not covered" >              setCurrentPageIndex(pageNumber - 1);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >              if (pageNumber &gt; 1) {</span>
-<span class="cstat-no" title="statement not covered" >                setSearchParams({ page: pageNumber });</span>
+<span class="cstat-no" title="statement not covered" >                setSearchParams({ page: pageNumber.toString() });</span>
               } else {
 <span class="cstat-no" title="statement not covered" >                setSearchParams({});</span>
               }
@@ -811,7 +799,7 @@ export default InterfacesIndex;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-06T22:06:51.076Z
+                at 2024-08-08T22:07:02.433Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

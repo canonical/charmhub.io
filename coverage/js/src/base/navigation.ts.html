@@ -146,7 +146,16 @@
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -167,6 +176,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -182,21 +194,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -207,9 +204,24 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -228,6 +240,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">function toggleDropdown(toggle: HTMLElement, open: boolean) {
   const parentElement = toggle.parentNode;
@@ -249,7 +267,10 @@ function closeAllDropdowns(toggles: HTMLElement[]) {
   });
 }
 &nbsp;
-function handleClickOutside(toggles: HTMLElement[], containerClass: string): void {
+function handleClickOutside(
+  toggles: HTMLElement[],
+  containerClass: string
+): void {
   document.addEventListener("click", (event: MouseEvent) =&gt; {
     const target = event.target as HTMLElement;
 &nbsp;
@@ -263,7 +284,8 @@ function handleClickOutside(toggles: HTMLElement[], containerClass: string): voi
 &nbsp;
 function initNavDropdowns(containerClass: string): void {
   const toggles = Array.from(
-    document.querySelectorAll(containerClass + " [aria-controls]")) as HTMLElement[];
+    document.querySelectorAll(containerClass + " [aria-controls]")
+  ) as HTMLElement[];
 &nbsp;
   handleClickOutside(toggles, containerClass);
 &nbsp;
@@ -294,10 +316,9 @@ const navAccountContainer = document.querySelector(".js-nav-account");
         const authenticatedMenu = <span class="cstat-no" title="statement not covered" >navAccountContainer.querySelector(</span>
           ".js-nav-account--authenticated"
         ) as HTMLElement;
-        const displayName =
-<span class="cstat-no" title="statement not covered" >          navAccountContainer.querySelector(</span>
-            ".js-account--name"
-          ) as HTMLElement;
+        const displayName = <span class="cstat-no" title="statement not covered" >navAccountContainer.querySelector(</span>
+          ".js-account--name"
+        ) as HTMLElement;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        navAccountContainer.classList.add(</span>
           "p-navigation__item--dropdown-toggle"
@@ -312,14 +333,20 @@ const navAccountContainer = document.querySelector(".js-nav-account");
 &nbsp;
 initNavDropdowns(".p-navigation__item--dropdown-toggle");
 &nbsp;
-export { toggleDropdown, closeAllDropdowns, handleClickOutside, initNavDropdowns };</pre></td></tr></table></pre>
+export {
+  toggleDropdown,
+  closeAllDropdowns,
+  handleClickOutside,
+  initNavDropdowns,
+};
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-06T22:06:51.076Z
+                at 2024-08-08T22:07:02.433Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

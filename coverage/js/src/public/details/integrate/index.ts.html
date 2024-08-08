@@ -563,7 +563,31 @@
 <a name='L498'></a><a href='#L498'>498</a>
 <a name='L499'></a><a href='#L499'>499</a>
 <a name='L500'></a><a href='#L500'>500</a>
-<a name='L501'></a><a href='#L501'>501</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L501'></a><a href='#L501'>501</a>
+<a name='L502'></a><a href='#L502'>502</a>
+<a name='L503'></a><a href='#L503'>503</a>
+<a name='L504'></a><a href='#L504'>504</a>
+<a name='L505'></a><a href='#L505'>505</a>
+<a name='L506'></a><a href='#L506'>506</a>
+<a name='L507'></a><a href='#L507'>507</a>
+<a name='L508'></a><a href='#L508'>508</a>
+<a name='L509'></a><a href='#L509'>509</a>
+<a name='L510'></a><a href='#L510'>510</a>
+<a name='L511'></a><a href='#L511'>511</a>
+<a name='L512'></a><a href='#L512'>512</a>
+<a name='L513'></a><a href='#L513'>513</a>
+<a name='L514'></a><a href='#L514'>514</a>
+<a name='L515'></a><a href='#L515'>515</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1039,6 +1063,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1049,6 +1075,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1069,7 +1097,17 @@ import { Navigation, Pagination } from "swiper/modules";
 import debounce from "../../../libs/debounce";
 import "swiper/swiper-bundle.css";
 &nbsp;
-function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
+function buildChart(data: {
+  groups: string[][];
+  packageOne: {
+    iconPath: string;
+    name: string;
+  };
+  packageTwo: {
+    iconPath: string;
+    name: string;
+  };
+}) {
   // set dimensions
   const chartWidth = window.innerWidth &gt; 1175 ? <span class="branch-0 cbranch-no" title="branch not covered" >960 </span>: window.innerWidth * 0.8;
   const chartHeight = 280;
@@ -1155,7 +1193,7 @@ function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
     .attr("width", nodeWidth)
     .attr("height", nodeWidth)
     .attr("fill", "#cdcdcd")
-    .attr("transform", <span class="fstat-no" title="function not covered" >(_</span>d: any, i: number) =&gt; {
+    .attr("transform", <span class="fstat-no" title="function not covered" >(_</span>d: unknown, i: number) =&gt; {
       const angle = <span class="cstat-no" title="statement not covered" >102 - nodeWidth * data.groups.length;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      return `rotate(${angle + i * nodeRadius * 4}, ${</span>
@@ -1170,7 +1208,7 @@ function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
     .enter()
     .append("path")
     .attr("class", "left-node-line")
-    .attr("d", <span class="fstat-no" title="function not covered" >(_</span>d: any, i: number) =&gt; {
+    .attr("d", <span class="fstat-no" title="function not covered" >(_</span>d: unknown, i: number) =&gt; {
       let leftNodeYEndPos = <span class="cstat-no" title="statement not covered" >chartHeight / 2;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (data.groups.length === 5) {</span>
@@ -1189,7 +1227,7 @@ function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
     })
     .attr("stroke", "#cdcdcd")
     .attr("stroke-width", "1")
-    .attr("transform", <span class="fstat-no" title="function not covered" >(_</span>d: any, i: number) =&gt; {
+    .attr("transform", <span class="fstat-no" title="function not covered" >(_</span>d: unknown, i: number) =&gt; {
       const angle = <span class="cstat-no" title="statement not covered" >12 - nodeWidth * data.groups.length;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      return `rotate(${angle + i * nodeRadius * 4}, ${</span>
@@ -1236,7 +1274,7 @@ function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
     .attr("width", nodeWidth)
     .attr("height", nodeWidth)
     .attr("fill", "#cdcdcd")
-    .attr("transform", <span class="fstat-no" title="function not covered" >(_</span>d: any, i: number) =&gt; {
+    .attr("transform", <span class="fstat-no" title="function not covered" >(_</span>d: unknown, i: number) =&gt; {
       const angle = <span class="cstat-no" title="statement not covered" >102 - nodeWidth * data.groups.length;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      return `rotate(-${angle + i * nodeRadius * 4}, ${</span>
@@ -1251,7 +1289,7 @@ function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
     .enter()
     .append("path")
     .attr("class", "right-node-line")
-    .attr("d", <span class="fstat-no" title="function not covered" >(_</span>d: any, i: number) =&gt; {
+    .attr("d", <span class="fstat-no" title="function not covered" >(_</span>d: unknown, i: number) =&gt; {
       let rightNodeYEndPos = <span class="cstat-no" title="statement not covered" >chartHeight / 2;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (data.groups.length === 5) {</span>
@@ -1270,7 +1308,7 @@ function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
     })
     .attr("stroke", "#cdcdcd")
     .attr("stroke-width", 1)
-    .attr("transform", <span class="fstat-no" title="function not covered" >(_</span>d: any, i: number) =&gt; {
+    .attr("transform", <span class="fstat-no" title="function not covered" >(_</span>d: unknown, i: number) =&gt; {
       const angle = <span class="cstat-no" title="statement not covered" >12 - nodeWidth * data.groups.length;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      return `rotate(${angle + i * nodeRadius * 4}, ${</span>
@@ -1313,7 +1351,7 @@ function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
     )
     .attr("stroke", "#cdcdcd")
     .attr("stroke-width", "1")
-    .attr("transform", <span class="fstat-no" title="function not covered" >(_</span>d: any, i: number) =&gt; {
+    .attr("transform", <span class="fstat-no" title="function not covered" >(_</span>d: unknown, i: number) =&gt; {
 <span class="cstat-no" title="statement not covered" >      return `translate(0, ${40 * i})`;</span>
     });
 &nbsp;
@@ -1349,7 +1387,7 @@ function buildChart(data: { groups: any; packageOne: any; packageTwo: any; }) {
     );
 &nbsp;
   // connecting lines text
-  data.groups.forEach((_group: any, i: number) =&gt; {
+  data.groups.forEach((_group: unknown, i: number) =&gt; {
     const textGroup = bounds.append("g").attr("transform", <span class="fstat-no" title="function not covered" >()</span> =&gt; {
       const yPos = <span class="cstat-no" title="statement not covered" >(40 * data.groups.length) / 2 - 21;</span>
 &nbsp;
@@ -1538,7 +1576,9 @@ const init = (packageName: string, integrationPackage: string) =&gt; {
 <span class="cstat-no" title="statement not covered" >    data.groups = groups5;</span>
   }
 &nbsp;
-  const integrationChartWrapper = document.getElementById("integration-chart-wrapper");
+  const integrationChartWrapper = document.getElementById(
+    "integration-chart-wrapper"
+  );
   <span class="missing-if-branch" title="else path not taken" >E</span>if (integrationChartWrapper) {
     integrationChartWrapper.innerHTML = "";
   }
@@ -1548,7 +1588,9 @@ const init = (packageName: string, integrationPackage: string) =&gt; {
   const resize = debounce(
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >      if (window.innerWidth &gt;= 1036) {</span>
-        const integrationChartWrapper = <span class="cstat-no" title="statement not covered" >document.getElementById("integration-chart-wrapper");</span>
+        const integrationChartWrapper = <span class="cstat-no" title="statement not covered" >document.getElementById(</span>
+          "integration-chart-wrapper"
+        );
 <span class="cstat-no" title="statement not covered" >        if (integrationChartWrapper) {</span>
 <span class="cstat-no" title="statement not covered" >          integrationChartWrapper.innerHTML = "";</span>
         }
@@ -1570,7 +1612,7 @@ export { init };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-06T22:06:51.076Z
+                at 2024-08-08T22:07:02.433Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

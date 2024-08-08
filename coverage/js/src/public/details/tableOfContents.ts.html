@@ -203,7 +203,20 @@
 <a name='L138'></a><a href='#L138'>138</a>
 <a name='L139'></a><a href='#L139'>139</a>
 <a name='L140'></a><a href='#L140'>140</a>
-<a name='L141'></a><a href='#L141'>141</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -242,19 +255,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -326,6 +334,8 @@
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">8x</span>
@@ -345,10 +355,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { HistoryState } from "./historyState";
 &nbsp;
+interface Tab {
+  name: string;
+  tabEl: HTMLElement;
+  selected: boolean;
+  index: number;
+  contentEl: HTMLElement | null;
+}
+&nbsp;
 class TableOfContents {
   el: HTMLElement;
   instanceName: string;
-  tabs: any;
+  tabs: { [key: string]: Tab };
   historyState: HistoryState;
 &nbsp;
   constructor(el: HTMLElement, historyState: HistoryState) {
@@ -359,10 +377,10 @@ class TableOfContents {
 &nbsp;
     const tabLinks = this.el.querySelectorAll("[role='tab']");
 &nbsp;
-    tabLinks.forEach((tabLink: any, i: any) =&gt; {
-      const name = tabLink.getAttribute("aria-controls");
+    tabLinks.forEach((tabLink, i) =&gt; {
+      const name = tabLink.getAttribute("aria-controls") as string;
       let isSelected = tabLink.hasAttribute("aria-selected");
-      const controls = document.querySelector(`#${name}`);
+      const controls = document.querySelector(`#${name}`) as HTMLElement | null;
 &nbsp;
       <span class="missing-if-branch" title="if path not taken" >I</span>if (
         this.historyState.path.length === 2 &amp;&amp;
@@ -374,7 +392,7 @@ class TableOfContents {
 &nbsp;
       this.tabs[name] = {
         name,
-        tabEl: tabLink,
+        tabEl: tabLink as HTMLElement,
         selected: isSelected,
         index: i,
         contentEl: controls,
@@ -382,21 +400,16 @@ class TableOfContents {
     });
 &nbsp;
     this.updateUI();
-&nbsp;
     this.initEvents();
-&nbsp;
     this.historyState.addPopListener(this.popHandler.bind(this));
   }
 &nbsp;
   focus() {
-    const selectedTab = this.getSelected() as any;
+    const selectedTab = this.getSelected();
     <span class="missing-if-branch" title="else path not taken" >E</span>if (selectedTab) {
-      this.historyState.updatePath(0, [
-        this.instanceName,
-        selectedTab.name,
-      ]);
+      this.historyState.updatePath(0, [this.instanceName, selectedTab.name]);
     }
-  }  
+  }
 &nbsp;
   popHandler(state: Array&lt;string&gt;) {
     <span class="missing-if-branch" title="else path not taken" >E</span>if (state) {
@@ -414,8 +427,8 @@ class TableOfContents {
     }
   }
 &nbsp;
-  getSelected() {
-    let selected: { name: string; tabEl: HTMLElement; selected: boolean; index: number; contentEl: HTMLElement | null } | undefined;
+  getSelected(): Tab | undefined {
+    let selected: Tab | undefined;
 &nbsp;
     Object.keys(this.tabs).forEach((tab) =&gt; {
       if (this.tabs[tab].selected) {
@@ -449,7 +462,7 @@ class TableOfContents {
 &nbsp;
   updateUI() {
     this.resetTabUI();
-    const selectedTab = this.getSelected() as any;
+    const selectedTab = this.getSelected();
 &nbsp;
     <span class="missing-if-branch" title="else path not taken" >E</span>if (selectedTab) {
       <span class="missing-if-branch" title="else path not taken" >E</span>if (selectedTab.tabEl) {
@@ -465,7 +478,9 @@ class TableOfContents {
   initEvents() {
     this.el.addEventListener("click", (e) =&gt; {
       e.preventDefault();
-      const clickedTab = (e.target as HTMLElement).getAttribute("aria-controls");
+      const clickedTab = (e.target as HTMLElement).getAttribute(
+        "aria-controls"
+      );
       <span class="missing-if-branch" title="else path not taken" >E</span>if (clickedTab) {
         Object.keys(this.tabs).forEach((tab) =&gt; {
           if (tab === clickedTab) {
@@ -490,7 +505,7 @@ export { TableOfContents };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-06T22:06:51.076Z
+                at 2024-08-08T22:07:02.433Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

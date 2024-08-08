@@ -297,7 +297,9 @@
 <a name='L232'></a><a href='#L232'>232</a>
 <a name='L233'></a><a href='#L233'>233</a>
 <a name='L234'></a><a href='#L234'>234</a>
-<a name='L235'></a><a href='#L235'>235</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -489,6 +491,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -523,6 +526,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -553,7 +557,7 @@ type Validation = {
 &nbsp;
 class ListingForm {
   formEl: HTMLInputElement;
-  validation: { [key: string]: Validation};
+  validation: { [key: string]: Validation };
   prefixableFields: string[];
   allInputs: HTMLInputElement[];
   initialState: { [key: string]: string };
@@ -611,7 +615,7 @@ class ListingForm {
 &nbsp;
     // validate inputs on change
     this.formEl.addEventListener("input", <span class="fstat-no" title="function not covered" >(e</span>vent: Event) =&gt; {
-      let target = <span class="cstat-no" title="statement not covered" >event.target as HTMLInputElement;</span>
+      const target = <span class="cstat-no" title="statement not covered" >event.target as HTMLInputElement;</span>
 <span class="cstat-no" title="statement not covered" >      this.validateInput(target);</span>
 <span class="cstat-no" title="statement not covered" >      this.updateCurrentState(target);</span>
     });
@@ -620,7 +624,7 @@ class ListingForm {
       const input = this.formEl[inputName as keyof ListingForm["formEl"]];
       <span class="missing-if-branch" title="if path not taken" >I</span>if (input) {
 <span class="cstat-no" title="statement not covered" >        (input as HTMLElement).addEventListener("blur", <span class="fstat-no" title="function not covered" >(e</span>vent: Event) =&gt; {</span>
-          let target = <span class="cstat-no" title="statement not covered" >event.target as HTMLInputElement;</span>
+          const target = <span class="cstat-no" title="statement not covered" >event.target as HTMLInputElement;</span>
 <span class="cstat-no" title="statement not covered" >          this.prefixInput(target);</span>
 <span class="cstat-no" title="statement not covered" >          this.updateCurrentState(target);</span>
         });
@@ -631,11 +635,11 @@ class ListingForm {
 <span class="fstat-no" title="function not covered" >  di</span>ffState() {
     const diff = <span class="cstat-no" title="statement not covered" >deepCopy(this.initialState);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    for (let key of ALLOWED_KEYS) {</span>
+<span class="cstat-no" title="statement not covered" >    for (const key of ALLOWED_KEYS) {</span>
 <span class="cstat-no" title="statement not covered" >      diff[key] = this.initialState[key];</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    for (let key of ALLOWED_KEYS) {</span>
+<span class="cstat-no" title="statement not covered" >    for (const key of ALLOWED_KEYS) {</span>
 <span class="cstat-no" title="statement not covered" >      if (this.prefixableFields.includes(key)) {</span>
 <span class="cstat-no" title="statement not covered" >        if (</span>
           this.initialState[key] !== this.currentState[key] &amp;&amp;
@@ -719,9 +723,10 @@ class ListingForm {
 &nbsp;
       <span class="missing-if-branch" title="else path not taken" >E</span>if (inputValidation.maxLength) {
         <span class="missing-if-branch" title="if path not taken" >I</span>if (this.validation[input.name].maxLength === input.value.length) {
-<span class="cstat-no" title="statement not covered" >          (inputValidation.counterEl as HTMLElement).innerHTML = `The maximum number of characters for this field is ${</span>
-            this.validation[input.name].maxLength
-          }.`;
+<span class="cstat-no" title="statement not covered" >          (inputValidation.counterEl as HTMLElement).innerHTML =</span>
+            `The maximum number of characters for this field is ${
+              this.validation[input.name].maxLength
+            }.`;
         } else {
           (inputValidation.counterEl as HTMLElement).innerHTML = "";
         }
@@ -755,8 +760,9 @@ class ListingForm {
 &nbsp;
   isFormValid() {
     // form is valid if every validated input is valid
-    return Object.keys(this.validation)
-      .every((name) =&gt; this.validation[name].isValid);
+    return Object.keys(this.validation).every(
+      (name) =&gt; this.validation[name].isValid
+    );
   }
 }
 &nbsp;
@@ -772,7 +778,7 @@ export { init, ListingForm };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-06T22:06:51.076Z
+                at 2024-08-08T22:07:02.433Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
