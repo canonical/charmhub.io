@@ -1,7 +1,15 @@
 import "@testing-library/jest-dom";
 
-const mockDataLayer: any[] = [];
-(window as any).dataLayer = mockDataLayer;
+interface GAEvent {
+  event: string;
+  eventCategory: string;
+  eventAction: string;
+  eventLabel?: string;
+  eventValue?: string;
+}
+
+const mockDataLayer: GAEvent[] = [];
+(window as unknown as { dataLayer: GAEvent[] }).dataLayer = mockDataLayer;
 const originalLocation = window.location;
 
 const setupMockDOM = (markup: string) => {
@@ -10,11 +18,11 @@ const setupMockDOM = (markup: string) => {
 
 describe("navigation-events", () => {
   beforeEach(() => {
-    (window.location as any).href = "http://localhost.test";
+    (window.location as Location).href = "http://localhost.test";
     mockDataLayer.length = 0;
   });
 
-  test("should add GA navigation events for main navigation", () => {
+  test("should add GA navigation events for main navigation", async () => {
     setupMockDOM(`
       <div id="navigation">
         <a href="/page1" class="nav-link">Page 1</a>
@@ -22,7 +30,7 @@ describe("navigation-events", () => {
       </div>
     `);
 
-    require("../navigation-events");
+    await import("../navigation-events");
 
     const [link1, link2] =
       document.querySelectorAll<HTMLAnchorElement>("#navigation a");
@@ -50,7 +58,7 @@ describe("navigation-events", () => {
     ]);
   });
 
-  test("should add GA content events for content elements", () => {
+  test("should add GA content events for content elements", async () => {
     setupMockDOM(`
       <div id="main-content">
         <a href="/cta-positive" class="p-button--positive">Positive CTA</a>
@@ -61,7 +69,7 @@ describe("navigation-events", () => {
       </div>
     `);
 
-    require("../navigation-events");
+    await import("../navigation-events");
 
     const [ctaPositive, ctaSecondary, listing, card, textLink] =
       document.querySelectorAll<HTMLAnchorElement>("#main-content a");

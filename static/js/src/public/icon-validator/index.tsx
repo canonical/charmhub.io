@@ -14,7 +14,7 @@ import {
 } from "@canonical/react-components";
 
 import { useDropzone } from "react-dropzone";
-import { createRoot } from "react-dom/client";
+import ReactDOM from "react-dom/client";
 
 export default function App() {
   const [icon, setIcon] = useState<string | null>(null);
@@ -256,4 +256,9 @@ export default function App() {
   );
 }
 
-createRoot(document.getElementById("main-content") as Element).render(<App />);
+const rootElement = document.getElementById("main-content");
+
+if (rootElement) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(<App />);
+}
