@@ -28,7 +28,21 @@ once `juju status` reports the charm as `active`, you can test the webserver:
 curl {IP_OF_CHARMHUB_IO_UNIT}:8000
 ```
 
-<!-- TODO: Add a section for connecting using browser -->
+to connect using a browser, the easiest way is to integrate with `nginx-ingress-integrator`:
+
+```bash
+juju deploy nginx-ingress-integrator --trust
+juju config nginx-ingress-integrator service-hostname=charmhub.local path-routes=/
+juju integrate nginx-ingress-integrator charmhub-io
+```
+
+You can then add `charmhub.local` to your `/etc/hosts` file with the IP of the multipass vm:
+
+```bash
+multipass ls # Get the IP of the VM
+echo "{IP_OF_VM} charmhub.local" | sudo tee -a /etc/hosts
+```
+
 
 ## Design Decisions:
 - To keep the codebase clean and charm libraries updated, they are only fetched before packing the charm in the [Github Actions workflow](https://github.com/canonical/charmhub.io/blob/main/.github/workflows/publish_charm.yaml#L25).
