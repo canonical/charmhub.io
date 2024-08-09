@@ -70,3 +70,5 @@ bower_components/
 
 build/
 dist/
+*.charm
+*.rock
