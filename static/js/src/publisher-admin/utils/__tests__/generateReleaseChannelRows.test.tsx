@@ -91,7 +91,7 @@ describe("generateReleaseChannelRows", () => {
 
   test("renders ResourcesCell correctly", () => {
     const resources: Resource[] = [
-      { name: "resource1", type: "oci", revision: 1 },
+      { name: "resource1", type: "oci-image", revision: 1 },
       { name: "resource2", type: "file", revision: null },
     ];
 

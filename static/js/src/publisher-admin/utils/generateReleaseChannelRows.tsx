@@ -106,7 +106,7 @@ export function generateReleaseChannelRows(
 
 export function ResourcesCell({ resources }: { resources: Resource[] }) {
   const items = resources.map((resource) => {
-    const type = resource.type === "oci" ? "OCI Image" : "File";
+    const type = resource.type === "oci-image" ? "OCI Image" : "File";
 
     return (
       <>
