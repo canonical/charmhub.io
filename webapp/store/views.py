@@ -705,17 +705,28 @@ def details_integrate(entity_name):
 def entity_badge(entity_name):
     package = app.store_api.get_item_details(entity_name, fields=FIELDS)
 
+    channel_request = request.args.get("channel")
+
     if not package["default-release"]:
         abort(404)
+
+    release = package["default-release"]
+
+    if channel_request:
+        for release_channel in package["channel-map"]:
+            channel = release_channel["channel"]
+            if f"{channel['track']}/{channel['risk']}" == channel_request:
+                release = release_channel
+                break
 
     entity_link = request.url_root + entity_name
     right_text = "".join(
         [
-            package["default-release"]["channel"]["track"],
+            release["channel"]["track"],
             "/",
-            package["default-release"]["channel"]["risk"],
+            release["channel"]["risk"],
             " ",
-            package["default-release"]["revision"]["version"],
+            release["revision"]["version"],
         ]
     )
 
