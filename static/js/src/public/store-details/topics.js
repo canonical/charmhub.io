@@ -244,7 +244,10 @@ class initTopics {
     if (this.domEl.topicsContainer.el) {
       this.domEl.topicsContainer.el.innerHTML = "";
       this.topics.slice(0, 3).forEach((entity) => {
-        this.domEl.topicsContainer.el.appendChild(buildTopicCard(entity));
+        const topicCard = buildTopicCard(entity);
+        if (topicCard) {
+          this.domEl.topicsContainer.el.appendChild(topicCard);
+        }
       });
     } else {
       throw new Error(

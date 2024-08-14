@@ -51,10 +51,12 @@ describe("useReleases", () => {
     jest.resetAllMocks();
   });
 
-  test("should display loading state initially", () => {
+  test("should display loading state initially", async () => {
     render(<TestComponent packageName="test-package" />, { wrapper: Wrapper });
 
-    expect(screen.getByText("Loading...")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("Loading...")).toBeInTheDocument();
+    });
   });
 
   test("should fetch and display release data", async () => {

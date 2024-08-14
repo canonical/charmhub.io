@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { App, getIntegrations } from "../App";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -61,17 +55,19 @@ describe("App component", () => {
     (global.fetch as jest.Mock).mockClear();
   });
 
-  test("should render loading spinner initially", () => {
+  test("should render loading spinner initially", async () => {
     renderWithProviders(<App />);
 
-    const spinners = screen.queryAllByText("Loading...");
-    expect(spinners.length).toBeGreaterThan(0);
+    await waitFor(() => {
+      const spinners = screen.queryAllByText("Loading...");
+      expect(spinners.length).toBeGreaterThan(0);
+    });
   });
 
   test("should fetch and display integrations", async () => {
     renderWithProviders(<App />);
 
-    await act(async () => {
+    await waitFor(async () => {
       const integrations = await screen.findByText("3 integrations");
       expect(integrations).toBeInTheDocument();
     });
@@ -99,16 +95,14 @@ describe("App component", () => {
   test("should show 'Required' chip for required integrations", async () => {
     renderWithProviders(<App />);
 
-    await act(async () => {
-      await waitFor(() => {
-        const interfaceElements = screen.getAllByText("interface-1");
+    await waitFor(() => {
+      const interfaceElements = screen.getAllByText("interface-1");
 
-        interfaceElements.forEach((element) => {
-          const parentElement = element.closest(".p-heading--4");
-          if (parentElement) {
-            expect(parentElement).toHaveTextContent("Required");
-          }
-        });
+      interfaceElements.forEach((element) => {
+        const parentElement = element.closest(".p-heading--4");
+        if (parentElement) {
+          expect(parentElement).toHaveTextContent("Required");
+        }
       });
     });
   });

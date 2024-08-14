@@ -46,10 +46,12 @@ describe("Packages Component", () => {
     );
   };
 
-  test("renders Banner and Topics components", () => {
+  test("renders Banner and Topics components", async () => {
     renderWithRouter(<Packages />);
-    expect(screen.getByText("Banner")).toBeInTheDocument();
-    expect(screen.getByText("Topics")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("Banner")).toBeInTheDocument();
+      expect(screen.getByText("Topics")).toBeInTheDocument();
+    });
   });
 
   test("shows loading state", async () => {

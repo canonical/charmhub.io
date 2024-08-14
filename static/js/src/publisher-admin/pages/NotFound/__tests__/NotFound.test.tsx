@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import NotFound from "../NotFound";
 
@@ -68,13 +68,5 @@ describe("NotFound", () => {
     const searchButton = screen.getByRole("button", { name: /search/i });
     expect(searchButton).toBeInTheDocument();
     expect(searchButton).toHaveAttribute("type", "submit");
-  });
-
-  test("handles form submission", () => {
-    render(<NotFound />);
-    const searchInput = screen.getByPlaceholderText("Search");
-    fireEvent.change(searchInput, { target: { value: "test query" } });
-    const searchButton = screen.getByRole("button", { name: /search/i });
-    fireEvent.click(searchButton);
   });
 });

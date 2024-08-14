@@ -18,14 +18,18 @@ const renderApp = () => {
 describe("App component", () => {
   let root: ReactDOM.Root;
 
-  beforeEach(() => {
-    root = renderApp();
+  beforeEach(async () => {
+    await waitFor(() => {
+      root = renderApp();
+    });
   });
 
-  afterEach(() => {
-    root.unmount();
-    cleanup();
-    document.body.innerHTML = "";
+  afterEach(async () => {
+    await waitFor(() => {
+      root.unmount();
+      cleanup();
+      document.body.innerHTML = "";
+    });
   });
 
   test("renders the app with initial state", async () => {
