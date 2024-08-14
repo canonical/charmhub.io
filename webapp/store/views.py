@@ -352,12 +352,12 @@ def details_docs(entity_name, path=None):
 
 
 @store.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configuration'
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configurations'
 )
 @store.route(
     '/<regex("'
     + DETAILS_VIEW_REGEX
-    + '"):entity_name>/configuration/<path:path>'
+    + '"):entity_name>/configurations/<path:path>'
 )
 @store_maintenance
 @redirect_uppercase_to_lowercase
@@ -378,7 +378,7 @@ def details_configuration(entity_name, path=None):
         if not path and bundle_charms:
             default_charm = bundle_charms[0]
             redirect_url = (
-                f"/{entity_name}/configuration/{default_charm['name']}"
+                f"/{entity_name}/configurations/{default_charm['name']}"
             )
             if channel_request:
                 redirect_url = redirect_url + f"?channel={channel_request}"

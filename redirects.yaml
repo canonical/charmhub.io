@@ -11,7 +11,8 @@ kubeflow-charmers-kubeflow-edge: kubeflow-edge
 openstack-charmers-keystone-saml-mellon: keystone-saml-mellon
 containers-etcd: etcd
 search\??(?P<search>.*)?/?: /?{search}
-/(?P<charm>[A-Za-z0-9-]*[A-Za-z][A-Za-z0-9-]*)/configure: /{charm}/configuration
+/(?P<charm>[A-Za-z0-9-]*[A-Za-z][A-Za-z0-9-]*)/configure: /{charm}/configurations
+/(?P<charm>[A-Za-z0-9-]*[A-Za-z][A-Za-z0-9-]*)/configuration: /{charm}/configurations
 
 jaas: https://jaas.ai/jaas
 docs/stable/about-juju: https://juju.is/about

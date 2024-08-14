@@ -16,7 +16,7 @@
       </li>
       {% endif %}
       <li class="p-tabs__item" role="presentation">
-        <a href="/{{ package.name }}/configuration{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'configuration' %}aria-selected="true" {% endif %}>Configuration</a>
+        <a href="/{{ package.name }}/configurations{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'configurations' %}aria-selected="true" {% endif %}>Configurations</a>
       </li>
       {% if package.type == "charm" %}
       <li class="p-tabs__item" role="presentation">
