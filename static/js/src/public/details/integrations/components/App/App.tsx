@@ -110,7 +110,7 @@ export const App = () => {
       (interfaceItem: IInterfaceData) => interfaceItem.type === type
     );
     if (!hasItems) {
-      return <></>;
+      return null;
     } else {
       return (
         <>
@@ -161,7 +161,7 @@ export const App = () => {
                 </li>
               );
             } else {
-              return <></>;
+              return null;
             }
           })}
         </>

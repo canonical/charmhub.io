@@ -1,7 +1,7 @@
 import type { IInterfaceData, ISearchAndFilter, IFilterChip } from "../types";
 import type { ICharm } from "../../../../shared/types";
 
-import { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { useQuery } from "react-query";
@@ -169,7 +169,7 @@ export const InterfaceItem = ({
           </div>
           <Row>
             {charms.map((charm: ICharm) => (
-              <>
+              <React.Fragment key={charm.package.name}>
                 <Col
                   size={3}
                   style={{ marginBottom: "1.5rem" }}
@@ -177,7 +177,7 @@ export const InterfaceItem = ({
                 >
                   <IntegrationCard data={charm} />
                 </Col>
-              </>
+              </React.Fragment>
             ))}
           </Row>
         </>
