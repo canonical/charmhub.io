@@ -132,11 +132,6 @@ def contact_us():
     return render_template("contact-us.html")
 
 
-@app.route("/get-in-touch")
-def get_in_touch():
-    return render_template("partial/_get-in-touch.html")
-
-
 @app.route("/thank-you")
 def thank_you():
     return render_template("thank-you.html")
