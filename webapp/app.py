@@ -1,16 +1,13 @@
 import re
 
 import talisker.requests
-from canonicalwebteam.store_base.app import create_app
-from canonicalwebteam.store_api.stores.charmstore import (
-    CharmStore,
-    CharmPublisher,
-)
-from canonicalwebteam.candid import CandidClient
+from canonicalwebteam.flask_base.app import FlaskBase
+from canonicalwebteam.store_api.stores.charmstore import CharmStore
 from dateutil import parser
 from flask import render_template, make_response, request, session, escape
+from webapp import config
 from webapp.extensions import csrf
-from webapp.handlers import set_handlers, charmhub_utility_processor
+from webapp.handlers import set_handlers
 from webapp.login.views import login
 from webapp.topics.views import topics
 from webapp.publisher.views import publisher
@@ -20,30 +17,18 @@ from webapp.deprecated_interfaces.views import interfaces
 from webapp.search.views import search
 from webapp.search.logic import cache
 from webapp.helpers import markdown_to_html
-from webapp.charmhub_bp import charmhub_bp
-from webapp.decorators import login_required
 
 
-app = create_app(
-    "charmhub",
-    login_required,
-    store_bp=charmhub_bp,
-    utility_processor=charmhub_utility_processor,
+app = FlaskBase(
+    __name__,
+    config.APP_NAME,
+    template_folder="../templates",
+    static_folder="../static",
+    template_404="404.html",
+    template_500="500.html",
+    favicon_url="https://assets.ubuntu.com/v1/5d4edefd-jaas-favicon.png",
 )
-
-app.name = "charmhub"
-app.static_folder = charmhub_bp.static_folder
-app.template_folder = charmhub_bp.template_folder
-app.static_url_path = charmhub_bp.static_url_path
-app.template_404 = ("404.html",)
-app.template_500 = ("500.html",)
-app.favicon_url = ("https://assets.ubuntu.com/v1/5d4edefd-jaas-favicon.png",)
 app.store_api = CharmStore(session=talisker.requests.get_session())
-
-
-request_session = talisker.requests.get_session()
-candid = CandidClient(request_session)
-publisher_api = CharmPublisher(request_session)
 
 
 @app.template_filter("linkify")
