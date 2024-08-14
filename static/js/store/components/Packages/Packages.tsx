@@ -25,7 +25,7 @@ function Packages() {
   const ITEMS_PER_PAGE = 12;
 
   const getData = async () => {
-    const response = await fetch(`/store.json${search}`);
+    const response = await fetch(`/beta/store.json${search}`);
     const data = await response.json();
     const packagesWithId = data.packages.map((item: any) => {
       return {
