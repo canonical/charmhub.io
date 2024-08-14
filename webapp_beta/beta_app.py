@@ -12,13 +12,13 @@ from webapp.handlers import charmhub_utility_processor
 
 # beta charmhub configiuration
 app = create_app(
-    "charmhub_beta",
+    "charmhub",
     login_required,
     store_bp=charmhub_bp,
     utility_processor=charmhub_utility_processor,
 )
 
-app.name = "charmhub_beta"
+app.name = "charmhub"
 app.static_folder = charmhub_bp.static_folder
 app.template_folder = charmhub_bp.template_folder
 app.static_url_path = charmhub_bp.static_url_path
