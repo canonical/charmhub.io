@@ -15,9 +15,4 @@
 {{ super() }}
 
 <script src="{{ versioned_static('js/dist/highlight-js.js') }}" defer></script>
-<script>
-  window.addEventListener("DOMContentLoaded", () => {
-    Prism.highlightAll();
-  });
-</script>
 {% endblock %}
