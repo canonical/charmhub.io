@@ -1,13 +1,16 @@
 import re
 
 import talisker.requests
-from canonicalwebteam.flask_base.app import FlaskBase
-from canonicalwebteam.store_api.stores.charmstore import CharmStore
+from canonicalwebteam.store_api.stores.charmstore import (
+    CharmStore,
+    CharmPublisher,
+)
+from canonicalwebteam.candid import CandidClient
 from dateutil import parser
 from flask import render_template, make_response, request, session, escape
-from webapp import config
 from webapp.extensions import csrf
-from webapp.handlers import set_handlers
+from webapp.config import APP_NAME
+from webapp.handlers import set_handlers, charmhub_utility_processor
 from webapp.login.views import login
 from webapp.topics.views import topics
 from webapp.publisher.views import publisher
@@ -17,18 +20,38 @@ from webapp.deprecated_interfaces.views import interfaces
 from webapp.search.views import search
 from webapp.search.logic import cache
 from webapp.helpers import markdown_to_html
-
+from webapp.decorators import login_required
+from canonicalwebteam.flask_base.app import FlaskBase
+import canonicalwebteam.store_base.utils.config as config
+from canonicalwebteam.store_base.packages.views import init_packages
+from canonicalwebteam.store_base.handlers import (
+    set_handlers as store_base_set_handlers,
+)
 
 app = FlaskBase(
     __name__,
-    config.APP_NAME,
-    template_folder="../templates",
-    static_folder="../static",
+    "charmhub.io",
     template_404="404.html",
     template_500="500.html",
     favicon_url="https://assets.ubuntu.com/v1/5d4edefd-jaas-favicon.png",
+    static_folder="../static",
+    template_folder="../templates",
 )
+
+
+app.name = APP_NAME
+app.config.from_object(config)
+app.config["LOGIN_REQUIRED"] = login_required
+
+store_base_set_handlers(app, charmhub_utility_processor)
+init_packages(app)
+
 app.store_api = CharmStore(session=talisker.requests.get_session())
+
+
+request_session = talisker.requests.get_session()
+candid = CandidClient(request_session)
+publisher_api = CharmPublisher(request_session)
 
 
 @app.template_filter("linkify")
