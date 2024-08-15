@@ -82,36 +82,6 @@ def get_account_json():
     return response
 
 
-@app.route("/overview")
-def overview():
-    return render_template("overview.html")
-
-
-@app.route("/about")
-def about():
-    return render_template("about/index.html")
-
-
-@app.route("/manifesto")
-def manifesto():
-    return render_template("about/manifesto.html")
-
-
-@app.route("/publishing")
-def publishing():
-    return render_template("about/publishing.html")
-
-
-@app.route("/governance")
-def governance():
-    return render_template("about/governance.html")
-
-
-@app.route("/glossary")
-def glossary():
-    return render_template("about/glossary.html")
-
-
 @app.route("/contact-us")
 def contact_us():
     return render_template("contact-us.html")
