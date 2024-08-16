@@ -70,6 +70,8 @@
           <th>Date</th>
           {% if resource.type == "file" %}
             <th>Size</th>
+          {% else %}
+            <th>Digest</th>
           {% endif %}
         </tr>
       </thead>
@@ -80,6 +82,8 @@
             <td>{{ revision.updated }}</td>
             {% if resource.type == "file" %}
               <td>{{ revision.size }}</td>
+          {% else %}
+            <td>{{ revision.download["hash-sha-256"][:12] }}</td>
             {% endif %}
           </tr>
         {% endfor %}
