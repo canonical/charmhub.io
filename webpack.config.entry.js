@@ -1,5 +1,4 @@
 module.exports = {
-  about: "./static/js/src/public/about/index.js",
   docs: "./static/js/src/public/docs/index.js",
   "docs-side-nav": "./static/js/src/base/docs-side-nav.ts",
   base: "./static/js/src/base/base.js",
