@@ -187,6 +187,10 @@ function initTopicFilters() {
 
   setupSideNavigations('.p-side-navigation, [class*="p-side-navigation--"]');
   initFilters();
+
+  return {
+    toggleDrawer,
+  };
 }
 
 export { initTopicFilters };

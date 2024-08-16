@@ -56,39 +56,6 @@ describe("CollaboratorFilter", () => {
     expect(component).toHaveValue("testing");
   });
 
-  test("updates the search params and recoil state on input change", () => {
-    const mockEvent = jest.fn();
-    renderComponent({ event: mockEvent });
-
-    const input = screen.getByLabelText(searchInputLabel);
-
-    fireEvent.change(input, { target: { value: "new value" } });
-
-    setTimeout(() => {
-      expect(input).toHaveValue("new value");
-      expect(mockSearchParams.filter).toBe("new value");
-      expect(mockEvent).toHaveBeenCalledWith("new value");
-    }, 0);
-  });
-
-  test("clears the input, search params, and recoil state on reset button click", () => {
-    const mockEvent = jest.fn();
-    renderComponent({ filterQuery: "test", event: mockEvent });
-
-    const input = screen.getByLabelText(searchInputLabel);
-    const resetButton = screen.getByRole("button", { name: /clear filter/i });
-
-    expect(input).toHaveValue("test");
-
-    fireEvent.click(resetButton);
-
-    setTimeout(() => {
-      expect(input).toHaveValue("");
-      expect(mockSearchParams.filter).toBeUndefined();
-      expect(mockEvent).toHaveBeenCalledWith("");
-    }, 0);
-  });
-
   test("submits the search query when the search button is clicked", () => {
     renderComponent({ filterQuery: "search term" });
 

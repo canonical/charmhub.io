@@ -29,13 +29,13 @@ const renderComponent = ({ event }: { event?: () => void }) => {
 };
 
 describe("InviteCollaborator", () => {
-  it("disables 'Add collaborator' button if no email value", () => {
+  test("disables 'Add collaborator' button if no email value", () => {
     renderComponent({});
     const component = screen.getByRole("button", { name: "Add collaborator" });
     expect(component).toHaveAttribute("aria-disabled", "true");
   });
 
-  it("enables 'Add collaborator' button is there is an email value", async () => {
+  test("enables 'Add collaborator' button is there is an email value", async () => {
     renderComponent({});
     const componentInput = screen.getByLabelText("Email");
     const componentButton = screen.getByRole("button", {
@@ -46,7 +46,7 @@ describe("InviteCollaborator", () => {
     expect(componentButton).not.toBeDisabled();
   });
 
-  it("changes active email address", async () => {
+  test("changes active email address", async () => {
     const oninput = jest.fn();
     renderComponent({ event: oninput });
     const component = screen.getByLabelText("Email");

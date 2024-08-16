@@ -112,7 +112,6 @@ class ListingForm {
         }
       } else {
         if (this.initialState[key] !== this.currentState[key]) {
-          console.log("hello");
           diff[key] = this.currentState[key];
         }
       }
