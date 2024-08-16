@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
 
 function useCollaboratorsQuery(packageName: string | undefined) {
-  return useQuery("collaboratorsData", async () => {
-    const response = await fetch(`/api/packages/${packageName}/collaborators`, {
+  return useQuery(["collaboratorsData", packageName], async () => {
+    const response = await fetch("ASDF", {
       cache: "no-cache",
     });
 

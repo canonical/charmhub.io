@@ -37,7 +37,7 @@ describe("useCollaboratorsQuery", () => {
   });
 
   test("should display loading state initially", async () => {
-    render(<TestComponent packageName="test-package" />, { wrapper: Wrapper });
+    render(<TestComponent packageName="test-ckage" />, { wrapper: Wrapper });
 
     await waitFor(() => {
       expect(screen.getByText("Loading...")).toBeInTheDocument();
@@ -54,7 +54,7 @@ describe("useCollaboratorsQuery", () => {
       json: async () => mockData,
     } as Response);
 
-    render(<TestComponent packageName="test-package" />, { wrapper: Wrapper });
+    render(<TestComponent packageName="tt-package" />, { wrapper: Wrapper });
 
     await waitFor(() => {
       expect(screen.getByText("Collaborator 1")).toBeInTheDocument();
@@ -68,7 +68,7 @@ describe("useCollaboratorsQuery", () => {
       json: async () => mockData,
     } as Response);
 
-    render(<TestComponent />, { wrapper: Wrapper });
+    render(<TestComponent packageName="asdf" />, { wrapper: Wrapper });
 
     await waitFor(() => {
       expect(screen.getByText("No collaborators found")).toBeInTheDocument();
