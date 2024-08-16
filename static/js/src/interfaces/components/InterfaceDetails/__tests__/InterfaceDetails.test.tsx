@@ -1,142 +1,154 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import { MemoryRouter } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { useParams } from "react-router-dom";
+import { useQuery } from "react-query";
 import InterfaceDetails from "../InterfaceDetails";
+import { InterfaceData } from "../../../types";
+import "@testing-library/jest-dom";
 
-const queryClient = new QueryClient();
-
-jest.mock("mermaid", () => ({
-  initialize: jest.fn(),
+jest.mock("react-router-dom", () => ({
+  useParams: jest.fn(),
 }));
 
-beforeEach(() => {
-  jest.restoreAllMocks();
-});
+jest.mock("react-query", () => ({
+  useQuery: jest.fn(),
+}));
 
-const mockInterfaceData = {
-  name: "Test Interface",
-  version: "1.0",
-  last_modified: "2024-01-01T00:00:00Z",
-  body: [],
-};
+jest.mock("../../InterfaceDetailsNav", () => () => (
+  <div>InterfaceDetailsNav</div>
+));
+jest.mock("../../InterfaceDiscussion", () => () => (
+  <div>InterfaceDiscussion</div>
+));
+jest.mock("../../CanonicalRelationsMeta", () => () => (
+  <div>CanonicalRelationsMeta</div>
+));
+jest.mock("../../CommunityRelationsMeta", () => () => (
+  <div>CommunityRelationsMeta</div>
+));
+jest.mock("../../InterfaceDetailsLinks", () => () => (
+  <div>InterfaceDetailsLinks</div>
+));
+jest.mock("../../DeveloperDocumentation", () => () => (
+  <div>DeveloperDocumentation</div>
+));
+jest.mock("../../ProvidingCharms", () => () => <div>ProvidingCharms</div>);
+jest.mock("../../RequiringCharms", () => () => <div>RequiringCharms</div>);
 
-const renderWithRouter = (ui: React.ReactElement, { route = "/" } = {}) => {
-  window.history.pushState({}, "Test page", route);
-  return render(
-    <MemoryRouter initialEntries={[route]}>
-      <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>
-    </MemoryRouter>
-  );
-};
+const mockUseParams = useParams as jest.Mock;
+const mockUseQuery = useQuery as jest.Mock;
 
 describe("InterfaceDetails", () => {
-  test("renders interface name from props", () => {
-    renderWithRouter(<InterfaceDetails interfaceItem={mockInterfaceData} />);
-
-    setTimeout(() => {
-      expect(screen.getByText("Test Interface")).toBeInTheDocument();
-    }, 0);
+  beforeEach(() => {
+    mockUseParams.mockReturnValue({
+      interfaceName: "test-interface",
+      interfaceStatus: undefined,
+    });
   });
 
-  test("renders error state correctly", () => {
-    global.fetch = jest.fn(() =>
-      Promise.reject({ message: "Failed to fetch" })
-    ) as jest.Mock;
+  test("renders loading state when data is being fetched", () => {
+    mockUseQuery.mockReturnValue({
+      data: undefined,
+      error: null,
+      isLoading: true,
+    });
 
-    renderWithRouter(<InterfaceDetails interfaceItem={mockInterfaceData} />);
-
-    setTimeout(() => {
-      expect(
-        screen.getByText(
-          "There was a problem fetching this interface. Failed to fetch"
-        )
-      ).toBeInTheDocument();
-    }, 0);
-  });
-
-  test("displays community notification when no developer documentation", () => {
-    const dataWithoutDoc = { ...mockInterfaceData, body: [] };
-
-    renderWithRouter(<InterfaceDetails interfaceItem={dataWithoutDoc} />);
-
-    setTimeout(() => {
-      expect(
-        screen.getByText("Discuss this interface on discourse.")
-      ).toBeInTheDocument();
-    }, 0);
-  });
-
-  test("displays developer documentation section when available", () => {
-    const dataWithDoc = {
-      ...mockInterfaceData,
-      body: [{ heading: "Section", level: 1, children: [] }],
-    };
-
-    renderWithRouter(<InterfaceDetails interfaceItem={dataWithDoc} />);
-
-    setTimeout(() => {
-      expect(screen.getByText("Developer Documentation")).toBeInTheDocument();
-    }, 0);
-  });
-
-  test("renders charms information", () => {
-    const dataWithCharms = {
-      ...mockInterfaceData,
-      charms: {
-        requirers: [{ name: "Requirer Charm", url: "http://example.com" }],
-        providers: [{ name: "Provider Charm", url: "http://example.com" }],
-      },
-    };
-
-    renderWithRouter(<InterfaceDetails interfaceItem={dataWithCharms} />);
-
-    setTimeout(() => {
-      expect(screen.getByText("Provider Charm")).toBeInTheDocument();
-      expect(screen.getByText("Requirer Charm")).toBeInTheDocument();
-    }, 0);
-  });
-
-  test('displays "No charms found" notification when no charms are found', () => {
-    const dataWithoutCharms = {
-      ...mockInterfaceData,
-      charms: { requirers: [], providers: [] },
-    };
-
-    renderWithRouter(<InterfaceDetails interfaceItem={dataWithoutCharms} />);
-
-    setTimeout(() => {
-      expect(
-        screen.getByText(
-          "No charms found that Provide or Require Test Interface"
-        )
-      ).toBeInTheDocument();
-    }, 0);
-  });
-
-  test("displays last updated information", () => {
-    renderWithRouter(<InterfaceDetails interfaceItem={mockInterfaceData} />);
-
-    setTimeout(() => {
-      expect(
-        screen.getByText("Last updated about 6 months ago.")
-      ).toBeInTheDocument();
-    }, 0);
-  });
-
-  test("renders loading state", () => {
-    global.fetch = jest.fn(() => new Promise(() => {})) as jest.Mock;
-
-    renderWithRouter(<InterfaceDetails interfaceItem={mockInterfaceData} />);
+    render(<InterfaceDetails interfaceItem={null} />);
 
     expect(screen.getByText("Fetching interface...")).toBeInTheDocument();
+  });
 
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve(mockInterfaceData),
-      })
-    ) as jest.Mock;
+  test("renders error state when there is an error fetching data", () => {
+    mockUseQuery.mockReturnValue({
+      data: undefined,
+      error: new Error("Failed to fetch"),
+      isLoading: false,
+    });
+
+    render(<InterfaceDetails interfaceItem={null} />);
+
+    expect(screen.getByText("Error")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "There was a problem fetching this interface. Failed to fetch"
+      )
+    ).toBeInTheDocument();
+  });
+
+  test("renders interface details when data is successfully fetched", () => {
+    const mockInterfaceData: InterfaceData = {
+      name: "test-interface",
+      version: "v1.0",
+      body: [
+        {
+          heading: "Main Section",
+          level: 1,
+          children: [
+            {
+              heading: "Sub Section",
+              level: 2,
+              children: [
+                {
+                  heading: "SubSub Section",
+                  level: 3,
+                  children: ["Detail 1", "Detail 2"],
+                },
+              ],
+            },
+            "Some additional details in string format",
+          ],
+        },
+      ],
+      last_modified: "2024-08-14T12:00:00Z",
+    };
+
+    mockUseQuery.mockReturnValue({
+      data: mockInterfaceData,
+      error: null,
+      isLoading: false,
+    });
+
+    render(<InterfaceDetails interfaceItem={null} />);
+
+    expect(screen.getByText("test-interface")).toBeInTheDocument();
+    expect(screen.getByText("CanonicalRelationsMeta")).toBeInTheDocument();
+    expect(screen.getAllByText("InterfaceDetailsNav")[0]).toBeInTheDocument();
+    expect(screen.getByText("InterfaceDiscussion")).toBeInTheDocument();
+    expect(screen.getByText("Help us improve this page")).toBeInTheDocument();
+  });
+
+  test("renders fallback when interfaceItem matches the interface name", () => {
+    const mockInterfaceData: InterfaceData = {
+      name: "test-interface",
+      version: "v1.0",
+      body: [
+        {
+          heading: "Main Section",
+          level: 1,
+          children: [
+            {
+              heading: "Sub Section",
+              level: 2,
+              children: [
+                {
+                  heading: "SubSub Section",
+                  level: 3,
+                  children: ["Detail 1", "Detail 2"],
+                },
+              ],
+            },
+            "Some additional details in string format",
+          ],
+        },
+      ],
+      last_modified: "2024-08-14T12:00:00Z",
+    };
+
+    render(<InterfaceDetails interfaceItem={mockInterfaceData} />);
+
+    expect(screen.getByText("test-interface")).toBeInTheDocument();
+    expect(screen.getByText("CanonicalRelationsMeta")).toBeInTheDocument();
+    expect(screen.getAllByText("InterfaceDetailsNav")[0]).toBeInTheDocument();
+    expect(screen.getByText("InterfaceDiscussion")).toBeInTheDocument();
+    expect(screen.getByText("Help us improve this page")).toBeInTheDocument();
   });
 });

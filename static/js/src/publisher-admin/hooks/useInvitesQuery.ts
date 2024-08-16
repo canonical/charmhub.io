@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 
 function useInvitesQuery(packageName: string | undefined) {
-  return useQuery("invitesData", async () => {
+  return useQuery(["invitesData", packageName], async () => {
     const response = await fetch(`/api/packages/${packageName}/invites`, {
       cache: "no-cache",
     });

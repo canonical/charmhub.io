@@ -45,8 +45,6 @@ async function renderSVG(block, index) {
 
   block.parentNode.parentNode.replaceChild(codeSnippet, block.parentNode);
 
-  console.log(codeSnippet);
-
   const rendered = codeSnippet.querySelector(".rendered");
   const markup = codeSnippet.querySelector(".markup");
 

@@ -30,7 +30,7 @@ const renderComponent = ({
 };
 
 describe("Collaboration", () => {
-  it("sets collaborators data", async () => {
+  test("sets collaborators data", async () => {
     const onload = jest.fn();
     renderComponent({ event: onload, state: filteredCollaboratorsListState });
     const component = await waitFor(() => screen.getByRole("grid"));
@@ -38,7 +38,7 @@ describe("Collaboration", () => {
     expect(onload).toHaveBeenCalled();
   });
 
-  it("sets invites data", async () => {
+  test("sets invites data", async () => {
     const onload = jest.fn();
     renderComponent({ event: onload, state: filteredInvitesListState });
     const component = await waitFor(() => screen.getByRole("grid"));

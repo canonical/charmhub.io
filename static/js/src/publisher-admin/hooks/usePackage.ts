@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import { Package } from "../types";
 
 function usePackage(packageName: string | undefined) {
-  return useQuery("packageData", async () => {
+  return useQuery(["packageData", packageName], async () => {
     const response = await fetch(`/api/packages/${packageName}`);
 
     if (!response.ok) {
