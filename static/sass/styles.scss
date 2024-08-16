@@ -128,8 +128,6 @@ $breakpoint-large: 1220px;
 @include p-charmhub-modal;
 @import "pattern-p-integration-charts";
 @include pattern_p-integration-charts;
-@import "swiper-overrides";
-@include swiper-overrides;
 @import "pattern_p-docstring";
 @include p-charmhub-docstring;
 @import "charmhub_p-topology";
