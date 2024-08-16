@@ -65,12 +65,6 @@ module.exports = [
   },
   {
     test: require.resolve(
-      __dirname + "/static/js/src/public/details/integrate/index.ts"
-    ),
-    use: ["expose-loader?exposes=charmhub.details.integrate", "babel-loader"],
-  },
-  {
-    test: require.resolve(
       __dirname + "/static/js/src/public/details/resources/index.ts"
     ),
     use: ["expose-loader?exposes=charmhub.resources", "babel-loader"],

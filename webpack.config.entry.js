@@ -6,7 +6,6 @@ module.exports = {
   details_overview: "./static/js/src/public/details/overview/index.js",
   details_docs: "./static/js/src/public/details/docs/index.js",
   details_history: "./static/js/src/public/details/history/index.js",
-  details_integrate: "./static/js/src/public/details/integrate/index.ts",
   details_resources: "./static/js/src/public/details/resources/index.ts",
   details_integrations: "./static/js/src/public/details/integrations/index.tsx",
   "store-details": "./static/js/src/public/store-details/index.js",
