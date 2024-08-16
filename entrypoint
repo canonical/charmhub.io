@@ -3,7 +3,7 @@
 set -e
 
 
-RUN_COMMAND="talisker.gunicorn.gevent webapp_beta.app:app --bind $1 --worker-class gevent --name talisker-`hostname`"
+RUN_COMMAND="talisker.gunicorn.gevent webapp.app:app --bind $1 --worker-class gevent --name talisker-`hostname`"
 
 
 if [ "${FLASK_DEBUG}" = true ] || [ "${FLASK_DEBUG}" = 1 ]; then
