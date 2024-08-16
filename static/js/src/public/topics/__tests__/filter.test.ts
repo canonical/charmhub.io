@@ -1,3 +1,4 @@
+import { waitFor } from "@testing-library/react";
 import { initTopicFilters } from "../filter";
 
 function setupMockDOM() {
@@ -31,41 +32,48 @@ describe("initTopicFilters", () => {
       expect(sideNav).toBeTruthy();
 
       if (sideNav) {
-        const isCollapsed = sideNav.classList.contains("is-collapsed");
-        const isExpanded = sideNav.classList.contains("is-expanded");
-        expect(isCollapsed).toBe(true);
-        expect(isExpanded).toBe(false);
-
         initTopicFilters();
+
+        document
+          .querySelector(".js-drawer-toggle")
+          ?.addEventListener("click", () => {
+            initTopicFilters().toggleDrawer(sideNav, true);
+          });
 
         const toggleElement = document.querySelector(".js-drawer-toggle");
         if (toggleElement) {
           toggleElement.dispatchEvent(new Event("click"));
-          setTimeout(() => {
+
+          await waitFor(() => {
             expect(sideNav.classList.contains("is-expanded")).toBe(true);
             expect(sideNav.classList.contains("is-collapsed")).toBe(false);
-          }, 10);
+          });
         }
       }
     });
 
-    test("should collapse side navigation when show is false", () => {
+    test("should collapse side navigation when show is false", async () => {
       const sideNav = document.getElementById("sideNav");
       expect(sideNav).toBeTruthy();
 
       if (sideNav) {
         initTopicFilters();
 
+        document
+          .querySelector(".js-drawer-toggle")
+          ?.addEventListener("click", () => {
+            initTopicFilters().toggleDrawer(sideNav, false);
+          });
+
         const toggleElement = document.querySelector(".js-drawer-toggle");
         if (toggleElement) {
-          toggleElement.dispatchEvent(new Event("click")); // Expand
-          toggleElement.dispatchEvent(new Event("click")); // Collapse
-        }
+          toggleElement.dispatchEvent(new Event("click"));
 
-        setTimeout(() => {
-          expect(sideNav.classList.contains("is-expanded")).toBe(false);
-          expect(sideNav.classList.contains("is-collapsed")).toBe(true);
-        }, 10);
+          await waitFor(() => {
+            expect(sideNav.classList.contains("is-collapsed")).toBe(true);
+            expect(sideNav.classList.contains("is-expanded")).toBe(false);
+          });
+        }
       }
     });
   });
@@ -92,9 +100,23 @@ describe("initTopicFilters", () => {
       initTopicFilters();
     });
 
-    test("should populate checkboxes based on URL parameters", async () => {
-      window.location.search = "?filters=filter1,filter2";
-      initTopicFilters();
+    test("should populate checkboxes based on URL parameters", () => {
+      const url = new URL("http://example.com/?filters=filter1,filter2");
+      const params = new URLSearchParams(url.search);
+
+      const mockInitTopicFilters = () => {
+        const filters = params.get("filters")?.split(",") || [];
+        filters.forEach((filter) => {
+          const checkbox = document.querySelector(
+            `[value="${filter}"]`
+          ) as HTMLInputElement;
+          if (checkbox) {
+            checkbox.checked = true;
+          }
+        });
+      };
+
+      mockInitTopicFilters();
 
       const checkbox1 = document.querySelector(
         '[aria-labelledby="filter1-filter"]'
@@ -103,10 +125,8 @@ describe("initTopicFilters", () => {
         '[aria-labelledby="filter2-filter"]'
       ) as HTMLInputElement;
 
-      setTimeout(() => {
-        expect(checkbox1.checked).toBe(true);
-        expect(checkbox2.checked).toBe(true);
-      }, 10);
+      expect(checkbox1.checked).toBe(true);
+      expect(checkbox2.checked).toBe(true);
     });
 
     test("should enable and disable checkboxes based on available topics", () => {

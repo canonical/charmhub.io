@@ -1,3 +1,4 @@
+import { fireEvent, waitFor } from "@testing-library/react";
 import { ListingForm } from "../listing-page";
 import "@testing-library/jest-dom";
 
@@ -84,15 +85,15 @@ describe("ListingForm", () => {
     expect(contactInput.value).toBe("mailto:email@example.com");
   });
 
-  test("should handle input changes", () => {
+  test("should handle input changes", async () => {
     const titleInput = document.querySelector(
       'input[name="title"]'
     ) as HTMLInputElement;
-    titleInput.value = "New Title";
-    titleInput.dispatchEvent(new Event("input"));
-    setTimeout(() => {
+    fireEvent.input(titleInput, { target: { value: "New Title" } });
+
+    await waitFor(() => {
       expect(form.currentState.title).toBe("New Title");
-    }, 0);
+    });
   });
 
   test("should enable action buttons when form state changes", () => {
@@ -110,7 +111,7 @@ describe("ListingForm", () => {
     expect(actionButton.classList.contains("is-disabled")).toBe(false);
   });
 
-  test("should disable action buttons if there are no changes", () => {
+  test("should disable action buttons if there are no changes", async () => {
     const actionButton = document.querySelector(
       ".js-action-button"
     ) as HTMLButtonElement;
@@ -121,24 +122,23 @@ describe("ListingForm", () => {
     const titleInput = document.querySelector(
       'input[name="title"]'
     ) as HTMLInputElement;
-    titleInput.value = "";
-    titleInput.dispatchEvent(new Event("input"));
+    fireEvent.input(titleInput, { target: { value: "" } });
 
-    setTimeout(() => {
+    await waitFor(() => {
       expect(actionButton.disabled).toBe(true);
       expect(actionButton.classList.contains("is-disabled")).toBe(true);
-    }, 0);
+    });
   });
 
-  test("should detect changes in the form state", () => {
+  test("should detect changes in the form state", async () => {
     const titleInput = document.querySelector(
       'input[name="title"]'
     ) as HTMLInputElement;
-    titleInput.value = "Updated Title";
-    titleInput.dispatchEvent(new Event("input"));
-    setTimeout(() => {
+    fireEvent.input(titleInput, { target: { value: "Updated Title" } });
+
+    await waitFor(() => {
       expect(form.diffState()).toBe(true);
-    }, 0);
+    });
   });
 
   test("should validate the entire form", () => {

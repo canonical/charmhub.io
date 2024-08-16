@@ -58,10 +58,12 @@ const TestComponent: React.FC<{
   );
 };
 
-const queryClient = new QueryClient();
-const Wrapper: React.FC = ({ children }: React.PropsWithChildren) => (
-  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-);
+const createWrapper = () => {
+  const queryClient = new QueryClient();
+  return ({ children }: React.PropsWithChildren) => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
+};
 
 describe("useSendMutation", () => {
   beforeEach(() => {
@@ -97,7 +99,7 @@ describe("useSendMutation", () => {
         setShowInviteSuccess={setShowInviteSuccess}
         setShowInviteError={setShowInviteError}
       />,
-      { wrapper: Wrapper }
+      { wrapper: createWrapper() }
     );
 
     fireEvent.click(screen.getByText("Send Invite"));
@@ -137,7 +139,7 @@ describe("useSendMutation", () => {
         setShowInviteSuccess={setShowInviteSuccess}
         setShowInviteError={setShowInviteError}
       />,
-      { wrapper: Wrapper }
+      { wrapper: createWrapper() }
     );
 
     fireEvent.click(screen.getByText("Send Invite"));
@@ -166,7 +168,7 @@ describe("useSendMutation", () => {
         setShowInviteSuccess={setShowInviteSuccess}
         setShowInviteError={setShowInviteError}
       />,
-      { wrapper: Wrapper }
+      { wrapper: createWrapper() }
     );
 
     fireEvent.click(screen.getByText("Send Invite"));
@@ -207,7 +209,7 @@ describe("useSendMutation", () => {
         setShowInviteError={setShowInviteError}
         setShowSidePanel={setShowSidePanel}
       />,
-      { wrapper: Wrapper }
+      { wrapper: createWrapper() }
     );
 
     fireEvent.click(screen.getByText("Send Invite"));

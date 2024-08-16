@@ -43,7 +43,7 @@ describe("toggleDrawer", () => {
     toggleDrawer(sideNavigation, true);
   });
 
-  it("should expand the drawer", () => {
+  test("should expand the drawer", () => {
     expect(sideNavigation).toHaveClass("is-drawer-expanded");
     expect(sideNavigation).not.toHaveClass("is-drawer-collapsed");
     expect(toggleButtonInsideDrawer).toHaveFocus();
@@ -51,7 +51,7 @@ describe("toggleDrawer", () => {
     expect(toggleButtonInsideDrawer).toHaveAttribute("aria-expanded", "true");
   });
 
-  it("should collapse the drawer", () => {
+  test("should collapse the drawer", () => {
     toggleDrawer(sideNavigation, false);
 
     expect(sideNavigation).toHaveClass("is-drawer-collapsed");
@@ -87,11 +87,11 @@ describe("setupSideNavigation", () => {
     setupSideNavigation(sideNavigation);
   });
 
-  it("should initially hide the navigation drawer", () => {
+  test("should initially hide the navigation drawer", () => {
     expect(sideNavigation).toHaveClass("is-drawer-hidden");
   });
 
-  it("should expand and collapse the drawer when toggle buttons are clicked", () => {
+  test("should expand and collapse the drawer when toggle buttons are clicked", () => {
     // expand the drawer
     fireEvent.click(toggleButtonOutsideDrawer);
 
@@ -112,7 +112,7 @@ describe("setupSideNavigation", () => {
     expect(toggleButtonInsideDrawer).toHaveAttribute("aria-expanded", "false");
   });
 
-  it("should collapse the drawer when the Escape key is pressed", () => {
+  test("should collapse the drawer when the Escape key is pressed", () => {
     toggleDrawer(sideNavigation, true);
 
     fireEvent.keyDown(window, { key: "Escape" });
@@ -150,7 +150,7 @@ describe("setupSideNavigations", () => {
     });
   });
 
-  it("should call setupSideNavigation for each side navigation element", () => {
+  test("should call setupSideNavigation for each side navigation element", () => {
     setupSideNavigations(".p-side-navigation");
     expect(setupSideNavigation).toHaveBeenCalledTimes(2);
     expect(setupSideNavigation).toHaveBeenCalledWith(
@@ -161,7 +161,7 @@ describe("setupSideNavigations", () => {
     );
   });
 
-  it("should set up event listeners and initial state for each side navigation element", () => {
+  test("should set up event listeners and initial state for each side navigation element", () => {
     // first side navigation element
     const firstSideNav = mockSideNavigationElements[0];
     expect(firstSideNav).toHaveClass("is-drawer-hidden");

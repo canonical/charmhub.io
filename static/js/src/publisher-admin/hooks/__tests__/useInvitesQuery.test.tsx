@@ -25,18 +25,22 @@ const TestComponent: React.FC<{ packageName?: string }> = ({ packageName }) => {
   );
 };
 
-const queryClient = new QueryClient();
-const Wrapper: React.FC = ({ children }: React.PropsWithChildren) => (
-  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-);
+const createWrapper = () => {
+  const queryClient = new QueryClient();
+  return ({ children }: React.PropsWithChildren) => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
+};
 
 describe("useInvitesQuery", () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
   test("should display loading state initially", async () => {
-    render(<TestComponent packageName="test-package" />, { wrapper: Wrapper });
+    render(<TestComponent packageName="test-package" />, {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => {
       expect(screen.getByText("Loading...")).toBeInTheDocument();
@@ -48,12 +52,14 @@ describe("useInvitesQuery", () => {
       success: true,
       data: [{ id: 1, email: "invite@example.com" }],
     };
-    jest.spyOn(global, "fetch").mockResolvedValueOnce({
+    jest.spyOn(global, "fetch").mockResolvedValue({
       ok: true,
       json: async () => mockData,
     } as Response);
 
-    render(<TestComponent packageName="test-package" />, { wrapper: Wrapper });
+    render(<TestComponent packageName="test-package" />, {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => {
       expect(screen.getByText("invite@example.com")).toBeInTheDocument();
@@ -62,12 +68,12 @@ describe("useInvitesQuery", () => {
 
   test("should display a message when no packageName is provided", async () => {
     const mockData = { success: true, data: [] };
-    jest.spyOn(global, "fetch").mockResolvedValueOnce({
+    jest.spyOn(global, "fetch").mockResolvedValue({
       ok: true,
       json: async () => mockData,
     } as Response);
 
-    render(<TestComponent />, { wrapper: Wrapper });
+    render(<TestComponent />, { wrapper: createWrapper() });
 
     await waitFor(() => {
       expect(screen.getByText("No invites found")).toBeInTheDocument();

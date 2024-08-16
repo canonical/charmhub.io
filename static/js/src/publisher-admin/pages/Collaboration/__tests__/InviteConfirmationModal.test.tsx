@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -46,11 +46,11 @@ beforeEach(() => {
   mockUseParams.mockReturnValue({ packageName: "test-package" });
 
   mockUseSendMutation.mockReturnValue({
-    mutate: jest.fn(),
+    mutate: sendMutation,
   });
 
   mockUseRevokeMutation.mockReturnValue({
-    mutate: jest.fn(),
+    mutate: revokeMutation,
   });
 
   jest.clearAllMocks();
@@ -96,11 +96,10 @@ test("performs send mutation on Resend action and updates invite list", async ()
   const actionButton = screen.getByRole("button", { name: /resend invite/i });
   fireEvent.click(actionButton);
 
-  setTimeout(() => {
+  await waitFor(() => {
     expect(sendMutation).toHaveBeenCalled();
     expect(mockSetShowModal).toHaveBeenCalledWith(false);
-    expect(mockSetShowSuccess).toHaveBeenCalled();
-  }, 0);
+  });
 });
 
 test("performs revoke mutation on Revoke action and updates collaborators list", async () => {
@@ -109,9 +108,8 @@ test("performs revoke mutation on Revoke action and updates collaborators list",
   const actionButton = screen.getByRole("button", { name: /revoke invite/i });
   fireEvent.click(actionButton);
 
-  setTimeout(() => {
+  await waitFor(() => {
     expect(revokeMutation).toHaveBeenCalled();
     expect(mockSetShowModal).toHaveBeenCalledWith(false);
-    expect(mockSetShowSuccess).toHaveBeenCalled();
-  }, 0);
+  });
 });

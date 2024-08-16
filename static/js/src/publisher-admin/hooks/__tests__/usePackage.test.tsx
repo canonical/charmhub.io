@@ -24,10 +24,12 @@ const TestComponent: React.FC<{ packageName?: string }> = ({ packageName }) => {
   );
 };
 
-const queryClient = new QueryClient();
-const Wrapper: React.FC = ({ children }: React.PropsWithChildren) => (
-  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-);
+const createWrapper = () => {
+  const queryClient = new QueryClient();
+  return ({ children }: React.PropsWithChildren) => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
+};
 
 describe("usePackage", () => {
   beforeEach(() => {
@@ -35,7 +37,9 @@ describe("usePackage", () => {
   });
 
   test("should display loading state initially", async () => {
-    render(<TestComponent packageName="test-package" />, { wrapper: Wrapper });
+    render(<TestComponent packageName="test-package" />, {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => {
       expect(screen.getByText("Loading...")).toBeInTheDocument();
@@ -53,7 +57,9 @@ describe("usePackage", () => {
       json: async () => ({ success: true, data: mockData }),
     } as Response);
 
-    render(<TestComponent packageName="test-package" />, { wrapper: Wrapper });
+    render(<TestComponent packageName="test-package" />, {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => {
       expect(screen.getByText(`ID: ${mockData.id}`)).toBeInTheDocument();
@@ -70,7 +76,7 @@ describe("usePackage", () => {
       json: async () => ({ success: true, data: null }),
     } as Response);
 
-    render(<TestComponent />, { wrapper: Wrapper });
+    render(<TestComponent />, { wrapper: createWrapper() });
 
     await waitFor(() => {
       expect(screen.getByText("No data available")).toBeInTheDocument();

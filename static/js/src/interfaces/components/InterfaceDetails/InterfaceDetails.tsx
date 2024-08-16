@@ -36,7 +36,7 @@ const getInterface = async (
 };
 
 type Props = {
-  interfaceItem: InterfaceData;
+  interfaceItem?: InterfaceData | null;
 };
 
 function InterfaceDetails({ interfaceItem }: Props) {
@@ -146,7 +146,7 @@ function InterfaceDetails({ interfaceItem }: Props) {
                 !interfaceData?.other_charms?.requirers?.length
               ) && (
                 <Notification severity="information">
-                  <p>No charms found that Provide or Require {interfaceName}</p>
+                  No charms found that Provide or Require {interfaceName}
                 </Notification>
               )}
 

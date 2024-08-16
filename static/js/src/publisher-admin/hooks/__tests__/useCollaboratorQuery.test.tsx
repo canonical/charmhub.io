@@ -25,11 +25,12 @@ const TestComponent: React.FC<{ packageName?: string }> = ({ packageName }) => {
   );
 };
 
-const queryClient = new QueryClient();
-
-const Wrapper: React.FC = ({ children }: React.PropsWithChildren) => (
-  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-);
+const createWrapper = () => {
+  const queryClient = new QueryClient();
+  return ({ children }: React.PropsWithChildren) => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
+};
 
 describe("useCollaboratorsQuery", () => {
   beforeEach(() => {
@@ -37,7 +38,9 @@ describe("useCollaboratorsQuery", () => {
   });
 
   test("should display loading state initially", async () => {
-    render(<TestComponent packageName="test-package" />, { wrapper: Wrapper });
+    render(<TestComponent packageName="test-package" />, {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => {
       expect(screen.getByText("Loading...")).toBeInTheDocument();
@@ -49,12 +52,14 @@ describe("useCollaboratorsQuery", () => {
       success: true,
       data: [{ id: 1, name: "Collaborator 1" }],
     };
-    jest.spyOn(global, "fetch").mockResolvedValueOnce({
+    jest.spyOn(global, "fetch").mockResolvedValue({
       ok: true,
       json: async () => mockData,
     } as Response);
 
-    render(<TestComponent packageName="test-package" />, { wrapper: Wrapper });
+    render(<TestComponent packageName="test-package" />, {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => {
       expect(screen.getByText("Collaborator 1")).toBeInTheDocument();
@@ -63,12 +68,14 @@ describe("useCollaboratorsQuery", () => {
 
   test("should display a message when no packageName is provided", async () => {
     const mockData = { success: true, data: [] };
-    jest.spyOn(global, "fetch").mockResolvedValueOnce({
+    jest.spyOn(global, "fetch").mockResolvedValue({
       ok: true,
       json: async () => mockData,
     } as Response);
 
-    render(<TestComponent />, { wrapper: Wrapper });
+    render(<TestComponent packageName="test-package" />, {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => {
       expect(screen.getByText("No collaborators found")).toBeInTheDocument();

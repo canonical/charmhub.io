@@ -1,4 +1,5 @@
 import "@testing-library/jest-dom";
+import { waitFor } from "@testing-library/react";
 
 interface GAEvent {
   event: string;
@@ -10,15 +11,14 @@ interface GAEvent {
 
 const mockDataLayer: GAEvent[] = [];
 (window as unknown as { dataLayer: GAEvent[] }).dataLayer = mockDataLayer;
-const originalLocation = window.location;
 
 const setupMockDOM = (markup: string) => {
   document.body.innerHTML = markup;
 };
 
-describe("navigation-events", () => {
+describe("navigation-events main navigation", () => {
   beforeEach(() => {
-    (window.location as Location).href = "http://localhost.test";
+    jest.resetModules();
     mockDataLayer.length = 0;
   });
 
@@ -38,26 +38,68 @@ describe("navigation-events", () => {
     link1.click();
     link2.click();
 
-    expect(mockDataLayer).toEqual([
+    const expectedData = [
       {
         event: "GAEvent",
         eventCategory: "charmhub.io-nav-1",
-        eventAction:
-          "from:http://localhost.test/ to:http://localhost.test/page1",
+        eventAction: `from:${window.location.href} to:http://localhost.test/page1`,
         eventLabel: "Page 1",
         eventValue: undefined,
       },
       {
         event: "GAEvent",
         eventCategory: "charmhub.io-nav-1",
-        eventAction:
-          "from:http://localhost.test/ to:http://localhost.test/page2",
+        eventAction: `from:${window.location.href} to:http://localhost.test/page2`,
         eventLabel: "Page 2",
         eventValue: undefined,
       },
-    ]);
-  });
+    ];
 
+    await waitFor(() => {
+      expect(mockDataLayer).toEqual(expectedData);
+    });
+  });
+});
+
+describe("navigation-events footer", () => {
+  beforeEach(() => {
+    jest.resetModules();
+    mockDataLayer.length = 0;
+  });
+  test("should add GA footer navigation events", async () => {
+    setupMockDOM(`
+      <footer>
+        <a href="/footer-link" class="footer-link">Footer Link</a>
+      </footer>
+    `);
+
+    await import("../navigation-events");
+
+    const footerLink = document.querySelector<HTMLAnchorElement>("footer a");
+
+    footerLink?.click();
+
+    const expectedData = [
+      {
+        event: "GAEvent",
+        eventCategory: "charmhub.io-nav-footer",
+        eventAction: `from:${window.location.href} to:http://localhost.test/footer-link`,
+        eventLabel: "Footer Link",
+        eventValue: undefined,
+      },
+    ];
+
+    await waitFor(() => {
+      expect(mockDataLayer).toEqual(expectedData);
+    });
+  });
+});
+
+describe("navigation-events content", () => {
+  beforeEach(() => {
+    jest.resetModules();
+    mockDataLayer.length = 0;
+  });
   test("should add GA content events for content elements", async () => {
     setupMockDOM(`
       <div id="main-content">
@@ -84,46 +126,42 @@ describe("navigation-events", () => {
       {
         event: "GAEvent",
         eventCategory: "charmhub.io-content-cta-0",
-        eventAction: "from:http://localhost.test to:/cta-positive",
+        eventAction: `from:${window.location.href} to:http://localhost.test/cta-positive`,
         eventLabel: "Positive CTA",
         eventValue: undefined,
       },
       {
         event: "GAEvent",
         eventCategory: "charmhub.io-content-cta-1",
-        eventAction: "from:http://localhost.test to:/cta-secondary",
+        eventAction: `from:${window.location.href} to:http://localhost.test/cta-secondary`,
         eventLabel: "Secondary CTA",
         eventValue: undefined,
       },
       {
         event: "GAEvent",
         eventCategory: "charmhub.io-nav-listing",
-        eventAction: "from:http://localhost.test to:/listing",
+        eventAction: `from:${window.location.href} to:http://localhost.test/listing`,
         eventLabel: "Listing Link",
         eventValue: undefined,
       },
       {
         event: "GAEvent",
         eventCategory: "charmhub.io-content-card",
-        eventAction: "from:http://localhost.test to:/card",
+        eventAction: `from:${window.location.href} to:http://localhost.test/card`,
         eventLabel: "Card Button",
         eventValue: undefined,
       },
       {
         event: "GAEvent",
         eventCategory: "charmhub.io-content-link",
-        eventAction: "from:http://localhost.test to:/text-link",
+        eventAction: `from:${window.location.href} to:http://localhost.test/text-link`,
         eventLabel: "Text Link",
         eventValue: undefined,
       },
     ];
 
-    setTimeout(() => {
-      expect(mockDataLayer).toEqual(expect.arrayContaining(expectedData));
-    }, 0);
-  });
-
-  afterAll(() => {
-    window.location = originalLocation;
+    await waitFor(() => {
+      expect(mockDataLayer).toEqual(expectedData);
+    });
   });
 });
