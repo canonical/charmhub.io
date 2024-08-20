@@ -21,3 +21,10 @@ docs/stable/about-juju: https://juju.is/about
 q/(?P<search>.*)/?: /?q={search}
 u/(?P<author>.*)/(?P<charm>.*)/?: /{author}-{charm}
 u/(?P<author>.*)/?: /?q={author}
+
+# interfaces -> integrations
+interfaces.json: integrations.json
+interfaces: integrations
+interfaces/(?P<interface>.*)/?: /integrations/{interface}
+interfaces/(?P<interface>.*).json: /integrations/{interface}.json
+interfaces/(?P<interface>.*)/(?P<status>.*).json: /integrations/{interface}/{status}.json
