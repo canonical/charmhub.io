@@ -26,9 +26,6 @@ def charmhub_utility_processor():
     else:
         account = None
     return {
-        "add_filter": helpers.add_filter,
-        "active_filter": helpers.active_filter,
-        "remove_filter": helpers.remove_filter,
         "schedule_banner": helpers.schedule_banner,
         "account": account,
         "image": image_template,
