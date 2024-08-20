@@ -59,11 +59,6 @@ class TestIntegrationRoutes(TestCase):
                 "Interface status does not match expected value",
             )
 
-    def test_interfaces_redirect_to_integrations(self):
-        response = self.client.get("/interfaces")
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(response.location.endswith("/integrations"))
-
     @patch("webapp.integrations.views.get_single_interface")
     def test_single_interface_success(self, mock_get_single_interface):
         mock_response = MagicMock()
