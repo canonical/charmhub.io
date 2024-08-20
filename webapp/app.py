@@ -10,7 +10,7 @@ from dateutil import parser
 from flask import render_template, make_response, request, session, escape
 from webapp.extensions import csrf
 from webapp.config import APP_NAME
-from webapp.handlers import set_handlers, charmhub_utility_processor
+from webapp.handlers import set_handlers
 from webapp.login.views import login
 from webapp.topics.views import topics
 from webapp.publisher.views import publisher
@@ -23,9 +23,7 @@ from webapp.decorators import login_required
 from canonicalwebteam.flask_base.app import FlaskBase
 import canonicalwebteam.store_base.utils.config as config
 from canonicalwebteam.store_base.packages.views import init_packages
-from canonicalwebteam.store_base.handlers import (
-    set_handlers as store_base_set_handlers,
-)
+
 
 app = FlaskBase(
     __name__,
@@ -42,7 +40,7 @@ app.name = APP_NAME
 app.config.from_object(config)
 app.config["LOGIN_REQUIRED"] = login_required
 
-store_base_set_handlers(app, charmhub_utility_processor)
+set_handlers(app)
 init_packages(app)
 
 app.store_api = CharmStore(session=talisker.requests.get_session())
@@ -72,7 +70,6 @@ def linkify(text):
 
 
 cache.init_app(app)
-set_handlers(app)
 csrf.init_app(app)
 
 app.register_blueprint(publisher)
