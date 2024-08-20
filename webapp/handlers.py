@@ -8,6 +8,7 @@ from canonicalwebteam.store_api.exceptions import (
     StoreApiResponseError,
     StoreApiResponseErrorList,
     StoreApiTimeoutError,
+    StoreApiConnectionError,
 )
 
 from canonicalwebteam import image_template
@@ -76,6 +77,7 @@ def set_handlers(app):
 
     @app.errorhandler(StoreApiResponseDecodeError)
     @app.errorhandler(StoreApiResponseError)
+    @app.errorhandler(StoreApiConnectionError)
     @app.errorhandler(StoreApiError)
     def handle_store_api_error(e):
         status_code = 502
