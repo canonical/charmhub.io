@@ -7,6 +7,7 @@ from flask import make_response
 from typing import List, Dict, TypedDict, Any, Union
 
 from canonicalwebteam.store_api.exceptions import StoreApiError
+from webapp.store.logic import format_slug
 
 Packages = TypedDict(
     "Packages",
@@ -311,20 +312,6 @@ def get_packages(
         "total_items": total_items,
         "categories": categories,
     }
-
-
-def format_slug(slug):
-    """Format category name into a standard title format
-
-    :param slug: The hypen spaced, lowercase slug to be formatted
-    :return: The formatted string
-    """
-    return (
-        slug.title()
-        .replace("-", " ")
-        .replace("And", "and")
-        .replace("Iot", "IoT")
-    )
 
 
 def parse_categories(
