@@ -1,4 +1,3 @@
-import datetime
 import re
 
 import yaml
@@ -147,7 +146,7 @@ def parse_package_for_card(
     libraries: bool = False,
 ) -> Package:
     """
-    Parses a package (snap, charm, or bundle) and returns the formatted package
+    Parses a package (charm, or bundle) and returns the formatted package
     based on the given card schema.
 
     :param: package (Dict[str, Any]): The package to be parsed.
@@ -226,20 +225,6 @@ def parse_package_for_card(
                 )
             )
             resp["package"]["charms"] = bundle_charms
-
-    if store_name.startswith("snapcraft"):
-        snap = package.get("snap", {})
-        publisher = snap.get("publisher", {})
-        resp["package"]["description"] = snap.get("summary", "")
-        resp["package"]["display_name"] = snap.get("title", "")
-        resp["package"]["type"] = "snap"
-        resp["package"]["name"] = package.get("name", "")
-        # platform to be fetched
-        resp["publisher"]["display_name"] = publisher.get("display-name", "")
-        resp["publisher"]["name"] = publisher.get("username", "")
-        resp["publisher"]["validation"] = publisher.get("validation", "")
-        resp["categories"] = snap.get("categories", [])
-        resp["package"]["icon_url"] = get_icon(package["snap"]["media"])
 
     return resp
 
@@ -386,52 +371,6 @@ def get_store_categories(store_api) -> List[Dict[str, str]]:
     )
 
     return categories
-
-
-def get_snaps_account_info(account_info):
-    """Get snaps from the account information of a user
-
-    :param account_info: The account informations
-
-    :return: A list of snaps
-    :return: A list of registred snaps
-    """
-    user_snaps = {}
-    registered_snaps = {}
-    if "16" in account_info["snaps"]:
-        snaps = account_info["snaps"]["16"]
-        for snap in snaps.keys():
-            if snaps[snap]["status"] != "Revoked":
-                if not snaps[snap]["latest_revisions"]:
-                    registered_snaps[snap] = snaps[snap]
-                else:
-                    user_snaps[snap] = snaps[snap]
-
-    now = datetime.datetime.utcnow()
-
-    for snap in user_snaps:
-        snap_info = user_snaps[snap]
-        for revision in snap_info["latest_revisions"]:
-            if len(revision["channels"]) > 0:
-                snap_info["latest_release"] = revision
-                break
-
-    if len(user_snaps) == 1:
-        for snap in user_snaps:
-            snap_info = user_snaps[snap]
-            revisions = snap_info["latest_revisions"]
-
-            revision_since = datetime.datetime.strptime(
-                revisions[-1]["since"], "%Y-%m-%dT%H:%M:%SZ"
-            )
-
-            if abs((revision_since - now).days) < 30 and (
-                not revisions[0]["channels"]
-                or revisions[0]["channels"][0] == "edge"
-            ):
-                snap_info["is_new"] = True
-
-    return user_snaps, registered_snaps
 
 
 def get_package(

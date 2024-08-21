@@ -65,7 +65,7 @@ def get_store_packages():
     return res
 
 
-@store_packages.route("/<any(charms, bundles, snaps):package_type>")
+@store_packages.route("/<any(charms, bundles):package_type>")
 @login_required
 def package(package_type):
     """
