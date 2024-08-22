@@ -21,8 +21,7 @@ from webapp.search.logic import cache
 from webapp.helpers import markdown_to_html
 from webapp.decorators import login_required
 from canonicalwebteam.flask_base.app import FlaskBase
-import canonicalwebteam.store_base.utils.config as config
-from canonicalwebteam.store_base.packages.views import init_packages
+from webapp.packages.store_packages import store_packages
 
 
 app = FlaskBase(
@@ -37,11 +36,9 @@ app = FlaskBase(
 
 
 app.name = APP_NAME
-app.config.from_object(config)
 app.config["LOGIN_REQUIRED"] = login_required
 
 set_handlers(app)
-init_packages(app)
 
 app.store_api = CharmStore(session=talisker.requests.get_session())
 
@@ -72,6 +69,7 @@ def linkify(text):
 cache.init_app(app)
 csrf.init_app(app)
 
+app.register_blueprint(store_packages)
 app.register_blueprint(publisher)
 app.register_blueprint(store)
 app.register_blueprint(login)
