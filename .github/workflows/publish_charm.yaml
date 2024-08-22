@@ -92,3 +92,11 @@ jobs:
         run: |
             sudo snap install charmcraft --classic --channel=latest/edge
             charmcraft upload-resource charmhub-io flask-app-image --image=`docker images --format "{{.ID}}" | head -n 1` --verbosity=trace
+      - name: Attach resource to charm
+        env:
+          CHARMCRAFT_AUTH: ${{ secrets.CHARMHUB_TOKEN }}
+        run: |
+
+          revision_number=$(charmcraft revisions charmhub-io | awk 'NR==2 {print $1}')
+          resource_revision_number=$(charmcraft resource-revisions charmhub-io flask-app-image | awk 'NR==2 {print $1}')
+          charmcraft release charmhub-io --channel=beta --revision $revision_number --resource flask-app-image:$resource_revision_number
