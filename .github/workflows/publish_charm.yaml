@@ -10,7 +10,8 @@ env:
 jobs:
   pack-charm:
     # only run when ./charm content changes
-    if: ${{ github.event_name == 'push' && contains(github.event.commits.*.added, 'charm') || contains(github.event.commits.*.modified, 'charm') }}
+    - path:
+        - 'charm/**'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

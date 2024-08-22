@@ -12,7 +12,7 @@ bases:
 
 summary: The charm for the charmhub.io website
 
-description: The charm for the charmhub.io website, built with PaaS app charmer
+description: The charm for the charmhub.io website, built with [PaaS app charmer](https://juju.is/docs/sdk/paas-charm)
 
 extensions:
   - flask-framework
