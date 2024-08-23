@@ -1,44 +1,23 @@
-name: Build and publish charm
+name: Pack Rock and Publish Image
+
 on:
   push:
     branches:
-      - charming-charmhub # TODO(mhdisk): Change this to main once we are ready to deploy
+      - charming-charmhub # TODO: Change this to main once we are ready to deploy
+  # paths:
+  #   - '.env'
+  #   - 'app.py'
+  #   - 'webapp'
+  #   - 'templates'
+  #   - 'static'
+  #   - 'redirects.yaml'
+
 env:
-  CHARMCRAFT_ENABLE_EXPERIMENTAL_EXTENSIONS: true
   ROCKCRAFT_ENABLE_EXPERIMENTAL_EXTENSIONS: true
 
 jobs:
-  pack-charm:
-    # only run when ./charm content changes
-    - path:
-        - 'charm/**'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup LXD
-        uses: canonical/setup-lxd@main
-
-      - name: Setup charmcraft
-        run: sudo snap install charmcraft --classic --channel=latest/edge
-
-      - name: Fetch libs
-        run: |
-             cd ./charm 
-             charmcraft fetch-libs
-
-      - name: Pack charm
-        run: charmcraft pack -v --project-dir ./charm
-
-      - name: Upload charm
-        env:
-          CHARMCRAFT_AUTH: ${{ secrets.CHARMHUB_TOKEN }}
-        run: charmcraft upload ./*.charm
-
   pack-rock:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -84,7 +63,7 @@ jobs:
       - name: Push to GHCR
         run: skopeo --insecure-policy copy oci-archive:$(ls *.rock) docker://${{ steps.set_image_url.outputs.image_url }} --dest-creds "canonical:${{ secrets.GITHUB_TOKEN }}"
 
-      - name: pull image into registry
+      - name: Pull image into registry
         run: docker pull ${{ steps.set_image_url.outputs.image_url }}
 
       - name: Upload flask app OCI image
@@ -93,11 +72,12 @@ jobs:
         run: |
             sudo snap install charmcraft --classic --channel=latest/edge
             charmcraft upload-resource charmhub-io flask-app-image --image=`docker images --format "{{.ID}}" | head -n 1` --verbosity=trace
+
       - name: Attach resource to charm
         env:
           CHARMCRAFT_AUTH: ${{ secrets.CHARMHUB_TOKEN }}
         run: |
-
           revision_number=$(charmcraft revisions charmhub-io | awk 'NR==2 {print $1}')
           resource_revision_number=$(charmcraft resource-revisions charmhub-io flask-app-image | awk 'NR==2 {print $1}')
           charmcraft release charmhub-io --channel=beta --revision $revision_number --resource flask-app-image:$resource_revision_number
+
