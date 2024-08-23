@@ -7,9 +7,6 @@ on:
     paths:
       - 'charm/**'  # Only trigger when changes are made to the ./charm/ directory
 
-env:
-  CHARMCRAFT_ENABLE_EXPERIMENTAL_EXTENSIONS: true
-
 jobs:
   pack-charm:
     runs-on: ubuntu-latest

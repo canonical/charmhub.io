@@ -12,9 +12,6 @@ on:
   #   - 'static'
   #   - 'redirects.yaml'
 
-env:
-  ROCKCRAFT_ENABLE_EXPERIMENTAL_EXTENSIONS: true
-
 jobs:
   pack-rock:
     runs-on: ubuntu-latest
