@@ -240,22 +240,16 @@ def search_topics(term: str, page: int, limit: int, see_all=False) -> dict:
 
 
 def search_charms(term: str, limit: int):
-    packages = app.store_api.find(term, fields=SEARCH_FIELDS)
-    charms = [
-        package
-        for package in packages["results"]
-        if package["type"] == "charm"
+    packages = app.store_api.find(term, type="charm", fields=SEARCH_FIELDS)[
+        "results"
     ]
 
-    return charms[:limit]
+    return packages[:limit]
 
 
 def search_bundles(term: str, limit: int):
-    packages = app.store_api.find(term, fields=SEARCH_FIELDS)
-    bundles = [
-        package
-        for package in packages["results"]
-        if package["type"] == "bundle"
+    packages = app.store_api.find(term, type="bundle", fields=SEARCH_FIELDS)[
+        "results"
     ]
 
-    return bundles[:limit]
+    return packages[:limit]
