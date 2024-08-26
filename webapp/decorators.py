@@ -58,7 +58,9 @@ def store_maintenance(func):
 
     @functools.wraps(func)
     def is_store_in_maintenance(*args, **kwargs):
-        if strtobool(os.getenv("MAINTENANCE")):
+        # TODO: this will be a config option for the charm
+        # or used from the app config using from_prefexed_env
+        if strtobool(os.getenv("MAINTENANCE", "false")):
             return flask.render_template("maintenance.html")
 
         return func(*args, **kwargs)
