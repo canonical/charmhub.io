@@ -22,8 +22,8 @@
         </h1>
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
         <h2 class="stats">
-            96 statements &nbsp;
-            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">90 run</button>
+            94 statements &nbsp;
+            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">88 run</button>
             <button type="button" class="mis show_mis shortkey_m button_toggle_mis" title="Toggle lines missing">6 missing</button>
             <button type="button" class="exc show_exc shortkey_x button_toggle_exc" title="Toggle lines excluded">0 excluded</button>
         </h2>
@@ -294,31 +294,25 @@
     <p id="t240" class="pln"><span class="n"><a href="#t240">240</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t241" class="pln"><span class="n"><a href="#t241">241</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t242" class="run"><span class="n"><a href="#t242">242</a></span><span class="t"><span class="key">def</span> <span class="nam">search_charms</span><span class="op">(</span><span class="nam">term</span><span class="op">:</span> <span class="nam">str</span><span class="op">,</span> <span class="nam">limit</span><span class="op">:</span> <span class="nam">int</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t243" class="run"><span class="n"><a href="#t243">243</a></span><span class="t">    <span class="nam">packages</span> <span class="op">=</span> <span class="nam">app</span><span class="op">.</span><span class="nam">store_api</span><span class="op">.</span><span class="nam">find</span><span class="op">(</span><span class="nam">term</span><span class="op">,</span> <span class="nam">fields</span><span class="op">=</span><span class="nam">SEARCH_FIELDS</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t244" class="run"><span class="n"><a href="#t244">244</a></span><span class="t">    <span class="nam">charms</span> <span class="op">=</span> <span class="op">[</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t245" class="pln"><span class="n"><a href="#t245">245</a></span><span class="t">        <span class="nam">package</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t246" class="pln"><span class="n"><a href="#t246">246</a></span><span class="t">        <span class="key">for</span> <span class="nam">package</span> <span class="key">in</span> <span class="nam">packages</span><span class="op">[</span><span class="str">"results"</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t247" class="pln"><span class="n"><a href="#t247">247</a></span><span class="t">        <span class="key">if</span> <span class="nam">package</span><span class="op">[</span><span class="str">"type"</span><span class="op">]</span> <span class="op">==</span> <span class="str">"charm"</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t248" class="pln"><span class="n"><a href="#t248">248</a></span><span class="t">    <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t243" class="run"><span class="n"><a href="#t243">243</a></span><span class="t">    <span class="nam">packages</span> <span class="op">=</span> <span class="nam">app</span><span class="op">.</span><span class="nam">store_api</span><span class="op">.</span><span class="nam">find</span><span class="op">(</span><span class="nam">term</span><span class="op">,</span> <span class="nam">type</span><span class="op">=</span><span class="str">"charm"</span><span class="op">,</span> <span class="nam">fields</span><span class="op">=</span><span class="nam">SEARCH_FIELDS</span><span class="op">)</span><span class="op">[</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t244" class="pln"><span class="n"><a href="#t244">244</a></span><span class="t">        <span class="str">"results"</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t245" class="pln"><span class="n"><a href="#t245">245</a></span><span class="t">    <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t246" class="pln"><span class="n"><a href="#t246">246</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p id="t247" class="run"><span class="n"><a href="#t247">247</a></span><span class="t">    <span class="key">return</span> <span class="nam">packages</span><span class="op">[</span><span class="op">:</span><span class="nam">limit</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t248" class="pln"><span class="n"><a href="#t248">248</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t249" class="pln"><span class="n"><a href="#t249">249</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t250" class="run"><span class="n"><a href="#t250">250</a></span><span class="t">    <span class="key">return</span> <span class="nam">charms</span><span class="op">[</span><span class="op">:</span><span class="nam">limit</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t251" class="pln"><span class="n"><a href="#t251">251</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t252" class="pln"><span class="n"><a href="#t252">252</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t253" class="run"><span class="n"><a href="#t253">253</a></span><span class="t"><span class="key">def</span> <span class="nam">search_bundles</span><span class="op">(</span><span class="nam">term</span><span class="op">:</span> <span class="nam">str</span><span class="op">,</span> <span class="nam">limit</span><span class="op">:</span> <span class="nam">int</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t254" class="run"><span class="n"><a href="#t254">254</a></span><span class="t">    <span class="nam">packages</span> <span class="op">=</span> <span class="nam">app</span><span class="op">.</span><span class="nam">store_api</span><span class="op">.</span><span class="nam">find</span><span class="op">(</span><span class="nam">term</span><span class="op">,</span> <span class="nam">fields</span><span class="op">=</span><span class="nam">SEARCH_FIELDS</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t255" class="run"><span class="n"><a href="#t255">255</a></span><span class="t">    <span class="nam">bundles</span> <span class="op">=</span> <span class="op">[</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t256" class="pln"><span class="n"><a href="#t256">256</a></span><span class="t">        <span class="nam">package</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t257" class="pln"><span class="n"><a href="#t257">257</a></span><span class="t">        <span class="key">for</span> <span class="nam">package</span> <span class="key">in</span> <span class="nam">packages</span><span class="op">[</span><span class="str">"results"</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t258" class="pln"><span class="n"><a href="#t258">258</a></span><span class="t">        <span class="key">if</span> <span class="nam">package</span><span class="op">[</span><span class="str">"type"</span><span class="op">]</span> <span class="op">==</span> <span class="str">"bundle"</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t259" class="pln"><span class="n"><a href="#t259">259</a></span><span class="t">    <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t260" class="pln"><span class="n"><a href="#t260">260</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t261" class="run"><span class="n"><a href="#t261">261</a></span><span class="t">    <span class="key">return</span> <span class="nam">bundles</span><span class="op">[</span><span class="op">:</span><span class="nam">limit</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t250" class="run"><span class="n"><a href="#t250">250</a></span><span class="t"><span class="key">def</span> <span class="nam">search_bundles</span><span class="op">(</span><span class="nam">term</span><span class="op">:</span> <span class="nam">str</span><span class="op">,</span> <span class="nam">limit</span><span class="op">:</span> <span class="nam">int</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t251" class="run"><span class="n"><a href="#t251">251</a></span><span class="t">    <span class="nam">packages</span> <span class="op">=</span> <span class="nam">app</span><span class="op">.</span><span class="nam">store_api</span><span class="op">.</span><span class="nam">find</span><span class="op">(</span><span class="nam">term</span><span class="op">,</span> <span class="nam">type</span><span class="op">=</span><span class="str">"bundle"</span><span class="op">,</span> <span class="nam">fields</span><span class="op">=</span><span class="nam">SEARCH_FIELDS</span><span class="op">)</span><span class="op">[</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t252" class="pln"><span class="n"><a href="#t252">252</a></span><span class="t">        <span class="str">"results"</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t253" class="pln"><span class="n"><a href="#t253">253</a></span><span class="t">    <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t254" class="pln"><span class="n"><a href="#t254">254</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p id="t255" class="run"><span class="n"><a href="#t255">255</a></span><span class="t">    <span class="key">return</span> <span class="nam">packages</span><span class="op">[</span><span class="op">:</span><span class="nam">limit</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
 </div>
 <div id="footer">
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.5</a>,
-            created at 2024-08-25 22:08 +0000
+            created at 2024-08-26 22:09 +0000
         </p>
     </div>
 </div>
