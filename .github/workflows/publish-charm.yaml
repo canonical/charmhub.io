@@ -3,9 +3,9 @@ name: Pack and Publish Charm
 on:
   push:
     branches:
-      - charming-charmhub # TODO: Change this to main once we are ready to deploy
+      - main
     paths:
-      - 'charm/**'  # Only trigger when changes are made to the ./charm/ directory
+      - 'charm/**' # Only trigger when changes are made to the ./charm/ directory
 
 jobs:
   pack-charm:

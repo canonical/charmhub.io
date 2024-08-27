@@ -3,14 +3,7 @@ name: Pack Rock and Publish Image
 on:
   push:
     branches:
-      - charming-charmhub # TODO: Change this to main once we are ready to deploy
-  # paths:
-  #   - '.env'
-  #   - 'app.py'
-  #   - 'webapp'
-  #   - 'templates'
-  #   - 'static'
-  #   - 'redirects.yaml'
+      - main
 
 jobs:
   pack-rock:
