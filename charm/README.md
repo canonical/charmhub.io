@@ -43,6 +43,8 @@ multipass ls # Get the IP of the VM
 echo "{IP_OF_VM} charmhub.local" | sudo tee -a /etc/hosts
 ```
 
+> Note: login will not work using this setup, if you'd like to access publisher pages, change the domain to `staging.charmhub.io`, but make sure to remove the line from `/etc/hosts/` after you're done.
+
 
 ## Design Decisions:
 - To keep the codebase clean and charm libraries updated, they are only fetched before packing the charm in the [Github Actions workflow](https://github.com/canonical/charmhub.io/blob/main/.github/workflows/publish_charm.yaml#L25).
