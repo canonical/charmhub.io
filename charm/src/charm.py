@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-# Copyright 2024 Moe Isk
-# See LICENSE file for licensing details.
 
 """Flask Charm entrypoint."""
 

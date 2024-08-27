@@ -13,6 +13,8 @@ rockcraft pack
 rockcraft.skopeo --insecure-policy copy --dest-tls-verify=false oci-archive:charmhub-io*.rock docker://localhost:32000/charmhub-io:1
 ```
 
+This will pack the application into a [rock](https://documentation.ubuntu.com/rockcraft/en/latest/explanation/rocks/) (OCI image) and upload it to the local registry.
+
 You can deploy the charm locally with:
 
 ```bash
@@ -21,6 +23,8 @@ charmcraft fetch-libs
 charmcraft pack
 juju deploy ./*.charm --resource flask-app-image=localhost:32000/charmhub-io:1
 ```
+
+This will deploy the charm with the rock image you just uploaded attached as a resource.
 
 once `juju status` reports the charm as `active`, you can test the webserver:
 
