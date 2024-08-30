@@ -49,7 +49,7 @@ class TestSearchPackage(TestCase):
             )
         )
 
-        response1 = self.client.get("/all-charms?q=juju&type_limit=3")
+        response1 = self.client.get("/all-charms?q=juju&limit=3")
         self.assertEqual(response1.status_code, 200)
         self.assertEqual(len(response1.json["charms"]), 3)
         self.assertEqual(len(response1.json), 1)
@@ -68,7 +68,7 @@ class TestSearchPackage(TestCase):
             )
         )
 
-        bundle_response = self.client.get("/all-bundles?q=juju&type_limit=2")
+        bundle_response = self.client.get("/all-bundles?q=juju&limit=2")
         self.assertEqual(bundle_response.status_code, 200)
         self.assertEqual(len(bundle_response.json["bundles"]), 2)
         self.assertEqual(len(bundle_response.json), 1)
@@ -99,7 +99,7 @@ class TestAllSearchView(TestCase):
         mock_search_topics.return_value = sample_topics
 
         all_search_response = self.client.get("/all-search?q=juju")
-        all_docs_response = self.client.get("/all-docs?q=juju&type_limit=3")
+        all_docs_response = self.client.get("/all-docs?q=juju&limit=3")
         all_topics_response = self.client.get("/all-topics?q=juju")
 
         self.assertEqual(all_search_response.status_code, 200)
@@ -133,22 +133,10 @@ class TestAllSearchView(TestCase):
     @patch("webapp.search.logic.search_charms")
     def test_search_with_single_type(self, mock_search_charms):
         mock_search_charms.return_value = sample_charms
-        response = self.client.get(
-            "/all-search?q=test&types=charms&type_limit=2"
-        )
+        response = self.client.get("/all-search?q=test&limit=2")
         data = json.loads(response.data)
 
         self.assertEqual(response.status_code, 200)
         self.assertIn("charms", data)
         self.assertIsInstance(data["charms"], list)
         self.assertEqual(len(data["charms"]), 2)
-
-    def test_invalid_search_type(self):
-        response = self.client.get(
-            "/all-search?q=test&types=invalid&type_limit=5"
-        )
-        data = json.loads(response.data)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("error", data)
-        self.assertEqual(data["error"], "Invalid search type")
