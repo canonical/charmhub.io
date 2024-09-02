@@ -141,7 +141,6 @@ def get_bundle_charms(charm_apps):
 
 def parse_package_for_card(
     package: Dict[str, Any],
-    store_name: str,
     store_api: Any,
     publisher_api: Any,
     libraries: bool = False,
@@ -180,52 +179,51 @@ def parse_package_for_card(
         "ratings": {"value": "0", "count": "0"},
     }
 
-    if store_name.startswith("charmhub"):
-        result = package.get("result", {})
-        publisher = result.get("publisher", {})
-        channel = package.get("default-release", {}).get("channel", {})
-        risk = channel.get("risk", "")
-        track = channel.get("track", "")
-        if libraries:
-            resp["package"]["libraries"] = publisher_api.get_charm_libraries(
-                package["name"]
-            ).get("libraries", [])
-        resp["package"]["type"] = package.get("type", "")
-        resp["package"]["name"] = package.get("name", "")
-        resp["package"]["description"] = result.get("summary", "")
-        resp["package"]["display_name"] = result.get(
-            "title", format_slug(package.get("name", ""))
+    result = package.get("result", {})
+    publisher = result.get("publisher", {})
+    channel = package.get("default-release", {}).get("channel", {})
+    risk = channel.get("risk", "")
+    track = channel.get("track", "")
+    if libraries:
+        resp["package"]["libraries"] = publisher_api.get_charm_libraries(
+            package["name"]
+        ).get("libraries", [])
+    resp["package"]["type"] = package.get("type", "")
+    resp["package"]["name"] = package.get("name", "")
+    resp["package"]["description"] = result.get("summary", "")
+    resp["package"]["display_name"] = result.get(
+        "title", format_slug(package.get("name", ""))
+    )
+    resp["package"]["channel"]["risk"] = risk
+    resp["package"]["channel"]["track"] = track
+    resp["package"]["channel"]["name"] = f"{track}/{risk}"
+    resp["publisher"]["display_name"] = publisher.get("display-name", "")
+    resp["publisher"]["validation"] = publisher.get("validation", "")
+    resp["categories"] = result.get("categories", [])
+    resp["package"]["icon_url"] = get_icon(result.get("media", []))
+
+    platforms = result.get("deployable-on", [])
+    if platforms:
+        resp["package"]["platforms"] = platforms
+    else:
+        resp["package"]["platforms"] = ["vm"]
+
+    if resp["package"]["type"] == "bundle":
+        name = package["name"]
+        default_release = store.get_item_details(
+            name, fields=["default-release"]
         )
-        resp["package"]["channel"]["risk"] = risk
-        resp["package"]["channel"]["track"] = track
-        resp["package"]["channel"]["name"] = f"{track}/{risk}"
-        resp["publisher"]["display_name"] = publisher.get("display-name", "")
-        resp["publisher"]["validation"] = publisher.get("validation", "")
-        resp["categories"] = result.get("categories", [])
-        resp["package"]["icon_url"] = get_icon(result.get("media", []))
+        bundle_yaml = default_release["default-release"]["revision"][
+            "bundle-yaml"
+        ]
 
-        platforms = result.get("deployable-on", [])
-        if platforms:
-            resp["package"]["platforms"] = platforms
-        else:
-            resp["package"]["platforms"] = ["vm"]
-
-        if resp["package"]["type"] == "bundle":
-            name = package["name"]
-            default_release = store.get_item_details(
-                name, fields=["default-release"]
+        bundle_details = yaml.load(bundle_yaml, Loader=yaml.FullLoader)
+        bundle_charms = get_bundle_charms(
+            bundle_details.get(
+                "applications", bundle_details.get("services", [])
             )
-            bundle_yaml = default_release["default-release"]["revision"][
-                "bundle-yaml"
-            ]
-
-            bundle_details = yaml.load(bundle_yaml, Loader=yaml.FullLoader)
-            bundle_charms = get_bundle_charms(
-                bundle_details.get(
-                    "applications", bundle_details.get("services", [])
-                )
-            )
-            resp["package"]["charms"] = bundle_charms
+        )
+        resp["package"]["charms"] = bundle_charms
 
     return resp
 
@@ -264,7 +262,6 @@ def paginate(
 def get_packages(
     store,
     publisher: Any,
-    store_name: str,
     libraries: bool,
     fields: List[str],
     size: int = 10,
@@ -298,9 +295,7 @@ def get_packages(
     parsed_packages = []
     for package in packages_per_page:
         parsed_packages.append(
-            parse_package_for_card(
-                package, store_name, store, publisher, libraries
-            )
+            parse_package_for_card(package, store, publisher, libraries)
         )
     res = parsed_packages
 
@@ -363,7 +358,6 @@ def get_store_categories(store_api) -> List[Dict[str, str]]:
 def get_package(
     store,
     publisher_api,
-    store_name: str,
     package_name: str,
     fields: List[str],
     libraries: bool,
@@ -378,7 +372,5 @@ def get_package(
     :return: A dictionary containing the package.
     """
     package = fetch_package(store, package_name, fields).get("package", {})
-    resp = parse_package_for_card(
-        package, store_name, store, publisher_api, libraries
-    )
+    resp = parse_package_for_card(package, store, publisher_api, libraries)
     return {"package": resp}
