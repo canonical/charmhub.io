@@ -1,5 +1,6 @@
 name: charmhub-io
-base: ubuntu@22.04
+base: bare
+build-base: ubuntu@22.04
 version: "0.1"
 summary: Rocked charmhub.io
 description: |
