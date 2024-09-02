@@ -5,6 +5,8 @@ import requests
 from urllib.parse import quote
 from typing import Dict
 from webapp.config import SEARCH_FIELDS
+from webapp.packages.logic import parse_package_for_card
+from webapp.packages.store_packages import CharmStore, CharmPublisher
 
 
 url = "https://discourse.charmhub.io"
@@ -65,8 +67,7 @@ def rewrite_topic_url(topics: list) -> list:
     if len(documentation_topic_mappings) == 0:
         fetch_documentation_index()
     for topic in topics:
-        if not documentation_topic_mappings.get(topic["id"]):
-            topic["url"] = cache.get(topic["id"])
+        topic["url"] = documentation_topic_mappings.get(str(topic["id"]))
 
     return topics
 
@@ -102,6 +103,16 @@ def search_discourse(
         else:
             resp = requests.get(f"{url}/search.json?q={query}&page={page}")
             topics = resp.json().get("topics", [])
+            for topic in topics:
+                post = next(
+                    (
+                        post
+                        for post in resp.json()["posts"]
+                        if post["topic_id"] == topic["id"]
+                    ),
+                    None,
+                )
+                topic["post"] = post
             cache.set(f"{query}-{page}", topics, timeout=300)
             return topics
 
@@ -127,10 +138,21 @@ def search_discourse(
             continue
 
         resp = requests.get(f"{url}/search.json?q={query}&page={page}")
-        topics = resp.json().get("topics", [])
-        cache.set(f"{query}-{page}", topics, timeout=300)
+        data = resp.json()
+        topics = data.get("topics", [])
 
         if topics:
+            for topic in topics:
+                post = next(
+                    (
+                        post
+                        for post in data["posts"]
+                        if post["topic_id"] == topic["id"]
+                    ),
+                    None,
+                )
+                topic["post"] = post
+            cache.set(f"{query}-{page}", topics, timeout=300)
             result.extend(topics)
             page += 1
             next_resp = requests.get(
@@ -205,12 +227,18 @@ def search_topics(term: str, page: int, see_all=False) -> dict:
 
 
 def search_charms(term: str):
-    return app.store_api.find(term, type="charm", fields=SEARCH_FIELDS)[
-        "results"
+    return [
+        parse_package_for_card(package, CharmStore, CharmPublisher)
+        for package in app.store_api.find(
+            term, type="charm", fields=SEARCH_FIELDS
+        )["results"]
     ]
 
 
 def search_bundles(term: str):
-    return app.store_api.find(term, type="bundle", fields=SEARCH_FIELDS)[
-        "results"
+    return [
+        parse_package_for_card(package, CharmStore, CharmPublisher)
+        for package in app.store_api.find(
+            term, type="bundle", fields=SEARCH_FIELDS
+        )["results"]
     ]

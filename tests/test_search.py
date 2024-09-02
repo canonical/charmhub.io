@@ -98,7 +98,7 @@ class TestAllSearchView(TestCase):
         mock_search_docs.return_value.json = sample_docs
         mock_search_topics.return_value = sample_topics
 
-        all_search_response = self.client.get("/all-search?q=juju")
+        all_search_response = self.client.get("/all-search.json?q=juju")
         all_docs_response = self.client.get("/all-docs?q=juju&limit=3")
         all_topics_response = self.client.get("/all-topics?q=juju")
 
@@ -133,7 +133,7 @@ class TestAllSearchView(TestCase):
     @patch("webapp.search.logic.search_charms")
     def test_search_with_single_type(self, mock_search_charms):
         mock_search_charms.return_value = sample_charms
-        response = self.client.get("/all-search?q=test&limit=2")
+        response = self.client.get("/all-search.json?q=test&limit=2")
         data = json.loads(response.data)
 
         self.assertEqual(response.status_code, 200)

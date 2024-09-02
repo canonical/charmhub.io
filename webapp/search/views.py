@@ -1,4 +1,4 @@
-from flask import Blueprint, request, current_app as app
+from flask import Blueprint, request, current_app as app, render_template
 
 from webapp.config import SEARCH_FIELDS
 from webapp.search.logic import (
@@ -16,6 +16,11 @@ search = Blueprint(
 
 @search.route("/all-search")
 def all_search():
+    return render_template("all-search.html")
+
+
+@search.route("/all-search.json")
+def all_search_json():
     params = request.args
     term = params.get("q")
     limit = int(params.get("limit", 5))
