@@ -6,6 +6,14 @@ import {
 } from "@canonical/store-components";
 import { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
+import { Package } from "../publisher-admin/types";
+
+type DiscourseTopic = {
+  id: string;
+  url: string;
+  title: string;
+  post: { blurb: string };
+};
 
 function App() {
   const search = new URLSearchParams(window.location.search).get("q");
@@ -13,7 +21,7 @@ function App() {
 
   const [term, setTerm] = useState(search || "");
 
-  const [results, setResults] = useState<any>({
+  const [results, setResults] = useState({
     charms: [],
     bundles: [],
     docs: [],
@@ -70,7 +78,7 @@ function App() {
                   </Col>
                 ))
               ) : charms.length ? (
-                charms.map((charm: any) => (
+                charms.map((charm: Package) => (
                   <Col
                     size={3}
                     style={{ marginBottom: "1.5rem" }}
@@ -94,7 +102,7 @@ function App() {
                   </Col>
                 ))
               ) : bundles.length ? (
-                bundles.map((bundle: any) => (
+                bundles.map((bundle: Package) => (
                   <Col
                     size={3}
                     style={{ marginBottom: "1.5rem" }}
@@ -112,7 +120,7 @@ function App() {
             <h2>Documentation</h2>
             <div>
               {docs.length ? (
-                docs.map((doc: any) => (
+                docs.map((doc: DiscourseTopic) => (
                   <Col size={12} key={doc.id}>
                     <h3>
                       {doc.url ? (
@@ -137,7 +145,7 @@ function App() {
           <section className="p-section">
             <h2>Posts</h2>
             {topics.length ? (
-              topics.map((post: any) => (
+              topics.map((post: DiscourseTopic) => (
                 <Col size={12} key={post.id}>
                   <h3>
                     <a
