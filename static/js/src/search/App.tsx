@@ -139,10 +139,7 @@ function App() {
                         doc.title
                       )}
                     </h3>
-                    <HighlightText
-                      text={doc?.post?.blurb}
-                      searchTerm={search || ""}
-                    />
+                    <p>{doc?.post?.blurb}</p>
                   </Col>
                 ))
               ) : (
@@ -157,21 +154,18 @@ function App() {
               </a>
             </h2>
             {topics.length ? (
-              topics.map((post: DiscourseTopic) => (
-                <Col size={12} key={post.id}>
+              topics.map((topic: DiscourseTopic) => (
+                <Col size={12} key={topic.id}>
                   <h3>
                     <a
-                      href={`https://discourse.charmhub.io/t/${post.id}`}
+                      href={`https://discourse.charmhub.io/t/${topic.id}`}
                       target="_blank"
                       rel="noreferrer"
                     >
-                      {post.title}
+                      {topic.title}
                     </a>
                   </h3>
-                  <HighlightText
-                    text={post?.post?.blurb}
-                    searchTerm={search || ""}
-                  />
+                  <p>{topic?.post?.blurb}</p>
                 </Col>
               ))
             ) : (
@@ -187,31 +181,6 @@ function App() {
     </>
   );
 }
-
-const HighlightText = ({
-  text,
-  searchTerm,
-}: {
-  text: string;
-  searchTerm: string;
-}) => {
-  if (!searchTerm) return <p>{text}</p>;
-
-  const regex = new RegExp(`(${searchTerm})`, "gi");
-  const parts = text.split(regex);
-
-  return (
-    <p>
-      {parts.map((part, index) =>
-        part.toLowerCase() === searchTerm.toLowerCase() ? (
-          <strong key={index}>{part}</strong>
-        ) : (
-          part
-        )
-      )}
-    </p>
-  );
-};
 
 const container = document.getElementById("main-content");
 const root = createRoot(container as HTMLElement);
