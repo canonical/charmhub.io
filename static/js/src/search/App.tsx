@@ -69,7 +69,9 @@ function App() {
       {search ? (
         <div className="row">
           <section className="p-section">
-            <h2>Charms</h2>
+            <h2>
+              <a href={`/?type=charm&q=${search}`}>Charms &rsaquo;</a>
+            </h2>
             <Row>
               {loading ? (
                 [...Array(3)].map((_, i) => (
@@ -93,7 +95,9 @@ function App() {
             </Row>
           </section>
           <section className="p-section">
-            <h2>Bundles</h2>
+            <h2>
+              <a href={`/?type=bundle&q=${search}`}>Bundles &rsaquo;</a>
+            </h2>
             <Row>
               {loading ? (
                 [...Array(3)].map((_, i) => (
@@ -117,7 +121,11 @@ function App() {
             </Row>
           </section>
           <section className="p-section">
-            <h2>Documentation</h2>
+            <h2>
+              <a href={`https://juju.is/docs/search?q=${search}`}>
+                Documentation &rsaquo;
+              </a>
+            </h2>
             <div>
               {docs.length ? (
                 docs.map((doc: DiscourseTopic) => (
@@ -143,7 +151,11 @@ function App() {
             </div>
           </section>
           <section className="p-section">
-            <h2>Posts</h2>
+            <h2>
+              <a href={`https://discourse.charmhub.io/search?q=${search}`}>
+                Forum posts &rsaquo;
+              </a>
+            </h2>
             {topics.length ? (
               topics.map((post: DiscourseTopic) => (
                 <Col size={12} key={post.id}>
