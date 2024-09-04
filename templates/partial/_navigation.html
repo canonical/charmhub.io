@@ -81,7 +81,84 @@
             <i class="p-icon--user is-light"></i>
           </a>
         </li>
+          <li class="p-navigation__item">
+            <a href="/all-search"
+               class="js-search-button p-navigation__link--search-toggle"
+               aria-label="Search"></a>
+          </li>
       </ul>
+      <div class="p-navigation__search">
+          <form action="/all-search" class="p-search-box is-light">
+            <input type="search"
+                   class="p-search-box__input"
+                   name="q"
+                   placeholder="Search Charmhub"
+                   required=""
+                   aria-label="Search Charmhub" />
+            <button type="reset" class="p-search-box__reset">
+              <i class="p-icon--close"></i>
+            </button>
+            <button type="submit" class="p-search-box__button">
+              <i class="p-icon--search"></i>
+            </button>
+          </form>
+        </div>
     </nav>
   </div>
+   <div class="p-navigation__search-overlay"></div>
 </header>
+<script>
+const searchButtons = document.querySelectorAll(".js-search-button");
+const searchOverlay = document.querySelector(".p-navigation__search-overlay");
+
+function escKeyPressHandler(e) {
+  if (e.key === "Escape") {
+    closeSearch();
+  }
+}
+
+function closeSearch() {
+  searchButtons.forEach((searchButton) => {
+    searchButton.removeAttribute("aria-pressed");
+  });
+
+  navigation.classList.remove("has-search-open");
+
+  document.removeEventListener("keyup", escKeyPressHandler);
+}
+
+function openSearch(e) {
+  e.preventDefault();
+  const searchInput = navigation.querySelector(".p-search-box__input");
+  searchButtons.forEach((searchButton) => {
+    searchButton.setAttribute("aria-pressed", true);
+  });
+
+  navigation.classList.add("has-search-open");
+
+  searchInput.focus();
+  document.addEventListener("keyup", escKeyPressHandler);
+}
+
+function toggleSearch(e) {
+  e.preventDefault();
+  if (navigation.classList.contains("has-search-open")) {
+    closeSearch();
+  } else {
+    closeSearch();
+    openSearch(e);
+  }
+}
+
+
+function initNavigationSearch() {
+  searchButtons.forEach((searchButton) =>
+    searchButton.addEventListener("click", toggleSearch),
+  );
+
+  searchOverlay.addEventListener("click", toggleSearch);
+}
+
+initNavigationSearch()
+</script>
+
