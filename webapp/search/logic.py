@@ -124,8 +124,6 @@ def search_discourse(
     #   pages to be fetched.
     # 2. The API does not support fetching multiple categories or
     #   excluding a category from the search
-    # 3. The API does not support excluding (we had to filter out archived
-    #   topics) a status from the search
 
     result = []
     more_pages = True
@@ -213,15 +211,9 @@ def search_topics(term: str, page: int, see_all=False) -> dict:
     """
     query = term
 
-    query += " status:-archived"
-
     result = search_discourse(query, page, see_all)
 
-    result = [
-        topic
-        for topic in result
-        if not topic["archived"] and topic["category_id"] != 22
-    ]
+    result = [topic for topic in result if topic["category_id"] != 22]
 
     return result
 
