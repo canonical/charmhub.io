@@ -86,6 +86,9 @@ function App() {
                 ))
               ) : charms.length ? (
                 <>
+                  <p>
+                    Showing the top {charms.length} results for "{search}"
+                  </p>
                   {charms.map((charm: ICharm) => (
                     <Col
                       size={3}
@@ -95,9 +98,6 @@ function App() {
                       <CharmCard data={charm} />
                     </Col>
                   ))}
-                  <p>
-                    Showing the top {charms.length} results for "{search}"
-                  </p>
                 </>
               ) : (
                 <p>No charms matching this search</p>
@@ -117,6 +117,9 @@ function App() {
                 ))
               ) : bundles.length ? (
                 <>
+                  <p>
+                    Showing the top {bundles.length} results for "{search}"
+                  </p>
                   {bundles.map((bundle: ICharm) => (
                     <Col
                       size={3}
@@ -126,9 +129,6 @@ function App() {
                       <BundleCard data={bundle} />
                     </Col>
                   ))}
-                  <p>
-                    Showing the top {bundles.length} results for "{search}"
-                  </p>
                 </>
               ) : (
                 <p>No bundles matching this search</p>
