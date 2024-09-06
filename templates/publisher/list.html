@@ -280,12 +280,7 @@
 {% endblock %}
 
 {% block page_scripts %}
-<script src="{{ versioned_static('js/dist/list.js') }}" defer></script>
 <script>
-  window.addEventListener("DOMContentLoaded", function () {
-    charmhub.publisher.list.init();
-  });
-
   // De-register charms and bundles
   const unregisterConfirmationModal = document.querySelector(
     "[data-js='unregister-confirmation-modal']"
