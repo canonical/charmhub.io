@@ -159,16 +159,33 @@ def set_handlers(app):
             "utf-8", errors="replace"
         )
 
-        CSP["script-src"] = CSP_SCRIPT_SRC + get_csp_directive(
-            decoded_content, r'onclick\s*=\s*"(.*?)"'
-        )
+        CSP["script-src"] = CSP_SCRIPT_SRC 
+        # + get_csp_directive(
+        #     decoded_content, r'onclick\s*=\s*"(.*?)"'
+        # )
         return CSP
     
     @app.after_request
     def add_headers(response):
+        """
+        Security headers to add to all requests
+        - Content-Security-Policy: Restrict resources (e.g., JavaScript, CSS,
+        Images) and URLs
+        - Referrer-Policy: Limit referrer data for security while preserving
+        full referrer for same-origin requests
+        - Cross-Origin-Embedder-Policy: allows embedding cross-origin
+        resources without credentials
+        - Cross-Origin-Opener-Policy: enable the page to open pop-ups while
+        maintaining same-origin policy
+        - Cross-Origin-Resource-Policy: allowing only same-origin requests to
+        access the resource
+        - X-Permitted-Cross-Domain-Policies: disallows cross-domain access to
+        resources
+        """
+         
         csp = add_script_hashes_to_csp(response)
         response.headers["Content-Security-Policy"] = helpers.get_csp_as_str(
-            CSP
+            csp
         )
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         response.headers["Cross-Origin-Embedder-Policy"] = "credentialless"
