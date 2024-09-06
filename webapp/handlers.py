@@ -170,4 +170,11 @@ def set_handlers(app):
         response.headers["Content-Security-Policy"] = helpers.get_csp_as_str(
             CSP
         )
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Cross-Origin-Embedder-Policy"] = "credentialless"
+        response.headers["Cross-Origin-Opener-Policy"] = (
+            "same-origin-allow-popups"
+        )
+        response.headers["Cross-Origin-Resource-Policy"] = "same-site"
+        response.headers["X-Permitted-Cross-Domain-Policies"] = "none"
         return response
