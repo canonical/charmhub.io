@@ -57,6 +57,7 @@ CSP = {
     ],
     "frame-src": [
         "'self'",
+        "td.doubleclick.net",
     ],
     "style-src": [
         "'self'",
