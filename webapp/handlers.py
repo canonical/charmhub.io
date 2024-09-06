@@ -1,10 +1,6 @@
 from flask import render_template, session
 from webapp.config import SENTRY_DSN
 
-import base64
-import hashlib
-import re
-
 from canonicalwebteam.store_api.exceptions import (
     StoreApiError,
     StoreApiResourceNotFound,
@@ -44,7 +40,12 @@ CSP = {
         "'self'",
         "assets.ubuntu.com",
     ],
-    "script-src": [],
+    "script-src": [
+        "'self'",
+        "blob:",
+        "'unsafe-eval'",
+        "'unsafe-hashes'",
+    ],
     "connect-src": [
         "'self'",
         "sentry.is.canonical.com",
@@ -59,12 +60,6 @@ CSP = {
     ],
 }
 
-CSP_SCRIPT_SRC = [
-    "'self'",
-    "blob:",
-    "'unsafe-eval'",
-    "'unsafe-hashes'",
-]
 
 def charmhub_utility_processor():
     """
@@ -137,34 +132,7 @@ def set_handlers(app):
             ),
             status_code,
         )
-    
-    # Calculate the SHA256 hash of the script content and encode it in base64.
-    def calculate_sha256_base64(script_content):
-        sha256_hash = hashlib.sha256(script_content.encode()).digest()
-        return "sha256-" + base64.b64encode(sha256_hash).decode()
 
-    def get_csp_directive(content, regex):
-        directive_items = set()
-        pattern = re.compile(regex)
-        matched_contents = pattern.findall(content)
-        for matched_content in matched_contents:
-            hash_value = f"'{calculate_sha256_base64(matched_content)}'"
-            directive_items.add(hash_value)
-        return list(directive_items)
-
-    # Find all script elements in the response and add their hashes to the CSP.
-    def add_script_hashes_to_csp(response):
-        response.freeze()
-        decoded_content = b"".join(response.response).decode(
-            "utf-8", errors="replace"
-        )
-
-        CSP["script-src"] = CSP_SCRIPT_SRC 
-        # + get_csp_directive(
-        #     decoded_content, r'onclick\s*=\s*"(.*?)"'
-        # )
-        return CSP
-    
     @app.after_request
     def add_headers(response):
         """
@@ -182,10 +150,8 @@ def set_handlers(app):
         - X-Permitted-Cross-Domain-Policies: disallows cross-domain access to
         resources
         """
-         
-        csp = add_script_hashes_to_csp(response)
         response.headers["Content-Security-Policy"] = helpers.get_csp_as_str(
-            csp
+            CSP
         )
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         response.headers["Cross-Origin-Embedder-Policy"] = "credentialless"
