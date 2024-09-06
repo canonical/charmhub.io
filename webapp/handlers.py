@@ -26,6 +26,7 @@ CSP = {
         "charmhub.io",
         "*.cdn.snapcraftcontent.com",
         "www.googletagmanager.com",
+        "stats.g.doubleclick.net",
     ],
     "script-src-elem": [
         "'self'",
@@ -50,9 +51,13 @@ CSP = {
         "'self'",
         "sentry.is.canonical.com",
         "*.crazyegg.com",
+        "analytics.google.com",
+        "www.google-analytics.com",
+        "stats.g.doubleclick.net",
     ],
     "frame-src": [
         "'self'",
+        "td.doubleclick.net",
     ],
     "style-src": [
         "'self'",
