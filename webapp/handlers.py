@@ -26,6 +26,7 @@ CSP = {
         "charmhub.io",
         "*.cdn.snapcraftcontent.com",
         "www.googletagmanager.com",
+        "stats.g.doubleclick.net",
     ],
     "script-src-elem": [
         "'self'",
