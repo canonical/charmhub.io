@@ -27,7 +27,9 @@ CSP = {
         "assets.ubuntu.com",
         "res.cloudinary.com",
         "api.charmhub.io",
+        "charmhub.io",
         "*.cdn.snapcraftcontent.com",
+        "www.googletagmanager.com",
     ],
     "script-src-elem": [
         "'self'",
@@ -45,16 +47,8 @@ CSP = {
     "script-src": [],
     "connect-src": [
         "'self'",
-    #     "ubuntu.com",
-    #     "analytics.google.com",
-    #     "stats.g.doubleclick.net",
-    #     "www.googletagmanager.com",
-    #     "sentry.is.canonical.com",
-    #     "www.google-analytics.com",
-    #     "plausible.io",
+        "sentry.is.canonical.com",
         "*.crazyegg.com",
-    #     "www.facebook.com",
-    #     "px.ads.linkedin.com",
     ],
     "frame-src": [
         "'self'",
