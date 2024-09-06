@@ -79,7 +79,7 @@ export default function Releases() {
   if (Object.keys(releaseData.releases).length === 0) {
     return (
       <EmptyState
-        title="No releases have been added for this charm yet"
+        title="No releases have been added for this charm"
         image={
           <img
             src="https://assets.ubuntu.com/v1/3234f995-Generic_chamhub_NoDocs.svg"
@@ -168,7 +168,7 @@ export default function Releases() {
       />
       {channels.length === 0 ? (
         <Notification severity="information">
-          No Releases have been added for this track yet
+          No Releases have been added for this track
         </Notification>
       ) : (
         <ReleasesTable releaseMap={channels} arch={selectedArch} />
