@@ -11,7 +11,7 @@ from webapp.packages.logic import (
     get_packages,
     get_package,
 )
-from webapp.config import APP_NAME, SEARCH_FIELDS as FIELDS
+from webapp.config import SEARCH_FIELDS as FIELDS
 
 from canonicalwebteam.store_api.stores.charmstore import (
     CharmStore,
@@ -33,7 +33,6 @@ def get_store_packages():
         get_packages(
             CharmStore,
             CharmPublisher,
-            APP_NAME,
             libraries,
             FIELDS,
             12,
@@ -90,7 +89,6 @@ def get_store_package(package_name):
         get_package(
             CharmStore,
             CharmPublisher,
-            APP_NAME,
             package_name,
             FIELDS,
             has_libraries,
