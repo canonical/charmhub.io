@@ -1,6 +1,10 @@
 from flask import render_template, session
 from webapp.config import SENTRY_DSN
 
+import base64
+import hashlib
+import re
+
 from canonicalwebteam.store_api.exceptions import (
     StoreApiError,
     StoreApiResourceNotFound,
@@ -15,6 +19,58 @@ from canonicalwebteam import image_template
 
 from webapp import authentication, helpers
 
+CSP = {
+    "default-src": ["'self'"],
+    "img-src": [
+        "'self'",
+        "data: blob:",
+        "assets.ubuntu.com",
+        "res.cloudinary.com",
+        "api.charmhub.io",
+        "*.cdn.snapcraftcontent.com",
+    ],
+    "script-src-elem": [
+        "'self'",
+        "assets.ubuntu.com",
+        "www.googletagmanager.com",
+        "*.crazyegg.com",
+        "w.usabilla.com",
+        # This is necessary for Google Tag Manager to function properly.
+        "'unsafe-inline'",
+    ],
+    "font-src": [
+        "'self'",
+        "assets.ubuntu.com",
+    ],
+    "script-src": [],
+    "connect-src": [
+        "'self'",
+    #     "ubuntu.com",
+    #     "analytics.google.com",
+    #     "stats.g.doubleclick.net",
+    #     "www.googletagmanager.com",
+    #     "sentry.is.canonical.com",
+    #     "www.google-analytics.com",
+    #     "plausible.io",
+        "*.crazyegg.com",
+    #     "www.facebook.com",
+    #     "px.ads.linkedin.com",
+    ],
+    "frame-src": [
+        "'self'",
+    ],
+    "style-src": [
+        "'self'",
+        "'unsafe-inline'",
+    ],
+}
+
+CSP_SCRIPT_SRC = [
+    "'self'",
+    "blob:",
+    "'unsafe-eval'",
+    "'unsafe-hashes'",
+]
 
 def charmhub_utility_processor():
     """
@@ -87,3 +143,37 @@ def set_handlers(app):
             ),
             status_code,
         )
+    
+    # Calculate the SHA256 hash of the script content and encode it in base64.
+    def calculate_sha256_base64(script_content):
+        sha256_hash = hashlib.sha256(script_content.encode()).digest()
+        return "sha256-" + base64.b64encode(sha256_hash).decode()
+
+    def get_csp_directive(content, regex):
+        directive_items = set()
+        pattern = re.compile(regex)
+        matched_contents = pattern.findall(content)
+        for matched_content in matched_contents:
+            hash_value = f"'{calculate_sha256_base64(matched_content)}'"
+            directive_items.add(hash_value)
+        return list(directive_items)
+
+    # Find all script elements in the response and add their hashes to the CSP.
+    def add_script_hashes_to_csp(response):
+        response.freeze()
+        decoded_content = b"".join(response.response).decode(
+            "utf-8", errors="replace"
+        )
+
+        CSP["script-src"] = CSP_SCRIPT_SRC + get_csp_directive(
+            decoded_content, r'onclick\s*=\s*"(.*?)"'
+        )
+        return CSP
+    
+    @app.after_request
+    def add_headers(response):
+        csp = add_script_hashes_to_csp(response)
+        response.headers["Content-Security-Policy"] = helpers.get_csp_as_str(
+            CSP
+        )
+        return response

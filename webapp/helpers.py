@@ -151,3 +151,11 @@ def param_redirect_exec(req, make_response, redirect):
             response.set_cookie("param_redirect", "", expires=0)
             return response
     return None
+
+
+def get_csp_as_str(csp={}):
+    csp_str = ""
+    for key, values in csp.items():
+        csp_value = " ".join(values)
+        csp_str += f"{key} {csp_value}; "
+    return csp_str.strip()
