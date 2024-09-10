@@ -20,13 +20,9 @@ CSP = {
     "img-src": [
         "'self'",
         "data: blob:",
-        "assets.ubuntu.com",
-        "res.cloudinary.com",
-        "api.charmhub.io",
-        "charmhub.io",
-        "*.cdn.snapcraftcontent.com",
-        "www.googletagmanager.com",
-        "stats.g.doubleclick.net",
+        # This is needed to allow images from
+        # https://www.google.*/ads/ga-audiences to load.
+        "*",
     ],
     "script-src-elem": [
         "'self'",
