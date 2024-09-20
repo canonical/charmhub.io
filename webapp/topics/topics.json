@@ -22,6 +22,18 @@
       "storage"
     ]
   },
+    {
+    "name": "Charmed Tempo HA",
+    "slug": "charmed-tempo-ha",
+    "topic_id": 15531,
+    "description": "A solution to deploy and operate Grafana Tempo, a distributed tracing backend that natively integrates with COS Lite, on Juju.",
+    "categories": [
+      "cloud",
+      "tracing",
+      "monitoring"
+    ]
+  },
+
   {
     "name": "Kubeflow AI/MLOps",
     "slug": "kubeflow",
