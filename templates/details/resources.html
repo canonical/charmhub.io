@@ -179,6 +179,10 @@
         var fileCell = document.createElement("td");
         fileCell.innerText = release.download.size * 1000 * 1000;
         tableRow.appendChild(fileCell);
+      } else {
+        var digestCell = document.createElement("td");
+        digestCell.innerText = release.download["hash-sha-256"].slice(0, 12);
+        tableRow.appendChild(digestCell);
       }
 
       revisionsTableBody.appendChild(tableRow);
