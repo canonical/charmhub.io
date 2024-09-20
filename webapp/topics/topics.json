@@ -29,7 +29,7 @@
     "description": "A solution to deploy and operate Grafana Tempo, a distributed tracing backend that natively integrates with COS Lite, on Juju.",
     "categories": [
       "cloud",
-      "tracing",
+      "logging-tracing",
       "monitoring"
     ]
   },
