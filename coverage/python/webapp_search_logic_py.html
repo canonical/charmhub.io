@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
-    <title>Coverage for webapp/search/logic.py: 99%</title>
+    <title>Coverage for webapp/search/logic.py: 88%</title>
     <link rel="icon" sizes="32x32" href="favicon_32.png">
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="jquery.min.js"></script>
@@ -18,13 +18,13 @@
 <div id="header">
     <div class="content">
         <h1>Coverage for <b>webapp/search/logic.py</b> :
-            <span class="pc_cov">99%</span>
+            <span class="pc_cov">88%</span>
         </h1>
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
         <h2 class="stats">
             94 statements &nbsp;
-            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">93 run</button>
-            <button type="button" class="mis show_mis shortkey_m button_toggle_mis" title="Toggle lines missing">1 missing</button>
+            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">83 run</button>
+            <button type="button" class="mis show_mis shortkey_m button_toggle_mis" title="Toggle lines missing">11 missing</button>
             <button type="button" class="exc show_exc shortkey_x button_toggle_exc" title="Toggle lines excluded">0 excluded</button>
         </h2>
     </div>
@@ -194,8 +194,8 @@
     <p id="t140" class="run"><span class="n"><a href="#t140">140</a></span><span class="t">        <span class="nam">topics</span> <span class="op">=</span> <span class="nam">data</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">"topics"</span><span class="op">,</span> <span class="op">[</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t141" class="pln"><span class="n"><a href="#t141">141</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t142" class="run"><span class="n"><a href="#t142">142</a></span><span class="t">        <span class="key">if</span> <span class="nam">topics</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t143" class="run"><span class="n"><a href="#t143">143</a></span><span class="t">            <span class="key">for</span> <span class="nam">topic</span> <span class="key">in</span> <span class="nam">topics</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t144" class="run"><span class="n"><a href="#t144">144</a></span><span class="t">                <span class="nam">post</span> <span class="op">=</span> <span class="nam">next</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t143" class="mis show_mis"><span class="n"><a href="#t143">143</a></span><span class="t">            <span class="key">for</span> <span class="nam">topic</span> <span class="key">in</span> <span class="nam">topics</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t144" class="mis show_mis"><span class="n"><a href="#t144">144</a></span><span class="t">                <span class="nam">post</span> <span class="op">=</span> <span class="nam">next</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p id="t145" class="pln"><span class="n"><a href="#t145">145</a></span><span class="t">                    <span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p id="t146" class="pln"><span class="n"><a href="#t146">146</a></span><span class="t">                        <span class="nam">post</span>&nbsp;</span><span class="r"></span></p>
     <p id="t147" class="pln"><span class="n"><a href="#t147">147</a></span><span class="t">                        <span class="key">for</span> <span class="nam">post</span> <span class="key">in</span> <span class="nam">data</span><span class="op">[</span><span class="str">"posts"</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
@@ -203,16 +203,16 @@
     <p id="t149" class="pln"><span class="n"><a href="#t149">149</a></span><span class="t">                    <span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t150" class="pln"><span class="n"><a href="#t150">150</a></span><span class="t">                    <span class="key">None</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t151" class="pln"><span class="n"><a href="#t151">151</a></span><span class="t">                <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t152" class="run"><span class="n"><a href="#t152">152</a></span><span class="t">                <span class="nam">topic</span><span class="op">[</span><span class="str">"post"</span><span class="op">]</span> <span class="op">=</span> <span class="nam">post</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t153" class="run"><span class="n"><a href="#t153">153</a></span><span class="t">            <span class="nam">cache</span><span class="op">.</span><span class="nam">set</span><span class="op">(</span><span class="str">f"{query}-{page}"</span><span class="op">,</span> <span class="nam">topics</span><span class="op">,</span> <span class="nam">timeout</span><span class="op">=</span><span class="num">300</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t154" class="run"><span class="n"><a href="#t154">154</a></span><span class="t">            <span class="nam">result</span><span class="op">.</span><span class="nam">extend</span><span class="op">(</span><span class="nam">topics</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t155" class="run"><span class="n"><a href="#t155">155</a></span><span class="t">            <span class="nam">page</span> <span class="op">+=</span> <span class="num">1</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t156" class="run"><span class="n"><a href="#t156">156</a></span><span class="t">            <span class="nam">next_resp</span> <span class="op">=</span> <span class="nam">requests</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t152" class="mis show_mis"><span class="n"><a href="#t152">152</a></span><span class="t">                <span class="nam">topic</span><span class="op">[</span><span class="str">"post"</span><span class="op">]</span> <span class="op">=</span> <span class="nam">post</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t153" class="mis show_mis"><span class="n"><a href="#t153">153</a></span><span class="t">            <span class="nam">cache</span><span class="op">.</span><span class="nam">set</span><span class="op">(</span><span class="str">f"{query}-{page}"</span><span class="op">,</span> <span class="nam">topics</span><span class="op">,</span> <span class="nam">timeout</span><span class="op">=</span><span class="num">300</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t154" class="mis show_mis"><span class="n"><a href="#t154">154</a></span><span class="t">            <span class="nam">result</span><span class="op">.</span><span class="nam">extend</span><span class="op">(</span><span class="nam">topics</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t155" class="mis show_mis"><span class="n"><a href="#t155">155</a></span><span class="t">            <span class="nam">page</span> <span class="op">+=</span> <span class="num">1</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t156" class="mis show_mis"><span class="n"><a href="#t156">156</a></span><span class="t">            <span class="nam">next_resp</span> <span class="op">=</span> <span class="nam">requests</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p id="t157" class="pln"><span class="n"><a href="#t157">157</a></span><span class="t">                <span class="str">f"{url}/search.json?q={query}&amp;page={page}"</span>&nbsp;</span><span class="r"></span></p>
     <p id="t158" class="pln"><span class="n"><a href="#t158">158</a></span><span class="t">            <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t159" class="run"><span class="n"><a href="#t159">159</a></span><span class="t">            <span class="nam">next_topics</span> <span class="op">=</span> <span class="nam">next_resp</span><span class="op">.</span><span class="nam">json</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">"topics"</span><span class="op">,</span> <span class="op">[</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t160" class="run"><span class="n"><a href="#t160">160</a></span><span class="t">            <span class="key">if</span> <span class="key">not</span> <span class="nam">next_topics</span> <span class="key">or</span> <span class="nam">next_topics</span><span class="op">[</span><span class="num">0</span><span class="op">]</span><span class="op">[</span><span class="str">"id"</span><span class="op">]</span> <span class="op">==</span> <span class="nam">topics</span><span class="op">[</span><span class="num">0</span><span class="op">]</span><span class="op">[</span><span class="str">"id"</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t161" class="run"><span class="n"><a href="#t161">161</a></span><span class="t">                <span class="nam">more_pages</span> <span class="op">=</span> <span class="key">False</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t159" class="mis show_mis"><span class="n"><a href="#t159">159</a></span><span class="t">            <span class="nam">next_topics</span> <span class="op">=</span> <span class="nam">next_resp</span><span class="op">.</span><span class="nam">json</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">"topics"</span><span class="op">,</span> <span class="op">[</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t160" class="mis show_mis"><span class="n"><a href="#t160">160</a></span><span class="t">            <span class="key">if</span> <span class="key">not</span> <span class="nam">next_topics</span> <span class="key">or</span> <span class="nam">next_topics</span><span class="op">[</span><span class="num">0</span><span class="op">]</span><span class="op">[</span><span class="str">"id"</span><span class="op">]</span> <span class="op">==</span> <span class="nam">topics</span><span class="op">[</span><span class="num">0</span><span class="op">]</span><span class="op">[</span><span class="str">"id"</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t161" class="mis show_mis"><span class="n"><a href="#t161">161</a></span><span class="t">                <span class="nam">more_pages</span> <span class="op">=</span> <span class="key">False</span>&nbsp;</span><span class="r"></span></p>
     <p id="t162" class="pln"><span class="n"><a href="#t162">162</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p id="t163" class="run"><span class="n"><a href="#t163">163</a></span><span class="t">            <span class="nam">more_pages</span> <span class="op">=</span> <span class="key">False</span>&nbsp;</span><span class="r"></span></p>
     <p id="t164" class="pln"><span class="n"><a href="#t164">164</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -293,7 +293,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.5</a>,
-            created at 2024-09-21 22:07 +0000
+            created at 2024-09-23 22:07 +0000
         </p>
     </div>
 </div>
