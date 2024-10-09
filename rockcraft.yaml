@@ -23,6 +23,7 @@ parts:
     - flask/app/redirects.yaml
     - flask/app/security.txt
     - flask/app/robots.txt
+    - flask/app/gunicorn.conf.py
     plugin: dump
     source: .
     organize:
@@ -34,6 +35,7 @@ parts:
       redirects.yaml: flask/app/redirects.yaml
       security.txt: flask/app/security.txt
       robots.txt: flask/app/robots.txt
+      gunicorn.conf.py: flask/app/gunicorn.conf.py
     stage:
     - flask/app/.env
     - flask/app/app.py
@@ -43,6 +45,7 @@ parts:
     - flask/app/redirects.yaml
     - flask/app/security.txt
     - flask/app/robots.txt
+    - flask/app/gunicorn.conf.py
   flask-framework/dependencies:
     plugin: python
     stage-packages:
@@ -86,7 +89,7 @@ run-user: _daemon_
 services:
   flask:
     override: replace
-    command: /bin/python3 -m gunicorn -c /flask/gunicorn.conf.py app:app
+    command: /bin/python3 -m gunicorn -c /flask/app/gunicorn.conf.py app:app
     startup: enabled
     after:
     - statsd-exporter
