@@ -74,7 +74,7 @@ run-user: _daemon_
 services:
   flask:
     override: replace
-    command: /bin/python3 -m gunicorn -c /flask/app/gunicorn.conf.py app:app
+    command: /bin/python3 -m gunicorn -c /flask/app/rock.gunicorn.conf.py app:app
     startup: enabled
     after:
     - statsd-exporter
