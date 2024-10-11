@@ -57,11 +57,6 @@ parts:
     - requirements.txt
     build-environment:
     - PARTS_PYTHON_INTERPRETER: python3.10
-  flask-framework/config-files:
-    plugin: dump
-    source: /snap/rockcraft/2599/share/rockcraft/extensions/flask-framework
-    organize:
-      gunicorn.conf.py: flask/gunicorn.conf.py
   flask-framework/statsd-exporter:
     build-snaps:
     - go
