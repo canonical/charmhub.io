@@ -134,19 +134,6 @@
   }
 
   .p-docstring {
-    $grid-x-large-col-prefix: "#{$grid-column-prefix}x-large-" !default;
-
-    @media (min-width: $breakpoint-large) {
-      @for $i from $grid-columns through 1 {
-        // set col-* to span respective number of columns on desktop
-        .#{$grid-x-large-col-prefix}#{$i} {
-          // on large screens provide flex box column implementation for IE
-          // on smaller screens let them display full width one under another
-          @include vf-grid-column($i);
-        }
-      }
-    }
-
     .p-docstring__intro > {
       p:first-child {
         @extend %vf-heading-4;
