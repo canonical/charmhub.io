@@ -75,16 +75,6 @@ parts:
     - bash_bins
     - coreutils_bins
     - ca-certificates_data
-  pebble:
-    plugin: nil
-    stage-snaps:
-    - pebble/latest/stable
-    override-prime: |-
-      craftctl default
-      mkdir -p var/lib/pebble/default/layers
-      chmod 777 var/lib/pebble/default
-    stage:
-    - bin/pebble
 run-user: _daemon_
 services:
   flask:
