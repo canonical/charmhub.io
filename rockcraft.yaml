@@ -23,7 +23,7 @@ parts:
     - flask/app/redirects.yaml
     - flask/app/security.txt
     - flask/app/robots.txt
-    - flask/app/gunicorn.conf.py
+    - flask/app/rock.gunicorn.conf.py
     plugin: dump
     source: .
     organize:
@@ -35,7 +35,7 @@ parts:
       redirects.yaml: flask/app/redirects.yaml
       security.txt: flask/app/security.txt
       robots.txt: flask/app/robots.txt
-      gunicorn.conf.py: flask/app/gunicorn.conf.py
+      rock.gunicorn.conf.py: flask/app/rock.gunicorn.conf.py
     stage:
     - flask/app/.env
     - flask/app/app.py
@@ -45,7 +45,7 @@ parts:
     - flask/app/redirects.yaml
     - flask/app/security.txt
     - flask/app/robots.txt
-    - flask/app/gunicorn.conf.py
+    - flask/app/rock.gunicorn.conf.py
   flask-framework/dependencies:
     plugin: python
     stage-packages:
