@@ -47,6 +47,18 @@ request_session = talisker.requests.get_session()
 candid = CandidClient(request_session)
 publisher_api = CharmPublisher(request_session)
 
+#### SETUP TELEMETRY
+
+from webapp.observability.telemetry import setup_tracing, setup_metrics, instrument_app
+
+instrument_app(app)
+
+from opentelemetry.sdk.resources import Resource
+
+resource = Resource.create({"service.name": APP_NAME})
+
+setup_metrics(resource, app, "/metrics")
+
 
 @app.template_filter("linkify")
 def linkify(text):

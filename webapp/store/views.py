@@ -27,6 +27,7 @@ store = Blueprint(
 )
 publisher_api = CharmPublisher(talisker.requests.get_session())
 
+from webapp.observability.utils import trace_function
 
 @store.route("/publisher/<regex('[a-z0-9-]*[a-z][a-z0-9-]*'):publisher>")
 def get_publisher_details(publisher):
@@ -66,9 +67,19 @@ def get_publisher_details(publisher):
     # HTML template will be returned here for the front end
     return (context, status_code)
 
+from opentelemetry import metrics
+
+### CUSTOM METRICS
+
+meter = metrics.get_meter(__name__)
+work_counter = meter.create_counter(
+    "work.counter", unit="1", description="Counts the amount of work done"
+)
+
 
 @store.route("/packages.json")
 def get_packages():
+    work_counter.add(1, {"work.type": "hard"})
     query = request.args.get("q", default=None, type=str)
     provides = request.args.get("provides", default=None, type=str)
     requires = request.args.get("requires", default=None, type=str)
