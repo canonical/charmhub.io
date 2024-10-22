@@ -9,6 +9,10 @@ from typing import List, Dict, TypedDict, Any, Union
 from canonicalwebteam.store_api.exceptions import StoreApiError
 from webapp.store.logic import format_slug
 
+from opentelemetry import trace
+
+tracer = trace.get_tracer("charmhub.io")
+
 Packages = TypedDict(
     "Packages",
     {
@@ -284,7 +288,8 @@ def get_packages(
             the total pages
     """
 
-    packages = fetch_packages(store, fields, query_params)
+    with tracer.start_as_current_span("fetch_packages()"):
+        packages = fetch_packages(store, fields, query_params)
 
     total_pages = -(len(packages) // -size)
 

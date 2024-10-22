@@ -23,6 +23,14 @@ from webapp.decorators import login_required
 from canonicalwebteam.flask_base.app import FlaskBase
 from webapp.packages.store_packages import store_packages
 
+from opentelemetry import trace
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
 
 app = FlaskBase(
     __name__,
@@ -34,6 +42,23 @@ app = FlaskBase(
     template_folder="../templates",
 )
 
+resource = Resource(attributes={
+    "service.name": "charmhub.io"
+})
+
+tracer_provider = TracerProvider(resource=resource)
+trace.set_tracer_provider(tracer_provider)
+
+# Set up OTLP exporter pointing to the collector
+otlp_exporter = OTLPSpanExporter(endpoint="http://localhost:4317")
+span_processor = BatchSpanProcessor(otlp_exporter)
+trace.get_tracer_provider().add_span_processor(span_processor)
+
+# Automatically instrument Flask app
+FlaskInstrumentor().instrument_app(app)
+
+# Automatically instrument outgoing HTTP requests
+RequestsInstrumentor().instrument()
 
 app.name = APP_NAME
 app.config["LOGIN_REQUIRED"] = login_required

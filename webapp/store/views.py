@@ -21,6 +21,9 @@ from webapp.helpers import discourse_api
 from webapp.store import logic
 from webapp.config import SEARCH_FIELDS
 
+from opentelemetry import trace
+
+tracer = trace.get_tracer("charmhub.io")
 
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
@@ -69,43 +72,44 @@ def get_publisher_details(publisher):
 
 @store.route("/packages.json")
 def get_packages():
-    query = request.args.get("q", default=None, type=str)
-    provides = request.args.get("provides", default=None, type=str)
-    requires = request.args.get("requires", default=None, type=str)
-    context = {"packages": [], "size": 0}
+    with tracer.start_as_current_span("Handling /packages.json"):
+        query = request.args.get("q", default=None, type=str)
+        provides = request.args.get("provides", default=None, type=str)
+        requires = request.args.get("requires", default=None, type=str)
+        context = {"packages": [], "size": 0}
 
-    if query:
-        results = app.store_api.find(query=query, fields=SEARCH_FIELDS).get(
-            "results"
-        )
-        context["q"] = query
-    elif provides or requires:
-        if provides:
-            provides = provides.split(",")
-        if requires:
-            requires = requires.split(",")
+        if query:
+            results = app.store_api.find(query=query, fields=SEARCH_FIELDS).get(
+                "results"
+            )
+            context["q"] = query
+        elif provides or requires:
+            if provides:
+                provides = provides.split(",")
+            if requires:
+                requires = requires.split(",")
 
-        results = app.store_api.find(
-            provides=provides, requires=requires, fields=SEARCH_FIELDS
-        ).get("results")
+            results = app.store_api.find(
+                provides=provides, requires=requires, fields=SEARCH_FIELDS
+            ).get("results")
 
-        context["provides"] = provides
-        context["requires"] = requires
-    else:
-        results = app.store_api.find(fields=SEARCH_FIELDS).get("results", [])
+            context["provides"] = provides
+            context["requires"] = requires
+        else:
+            results = app.store_api.find(fields=SEARCH_FIELDS).get("results", [])
 
-    packages = []
-    total_packages = 0
+        packages = []
+        total_packages = 0
 
-    for i, item in enumerate(results):
-        total_packages += 1
-        package = logic.add_store_front_data(results[i], False)
-        packages.append(package)
+        for i, item in enumerate(results):
+            total_packages += 1
+            package = logic.add_store_front_data(results[i], False)
+            packages.append(package)
 
-    context["packages"] = packages
-    context["size"] = total_packages
+        context["packages"] = packages
+        context["size"] = total_packages
 
-    return context
+        return context
 
 
 FIELDS = [
@@ -122,9 +126,10 @@ FIELDS = [
 
 def get_package(entity_name, channel_request=None, fields=FIELDS):
     # Get entity info from API
-    package = app.store_api.get_item_details(
-        entity_name, channel=channel_request, fields=fields
-    )
+    with tracer.start_as_current_span("get_item_details()"):
+        package = app.store_api.get_item_details(
+            entity_name, channel=channel_request, fields=fields
+        )
 
     # If the package is not published, return a 404
     if not package["default-release"]:
@@ -132,12 +137,14 @@ def get_package(entity_name, channel_request=None, fields=FIELDS):
 
     # Fix issue #1010
     if channel_request:
-        channel_map = app.store_api.get_item_details(
-            entity_name, fields=["channel-map"]
-        )
+        with tracer.start_as_current_span("get_item_details() if channel_request"):
+            channel_map = app.store_api.get_item_details(
+                entity_name, fields=["channel-map"]
+            )
         package["channel-map"] = channel_map["channel-map"]
 
-    package = logic.add_store_front_data(package, True)
+    with tracer.start_as_current_span("add_store_front_data()"):
+        package = logic.add_store_front_data(package, True)
 
     for channel in package["channel-map"]:
         channel["channel"]["released-at"] = logic.convert_date(
@@ -152,7 +159,8 @@ def get_package(entity_name, channel_request=None, fields=FIELDS):
 @store_maintenance
 @redirect_uppercase_to_lowercase
 def details_overview(entity_name):
-    channel_request = request.args.get("channel", default=None, type=str)
+    with tracer.start_as_current_span("Handling channel_request"):
+        channel_request = request.args.get("channel", default=None, type=str)
     if request.base_url.endswith("/docs"):
         url = f"/{entity_name}"
         if channel_request:
@@ -167,9 +175,10 @@ def details_overview(entity_name):
         "result.links",
     ]
 
-    package = get_package(
-        entity_name, channel_request, FIELDS.copy() + extra_fields
-    )
+    with tracer.start_as_current_span("get_package()"):
+        package = get_package(
+            entity_name, channel_request, FIELDS.copy() + extra_fields
+        )
 
     context = {
         "package": package,
@@ -183,78 +192,84 @@ def details_overview(entity_name):
     description = None
     summary = None
 
-    docs_topic = package["store_front"].get("docs_topic")
+    with tracer.start_as_current_span("Handling docs_topic"):
+        docs_topic = package["store_front"].get("docs_topic")
 
     if docs_topic:
-        docs_url_prefix = f"/{package['name']}/docs"
+        with tracer.start_as_current_span("Handling if docs_topic"):
 
-        docs = DocParser(
-            api=discourse_api,
-            index_topic_id=package["store_front"]["docs_topic"],
-            url_prefix=docs_url_prefix,
-        )
-        try:
-            docs.parse()
-            topic = docs.index_topic
-            docs_content = docs.parse_topic(topic)
-            description = docs_content.get("body_html", "")
+            docs_url_prefix = f"/{package['name']}/docs"
 
-            navigation = docs.navigation
-
-            overview = {
-                "hidden": False,
-                "level": 1,
-                "path": "",
-                "navlink_href": f"/{entity_name}",
-                "navlink_fragment": "",
-                "navlink_text": "Overview",
-                "is_active": True,
-                "has_active_child": False,
-                "children": [],
-            }
-
-            if len(navigation["nav_items"]) > 0:
-                navigation["nav_items"][0]["children"].insert(0, overview)
-                # If the first item in docs nav is "overview",
-                # prefix with "Docs - "
-                if (
-                    len(navigation["nav_items"][0]["children"]) > 1
-                    and navigation["nav_items"][0]["children"][1][
-                        "navlink_text"
-                    ]
-                    == "Overview"
-                ):
-                    del navigation["nav_items"][0]["children"][1]
-            else:
-                # If there is no navigation but we've got here, there are docs
-                # So add a top level "Docs item". Example: /easyrsa
-                navigation["nav_items"] = [
-                    {
-                        "level": 0,
-                        "children": [
-                            overview,
-                        ],
-                    }
-                ]
-
-            context["navigation"] = navigation
-            context["forum_url"] = docs.api.base_url
-            context["last_update"] = docs_content["updated"]
-            context["topic_path"] = docs_content["topic_path"]
-        except Exception as e:
-            if e.response.status_code == 404:
-                navigation = None
-                description, summary = logic.add_description_and_summary(
-                    package
+            with tracer.start_as_current_span("Handling DocParser"):
+                docs = DocParser(
+                    api=discourse_api,
+                    index_topic_id=package["store_front"]["docs_topic"],
+                    url_prefix=docs_url_prefix,
                 )
+            try:
+                with tracer.start_as_current_span("docs.parse()"):
+                    docs.parse()
+                topic = docs.index_topic
+                docs_content = docs.parse_topic(topic)
+                description = docs_content.get("body_html", "")
+
+                navigation = docs.navigation
+
+                overview = {
+                    "hidden": False,
+                    "level": 1,
+                    "path": "",
+                    "navlink_href": f"/{entity_name}",
+                    "navlink_fragment": "",
+                    "navlink_text": "Overview",
+                    "is_active": True,
+                    "has_active_child": False,
+                    "children": [],
+                }
+
+                if len(navigation["nav_items"]) > 0:
+                    navigation["nav_items"][0]["children"].insert(0, overview)
+                    # If the first item in docs nav is "overview",
+                    # prefix with "Docs - "
+                    if (
+                        len(navigation["nav_items"][0]["children"]) > 1
+                        and navigation["nav_items"][0]["children"][1][
+                            "navlink_text"
+                        ]
+                        == "Overview"
+                    ):
+                        del navigation["nav_items"][0]["children"][1]
+                else:
+                    # If there is no navigation but we've got here, there are docs
+                    # So add a top level "Docs item". Example: /easyrsa
+                    navigation["nav_items"] = [
+                        {
+                            "level": 0,
+                            "children": [
+                                overview,
+                            ],
+                        }
+                    ]
+
+                context["navigation"] = navigation
+                context["forum_url"] = docs.api.base_url
+                context["last_update"] = docs_content["updated"]
+                context["topic_path"] = docs_content["topic_path"]
+            except Exception as e:
+                if e.response.status_code == 404:
+                    navigation = None
+                    description, summary = logic.add_description_and_summary(
+                        package
+                    )
 
     else:
         navigation = None
         description, summary = logic.add_description_and_summary(package)
 
-    context["description"] = description
-    context["summary"] = summary
-    context["package_type"] = package["type"]
+    with tracer.start_as_current_span("Handling setting context"):
+        context["description"] = description
+        context["summary"] = summary
+        context["package_type"] = package["type"]
 
     return render_template("details/overview.html", **context)
 
@@ -272,9 +287,10 @@ def details_docs(entity_name, path=None):
         "result.website",
     ]
 
-    package = get_package(
-        entity_name, channel_request, FIELDS.copy() + extra_fields
-    )
+    with tracer.start_as_current_span("Handling get_package() for /docs"):
+        package = get_package(
+            entity_name, channel_request, FIELDS.copy() + extra_fields
+        )
 
     # If no docs, redirect to main page
     if not package["store_front"]["docs_topic"]:
@@ -287,7 +303,8 @@ def details_docs(entity_name, path=None):
         index_topic_id=package["store_front"]["docs_topic"],
         url_prefix=docs_url_prefix,
     )
-    docs.parse()
+    with tracer.start_as_current_span("Handling docs.parse() for /docs"):
+        docs.parse()
 
     if path:
         topic_id = None
@@ -295,8 +312,8 @@ def details_docs(entity_name, path=None):
             topic_id = docs.resolve_path(path)[0]
         except PathNotFoundError:
             abort(404)
-
-        topic = docs.api.get_topic(topic_id)
+        with tracer.start_as_current_span("Handling docs.api.get_topic() for /docs"):
+            topic = docs.api.get_topic(topic_id)
     else:
         topic = docs.index_topic
 
@@ -367,9 +384,10 @@ def details_configuration(entity_name, path=None):
         "default-release.revision.config-yaml",
     ]
 
-    package = get_package(
-        entity_name, channel_request, FIELDS.copy() + extra_fields
-    )
+    with tracer.start_as_current_span("Handling get_package() in details_configuration()"):
+        package = get_package(
+            entity_name, channel_request, FIELDS.copy() + extra_fields
+        )
     subpackage = None
 
     if package["type"] == "bundle":
@@ -411,9 +429,10 @@ def details_actions(entity_name):
         "default-release.revision.actions-yaml",
     ]
 
-    package = get_package(
-        entity_name, channel_request, FIELDS.copy() + extra_fields
-    )
+    with tracer.start_as_current_span("Handling get_package() in details_actions()"):
+        package = get_package(
+            entity_name, channel_request, FIELDS.copy() + extra_fields
+        )
     return render_template(
         "details/actions.html",
         package=package,
@@ -428,9 +447,10 @@ def details_libraries(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request, FIELDS)
 
-    libraries = logic.process_libraries(
-        publisher_api.get_charm_libraries(entity_name)
-    )
+    with tracer.start_as_current_span("Handling get_charm_libraries()"):
+        libraries = logic.process_libraries(
+            publisher_api.get_charm_libraries(entity_name)
+        )
 
     if libraries:
         first_lib = libraries[0]["name"]
@@ -461,17 +481,20 @@ def details_library(entity_name, library_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request, FIELDS)
 
-    libraries = logic.process_libraries(
-        publisher_api.get_charm_libraries(entity_name)
-    )
+    with tracer.start_as_current_span("Handling get_charm_libraries(entity) and library_id"):
+        libraries = logic.process_libraries(
+            publisher_api.get_charm_libraries(entity_name)
+        )
 
-    library_id = logic.get_library(library_name, libraries)
+        library_id = logic.get_library(library_name, libraries)
 
     if not library_id:
         abort(404)
 
-    library = publisher_api.get_charm_library(entity_name, library_id)
-    docstrings = logic.process_python_docs(library, module_name=library_name)
+    with tracer.start_as_current_span("Handling get_charm_library from library_id"):
+        library = publisher_api.get_charm_library(entity_name, library_id)
+    with tracer.start_as_current_span("Handling process_python_docs()"):
+        docstrings = logic.process_python_docs(library, module_name=library_name)
 
     # Charmcraft string to fetch the library
     fetch_charm = entity_name.replace("-", "_")
@@ -544,7 +567,8 @@ def details_integrations(entity_name):
     extra_fields = [
         "default-release.revision.metadata-yaml",
     ]
-    package = get_package(entity_name, channel_request, FIELDS + extra_fields)
+    with tracer.start_as_current_span("Handling get_package() in details_integrations()"):
+        package = get_package(entity_name, channel_request, FIELDS + extra_fields)
 
     return render_template(
         "details/integrations.html",
@@ -563,7 +587,8 @@ def details_integrations_data(entity_name):
     extra_fields = [
         "default-release.revision.metadata-yaml",
     ]
-    package = get_package(entity_name, channel_request, FIELDS + extra_fields)
+    with tracer.start_as_current_span("Handling get_package() in details_integrations_data()"):
+        package = get_package(entity_name, channel_request, FIELDS + extra_fields)
 
     relations = (
         package.get("default-release", {})
@@ -604,8 +629,9 @@ def add_required_fields(metadata_relations, relations):
 @store_maintenance
 @redirect_uppercase_to_lowercase
 def details_resources(entity_name):
-    channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request, FIELDS)
+    with tracer.start_as_current_span("Handling get_package() in details_resources()"):
+        channel_request = request.args.get("channel", default=None, type=str)
+        package = get_package(entity_name, channel_request, FIELDS)
 
     # /resources redirect to the first resource
     if package["default-release"]["resources"]:
@@ -628,7 +654,8 @@ def details_resources(entity_name):
 @redirect_uppercase_to_lowercase
 def details_resource(entity_name, resource_name):
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request, FIELDS)
+    with tracer.start_as_current_span("Handling get_package() for specific resource"):
+        package = get_package(entity_name, channel_request, FIELDS)
     resources = package["default-release"]["resources"]
 
     if not resources:
@@ -650,10 +677,10 @@ def details_resource(entity_name, resource_name):
             "ImageName"
         ].split("@")
         resource["short_digest"] = resource["digest"].split(":")[1][:12]
-
-    revisions = app.store_api.get_resource_revisions(
-        entity_name, resource_name
-    )
+    with tracer.start_as_current_span("Handling get_resource_revisions()"):
+        revisions = app.store_api.get_resource_revisions(
+            entity_name, resource_name
+        )
     revisions = sorted(revisions, key=lambda k: k["revision"], reverse=True)
 
     # Humanize sizes
@@ -838,15 +865,16 @@ def entity_icon(entity_name):
     )
     package = None
 
-    try:
-        package = app.store_api.get_item_details(
-            entity_name,
-            fields=[
-                "result.media",
-            ],
-        )
-    except StoreApiResponseErrorList:
-        pass
+    with tracer.start_as_current_span("Handling ICON get_item_details() for entity_icon()"):
+        try:
+            package = app.store_api.get_item_details(
+                entity_name,
+                fields=[
+                    "result.media",
+                ],
+            )
+        except StoreApiResponseErrorList:
+            pass
 
     if package and package["result"]["media"]:
         icon_url = package["result"]["media"][0]["url"]
