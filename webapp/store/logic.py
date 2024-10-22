@@ -11,6 +11,7 @@ from webapp.helpers import (
     discourse_api,
     get_yaml_loader,
 )
+from webapp.observability.utils import trace_function
 
 yaml = get_yaml_loader()
 
@@ -22,6 +23,7 @@ PLATFORMS = {
 ARCHITECTURES = ["amd64", "arm64", "ppc64el", "riscv64", "s390x"]
 
 
+@trace_function
 def add_description_and_summary(package):
     if package["type"] == "bundle":
         description = (

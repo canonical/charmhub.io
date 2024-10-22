@@ -49,15 +49,16 @@ publisher_api = CharmPublisher(request_session)
 
 #### SETUP TELEMETRY
 
+from opentelemetry.sdk.resources import Resource
 from webapp.observability.telemetry import setup_tracing, setup_metrics, instrument_app
 
 instrument_app(app)
 
-from opentelemetry.sdk.resources import Resource
 
 resource = Resource.create({"service.name": APP_NAME})
 
 setup_metrics(resource, app, "/metrics")
+setup_tracing(resource, "http://localhost:4318/v1/traces")
 
 
 @app.template_filter("linkify")
