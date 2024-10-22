@@ -72,14 +72,13 @@ from opentelemetry import metrics
 ### CUSTOM METRICS
 
 meter = metrics.get_meter(__name__)
-work_counter = meter.create_counter(
-    "work.counter", unit="1", description="Counts the amount of work done"
+charm_counter = meter.create_counter(
+    "charm_counter", unit="1", description="Counts the visits for each charm"
 )
 
 
 @store.route("/packages.json")
 def get_packages():
-    work_counter.add(1, {"work.type": "hard"})
     query = request.args.get("q", default=None, type=str)
     provides = request.args.get("provides", default=None, type=str)
     requires = request.args.get("requires", default=None, type=str)
@@ -131,6 +130,7 @@ FIELDS = [
 ]
 
 
+@trace_function
 def get_package(entity_name, channel_request=None, fields=FIELDS):
     # Get entity info from API
     package = app.store_api.get_item_details(
@@ -163,6 +163,7 @@ def get_package(entity_name, channel_request=None, fields=FIELDS):
 @store_maintenance
 @redirect_uppercase_to_lowercase
 def details_overview(entity_name):
+    charm_counter.add(1, {"charm.name": entity_name})
     channel_request = request.args.get("channel", default=None, type=str)
     if request.base_url.endswith("/docs"):
         url = f"/{entity_name}"

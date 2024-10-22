@@ -13,3 +13,7 @@ def trace_function(fn):
             return fn(*args, **kwargs)
 
     return wrapper
+
+
+def start_span(span_name):
+    return tracer.start_as_current_span(span_name)

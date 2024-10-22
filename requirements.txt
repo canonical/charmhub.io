@@ -24,3 +24,4 @@ opentelemetry-sdk
 opentelemetry-exporter-prometheus
 opentelemetry-instrumentation-flask
 opentelemetry-exporter-otlp
+opentelemetry-instrumentation-requests
