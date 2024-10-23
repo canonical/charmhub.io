@@ -1,4 +1,4 @@
-import talisker
+import requests
 from webapp.decorators import login_required
 from flask import (
     Blueprint,
@@ -53,7 +53,7 @@ def package(package_type):
     packages.
     """
 
-    publisher_api = CharmPublisher(talisker.requests.get_session())
+    publisher_api = CharmPublisher(requests.Session())
 
     publisher_packages = publisher_api.get_account_packages(
         session["account-auth"], "charm", include_collaborations=True

@@ -1,5 +1,5 @@
 import os
-import talisker
+import requests
 import flask
 
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
@@ -19,7 +19,7 @@ LOGIN_LAUNCHPAD_TEAM = os.getenv(
 )
 
 
-request_session = talisker.requests.get_session()
+request_session = requests.Session()
 candid = CandidClient(request_session)
 publisher_api = CharmPublisher(request_session)
 

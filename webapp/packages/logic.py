@@ -1,8 +1,8 @@
 import re
 
 import yaml
+import requests
 
-import talisker
 from flask import make_response
 from typing import List, Dict, TypedDict, Any, Union
 
@@ -49,7 +49,7 @@ def fetch_packages(store_api, fields: List[str], query_params) -> Packages:
 
     :returns: a dictionary containing the list of fetched packages.
     """
-    store = store_api(talisker.requests.get_session())
+    store = store_api(requests.Session())
 
     category = query_params.get("categories", "")
     query = query_params.get("q", "")
@@ -108,7 +108,7 @@ def fetch_package(store_api, package_name: str, fields: List[str]) -> Package:
 
     :returns: a dictionary containing the fetched package.
     """
-    store = store_api(talisker.requests.get_session())
+    store = store_api(requests.Session())
     package = store.get_item_details(
         name=package_name,
         fields=fields,
@@ -157,8 +157,8 @@ def parse_package_for_card(
         so we won't have to check for the package type before parsing.
 
     """
-    store = store_api(talisker.requests.get_session())
-    publisher_api = publisher_api(talisker.requests.get_session())
+    store = store_api(requests.Session())
+    publisher_api = publisher_api(requests.Session())
     resp = {
         "package": {
             "description": "",
@@ -337,7 +337,7 @@ def get_store_categories(store_api) -> List[Dict[str, str]]:
     :returns: A list of categories in the format:
     [{"name": "Category", "slug": "category"}]
     """
-    store = store_api(talisker.requests.get_session())
+    store = store_api(requests.Session())
     try:
         all_categories = store.get_categories()
     except StoreApiError:
