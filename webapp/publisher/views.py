@@ -1,4 +1,4 @@
-import talisker
+import requests
 from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
 from canonicalwebteam.store_api.exceptions import StoreApiResponseErrorList
 from flask import (
@@ -22,7 +22,7 @@ publisher = Blueprint(
     template_folder="/templates",
     static_folder="/static",
 )
-publisher_api = CharmPublisher(talisker.requests.get_session())
+publisher_api = CharmPublisher(requests.Session())
 
 
 @publisher.route("/account/details")

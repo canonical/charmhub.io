@@ -1,13 +1,19 @@
 import re
 
-import talisker.requests
+import requests
 from canonicalwebteam.store_api.stores.charmstore import (
     CharmStore,
     CharmPublisher,
 )
 from canonicalwebteam.candid import CandidClient
 from dateutil import parser
-from flask import render_template, make_response, request, session, escape
+from flask import (
+    render_template,
+    make_response,
+    request,
+    session,
+    escape,
+)
 from webapp.extensions import csrf
 from webapp.config import APP_NAME
 from webapp.handlers import set_handlers
@@ -22,6 +28,8 @@ from webapp.helpers import markdown_to_html
 from webapp.decorators import login_required
 from canonicalwebteam.flask_base.app import FlaskBase
 from webapp.packages.store_packages import store_packages
+from opentelemetry.sdk.resources import Resource
+from webapp.observability.telemetry import setup_metrics, instrument_app
 
 
 app = FlaskBase(
@@ -34,31 +42,28 @@ app = FlaskBase(
     template_folder="../templates",
 )
 
-
 app.name = APP_NAME
 app.config["LOGIN_REQUIRED"] = login_required
 
 set_handlers(app)
 
-app.store_api = CharmStore(session=talisker.requests.get_session())
+app.store_api = CharmStore(session=requests.Session())
 
 
-request_session = talisker.requests.get_session()
+request_session = requests.Session()
 candid = CandidClient(request_session)
 publisher_api = CharmPublisher(request_session)
 
-#### SETUP TELEMETRY
+# SETUP TELEMETRY
 
-from opentelemetry.sdk.resources import Resource
-from webapp.observability.telemetry import setup_tracing, setup_metrics, instrument_app
 
 instrument_app(app)
 
 
 resource = Resource.create({"service.name": APP_NAME})
 
-setup_metrics(resource, app, "/metrics")
-setup_tracing(resource, "http://localhost:4318/v1/traces")
+setup_metrics(resource, app, "/_status/metrics")
+# setup_tracing(resource, "http://localhost:4318/v1/traces")
 
 
 @app.template_filter("linkify")

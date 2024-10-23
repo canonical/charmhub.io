@@ -1,5 +1,5 @@
 import humanize
-import talisker
+import requests
 from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.discourse.exceptions import PathNotFoundError
 from canonicalwebteam.flask_base.decorators import (
@@ -25,9 +25,10 @@ from webapp.config import SEARCH_FIELDS
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
 )
-publisher_api = CharmPublisher(talisker.requests.get_session())
+publisher_api = CharmPublisher(requests.Session())
 
 from webapp.observability.utils import trace_function
+
 
 @store.route("/publisher/<regex('[a-z0-9-]*[a-z][a-z0-9-]*'):publisher>")
 def get_publisher_details(publisher):
@@ -66,6 +67,7 @@ def get_publisher_details(publisher):
 
     # HTML template will be returned here for the front end
     return (context, status_code)
+
 
 from opentelemetry import metrics
 
