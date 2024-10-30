@@ -42,13 +42,6 @@
     "categories": ["featured", "ai-ml", "big-data", "containers", "networking"]
   },
   {
-    "name": "Operator’s Corner",
-    "slug": "operators-corner",
-    "topic_id": 5990,
-    "description": "Welcome to the Operator’s Corner, where you can find information about the best practices on developing your charms!",
-    "categories": ["cloud", "featured"]
-  },
-  {
     "name": "Security with X.509 Certificates",
     "slug": "security-with-x-509-certificates",
     "topic_id": 11664,
