@@ -9,6 +9,8 @@ glossary: https://juju.is/about
 overview: https://juju.is/about
 kubeflow-charmers-kubeflow-edge: kubeflow-edge
 openstack-charmers-keystone-saml-mellon: keystone-saml-mellon
+topics/operators-corner: https://juju.is/docs
+topics/charm-maturity: https://juju.is/docs
 containers-etcd: etcd
 search\??(?P<search>.*)?/?: /?{search}
 /(?P<charm>[A-Za-z0-9-]*[A-Za-z][A-Za-z0-9-]*)/configure: /{charm}/configurations
