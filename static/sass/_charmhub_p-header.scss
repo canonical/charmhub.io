@@ -30,6 +30,11 @@
       }
     }
 
+    &__action {
+      margin-block-start: $spv--small;
+      padding-inline-start: $spv--small;
+    }
+
     .p-button--base {
       margin-block-end: 0;
       width: fit-content;

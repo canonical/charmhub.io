@@ -1,12 +1,5 @@
 [
   {
-    "name": "Charm Maturity",
-    "slug": "charm-maturity",
-    "topic_id": 10632,
-    "description": "Our maturity model defining important qualities and capabilities of a charm.",
-    "categories": ["cloud", "containers"]
-  },
-  {
     "name": "Canonical Observability Stack",
     "slug": "canonical-observability-stack",
     "topic_id": 5132,
@@ -22,19 +15,24 @@
       "storage"
     ]
   },
+    {
+    "name": "Charmed Tempo HA",
+    "slug": "charmed-tempo-ha",
+    "topic_id": 15531,
+    "description": "A solution to deploy and operate Grafana Tempo, a distributed tracing backend that natively integrates with COS Lite, on Juju.",
+    "categories": [
+      "cloud",
+      "logging-tracing",
+      "monitoring"
+    ]
+  },
+
   {
     "name": "Kubeflow AI/MLOps",
     "slug": "kubeflow",
     "topic_id": 5774,
     "description": "Canonical Charmed Kubeflow is a state of the art, fully supported MLOps platform that helps data scientists collaborate on AI innovation on any cloud from concept to production, offered by Canonical - the open source experts.",
     "categories": ["featured", "ai-ml", "big-data", "containers", "networking"]
-  },
-  {
-    "name": "Operator’s Corner",
-    "slug": "operators-corner",
-    "topic_id": 5990,
-    "description": "Welcome to the Operator’s Corner, where you can find information about the best practices on developing your charms!",
-    "categories": ["cloud", "featured"]
   },
   {
     "name": "Security with X.509 Certificates",

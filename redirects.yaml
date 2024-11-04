@@ -9,9 +9,12 @@ glossary: https://juju.is/about
 overview: https://juju.is/about
 kubeflow-charmers-kubeflow-edge: kubeflow-edge
 openstack-charmers-keystone-saml-mellon: keystone-saml-mellon
+topics/operators-corner: https://juju.is/docs
+topics/charm-maturity: https://juju.is/docs
 containers-etcd: etcd
-canonical-kubernetes: charmed-kubernetes
 search\??(?P<search>.*)?/?: /?{search}
+/(?P<charm>[A-Za-z0-9-]*[A-Za-z][A-Za-z0-9-]*)/configure: /{charm}/configurations
+/(?P<charm>[A-Za-z0-9-]*[A-Za-z][A-Za-z0-9-]*)/configuration: /{charm}/configurations
 
 jaas: https://jaas.ai/jaas
 docs/stable/about-juju: https://juju.is/about
@@ -20,3 +23,10 @@ docs/stable/about-juju: https://juju.is/about
 q/(?P<search>.*)/?: /?q={search}
 u/(?P<author>.*)/(?P<charm>.*)/?: /{author}-{charm}
 u/(?P<author>.*)/?: /?q={author}
+
+# interfaces -> integrations
+interfaces.json: integrations.json
+interfaces: integrations
+interfaces/(?P<interface>.*)/?: /integrations/{interface}
+interfaces/(?P<interface>.*).json: /integrations/{interface}.json
+interfaces/(?P<interface>.*)/(?P<status>.*).json: /integrations/{interface}/{status}.json

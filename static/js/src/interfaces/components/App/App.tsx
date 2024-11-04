@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import InterfacesIndex from "../InterfacesIndex";
@@ -11,15 +10,15 @@ function App() {
     <Router>
       <Routes>
         <Route
-          path="/interfaces"
+          path="/integrations"
           element={<InterfacesIndex {...initialProps} />}
         />
         <Route
-          path="/interfaces/:interfaceName"
+          path="/integrations/:interfaceName"
           element={<InterfaceDetails {...initialProps} />}
         />
         <Route
-          path="/interfaces/:interfaceName/:interfaceStatus"
+          path="/integrations/:interfaceName/:interfaceStatus"
           element={<InterfaceDetails {...initialProps} />}
         />
       </Routes>

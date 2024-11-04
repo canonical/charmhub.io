@@ -50,6 +50,8 @@
 
     <link rel="stylesheet" type="text/css" media="screen" href="{{ versioned_static('css/styles.css') }}" />
 
+    <link rel="icon" type="image/png"  href="{{ versioned_static('images/favicon.png') }}" />
+
     <link rel="preload" as="font" type="font/woff2" href="https://assets.ubuntu.com/v1/e8c07df6-Ubuntu-L_W.woff2" crossorigin>
     <link rel="preload" as="font" type="font/woff2" href="https://assets.ubuntu.com/v1/7f100985-Ubuntu-Th_W.woff2" crossorigin>
     <link rel="preload" as="font" type="font/woff2" href="https://assets.ubuntu.com/v1/f8097dea-Ubuntu-LI_W.woff2" crossorigin>
@@ -70,9 +72,6 @@
     </main>
 
     {% include 'partial/_footer.html' %}
-
-    <!-- Set default Marketo information for contact form below-->
-    <div class="u-hide" id="contact-form-container" data-form-location="/get-in-touch" data-form-id="1337" data-lp-id="2313" data-return-url="http://charmhub.io/thank-you" data-lp-url=""></div>
 
     <script src="{{ versioned_static('js/dist/base.js') }}"></script>
     <script src="{{ versioned_static('js/dist/navigation-events.js') }}"></script>

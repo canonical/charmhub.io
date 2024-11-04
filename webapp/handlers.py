@@ -1,4 +1,5 @@
 from flask import render_template, session
+from webapp.config import SENTRY_DSN
 
 from canonicalwebteam.store_api.exceptions import (
     StoreApiError,
@@ -7,11 +8,58 @@ from canonicalwebteam.store_api.exceptions import (
     StoreApiResponseError,
     StoreApiResponseErrorList,
     StoreApiTimeoutError,
+    StoreApiConnectionError,
 )
 
 from canonicalwebteam import image_template
 
 from webapp import authentication, helpers
+
+CSP = {
+    "default-src": ["'self'"],
+    "img-src": [
+        "'self'",
+        "data: blob:",
+        # This is needed to allow images from
+        # https://www.google.*/ads/ga-audiences to load.
+        "*",
+    ],
+    "script-src-elem": [
+        "'self'",
+        "assets.ubuntu.com",
+        "www.googletagmanager.com",
+        "*.crazyegg.com",
+        "w.usabilla.com",
+        # This is necessary for Google Tag Manager to function properly.
+        "'unsafe-inline'",
+    ],
+    "font-src": [
+        "'self'",
+        "assets.ubuntu.com",
+    ],
+    "script-src": [
+        "'self'",
+        "blob:",
+        "'unsafe-eval'",
+        "'unsafe-hashes'",
+    ],
+    "connect-src": [
+        "'self'",
+        "sentry.is.canonical.com",
+        "*.crazyegg.com",
+        "analytics.google.com",
+        "www.google-analytics.com",
+        "stats.g.doubleclick.net",
+    ],
+    "frame-src": [
+        "'self'",
+        "td.doubleclick.net",
+    ],
+    "style-src": [
+        "'self'",
+        "'unsafe-inline'",
+    ],
+}
 
 
 def charmhub_utility_processor():
@@ -25,12 +73,10 @@ def charmhub_utility_processor():
     else:
         account = None
     return {
-        "add_filter": helpers.add_filter,
-        "active_filter": helpers.active_filter,
-        "remove_filter": helpers.remove_filter,
         "schedule_banner": helpers.schedule_banner,
         "account": account,
         "image": image_template,
+        "SENTRY_DSN": SENTRY_DSN,
     }
 
 
@@ -77,6 +123,7 @@ def set_handlers(app):
 
     @app.errorhandler(StoreApiResponseDecodeError)
     @app.errorhandler(StoreApiResponseError)
+    @app.errorhandler(StoreApiConnectionError)
     @app.errorhandler(StoreApiError)
     def handle_store_api_error(e):
         status_code = 502
@@ -86,3 +133,32 @@ def set_handlers(app):
             ),
             status_code,
         )
+
+    @app.after_request
+    def add_headers(response):
+        """
+        Security headers to add to all requests
+        - Content-Security-Policy: Restrict resources (e.g., JavaScript, CSS,
+        Images) and URLs
+        - Referrer-Policy: Limit referrer data for security while preserving
+        full referrer for same-origin requests
+        - Cross-Origin-Embedder-Policy: allows embedding cross-origin
+        resources without credentials
+        - Cross-Origin-Opener-Policy: enable the page to open pop-ups while
+        maintaining same-origin policy
+        - Cross-Origin-Resource-Policy: allowing cross-origin requests to
+        access the resource
+        - X-Permitted-Cross-Domain-Policies: disallows cross-domain access to
+        resources
+        """
+        response.headers["Content-Security-Policy"] = helpers.get_csp_as_str(
+            CSP
+        )
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Cross-Origin-Embedder-Policy"] = "credentialless"
+        response.headers["Cross-Origin-Opener-Policy"] = (
+            "same-origin-allow-popups"
+        )
+        response.headers["Cross-Origin-Resource-Policy"] = "cross-origin"
+        response.headers["X-Permitted-Cross-Domain-Policies"] = "none"
+        return response

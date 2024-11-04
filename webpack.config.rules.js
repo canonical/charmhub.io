@@ -24,10 +24,6 @@ module.exports = [
   // loaders are evaluated from bottom to top (right to left)
   // so first transpile via babel, then expose as global
   {
-    test: require.resolve(__dirname + "/static/js/src/public/about/index.js"),
-    use: ["expose-loader?exposes=charmhub.about", "babel-loader"],
-  },
-  {
     test: require.resolve(__dirname + "/static/js/src/public/docs/index.js"),
     use: ["expose-loader?exposes=charmhub.docs", "babel-loader"],
   },
@@ -46,7 +42,7 @@ module.exports = [
     use: ["expose-loader?exposes=charmhub.topics", "babel-loader"],
   },
   {
-    test: require.resolve(__dirname + "/static/js/src/public/details/index.js"),
+    test: require.resolve(__dirname + "/static/js/src/public/details/index.ts"),
     use: ["expose-loader?exposes=charmhub.details", "babel-loader"],
   },
   {
@@ -63,37 +59,7 @@ module.exports = [
   },
   {
     test: require.resolve(
-      __dirname + "/static/js/src/public/details/history/index.js"
-    ),
-    use: ["expose-loader?exposes=charmhub.details.history", "babel-loader"],
-  },
-  {
-    test: require.resolve(__dirname + "/static/js/src/publisher/list-page.js"),
-    use: ["expose-loader?exposes=charmhub.publisher.list", "babel-loader"],
-  },
-  {
-    test: require.resolve(
-      __dirname + "/static/js/src/publisher/listing-page.js"
-    ),
-    use: ["expose-loader?exposes=charmhub.publisher.listing", "babel-loader"],
-  },
-  {
-    test: require.resolve(__dirname + "/static/js/src/publisher/publicise.js"),
-    use: ["expose-loader?exposes=charmhub.publisher.publicise", "babel-loader"],
-  },
-  {
-    test: require.resolve(__dirname + "/static/js/src/publisher/settings.js"),
-    use: ["expose-loader?exposes=charmhub.publisher.settings", "babel-loader"],
-  },
-  {
-    test: require.resolve(
-      __dirname + "/static/js/src/public/details/integrate/index.js"
-    ),
-    use: ["expose-loader?exposes=charmhub.details.integrate", "babel-loader"],
-  },
-  {
-    test: require.resolve(
-      __dirname + "/static/js/src/public/details/resources/index.js"
+      __dirname + "/static/js/src/public/details/resources/index.ts"
     ),
     use: ["expose-loader?exposes=charmhub.resources", "babel-loader"],
   },

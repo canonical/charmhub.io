@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "@canonical/react-components";
 
 type Props = {
@@ -7,6 +6,9 @@ type Props = {
 };
 
 function CanonicalRelationsMeta({ interfaceName, interfaceVersion }: Props) {
+  // Fallback URL if interfaceName is undefined
+  const url = `https://github.com/canonical/charm-relation-interfaces/blob/main/interfaces/${interfaceName ? interfaceName + "/" : ""}v${interfaceVersion}/README.md`;
+
   return (
     <>
       <h2 className="p-muted-heading">Help us improve this page</h2>
@@ -15,11 +17,7 @@ function CanonicalRelationsMeta({ interfaceName, interfaceVersion }: Props) {
         respective README file.
       </p>
       <p>
-        <Button
-          element="a"
-          href={`https://github.com/canonical/charm-relation-interfaces/blob/main/interfaces/${interfaceName}/v${interfaceVersion}/README.md`}
-          appearance="positive"
-        >
+        <Button element="a" href={url} appearance="positive">
           Contribute
         </Button>
       </p>

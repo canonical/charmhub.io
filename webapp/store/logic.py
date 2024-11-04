@@ -19,6 +19,34 @@ PLATFORMS = {
     "centos": "CentOS",
 }
 
+ARCHITECTURES = ["amd64", "arm64", "ppc64el", "riscv64", "s390x"]
+
+
+def add_description_and_summary(package):
+    if package["type"] == "bundle":
+        description = (
+            package.get("store_front", {})
+            .get("bundle", {})
+            .get("description", None)
+        )
+        summary = (
+            package.get("store_front", {})
+            .get("bundle", {})
+            .get("summary", None)
+        )
+    else:
+        description = (
+            package.get("store_front", {})
+            .get("metadata", {})
+            .get("description", None)
+        )
+        summary = (
+            package.get("store_front", {})
+            .get("metadata", {})
+            .get("summary", None)
+        )
+    return description, summary
+
 
 def get_banner_url(media):
     """
@@ -77,27 +105,37 @@ def convert_channel_maps(channel_map):
 
         # same revision but for a different arch
         if revision_number in result[track][risk]["releases"]:
-            result[track][risk]["releases"][revision_number][
-                "architectures"
-            ].add(channel["channel"]["base"]["architecture"])
+            arch = channel["channel"]["base"]["architecture"]
+
+            if arch == "all":
+                result[track][risk]["releases"][revision_number][
+                    "architectures"
+                ].update(ARCHITECTURES)
+            else:
+                result[track][risk]["releases"][revision_number][
+                    "architectures"
+                ].add(arch)
             continue
 
         info = {
-            "released_at": convert_date(channel["channel"]["released-at"]),
+            "released_at": channel["channel"]["released-at"],
+            "release_date": convert_date(channel["channel"]["released-at"]),
             "version": channel["revision"]["version"],
             "channel": channel["channel"]["name"],
             "risk": channel["channel"]["risk"],
             "size": channel["revision"]["download"]["size"],
             "bases": extract_series(channel, True),
             "channel_bases": extract_bases(channel),
-            "revision": channel["revision"],
+            "revision": process_revision(channel["revision"]),
             "architectures": set(),
         }
 
         if channel["channel"]["base"]:
-            info["architectures"].add(
-                channel["channel"]["base"]["architecture"]
-            )
+            arch = channel["channel"]["base"]["architecture"]
+            if arch == "all":
+                info["architectures"].update(ARCHITECTURES)
+            else:
+                info["architectures"].add(arch)
 
         result[track][risk]["releases"][revision_number] = info
 
@@ -120,14 +158,41 @@ def convert_channel_maps(channel_map):
         # Order releases by revision
         for risk, data in result[track].items():
             result[track][risk]["releases"] = OrderedDict(
-                sorted(result[track][risk]["releases"].items(), reverse=True)
+                sorted(
+                    result[track][risk]["releases"].items(),
+                    key=lambda release: release[1]["released_at"],
+                    reverse=True,
+                )
+            )
+
+            # Collect all the bases available across all releases
+            result[track][risk]["all_bases"] = sorted(
+                list(
+                    set(
+                        base
+                        for release in result[track][risk]["releases"].values()
+                        for base in release["bases"]
+                    )
+                ),
+                reverse=True,
             )
 
             result[track][risk]["latest"] = result[track][risk]["releases"][
                 max(result[track][risk]["releases"].keys())
             ]
-
     return result
+
+
+def process_revision(revision):
+    bases = []
+
+    for base in revision["bases"]:
+        if base and base.get("architecture") == "all":
+            for arch in ARCHITECTURES:
+                bases.append({**base, "architecture": arch})
+        else:
+            bases.append(base)
+    return {**revision, "bases": bases}
 
 
 def extract_resources(channel):
@@ -157,44 +222,43 @@ def extract_default_release_architectures(channel):
         if not base or base["architecture"] in architectures:
             continue
 
-        architectures.add(base["architecture"])
+        arch = base["architecture"]
+        if arch == "all":
+            architectures.update(ARCHITECTURES)
+        else:
+            architectures.add(arch)
 
     return sorted(architectures)
 
 
 def extract_all_arch(channel_map, parent_dict):
     all_archy = set()
-    all_channel_bases = []
+    all_channel_bases = {}
+    platforms = {}
 
-    if channel_map.get("latest"):
-        channel_map_all = list(channel_map["latest"].items())
-    # for charms without the latest revision
-    else:
-        for version, version_data in channel_map.items():
-            channel_map_all = list(version_data.items())
-            break
+    for version_data in channel_map.values():
+        channel_map_all = list(version_data.items())
+        for _, channel_data in channel_map_all:
+            for release in channel_data["releases"].values():
+                all_archy = all_archy.union(release["architectures"])
 
-    for channel, channel_data in channel_map_all:
-        bases = set()
-        name = ""
-        for _, release in channel_data["releases"].items():
-            all_archy = all_archy.union(release["architectures"])
-            bases = bases.union(release["bases"])
+                for base in release["channel_bases"]:
+                    for series in base["channels"]:
+                        platform = PLATFORMS.get(base["name"], base["name"])
 
-        if channel_data["latest"]["channel_bases"]:
-            for base in channel_data["latest"]["channel_bases"]:
-                name = base["name"]
+                        if base["name"] not in platforms:
+                            platforms[base["name"]] = set()
+                        platforms[base["name"]].add(series)
 
-        bases = sorted(
-            bases, key=lambda k: k.replace("Ubuntu ", ""), reverse=True
-        )
+                        all_channel_bases[base["name"] + series] = (
+                            f"{platform} {series}"
+                        )
 
-        all_channel_bases.append(
-            {"channel": channel, "bases": bases, "name": name}
-        )
-
-    parent_dict["all_architectures"] = all_archy
-    parent_dict["all_channel_bases"] = all_channel_bases
+    parent_dict["all_architectures"] = sorted(all_archy)
+    parent_dict["all_platforms"] = platforms
+    parent_dict["all_channel_bases"] = dict(
+        sorted(all_channel_bases.items(), reverse=True)
+    )
 
     return
 
@@ -226,7 +290,7 @@ def extract_bases(channel):
 
     for i in bases:
         if i is None:
-            return
+            return []
 
         has_base = False
 

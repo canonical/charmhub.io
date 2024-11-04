@@ -14,7 +14,7 @@ from flask import (
 from flask.json import jsonify
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import login_required, cached_redirect
-from webapp.helpers import get_licenses
+from webapp.publisher.logic import get_all_architectures, process_releases
 
 publisher = Blueprint(
     "publisher",
@@ -29,6 +29,70 @@ publisher_api = CharmPublisher(talisker.requests.get_session())
 @login_required
 def get_account_details():
     return render_template("publisher/account-details.html")
+
+
+@publisher.route(
+    '/<regex("'
+    + DETAILS_VIEW_REGEX
+    + '"):entity_name>/'
+    + '<regex("listing|releases|publicise|collaboration|settings"):path>'
+)
+@login_required
+def get_publisher(entity_name, path):
+    package = publisher_api.get_package_metadata(
+        session["account-auth"], "charm", entity_name
+    )
+
+    context = {
+        "package": package,
+    }
+
+    return render_template("publisher/publisher.html", **context)
+
+
+@publisher.route(
+    '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>',
+)
+@login_required
+def get_package(entity_name):
+    package = publisher_api.get_package_metadata(
+        session["account-auth"], "charm", entity_name
+    )
+
+    return jsonify({"data": package, "success": True})
+
+
+@publisher.route(
+    '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>',
+    methods=["PATCH"],
+)
+@login_required
+def update_package(entity_name):
+    payload = request.get_json()
+
+    res = {}
+
+    try:
+        package = publisher_api.update_package_metadata(
+            session["account-auth"], "charm", entity_name, payload
+        )
+        res["data"] = package
+        res["success"] = True
+        res["message"] = ""
+        response = make_response(res, 200)
+    except StoreApiResponseErrorList as error_list:
+        error_messages = [
+            f"{error.get('message', 'Unable to update this charm or bundle')}"
+            for error in error_list.errors
+        ]
+        if "unauthorized" in error_messages:
+            res["message"] = "Package not found"
+        else:
+            res["message"] = " ".join(error_messages)
+        res["success"] = False
+        response = make_response(res, 500)
+
+    return response
 
 
 @publisher.route("/charms")
@@ -56,26 +120,6 @@ def list_page():
     }
 
     return render_template("publisher/list.html", **context)
-
-
-@publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaboration',
-    defaults={"path": ""},
-)
-@publisher.route(
-    '/<regex("'
-    + DETAILS_VIEW_REGEX
-    + '"):entity_name>/collaboration/<path:path>',
-)
-@login_required
-def collaboration(entity_name, path):
-    package = publisher_api.get_package_metadata(
-        session["account-auth"], "charm", entity_name
-    )
-    context = {
-        "package": package,
-    }
-    return render_template("publisher/collaboration.html", **context)
 
 
 @publisher.route("/accept-invite")
@@ -155,7 +199,9 @@ def reject_post_invite():
 
 
 @publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaborators',
+    '/api/packages/<regex("'
+    + DETAILS_VIEW_REGEX
+    + '"):entity_name>/collaborators',
 )
 @login_required
 def get_collaborators(entity_name):
@@ -181,7 +227,7 @@ def get_collaborators(entity_name):
 
 
 @publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites',
+    '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites',
 )
 @login_required
 def get_pending_invites(entity_name):
@@ -207,7 +253,7 @@ def get_pending_invites(entity_name):
 
 
 @publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invite',
+    '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites',
     methods=["POST"],
 )
 @login_required
@@ -237,8 +283,8 @@ def invite_collaborators(entity_name):
 
 
 @publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites/revoke',
-    methods=["POST"],
+    '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites',
+    methods=["DELETE"],
 )
 @login_required
 def revoke_invite(entity_name):
@@ -265,90 +311,8 @@ def revoke_invite(entity_name):
             for error in error_list.errors
         ]
         res["message"] = (" ").join(messages)
-    except Exception:
-        res["success"] = False
-        res["message"] = "An error occurred"
 
     return make_response(res, 500)
-
-
-@publisher.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/listing')
-@login_required
-def listing(entity_name):
-    package = publisher_api.get_package_metadata(
-        session["account-auth"], "charm", entity_name
-    )
-
-    licenses = []
-    for license in get_licenses():
-        licenses.append({"key": license["licenseId"], "name": license["name"]})
-    package["has-guardrails"] = (
-        False if len(package.get("track-guardrails", [])) == 0 else True
-    )
-    context = {
-        "package": package,
-        "licenses": licenses,
-    }
-    return render_template("publisher/listing.html", **context)
-
-
-@publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/listing',
-    methods=["POST"],
-)
-@login_required
-def post_listing(entity_name):
-    # These are the available fields to update in API
-    data = {
-        "contact": request.form["contact"],
-        "summary": request.form["summary"],
-        "title": request.form["title"],
-        "website": request.form["website"],
-    }
-
-    result = publisher_api.update_package_metadata(
-        session["account-auth"], "charm", entity_name, data
-    )
-
-    if result:
-        flash("Changes applied successfully.", "positive")
-
-    return redirect(url_for(".listing", entity_name=entity_name))
-
-
-@publisher.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/settings')
-@login_required
-def settings(entity_name):
-    package = publisher_api.get_package_metadata(
-        session["account-auth"], "charm", entity_name
-    )
-
-    context = {
-        "package": package,
-    }
-
-    return render_template("publisher/settings.html", **context)
-
-
-@publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/settings',
-    methods=["POST"],
-)
-@login_required
-def post_settings(entity_name):
-    # These are the available fields to update in API
-    data = {
-        "private": True if request.form["private"] == "private" else False,
-    }
-
-    result = publisher_api.update_package_metadata(
-        session["account-auth"], "charm", entity_name, data
-    )
-
-    if result:
-        flash("Changes applied successfully.", "positive")
-
-    return redirect(url_for(".settings", entity_name=entity_name))
 
 
 @publisher.route("/register-name")
@@ -469,7 +433,7 @@ def register_name_dispute_thank_you():
     )
 
 
-@publisher.route("/<package_name>", methods=["DELETE"])
+@publisher.route("/packages/<package_name>", methods=["DELETE"])
 @login_required
 def delete_package(package_name):
     resp = publisher_api.unregister_package_name(
@@ -483,95 +447,22 @@ def delete_package(package_name):
     )
 
 
-@publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/publicise'
-)
-@login_required
-def get_publicise(entity_name):
-    SUPPORTED_LANGUAGES = {
-        "ar": {"title": "العربية", "text": "احصل عليه من Charmhub"},
-        "bg": {"title": "български", "text": "Инсталирайте го от Charmhub"},
-        "bn": {"title": "বাংলা", "text": "Charmhub থেকে ইনস্টল করুন"},
-        "de": {"title": "Deutsch", "text": "Installieren vom Charmhub"},
-        "en": {"title": "English", "text": "Get it from the Charmhub"},
-        "es": {"title": "Español", "text": "Instalar desde Charmhub"},
-        "fr": {
-            "title": "Français",
-            "text": "Installer à partir du Charmhub",
-        },
-        "it": {"title": "Italiano", "text": "Scarica dallo Charmhub"},
-        "jp": {"title": "日本語", "text": "Charmhub から入手ください"},
-        "pl": {"title": "Polski", "text": "Pobierz w Charmhub"},
-        "pt": {"title": "Português", "text": "Disponível na Charmhub"},
-        "ro": {"title": "Română", "text": "Instalează din Charmhub"},
-        "ru": {"title": "русский язык", "text": "Загрузите из Charmhub"},
-        "tw": {"title": "中文（台灣）", "text": "安裝軟體敬請移駕 Charmhub"},
-        "ua": {"title": "українськa мовa", "text": "Завантажте з Charmhub"},
-    }
-    package = publisher_api.get_package_metadata(
-        session["account-auth"], "charm", entity_name
-    )
-
-    if not package["status"] == "published":
-        return render_template(
-            "publisher/publicise/publicise_empty.html", package=package
-        )
-
-    context = {
-        "package": package,
-        "languages": SUPPORTED_LANGUAGES,
-    }
-    return render_template("publisher/publicise/store_buttons.html", **context)
-
-
-@publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/publicise/badges'
-)
-@login_required
-def get_publicise_badges(entity_name):
-    package = publisher_api.get_package_metadata(
-        session["account-auth"], "charm", entity_name
-    )
-
-    if not package["status"] == "published":
-        return render_template(
-            "publisher/publicise/publicise_empty.html", package=package
-        )
-
-    context = {
-        "package": package,
-    }
-    return render_template("publisher/publicise/github_badges.html", **context)
-
-
-@publisher.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/publicise/cards'
-)
-@login_required
-def get_publicise_cards(entity_name):
-    package = publisher_api.get_package_metadata(
-        session["account-auth"], "charm", entity_name
-    )
-
-    if not package["status"] == "published":
-        return render_template(
-            "publisher/publicise/publicise_empty.html", package=package
-        )
-
-    context = {
-        "package": package,
-    }
-    return render_template(
-        "publisher/publicise/embedded_cards.html", **context
-    )
-
-
 @publisher.route("/<charm_name>/create-track", methods=["POST"])
 @login_required
 def post_create_track(charm_name):
-    track_name = request.form["track-name"]
+    track_name = request.form.get("track-name")
+    version_pattern = request.form.get("version-pattern")
+    auto_phasing_percentage = request.form.get("auto-phasing-percentage")
+
+    if auto_phasing_percentage is not None:
+        auto_phasing_percentage = float(auto_phasing_percentage)
+
     response = publisher_api.create_track(
-        session["account-auth"], charm_name, track_name
+        session["account-auth"],
+        charm_name,
+        track_name,
+        version_pattern,
+        auto_phasing_percentage,
     )
     if response.status_code == 201:
         return response.json(), response.status_code
@@ -586,3 +477,40 @@ def post_create_track(charm_name):
             response.status_code,
         )
     return response.json(), response.status_code
+
+
+@publisher.route(
+    '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/releases',
+)
+@login_required
+def get_releases(entity_name: str):
+    res = {}
+
+    try:
+        release_data = publisher_api.get_releases(
+            session["account-auth"], entity_name
+        )
+        res["success"] = True
+
+        res["data"] = {}
+
+        res["data"]["releases"] = process_releases(
+            release_data["channel-map"],
+            release_data["package"]["channels"],
+            release_data["revisions"],
+        )
+        res["data"]["all_architectures"] = get_all_architectures(
+            res["data"]["releases"]
+        )
+        response = make_response(res, 200)
+
+    except StoreApiResponseErrorList as error_list:
+        error_messages = [
+            f"{error.get('message', 'An error occured')}"
+            for error in error_list.errors
+        ]
+        res["message"] = " ".join(error_messages)
+        res["success"] = False
+        response = make_response(res, 500)
+
+    return response

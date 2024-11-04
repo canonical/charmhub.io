@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery } from "react-query";
 import { useLocation, useSearchParams } from "react-router-dom";
 import {
@@ -25,7 +25,7 @@ function Packages() {
   const ITEMS_PER_PAGE = 12;
 
   const getData = async () => {
-    const response = await fetch(`/beta/store.json${search}`);
+    const response = await fetch(`/store.json${search}`);
     const data = await response.json();
     const packagesWithId = data.packages.map((item: any) => {
       return {
@@ -173,7 +173,7 @@ function Packages() {
             )}
             <Row>
               {isFetching &&
-                [...Array(ITEMS_PER_PAGE)].map((item, index) => (
+                [...Array(ITEMS_PER_PAGE)].map((_item, index) => (
                   <Col size={3} key={index}>
                     <LoadingCard />
                   </Col>

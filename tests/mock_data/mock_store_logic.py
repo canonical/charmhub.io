@@ -88,8 +88,15 @@ converted_sample_channel_map = OrderedDict(
                     (
                         "stable",
                         {
+                            "all_bases": ["Ubuntu 14.04", "Ubuntu 12.04"],
                             "latest": {
-                                "architectures": {"all"},
+                                "architectures": {
+                                    "amd64",
+                                    "arm64",
+                                    "ppc64el",
+                                    "riscv64",
+                                    "s390x",
+                                },
                                 "bases": ["Ubuntu 14.04", "Ubuntu 12.04"],
                                 "channel": "latest/stable",
                                 "channel_bases": [
@@ -98,11 +105,34 @@ converted_sample_channel_map = OrderedDict(
                                         "name": "ubuntu",
                                     }
                                 ],
-                                "released_at": "21 Oct 2021",
+                                "released_at": (
+                                    "2021-10-21" "T16:45:42.323000+00:00"
+                                ),
+                                "release_date": "21 Oct 2021",
                                 "revision": {
                                     "bases": [
                                         {
-                                            "architecture": "all",
+                                            "architecture": "amd64",
+                                            "channel": "12.04",
+                                            "name": "ubuntu",
+                                        },
+                                        {
+                                            "architecture": "arm64",
+                                            "channel": "12.04",
+                                            "name": "ubuntu",
+                                        },
+                                        {
+                                            "architecture": "ppc64el",
+                                            "channel": "12.04",
+                                            "name": "ubuntu",
+                                        },
+                                        {
+                                            "architecture": "riscv64",
+                                            "channel": "12.04",
+                                            "name": "ubuntu",
+                                        },
+                                        {
+                                            "architecture": "s390x",
                                             "channel": "12.04",
                                             "name": "ubuntu",
                                         },
@@ -130,7 +160,13 @@ converted_sample_channel_map = OrderedDict(
                                     (
                                         1,
                                         {
-                                            "architectures": {"all"},
+                                            "architectures": {
+                                                "amd64",
+                                                "arm64",
+                                                "ppc64el",
+                                                "riscv64",
+                                                "s390x",
+                                            },
                                             "bases": [
                                                 "Ubuntu 14.04",
                                                 "Ubuntu 12.04",
@@ -145,11 +181,40 @@ converted_sample_channel_map = OrderedDict(
                                                     "name": "ubuntu",
                                                 }
                                             ],
-                                            "released_at": "21 Oct 2021",
+                                            "released_at": (
+                                                "2021-10-21"
+                                                "T16:45:42.323000+00:00"
+                                            ),
+                                            "release_date": "21 Oct 2021",
                                             "revision": {
                                                 "bases": [
                                                     {
-                                                        "architecture": "all",
+                                                        "arch"
+                                                        "itecture": "amd64",
+                                                        "channel": "12.04",
+                                                        "name": "ubuntu",
+                                                    },
+                                                    {
+                                                        "arch"
+                                                        "itecture": "arm64",
+                                                        "channel": "12.04",
+                                                        "name": "ubuntu",
+                                                    },
+                                                    {
+                                                        "arch"
+                                                        "itecture": "ppc64el",
+                                                        "channel": "12.04",
+                                                        "name": "ubuntu",
+                                                    },
+                                                    {
+                                                        "arch"
+                                                        "itecture": "riscv64",
+                                                        "channel": "12.04",
+                                                        "name": "ubuntu",
+                                                    },
+                                                    {
+                                                        "arch"
+                                                        "itecture": "s390x",
                                                         "channel": "12.04",
                                                         "name": "ubuntu",
                                                     },
@@ -187,6 +252,7 @@ converted_sample_channel_map = OrderedDict(
                     (
                         "stable",
                         {
+                            "all_bases": ["Ubuntu 20.04", "Ubuntu 18.04"],
                             "latest": {
                                 "architectures": {"amd"},
                                 "bases": ["Ubuntu 20.04", "Ubuntu 18.04"],
@@ -197,7 +263,10 @@ converted_sample_channel_map = OrderedDict(
                                         "name": "ubuntu",
                                     }
                                 ],
-                                "released_at": "21 Oct 2022",
+                                "released_at": (
+                                    "2022-10-21" "T16:45:42.323000+00:00"
+                                ),
+                                "release_date": "21 Oct 2022",
                                 "revision": {
                                     "bases": [
                                         {
@@ -247,9 +316,13 @@ converted_sample_channel_map = OrderedDict(
                                                         "18.04",
                                                     ],
                                                     "name": "ubuntu",
-                                                },
+                                                }
                                             ],
-                                            "released_at": "21 Oct 2022",
+                                            "released_at": (
+                                                "2022-10-21"
+                                                "T16:45:42.323000+00:00"
+                                            ),
+                                            "release_date": "21 Oct 2022",
                                             "revision": {
                                                 "bases": [
                                                     {

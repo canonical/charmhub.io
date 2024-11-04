@@ -1,4 +1,4 @@
-{% set current_tab = "configure" %}
+{% set current_tab = "configurations" %}
 
 {% extends '/details/details_layout.html' %}
 
@@ -19,6 +19,11 @@
     </div>
   </div>
   <div class="col-9">
+    <p class="p-heading--4">
+      <a href="https://juju.is/docs/juju/configuration#heading--application-configuration" class="" target="_blank" rel="noopener noreferrer">
+        Learn about configurations&nbsp;&gt;
+      </a>
+    </p>
     <ul class="p-list--divided has-separator-centered">
       {% for key, value in package.store_front.config.options.items() %}
       <li class="p-list__item" id="{{ key }}">
@@ -26,7 +31,7 @@
         {% if value.default %}
         <p style="overflow-wrap: break-word; white-space: pre-wrap;"><span class="u-text--muted">Default:</span> {{ value.default }}</p>
         {% endif %}
-        <p style="overflow-wrap: break-word; white-space: pre-wrap;">{{ value.description | linkify | safe }}</p>
+        <p style="overflow-wrap: break-word; white-space: pre-wrap;">{{ value.description | markdown | safe }}</p>
       </li>
       {% endfor %}
     </ul>
@@ -35,7 +40,7 @@
   <div class="p-notification--information">
     <div class="p-notification__content">
       <p class="p-notification__message">
-        No configuration details have been added yet.
+        No configuration details have been added.
       </p>
     </div>
   </div>

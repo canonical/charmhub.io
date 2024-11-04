@@ -1,0 +1,9 @@
+{% extends 'base_layout.html' %}
+{% block content %}
+  <main id="root"></main>
+  <script>
+    window.CSRF_TOKEN = "{{ csrf_token() }}";
+    window.SENTRY_DSN = "{{ SENTRY_DSN }}";
+  </script>
+  <script src="{{ versioned_static('js/dist/publisher.js') }}"></script>
+{% endblock %}

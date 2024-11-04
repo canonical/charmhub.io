@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import {
   Strip,
@@ -13,8 +13,8 @@ import {
 
 import type { InterfaceItem } from "../../types";
 
-function pageArray(items: Array<any>, count: number) {
-  const result: Array<any> = [];
+function pageArray<T>(items: T[], count: number) {
+  const result: T[][] = [];
 
   for (let i = 0; i < Math.ceil(items.length / count); i++) {
     const start = i * count;
@@ -27,11 +27,11 @@ function pageArray(items: Array<any>, count: number) {
 }
 
 function sortInterfaces(a: InterfaceItem, b: InterfaceItem) {
-  if (a.status === "Live" && b.status !== "Live") {
+  if (a.status === "live" && b.status !== "live") {
     return -1;
   }
 
-  if (a.status !== "Live" && b.status === "Live") {
+  if (a.status !== "live" && b.status === "live") {
     return 1;
   }
 
@@ -45,13 +45,12 @@ type Props = {
 function InterfacesIndex({ interfacesList }: Props) {
   const ITEMS_PER_PAGE = 10;
 
-  const [searchParams, setSearchParams]: [URLSearchParams, Function] =
-    useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [interfaces, setInterfaces] = useState<Array<InterfaceItem>>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [currentItems, setCurrentItems] = useState([]);
+  const [currentItems, setCurrentItems] = useState<InterfaceItem[]>([]);
   const [currentPageNumber, setCurrentPageNumber] = useState(
     parseInt(searchParams.get("page") || "1")
   );
@@ -117,9 +116,8 @@ function InterfacesIndex({ interfacesList }: Props) {
             <p>
               Interfaces describe the relation between two charms. This
               interface catalogue shows opinionated, standardized interface
-              specifications for charm relations. Each interface
-              outlines the behavior and requirements of charms relating to one
-              another.
+              specifications for charm relations. Each interface outlines the
+              behavior and requirements of charms relating to one another.
             </p>
             <p>
               Most of the content of these pages can be collaboratively
@@ -165,26 +163,12 @@ function InterfacesIndex({ interfacesList }: Props) {
             {
               content: "Interface name",
               heading: "Interface name",
-              style: {
-                width: "25%",
-              },
             },
             {
               content: "Version",
               heading: "Version",
               style: {
                 width: "80px",
-              },
-            },
-            {
-              content: "Category",
-              heading: "Category",
-            },
-            {
-              content: "Overview",
-              heading: "Overview",
-              style: {
-                width: "45%",
               },
             },
           ]}
@@ -200,20 +184,18 @@ function InterfacesIndex({ interfacesList }: Props) {
                           display: "flex",
                         }}
                       >
-                        {item?.status === "Live" && (
-                          <Link to={`/interfaces/${item?.name}`}>
+                        {item?.status === "live" && (
+                          <Link to={`/integrations/${item?.name}`}>
                             {item?.name}
                           </Link>
                         )}
-                        {item?.status !== "Live" && (
+                        {item?.status !== "live" && (
                           <>
                             <StatusLabel style={{ marginRight: "1rem" }}>
                               {item?.status}
                             </StatusLabel>
                             <Link
-                              to={`/interfaces/${
-                                item?.name
-                              }/${item?.status.toLowerCase()}`}
+                              to={`/integrations/${item?.name}/${item?.status}`}
                             >
                               {item?.name}
                             </Link>
@@ -225,12 +207,6 @@ function InterfacesIndex({ interfacesList }: Props) {
                   {
                     content: item?.version,
                     className: "u-align--right",
-                  },
-                  {
-                    content: item?.category,
-                  },
-                  {
-                    content: item?.description.split(".")[0],
                   },
                 ],
               };
@@ -250,7 +226,7 @@ function InterfacesIndex({ interfacesList }: Props) {
               setCurrentPageIndex(pageNumber - 1);
 
               if (pageNumber > 1) {
-                setSearchParams({ page: pageNumber });
+                setSearchParams({ page: pageNumber.toString() });
               } else {
                 setSearchParams({});
               }

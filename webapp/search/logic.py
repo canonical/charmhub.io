@@ -3,8 +3,10 @@ from bs4 import BeautifulSoup
 from flask_caching import Cache
 import requests
 from urllib.parse import quote
-
+from typing import Dict
 from webapp.config import SEARCH_FIELDS
+from webapp.packages.logic import parse_package_for_card
+from webapp.packages.store_packages import CharmStore, CharmPublisher
 
 
 url = "https://discourse.charmhub.io"
@@ -14,92 +16,66 @@ docs_id_cache = {
     "dev": {"id": 6669, "tag": "dev"},
 }
 
+# This stores all the mappings from topic index to the
+# corresponding url in the documentation
+documentation_topic_mappings: Dict[int, str] = {}
+
+
+def fetch_documentation_index():
+    """
+    This function initializes the cache dict for the navigation table
+    of the documentation index. It fetches the navigation table
+    from the discourse API and stores all the entries in a dictionary
+    where the key is the topic id and the value is the corresponding
+    url in the documentation.
+    """
+    for key in docs_id_cache.keys():
+        index_id = docs_id_cache[key]["id"]
+        index_page = requests.get(f"{url}/t/{index_id}.json").json()
+
+        index_doc = index_page.get("post_stream").get("posts")[0].get("cooked")
+
+        soup = BeautifulSoup(index_doc, "html.parser")
+        details_element = soup.find(
+            lambda tag: tag.name == "details"
+            and "Navigation" in tag.summary.text
+        )
+
+        if details_element:
+            table = details_element.find("table")
+            if table:
+                rows = table.find_all("tr")[1:]
+                for row in rows:
+                    cells = row.find_all("td")
+                    if len(cells) == 3:
+                        path = cells[1].text.strip()
+                        if not path:
+                            continue
+                        url_tag = docs_id_cache[key]["tag"]
+                        topic_link = cells[2].find("a")
+                        if topic_link:
+                            topic_id = topic_link["href"].split("/")[-1]
+                            documentation_topic_mappings[topic_id] = (
+                                f"https://juju.is/docs/{url_tag}/{path}"
+                            )
+
+
 cache = Cache(config={"CACHE_TYPE": "simple"})
 
 
-def map_topic_to_doc(topic):
-    for key in docs_id_cache.keys():
-        if key in topic["tags"]:
-            return docs_id_cache[key]["id"]
-
-
 def rewrite_topic_url(topics: list) -> list:
-    """
-    This function takes a list of topics and posts.
-    It retrieves navigation details from Discourse and modifies the topic URLs
-    based on tag matches. It then adds a url key to each topic dictionary.
-    Topics and corresponding Posts without urls are filtered out
-
-    Args:
-        topics (list): A list of topic dictionaries
-        posts (list): A list of post dictionaries
-
-    Returns:
-        dict: A dictionary containing modified lists of posts and topics with
-        rewritten URLs.
-
-    Note: it caches navigation table to minimize the number of requests to
-    Discourse API
-
-    """
-    topics_with_url = []
+    if len(documentation_topic_mappings) == 0:
+        fetch_documentation_index()
     for topic in topics:
-        index_id = map_topic_to_doc(topic)
-        index_details = cache.get(index_id)
-        nav_table = None
+        topic["url"] = documentation_topic_mappings.get(str(topic["id"]))
 
-        if index_details:
-            nav_table = BeautifulSoup(
-                index_details["nav_table"], "html.parser"
-            )
-        else:
-            index_page = requests.get(f"{url}/t/{index_id}.json").json()
-            index_doc = (
-                index_page.get("post_stream").get("posts")[0].get("cooked")
-            )
-            soup = BeautifulSoup(index_doc, "html.parser")
-            nav_heading = soup.find("h2", text="Navigation")
-
-            if nav_heading:
-                nav_table = nav_heading.find_next_sibling("details").find(
-                    "table"
-                )
-
-            if nav_table:
-                cache.set(
-                    index_id, {"nav_table": str(nav_table)}, timeout=3600
-                )
-
-        if nav_table:
-            topic_link = nav_table.find(
-                "a", href=lambda href: href and str(topic["id"]) in href
-            )
-            if topic_link:
-                topic_row_in_nav = topic_link.find_parent("tr")
-                topic_data = topic_row_in_nav.find_all("td")
-                topic_path = topic_data[1].text
-                topic_urls = []
-                for tag in topic["tags"]:
-                    if tag in docs_id_cache.keys():
-                        url_tag = docs_id_cache[tag]["tag"]
-                        topic_url = (
-                            f"https://juju.is/docs/{url_tag}/{topic_path}"
-                        )
-                        topic_urls.append(topic_url)
-                    topic["url"] = topic_urls
-                topics_with_url.append(topic)
-
-    return topics_with_url
+    return topics
 
 
 def search_discourse(
-    term: str,
     query: str,
-    category: str,
-    page: int,
-    limit: int,
-    see_all: bool,
-    filter_topics: callable,
+    page: int = 1,
+    see_all: bool = False,
 ) -> list:
     """
     Searches discourse for topics based on the query parameters.
@@ -113,71 +89,83 @@ def search_discourse(
         (5 posts and topics).
 
     Returns:
-        dict: A dictionary containing the a list of topics.
+        list: A list containing the a list of topics.
 
     Note:
         This function makes use of a cache to store result for a fetched search
         terms, this helps in reducing redundant requests to the discourse API.
     """
-    cached_page = cache.get(f"{category}-{term}")
+    cached_page = cache.get(f"{query}-{page}")
+
+    if not see_all:
+        if cached_page:
+            return cached_page
+        else:
+            resp = requests.get(f"{url}/search.json?q={query}&page={page}")
+            topics = resp.json().get("topics", [])
+            for topic in topics:
+                post = next(
+                    (
+                        post
+                        for post in resp.json()["posts"]
+                        if post["topic_id"] == topic["id"]
+                    ),
+                    None,
+                )
+                topic["post"] = post
+            cache.set(f"{query}-{page}", topics, timeout=300)
+            return topics
+
+    # Note: this logic is currently slower than it should ordinarily
+    # be because the  discourse API currently has some limitations that
+    # would probably be fixed in the near future.
+    # The ones affecting this code are:
+    # 1. The API does not return any indicator to show if there are more
+    #   pages to be fetched.
+    # 2. The API does not support fetching multiple categories or
+    #   excluding a category from the search
+
     result = []
     more_pages = True
 
-    if page == 1 and not see_all:
+    while more_pages:
+        cached_page = cache.get(f"{query}-{page}")
         if cached_page:
-            return cached_page.get("topics")[:limit]
-        else:
-            resp = requests.get(
-                f"{url}/search.json?q={query}&page={page}"
-            ).json()
+            result.extend(cached_page)
+            page += 1
+            continue
 
-            topics = filter_topics(resp.get("topics", []))
-            return topics[:limit]
+        resp = requests.get(f"{url}/search.json?q={query}&page={page}")
+        data = resp.json()
+        topics = data.get("topics", [])
 
-    if not cached_page:
-        # Note: this logic is currently slower than it should ordinarily
-        # be because the  discourse API currently has some limitations that
-        # would probably be fixed in the near future.
-        # The ones affecting this code are:
-        # 1. The API does not return any indicator to show if there are more
-        #   pages to be fetched.
-        # 2. The API does not support fetching multiple categories or
-        #   excluding a category from the search
-        # 3. The API does not support excluding (we had to filter out archived
-        #   topics) a status from the search
-        while more_pages:
-            resp = None
-            if len(result) < 10:
-                resp = (
-                    requests.get(f"{url}/search.json?q={query}&page={page}")
-                    .json()
-                    .get("topics", [])
+        if topics:
+            for topic in topics:
+                post = next(
+                    (
+                        post
+                        for post in data["posts"]
+                        if post["topic_id"] == topic["id"]
+                    ),
+                    None,
                 )
-            if resp:
-                topics = filter_topics(resp)
-                result.extend(topics)
-                next_page = requests.get(
-                    f"{url}/search.json?q={query}&page={page+1}"
-                ).json()
-                if (
-                    next_page.get("topics")
-                    and next_page.get("topics")[0]["id"] == resp[0]["id"]
-                ):
-                    more_pages = False
-                    cache.set(f"{category}-{term}", result, timeout=300)
-                    return result
-                page += 1
-            else:
+                topic["post"] = post
+            cache.set(f"{query}-{page}", topics, timeout=300)
+            result.extend(topics)
+            page += 1
+            next_resp = requests.get(
+                f"{url}/search.json?q={query}&page={page}"
+            )
+            next_topics = next_resp.json().get("topics", [])
+            if not next_topics or next_topics[0]["id"] == topics[0]["id"]:
                 more_pages = False
-                cache.set(f"{category}-{term}", result, timeout=300)
-                return result
+        else:
+            more_pages = False
 
-    else:
-        result = cached_page
-        return result
+    return result
 
 
-def search_docs(term: str, page: int, limit: int, see_all) -> dict:
+def search_docs(term: str, page: int, see_all: bool = False) -> dict:
     """
     Fetches documentation from discourse from the doc category and
     a specific search term.
@@ -193,69 +181,56 @@ def search_docs(term: str, page: int, limit: int, see_all) -> dict:
         dict: A dictionary containing the retrieved dtopics.
     """
     categories = ["#doc"]
-    encoded_cat = [quote(cat) for cat in categories]
+    encoded_categories = [quote(cat) for cat in categories]
     tags = ["olm", "sdk", "dev"]
-    query = f"{term} {' '.join(encoded_cat)} tag:{','.join(tags)}".strip()
-
-    def filter_topics(topics):
-        return rewrite_topic_url(
-            [topic for topic in topics if not topic["archived"]]
-        )
-
-    result = search_discourse(
-        term, query, "docs", page, limit, see_all, filter_topics
+    query = (
+        f"{term} {' '.join(encoded_categories)} tag:{','.join(tags)}".strip()
     )
 
-    return result
+    # exclude archived
+    query += " status:-archived"
+
+    result = search_discourse(query, page, see_all)
+
+    return rewrite_topic_url(result)
 
 
-def search_topics(term: str, page: int, limit: int, see_all=False) -> dict:
+def search_topics(term: str, page: int, see_all=False) -> dict:
     """
     Search discousre for a specific term and return the results.
     It searches from all categories except doc category.
 
     Parameters:
-        search_term (str): The search term used to find relevant documentation.
+        term (str): The search term used to find relevant documentation.
         page (int): The page number of the search results to retrieve.
         see_all (bool, optional): If True, retrieves all available search
-        results. If False (default), returns a limited number of results
-        (5 posts and topics).
+        results. If False (default), returns the first page only
 
     Returns:
         dict: A dictionary containing the retrieved topics.
     """
     query = term
 
-    def filter_topics(topics):
-        return [
-            topic
-            for topic in topics
-            if not topic["archived"] and topic["category_id"] != 22
-        ]
+    result = search_discourse(query, page, see_all)
 
-    result = search_discourse(
-        term, query, "discourse", page, limit, see_all, filter_topics
-    )
+    result = [topic for topic in result if topic["category_id"] != 22]
+
     return result
 
 
-def search_charms(term: str, limit: int):
-    packages = app.store_api.find(term, fields=SEARCH_FIELDS)
-    charms = [
-        package
-        for package in packages["results"]
-        if package["type"] == "charm"
+def search_charms(term: str):
+    return [
+        parse_package_for_card(package, CharmStore, CharmPublisher)
+        for package in app.store_api.find(
+            term, type="charm", fields=SEARCH_FIELDS
+        )["results"]
     ]
 
-    return charms[:limit]
 
-
-def search_bundles(term: str, limit: int):
-    packages = app.store_api.find(term, fields=SEARCH_FIELDS)
-    bundles = [
-        package
-        for package in packages["results"]
-        if package["type"] == "bundle"
+def search_bundles(term: str):
+    return [
+        parse_package_for_card(package, CharmStore, CharmPublisher)
+        for package in app.store_api.find(
+            term, type="bundle", fields=SEARCH_FIELDS
+        )["results"]
     ]
-
-    return bundles[:limit]

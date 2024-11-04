@@ -6,13 +6,26 @@ import {
   Col,
   Spinner,
   SearchAndFilter,
+  Chip,
 } from "@canonical/react-components";
 import { InterfaceItem } from "../InterfaceItem";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { filterChipsSelector, filterState } from "../../state";
+import { SearchAndFilterChip } from "@canonical/react-components/dist/components/SearchAndFilter/types";
 
-const getIntegrations = async (charm: string): Promise<IInterfaceData[]> => {
-  const resp = await fetch(`/${charm}/integrations.json`);
+export const getIntegrations = async (
+  charm: string
+): Promise<IInterfaceData[]> => {
+  let resp;
+  const url = new URL(document.location.href);
+  const selectedChannel = url.searchParams.get("channel");
+  if (selectedChannel) {
+    resp = await fetch(
+      `/${charm}/integrations.json?channel=${selectedChannel}`
+    );
+  } else {
+    resp = await fetch(`/${charm}/integrations.json`);
+  }
   const json = await resp.json();
   if (!json.grouped_relations) {
     return [];
@@ -92,6 +105,70 @@ export const App = () => {
     }
   }
 
+  const renderSideNav = (data: IInterfaceData[], type: string) => {
+    const hasItems = data.some(
+      (interfaceItem: IInterfaceData) => interfaceItem.type === type
+    );
+    if (!hasItems) {
+      return null;
+    } else {
+      return (
+        <>
+          <h3
+            className="p-side-navigation__heading"
+            style={{ paddingLeft: 0, paddingTop: 10 }}
+          >
+            {type.toUpperCase()}
+          </h3>
+          {data.map((interfaceItem: IInterfaceData, index) => {
+            if (interfaceItem.type === type) {
+              return (
+                <li
+                  key={`${interfaceItem.key}|${interfaceItem.interface}`}
+                  className="p-side-navigation__item"
+                >
+                  <a
+                    className={`p-side-navigation__link ${
+                      isActive(`#${interfaceItem.key}`, index)
+                        ? "is-active"
+                        : ""
+                    }`}
+                    href={`#${interfaceItem.key}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const target = e.target as HTMLLinkElement;
+                      const targetElId = target.getAttribute("href");
+
+                      if (targetElId) {
+                        const targetEl = document.querySelector(targetElId);
+                        targetEl?.scrollIntoView();
+                        setFragment(targetElId);
+                        window.location.hash = targetElId;
+                        target.classList.add("is-active");
+                      }
+                    }}
+                  >
+                    {`${interfaceItem.key}`}
+                    {interfaceItem.required === true && (
+                      <Chip
+                        value="Required"
+                        appearance="negative"
+                        className="u-no-margin--bottom"
+                        style={{ marginLeft: "10px" }}
+                      />
+                    )}
+                  </a>
+                </li>
+              );
+            } else {
+              return null;
+            }
+          })}
+        </>
+      );
+    }
+  };
+
   return (
     <Col size={12}>
       {!data && (
@@ -106,7 +183,7 @@ export const App = () => {
           <Spinner text="Loading..." />
         </div>
       )}
-      {data && (
+      {data && integrationCount > 0 && (
         <Row className="p-details-tab__content">
           <Col size={3} className="p-details-tab__content__sidebar">
             <div
@@ -114,46 +191,23 @@ export const App = () => {
               style={{ position: "sticky", top: "0" }}
             >
               <ul className="p-side-navigation__list">
-                {filteredData?.map((interfaceItem: IInterfaceData, index) => (
-                  <li
-                    className="p-side-navigation__item"
-                    key={`${interfaceItem.key}|${interfaceItem.interface}`}
-                  >
-                    <a
-                      className={`p-side-navigation__link ${
-                        isActive(`#${interfaceItem.key}`, index)
-                          ? "is-active"
-                          : ""
-                      }`}
-                      href={`#${interfaceItem.key}`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        const target = e.target as HTMLLinkElement;
-                        const targetElId = target.getAttribute("href");
-
-                        if (targetElId) {
-                          const targetEl = document.querySelector(targetElId);
-                          targetEl?.scrollIntoView();
-                          setFragment(targetElId);
-                          window.location.hash = targetElId;
-                          target.classList.add("is-active");
-                        }
-                      }}
-                    >
-                      {`${interfaceItem.key} | ${interfaceItem.interface}`}
-                    </a>
-                  </li>
-                ))}
+                {filteredData && renderSideNav(filteredData, "provides")}
+                {filteredData && renderSideNav(filteredData, "requires")}
               </ul>
             </div>
           </Col>
           <Col size={9} className="p-details-tab__content__body">
             <Row>
               <Col size={5}>
-                <h2 className="p-heading--3">
+                <h2 className="p-heading--3 p-details-tab__content__body__title">
                   {integrationCount} integration
-                  {integrationCount > 1 ? "s" : ""} related to this charm
+                  {integrationCount > 1 ? "s" : ""}
                 </h2>
+                <p className="p-heading--4 p-details-tab__content__body__link">
+                  <a href="https://juju.is/docs/juju/relation">
+                    Learn about integrations&nbsp;&gt;
+                  </a>
+                </p>
               </Col>
               <Col size={4}>
                 <div
@@ -166,8 +220,9 @@ export const App = () => {
                 >
                   <div style={{ position: "absolute", width: "100%" }}>
                     <SearchAndFilter
-                      filterPanelData={availableFilters as any}
-                      returnSearchData={(searchData: any) => {
+                      // @ts-expect-error: id mismatch (number instead of string) but doesn't matter in reality
+                      filterPanelData={availableFilters}
+                      returnSearchData={(searchData: SearchAndFilterChip[]) => {
                         setFilterData((prev) =>
                           prev !== searchData
                             ? (searchData as IFilterChip[])
@@ -189,6 +244,47 @@ export const App = () => {
             ))}
           </Col>
         </Row>
+      )}
+      {!data && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "10rem",
+          }}
+        >
+          <Spinner text="Loading..." />
+        </div>
+      )}
+      {integrationCount === 0 && (
+        <div className="p-strip u-no-padding--top">
+          <div className="u-fixed-width u-equal-height">
+            <div className="charm-empty-docs-icon u-vertically-center">
+              <img
+                src="https://assets.ubuntu.com/v1/8acd8f55-Integrations.svg"
+                alt=""
+                width="121"
+                height="121"
+              />
+            </div>
+            <div className="col-9 charm-empty-docs-content">
+              <h4>No Integrations have been added for this charm</h4>
+              <p>
+                Integration is a connection an application supports by virtue of
+                having a particular endpoint.
+              </p>
+              <p className="u-no-margin--bottom">
+                <a
+                  className="p-button--positive u-no-margin--bottom"
+                  href="https://juju.is/docs/juju/relation"
+                >
+                  Learn how to manage charm integrations
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
       )}
     </Col>
   );

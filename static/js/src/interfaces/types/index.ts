@@ -11,7 +11,7 @@ export type SubSectionData = {
 };
 
 export type SectionData = {
-  children: Array<SubSectionData>;
+  children: Array<SubSectionData | string>;
   heading: string;
   level: number;
 };
@@ -44,9 +44,9 @@ export type InterfaceData = {
 };
 
 export type InterfaceItem = {
-  name: String;
-  description: String;
-  version: String;
-  status: String;
-  category: String;
+  name: string;
+  description: string;
+  version: string;
+  status: string;
+  category: string;
 };

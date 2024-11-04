@@ -1,33 +1,51 @@
 import re
 
 import talisker.requests
-from canonicalwebteam.flask_base.app import FlaskBase
-from canonicalwebteam.store_api.stores.charmstore import CharmStore
+from canonicalwebteam.store_api.stores.charmstore import (
+    CharmStore,
+    CharmPublisher,
+)
+from canonicalwebteam.candid import CandidClient
 from dateutil import parser
 from flask import render_template, make_response, request, session, escape
-from webapp import config
 from webapp.extensions import csrf
+from webapp.config import APP_NAME
 from webapp.handlers import set_handlers
 from webapp.login.views import login
 from webapp.topics.views import topics
 from webapp.publisher.views import publisher
 from webapp.store.views import store
-from webapp.interfaces.views import interfaces
+from webapp.integrations.views import integrations
 from webapp.search.views import search
 from webapp.search.logic import cache
 from webapp.helpers import markdown_to_html
+from webapp.decorators import login_required
+from canonicalwebteam.flask_base.app import FlaskBase
+from webapp.packages.store_packages import store_packages
 
 
 app = FlaskBase(
     __name__,
-    config.APP_NAME,
-    template_folder="../templates",
-    static_folder="../static",
+    "charmhub.io",
     template_404="404.html",
     template_500="500.html",
     favicon_url="https://assets.ubuntu.com/v1/5d4edefd-jaas-favicon.png",
+    static_folder="../static",
+    template_folder="../templates",
 )
+
+
+app.name = APP_NAME
+app.config["LOGIN_REQUIRED"] = login_required
+
+set_handlers(app)
+
 app.store_api = CharmStore(session=talisker.requests.get_session())
+
+
+request_session = talisker.requests.get_session()
+candid = CandidClient(request_session)
+publisher_api = CharmPublisher(request_session)
 
 
 @app.template_filter("linkify")
@@ -49,14 +67,14 @@ def linkify(text):
 
 
 cache.init_app(app)
-set_handlers(app)
 csrf.init_app(app)
 
+app.register_blueprint(store_packages)
 app.register_blueprint(publisher)
 app.register_blueprint(store)
 app.register_blueprint(login)
 app.register_blueprint(topics)
-app.register_blueprint(interfaces)
+app.register_blueprint(integrations)
 app.register_blueprint(search)
 
 
@@ -80,44 +98,9 @@ def get_account_json():
     return response
 
 
-@app.route("/overview")
-def overview():
-    return render_template("overview.html")
-
-
-@app.route("/about")
-def about():
-    return render_template("about/index.html")
-
-
-@app.route("/manifesto")
-def manifesto():
-    return render_template("about/manifesto.html")
-
-
-@app.route("/publishing")
-def publishing():
-    return render_template("about/publishing.html")
-
-
-@app.route("/governance")
-def governance():
-    return render_template("about/governance.html")
-
-
-@app.route("/glossary")
-def glossary():
-    return render_template("about/glossary.html")
-
-
 @app.route("/contact-us")
 def contact_us():
     return render_template("contact-us.html")
-
-
-@app.route("/get-in-touch")
-def get_in_touch():
-    return render_template("partial/_get-in-touch.html")
 
 
 @app.route("/thank-you")

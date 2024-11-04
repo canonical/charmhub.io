@@ -2,7 +2,7 @@
 
 $brand-color: #772953;
 $color-text-orange: #d54110;
-$breakpoint-navigation-threshold: 1110px;
+$breakpoint-large: 1220px;
 
 // import cookie policy
 @import "@canonical/cookie-policy/build/css/cookie-policy";
@@ -108,8 +108,6 @@ $breakpoint-navigation-threshold: 1110px;
 @include charmhub-p-tutorial;
 @import "charmhub_utils";
 @include charmhub-utils;
-@import "charmhub_publisher";
-@include charmhub-publisher;
 @import "charmhub_metrics";
 @include charmhub-metrics;
 @import "charmhub_p-contextual-menu";
@@ -130,8 +128,6 @@ $breakpoint-navigation-threshold: 1110px;
 @include p-charmhub-modal;
 @import "pattern-p-integration-charts";
 @include pattern_p-integration-charts;
-@import "swiper-overrides";
-@include swiper-overrides;
 @import "pattern_p-docstring";
 @include p-charmhub-docstring;
 @import "charmhub_p-topology";
@@ -144,6 +140,9 @@ $breakpoint-navigation-threshold: 1110px;
 @include vf-p-icon-status-waiting;
 @import "pattern_p-filter-panel";
 @include p-charmhub-filter-panel;
+@import "charmhub_releases";
+@include charmhub-releases;
+
 
 // Remove table row borders
 .p-table--no-borders tr {
@@ -301,6 +300,12 @@ body {
       }
     }
   }
+
+  .p-details-tab__content__body .p-details-tab__content__body__title,
+  .p-details-tab__content__body .p-details-tab__content__body__link {
+    display: inline;
+    margin-right: 1rem;
+  }
 }
 
 // Override h3 font weight based on design feedback from MS
@@ -448,12 +453,18 @@ h3 {
   }
 }
 
+.l-application {
+  width: 100% !important;
+}
+
 .l-aside {
   background-color: $color-x-light;
-  height: calc(100vh - 112px);
+  height: 100vh;
   max-width: 535px;
   padding: 1rem;
   position: fixed;
+  right: 0;
+  top: 0;
   z-index: 999;
 
   .l-application & {
@@ -461,28 +472,22 @@ h3 {
   }
 }
 
-.panel {
+.p-panel {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
 }
 
-.panel__header {
-  display: flex;
-  justify-content: space-between;
-}
-
-.panel__content {
+.p-panel__content {
   flex: 1 1 0;
 }
 
-.panel__footer {
+.p-panel__footer {
   border-top: 1px solid $color-mid-x-light;
   padding-top: $sph--large;
 }
 
 .l-aside__overlay {
-  background-color: transparent;
+  background-color: rgba(0,0,0,0.5);
   height: 100%;
   position: fixed;
   right: 0;
@@ -533,11 +538,27 @@ h3 {
   display: none !important;
 }
 
-.collaboration-ui .l-aside {
-  height: 100vh;
-  top: 0;
+.mermaid-diagram-container {
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 
-.collaboration-ui.l-application {
-  width: 100%;
+.release-channel{
+  border:inherit;
+  border-right: 1px solid var(--vf-color-border-low-contrast);
+  display: table-cell;
+
+  &:hover {
+    background-color: var(--vf-color-background-hover);
+    cursor: pointer;
+  }
+
+  & > [class^="p-icon"] {
+    margin-right: 0.5rem;
+  }
+
+  @media screen and (max-width: $breakpoint-large) {
+    border: none;
+  }
 }

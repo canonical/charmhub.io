@@ -1,16 +1,17 @@
 import type { IInterfaceData, ISearchAndFilter, IFilterChip } from "../types";
 import type { ICharm } from "../../../../shared/types";
 
-import { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { useQuery } from "react-query";
 
-import { Row, Col, Spinner, Icon } from "@canonical/react-components";
+import { Row, Col, Spinner, Chip } from "@canonical/react-components";
 
 import { filterChipsSelector, filterState } from "../state";
 
 import { IntegrationCard } from "@canonical/store-components";
+import { Package } from "../../../../publisher-admin/types";
 
 interface InterfaceItemProps {
   interfaceType: string;
@@ -24,20 +25,18 @@ const getCharms = async (
   charmName: string
 ): Promise<ICharm[]> => {
   const resp = await fetch(
-    `/beta/store.json?${
+    `/store.json?${
       interfaceType === "provides" ? "requires" : "provides"
     }=${interfaceName}`
   );
   const json = await resp.json();
-  return json.packages.filter((pkg: any) => pkg.name !== charmName);
+  return json.packages.filter((pkg: Package) => pkg.name !== charmName);
 };
 
 const filterMap = (charm: ICharm, heading: string) => {
   switch (heading) {
     case "Platform":
-      return charm.package["platforms"][0] === "vm"
-        ? "Linux"
-        : "Kubernetes";
+      return charm.package["platforms"][0] === "vm" ? "Linux" : "Kubernetes";
     case "Stability":
       return charm.package["channel"]["risk"];
     case "Author":
@@ -131,39 +130,54 @@ export const InterfaceItem = ({
     <>
       <hr />
       <h3 className="p-heading--4 u-no-margin--bottom" id={interfaceData.key}>
-        {title}{" "}
-        <span
-          className="p-tooltip--right"
-          aria-describedby={`${interfaceData.key}-${interfaceData.interface}-tooltip`}
-        >
-          <Icon name="information" />
-          <span
-            className="p-tooltip__message"
-            role="tooltip"
-            id={`${interfaceData.key}-${interfaceData.interface}-tooltip`}
-          >
-            Relation | Interface
-          </span>
-        </span>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          {interfaceData.key}
+          <span className="u-text--muted">&nbsp;endpoint</span>
+          {interfaceData.required === true && (
+            <Chip
+              value="Required"
+              appearance="negative"
+              className="u-no-margin--bottom"
+              style={{ marginLeft: "10px" }}
+            />
+          )}
+        </div>
+        <div>
+          <a href={`/integrations/${interfaceData.interface}`}>
+            {interfaceData.interface}
+          </a>
+          <span className="u-text--muted">&nbsp;interface</span>
+        </div>
       </h3>
       {interfaceData.description && <p>{interfaceData.description}</p>}
 
       {charms && charms?.length > 0 && (
         <>
-          <p>
-            Charms that{" "}
-            <b>{interfaceType === "requires" ? "provide" : "consume"}</b>{" "}
-            {interfaceData.interface}
-          </p>
+          <div style={{ paddingTop: "0.5rem" }}>
+            <p className="u-fixed-width u-no-margin--bottom">
+              The <b>{interfaceData.key}</b> endpoint
+              <b>
+                {interfaceType === "requires" ? " requires " : " provides "}
+              </b>
+              an integration over the{" "}
+              <a href={`/integrations/${interfaceData.interface}`}>
+                {interfaceData.interface}
+              </a>{" "}
+              interface
+            </p>
+            <p>This means it can integrate with:</p>
+          </div>
           <Row>
             {charms.map((charm: ICharm) => (
-              <Col
-              size={3}
-              style={{ marginBottom: "1.5rem" }}
-              key={charm.package["display_name"]}
-              >
-                <IntegrationCard data={charm} />
-              </Col>
+              <React.Fragment key={charm.package.name}>
+                <Col
+                  size={3}
+                  style={{ marginBottom: "1.5rem" }}
+                  key={charm.package["display_name"]}
+                >
+                  <IntegrationCard data={charm} />
+                </Col>
+              </React.Fragment>
             ))}
           </Row>
         </>
@@ -177,7 +191,7 @@ export const InterfaceItem = ({
         <div className="u-fixed-width">
           <p>
             No charms found that{" "}
-            <b>{interfaceType === "requires" ? "provide" : "consume"}</b>{" "}
+            <b>{interfaceType === "requires" ? "require" : "provide"}</b>{" "}
             {interfaceData.interface}
           </p>
         </div>

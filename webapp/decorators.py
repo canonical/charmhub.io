@@ -38,11 +38,6 @@ def login_required(func):
     @functools.wraps(func)
     def is_user_logged_in(*args, **kwargs):
         if not authentication.is_authenticated(flask.session):
-            response = None
-            if "beta" in flask.request.url:
-                response = flask.make_response(
-                    flask.redirect("/login?next=/beta" + flask.request.path)
-                )
             response = flask.make_response(
                 flask.redirect("/login?next=" + flask.request.path)
             )
@@ -63,7 +58,9 @@ def store_maintenance(func):
 
     @functools.wraps(func)
     def is_store_in_maintenance(*args, **kwargs):
-        if strtobool(os.getenv("MAINTENANCE")):
+        # TODO: this will be a config option for the charm
+        # or used from the app config using from_prefexed_env
+        if strtobool(os.getenv("MAINTENANCE", "false")):
             return flask.render_template("maintenance.html")
 
         return func(*args, **kwargs)
@@ -83,8 +80,24 @@ def redirect_uppercase_to_lowercase(func):
     def is_uppercase(*args, **kwargs):
         name = kwargs["entity_name"]
 
+        ENV = os.getenv("ENVIRONMENT", "devel").strip()
+        redirect = flask.request.url.lower()
+
         if any(char.isupper() for char in name):
-            return flask.redirect(flask.request.url.lower())
+            if (
+                (ENV == "devel" and redirect.startswith("http://localhost:"))
+                or (
+                    ENV == "production"
+                    and redirect.startswith("https://charmhub.io/")
+                )
+                or (
+                    ENV == "staging"
+                    and redirect.startswith("https://staging.charmhub.io/")
+                )
+            ):
+                return flask.redirect(redirect)
+            else:
+                flask.abort(404)
 
         return func(*args, **kwargs)
 

@@ -28,6 +28,45 @@ store = Blueprint(
 publisher_api = CharmPublisher(talisker.requests.get_session())
 
 
+@store.route("/publisher/<regex('[a-z0-9-]*[a-z][a-z0-9-]*'):publisher>")
+def get_publisher_details(publisher):
+    """
+    A view to display the publisher details page for specific publisher.
+    """
+
+    status_code = 200
+    error_info = {}
+    charms_results = []
+    charms = []
+    charms_count = 0
+    publisher_details = {"display-name": publisher}
+
+    charms_results = app.store_api.find(
+        publisher=publisher,
+        fields=SEARCH_FIELDS,
+    )["results"]
+
+    for charm in charms_results:
+        item = charm["result"]
+        item["package_name"] = charm["name"]
+        charms.append(item)
+
+    charms_count = len(charms)
+
+    if charms_count > 0:
+        publisher_details = charms[0]["publisher"]
+
+    context = {
+        "charms": charms,
+        "charms_count": charms_count,
+        "publisher": publisher_details,
+        "error_info": error_info,
+    }
+
+    # HTML template will be returned here for the front end
+    return (context, status_code)
+
+
 @store.route("/packages.json")
 def get_packages():
     query = request.args.get("q", default=None, type=str)
@@ -144,20 +183,9 @@ def details_overview(entity_name):
     description = None
     summary = None
 
-    if not package["store_front"]["docs_topic"]:
-        navigation = None
+    docs_topic = package["store_front"].get("docs_topic")
 
-        if package["type"] == "bundle":
-            description = package["store_front"]["bundle"].get(
-                "description", None
-            )
-            summary = package["store_front"]["bundle"].get("summary", None)
-        else:
-            description = package["store_front"]["metadata"].get(
-                "description", None
-            )
-            summary = package["store_front"]["metadata"].get("summary", None)
-    else:
+    if docs_topic:
         docs_url_prefix = f"/{package['name']}/docs"
 
         docs = DocParser(
@@ -165,51 +193,64 @@ def details_overview(entity_name):
             index_topic_id=package["store_front"]["docs_topic"],
             url_prefix=docs_url_prefix,
         )
-        docs.parse()
-        topic = docs.index_topic
+        try:
+            docs.parse()
+            topic = docs.index_topic
+            docs_content = docs.parse_topic(topic)
+            description = docs_content.get("body_html", "")
 
-        docs_content = docs.parse_topic(topic)
-        description = docs_content.get("body_html", "")
+            navigation = docs.navigation
 
-        navigation = docs.navigation
+            overview = {
+                "hidden": False,
+                "level": 1,
+                "path": "",
+                "navlink_href": f"/{entity_name}",
+                "navlink_fragment": "",
+                "navlink_text": "Overview",
+                "is_active": True,
+                "has_active_child": False,
+                "children": [],
+            }
 
-        overview = {
-            "hidden": False,
-            "level": 1,
-            "path": "",
-            "navlink_href": f"/{entity_name}",
-            "navlink_fragment": "",
-            "navlink_text": "Overview",
-            "is_active": True,
-            "has_active_child": False,
-            "children": [],
-        }
+            if len(navigation["nav_items"]) > 0:
+                navigation["nav_items"][0]["children"].insert(0, overview)
+                # If the first item in docs nav is "overview",
+                # prefix with "Docs - "
+                if (
+                    len(navigation["nav_items"][0]["children"]) > 1
+                    and navigation["nav_items"][0]["children"][1][
+                        "navlink_text"
+                    ]
+                    == "Overview"
+                ):
+                    del navigation["nav_items"][0]["children"][1]
+            else:
+                # If there is no navigation but we've got here, there are docs
+                # So add a top level "Docs item". Example: /easyrsa
+                navigation["nav_items"] = [
+                    {
+                        "level": 0,
+                        "children": [
+                            overview,
+                        ],
+                    }
+                ]
 
-        if len(navigation["nav_items"]) > 0:
-            navigation["nav_items"][0]["children"].insert(0, overview)
-            # If the first item in docs nav is "overview",
-            # prefix with "Docs - "
-            if (
-                navigation["nav_items"][0]["children"][1]["navlink_text"]
-                == "Overview"
-            ):
-                del navigation["nav_items"][0]["children"][1]
-        else:
-            # If there is no navigation but we've got here, there are docs
-            # So add a top level "Docs item". Example: /easyrsa
-            navigation["nav_items"] = [
-                {
-                    "level": 0,
-                    "children": [
-                        overview,
-                    ],
-                }
-            ]
+            context["navigation"] = navigation
+            context["forum_url"] = docs.api.base_url
+            context["last_update"] = docs_content["updated"]
+            context["topic_path"] = docs_content["topic_path"]
+        except Exception as e:
+            if e.response.status_code == 404:
+                navigation = None
+                description, summary = logic.add_description_and_summary(
+                    package
+                )
 
-        context["navigation"] = navigation
-        context["forum_url"] = docs.api.base_url
-        context["last_update"] = docs_content["updated"]
-        context["topic_path"] = docs_content["topic_path"]
+    else:
+        navigation = None
+        description, summary = logic.add_description_and_summary(package)
 
     context["description"] = description
     context["summary"] = summary
@@ -280,7 +321,8 @@ def details_docs(entity_name, path=None):
         # If the first item in docs nav is "overview",
         # prefix with "Docs - "
         if (
-            navigation["nav_items"][0]["children"][1]["navlink_text"]
+            len(navigation["nav_items"][0]["children"]) > 1
+            and navigation["nav_items"][0]["children"][1]["navlink_text"]
             == "Overview"
         ):
             del navigation["nav_items"][0]["children"][1]
@@ -309,9 +351,13 @@ def details_docs(entity_name, path=None):
     return render_template("details/docs.html", **context)
 
 
-@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configure')
 @store.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configure/<path:path>'
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configurations'
+)
+@store.route(
+    '/<regex("'
+    + DETAILS_VIEW_REGEX
+    + '"):entity_name>/configurations/<path:path>'
 )
 @store_maintenance
 @redirect_uppercase_to_lowercase
@@ -331,7 +377,9 @@ def details_configuration(entity_name, path=None):
 
         if not path and bundle_charms:
             default_charm = bundle_charms[0]
-            redirect_url = f"/{entity_name}/configure/{default_charm['name']}"
+            redirect_url = (
+                f"/{entity_name}/configurations/{default_charm['name']}"
+            )
             if channel_request:
                 redirect_url = redirect_url + f"?channel={channel_request}"
             return redirect(redirect_url)
@@ -488,26 +536,15 @@ def download_library(entity_name, library_name):
     )
 
 
-@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/history')
-@store_maintenance
-@redirect_uppercase_to_lowercase
-def details_history(entity_name):
-    channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request, FIELDS)
-
-    return render_template(
-        "details/history.html",
-        package=package,
-        channel_requested=channel_request,
-    )
-
-
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/integrations')
 @store_maintenance
 @redirect_uppercase_to_lowercase
 def details_integrations(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request, FIELDS)
+    extra_fields = [
+        "default-release.revision.metadata-yaml",
+    ]
+    package = get_package(entity_name, channel_request, FIELDS + extra_fields)
 
     return render_template(
         "details/integrations.html",
@@ -523,7 +560,10 @@ def details_integrations(entity_name):
 @redirect_uppercase_to_lowercase
 def details_integrations_data(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request, FIELDS)
+    extra_fields = [
+        "default-release.revision.metadata-yaml",
+    ]
+    package = get_package(entity_name, channel_request, FIELDS + extra_fields)
 
     relations = (
         package.get("default-release", {})
@@ -531,18 +571,33 @@ def details_integrations_data(entity_name):
         .get("relations", {})
     )
 
+    provides = add_required_fields(
+        package["store_front"]["metadata"].get("provides", {}),
+        relations.get("provides", {}),
+    )
+    requires = add_required_fields(
+        package["store_front"]["metadata"].get("requires", {}),
+        relations.get("requires", {}),
+    )
+
     grouped_relations = {
-        "provides": [
-            {**provide[1], "key": provide[0]}
-            for provide in list(relations["provides"].items())
-        ],
-        "requires": [
-            {**require[1], "key": require[0]}
-            for require in list(relations["requires"].items())
-        ],
+        "provides": provides,
+        "requires": requires,
     }
 
     return jsonify({"grouped_relations": grouped_relations})
+
+
+def add_required_fields(metadata_relations, relations):
+    processed_relations = [
+        {
+            **relations[key],
+            "key": key,
+            "required": metadata_relations[key].get("required", False),
+        }
+        for key in relations.keys()
+    ]
+    return processed_relations
 
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/resources')
@@ -636,17 +691,28 @@ def details_integrate(entity_name):
 def entity_badge(entity_name):
     package = app.store_api.get_item_details(entity_name, fields=FIELDS)
 
+    channel_request = request.args.get("channel")
+
     if not package["default-release"]:
         abort(404)
+
+    release = package["default-release"]
+
+    if channel_request:
+        for release_channel in package["channel-map"]:
+            channel = release_channel["channel"]
+            if f"{channel['track']}/{channel['risk']}" == channel_request:
+                release = release_channel
+                break
 
     entity_link = request.url_root + entity_name
     right_text = "".join(
         [
-            package["default-release"]["channel"]["track"],
+            release["channel"]["track"],
             "/",
-            package["default-release"]["channel"]["risk"],
+            release["channel"]["risk"],
             " ",
-            package["default-release"]["revision"]["version"],
+            release["revision"]["version"],
         ]
     )
 
@@ -831,7 +897,6 @@ def get_charms_from_bundle(entity_name):
 
 
 @store.route("/")
-def beta_store_index():
+def store_index():
     response = make_response(render_template("store.html"))
-    response.headers["X-Robots-Tag"] = "noindex"
     return response

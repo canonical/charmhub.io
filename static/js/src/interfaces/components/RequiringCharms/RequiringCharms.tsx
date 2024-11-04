@@ -1,4 +1,3 @@
-import React from "react";
 import { Strip, Row, Col } from "@canonical/react-components";
 
 import type { InterfaceData } from "../../types";
