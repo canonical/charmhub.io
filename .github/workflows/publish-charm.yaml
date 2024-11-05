@@ -31,7 +31,7 @@ jobs:
       - name: Pack charm
         run: charmcraft pack -v --project-dir ./charm
 
-      - name: Upload charm
+      - name: Upload charm (only runs on push to main)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           CHARMCRAFT_AUTH: ${{ secrets.CHARMHUB_TOKEN }}
