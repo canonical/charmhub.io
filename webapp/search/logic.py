@@ -13,7 +13,6 @@ url = "https://discourse.charmhub.io"
 docs_id_cache = {
     "olm": {"id": 1087, "tag": "juju"},
     "sdk": {"id": 4449, "tag": "sdk"},
-    "dev": {"id": 6669, "tag": "dev"},
 }
 
 # This stores all the mappings from topic index to the
