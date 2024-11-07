@@ -3,7 +3,8 @@ name: Pack Rock and Publish Image
 on:
   push:
     branches:
-      - main
+      # - main # Uncomment this line to run the workflow on main branch, for now using this to experiment with observability
+      - observability
 
 jobs:
   pack-rock:
