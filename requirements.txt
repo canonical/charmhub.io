@@ -18,5 +18,4 @@ PyGithub==2.2.0
 black==24.3.0
 flake8==6.1.0
 Flask-Caching==2.1.0
-Flask-Testing==0.8.1
 responses==0.22.0

@@ -6,22 +6,6 @@ import responses
 from webapp.app import app
 from webapp.integrations.logic import Interfaces
 
-mock_interface_yaml = """
-name: test_interface
-
-version: 0
-status: published
-
-providers:
-  - name: ptest_provider
-    url: https://www.github.com/canonical/test_provider
-
-requirers:
-  - name: test-requirer
-    url: https://www.github.com/canonical/test_requirer
-
-"""
-
 
 class TestSingleInterface(TestCase):
 
