@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
-    <title>Coverage for webapp/integrations/views.py: 56%</title>
+    <title>Coverage for webapp/integrations/views.py: 68%</title>
     <link rel="icon" sizes="32x32" href="favicon_32.png">
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="jquery.min.js"></script>
@@ -18,13 +18,13 @@
 <div id="header">
     <div class="content">
         <h1>Coverage for <b>webapp/integrations/views.py</b> :
-            <span class="pc_cov">56%</span>
+            <span class="pc_cov">68%</span>
         </h1>
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
         <h2 class="stats">
             63 statements &nbsp;
-            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">35 run</button>
-            <button type="button" class="mis show_mis shortkey_m button_toggle_mis" title="Toggle lines missing">28 missing</button>
+            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">43 run</button>
+            <button type="button" class="mis show_mis shortkey_m button_toggle_mis" title="Toggle lines missing">20 missing</button>
             <button type="button" class="exc show_exc shortkey_x button_toggle_exc" title="Toggle lines excluded">0 excluded</button>
         </h2>
     </div>
@@ -143,20 +143,20 @@
     <p id="t89" class="pln"><span class="n"><a href="#t89">89</a></span><span class="t"><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t90" class="run"><span class="n"><a href="#t90">90</a></span><span class="t"><span class="op">@</span><span class="nam">integrations</span><span class="op">.</span><span class="nam">route</span><span class="op">(</span><span class="str">"/integrations/&lt;interface_name>/&lt;status>.json"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t91" class="run"><span class="n"><a href="#t91">91</a></span><span class="t"><span class="key">def</span> <span class="nam">get_single_interface</span><span class="op">(</span><span class="nam">interface_name</span><span class="op">,</span> <span class="nam">status</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t92" class="mis show_mis"><span class="n"><a href="#t92">92</a></span><span class="t">    <span class="nam">repo_has_interface</span> <span class="op">=</span> <span class="nam">interface_logic</span><span class="op">.</span><span class="nam">repo_has_interface</span><span class="op">(</span><span class="nam">interface_name</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t92" class="run"><span class="n"><a href="#t92">92</a></span><span class="t">    <span class="nam">repo_has_interface</span> <span class="op">=</span> <span class="nam">interface_logic</span><span class="op">.</span><span class="nam">repo_has_interface</span><span class="op">(</span><span class="nam">interface_name</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t93" class="pln"><span class="n"><a href="#t93">93</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t94" class="mis show_mis"><span class="n"><a href="#t94">94</a></span><span class="t">    <span class="nam">api</span> <span class="op">=</span> <span class="nam">app</span><span class="op">.</span><span class="nam">store_api</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t95" class="mis show_mis"><span class="n"><a href="#t95">95</a></span><span class="t">    <span class="nam">other_requirers</span> <span class="op">=</span> <span class="nam">api</span><span class="op">.</span><span class="nam">find</span><span class="op">(</span><span class="nam">requires</span><span class="op">=</span><span class="op">[</span><span class="nam">interface_name</span><span class="op">]</span><span class="op">)</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">"results"</span><span class="op">,</span> <span class="op">[</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t96" class="mis show_mis"><span class="n"><a href="#t96">96</a></span><span class="t">    <span class="nam">other_providers</span> <span class="op">=</span> <span class="nam">api</span><span class="op">.</span><span class="nam">find</span><span class="op">(</span><span class="nam">provides</span><span class="op">=</span><span class="op">[</span><span class="nam">interface_name</span><span class="op">]</span><span class="op">)</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">"results"</span><span class="op">,</span> <span class="op">[</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t94" class="run"><span class="n"><a href="#t94">94</a></span><span class="t">    <span class="nam">api</span> <span class="op">=</span> <span class="nam">app</span><span class="op">.</span><span class="nam">store_api</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t95" class="run"><span class="n"><a href="#t95">95</a></span><span class="t">    <span class="nam">other_requirers</span> <span class="op">=</span> <span class="nam">api</span><span class="op">.</span><span class="nam">find</span><span class="op">(</span><span class="nam">requires</span><span class="op">=</span><span class="op">[</span><span class="nam">interface_name</span><span class="op">]</span><span class="op">)</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">"results"</span><span class="op">,</span> <span class="op">[</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t96" class="run"><span class="n"><a href="#t96">96</a></span><span class="t">    <span class="nam">other_providers</span> <span class="op">=</span> <span class="nam">api</span><span class="op">.</span><span class="nam">find</span><span class="op">(</span><span class="nam">provides</span><span class="op">=</span><span class="op">[</span><span class="nam">interface_name</span><span class="op">]</span><span class="op">)</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">"results"</span><span class="op">,</span> <span class="op">[</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t97" class="pln"><span class="n"><a href="#t97">97</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t98" class="mis show_mis"><span class="n"><a href="#t98">98</a></span><span class="t">    <span class="nam">res</span> <span class="op">=</span> <span class="op">{</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t98" class="run"><span class="n"><a href="#t98">98</a></span><span class="t">    <span class="nam">res</span> <span class="op">=</span> <span class="op">{</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p id="t99" class="pln"><span class="n"><a href="#t99">99</a></span><span class="t">    <span class="com"># check if interface exists in github repo</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t100" class="mis show_mis"><span class="n"><a href="#t100">100</a></span><span class="t">    <span class="key">if</span> <span class="key">not</span> <span class="nam">repo_has_interface</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t101" class="mis show_mis"><span class="n"><a href="#t101">101</a></span><span class="t">        <span class="nam">res</span><span class="op">[</span><span class="str">"other_charms"</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t100" class="run"><span class="n"><a href="#t100">100</a></span><span class="t">    <span class="key">if</span> <span class="key">not</span> <span class="nam">repo_has_interface</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t101" class="run"><span class="n"><a href="#t101">101</a></span><span class="t">        <span class="nam">res</span><span class="op">[</span><span class="str">"other_charms"</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span>&nbsp;</span><span class="r"></span></p>
     <p id="t102" class="pln"><span class="n"><a href="#t102">102</a></span><span class="t">            <span class="str">"providers"</span><span class="op">:</span> <span class="nam">other_providers</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t103" class="pln"><span class="n"><a href="#t103">103</a></span><span class="t">            <span class="str">"requirers"</span><span class="op">:</span> <span class="nam">other_requirers</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t104" class="pln"><span class="n"><a href="#t104">104</a></span><span class="t">        <span class="op">}</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t105" class="mis show_mis"><span class="n"><a href="#t105">105</a></span><span class="t">        <span class="key">return</span> <span class="nam">jsonify</span><span class="op">(</span><span class="nam">res</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t105" class="run"><span class="n"><a href="#t105">105</a></span><span class="t">        <span class="key">return</span> <span class="nam">jsonify</span><span class="op">(</span><span class="nam">res</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t106" class="pln"><span class="n"><a href="#t106">106</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t107" class="mis show_mis"><span class="n"><a href="#t107">107</a></span><span class="t">    <span class="nam">interface</span> <span class="op">=</span> <span class="nam">interface_logic</span><span class="op">.</span><span class="nam">get_interface_from_path</span><span class="op">(</span><span class="nam">interface_name</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t108" class="pln"><span class="n"><a href="#t108">108</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -196,7 +196,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.5</a>,
-            created at 2024-10-13 22:07 +0000
+            created at 2024-11-08 22:02 +0000
         </p>
     </div>
 </div>
