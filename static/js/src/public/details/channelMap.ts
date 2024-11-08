@@ -139,7 +139,7 @@ const init = (packageName: string, channelMapButton: HTMLElement) => {
     supportedBases.forEach((el) => {
       const matchesBase =
         el?.getAttribute("data-base-revision-supported") === "True" ||
-        baseValue === "any";
+        (baseValue === "any" && archValue === "any");
 
       if (matchesBase) {
         el.classList.remove("u-hide");
