@@ -7,7 +7,7 @@
     "watch-js": "webpack --watch --mode development",
     "watch-scss": "watch -p 'static/sass/**/*.scss' -c 'yarn run build-css'",
     "build": "yarn run build-css && yarn run build-js",
-    "build-css": "sass static/sass/styles.scss:static/css/styles.css static/sass/styles-embedded.scss:static/css/styles-embedded.css --load-path=node_modules --style=compressed && postcss --map false --use autoprefixer --replace 'static/css/**/*.css'",
+    "build-css": "sass static/sass/styles.scss:static/css/styles.css static/sass/styles-embedded.scss:static/css/styles-embedded.css --load-path=node_modules --style=compressed --quiet-deps --silence-deprecation=mixed-decls && postcss --map false --use autoprefixer --replace 'static/css/**/*.css' ",
     "build-js": "webpack",
     "format-python": "black --line-length 79 webapp",
     "lint-python": "flake8 --extend-ignore=E203 webapp tests && black --check --line-length 79 webapp tests",
