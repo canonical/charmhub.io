@@ -1,5 +1,6 @@
 module.exports = {
   docs: "./static/js/src/public/docs/index.js",
+  "global-nav": "./static/js/src/base/global-nav.ts",
   "docs-side-nav": "./static/js/src/base/docs-side-nav.ts",
   base: "./static/js/src/base/base.js",
   details: "./static/js/src/public/details/index.ts",
