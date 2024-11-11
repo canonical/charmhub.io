@@ -12,6 +12,7 @@
     "format-python": "black --line-length 79 webapp",
     "lint-python": "flake8 --extend-ignore=E203 webapp tests && black --check --line-length 79 webapp tests",
     "lint-js": "eslint --ext=.jsx,.js,.tsx,.ts  static/js/src/",
+    "lint-a11y": "eslint -c eslint-a11y.config.js static/js --ext .js,.jsx,.ts,.tsx",
     "lint-scss": "stylelint static/**/*.scss",
     "serve": "./entrypoint 0.0.0.0:${PORT}",
     "start": "yarn run build && concurrently --raw 'yarn run watch-scss' 'yarn run watch-js' 'yarn run serve'",
