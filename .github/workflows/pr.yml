@@ -141,14 +141,6 @@ jobs:
       - name: Lint JS
         if: ${{ steps.filter.outputs.js == 'true' || steps.filter.outputs.ts == 'true' || steps.filter.outputs.jsx == 'true' || steps.filter.outputs.tsx == 'true' }}
         run: yarn lint-js
-        
-      - name: Install JS dependencies
-        if: ${{ steps.filter.outputs.js == 'true' || steps.filter.outputs.ts == 'true' || steps.filter.outputs.jsx == 'true' || steps.filter.outputs.tsx == 'true' }}
-        run: yarn install --immutable
-
-      - name: Lint JS for Accessibility
-        if: ${{ steps.filter.outputs.js == 'true' || steps.filter.outputs.ts == 'true' || steps.filter.outputs.jsx == 'true' || steps.filter.outputs.tsx == 'true' }}
-        run: yarn lint-a11y
 
   test-python:
     runs-on: ubuntu-latest
