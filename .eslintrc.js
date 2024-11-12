@@ -1,6 +1,6 @@
 module.exports = {
   parser: "@typescript-eslint/parser",
-  plugins: ["jest", "react", "@typescript-eslint"],
+  plugins: ["jest", "react", "@typescript-eslint", "jsx-a11y"],
   globals: {
     ga: "readonly",
   },
@@ -16,6 +16,7 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
+    "plugin:jsx-a11y/recommended",
   ],
   parserOptions: {
     sourceType: "module",
@@ -38,4 +39,20 @@ module.exports = {
       version: "detect",
     },
   },
+  overrides: [
+    {
+      files: ["*.js", "*.jsx", "*.ts", "*.tsx"],
+      rules: {
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/ban-types": "off",
+        "prefer-const": "off",
+        "react/no-children-prop": "off",
+        "no-sparse-arrays": "off",
+      },
+    },
+  ],
 };
