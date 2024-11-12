@@ -6,13 +6,17 @@ import Packages from "../Packages";
 import "@testing-library/jest-dom";
 
 jest.mock("@canonical/store-components", () => ({
-  CharmCard: ({ data }: { data: any }) => <div>{data.name}</div>,
-  BundleCard: ({ data }: { data: any }) => <div>{data.name}</div>,
+  CharmCard: ({ data }: { data: { name: string } }) => <div>{data.name}</div>,
+  BundleCard: ({ data }: { data: { name: string } }) => <div>{data.name}</div>,
   Filters: ({
     setSelectedCategories,
     setSelectedPlatform,
     setSelectedPackageType,
-  }: any) => (
+  }: {
+    setSelectedCategories: (categories: string[]) => void;
+    setSelectedPlatform: (platform: string) => void;
+    setSelectedPackageType: (packageType: string) => void;
+  }) => (
     <div>
       <button onClick={() => setSelectedCategories(["category1"])}>
         Set Categories
@@ -44,7 +48,7 @@ const renderPackages = () => {
 
 describe("Packages component", () => {
   beforeEach(() => {
-    jest.clearAllMocks();    
+    jest.clearAllMocks();
   });
 
   test("renders Banner and Topics components", async () => {
@@ -63,7 +67,7 @@ describe("Packages component", () => {
   });
 
   test("renders no packages message when there are no results", async () => {
-    (global as any).fetch = jest.fn(() =>
+    (global.fetch as jest.Mock) = jest.fn(() =>
       Promise.resolve({
         json: () =>
           Promise.resolve({

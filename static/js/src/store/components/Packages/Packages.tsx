@@ -20,6 +20,8 @@ import Topics from "../Topics";
 
 import platforms from "../../data/platforms";
 import packageTypes from "../../data/package-types";
+import { Category } from "../../types";
+import { Package, Publisher } from "../../../publisher-admin/types";
 
 function Packages() {
   const ITEMS_PER_PAGE = 12;
@@ -27,7 +29,7 @@ function Packages() {
   const getData = async () => {
     const response = await fetch(`/store.json${search}`);
     const data = await response.json();
-    const packagesWithId = data.packages.map((item: any) => {
+    const packagesWithId = data.packages.map((item: string[]) => {
       return {
         ...item,
         id: crypto.randomUUID(),
@@ -48,6 +50,8 @@ function Packages() {
   const [hideFilters, setHideFilters] = useState(true);
   const currentPage = searchParams.get("page") || "1";
   const { data, status, refetch, isFetching } = useQuery("data", getData);
+  console.log(data);
+  console.log(typeof data);
 
   const topicsQuery = searchParams ? searchParams.get("categories") : null;
 
@@ -110,7 +114,7 @@ function Packages() {
                   selectedCategories={
                     searchParams.get("categories")?.split(",") || []
                   }
-                  setSelectedCategories={(items: any) => {
+                  setSelectedCategories={(items: string[]) => {
                     if (items.length > 0) {
                       searchParams.set("categories", items.join(","));
                     } else {
@@ -182,19 +186,27 @@ function Packages() {
               {!isFetching &&
                 status === "success" &&
                 data.packages.length > 0 &&
-                data.packages.map((packageData: any) => (
-                  <Col
-                    size={3}
-                    style={{ marginBottom: "1.5rem" }}
-                    key={packageData.id}
-                  >
-                    {packageData.package.type === "bundle" ? (
-                      <BundleCard data={packageData} />
-                    ) : (
-                      <CharmCard data={packageData} />
-                    )}
-                  </Col>
-                ))}
+                data.packages.map(
+                  (packageData: {
+                    categories: Category[];
+                    package: Package;
+                    publisher: Publisher;
+                    ratings: { count: string; value: string };
+                    id: string;
+                  }) => (
+                    <Col
+                      size={3}
+                      style={{ marginBottom: "1.5rem" }}
+                      key={packageData.id}
+                    >
+                      {packageData.package.type === "bundle" ? (
+                        <BundleCard data={packageData} />
+                      ) : (
+                        <CharmCard data={packageData} />
+                      )}
+                    </Col>
+                  )
+                )}
 
               {status === "success" && data.packages.length === 0 && (
                 <h1 className="p-heading--2">No packages match this filter</h1>

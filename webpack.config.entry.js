@@ -15,7 +15,7 @@ module.exports = {
   "navigation-events": "./static/js/src/public/navigation-events.ts",
   "icon-validator": "./static/js/src/public/icon-validator/index.tsx",
   interfaces: "./static/js/src/interfaces/index.tsx",
-  store: "./static/js/store/index.tsx",
+  store: "./static/js/src/store/index.tsx",
   publisher: "./static/js/src/publisher-admin/index.tsx",
   search: "./static/js/src/search/App.tsx",
 };

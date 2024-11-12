@@ -4,7 +4,7 @@ import Topics from "../Topics";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "@testing-library/jest-dom";
 
-(global as any).fetch = jest.fn(() =>
+(global.fetch as jest.Mock) = jest.fn(() =>
   Promise.resolve({
     json: () => Promise.resolve({ topics: [] }),
   })
@@ -64,7 +64,7 @@ describe("Topics Component", () => {
       },
     ];
 
-    (global as any).fetch = jest.fn(() =>
+    (global.fetch as unknown as jest.Mock) = jest.fn(() =>
       Promise.resolve({
         json: () => Promise.resolve({ topics: mockTopics }),
       })
@@ -80,7 +80,7 @@ describe("Topics Component", () => {
   });
 
   test("renders empty state when no topics are available", async () => {
-    (global as any).fetch = jest.fn(() =>
+    (global.fetch as jest.Mock) = jest.fn(() =>
       Promise.resolve({
         json: () => Promise.resolve({ topics: [] }),
       })
