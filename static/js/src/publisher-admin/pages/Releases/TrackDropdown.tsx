@@ -29,10 +29,16 @@ export function TrackDropdown({
         <div
           className="dropdown-toggle"
           onClick={() => setIsOpen(!isOpen)}
-          role="listbox"
+          role="button"
           aria-haspopup="true"
           id="track-dropdown"
+          tabIndex={0}
           aria-expanded={isOpen}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              setIsOpen(!isOpen);
+            }
+          }}
         >
           {selectedTrack}
           <i className="p-icon--chevron-down u-float-right"></i>
@@ -45,9 +51,17 @@ export function TrackDropdown({
                   key={index}
                   role="option"
                   className="dropdown-item"
+                  tabIndex={0}
+                  aria-selected={option === selectedTrack}
                   onClick={() => {
                     setSelectedTrack(option);
                     setIsOpen(false);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      setSelectedTrack(option);
+                      setIsOpen(false);
+                    }
                   }}
                 >
                   <div>

@@ -28,9 +28,9 @@ function Publicise() {
             aria-controls="drawer"
           ></div>
           <nav className="p-side-navigation__drawer">
-            <div className="p-side-navigation__drawer-header">
+            <div className="p-side-navigation__drawer-header" id="drawer">
               <a
-                href="#"
+                href="#drawer"
                 className="p-side-navigation__toggle--in-drawer"
                 aria-controls="drawer"
               >

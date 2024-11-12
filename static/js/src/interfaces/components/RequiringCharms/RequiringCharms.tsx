@@ -23,6 +23,7 @@ function RequiringCharms({ interfaceData, isCommunity }: Props) {
                     height={170}
                     style={{ width: "100%" }}
                     src={`/${requirer.name}/embedded/interface`}
+                    title={`Interface for ${requirer.name}`}
                   />
                 </div>
               </Col>

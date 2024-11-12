@@ -208,6 +208,14 @@ function Collaboration() {
         onClick={() => {
           setShowSidePanel(false);
         }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === "Escape") {
+            setShowSidePanel(false);
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        aria-label="Close side panel"
       ></div>
       <aside className={`l-aside ${!showSidePanel && "is-collapsed"}`}>
         <InviteCollaborator
