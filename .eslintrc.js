@@ -1,6 +1,6 @@
 module.exports = {
   parser: "@typescript-eslint/parser",
-  plugins: ["jest", "react", "@typescript-eslint"],
+  plugins: ["jest", "react", "@typescript-eslint", "jsx-a11y"],
   globals: {
     ga: "readonly",
   },
@@ -16,6 +16,7 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
+    "plugin:jsx-a11y/recommended",
   ],
   parserOptions: {
     sourceType: "module",

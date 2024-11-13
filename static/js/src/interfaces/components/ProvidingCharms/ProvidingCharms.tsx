@@ -23,6 +23,7 @@ function ProvidingCharms({ interfaceData, isCommunity }: Props) {
                     height={170}
                     style={{ width: "100%" }}
                     src={`/${provider.name}/embedded/interface`}
+                    title={`Interface for ${provider.name}`}
                   />
                 </div>
               </Col>

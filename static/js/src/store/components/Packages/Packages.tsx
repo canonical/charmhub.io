@@ -85,8 +85,15 @@ function Packages() {
               className={`p-filter-panel-overlay u-hide--large ${
                 hideFilters ? "u-hide--small u-hide--medium" : ""
               }`}
+              role="button"
+              tabIndex={0}
               onClick={() => {
                 setHideFilters(true);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  setHideFilters(true);
+                }
               }}
             ></div>
 

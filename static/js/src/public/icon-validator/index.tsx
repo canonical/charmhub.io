@@ -142,7 +142,7 @@ export default function App() {
                 <>
                   <Row>
                     <Col size={2}>
-                      <img src={icon} style={{ maxWidth: "100%" }} />
+                      <img src={icon} alt="" style={{ maxWidth: "100%" }} />
                     </Col>
                     <Col size={6}>
                       <p>
@@ -229,7 +229,11 @@ export default function App() {
             <Row>
               <Col size={8}>
                 <div className="p-media-object--large">
-                  <img src={icon} className="p-media-object__image is-round" />
+                  <img
+                    src={icon}
+                    alt="Your Charm Icon"
+                    className="p-media-object__image is-round"
+                  />
                   <div className="p-media-object__details">
                     <h1 className="p-media-object__title">Your Charm</h1>
                     <div className="p-media-object__content u-no-margin--bottom">

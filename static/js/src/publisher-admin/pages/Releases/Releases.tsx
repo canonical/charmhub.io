@@ -177,6 +177,14 @@ export default function Releases() {
         <div
           className="l-aside__overlay"
           onClick={() => setShowSidePanel(false)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              setShowSidePanel(false);
+            }
+          }}
+          aria-label="Close side panel"
         />
       )}
       <AppAside className={`${!showSidePanel && "is-collapsed"}`}>
