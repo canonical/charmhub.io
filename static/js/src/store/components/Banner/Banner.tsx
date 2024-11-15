@@ -5,10 +5,9 @@ import { Strip, Row, Col } from "@canonical/react-components";
 type Props = {
   searchRef: RefObject<HTMLInputElement>;
   searchSummaryRef: RefObject<HTMLDivElement>;
-  disabled: boolean;
 };
 
-function Banner({ searchRef, searchSummaryRef, disabled }: Props) {
+function Banner({ searchRef, searchSummaryRef }: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   return (
@@ -45,7 +44,6 @@ function Banner({ searchRef, searchSummaryRef, disabled }: Props) {
               placeholder="Search Charmhub"
               defaultValue={searchParams.get("q") || ""}
               ref={searchRef}
-              disabled={disabled}
             />
             <button
               type="reset"
@@ -57,11 +55,7 @@ function Banner({ searchRef, searchSummaryRef, disabled }: Props) {
             >
               <i className="p-icon--close">Close</i>
             </button>
-            <button
-              type="submit"
-              className="p-search-box__button"
-              disabled={disabled}
-            >
+            <button type="submit" className="p-search-box__button">
               <i className="p-icon--search">Search</i>
             </button>
           </form>

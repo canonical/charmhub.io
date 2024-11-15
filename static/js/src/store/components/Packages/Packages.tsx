@@ -49,7 +49,10 @@ function Packages() {
 
   const [hideFilters, setHideFilters] = useState(true);
   const currentPage = searchParams.get("page") || "1";
-  const { data, status, refetch, isFetching } = useQuery("data", getData);
+  const { data, status, refetch, isFetching } = useQuery(
+    ["data", search],
+    getData
+  );
 
   const topicsQuery = searchParams ? searchParams.get("categories") : null;
 
@@ -63,15 +66,10 @@ function Packages() {
   const firstResultNumber = (parseInt(currentPage) - 1) * ITEMS_PER_PAGE + 1;
   const lastResultNumber =
     (parseInt(currentPage) - 1) * ITEMS_PER_PAGE + data?.packages.length;
-  const isLoaded = status === "success" && !isFetching;
 
   return (
     <>
-      <Banner
-        searchRef={searchRef}
-        searchSummaryRef={searchSummaryRef}
-        disabled={!isLoaded}
-      />
+      <Banner searchRef={searchRef} searchSummaryRef={searchSummaryRef} />
       <Strip>
         <Row>
           <Col size={3}>
