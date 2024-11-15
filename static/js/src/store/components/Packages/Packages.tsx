@@ -63,10 +63,15 @@ function Packages() {
   const firstResultNumber = (parseInt(currentPage) - 1) * ITEMS_PER_PAGE + 1;
   const lastResultNumber =
     (parseInt(currentPage) - 1) * ITEMS_PER_PAGE + data?.packages.length;
+  const isLoaded = status === "success" && !isFetching;
 
   return (
     <>
-      <Banner searchRef={searchRef} searchSummaryRef={searchSummaryRef} />
+      <Banner
+        searchRef={searchRef}
+        searchSummaryRef={searchSummaryRef}
+        disabled={!isLoaded}
+      />
       <Strip>
         <Row>
           <Col size={3}>

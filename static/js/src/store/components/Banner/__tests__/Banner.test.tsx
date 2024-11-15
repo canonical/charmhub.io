@@ -36,6 +36,7 @@ describe("Banner Component", () => {
       <Banner
         searchRef={mockSearchRef}
         searchSummaryRef={mockSearchSummaryRef}
+        disabled={false}
       />
     );
 
@@ -54,6 +55,7 @@ describe("Banner Component", () => {
       <Banner
         searchRef={mockSearchRef}
         searchSummaryRef={mockSearchSummaryRef}
+        disabled={false}
       />
     );
 
@@ -77,6 +79,7 @@ describe("Banner Component", () => {
       <Banner
         searchRef={mockSearchRef}
         searchSummaryRef={mockSearchSummaryRef}
+        disabled={false}
       />
     );
 
@@ -90,6 +93,7 @@ describe("Banner Component", () => {
       <Banner
         searchRef={mockSearchRef}
         searchSummaryRef={mockSearchSummaryRef}
+        disabled={false}
       />
     );
 
@@ -113,6 +117,7 @@ describe("Banner Component", () => {
       <Banner
         searchRef={mockSearchRef}
         searchSummaryRef={mockSearchSummaryRef}
+        disabled={false}
       />
     );
 
@@ -127,6 +132,7 @@ describe("Banner Component", () => {
       <Banner
         searchRef={mockSearchRef}
         searchSummaryRef={mockSearchSummaryRef}
+        disabled={false}
       />
     );
 
@@ -139,5 +145,21 @@ describe("Banner Component", () => {
     expect(mockSearchSummaryRef.current?.scrollIntoView).toHaveBeenCalledWith({
       behavior: "smooth",
     });
+  });
+
+  test("should disable search functionality while loading charms", () => {
+    render(
+      <Banner
+        searchRef={mockSearchRef}
+        searchSummaryRef={mockSearchSummaryRef}
+        disabled={true}
+      />
+    );
+
+    const searchInput = screen.getByPlaceholderText("Search Charmhub");
+    const searchButton = screen.getByRole("button", { name: /Search/i });
+
+    expect(searchInput).toBeDisabled();
+    expect(searchButton).toBeDisabled();
   });
 });
