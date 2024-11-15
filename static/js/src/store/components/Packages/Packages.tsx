@@ -50,8 +50,6 @@ function Packages() {
   const [hideFilters, setHideFilters] = useState(true);
   const currentPage = searchParams.get("page") || "1";
   const { data, status, refetch, isFetching } = useQuery("data", getData);
-  console.log(data);
-  console.log(typeof data);
 
   const topicsQuery = searchParams ? searchParams.get("categories") : null;
 
