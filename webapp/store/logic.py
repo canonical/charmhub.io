@@ -166,7 +166,8 @@ def convert_channel_maps(channel_map):
             )
 
             # Collect all the bases available across all releases
-            result[track][risk]["all_bases"] = sorted(
+
+            base_names = sorted(
                 list(
                     set(
                         base
@@ -176,6 +177,23 @@ def convert_channel_maps(channel_map):
                 ),
                 reverse=True,
             )
+
+            result[track][risk]["all_bases"] = [
+                {
+                    "name": base,
+                    "architectures": list(
+                        set(
+                            arch
+                            for release in result[track][risk][
+                                "releases"
+                            ].values()
+                            if base in release["bases"]
+                            for arch in release["architectures"]
+                        )
+                    ),
+                }
+                for base in base_names
+            ]
 
             result[track][risk]["latest"] = result[track][risk]["releases"][
                 max(result[track][risk]["releases"].keys())

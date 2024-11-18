@@ -27,7 +27,7 @@ const init = (packageName: string, channelMapButton: HTMLElement) => {
   ) as NodeListOf<Element>;
 
   const supportedBases = channelMap?.querySelectorAll(
-    "[data-base-revision-supported]"
+    "[data-base-supported-archs]"
   ) as NodeListOf<Element>;
 
   const selectChannel = (track: string, channel: string) => {
@@ -138,8 +138,8 @@ const init = (packageName: string, channelMapButton: HTMLElement) => {
 
     supportedBases.forEach((el) => {
       const matchesBase =
-        el?.getAttribute("data-base-revision-supported") === "True" ||
-        (baseValue === "any" && archValue === "any");
+        el?.getAttribute("data-base-supported-archs")?.includes(archValue) ||
+        archValue === "any";
 
       if (matchesBase) {
         el.classList.remove("u-hide");
