@@ -181,14 +181,16 @@ def convert_channel_maps(channel_map):
             result[track][risk]["all_bases"] = [
                 {
                     "name": base,
-                    "architectures": list(
-                        set(
-                            arch
-                            for release in result[track][risk][
-                                "releases"
-                            ].values()
-                            if base in release["bases"]
-                            for arch in release["architectures"]
+                    "architectures": sorted(
+                        list(
+                            set(
+                                arch
+                                for release in result[track][risk][
+                                    "releases"
+                                ].values()
+                                if base in release["bases"]
+                                for arch in release["architectures"]
+                            )
                         )
                     ),
                 }
