@@ -26,6 +26,10 @@ const init = (packageName: string, channelMapButton: HTMLElement) => {
     "[data-channel-map-channel]"
   ) as NodeListOf<Element>;
 
+  const supportedBases = channelMap?.querySelectorAll(
+    "[data-base-supported-archs]"
+  ) as NodeListOf<Element>;
+
   const selectChannel = (track: string, channel: string) => {
     const page = window.location.pathname;
 
@@ -126,6 +130,18 @@ const init = (packageName: string, channelMapButton: HTMLElement) => {
         baseValue === "any";
 
       if (matchesArch && matchesBase) {
+        el.classList.remove("u-hide");
+      } else {
+        el.classList.add("u-hide");
+      }
+    });
+
+    supportedBases.forEach((el) => {
+      const matchesBase =
+        el?.getAttribute("data-base-supported-archs")?.includes(archValue) ||
+        archValue === "any";
+
+      if (matchesBase) {
         el.classList.remove("u-hide");
       } else {
         el.classList.add("u-hide");

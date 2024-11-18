@@ -104,9 +104,9 @@
             </div>
             <div>
               {% for base in bases | sort(reverse=True) %}
-                {% if loop.index <= 8 %}
+                {% if loop.index <= 9 %}
                   <span class="series-tag">{{ base }}</span>
-                {% elif loop.index == 9 %}
+                {% elif loop.index == 10 %}
                   <span class="series-tag">+{{ loop.revindex }}</span>
                 {% endif %}
               {% endfor %}

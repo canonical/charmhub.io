@@ -88,7 +88,28 @@ converted_sample_channel_map = OrderedDict(
                     (
                         "stable",
                         {
-                            "all_bases": ["Ubuntu 14.04", "Ubuntu 12.04"],
+                            "all_bases": [
+                                {
+                                    "name": "Ubuntu 14.04",
+                                    "architectures": [
+                                        "amd64",
+                                        "arm64",
+                                        "ppc64el",
+                                        "riscv64",
+                                        "s390x",
+                                    ],
+                                },
+                                {
+                                    "name": "Ubuntu 12.04",
+                                    "architectures": [
+                                        "amd64",
+                                        "arm64",
+                                        "ppc64el",
+                                        "riscv64",
+                                        "s390x",
+                                    ],
+                                },
+                            ],
                             "latest": {
                                 "architectures": {
                                     "amd64",
@@ -252,7 +273,16 @@ converted_sample_channel_map = OrderedDict(
                     (
                         "stable",
                         {
-                            "all_bases": ["Ubuntu 20.04", "Ubuntu 18.04"],
+                            "all_bases": [
+                                {
+                                    "name": "Ubuntu 20.04",
+                                    "architectures": ["amd"],
+                                },
+                                {
+                                    "name": "Ubuntu 18.04",
+                                    "architectures": ["amd"],
+                                },
+                            ],
                             "latest": {
                                 "architectures": {"amd"},
                                 "bases": ["Ubuntu 20.04", "Ubuntu 18.04"],
