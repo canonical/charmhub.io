@@ -32,8 +32,8 @@ jest.mock("@canonical/store-components", () => ({
   LoadingCard: () => <div>Loading...</div>,
 }));
 
-jest.mock("../../Banner", () => () => <div>Banner</div>);
-jest.mock("../../Topics", () => () => <div>Topics</div>);
+jest.mock("../../../components/Banner", () => () => <div>Banner</div>);
+jest.mock("../../../components/Topics", () => () => <div>Topics</div>);
 
 const renderPackages = () => {
   const queryClient = new QueryClient();
@@ -83,7 +83,7 @@ describe("Packages component", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText("No packages match this filter")
+        screen.getByText("Why not trying widening your search?")
       ).toBeInTheDocument();
     });
   });
