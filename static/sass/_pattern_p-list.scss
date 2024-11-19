@@ -34,13 +34,6 @@
     }
   }
 
-  .p-list {
-    // Overide the default vanilla $color-accent for ticked icon
-    .p-list__item.is-ticked {
-      @include vf-icon-success($color-dark);
-    }
-  }
-
   // Overide the default vanilla padding for p-list--divided
   .p-list--divided.has-padding {
     .p-list__item {
