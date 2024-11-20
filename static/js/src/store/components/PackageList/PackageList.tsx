@@ -33,7 +33,6 @@ export const PackageList = ({
   const topicsQuery = searchParams ? searchParams.get("categories") : null;
 
   const searchRef = useRef<HTMLInputElement | null>(null);
-  const searchSummaryRef = useRef<HTMLDivElement>(null);
 
   const currentPage = searchParams.get("page") || "1";
   const firstResultNumber = (parseInt(currentPage) - 1) * ITEMS_PER_PAGE + 1;
@@ -53,7 +52,7 @@ export const PackageList = ({
 
   return (
     <>
-      <Banner searchRef={searchRef} searchSummaryRef={searchSummaryRef} />
+      <Banner searchRef={searchRef} />
       <Strip>
         <Row>
           <Col size={3}>
@@ -62,7 +61,7 @@ export const PackageList = ({
           <Col size={9}>
             <Topics topicsQuery={topicsQuery} />
             {data && (
-              <div className="u-fixed-width" ref={searchSummaryRef}>
+              <div className="u-fixed-width">
                 {searchParams.get("q") ? (
                   <p>
                     Showing {currentPage === "1" ? "1" : firstResultNumber} to{" "}
