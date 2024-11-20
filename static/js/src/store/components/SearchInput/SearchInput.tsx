@@ -4,10 +4,9 @@ import { useSearchParams } from "react-router-dom";
 
 type Props = {
   searchRef: RefObject<HTMLInputElement>;
-  searchSummaryRef?: RefObject<HTMLDivElement>;
 };
 
-export const SearchInput = ({ searchRef, searchSummaryRef }: Props) => {
+export const SearchInput = ({ searchRef }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const onSearch = (event: React.FormEvent<HTMLFormElement>) => {
@@ -17,12 +16,6 @@ export const SearchInput = ({ searchRef, searchSummaryRef }: Props) => {
       searchParams.delete("page");
       searchParams.set("q", searchRef.current.value);
       setSearchParams(searchParams);
-    }
-
-    if (searchSummaryRef && searchSummaryRef.current) {
-      searchSummaryRef.current.scrollIntoView({
-        behavior: "smooth",
-      });
     }
   };
 
