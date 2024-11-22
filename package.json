@@ -29,7 +29,7 @@
     "@canonical/cookie-policy": "3.6.4",
     "@canonical/global-nav": "3.6.4",
     "@canonical/react-components": "1.7.1",
-    "@canonical/store-components": "0.51.0",
+    "@canonical/store-components": "0.52.0",
     "@sentry/react": "7.113.0",
     "@testing-library/dom": "10.4.0",
     "@testing-library/jest-dom": "6.4.2",
