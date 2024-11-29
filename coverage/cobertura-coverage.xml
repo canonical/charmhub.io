@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="1938" lines-covered="1293" line-rate="0.6670999999999999" branches-valid="1231" branches-covered="702" branch-rate="0.5702" timestamp="1732312910866" complexity="0" version="0.1">
+<coverage lines-valid="1938" lines-covered="1293" line-rate="0.6670999999999999" branches-valid="1231" branches-covered="702" branch-rate="0.5702" timestamp="1732917703816" complexity="0" version="0.1">
   <sources>
     <source>/home/runner/work/charmhub.io/charmhub.io</source>
   </sources>
