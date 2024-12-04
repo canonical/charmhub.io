@@ -30,3 +30,41 @@
     {% endfor %}
   </ul>
 {% endmacro %}
+
+{% macro render_maintainer(maintainer) %}
+  {% if ' <' in maintainer and maintainer.endswith('>') %}
+    {% set name = maintainer.split(' <')[0] %}
+    {% set email = maintainer.split(' <')[1].rstrip('>') %}
+    <a href="mailto:{{ email }}">
+      <i class="p-icon--user"></i>&nbsp;&nbsp;{{ name }}
+    </a>
+  {% elif maintainer is string and maintainer.find('<') != -1 and maintainer.find('>') != -1 %}
+    {% set name = maintainer[:maintainer.find('<')].strip() %}
+    {% set email = maintainer[maintainer.find('<') + 1:maintainer.find('>')].strip() %}
+    <a href="mailto:{{ email }}">
+      <i class="p-icon--user"></i>&nbsp;&nbsp;{{ name }}
+    </a>
+  {% else %}
+    {% if 'matrix.to' in maintainer %}
+      <a href="{{ maintainer }}">
+        <i class="p-icon--user"></i>&nbsp;&nbsp;Matrix Channel
+      </a>
+    {% elif maintainer.startswith('mailto:') %}
+      {% set email = maintainer.split('mailto:')[1] %}
+      <a href="{{ maintainer }}">
+        <i class="p-icon--user"></i>&nbsp;&nbsp;{{ email }}
+      </a>
+    {% elif 'launchpad.net/~' in maintainer %}
+      {% set launchpad_url = maintainer if maintainer.startswith('http') else 'https://' + maintainer %}
+      <a href="{{ launchpad_url }}">
+        <i class="p-icon--user"></i>&nbsp;&nbsp;Launchpad Team
+      </a>
+    {% else %}
+      {% set name = maintainer %}
+      {% set email = maintainer %}
+      <a href="mailto:{{ email }}">
+        <i class="p-icon--user"></i>&nbsp;&nbsp;{{ name }}
+      </a>
+    {% endif %}
+  {% endif %}
+{% endmacro %}
