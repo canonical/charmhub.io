@@ -1102,10 +1102,10 @@
   dependencies:
     statuses "^2.0.1"
 
-"@canonical/cookie-policy@3.6.4":
-  version "3.6.4"
-  resolved "https://registry.npmjs.org/@canonical/cookie-policy/-/cookie-policy-3.6.4.tgz"
-  integrity sha512-kfwamTpAaBhtH5TzlMb8wE814a8lIbONUuSYnS7VPiHDfcdmw4NoBPNpldmNY1j3CAT5vMKOx5kulRTWpEXpag==
+"@canonical/cookie-policy@3.6.5":
+  version "3.6.5"
+  resolved "https://registry.yarnpkg.com/@canonical/cookie-policy/-/cookie-policy-3.6.5.tgz#50d82df6da2970b6b5d78d066dd94fcc1317e591"
+  integrity sha512-CQJKSkuLXhSumkIIw4YPSjR7k9561hZ3EEdMPQTkAVTxXURhm3WzJm/uyrvcAuU/a//jzWa8ScltCaHFBdACew==
 
 "@canonical/global-nav@3.6.4":
   version "3.6.4"
@@ -1131,10 +1131,10 @@
     react-table "7.8.0"
     react-useportal "1.0.19"
 
-"@canonical/react-components@1.7.1":
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/@canonical/react-components/-/react-components-1.7.1.tgz#5202774abac6d858896a857cd24ae3746f7fcabb"
-  integrity sha512-ekd7tE+yiABdFikTyqr7n6Rwggo02b2tEvnNvEtY01S56qRBnhJFilDgebe8nZX/A/1ukzs0PYOzi2kD8SwIKA==
+"@canonical/react-components@1.7.2":
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/@canonical/react-components/-/react-components-1.7.2.tgz#545323385fcf9aced5c22e3b59d39e62cf6580c2"
+  integrity sha512-w2eTePgJ/xH48MPeIaM1YRsUSPSzcD2fq2nGS3D7IiW68MrLl0rZGx5UQGpvICKLwUUQoGktryS68ns3h4QuVg==
   dependencies:
     "@types/jest" "29.5.12"
     "@types/node" "20.16.3"
@@ -8698,10 +8698,10 @@ v8-to-istanbul@^9.0.1:
     "@types/istanbul-lib-coverage" "^2.0.1"
     convert-source-map "^2.0.0"
 
-vanilla-framework@4.18.3:
-  version "4.18.3"
-  resolved "https://registry.yarnpkg.com/vanilla-framework/-/vanilla-framework-4.18.3.tgz#8b7e3cc164eab90c540880fd7b87fa8dc91ff9e1"
-  integrity sha512-WsOgD/iI27de80cMS9IYFq1X4nbsEOFfqUmTT7V57k5C20WHwshUA0ocw4R21ThN+A7amh4+c7i0mtcr9a/+uQ==
+vanilla-framework@4.18.4:
+  version "4.18.4"
+  resolved "https://registry.yarnpkg.com/vanilla-framework/-/vanilla-framework-4.18.4.tgz#8f740cd369d9a61d1cc3c34d3119660db4030e4a"
+  integrity sha512-g5jotlb6ENcK1+9hF3QsP5y8hGIXkgEdwjnDGTMEJ3vmtmwSJNa3KWp0QaFBE59nIZq71VGxTbYh+GI+9dzlLQ==
 
 vanilla-framework@4.9.0:
   version "4.9.0"
