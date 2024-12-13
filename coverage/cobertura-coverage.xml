@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="1938" lines-covered="1293" line-rate="0.6670999999999999" branches-valid="1231" branches-covered="702" branch-rate="0.5702" timestamp="1733522513051" complexity="0" version="0.1">
+<coverage lines-valid="1941" lines-covered="1294" line-rate="0.6666" branches-valid="1235" branches-covered="704" branch-rate="0.57" timestamp="1734127307745" complexity="0" version="0.1">
   <sources>
     <source>/home/runner/work/charmhub.io/charmhub.io</source>
   </sources>
@@ -522,18 +522,31 @@
         </class>
       </classes>
     </package>
-    <package name="interfaces.components.InterfaceDetailsNav" line-rate="1" branch-rate="1">
+    <package name="interfaces.components.InterfaceDetailsNav" line-rate="0.5" branch-rate="0.6666">
       <classes>
-        <class name="InterfaceDetailsNav.tsx" filename="static/js/src/interfaces/components/InterfaceDetailsNav/InterfaceDetailsNav.tsx" line-rate="1" branch-rate="1">
+        <class name="InterfaceDetailsNav.tsx" filename="static/js/src/interfaces/components/InterfaceDetailsNav/InterfaceDetailsNav.tsx" line-rate="0.5" branch-rate="0.6666">
           <methods>
             <method name="InterfaceDetailsNav" hits="3" signature="()V">
               <lines>
-                <line number="5" hits="3"/>
+                <line number="7" hits="3"/>
+              </lines>
+            </method>
+            <method name="(anonymous_1)" hits="0" signature="()V">
+              <lines>
+                <line number="18" hits="0"/>
+              </lines>
+            </method>
+            <method name="(anonymous_2)" hits="0" signature="()V">
+              <lines>
+                <line number="30" hits="0"/>
               </lines>
             </method>
           </methods>
           <lines>
-            <line number="6" hits="3" branch="false"/>
+            <line number="8" hits="3" branch="false"/>
+            <line number="9" hits="3" branch="false"/>
+            <line number="18" hits="0" branch="false"/>
+            <line number="30" hits="0" branch="false"/>
           </lines>
         </class>
       </classes>
