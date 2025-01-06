@@ -6,16 +6,16 @@ canonicalwebteam.image-template==1.4.1
 canonicalwebteam.store-api==5.0.0
 canonicalwebteam.docstring-extractor==1.2.0
 
-Flask-WTF==1.2.1
-humanize==4.9.0
-mistune==3.0.2
+Flask-WTF==1.2.2
+humanize==4.11.0
+mistune==3.1.0
 pybadges==3.0.1
 pymacaroons==0.13.0
-python-slugify==8.0.3
-ruamel.yaml.clib==0.2.8
-ruamel.yaml==0.18.5
-PyGithub==2.2.0
-black==24.3.0
+python-slugify==8.0.4
+ruamel.yaml.clib==0.2.12
+ruamel.yaml==0.18.9
+PyGithub==2.5.0
+black==24.10.0
 flake8==6.1.0
-Flask-Caching==2.1.0
-responses==0.22.0
+Flask-Caching==2.3.0
+responses==0.25.3
