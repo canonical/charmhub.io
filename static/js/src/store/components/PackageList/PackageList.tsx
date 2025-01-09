@@ -52,7 +52,7 @@ export const PackageList = ({
 
   return (
     <>
-      <Banner searchRef={searchRef} />
+      <Banner searchRef={searchRef as React.RefObject<HTMLInputElement>} />
       <Strip>
         <Row>
           <Col size={3}>

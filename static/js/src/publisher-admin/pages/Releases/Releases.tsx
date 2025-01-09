@@ -8,9 +8,11 @@ import {
   Spinner,
   AppAside,
   Notification,
-  EmptyState,
+  EmptyState as CanonicalEmptyState,
   Button,
 } from "@canonical/react-components";
+import type { Props as EmptyStateProps } from "@canonical/react-components/dist/components/EmptyState/EmptyState";
+
 import { usePackage } from "../../hooks";
 import { TrackInfo } from "./TrackInfo";
 import { TrackDropdown } from "./TrackDropdown";
@@ -21,6 +23,10 @@ enum SidePanelType {
   RequestTrack = "RequestTrack",
   AddTrack = "AddTrack",
 }
+
+const EmptyState = (props: EmptyStateProps): JSX.Element => {
+  return CanonicalEmptyState(props) as unknown as JSX.Element;
+};
 
 export default function Releases() {
   const { packageName } = useParams();
