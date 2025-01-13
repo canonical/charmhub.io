@@ -16,6 +16,6 @@ ruamel.yaml.clib==0.2.12
 ruamel.yaml==0.18.9
 PyGithub==2.5.0
 black==24.10.0
-flake8==6.1.0
+flake8==7.1.1
 Flask-Caching==2.3.0
 responses==0.25.3
