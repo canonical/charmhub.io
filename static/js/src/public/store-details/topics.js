@@ -205,7 +205,7 @@ class initTopics {
       );
 
       if (this.topics.length < 3) {
-        var bucketFillers = this.allTopics.reduce((acc, topic) => {
+        const bucketFillers = this.allTopics.reduce((acc, topic) => {
           if (!this.topics.includes(topic)) {
             acc.push(topic);
           }
