@@ -1,5 +1,6 @@
-/* eslint-env node */
+/* eslint-disable @typescript-eslint/no-var-requires */
 
+const path = require("path");
 const entry = require("./webpack.config.entry.js");
 const rules = require("./webpack.config.rules.js");
 
@@ -9,7 +10,7 @@ module.exports = {
   entry: entry,
   output: {
     filename: "[name].js",
-    path: __dirname + "/static/js/dist",
+    path: path.resolve(__dirname, "static/js/dist"),
   },
   mode: production ? "production" : "development",
   devtool: production ? "source-map" : "eval-source-map",

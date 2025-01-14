@@ -1,10 +1,10 @@
 function initSideNav() {
-  var sideNav = document.getElementById("drawer");
-  var path = window.location.pathname;
+  const sideNav = document.getElementById("drawer");
+  const path = window.location.pathname;
   if (!sideNav) {
     return;
   }
-  var active = sideNav.querySelector(`a[href="${path}"]`);
+  const active = sideNav.querySelector(`a[href="${path}"]`);
 
   if (active) {
     active.setAttribute("aria-current", "page");
@@ -32,14 +32,14 @@ function initSideNav() {
     @param {HTMLElement} sideNavigation The side navigation element.
   */
   function setupSideNavigation(sideNavigation) {
-    var toggles = [].slice.call(
+    const toggles = [].slice.call(
       sideNavigation.querySelectorAll(".js-drawer-toggle")
     );
 
     toggles.forEach(function (toggle) {
       toggle.addEventListener("click", function (event) {
         event.preventDefault();
-        var sideNav = document.getElementById(
+        const sideNav = document.getElementById(
           toggle.getAttribute("aria-controls")
         );
 
@@ -53,12 +53,12 @@ function initSideNav() {
   setupSideNavigation(sideNav);
 
   // scroll active side navigation item into view (without scrolling whole page)
-  var currentItem = sideNav.querySelector('[aria-current="page"]');
+  const currentItem = sideNav.querySelector('[aria-current="page"]');
 
   if (sideNav && currentItem) {
     // calculate scroll by comparing top of side nav and top of active item
-    var currentItemOffset = currentItem.getBoundingClientRect().top;
-    var offset = currentItemOffset - sideNav.getBoundingClientRect().top;
+    const currentItemOffset = currentItem.getBoundingClientRect().top;
+    const offset = currentItemOffset - sideNav.getBoundingClientRect().top;
 
     // only scroll if active link is off screen or close to bottom of the window
     setTimeout(function () {

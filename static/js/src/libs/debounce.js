@@ -7,9 +7,8 @@
 export default function debounce(func, wait, immediate) {
   let timeout;
 
-  const debounced = function () {
-    const args = arguments;
-    let later = () => {
+  const debounced = function (...args) {
+    const later = () => {
       timeout = null;
       if (!immediate) func.apply(this, args);
     };

@@ -17,13 +17,37 @@ type Entity = {
   apps: { name: string; title: string }[];
 };
 
+type DOMElement = {
+  el: HTMLElement | null;
+  selector: string;
+};
+
+type DOMElementCollection = {
+  el: NodeListOf<Element>;
+  selector: string;
+};
+
+type DOMElements = {
+  baseSwitcher: DOMElement;
+  categoryFilters: DOMElementCollection;
+  featuredContainer: DOMElement;
+  filterButtonMobileClose: DOMElement;
+  filterButtonMobileOpen: DOMElement;
+  packageContainer: DOMElement;
+  packageTypeSwitcher: DOMElement;
+  placeholderContainer: DOMElement;
+  resultsCountContainer: DOMElement;
+  searchInputDesktop: DOMElement;
+  searchInputMobile: DOMElement;
+  showAllPackagesButton: DOMElement;
+};
+
 /** Store page filters */
 class initPackages {
   allPackages: Entity[];
   searchCache: string;
   _filters: { [key: string]: string[] };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  domEl: any;
+  domEl: DOMElements;
   filteredPackagesAllCategories: Entity[];
   packages: Entity[];
 
@@ -118,8 +142,14 @@ class initPackages {
 
     if (this._filters.q.length > 0) {
       const queryString = this._filters.q.join(",");
-      this.domEl.searchInputDesktop.el.value = queryString;
-      this.domEl.searchInputMobile.el.value = queryString;
+      if (this.domEl.searchInputDesktop.el) {
+        (this.domEl.searchInputDesktop.el as HTMLInputElement).value =
+          queryString;
+      }
+      if (this.domEl.searchInputMobile.el) {
+        (this.domEl.searchInputMobile.el as HTMLInputElement).value =
+          queryString;
+      }
     }
 
     this.filterPackages();
@@ -143,14 +173,29 @@ class initPackages {
       this.togglePackageContainer(true);
       this.togglePlaceholderContainer();
       this.toggleShowAllPackagesButton();
-      handleBundleIcons(this.domEl.packageContainer.el);
+      if (this.domEl.packageContainer.el) {
+        handleBundleIcons(this.domEl.packageContainer.el);
+      }
     }
 
     this.captureTooltipButtonClick();
   }
 
   selectElements() {
-    this.domEl = {};
+    this.domEl = {
+      baseSwitcher: { el: null, selector: "" },
+      categoryFilters: { el: document.querySelectorAll(""), selector: "" },
+      featuredContainer: { el: null, selector: "" },
+      filterButtonMobileClose: { el: null, selector: "" },
+      filterButtonMobileOpen: { el: null, selector: "" },
+      packageContainer: { el: null, selector: "" },
+      packageTypeSwitcher: { el: null, selector: "" },
+      placeholderContainer: { el: null, selector: "" },
+      resultsCountContainer: { el: null, selector: "" },
+      searchInputDesktop: { el: null, selector: "" },
+      searchInputMobile: { el: null, selector: "" },
+      showAllPackagesButton: { el: null, selector: "" },
+    };
 
     this.domEl.resultsCountContainer = {
       el: document.querySelector("[data-js='results-count-container']"),
@@ -214,7 +259,9 @@ class initPackages {
           this.renderButtonMobileOpen();
           this.toggleFeaturedContainer();
           this.toggleShowAllPackagesButton();
-          handleBundleIcons(this.domEl.packageContainer.el);
+          if (this.domEl.packageContainer.el) {
+            handleBundleIcons(this.domEl.packageContainer.el);
+          }
           window.scrollTo(0, 0);
         }
       );
@@ -232,7 +279,7 @@ class initPackages {
 
     if (this.domEl.resultsCountContainer.el) {
       if (featured) {
-        this.domEl.resultsCountContainer.el.innerHTML = `${this.domEl.featuredContainer.el.children.length} Featured`;
+        this.domEl.resultsCountContainer.el.innerHTML = `${this.domEl.featuredContainer.el?.children.length} Featured`;
       } else if (this._filters.q.length > 0) {
         this.domEl.resultsCountContainer.el.innerHTML = `${
           this.packages.length
@@ -293,7 +340,9 @@ class initPackages {
         this.toggleFeaturedContainer();
         this.toggleShowAllPackagesButton();
         this.togglePackageContainer(true);
-        handleBundleIcons(this.domEl.packageContainer.el);
+        if (this.domEl.packageContainer.el) {
+          handleBundleIcons(this.domEl.packageContainer.el);
+        }
       });
     } else {
       throw new Error(
@@ -318,7 +367,9 @@ class initPackages {
           this.toggleFeaturedContainer();
           this.toggleShowAllPackagesButton();
           this.togglePackageContainer(true);
-          handleBundleIcons(this.domEl.packageContainer.el);
+          if (this.domEl.packageContainer.el) {
+            handleBundleIcons(this.domEl.packageContainer.el);
+          }
         }
       );
     } else {
@@ -330,40 +381,41 @@ class initPackages {
 
   handleFilterClick() {
     if (this.domEl.categoryFilters.el) {
-      this.domEl.categoryFilters.el.forEach(
-        (categoryFilter: HTMLInputElement) => {
-          if (
-            this._filters.filter.length > 0 &&
-            this._filters.filter.indexOf(categoryFilter.value) !== -1
-          ) {
-            categoryFilter.checked = true;
+      this.domEl.categoryFilters.el.forEach((categoryFilter) => {
+        const inputElement = categoryFilter as HTMLInputElement;
+        if (
+          this._filters.filter.length > 0 &&
+          this._filters.filter.indexOf(inputElement.value) !== -1
+        ) {
+          inputElement.checked = true;
+        } else {
+          inputElement.checked = false;
+        }
+
+        inputElement.addEventListener("click", () => {
+          if (inputElement.checked) {
+            this._filters.filter.push(inputElement.value);
           } else {
-            categoryFilter.checked = false;
+            this._filters.filter = this._filters.filter.filter(
+              (el: string) => el !== inputElement.value
+            );
           }
 
-          categoryFilter.addEventListener("click", () => {
-            if (categoryFilter.checked) {
-              this._filters.filter.push(categoryFilter.value);
-            } else {
-              this._filters.filter = this._filters.filter.filter(
-                (el: string) => el !== categoryFilter.value
-              );
-            }
-
-            this.filterPackages();
-            this.updateEnabledCategories();
-            this.renderPackages();
-            this.renderResultsCount();
-            this.renderButtonMobileOpen();
-            this.renderButtonMobileClose();
-            this.updateHistory();
-            this.toggleFeaturedContainer();
-            this.toggleShowAllPackagesButton();
-            this.togglePackageContainer(true);
+          this.filterPackages();
+          this.updateEnabledCategories();
+          this.renderPackages();
+          this.renderResultsCount();
+          this.renderButtonMobileOpen();
+          this.renderButtonMobileClose();
+          this.updateHistory();
+          this.toggleFeaturedContainer();
+          this.toggleShowAllPackagesButton();
+          this.togglePackageContainer(true);
+          if (this.domEl.packageContainer.el) {
             handleBundleIcons(this.domEl.packageContainer.el);
-          });
-        }
-      );
+          }
+        });
+      });
     } else {
       throw new Error(
         `There are no elements containing ${this.domEl.categoryFilters.selector} selector.`
@@ -373,8 +425,8 @@ class initPackages {
 
   updateEnabledCategories() {
     // Enable all categories by default
-    this.domEl.categoryFilters.el.forEach((filter: { disabled: boolean }) => {
-      filter.disabled = false;
+    this.domEl.categoryFilters.el.forEach((filter) => {
+      (filter as HTMLInputElement).disabled = false;
     });
 
     // If the user is searching or using filters
@@ -396,29 +448,29 @@ class initPackages {
       });
 
       // We hide categories without results
-      this.domEl.categoryFilters.el.forEach(
-        (filter: { value: string; disabled: boolean }) => {
+      this.domEl.categoryFilters.el.forEach((filter) => {
+        if (filter instanceof HTMLInputElement) {
           if (categories.includes(filter.value)) {
             filter.disabled = false;
           } else {
             filter.disabled = true;
           }
         }
-      );
+      });
     }
   }
 
   togglePlaceholderContainer(visibility: boolean = false) {
-    if (this.domEl.placeholderContainer.el) {
-      if (visibility) {
-        this.domEl.placeholderContainer.el.classList.remove("u-hide");
-      } else {
-        this.domEl.placeholderContainer.el.classList.add("u-hide");
+    try {
+      if (this.domEl.placeholderContainer.el) {
+        if (visibility) {
+          this.domEl.placeholderContainer.el.classList.remove("u-hide");
+        } else {
+          this.domEl.placeholderContainer.el.classList.add("u-hide");
+        }
       }
-    } else {
-      throw new Error(
-        `There is no element containing ${this.domEl.placeholderContainer.selector} selector.`
-      );
+    } catch (error) {
+      console.warn("togglePlaceholderContainer error:", error);
     }
   }
 
@@ -509,7 +561,7 @@ class initPackages {
       this.domEl.packageContainer.el.innerHTML = "";
 
       this.packages.forEach((entity: Entity) => {
-        this.domEl.packageContainer.el.appendChild(buildPackageCard(entity));
+        this.domEl.packageContainer.el?.appendChild(buildPackageCard(entity));
       });
 
       this.captureTooltipButtonClick();
@@ -526,9 +578,10 @@ class initPackages {
       this.domEl.showAllPackagesButton.el &&
       this.domEl.packageTypeSwitcher.el
     ) {
-      this.domEl.baseSwitcher.el.disabled = false;
-      this.domEl.packageTypeSwitcher.el.disabled = false;
-      this.domEl.showAllPackagesButton.el.disabled = false;
+      (this.domEl.baseSwitcher.el as HTMLInputElement).disabled = false;
+      (this.domEl.packageTypeSwitcher.el as HTMLInputElement).disabled = false;
+      (this.domEl.showAllPackagesButton.el as HTMLInputElement).disabled =
+        false;
     }
   }
 
@@ -576,10 +629,12 @@ class initPackages {
     if (this.domEl.filterButtonMobileOpen.el) {
       const filterSpanEl =
         this.domEl.filterButtonMobileOpen.el.querySelector("span");
-      if (this._filters.filter.length > 0) {
-        filterSpanEl.innerHTML = `Filters (${this._filters.filter.length})`;
-      } else {
-        filterSpanEl.innerHTML = `Filters`;
+      if (filterSpanEl) {
+        if (this._filters.filter.length > 0) {
+          filterSpanEl.innerHTML = `Filters (${this._filters.filter.length})`;
+        } else {
+          filterSpanEl.innerHTML = `Filters`;
+        }
       }
     } else {
       throw new Error(
