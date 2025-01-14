@@ -168,7 +168,7 @@ jobs:
           
       - name: Upload coverage to Codecov
         if: ${{ steps.filter.outputs.py == 'true' }}
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           flags: python
 
@@ -206,7 +206,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         if: ${{ steps.filter.outputs.js == 'true' || steps.filter.outputs.ts == 'true' || steps.filter.outputs.jsx == 'true' || steps.filter.outputs.tsx == 'true' }}
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           flags: javascript
 
