@@ -1,10 +1,14 @@
 import { useSetRecoilState } from "recoil";
 import { format } from "date-fns";
-import { Button } from "@canonical/react-components";
+import { Button, MainTable } from "@canonical/react-components";
 
 import { activeInviteEmailState } from "../state/atoms";
 
 import type { Invite } from "../types";
+
+type MainTableProps = Parameters<typeof MainTable>[0];
+type MainTableRow = NonNullable<MainTableProps["rows"]>[number];
+type MainTableCell = NonNullable<MainTableRow["columns"]>[number];
 
 function buildInviteTableRows(
   invites: Array<Invite>,
@@ -16,12 +20,8 @@ function buildInviteTableRows(
   const setActiveInviteEmail = useSetRecoilState(activeInviteEmailState);
 
   return invites.map((invite: Invite, index) => {
-    let columns: {
-      content: React.ReactNode;
-      rowSpan?: number;
-      className?: string;
-    }[] = [];
-    let statusColumn;
+    let columns: MainTableCell[] = [];
+    let statusColumn: MainTableCell | undefined;
 
     if (invites.length > 0 && index === 0) {
       statusColumn = {
@@ -38,7 +38,7 @@ function buildInviteTableRows(
       };
     }
 
-    const remainingColumns = [
+    const remainingColumns: MainTableCell[] = [
       {
         content: invite?.email,
         className: "u-truncate",

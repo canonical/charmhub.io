@@ -5,8 +5,8 @@ export default function initCloseButton() {
 */
   function setupCloseButton(closeButton) {
     closeButton.addEventListener("click", function (event) {
-      var target = event.target.getAttribute("aria-controls");
-      var notification = document.getElementById(target);
+      const target = event.target.getAttribute("aria-controls");
+      const notification = document.getElementById(target);
 
       if (notification) {
         notification.classList.add("u-hide");
@@ -15,11 +15,11 @@ export default function initCloseButton() {
   }
 
   // Set up all notification close buttons.
-  var closeButtons = document.querySelectorAll(
+  const closeButtons = document.querySelectorAll(
     ".p-notification [aria-controls]"
   );
 
-  for (var i = 0, l = closeButtons.length; i < l; i++) {
+  for (let i = 0, l = closeButtons.length; i < l; i++) {
     setupCloseButton(closeButtons[i]);
   }
 }

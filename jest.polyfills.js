@@ -8,19 +8,23 @@
  * you don't want to deal with this.
  */
 
-const { TextDecoder, TextEncoder, ReadableStream } = require("node:util");
+const {
+  TextDecoder,
+  TextEncoder,
+  ReadableStream,
+  MessagePort,
+} = require("node:util");
 
-// eslint-disable-next-line no-undef
 Object.defineProperties(globalThis, {
   TextDecoder: { value: TextDecoder },
   TextEncoder: { value: TextEncoder },
   ReadableStream: { value: ReadableStream },
+  MessagePort: { value: MessagePort },
 });
 
 const { Blob, File } = require("node:buffer");
 const { fetch, Headers, FormData, Request, Response } = require("undici");
 
-// eslint-disable-next-line no-undef
 Object.defineProperties(globalThis, {
   fetch: { value: fetch, writable: true },
   Blob: { value: Blob },

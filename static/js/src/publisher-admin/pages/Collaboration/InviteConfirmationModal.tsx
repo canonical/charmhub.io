@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil";
-import { Modal, Button } from "@canonical/react-components";
+import { Button, Modal as CanonicalModal } from "@canonical/react-components";
+import type { Props as ModalProps } from "@canonical/react-components/dist/components/Modal/Modal";
 
 import {
   activeInviteEmailState,
@@ -23,6 +24,10 @@ type Props = {
   setShowSuccess: (showSuccess: boolean) => void;
   setShowError: (showError: boolean) => void;
   queryKey?: string;
+};
+
+const Modal = (props: ModalProps): JSX.Element => {
+  return CanonicalModal(props) as unknown as JSX.Element;
 };
 
 function InviteConfirmationModal({

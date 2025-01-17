@@ -28,7 +28,9 @@ export const EmptyResultSection = ({
               <h1 className="p-heading--2">
                 Search results for "{searchTerm}"
               </h1>
-              <SearchInput searchRef={searchRef} />
+              <SearchInput
+                searchRef={searchRef as React.RefObject<HTMLInputElement>}
+              />
             </Col>
           </Row>
           <Row>
