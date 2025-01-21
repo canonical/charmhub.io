@@ -25,16 +25,6 @@
   }
 
   .p-card--placeholder {
-    @keyframes shine {
-      0% {
-        background-position: right;
-      }
-
-      100% {
-        background-position: left;
-      }
-    }
-
     animation: shine 3s infinite ease-in-out;
     background-image:
       linear-gradient(
@@ -45,6 +35,16 @@
       );
     background-size: 300% 300%;
     clip-path: url("#animation-mask");
+
+    @keyframes shine {
+      0% {
+        background-position: right;
+      }
+
+      100% {
+        background-position: left;
+      }
+    }
   }
 
   .p-card--button {

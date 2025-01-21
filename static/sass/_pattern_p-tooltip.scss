@@ -1,6 +1,8 @@
+@use "sass:map";
+
 @mixin p-charmhub-tooltip {
   .p-tooltip--information {
-    $icon-size: map-get($icon-sizes, default);
+    $icon-size: map.get($icon-sizes, default);
 
     padding-inline-end: $spv--large;
     position: relative;
@@ -32,7 +34,7 @@
 
       @media screen and (max-width: $breakpoint-large - 1) {
         cursor: pointer;
-        line-height: map-get($line-heights, default-text);
+        line-height: map.get($line-heights, default-text);
         margin: 0 0 $spv-nudge-compensation $spv--x-small;
         padding: $spv--x-small;
         text-align: center;

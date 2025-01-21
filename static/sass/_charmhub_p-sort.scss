@@ -1,3 +1,5 @@
+@use "sass:map";
+
 @mixin p-charmhub-sort {
   .p-sort {
     background-color: $color-x-light;
@@ -28,7 +30,7 @@
       background-color: $color-x-light;
       margin-bottom: 0;
       padding:
-        map-get($sp-after, small) - map-get($nudges, nudge--small)
+        map.get($sp-after, small) - map.get($nudges, nudge--small)
         $spv--large;
       position: sticky;
       top: 0;
