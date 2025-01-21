@@ -1,10 +1,12 @@
+@use "sass:map";
+
 @mixin l-charmhub-fluid-breakout {
   .l-fluid-breakout {
     .l-fluid-breakout__aside {
       .p-muted-heading,
       .p-side-navigation__list {
         @media (max-width: $breakpoint-large - 1px) {
-          padding-inline-start: map-get($grid-margin-widths, small);
+          padding-inline-start: map.get($grid-margin-widths, small);
         }
       }
 

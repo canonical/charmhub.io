@@ -1,3 +1,6 @@
+@use "sass:map";
+@use "sass:string";
+
 @mixin p-charmhub-docstring {
   %vf-pseudo-border--top-light {
     @extend %vf-pseudo-border--top;
@@ -52,7 +55,7 @@
   }
 
   %p-code {
-    font-family: unquote($font-monospace);
+    font-family: string.unquote($font-monospace);
     font-weight: $font-weight-regular-text;
   }
 
@@ -148,11 +151,11 @@
   .p-text--dense {
     @extend %default-text;
 
-    margin-bottom: 2 * $sp-unit - map-get($nudges, nudge--p);
+    margin-bottom: 2 * $sp-unit - map.get($nudges, nudge--p);
     margin-top: 0;
 
     @media (min-width: $breakpoint-large) {
-      margin-bottom: 2 * $sp-unit - map-get($nudges, nudge--p);
+      margin-bottom: 2 * $sp-unit - map.get($nudges, nudge--p);
     }
   }
 
