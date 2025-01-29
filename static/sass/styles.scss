@@ -2,7 +2,7 @@
 
 $brand-color: #772953;
 $color-text-orange: #d54110;
-$breakpoint-large: 1220px;
+$breakpoint-navigation-threshold: 1110px; // keep it in sync with juju.is and breakpoint value in global-nav.ts
 
 // import cookie policy
 @import "@canonical/cookie-policy/build/css/cookie-policy";
