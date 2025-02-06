@@ -77,7 +77,6 @@ def package(package_type):
 
 @store_packages.route("/<package_name>/card.json")
 def get_store_package(package_name):
-
     has_libraries = bool(request.args.get("fields", ""))
 
     res = make_response(

@@ -1,7 +1,6 @@
 from unittest import TestCase
 from unittest.mock import patch
 from webapp.app import app
-import talisker
 
 
 class TestGetPublisherDetails(TestCase):

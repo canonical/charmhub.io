@@ -76,9 +76,9 @@ def get_packages():
     context = {"packages": [], "size": 0}
 
     if query:
-        results = publisher_gateway.find(query=query, fields=SEARCH_FIELDS).get(
-            "results"
-        )
+        results = publisher_gateway.find(
+            query=query, fields=SEARCH_FIELDS
+        ).get("results")
         context["q"] = query
     elif provides or requires:
         if provides:
@@ -93,7 +93,9 @@ def get_packages():
         context["provides"] = provides
         context["requires"] = requires
     else:
-        results = publisher_gateway.find(fields=SEARCH_FIELDS).get("results", [])
+        results = publisher_gateway.find(fields=SEARCH_FIELDS).get(
+            "results", []
+        )
 
     packages = []
     total_packages = 0
@@ -690,7 +692,7 @@ def details_integrate(entity_name):
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/badge.svg')
 def entity_badge(entity_name):
-    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
+    package = publisher_gateway.get_item_details(entity_name, fields=FIELDS)
 
     channel_request = request.args.get("channel")
 
@@ -760,10 +762,10 @@ def entity_embedded_card(entity_name):
     try:
         package = get_package(entity_name, channel_request, FIELDS)
 
-        package["default-release"]["channel"]["released-at"] = (
-            logic.convert_date(
-                package["default-release"]["channel"]["released-at"]
-            )
+        package["default-release"]["channel"][
+            "released-at"
+        ] = logic.convert_date(
+            package["default-release"]["channel"]["released-at"]
         )
 
         button = request.args.get("button")
@@ -803,10 +805,10 @@ def entity_embedded_interface_card(entity_name):
     try:
         package = get_package(entity_name, channel_request, FIELDS)
 
-        package["default-release"]["channel"]["released-at"] = (
-            logic.convert_date(
-                package["default-release"]["channel"]["released-at"]
-            )
+        package["default-release"]["channel"][
+            "released-at"
+        ] = logic.convert_date(
+            package["default-release"]["channel"]["released-at"]
         )
 
         libraries = logic.process_libraries(
@@ -840,7 +842,7 @@ def entity_icon(entity_name):
     package = None
 
     try:
-        package = app.store_api.get_item_details(
+        package = publisher_gateway.get_item_details(
             entity_name,
             fields=[
                 "result.media",
@@ -865,7 +867,7 @@ def entity_icon_missing(entity_name):
     package = None
 
     try:
-        package = app.store_api.get_item_details(
+        package = publisher_gateway.get_item_details(
             entity_name,
             fields=[
                 "result.media",

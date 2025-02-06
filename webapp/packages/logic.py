@@ -288,9 +288,7 @@ def get_packages(
     packages_per_page = paginate(packages, page, size, total_pages)
     parsed_packages = []
     for package in packages_per_page:
-        parsed_packages.append(
-            parse_package_for_card(package, libraries)
-        )
+        parsed_packages.append(parse_package_for_card(package, libraries))
     res = parsed_packages
 
     categories = get_store_categories()
@@ -330,11 +328,9 @@ def get_store_categories() -> List[Dict[str, str]]:
     :param: api_gw: The API object used to fetch the categories.
     :returns: A list of categories in the format:
     [{"name": "Category", "slug": "category"}]
-    """ 
+    """
     try:
         all_categories = publisher_gateway.get_categories()
-        pprint("all_categories")
-        pprint(all_categories)
     except StoreApiError:
         all_categories = []
 

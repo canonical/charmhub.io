@@ -8,7 +8,6 @@ from webapp.integrations.logic import Interfaces
 
 
 class TestSingleInterface(TestCase):
-
     def setUp(self):
         app.config["TESTING"] = True
         app.config["DEBUG"] = True

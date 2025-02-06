@@ -39,6 +39,7 @@ set_handlers(app)
 request_session = talisker.requests.get_session()
 candid = CandidClient(request_session)
 
+
 @app.template_filter("linkify")
 def linkify(text):
     escaped_text = escape(text)

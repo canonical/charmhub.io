@@ -53,9 +53,9 @@ def fetch_documentation_index():
                         topic_link = cells[2].find("a")
                         if topic_link:
                             topic_id = topic_link["href"].split("/")[-1]
-                            documentation_topic_mappings[topic_id] = (
-                                f"https://juju.is/docs/{url_tag}/{path}"
-                            )
+                            documentation_topic_mappings[
+                                topic_id
+                            ] = f"https://juju.is/docs/{url_tag}/{path}"
 
 
 cache = Cache(config={"CACHE_TYPE": "simple"})
