@@ -13,10 +13,7 @@ from webapp.packages.logic import (
 )
 from webapp.config import SEARCH_FIELDS as FIELDS
 
-from canonicalwebteam.store_api.stores.charmstore import (
-    CharmStore,
-    CharmPublisher,
-)
+from canonicalwebteam.store_api.publishergw import PublisherGW
 
 
 store_packages = Blueprint(
@@ -31,8 +28,6 @@ def get_store_packages():
     libraries = bool(args.pop("fields", ""))
     res = make_response(
         get_packages(
-            CharmStore,
-            CharmPublisher,
             libraries,
             FIELDS,
             12,
@@ -53,9 +48,9 @@ def package(package_type):
     packages.
     """
 
-    publisher_api = CharmPublisher(talisker.requests.get_session())
+    publisher_gateway = PublisherGW("charm", talisker.requests.get_session())
 
-    publisher_packages = publisher_api.get_account_packages(
+    publisher_packages = publisher_gateway.get_account_packages(
         session["account-auth"], "charm", include_collaborations=True
     )
     page_type = request.path[1:-1]
@@ -87,8 +82,6 @@ def get_store_package(package_name):
 
     res = make_response(
         get_package(
-            CharmStore,
-            CharmPublisher,
             package_name,
             FIELDS,
             has_libraries,

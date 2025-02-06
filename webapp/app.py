@@ -1,10 +1,6 @@
 import re
 
 import talisker.requests
-from canonicalwebteam.store_api.stores.charmstore import (
-    CharmStore,
-    CharmPublisher,
-)
 from canonicalwebteam.candid import CandidClient
 from dateutil import parser
 from flask import render_template, make_response, request, session, escape
@@ -40,13 +36,8 @@ app.config["LOGIN_REQUIRED"] = login_required
 
 set_handlers(app)
 
-app.store_api = CharmStore(session=talisker.requests.get_session())
-
-
 request_session = talisker.requests.get_session()
 candid = CandidClient(request_session)
-publisher_api = CharmPublisher(request_session)
-
 
 @app.template_filter("linkify")
 def linkify(text):

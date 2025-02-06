@@ -2,9 +2,6 @@ from unittest import TestCase
 from unittest.mock import patch
 from webapp.app import app
 import talisker
-from canonicalwebteam.store_api.stores.charmstore import CharmStore
-
-store_api = CharmStore(session=talisker.requests.get_session())
 
 
 class TestGetPackages(TestCase):

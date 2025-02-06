@@ -3,13 +3,11 @@ from flask import session
 
 import talisker
 from canonicalwebteam.candid import CandidClient
-from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
 from webapp.app import app
 import responses
 
 request_session = talisker.requests.get_session()
 candid = CandidClient(request_session)
-publisher_api = CharmPublisher(request_session)
 
 
 class TestLoginViews(unittest.TestCase):

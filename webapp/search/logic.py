@@ -6,7 +6,6 @@ from urllib.parse import quote
 from typing import Dict
 from webapp.config import SEARCH_FIELDS
 from webapp.packages.logic import parse_package_for_card
-from webapp.packages.store_packages import CharmStore, CharmPublisher
 
 
 url = "https://discourse.charmhub.io"
@@ -219,7 +218,7 @@ def search_topics(term: str, page: int, see_all=False) -> dict:
 
 def search_charms(term: str):
     return [
-        parse_package_for_card(package, CharmStore, CharmPublisher)
+        parse_package_for_card(package)
         for package in app.store_api.find(
             term, type="charm", fields=SEARCH_FIELDS
         )["results"]
@@ -228,7 +227,7 @@ def search_charms(term: str):
 
 def search_bundles(term: str):
     return [
-        parse_package_for_card(package, CharmStore, CharmPublisher)
+        parse_package_for_card(package)
         for package in app.store_api.find(
             term, type="bundle", fields=SEARCH_FIELDS
         )["results"]

@@ -3,7 +3,7 @@ from webapp.app import app
 from tests.mock_data.mock_store_logic import sample_charm
 from unittest.mock import patch
 
-from canonicalwebteam.store_api.exceptions import StoreApiResponseErrorList
+from canonicalwebteam.exceptions import StoreApiResponseErrorList
 
 
 class TestPublisherViews(unittest.TestCase):
