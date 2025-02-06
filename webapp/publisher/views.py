@@ -40,7 +40,7 @@ def get_account_details():
 @login_required
 def get_publisher(entity_name, path):
     package = publisher_gateway.get_package_metadata(
-        session["account-auth"], "charm", entity_name
+        session["account-auth"], entity_name
     )
 
     context = {
@@ -56,7 +56,7 @@ def get_publisher(entity_name, path):
 @login_required
 def get_package(entity_name):
     package = publisher_gateway.get_package_metadata(
-        session["account-auth"], "charm", entity_name
+        session["account-auth"], entity_name
     )
 
     return jsonify({"data": package, "success": True})
