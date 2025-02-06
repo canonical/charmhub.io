@@ -103,7 +103,6 @@ def fetch_package(package_name: str, fields: List[str]) -> Package:
     """
     Fetches a package from the store API based on the specified package name.
 
-    :param: store_api: The specific store API object.
     :param: package_name (str): The name of the package to fetch.
     :param: fields (List[str]): A list of fields to include in the package
 
@@ -305,7 +304,7 @@ def parse_categories(
     categories_json: Dict[str, List[Dict[str, str]]]
 ) -> List[Dict[str, str]]:
     """
-    :param categories_json: The returned json from store_api.get_categories()
+    :param categories_json: The returned json from publisher_gateway.get_categories()
     :returns: A list of categories in the format:
     [{"name": "Category", "slug": "category"}]
     """

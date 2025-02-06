@@ -1,4 +1,7 @@
 from flask import Blueprint, request, current_app as app, render_template
+from talisker import requests
+
+from canonicalwebteam.store_api.publishergw import PublisherGW
 
 from webapp.config import SEARCH_FIELDS
 from webapp.search.logic import (
@@ -13,6 +16,7 @@ search = Blueprint(
     "search", __name__, template_folder="/templates", static_folder="/static"
 )
 
+publisher_gateway = PublisherGW("charm", requests.get_session())
 
 @search.route("/all-search")
 def all_search():
@@ -40,7 +44,7 @@ def all_charms() -> dict:
     query = request.args.get("q", "")
     page = int(request.args.get("page", 1))
     limit = int(request.args.get("limit", 50))
-    packages = app.store_api.find(query, fields=SEARCH_FIELDS)
+    packages = publisher_gateway.find(query, fields=SEARCH_FIELDS)
     package_type = request.path[1:-1].split("-")[1]
     result = [
         package

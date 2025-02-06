@@ -1,9 +1,12 @@
 from flask import current_app as app
 from bs4 import BeautifulSoup
 from flask_caching import Cache
-import requests
+from talisker import requests
 from urllib.parse import quote
 from typing import Dict
+
+from canonicalwebteam.store_api.publishergw import PublisherGW
+
 from webapp.config import SEARCH_FIELDS
 from webapp.packages.logic import parse_package_for_card
 
@@ -14,6 +17,7 @@ docs_id_cache = {
     "sdk": {"id": 4449, "tag": "sdk"},
 }
 
+publisher_gateway = PublisherGW("charm", requests.get_session())
 # This stores all the mappings from topic index to the
 # corresponding url in the documentation
 documentation_topic_mappings: Dict[int, str] = {}
@@ -219,7 +223,7 @@ def search_topics(term: str, page: int, see_all=False) -> dict:
 def search_charms(term: str):
     return [
         parse_package_for_card(package)
-        for package in app.store_api.find(
+        for package in publisher_gateway.find(
             term, type="charm", fields=SEARCH_FIELDS
         )["results"]
     ]
@@ -228,7 +232,7 @@ def search_charms(term: str):
 def search_bundles(term: str):
     return [
         parse_package_for_card(package)
-        for package in app.store_api.find(
+        for package in publisher_gateway.find(
             term, type="bundle", fields=SEARCH_FIELDS
         )["results"]
     ]
