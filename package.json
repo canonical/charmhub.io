@@ -29,7 +29,7 @@
     "@canonical/cookie-policy": "3.6.5",
     "@canonical/global-nav": "3.6.4",
     "@canonical/react-components": "2.1.0",
-    "@canonical/store-components": "0.52.0",
+    "@canonical/store-components": "0.53.0",
     "@sentry/react": "8.48.0",
     "@testing-library/dom": "10.4.0",
     "@testing-library/jest-dom": "6.6.3",
@@ -60,7 +60,7 @@
     "style-loader": "4.0.0",
     "ts-loader": "9.5.1",
     "typescript": "5.7.2",
-    "vanilla-framework": "4.20.3",
+    "vanilla-framework": "4.21.0",
     "watch-cli": "0.2.3",
     "webpack": "5.97.1",
     "webpack-cli": "6.0.1"
