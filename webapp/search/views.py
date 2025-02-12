@@ -25,10 +25,13 @@ def all_search_json():
     term = params.get("q")
     limit = int(params.get("limit", 5))
 
+    if not term:
+        return {"error": "No search term provided"}
+
     result = {
         "charms": search_charms(term)[:limit],
         "bundles": search_bundles(term)[:limit],
-        "docs": search_docs(term, 1, False)[:limit],
+        "docs": search_docs(term)[:limit],
         "topics": search_topics(term, 1, False)[:limit],
     }
     return result
@@ -55,15 +58,13 @@ def all_charms() -> dict:
 @search.route("/all-docs")
 def all_docs():
     search_term = request.args.get("q")
-    page = int(request.args.get("page", 1))
     limit = int(request.args.get("limit", 50))
 
-    all_topics = search_docs(search_term, page, True)[:limit]
-    total_pages = -(len(all_topics) // -limit)
-    start = (page - 1) * limit
-    end = start + limit
+    docs = search_docs(search_term)[:limit]
 
-    return {"topics": all_topics[start:end], "total_pages": total_pages}
+    return {
+        "docs": docs,
+    }
 
 
 @search.route("/all-topics")

@@ -1,74 +1,16 @@
 from flask import current_app as app
-from bs4 import BeautifulSoup
 from flask_caching import Cache
 import requests
-from urllib.parse import quote
-from typing import Dict
 from webapp.config import SEARCH_FIELDS
 from webapp.packages.logic import parse_package_for_card
 from webapp.packages.store_packages import CharmStore, CharmPublisher
 
 
-url = "https://discourse.charmhub.io"
-docs_id_cache = {
-    "olm": {"id": 1087, "tag": "juju"},
-    "sdk": {"id": 4449, "tag": "sdk"},
-}
-
-# This stores all the mappings from topic index to the
-# corresponding url in the documentation
-documentation_topic_mappings: Dict[int, str] = {}
-
-
-def fetch_documentation_index():
-    """
-    This function initializes the cache dict for the navigation table
-    of the documentation index. It fetches the navigation table
-    from the discourse API and stores all the entries in a dictionary
-    where the key is the topic id and the value is the corresponding
-    url in the documentation.
-    """
-    for key in docs_id_cache.keys():
-        index_id = docs_id_cache[key]["id"]
-        index_page = requests.get(f"{url}/t/{index_id}.json").json()
-
-        index_doc = index_page.get("post_stream").get("posts")[0].get("cooked")
-
-        soup = BeautifulSoup(index_doc, "html.parser")
-        details_element = soup.find(
-            lambda tag: tag.name == "details"
-            and "Navigation" in tag.summary.text
-        )
-
-        if details_element:
-            table = details_element.find("table")
-            if table:
-                rows = table.find_all("tr")[1:]
-                for row in rows:
-                    cells = row.find_all("td")
-                    if len(cells) == 3:
-                        path = cells[1].text.strip()
-                        if not path:
-                            continue
-                        url_tag = docs_id_cache[key]["tag"]
-                        topic_link = cells[2].find("a")
-                        if topic_link:
-                            topic_id = topic_link["href"].split("/")[-1]
-                            documentation_topic_mappings[topic_id] = (
-                                f"https://juju.is/docs/{url_tag}/{path}"
-                            )
+DISCOURSE_URL = "https://discourse.charmhub.io"
+DOCS_URL = "https://canonical-juju.readthedocs-hosted.com/"
 
 
 cache = Cache(config={"CACHE_TYPE": "simple"})
-
-
-def rewrite_topic_url(topics: list) -> list:
-    if len(documentation_topic_mappings) == 0:
-        fetch_documentation_index()
-    for topic in topics:
-        topic["url"] = documentation_topic_mappings.get(str(topic["id"]))
-
-    return topics
 
 
 def search_discourse(
@@ -100,7 +42,9 @@ def search_discourse(
         if cached_page:
             return cached_page
         else:
-            resp = requests.get(f"{url}/search.json?q={query}&page={page}")
+            resp = requests.get(
+                f"{DISCOURSE_URL}/search.json?q={query}&page={page}"
+            )
             topics = resp.json().get("topics", [])
             for topic in topics:
                 post = next(
@@ -134,7 +78,9 @@ def search_discourse(
             page += 1
             continue
 
-        resp = requests.get(f"{url}/search.json?q={query}&page={page}")
+        resp = requests.get(
+            f"{DISCOURSE_URL}/search.json?q={query}&page={page}"
+        )
         data = resp.json()
         topics = data.get("topics", [])
 
@@ -153,7 +99,7 @@ def search_discourse(
             result.extend(topics)
             page += 1
             next_resp = requests.get(
-                f"{url}/search.json?q={query}&page={page}"
+                f"{DISCOURSE_URL}/search.json?q={query}&page={page}"
             )
             next_topics = next_resp.json().get("topics", [])
             if not next_topics or next_topics[0]["id"] == topics[0]["id"]:
@@ -164,7 +110,7 @@ def search_discourse(
     return result
 
 
-def search_docs(term: str, page: int, see_all: bool = False) -> dict:
+def search_docs(term: str) -> dict:
     """
     Fetches documentation from discourse from the doc category and
     a specific search term.
@@ -179,19 +125,17 @@ def search_docs(term: str, page: int, see_all: bool = False) -> dict:
     Returns:
         dict: A dictionary containing the retrieved dtopics.
     """
-    categories = ["#doc"]
-    encoded_categories = [quote(cat) for cat in categories]
-    tags = ["olm", "sdk", "dev"]
-    query = (
-        f"{term} {' '.join(encoded_categories)} tag:{','.join(tags)}".strip()
+
+    search_url = (
+        f"{DOCS_URL}/_/api/v3/search/?q=project%3Acanonical-juju+{term}"
     )
 
-    # exclude archived
-    query += " status:-archived"
+    resp = requests.get(search_url)
+    data = resp.json()
 
-    result = search_discourse(query, page, see_all)
+    results = data.get("results", [])
 
-    return rewrite_topic_url(result)
+    return results
 
 
 def search_topics(term: str, page: int, see_all=False) -> dict:

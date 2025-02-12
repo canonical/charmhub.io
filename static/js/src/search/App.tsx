@@ -1,4 +1,4 @@
-import { Col, Row } from "@canonical/react-components";
+import { Col, Row, Spinner } from "@canonical/react-components";
 import {
   BundleCard,
   CharmCard,
@@ -13,6 +13,13 @@ type DiscourseTopic = {
   url: string;
   title: string;
   post: { blurb: string };
+};
+
+type Documentation = {
+  path: string;
+  domain: string;
+  title: string;
+  blocks: { title: string; content: string }[];
 };
 
 function App() {
@@ -142,19 +149,25 @@ function App() {
               </a>
             </h3>
             <div>
-              {docs.length ? (
-                docs.map((doc: DiscourseTopic) => (
-                  <Col size={12} key={doc.id}>
+              {loading ? (
+                <Spinner />
+              ) : docs.length ? (
+                docs.map((doc: Documentation) => (
+                  <Col size={12} key={doc.path}>
                     <h5>
-                      {doc.url ? (
-                        <a href={doc.url} target="_blank" rel="noreferrer">
+                      {doc.path ? (
+                        <a
+                          href={doc.domain + doc.path}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
                           {doc.title}
                         </a>
                       ) : (
                         doc.title
                       )}
                     </h5>
-                    <p>{doc?.post?.blurb}</p>
+                    <p>{doc?.blocks?.[0].content.substring(0, 300) + "..."}</p>
                   </Col>
                 ))
               ) : (
@@ -168,7 +181,9 @@ function App() {
                 Forum posts &rsaquo;
               </a>
             </h3>
-            {topics.length ? (
+            {loading ? (
+              <Spinner />
+            ) : topics.length ? (
               topics.map((topic: DiscourseTopic) => (
                 <Col size={12} key={topic.id}>
                   <h5>
