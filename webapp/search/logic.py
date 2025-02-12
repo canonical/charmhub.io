@@ -1,7 +1,6 @@
 from flask import current_app as app
 from flask_caching import Cache
 import requests
-from urllib.parse import quote
 from webapp.config import SEARCH_FIELDS
 from webapp.packages.logic import parse_package_for_card
 from webapp.packages.store_packages import CharmStore, CharmPublisher
@@ -43,7 +42,9 @@ def search_discourse(
         if cached_page:
             return cached_page
         else:
-            resp = requests.get(f"{DISCOURSE_URL}/search.json?q={query}&page={page}")
+            resp = requests.get(
+                f"{DISCOURSE_URL}/search.json?q={query}&page={page}"
+            )
             topics = resp.json().get("topics", [])
             for topic in topics:
                 post = next(
@@ -77,14 +78,20 @@ def search_discourse(
             page += 1
             continue
 
-        resp = requests.get(f"{DISCOURSE_URL}/search.json?q={query}&page={page}")
+        resp = requests.get(
+            f"{DISCOURSE_URL}/search.json?q={query}&page={page}"
+        )
         data = resp.json()
         topics = data.get("topics", [])
 
         if topics:
             for topic in topics:
                 post = next(
-                    (post for post in data["posts"] if post["topic_id"] == topic["id"]),
+                    (
+                        post
+                        for post in data["posts"]
+                        if post["topic_id"] == topic["id"]
+                    ),
                     None,
                 )
                 topic["post"] = post
@@ -119,7 +126,9 @@ def search_docs(term: str) -> dict:
         dict: A dictionary containing the retrieved dtopics.
     """
 
-    search_url = f"{DOCS_URL}/_/api/v3/search/?q=project%3Acanonical-juju+{term}"
+    search_url = (
+        f"{DOCS_URL}/_/api/v3/search/?q=project%3Acanonical-juju+{term}"
+    )
 
     resp = requests.get(search_url)
     data = resp.json()
@@ -155,16 +164,16 @@ def search_topics(term: str, page: int, see_all=False) -> dict:
 def search_charms(term: str):
     return [
         parse_package_for_card(package, CharmStore, CharmPublisher)
-        for package in app.store_api.find(term, type="charm", fields=SEARCH_FIELDS)[
-            "results"
-        ]
+        for package in app.store_api.find(
+            term, type="charm", fields=SEARCH_FIELDS
+        )["results"]
     ]
 
 
 def search_bundles(term: str):
     return [
         parse_package_for_card(package, CharmStore, CharmPublisher)
-        for package in app.store_api.find(term, type="bundle", fields=SEARCH_FIELDS)[
-            "results"
-        ]
+        for package in app.store_api.find(
+            term, type="bundle", fields=SEARCH_FIELDS
+        )["results"]
     ]

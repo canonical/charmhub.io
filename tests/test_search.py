@@ -103,7 +103,7 @@ class TestAllSearchView(TestCase):
         all_topics_response = self.client.get("/all-topics?q=juju")
 
         self.assertEqual(all_search_response.status_code, 200)
-        self.assertIn("topics", all_docs_response.json)
+        self.assertIn("docs", all_docs_response.json)
         self.assertIn("charms", all_search_response.json)
         self.assertIn("bundles", all_search_response.json)
         self.assertIn("docs", all_search_response.json)
@@ -113,14 +113,8 @@ class TestAllSearchView(TestCase):
         self.assertIsInstance(all_search_response.json["topics"], list)
 
         self.assertEqual(all_docs_response.status_code, 200)
-        self.assertLessEqual(len(all_docs_response.json["topics"]), 3)
-        self.assertIn("url", all_docs_response.json["topics"][0])
-        self.assertTrue(
-            all(
-                topic.get("archived", False) is not True
-                for topic in all_docs_response.json["topics"]
-            )
-        )
+        self.assertLessEqual(len(all_docs_response.json["docs"]), 3)
+        self.assertIn("path", all_docs_response.json["docs"][0])
 
         self.assertEqual(all_topics_response.status_code, 200)
         self.assertTrue(

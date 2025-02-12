@@ -46,7 +46,9 @@ def all_charms() -> dict:
     packages = app.store_api.find(query, fields=SEARCH_FIELDS)
     package_type = request.path[1:-1].split("-")[1]
     result = [
-        package for package in packages["results"] if package["type"] == package_type
+        package
+        for package in packages["results"]
+        if package["type"] == package_type
     ]
     start = (page - 1) * limit
     end = start + limit
@@ -56,15 +58,13 @@ def all_charms() -> dict:
 @search.route("/all-docs")
 def all_docs():
     search_term = request.args.get("q")
-    page = int(request.args.get("page", 1))
     limit = int(request.args.get("limit", 50))
 
-    all_topics = search_docs(search_term)[:limit]
-    total_pages = -(len(all_topics) // -limit)
-    start = (page - 1) * limit
-    end = start + limit
+    docs = search_docs(search_term)[:limit]
 
-    return {"topics": all_topics[start:end], "total_pages": total_pages}
+    return {
+        "docs": docs,
+    }
 
 
 @search.route("/all-topics")

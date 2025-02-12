@@ -36,56 +36,52 @@ sample_bundles = {
 sample_docs = {
     "docs": [
         {
-            "id": 1087,
-            "archived": False,
-            "title": "Juju Documentation",
-            "fancy_title": "Juju Documentation",
-            "slug": "juju-documentation",
-            "tags": ["olm"],
-            "category_id": 22,
-            "url": "http://some_random_url.com",
+            "blocks": [
+                {
+                    "content": "Source: https://github.com/juju/juju",
+                    "highlights": {
+                        "content": [
+                            "util functions designed to help in creating"
+                        ],
+                        "title": ["<span>Test</span> includes"],
+                    },
+                    "id": "test-includes",
+                    "title": "Test includes",
+                    "type": "section",
+                }
+            ],
+            "domain": "https://canonical-juju.readthedocs-hosted.com",
+            "highlights": {"title": ["<span>Test</span> includes"]},
+            "path": "/en/3.6/contributor/reference/testing/integration",
+            "project": {"alias": None, "slug": "canonical-juju"},
+            "title": "Test includes",
+            "type": "page",
+            "version": {"slug": "3.6"},
         },
         {
-            "id": 4513,
-            "archived": False,
-            "title": "Documentation",
-            "fancy_title": "Documentation",
-            "slug": "documentation",
-            "tags": ["olm", "sdk"],
-            "category_id": 22,
-            "url": "http://some_random_url.com",
+            "blocks": [
+                {
+                    "content": "Source: https://github.com/juju/juju",
+                    "highlights": {
+                        "content": [
+                            "Integration <span>test</span> suites are often "
+                        ],
+                        "title": ["Integration <span>test</span> suite"],
+                    },
+                    "id": "integration-test-suite",
+                    "title": "Integration test suite",
+                    "type": "section",
+                }
+            ],
+            "domain": "https://canonical-juju.readthedocs-hosted.com",
+            "highlights": {"title": ["Integration <span>test</span> suite"]},
+            "path": "/en/3.6/contributor/reference/testing/",
+            "project": {"alias": None, "slug": "canonical-juju"},
+            "title": "Integration test suite",
+            "type": "page",
+            "version": {"slug": "3.6"},
         },
-        {
-            "id": 5476,
-            "archived": False,
-            "title": "How to manage applications",
-            "fancy_title": "How to manage applications",
-            "slug": "how-to-manage-applications",
-            "tags": ["olm"],
-            "category_id": 22,
-            "url": "http://some_random_url.com",
-        },
-        {
-            "id": 7068,
-            "archived": False,
-            "title": "List of model configuration keys",
-            "fancy_title": "List of model configuration keys",
-            "slug": "list-of-model-configuration-keys",
-            "tags": ["olm"],
-            "category_id": 22,
-            "url": "http://some_random_url.com",
-        },
-        {
-            "id": 1111,
-            "archived": False,
-            "title": "How to manage a controller",
-            "fancy_title": "How to manage a controller",
-            "slug": "how-to-manage-a-controller",
-            "tags": ["olm"],
-            "category_id": 22,
-            "url": "http://some_random_url.com",
-        },
-    ],
+    ]
 }
 
 sample_topics = {
