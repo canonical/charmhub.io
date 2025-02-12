@@ -25,10 +25,13 @@ def all_search_json():
     term = params.get("q")
     limit = int(params.get("limit", 5))
 
+    if not term:
+        return {"error": "No search term provided"}
+
     result = {
         "charms": search_charms(term)[:limit],
         "bundles": search_bundles(term)[:limit],
-        "docs": search_docs(term, 1, False)[:limit],
+        "docs": search_docs(term)[:limit],
         "topics": search_topics(term, 1, False)[:limit],
     }
     return result
@@ -43,9 +46,7 @@ def all_charms() -> dict:
     packages = app.store_api.find(query, fields=SEARCH_FIELDS)
     package_type = request.path[1:-1].split("-")[1]
     result = [
-        package
-        for package in packages["results"]
-        if package["type"] == package_type
+        package for package in packages["results"] if package["type"] == package_type
     ]
     start = (page - 1) * limit
     end = start + limit
@@ -58,7 +59,7 @@ def all_docs():
     page = int(request.args.get("page", 1))
     limit = int(request.args.get("limit", 50))
 
-    all_topics = search_docs(search_term, page, True)[:limit]
+    all_topics = search_docs(search_term)[:limit]
     total_pages = -(len(all_topics) // -limit)
     start = (page - 1) * limit
     end = start + limit

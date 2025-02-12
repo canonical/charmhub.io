@@ -15,6 +15,13 @@ type DiscourseTopic = {
   post: { blurb: string };
 };
 
+type Documentation = {
+  path: string;
+  domain: string;
+  title: string;
+  blocks: { title: string; content: string }[];
+};
+
 function App() {
   const search = new URLSearchParams(window.location.search).get("q");
   const [loading, setLoading] = useState(true);
@@ -143,18 +150,22 @@ function App() {
             </h3>
             <div>
               {docs.length ? (
-                docs.map((doc: DiscourseTopic) => (
-                  <Col size={12} key={doc.id}>
+                docs.map((doc: Documentation) => (
+                  <Col size={12} key={doc.path}>
                     <h5>
-                      {doc.url ? (
-                        <a href={doc.url} target="_blank" rel="noreferrer">
+                      {doc.path ? (
+                        <a
+                          href={doc.domain + doc.path}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
                           {doc.title}
                         </a>
                       ) : (
                         doc.title
                       )}
                     </h5>
-                    <p>{doc?.post?.blurb}</p>
+                    <p>{doc?.blocks?.[0].content.substring(0, 300) + "..."}</p>
                   </Col>
                 ))
               ) : (
