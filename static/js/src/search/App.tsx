@@ -1,4 +1,4 @@
-import { Col, Row } from "@canonical/react-components";
+import { Col, Row, Spinner } from "@canonical/react-components";
 import {
   BundleCard,
   CharmCard,
@@ -149,7 +149,9 @@ function App() {
               </a>
             </h3>
             <div>
-              {docs.length ? (
+              {loading ? (
+                <Spinner />
+              ) : docs.length ? (
                 docs.map((doc: Documentation) => (
                   <Col size={12} key={doc.path}>
                     <h5>
@@ -179,7 +181,9 @@ function App() {
                 Forum posts &rsaquo;
               </a>
             </h3>
-            {topics.length ? (
+            {loading ? (
+              <Spinner />
+            ) : topics.length ? (
               topics.map((topic: DiscourseTopic) => (
                 <Col size={12} key={topic.id}>
                   <h5>
