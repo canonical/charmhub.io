@@ -22,17 +22,9 @@ function Root() {
   return (
     <>
       <SectionHeader />
-      <div className="l-application">
-        <div className="l-main">
-          <div className="p-panel">
-            <div className="p-panel__content">
-              <div className="u-fixed-width">
-                <SectionNav />
-                <Outlet />
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="u-fixed-width">
+        <SectionNav />
+        <Outlet />
       </div>
     </>
   );
