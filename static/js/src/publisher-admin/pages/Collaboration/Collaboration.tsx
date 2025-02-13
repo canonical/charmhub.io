@@ -89,7 +89,7 @@ function Collaboration() {
 
   return (
     <>
-      <div className="u-fixed-width">
+      <div className="l-application">
         {showRevokeSuccess && (
           <Notification
             severity="positive"
@@ -156,112 +156,116 @@ function Collaboration() {
             <strong>{activeInviteEmail}</strong>.
           </Notification>
         )}
-      </div>
-      <Row>
-        <Col size={6}>
-          <CollaboratorFilter />
-        </Col>
-        <Col size={6} className="u-align--right">
-          <Button
-            appearance="positive"
-            hasIcon
-            onClick={() => {
-              setShowSidePanel(true);
-            }}
-          >
-            <Icon name="plus" light />
-            <span>Add new collaborator</span>
-          </Button>
-        </Col>
-      </Row>
-      <Strip shallow>
-        <div className="u-fixed-width">
-          <Accordion
-            expanded="collaborators"
-            sections={[
-              {
-                key: "collaborators",
-                title: `Active shares (${getCollaboratorsCount()})`,
-                content: (
-                  <Collaborators
-                    setShowRevokeModal={setShowRevokeCollaboratorModal}
-                  />
-                ),
-              },
-              {
-                key: "invites",
-                title: `Invites (${invitesList.length})`,
-                content: (
-                  <Invites
-                    setShowRevokeModal={setShowRevokeInviteModal}
-                    setShowReopenModal={setShowReopenInviteModal}
-                    setShowResendModal={setShowResendInviteModal}
-                  />
-                ),
-              },
-            ]}
-          />
+        <div className="l-main">
+          <div className="p-panel">
+            <Row>
+              <Col size={6}>
+                <CollaboratorFilter />
+              </Col>
+              <Col size={6} className="u-align--right">
+                <Button
+                  appearance="positive"
+                  hasIcon
+                  onClick={() => {
+                    setShowSidePanel(true);
+                  }}
+                >
+                  <Icon name="plus" light />
+                  <span>Add new collaborator</span>
+                </Button>
+              </Col>
+            </Row>
+            <Strip shallow>
+              <div className="u-fixed-width">
+                <Accordion
+                  expanded="collaborators"
+                  sections={[
+                    {
+                      key: "collaborators",
+                      title: `Active shares (${getCollaboratorsCount()})`,
+                      content: (
+                        <Collaborators
+                          setShowRevokeModal={setShowRevokeCollaboratorModal}
+                        />
+                      ),
+                    },
+                    {
+                      key: "invites",
+                      title: `Invites (${invitesList.length})`,
+                      content: (
+                        <Invites
+                          setShowRevokeModal={setShowRevokeInviteModal}
+                          setShowReopenModal={setShowReopenInviteModal}
+                          setShowResendModal={setShowResendInviteModal}
+                        />
+                      ),
+                    },
+                  ]}
+                />
+              </div>
+            </Strip>
+          </div>
         </div>
-      </Strip>
-      <div
-        className={`l-aside__overlay ${!showSidePanel && "u-hide"}`}
-        onClick={() => {
-          setShowSidePanel(false);
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === "Escape") {
+        <div
+          className={`l-aside__overlay ${!showSidePanel && "u-hide"}`}
+          onClick={() => {
             setShowSidePanel(false);
-          }
-        }}
-        role="button"
-        tabIndex={0}
-        aria-label="Close side panel"
-      ></div>
-      <aside className={`l-aside ${!showSidePanel && "is-collapsed"}`}>
-        <InviteCollaborator
-          setShowSidePanel={setShowSidePanel}
-          setShowInviteSuccess={setShowInviteSuccess}
-          setShowInviteError={setShowInviteError}
-        />
-      </aside>
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === "Escape") {
+              setShowSidePanel(false);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label="Close side panel"
+        ></div>
+        <aside className={`l-aside ${!showSidePanel && "is-collapsed"}`}>
+          <InviteCollaborator
+            setShowSidePanel={setShowSidePanel}
+            setShowInviteSuccess={setShowInviteSuccess}
+            setShowInviteError={setShowInviteError}
+          />
+        </aside>
 
-      {showRevokeCollaboratorModal && (
-        <InviteConfirmationModal
-          action="Revoke"
-          setShowModal={setShowRevokeCollaboratorModal}
-          setShowSuccess={setShowRevokeSuccess}
-          setShowError={setShowRevokeError}
-          queryKey="collaboratorsData"
-        />
-      )}
+        {showRevokeCollaboratorModal && (
+          <InviteConfirmationModal
+            action="Revoke"
+            setShowModal={setShowRevokeCollaboratorModal}
+            setShowSuccess={setShowRevokeSuccess}
+            setShowError={setShowRevokeError}
+            queryKey="collaboratorsData"
+          />
+        )}
 
-      {showRevokeInviteModal && (
-        <InviteConfirmationModal
-          action="Revoke"
-          setShowModal={setShowRevokeInviteModal}
-          setShowSuccess={setShowRevokeSuccess}
-          setShowError={setShowRevokeError}
-          queryKey="invitesData"
-        />
-      )}
+        {showRevokeInviteModal && (
+          <InviteConfirmationModal
+            action="Revoke"
+            setShowModal={setShowRevokeInviteModal}
+            setShowSuccess={setShowRevokeSuccess}
+            setShowError={setShowRevokeError}
+            queryKey="invitesData"
+          />
+        )}
 
-      {showReopenInviteModal && (
-        <InviteConfirmationModal
-          action="Reopen"
-          setShowModal={setShowReopenInviteModal}
-          setShowSuccess={setShowInviteSuccess}
-          setShowError={setShowInviteError}
-        />
-      )}
+        {showReopenInviteModal && (
+          <InviteConfirmationModal
+            action="Reopen"
+            setShowModal={setShowReopenInviteModal}
+            setShowSuccess={setShowInviteSuccess}
+            setShowError={setShowInviteError}
+          />
+        )}
 
-      {showResendInviteModal && (
-        <InviteConfirmationModal
-          action="Resend"
-          setShowModal={setShowResendInviteModal}
-          setShowSuccess={setShowInviteSuccess}
-          setShowError={setShowInviteError}
-        />
-      )}
+        {showResendInviteModal && (
+          <InviteConfirmationModal
+            action="Resend"
+            setShowModal={setShowResendInviteModal}
+            setShowSuccess={setShowInviteSuccess}
+            setShowError={setShowInviteError}
+          />
+        )}
+      </div>
     </>
   );
 }
