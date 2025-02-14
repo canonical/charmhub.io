@@ -52,7 +52,7 @@
     </div>
 </div>
 <div id="source">
-    <p id="t1" class="run"><span class="n"><a href="#t1">1</a></span><span class="t"><span class="key">import</span> <span class="nam">sys</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t1" class="pln"><span class="n"><a href="#t1">1</a></span><span class="t"><span class="key">import</span> <span class="nam">sys</span>&nbsp;</span><span class="r"></span></p>
     <p id="t2" class="run"><span class="n"><a href="#t2">2</a></span><span class="t"><span class="key">import</span> <span class="nam">datetime</span>&nbsp;</span><span class="r"></span></p>
     <p id="t3" class="run"><span class="n"><a href="#t3">3</a></span><span class="t"><span class="key">from</span> <span class="nam">collections</span> <span class="key">import</span> <span class="nam">OrderedDict</span>&nbsp;</span><span class="r"></span></p>
     <p id="t4" class="run"><span class="n"><a href="#t4">4</a></span><span class="t"><span class="key">import</span> <span class="nam">re</span>&nbsp;</span><span class="r"></span></p>
@@ -325,7 +325,7 @@
     <p id="t271" class="mis show_mis"><span class="n"><a href="#t271">271</a></span><span class="t">                        <span class="nam">platforms</span><span class="op">[</span><span class="nam">base</span><span class="op">[</span><span class="str">"name"</span><span class="op">]</span><span class="op">]</span><span class="op">.</span><span class="nam">add</span><span class="op">(</span><span class="nam">series</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t272" class="pln"><span class="n"><a href="#t272">272</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t273" class="mis show_mis"><span class="n"><a href="#t273">273</a></span><span class="t">                        <span class="nam">all_channel_bases</span><span class="op">[</span><span class="nam">base</span><span class="op">[</span><span class="str">"name"</span><span class="op">]</span> <span class="op">+</span> <span class="nam">series</span><span class="op">]</span> <span class="op">=</span> <span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t274" class="pln"><span class="n"><a href="#t274">274</a></span><span class="t">                            <span class="str">f"{platform} {series}"</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t274" class="pln"><span class="n"><a href="#t274">274</a></span><span class="t">                            <span class="fst">f"</span><span class="op">{</span><span class="nam">platform</span><span class="op">}</span><span class="fst"> </span><span class="op">{</span><span class="nam">series</span><span class="op">}</span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
     <p id="t275" class="pln"><span class="n"><a href="#t275">275</a></span><span class="t">                        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t276" class="pln"><span class="n"><a href="#t276">276</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t277" class="mis show_mis"><span class="n"><a href="#t277">277</a></span><span class="t">    <span class="nam">parent_dict</span><span class="op">[</span><span class="str">"all_architectures"</span><span class="op">]</span> <span class="op">=</span> <span class="nam">sorted</span><span class="op">(</span><span class="nam">all_archy</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -352,7 +352,7 @@
     <p id="t298" class="run"><span class="n"><a href="#t298">298</a></span><span class="t">            <span class="key">continue</span>&nbsp;</span><span class="r"></span></p>
     <p id="t299" class="run"><span class="n"><a href="#t299">299</a></span><span class="t">        <span class="nam">platform</span> <span class="op">=</span> <span class="nam">PLATFORMS</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="nam">base</span><span class="op">[</span><span class="str">"name"</span><span class="op">]</span><span class="op">,</span> <span class="nam">base</span><span class="op">[</span><span class="str">"name"</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t300" class="run"><span class="n"><a href="#t300">300</a></span><span class="t">        <span class="nam">series</span><span class="op">.</span><span class="nam">add</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t301" class="pln"><span class="n"><a href="#t301">301</a></span><span class="t">            <span class="str">f"{platform} {base['channel']}"</span> <span class="key">if</span> <span class="nam">long_name</span> <span class="key">else</span> <span class="nam">base</span><span class="op">[</span><span class="str">"channel"</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t301" class="pln"><span class="n"><a href="#t301">301</a></span><span class="t">            <span class="fst">f"</span><span class="op">{</span><span class="nam">platform</span><span class="op">}</span><span class="fst"> </span><span class="op">{</span><span class="nam">base</span><span class="op">[</span><span class="str">'channel'</span><span class="op">]</span><span class="op">}</span><span class="fst">"</span> <span class="key">if</span> <span class="nam">long_name</span> <span class="key">else</span> <span class="nam">base</span><span class="op">[</span><span class="str">"channel"</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p id="t302" class="pln"><span class="n"><a href="#t302">302</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t303" class="pln"><span class="n"><a href="#t303">303</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t304" class="run"><span class="n"><a href="#t304">304</a></span><span class="t">    <span class="key">return</span> <span class="nam">sorted</span><span class="op">(</span><span class="nam">series</span><span class="op">,</span> <span class="nam">reverse</span><span class="op">=</span><span class="key">True</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -635,7 +635,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.5</a>,
-            created at 2024-12-13 22:02 +0000
+            created at 2025-02-14 22:06 +0000
         </p>
     </div>
 </div>
