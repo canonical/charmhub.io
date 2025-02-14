@@ -55,8 +55,9 @@ def get_publisher(entity_name, path):
 )
 @login_required
 def get_package(entity_name):
+    session["developer_token"] = session["account-auth"]
     package = publisher_gateway.get_package_metadata(
-        session["account-auth"], entity_name
+        session, entity_name
     )
 
     return jsonify({"data": package, "success": True})

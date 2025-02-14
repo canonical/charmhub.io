@@ -28,8 +28,11 @@ class TestGetPackages(TestCase):
         self.assertIn(b"test-provides", response.data)
         self.assertIn(b"requires", response.data)
         self.assertIn(b"test-requires", response.data)
-
-    @patch("webapp.app.app.store_api.find")
+    
+    @patch(
+        "canonicalwebteam.store_api.publishergw"
+        ".PublisherGW.find"
+    )
     def test_get_packages_error_handling(self, mock_find):
         mock_find.side_effect = Exception("Mocked Error")
         with self.client as client:
@@ -39,7 +42,10 @@ class TestGetPackages(TestCase):
 
                 self.assertEqual(response.status_code, 500)
 
-    @patch("webapp.app.app.store_api.find")
+    @patch(
+        "canonicalwebteam.store_api.publishergw"
+        ".PublisherGW.find"
+    )
     def test_get_packages_empty_response(self, mock_find):
         mock_find.return_value = {"results": []}
         with self.client as client:

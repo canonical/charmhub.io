@@ -46,8 +46,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertIn(b"test-username", res.data)
 
     @patch(
-        "canonicalwebteam.store_api.stores.charmstore."
-        "CharmPublisher.get_package_metadata"
+        "canonicalwebteam.store_api.publishergw."
+        "PublisherGW.get_package_metadata"
     )
     def test_get_publisher(self, mock_get_package_metadata):
         mock_get_package_metadata.return_value = sample_charm
@@ -62,8 +62,8 @@ class TestPublisherViews(unittest.TestCase):
             self.assertEqual(res.status_code, 200)
 
     @patch(
-        "canonicalwebteam.store_api.stores"
-        ".charmstore.CharmPublisher.get_package_metadata"
+        "canonicalwebteam.store_api.publishergw."
+        "PublisherGW.get_package_metadata"
     )
     def test_get_package(self, mock_get_package_metadata):
         mock_get_package_metadata.return_value = {"name": "test-package"}
@@ -75,8 +75,8 @@ class TestPublisherViews(unittest.TestCase):
         )
 
     @patch(
-        "canonicalwebteam.store_api.stores"
-        ".charmstore.CharmPublisher.update_package_metadata"
+        "canonicalwebteam.store_api.publishergw."
+        "PublisherGW.update_package_metadata"
     )
     def test_update_package(self, mock_update_package_metadata):
         mock_update_package_metadata.return_value = {"name": "test-package"}
@@ -86,8 +86,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
 
     @patch(
-        "canonicalwebteam.store_api.stores"
-        ".charmstore.CharmPublisher.update_package_metadata"
+        "canonicalwebteam.store_api.publishergw."
+        "PublisherGW.update_package_metadata"
     )
     def test_update_package_failure(self, mock_update_package_metadata):
         mock_update_package_metadata.side_effect = StoreApiResponseErrorList(
@@ -100,8 +100,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.json["success"], False)
 
     @patch(
-        "canonicalwebteam.store_api.stores"
-        ".charmstore.CharmPublisher.update_package_metadata"
+        "canonicalwebteam.store_api.publishergw."
+        "PublisherGW.update_package_metadata"
     )
     def test_update_package_unauthorized(self, mock_update_package_metadata):
         mock_update_package_metadata.side_effect = StoreApiResponseErrorList(
@@ -115,8 +115,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.json["message"], "Package not found")
 
     @patch(
-        "canonicalwebteam.store_api.stores"
-        ".charmstore.CharmPublisher.get_account_packages"
+        "canonicalwebteam.store_api.publishergw."
+        "PublisherGW.get_account_packages"
     )
     def test_list_page(self, mock_get_account_packages):
         mock_get_account_packages.return_value = [
@@ -153,8 +153,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
 
     @patch(
-        "canonicalwebteam.store_api.stores.charmstore"
-        ".CharmPublisher.accept_invite"
+        "canonicalwebteam.store_api.publishergw"
+        ".PublisherGW.accept_invite"
     )
     def test_accept_post_invite(self, mock_accept_invite):
         mock_accept_invite.return_value.status_code = 204
@@ -165,8 +165,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
 
     @patch(
-        "canonicalwebteam.store_api.stores.charmstore"
-        ".CharmPublisher.accept_invite"
+        "canonicalwebteam.store_api.publishergw"
+        ".PublisherGW.accept_invite"
     )
     def test_accept_post_invite_failed(self, mock_accept_invite):
         mock_accept_invite.return_value.status_code = 401
@@ -178,8 +178,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.json["message"], "An error occured")
 
     @patch(
-        "canonicalwebteam.store_api.stores.charmstore"
-        ".CharmPublisher.reject_invite"
+        "canonicalwebteam.store_api.publishergw"
+        ".PublisherGW.reject_invite"
     )
     def test_reject_post_invite(self, mock_reject_invite):
         mock_reject_invite.return_value.status_code = 204
@@ -190,8 +190,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
 
     @patch(
-        "canonicalwebteam.store_api.stores.charmstore"
-        ".CharmPublisher.get_collaborators"
+        "canonicalwebteam.store_api.publishergw"
+        ".PublisherGW.get_collaborators"
     )
     def test_get_collaborators(self, mock_get_collaborators):
         mock_get_collaborators.return_value = [{"name": "collaborator"}]
@@ -199,8 +199,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
 
     @patch(
-        "canonicalwebteam.store_api.stores.charmstore"
-        ".CharmPublisher.get_collaborators"
+        "canonicalwebteam.store_api.publishergw"
+        ".PublisherGW.get_collaborators"
     )
     def test_get_collaborators_failed(self, mock_get_collaborators):
         mock_get_collaborators.side_effect = StoreApiResponseErrorList(
@@ -210,8 +210,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 500)
 
     @patch(
-        "canonicalwebteam.store_api.stores.charmstore"
-        ".CharmPublisher.get_pending_invites"
+        "canonicalwebteam.store_api.publishergw"
+        ".PublisherGW.get_pending_invites"
     )
     def test_get_pending_invites(self, mock_get_pending_invites):
         mock_get_pending_invites.return_value = {
@@ -221,8 +221,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
 
     @patch(
-        "canonicalwebteam.store_api.stores.charmstore"
-        ".CharmPublisher.invite_collaborators"
+        "canonicalwebteam.store_api.publishergw"
+        ".PublisherGW.invite_collaborators"
     )
     def test_invite_collaborators(self, mock_invite_collaborators):
         mock_invite_collaborators.return_value = {"tokens": ["token"]}
@@ -233,8 +233,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
 
     @patch(
-        "canonicalwebteam.store_api.stores.charmstore"
-        ".CharmPublisher.revoke_invites"
+        "canonicalwebteam.store_api.publishergw"
+        ".PublisherGW.revoke_invites"
     )
     def test_revoke_invite(self, mock_revoke_invites):
         mock_revoke_invites.return_value.status_code = 204
@@ -250,8 +250,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertIn(b"Register a new", res.data)
 
     @patch(
-        "canonicalwebteam.store_api.stores.charmstore"
-        ".CharmPublisher.register_package_name"
+        "canonicalwebteam.store_api.publishergw"
+        ".PublisherGW.register_package_name"
     )
     def test_post_register_name(self, mock_register_package_name):
         mock_register_package_name.return_value = True
@@ -266,8 +266,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 302)
 
     @patch(
-        "canonicalwebteam.store_api.stores.charmstore"
-        ".CharmPublisher.register_package_name"
+        "canonicalwebteam.store_api.publishergw"
+        ".PublisherGW.register_package_name"
     )
     def test_post_register_name_already_owned(
         self, mock_register_package_name
@@ -310,8 +310,8 @@ class TestPublisherViews(unittest.TestCase):
         )
 
     @patch(
-        "canonicalwebteam.store_api.stores.charmstore"
-        ".CharmPublisher.unregister_package_name"
+        "canonicalwebteam.store_api.publishergw"
+        ".PublisherGW.unregister_package_name"
     )
     def test_delete_package(self, mock_unregister_package_name):
         mock_unregister_package_name.return_value.status_code = 200
@@ -319,8 +319,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
 
     @patch(
-        "canonicalwebteam.store_api.stores.charmstore"
-        ".CharmPublisher.unregister_package_name"
+        "canonicalwebteam.store_api.publishergw"
+        ".PublisherGW.unregister_package_name"
     )
     def test_delete_package_failed(self, mock_unregister_package_name):
         mock_unregister_package_name.return_value.status_code = 500
@@ -331,8 +331,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 500)
 
     @patch(
-        "canonicalwebteam.store_api.stores.charmstore"
-        ".CharmPublisher.create_track"
+        "canonicalwebteam.store_api.publishergw"
+        ".PublisherGW.create_track"
     )
     def test_post_create_track(self, mock_create_track):
         mock_create_track.return_value.status_code = 201
@@ -348,8 +348,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 201)
 
     @patch(
-        "canonicalwebteam.store_api.stores.charmstore"
-        ".CharmPublisher.create_track"
+        "canonicalwebteam.store_api.publishergw"
+        ".PublisherGW.create_track"
     )
     def test_post_create_track_already_exists(self, mock_create_track):
         mock_create_track.return_value.status_code = 409
@@ -365,8 +365,8 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 409)
 
     @patch(
-        "canonicalwebteam.store_api.stores.charmstore"
-        ".CharmPublisher.get_releases"
+        "canonicalwebteam.store_api.publishergw"
+        ".PublisherGW.get_releases"
     )
     @patch("webapp.publisher.logic.process_releases")
     @patch("webapp.publisher.logic.get_all_architectures")

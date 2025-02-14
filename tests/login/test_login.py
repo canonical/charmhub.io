@@ -46,6 +46,6 @@ class TestLoginViews(unittest.TestCase):
         response = self.client.get("/logout")
         self.assertEqual(response.status_code, 302)
         with self.client.session_transaction() as s:
-            self.assertEqual(response.location, "http://localhost/")
+            self.assertEqual(response.location, "/")
             self.assertEqual(s.get("account-auth"), None)
             self.assertEqual(s.get("account-macaroon"), None)

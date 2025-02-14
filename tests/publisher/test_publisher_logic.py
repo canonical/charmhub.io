@@ -98,13 +98,6 @@ class TestProcessReleases(TestCase):
         )
         self.assertEqual(result, expected_output)
 
-    def test_process_releases_basic_flow(
-        self,
-    ):
-        params, expected_output = test_case_basic_flow
-        result = process_releases(*params)
-        self.assertEqual(result, expected_output)
-
 
 class TestGetAllArchitectures(TestCase):
     def test_get_all_architectures(

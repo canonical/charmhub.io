@@ -17,7 +17,7 @@ class TestGetPublisherDetails(TestCase):
         self.assertIn(b"charms_count", response.data)
         self.assertIn(b"error_info", response.data)
 
-    @patch("webapp.app.app.store_api.find")
+    @patch ("canonicalwebteam.store_api.publishergw.PublisherGW.find")
     def test_get_publisher_details_error_handling(self, mock_find):
         mock_find.side_effect = Exception("Mocked Error")
         with self.client as client:
@@ -26,7 +26,7 @@ class TestGetPublisherDetails(TestCase):
                 self.assertEqual(str(context.exception), "Mocked Error")
                 self.assertEqual(response.status_code, 500)
 
-    @patch("webapp.app.app.store_api.find")
+    @patch ("canonicalwebteam.store_api.publishergw.PublisherGW.find")
     def test_get_publisher_details_empty_response(self, mock_find):
         mock_find.return_value = {"results": []}
         with self.client as client:

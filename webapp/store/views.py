@@ -42,7 +42,7 @@ def get_publisher_details(publisher):
     charms_count = 0
     publisher_details = {"display-name": publisher}
 
-    charms_results = publisher_gateway(
+    charms_results = publisher_gateway.find(
         publisher=publisher,
         fields=SEARCH_FIELDS,
     )["results"]
