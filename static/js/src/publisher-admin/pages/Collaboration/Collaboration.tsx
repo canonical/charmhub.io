@@ -90,74 +90,75 @@ function Collaboration() {
   return (
     <>
       <div className="l-application">
-        {showRevokeSuccess && (
-          <Notification
-            severity="positive"
-            onDismiss={() => {
-              setShowRevokeSuccess(false);
-            }}
-          >
-            The invite for <strong>{activeInviteEmail}</strong> has been
-            revoked.
-          </Notification>
-        )}
-
-        {showRevokeError && (
-          <Notification
-            severity="negative"
-            onDismiss={() => {
-              setShowRevokeError(false);
-            }}
-          >
-            There was a problem revoking the invite for{" "}
-            <strong>{activeInviteEmail}</strong>.
-          </Notification>
-        )}
-
-        {showInviteSuccess && (
-          <Notification
-            severity="positive"
-            title="An invite has been created"
-            onDismiss={() => {
-              setShowInviteSuccess(false);
-            }}
-          >
-            <p>
-              <a target="_blank" href={inviteEmailLink} rel="noreferrer">
-                Send the invite by email
-              </a>{" "}
-              or copy link:
-            </p>
-            <div>
-              <input
-                className="u-no-margin--bottom"
-                type="text"
-                readOnly
-                value={inviteLink}
-                style={{
-                  color: "inherit",
-                }}
-                onFocus={(e) => {
-                  e.target.select();
-                }}
-              />
-            </div>
-          </Notification>
-        )}
-
-        {showInviteError && (
-          <Notification
-            severity="negative"
-            onDismiss={() => {
-              setShowInviteError(false);
-            }}
-          >
-            There was a problem creating an invite for{" "}
-            <strong>{activeInviteEmail}</strong>.
-          </Notification>
-        )}
         <div className="l-main">
           <div className="p-panel">
+            {showRevokeSuccess && (
+              <Notification
+                severity="positive"
+                onDismiss={() => {
+                  setShowRevokeSuccess(false);
+                }}
+              >
+                The invite for <strong>{activeInviteEmail}</strong> has been
+                revoked.
+              </Notification>
+            )}
+
+            {showRevokeError && (
+              <Notification
+                severity="negative"
+                onDismiss={() => {
+                  setShowRevokeError(false);
+                }}
+              >
+                There was a problem revoking the invite for{" "}
+                <strong>{activeInviteEmail}</strong>.
+              </Notification>
+            )}
+
+            {showInviteSuccess && (
+              <Notification
+                severity="positive"
+                title="An invite has been created"
+                onDismiss={() => {
+                  setShowInviteSuccess(false);
+                }}
+              >
+                <p>
+                  <a target="_blank" href={inviteEmailLink} rel="noreferrer">
+                    Send the invite by email
+                  </a>{" "}
+                  or copy link:
+                </p>
+                <div>
+                  <input
+                    className="u-no-margin--bottom"
+                    type="text"
+                    readOnly
+                    value={inviteLink}
+                    style={{
+                      color: "inherit",
+                    }}
+                    onFocus={(e) => {
+                      e.target.select();
+                    }}
+                  />
+                </div>
+              </Notification>
+            )}
+
+            {showInviteError && (
+              <Notification
+                severity="negative"
+                onDismiss={() => {
+                  setShowInviteError(false);
+                }}
+              >
+                There was a problem creating an invite for{" "}
+                <strong>{activeInviteEmail}</strong>.
+              </Notification>
+            )}
+
             <Row>
               <Col size={6}>
                 <CollaboratorFilter />
