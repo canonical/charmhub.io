@@ -3,9 +3,9 @@
   "license": "LGPL-3.0-or-later",
   "scripts": {
     "clean": "rm -rf node_modules yarn-error.log css static/css *.log *.sqlite _site/ build/ .jekyll-metadata .bundle",
-    "watch": "watch -p 'static/sass/**/*' -p 'static/js/**/*.js' -p 'static/js/**/*.tsx' -c 'yarn run build'",
+    "watch": "SHELL=/bin/bash chokidar 'static/sass/**/*' 'static/js/**/*.js' 'static/js/**/*.tsx' --await-write-finish=100 -c 'yarn run build'",
     "watch-js": "webpack --watch --mode development",
-    "watch-scss": "watch -p 'static/sass/**/*.scss' -c 'yarn run build-css'",
+    "watch-scss": "SHELL=/bin/bash chokidar 'static/sass/**/*.scss' --await-write-finish=100 -c 'yarn run build-css'",
     "build": "yarn run build-css && yarn run build-js",
     "build-css": "sass static/sass/styles.scss:static/css/styles.css static/sass/styles-embedded.scss:static/css/styles-embedded.css --load-path=node_modules --style=compressed --quiet-deps --silence-deprecation=import && postcss --map false --use autoprefixer --replace 'static/css/**/*.css' ",
     "build-js": "webpack",
@@ -28,15 +28,14 @@
     "@babel/preset-typescript": "7.26.0",
     "@canonical/cookie-policy": "3.6.5",
     "@canonical/global-nav": "3.6.4",
-    "@canonical/react-components": "1.9.0",
-    "@canonical/store-components": "0.52.0",
+    "@canonical/react-components": "2.1.0",
+    "@canonical/store-components": "0.53.0",
     "@sentry/react": "8.48.0",
     "@testing-library/dom": "10.4.0",
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.1.0",
     "@testing-library/user-event": "14.5.2",
     "@types/jest": "29.5.14",
-    "@types/react-dom": "19.0.2",
     "@types/react-router-dom": "5.3.3",
     "autoprefixer": "10.4.20",
     "babel-loader": "9.2.1",
@@ -61,20 +60,19 @@
     "style-loader": "4.0.0",
     "ts-loader": "9.5.1",
     "typescript": "5.7.2",
-    "vanilla-framework": "4.20.3",
-    "watch-cli": "0.2.3",
+    "vanilla-framework": "4.21.0",
     "webpack": "5.97.1",
     "webpack-cli": "6.0.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.25.9",
     "@types/deep-equal": "1.0.4",
-    "@types/react": "19.0.4",
     "@types/uuid": "10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "babel-jest": "29.7.0",
     "babel-plugin-prismjs": "2.1.0",
+    "chokidar-cli": "^3.0.0",
     "concurrently": "9.1.2",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "9.1.0",
@@ -88,6 +86,10 @@
     "stylelint": "16.12.0",
     "stylelint-config-standard-scss": "14.0.0",
     "stylelint-order": "6.0.4",
-    "undici": "7.2.1"
+    "undici": "7.2.3"
+  },
+  "resolutions": {
+    "@types/react": "18.3.18",
+    "@types/react-dom": "18.3.5"
   }
 }

@@ -89,179 +89,184 @@ function Collaboration() {
 
   return (
     <>
-      <div className="u-fixed-width">
-        {showRevokeSuccess && (
-          <Notification
-            severity="positive"
-            onDismiss={() => {
-              setShowRevokeSuccess(false);
-            }}
-          >
-            The invite for <strong>{activeInviteEmail}</strong> has been
-            revoked.
-          </Notification>
-        )}
-
-        {showRevokeError && (
-          <Notification
-            severity="negative"
-            onDismiss={() => {
-              setShowRevokeError(false);
-            }}
-          >
-            There was a problem revoking the invite for{" "}
-            <strong>{activeInviteEmail}</strong>.
-          </Notification>
-        )}
-
-        {showInviteSuccess && (
-          <Notification
-            severity="positive"
-            title="An invite has been created"
-            onDismiss={() => {
-              setShowInviteSuccess(false);
-            }}
-          >
-            <p>
-              <a target="_blank" href={inviteEmailLink} rel="noreferrer">
-                Send the invite by email
-              </a>{" "}
-              or copy link:
-            </p>
-            <div>
-              <input
-                className="u-no-margin--bottom"
-                type="text"
-                readOnly
-                value={inviteLink}
-                style={{
-                  color: "inherit",
+      <div className="l-application">
+        <div className="l-main">
+          <div className="p-panel">
+            {showRevokeSuccess && (
+              <Notification
+                severity="positive"
+                onDismiss={() => {
+                  setShowRevokeSuccess(false);
                 }}
-                onFocus={(e) => {
-                  e.target.select();
+              >
+                The invite for <strong>{activeInviteEmail}</strong> has been
+                revoked.
+              </Notification>
+            )}
+
+            {showRevokeError && (
+              <Notification
+                severity="negative"
+                onDismiss={() => {
+                  setShowRevokeError(false);
                 }}
-              />
-            </div>
-          </Notification>
+              >
+                There was a problem revoking the invite for{" "}
+                <strong>{activeInviteEmail}</strong>.
+              </Notification>
+            )}
+
+            {showInviteSuccess && (
+              <Notification
+                severity="positive"
+                title="An invite has been created"
+                onDismiss={() => {
+                  setShowInviteSuccess(false);
+                }}
+              >
+                <p>
+                  <a target="_blank" href={inviteEmailLink} rel="noreferrer">
+                    Send the invite by email
+                  </a>{" "}
+                  or copy link:
+                </p>
+                <div>
+                  <input
+                    className="u-no-margin--bottom"
+                    type="text"
+                    readOnly
+                    value={inviteLink}
+                    style={{
+                      color: "inherit",
+                    }}
+                    onFocus={(e) => {
+                      e.target.select();
+                    }}
+                  />
+                </div>
+              </Notification>
+            )}
+
+            {showInviteError && (
+              <Notification
+                severity="negative"
+                onDismiss={() => {
+                  setShowInviteError(false);
+                }}
+              >
+                There was a problem creating an invite for{" "}
+                <strong>{activeInviteEmail}</strong>.
+              </Notification>
+            )}
+
+            <Row>
+              <Col size={6}>
+                <CollaboratorFilter />
+              </Col>
+              <Col size={6} className="u-align--right">
+                <Button
+                  appearance="positive"
+                  hasIcon
+                  onClick={() => {
+                    setShowSidePanel(true);
+                  }}
+                >
+                  <Icon name="plus" light />
+                  <span>Add new collaborator</span>
+                </Button>
+              </Col>
+            </Row>
+            <Strip shallow>
+              <div className="u-fixed-width">
+                <Accordion
+                  expanded="collaborators"
+                  sections={[
+                    {
+                      key: "collaborators",
+                      title: `Active shares (${getCollaboratorsCount()})`,
+                      content: (
+                        <Collaborators
+                          setShowRevokeModal={setShowRevokeCollaboratorModal}
+                        />
+                      ),
+                    },
+                    {
+                      key: "invites",
+                      title: `Invites (${invitesList.length})`,
+                      content: (
+                        <Invites
+                          setShowRevokeModal={setShowRevokeInviteModal}
+                          setShowReopenModal={setShowReopenInviteModal}
+                          setShowResendModal={setShowResendInviteModal}
+                        />
+                      ),
+                    },
+                  ]}
+                />
+              </div>
+            </Strip>
+          </div>
+        </div>
+        <div
+          className={`l-aside__overlay ${!showSidePanel && "u-hide"}`}
+          onClick={() => {
+            setShowSidePanel(false);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === "Escape") {
+              setShowSidePanel(false);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label="Close side panel"
+        ></div>
+        <aside className={`l-aside ${!showSidePanel && "is-collapsed"}`}>
+          <InviteCollaborator
+            setShowSidePanel={setShowSidePanel}
+            setShowInviteSuccess={setShowInviteSuccess}
+            setShowInviteError={setShowInviteError}
+          />
+        </aside>
+
+        {showRevokeCollaboratorModal && (
+          <InviteConfirmationModal
+            action="Revoke"
+            setShowModal={setShowRevokeCollaboratorModal}
+            setShowSuccess={setShowRevokeSuccess}
+            setShowError={setShowRevokeError}
+            queryKey="collaboratorsData"
+          />
         )}
 
-        {showInviteError && (
-          <Notification
-            severity="negative"
-            onDismiss={() => {
-              setShowInviteError(false);
-            }}
-          >
-            There was a problem creating an invite for{" "}
-            <strong>{activeInviteEmail}</strong>.
-          </Notification>
+        {showRevokeInviteModal && (
+          <InviteConfirmationModal
+            action="Revoke"
+            setShowModal={setShowRevokeInviteModal}
+            setShowSuccess={setShowRevokeSuccess}
+            setShowError={setShowRevokeError}
+            queryKey="invitesData"
+          />
+        )}
+
+        {showReopenInviteModal && (
+          <InviteConfirmationModal
+            action="Reopen"
+            setShowModal={setShowReopenInviteModal}
+            setShowSuccess={setShowInviteSuccess}
+            setShowError={setShowInviteError}
+          />
+        )}
+
+        {showResendInviteModal && (
+          <InviteConfirmationModal
+            action="Resend"
+            setShowModal={setShowResendInviteModal}
+            setShowSuccess={setShowInviteSuccess}
+            setShowError={setShowInviteError}
+          />
         )}
       </div>
-      <Row>
-        <Col size={6}>
-          <CollaboratorFilter />
-        </Col>
-        <Col size={6} className="u-align--right">
-          <Button
-            appearance="positive"
-            hasIcon
-            onClick={() => {
-              setShowSidePanel(true);
-            }}
-          >
-            <Icon name="plus" light />
-            <span>Add new collaborator</span>
-          </Button>
-        </Col>
-      </Row>
-      <Strip shallow>
-        <div className="u-fixed-width">
-          <Accordion
-            expanded="collaborators"
-            sections={[
-              {
-                key: "collaborators",
-                title: `Active shares (${getCollaboratorsCount()})`,
-                content: (
-                  <Collaborators
-                    setShowRevokeModal={setShowRevokeCollaboratorModal}
-                  />
-                ),
-              },
-              {
-                key: "invites",
-                title: `Invites (${invitesList.length})`,
-                content: (
-                  <Invites
-                    setShowRevokeModal={setShowRevokeInviteModal}
-                    setShowReopenModal={setShowReopenInviteModal}
-                    setShowResendModal={setShowResendInviteModal}
-                  />
-                ),
-              },
-            ]}
-          />
-        </div>
-      </Strip>
-      <div
-        className={`l-aside__overlay ${!showSidePanel && "u-hide"}`}
-        onClick={() => {
-          setShowSidePanel(false);
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === "Escape") {
-            setShowSidePanel(false);
-          }
-        }}
-        role="button"
-        tabIndex={0}
-        aria-label="Close side panel"
-      ></div>
-      <aside className={`l-aside ${!showSidePanel && "is-collapsed"}`}>
-        <InviteCollaborator
-          setShowSidePanel={setShowSidePanel}
-          setShowInviteSuccess={setShowInviteSuccess}
-          setShowInviteError={setShowInviteError}
-        />
-      </aside>
-
-      {showRevokeCollaboratorModal && (
-        <InviteConfirmationModal
-          action="Revoke"
-          setShowModal={setShowRevokeCollaboratorModal}
-          setShowSuccess={setShowRevokeSuccess}
-          setShowError={setShowRevokeError}
-          queryKey="collaboratorsData"
-        />
-      )}
-
-      {showRevokeInviteModal && (
-        <InviteConfirmationModal
-          action="Revoke"
-          setShowModal={setShowRevokeInviteModal}
-          setShowSuccess={setShowRevokeSuccess}
-          setShowError={setShowRevokeError}
-          queryKey="invitesData"
-        />
-      )}
-
-      {showReopenInviteModal && (
-        <InviteConfirmationModal
-          action="Reopen"
-          setShowModal={setShowReopenInviteModal}
-          setShowSuccess={setShowInviteSuccess}
-          setShowError={setShowInviteError}
-        />
-      )}
-
-      {showResendInviteModal && (
-        <InviteConfirmationModal
-          action="Resend"
-          setShowModal={setShowResendInviteModal}
-          setShowSuccess={setShowInviteSuccess}
-          setShowError={setShowInviteError}
-        />
-      )}
     </>
   );
 }
