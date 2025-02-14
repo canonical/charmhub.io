@@ -34,21 +34,6 @@
     }
   }
 
-  // Overide the default vanilla padding for p-list--divided
-  .p-list--divided.has-padding {
-    .p-list__item {
-      padding-block: $spv--small $spv--small;
-    }
-  }
-
-  .p-list--divided.has-separator-centered {
-    .p-list__item {
-      &:not(:first-of-type) {
-        margin-block-start: $spv--medium;
-      }
-    }
-  }
-
   .p-inline-list--stretch.p-list--reversed {
     > .p-inline-list__item:last-child {
       align-items: center;
