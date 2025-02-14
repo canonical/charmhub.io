@@ -3,9 +3,9 @@
   "license": "LGPL-3.0-or-later",
   "scripts": {
     "clean": "rm -rf node_modules yarn-error.log css static/css *.log *.sqlite _site/ build/ .jekyll-metadata .bundle",
-    "watch": "watch -p 'static/sass/**/*' -p 'static/js/**/*.js' -p 'static/js/**/*.tsx' -c 'yarn run build'",
+    "watch": "SHELL=/bin/bash chokidar 'static/sass/**/*' 'static/js/**/*.js' 'static/js/**/*.tsx' --await-write-finish=100 -c 'yarn run build'",
     "watch-js": "webpack --watch --mode development",
-    "watch-scss": "watch -p 'static/sass/**/*.scss' -c 'yarn run build-css'",
+    "watch-scss": "SHELL=/bin/bash chokidar 'static/sass/**/*.scss' --await-write-finish=100 -c 'yarn run build-css'",
     "build": "yarn run build-css && yarn run build-js",
     "build-css": "sass static/sass/styles.scss:static/css/styles.css static/sass/styles-embedded.scss:static/css/styles-embedded.css --load-path=node_modules --style=compressed --quiet-deps --silence-deprecation=import && postcss --map false --use autoprefixer --replace 'static/css/**/*.css' ",
     "build-js": "webpack",
@@ -61,7 +61,6 @@
     "ts-loader": "9.5.1",
     "typescript": "5.7.2",
     "vanilla-framework": "4.21.0",
-    "watch-cli": "0.2.3",
     "webpack": "5.97.1",
     "webpack-cli": "6.0.1"
   },
@@ -73,6 +72,7 @@
     "@typescript-eslint/parser": "^8.0.0",
     "babel-jest": "29.7.0",
     "babel-plugin-prismjs": "2.1.0",
+    "chokidar-cli": "^3.0.0",
     "concurrently": "9.1.2",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "9.1.0",
