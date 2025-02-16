@@ -1,4 +1,4 @@
-from flask import Blueprint, request, current_app as app, render_template
+from flask import Blueprint, request, render_template
 from talisker import requests
 
 from canonicalwebteam.store_api.publishergw import PublisherGW
@@ -17,6 +17,7 @@ search = Blueprint(
 )
 
 publisher_gateway = PublisherGW("charm", requests.get_session())
+
 
 @search.route("/all-search")
 def all_search():

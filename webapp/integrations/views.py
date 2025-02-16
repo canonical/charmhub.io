@@ -5,7 +5,6 @@ from flask import (
     Blueprint,
     render_template,
     make_response,
-    current_app as app,
     redirect,
     abort,
 )
@@ -95,8 +94,12 @@ def get_single_interface(interface_name, status):
     repo_has_interface = interface_logic.repo_has_interface(interface_name)
 
     publisher_gateway = PublisherGW("charm", requests.get_session())
-    other_requirers = publisher_gateway.find(requires=[interface_name]).get("results", [])
-    other_providers = publisher_gateway.find(provides=[interface_name]).get("results", [])
+    other_requirers = publisher_gateway.find(requires=[interface_name]).get(
+        "results", []
+    )
+    other_providers = publisher_gateway.find(provides=[interface_name]).get(
+        "results", []
+    )
 
     res = {}
     # check if interface exists in github repo

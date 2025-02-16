@@ -1,4 +1,3 @@
-from flask import current_app as app
 from flask_caching import Cache
 
 from canonicalwebteam.store_api.publishergw import PublisherGW
@@ -13,6 +12,7 @@ DOCS_URL = "https://canonical-juju.readthedocs-hosted.com/"
 
 cache = Cache(config={"CACHE_TYPE": "simple"})
 publisher_gateway = PublisherGW("charm", talisker.requests.get_session())
+
 
 def search_discourse(
     query: str,

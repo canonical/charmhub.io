@@ -762,10 +762,10 @@ def entity_embedded_card(entity_name):
     try:
         package = get_package(entity_name, channel_request, FIELDS)
 
-        package["default-release"]["channel"][
-            "released-at"
-        ] = logic.convert_date(
-            package["default-release"]["channel"]["released-at"]
+        package["default-release"]["channel"]["released-at"] = (
+            logic.convert_date(
+                package["default-release"]["channel"]["released-at"]
+            )
         )
 
         button = request.args.get("button")
@@ -805,10 +805,10 @@ def entity_embedded_interface_card(entity_name):
     try:
         package = get_package(entity_name, channel_request, FIELDS)
 
-        package["default-release"]["channel"][
-            "released-at"
-        ] = logic.convert_date(
-            package["default-release"]["channel"]["released-at"]
+        package["default-release"]["channel"]["released-at"] = (
+            logic.convert_date(
+                package["default-release"]["channel"]["released-at"]
+            )
         )
 
         libraries = logic.process_libraries(

@@ -270,9 +270,9 @@ def extract_all_arch(channel_map, parent_dict):
                             platforms[base["name"]] = set()
                         platforms[base["name"]].add(series)
 
-                        all_channel_bases[
-                            base["name"] + series
-                        ] = f"{platform} {series}"
+                        all_channel_bases[base["name"] + series] = (
+                            f"{platform} {series}"
+                        )
 
     parent_dict["all_architectures"] = sorted(all_archy)
     parent_dict["all_platforms"] = platforms

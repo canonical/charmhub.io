@@ -56,9 +56,7 @@ def get_publisher(entity_name, path):
 @login_required
 def get_package(entity_name):
     session["developer_token"] = session["account-auth"]
-    package = publisher_gateway.get_package_metadata(
-        session, entity_name
-    )
+    package = publisher_gateway.get_package_metadata(session, entity_name)
 
     return jsonify({"data": package, "success": True})
 
@@ -443,7 +441,7 @@ def delete_package(package_name):
     if resp.status_code == 200:
         return ("", 200)
     return (
-        jsonify({"error": resp.json()["error-list"][0]["message"]}),
+        jsonify({"error": resp.json["error-list"][0]["message"]}),
         resp.status_code,
     )
 

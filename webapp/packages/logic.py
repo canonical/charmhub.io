@@ -304,7 +304,7 @@ def parse_categories(
     categories_json: Dict[str, List[Dict[str, str]]]
 ) -> List[Dict[str, str]]:
     """
-    :param categories_json: The returned json from publisher_gateway.get_categories()
+    :param categories_json: The returned json from publishergw get_categories
     :returns: A list of categories in the format:
     [{"name": "Category", "slug": "category"}]
     """

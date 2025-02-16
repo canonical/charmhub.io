@@ -152,10 +152,7 @@ class TestPublisherViews(unittest.TestCase):
         self.assertIn(b"Success", res.data)
         self.assertEqual(res.status_code, 200)
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw"
-        ".PublisherGW.accept_invite"
-    )
+    @patch("canonicalwebteam.store_api.publishergw.PublisherGW.accept_invite")
     def test_accept_post_invite(self, mock_accept_invite):
         mock_accept_invite.return_value.status_code = 204
         res = self.client.post(
@@ -164,10 +161,7 @@ class TestPublisherViews(unittest.TestCase):
         )
         self.assertEqual(res.status_code, 200)
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw"
-        ".PublisherGW.accept_invite"
-    )
+    @patch("canonicalwebteam.store_api.publishergw.PublisherGW.accept_invite")
     def test_accept_post_invite_failed(self, mock_accept_invite):
         mock_accept_invite.return_value.status_code = 401
         res = self.client.post(
@@ -177,10 +171,7 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 500)
         self.assertEqual(res.json["message"], "An error occured")
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw"
-        ".PublisherGW.reject_invite"
-    )
+    @patch("canonicalwebteam.store_api.publishergw.PublisherGW.reject_invite")
     def test_reject_post_invite(self, mock_reject_invite):
         mock_reject_invite.return_value.status_code = 204
         res = self.client.post(
@@ -232,10 +223,7 @@ class TestPublisherViews(unittest.TestCase):
         )
         self.assertEqual(res.status_code, 200)
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw"
-        ".PublisherGW.revoke_invites"
-    )
+    @patch("canonicalwebteam.store_api.publishergw.PublisherGW.revoke_invites")
     def test_revoke_invite(self, mock_revoke_invites):
         mock_revoke_invites.return_value.status_code = 204
         res = self.client.delete(
@@ -330,10 +318,7 @@ class TestPublisherViews(unittest.TestCase):
         res = self.client.delete("/packages/test-package")
         self.assertEqual(res.status_code, 500)
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw"
-        ".PublisherGW.create_track"
-    )
+    @patch("canonicalwebteam.store_api.publishergw.PublisherGW.create_track")
     def test_post_create_track(self, mock_create_track):
         mock_create_track.return_value.status_code = 201
         mock_create_track.return_value.json = lambda: {"track": "test-track"}
@@ -347,10 +332,7 @@ class TestPublisherViews(unittest.TestCase):
         )
         self.assertEqual(res.status_code, 201)
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw"
-        ".PublisherGW.create_track"
-    )
+    @patch("canonicalwebteam.store_api.publishergw.PublisherGW.create_track")
     def test_post_create_track_already_exists(self, mock_create_track):
         mock_create_track.return_value.status_code = 409
         mock_create_track.return_value.json = lambda: {"track": "test-track"}
@@ -364,10 +346,7 @@ class TestPublisherViews(unittest.TestCase):
         )
         self.assertEqual(res.status_code, 409)
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw"
-        ".PublisherGW.get_releases"
-    )
+    @patch("canonicalwebteam.store_api.publishergw.PublisherGW.get_releases")
     @patch("webapp.publisher.logic.process_releases")
     @patch("webapp.publisher.logic.get_all_architectures")
     def test_get_releases(
