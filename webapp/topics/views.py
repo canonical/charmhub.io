@@ -10,11 +10,13 @@ from flask import Blueprint, abort, jsonify, render_template, request, redirect
 from webapp.helpers import discourse_api
 from jinja2 import Template
 from bs4 import BeautifulSoup
+from urllib.parse import urlparse
 
 from webapp.config import CATEGORIES
 
 DISCOURSE_API_KEY = getenv("DISCOURSE_API_KEY")
 DISCOURSE_API_USERNAME = getenv("DISCOURSE_API_USERNAME")
+ALLOWED_HOST = "charmhub.io"
 
 topics = Blueprint(
     "topics", __name__, template_folder="/templates", static_folder="/static"
@@ -59,8 +61,9 @@ class TopicParser(DocParser):
 
                     if navlink_href:
                         navlink_href = navlink_href.get("href")
+                        parsed_url = urlparse(navlink_href)
 
-                        if not navlink_href.startswith("https://charmhub.io"):
+                        if parsed_url.netloc != ALLOWED_HOST:
                             self.warnings.append("Invalid tutorial URL")
                             continue
 
