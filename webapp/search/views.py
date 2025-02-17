@@ -1,11 +1,11 @@
-
 from flask import (
     Blueprint,
     jsonify,
     request,
-    current_app as app,
     render_template,
 )
+from talisker import requests
+from canonicalwebteam.store_api.publishergw import PublisherGW
 
 from webapp.config import SEARCH_FIELDS
 from webapp.search.logic import (
