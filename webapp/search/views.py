@@ -40,7 +40,7 @@ def all_search_json():
         "docs": search_docs(term)[:limit],
         "topics": search_topics(term, 1, False)[:limit],
     }
-    return result
+    return jsonify(result)
 
 
 @search.route("/all-charms")
