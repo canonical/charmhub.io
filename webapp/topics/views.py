@@ -6,7 +6,7 @@ from canonicalwebteam.discourse.exceptions import (
     PathNotFoundError,
     RedirectFoundError,
 )
-from flask import Blueprint, abort, render_template, request, redirect
+from flask import Blueprint, abort, jsonify, render_template, request, redirect
 from webapp.helpers import discourse_api
 from jinja2 import Template
 from bs4 import BeautifulSoup
@@ -122,11 +122,13 @@ def topics_json():
     else:
         results = topic_list
 
-    return {
-        "topics": results,
-        "q": query,
-        "size": len(results),
-    }
+    return jsonify(
+        {
+            "topics": results,
+            "q": query,
+            "size": len(results),
+        }
+    )
 
 
 @topics.route("/topics")
