@@ -64,7 +64,7 @@ def get_publisher_details(publisher):
     }
 
     # HTML template will be returned here for the front end
-    return (context, status_code)
+    return jsonify(context), status_code
 
 
 @store.route("/packages.json")

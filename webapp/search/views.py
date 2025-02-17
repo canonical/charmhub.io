@@ -1,4 +1,10 @@
-from flask import Blueprint, request, current_app as app, render_template
+from flask import (
+    Blueprint,
+    jsonify,
+    request,
+    current_app as app,
+    render_template,
+)
 
 from webapp.config import SEARCH_FIELDS
 from webapp.search.logic import (
@@ -34,7 +40,7 @@ def all_search_json():
         "docs": search_docs(term)[:limit],
         "topics": search_topics(term, 1, False)[:limit],
     }
-    return result
+    return jsonify(result)
 
 
 @search.route("/all-charms")
@@ -62,9 +68,7 @@ def all_docs():
 
     docs = search_docs(search_term)[:limit]
 
-    return {
-        "docs": docs,
-    }
+    return jsonify({"docs": docs})
 
 
 @search.route("/all-topics")
@@ -79,4 +83,6 @@ def all_topics():
     start = (page - 1) * limit
     end = start + limit
 
-    return {"topics": all_topics[start:end], "total_pages": total_pages}
+    return jsonify(
+        {"topics": all_topics[start:end], "total_pages": total_pages}
+    )
