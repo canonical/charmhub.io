@@ -83,4 +83,6 @@ def all_topics():
     start = (page - 1) * limit
     end = start + limit
 
-    return {"topics": all_topics[start:end], "total_pages": total_pages}
+    return jsonify(
+        {"topics": all_topics[start:end], "total_pages": total_pages}
+    )
