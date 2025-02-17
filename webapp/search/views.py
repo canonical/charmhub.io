@@ -1,4 +1,10 @@
-from flask import Blueprint, jsonify, request, current_app as app, render_template
+from flask import (
+    Blueprint,
+    jsonify,
+    request,
+    current_app as app,
+    render_template,
+)
 
 from webapp.config import SEARCH_FIELDS
 from webapp.search.logic import (
