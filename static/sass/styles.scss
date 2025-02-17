@@ -147,15 +147,6 @@ $breakpoint-navigation-threshold: 1220px; // keep it in sync with juju.is and br
   margin-bottom: 1rem;
 }
 
-// XXX Ovi - 04.04.20: This can be removed once this issue is closed.
-// https://github.com/canonical-web-and-design/vanilla-framework/issues/1452
-body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto auto auto 1fr auto;
-  min-height: 100vh;
-}
-
 .package-card-icons {
   > * {
     display: inline-block;
