@@ -281,13 +281,11 @@ class initPackages {
       if (featured) {
         this.domEl.resultsCountContainer.el.innerHTML = `${this.domEl.featuredContainer.el?.children.length} Featured`;
       } else if (this._filters.q.length > 0) {
-        this.domEl.resultsCountContainer.el.innerHTML = `${
+        this.domEl.resultsCountContainer.el.textContent = `${
           this.packages.length
         } of ${
           this.allPackages.length
-        } search results for <span style='font-weight: 500;'>'${this._filters.q.join(
-          ","
-        )}'</span>`;
+        } search results for ${this._filters.q.join(",")}`;
       } else {
         this.domEl.resultsCountContainer.el.innerHTML = `${this.packages.length} of ${this.allPackages.length}`;
       }

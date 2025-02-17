@@ -2,6 +2,7 @@ import talisker
 from webapp.decorators import login_required
 from flask import (
     Blueprint,
+    jsonify,
     request,
     session,
     make_response,
@@ -55,7 +56,7 @@ def package(package_type):
     )
     page_type = request.path[1:-1]
 
-    response = make_response(
+    response = jsonify(
         {
             "published_packages": [
                 package
