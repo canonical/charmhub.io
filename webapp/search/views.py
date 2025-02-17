@@ -1,4 +1,4 @@
-from flask import Blueprint, request, current_app as app, render_template
+from flask import Blueprint, jsonify, request, current_app as app, render_template
 
 from webapp.config import SEARCH_FIELDS
 from webapp.search.logic import (
@@ -62,9 +62,7 @@ def all_docs():
 
     docs = search_docs(search_term)[:limit]
 
-    return {
-        "docs": docs,
-    }
+    return jsonify({"docs": docs})
 
 
 @search.route("/all-topics")
