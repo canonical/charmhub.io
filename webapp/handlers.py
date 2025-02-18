@@ -1,7 +1,7 @@
 from flask import render_template, session
 from webapp.config import SENTRY_DSN
 
-from canonicalwebteam.store_api.exceptions import (
+from canonicalwebteam.exceptions import (
     StoreApiError,
     StoreApiResourceNotFound,
     StoreApiResponseDecodeError,

@@ -1,6 +1,6 @@
 import talisker
-from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
-from canonicalwebteam.store_api.exceptions import StoreApiResponseErrorList
+from canonicalwebteam.store_api.publishergw import PublisherGW
+from canonicalwebteam.exceptions import StoreApiResponseErrorList
 from flask import (
     Blueprint,
     flash,
@@ -22,7 +22,7 @@ publisher = Blueprint(
     template_folder="/templates",
     static_folder="/static",
 )
-publisher_api = CharmPublisher(talisker.requests.get_session())
+publisher_gateway = PublisherGW("charm", talisker.requests.get_session())
 
 
 @publisher.route("/account/details")
@@ -39,9 +39,8 @@ def get_account_details():
 )
 @login_required
 def get_publisher(entity_name, path):
-    package = publisher_api.get_package_metadata(
-        session["account-auth"], "charm", entity_name
-    )
+    session["developer_token"] = session["account-auth"]
+    package = publisher_gateway.get_package_metadata(session, entity_name)
 
     context = {
         "package": package,
@@ -55,9 +54,8 @@ def get_publisher(entity_name, path):
 )
 @login_required
 def get_package(entity_name):
-    package = publisher_api.get_package_metadata(
-        session["account-auth"], "charm", entity_name
-    )
+    session["developer_token"] = session["account-auth"]
+    package = publisher_gateway.get_package_metadata(session, entity_name)
 
     return jsonify({"data": package, "success": True})
 
@@ -73,7 +71,7 @@ def update_package(entity_name):
     res = {}
 
     try:
-        package = publisher_api.update_package_metadata(
+        package = publisher_gateway.update_package_metadata(
             session["account-auth"], "charm", entity_name, payload
         )
         res["data"] = package
@@ -99,7 +97,7 @@ def update_package(entity_name):
 @publisher.route("/bundles")
 @login_required
 def list_page():
-    publisher_charms = publisher_api.get_account_packages(
+    publisher_charms = publisher_gateway.get_account_packages(
         session["account-auth"], "charm", include_collaborations=True
     )
 
@@ -137,7 +135,7 @@ def accept_post_invite():
     try:
         token = request.form.get("token")
         package = request.form.get("package")
-        response = publisher_api.accept_invite(
+        response = publisher_gateway.accept_invite(
             session["account-auth"], package, token
         )
 
@@ -171,7 +169,7 @@ def reject_post_invite():
     try:
         token = request.form.get("token")
         package = request.form.get("package")
-        response = publisher_api.reject_invite(
+        response = publisher_gateway.reject_invite(
             session["account-auth"], package, token
         )
 
@@ -208,7 +206,7 @@ def get_collaborators(entity_name):
     res = {}
 
     try:
-        collaborators = publisher_api.get_collaborators(
+        collaborators = publisher_gateway.get_collaborators(
             session["account-auth"], entity_name
         )
         res["success"] = True
@@ -234,7 +232,7 @@ def get_pending_invites(entity_name):
     res = {}
 
     try:
-        invites = publisher_api.get_pending_invites(
+        invites = publisher_gateway.get_pending_invites(
             session["account-auth"], entity_name
         )
         res["success"] = True
@@ -262,7 +260,7 @@ def invite_collaborators(entity_name):
 
     try:
         collaborators = request.form.get("collaborators")
-        result = publisher_api.invite_collaborators(
+        result = publisher_gateway.invite_collaborators(
             session["account-auth"], entity_name, [collaborators]
         )
         res["success"] = True
@@ -292,7 +290,7 @@ def revoke_invite(entity_name):
 
     try:
         collaborator = request.form.get("collaborator")
-        response = publisher_api.revoke_invites(
+        response = publisher_gateway.revoke_invites(
             session["account-auth"], entity_name, [collaborator]
         )
 
@@ -360,7 +358,7 @@ def post_register_name():
     }
 
     try:
-        result = publisher_api.register_package_name(
+        result = publisher_gateway.register_package_name(
             session["account-auth"], data
         )
         if result:
@@ -436,13 +434,13 @@ def register_name_dispute_thank_you():
 @publisher.route("/packages/<package_name>", methods=["DELETE"])
 @login_required
 def delete_package(package_name):
-    resp = publisher_api.unregister_package_name(
+    resp = publisher_gateway.unregister_package_name(
         session["account-auth"], package_name
     )
     if resp.status_code == 200:
         return ("", 200)
     return (
-        jsonify({"error": resp.json()["error-list"][0]["message"]}),
+        jsonify({"error": resp.json["error-list"][0]["message"]}),
         resp.status_code,
     )
 
@@ -457,7 +455,7 @@ def post_create_track(charm_name):
     if auto_phasing_percentage is not None:
         auto_phasing_percentage = float(auto_phasing_percentage)
 
-    response = publisher_api.create_track(
+    response = publisher_gateway.create_track(
         session["account-auth"],
         charm_name,
         track_name,
@@ -487,7 +485,7 @@ def get_releases(entity_name: str):
     res = {}
 
     try:
-        release_data = publisher_api.get_releases(
+        release_data = publisher_gateway.get_releases(
             session["account-auth"], entity_name
         )
         res["success"] = True

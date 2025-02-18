@@ -1,14 +1,14 @@
 import humanize
-import talisker
+from talisker import requests
 from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.discourse.exceptions import PathNotFoundError
 from canonicalwebteam.flask_base.decorators import (
     exclude_xframe_options_header,
 )
-from canonicalwebteam.store_api.exceptions import StoreApiResponseErrorList
-from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
+from canonicalwebteam.exceptions import StoreApiResponseErrorList
+from canonicalwebteam.store_api.publishergw import PublisherGW
+from canonicalwebteam.store_api.devicegw import DeviceGW
 from flask import Blueprint, Response, abort
-from flask import current_app as app
 from flask import jsonify, redirect, render_template, request, make_response
 from pybadges import badge
 
@@ -25,7 +25,8 @@ from webapp.config import SEARCH_FIELDS
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
 )
-publisher_api = CharmPublisher(talisker.requests.get_session())
+publisher_gateway = PublisherGW("charm", requests.get_session())
+device_gateway = DeviceGW("charm", requests.get_session())
 
 
 @store.route("/publisher/<regex('[a-z0-9-]*[a-z][a-z0-9-]*'):publisher>")
@@ -41,7 +42,7 @@ def get_publisher_details(publisher):
     charms_count = 0
     publisher_details = {"display-name": publisher}
 
-    charms_results = app.store_api.find(
+    charms_results = publisher_gateway.find(
         publisher=publisher,
         fields=SEARCH_FIELDS,
     )["results"]
@@ -75,9 +76,9 @@ def get_packages():
     context = {"packages": [], "size": 0}
 
     if query:
-        results = app.store_api.find(query=query, fields=SEARCH_FIELDS).get(
-            "results"
-        )
+        results = publisher_gateway.find(
+            query=query, fields=SEARCH_FIELDS
+        ).get("results")
         context["q"] = query
     elif provides or requires:
         if provides:
@@ -85,14 +86,16 @@ def get_packages():
         if requires:
             requires = requires.split(",")
 
-        results = app.store_api.find(
+        results = publisher_gateway.find(
             provides=provides, requires=requires, fields=SEARCH_FIELDS
         ).get("results")
 
         context["provides"] = provides
         context["requires"] = requires
     else:
-        results = app.store_api.find(fields=SEARCH_FIELDS).get("results", [])
+        results = publisher_gateway.find(fields=SEARCH_FIELDS).get(
+            "results", []
+        )
 
     packages = []
     total_packages = 0
@@ -122,7 +125,7 @@ FIELDS = [
 
 def get_package(entity_name, channel_request=None, fields=FIELDS):
     # Get entity info from API
-    package = app.store_api.get_item_details(
+    package = publisher_gateway.get_item_details(
         entity_name, channel=channel_request, fields=fields
     )
 
@@ -132,7 +135,7 @@ def get_package(entity_name, channel_request=None, fields=FIELDS):
 
     # Fix issue #1010
     if channel_request:
-        channel_map = app.store_api.get_item_details(
+        channel_map = publisher_gateway.get_item_details(
             entity_name, fields=["channel-map"]
         )
         package["channel-map"] = channel_map["channel-map"]
@@ -429,7 +432,7 @@ def details_libraries(entity_name):
     package = get_package(entity_name, channel_request, FIELDS)
 
     libraries = logic.process_libraries(
-        publisher_api.get_charm_libraries(entity_name)
+        publisher_gateway.get_charm_libraries(entity_name)
     )
 
     if libraries:
@@ -462,7 +465,7 @@ def details_library(entity_name, library_name):
     package = get_package(entity_name, channel_request, FIELDS)
 
     libraries = logic.process_libraries(
-        publisher_api.get_charm_libraries(entity_name)
+        publisher_gateway.get_charm_libraries(entity_name)
     )
 
     library_id = logic.get_library(library_name, libraries)
@@ -470,7 +473,7 @@ def details_library(entity_name, library_name):
     if not library_id:
         abort(404)
 
-    library = publisher_api.get_charm_library(entity_name, library_id)
+    library = publisher_gateway.get_charm_library(entity_name, library_id)
     docstrings = logic.process_python_docs(library, module_name=library_name)
 
     # Charmcraft string to fetch the library
@@ -513,7 +516,7 @@ def download_library(entity_name, library_name):
         lib_name = library_name
 
     libraries = logic.process_libraries(
-        publisher_api.get_charm_libraries(entity_name)
+        publisher_gateway.get_charm_libraries(entity_name)
     )
 
     library = next(
@@ -524,7 +527,7 @@ def download_library(entity_name, library_name):
     if not library:
         abort(404)
 
-    library = publisher_api.get_charm_library(entity_name, library["id"])
+    library = publisher_gateway.get_charm_library(entity_name, library["id"])
 
     return Response(
         library["content"],
@@ -643,15 +646,15 @@ def details_resource(entity_name, resource_name):
 
     # Get OCI image details
     if resource["type"] == "oci-image":
-        oci_details = app.store_api.process_response(
-            app.store_api.session.get(resource["download"]["url"])
+        oci_details = publisher_gateway.process_response(
+            publisher_gateway.session.get(resource["download"]["url"])
         )
         resource["image_name"], resource["digest"] = oci_details[
             "ImageName"
         ].split("@")
         resource["short_digest"] = resource["digest"].split(":")[1][:12]
 
-    revisions = app.store_api.get_resource_revisions(
+    revisions = device_gateway.get_resource_revisions(
         entity_name, resource_name
     )
     revisions = sorted(revisions, key=lambda k: k["revision"], reverse=True)
@@ -689,7 +692,7 @@ def details_integrate(entity_name):
 
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/badge.svg')
 def entity_badge(entity_name):
-    package = app.store_api.get_item_details(entity_name, fields=FIELDS)
+    package = publisher_gateway.get_item_details(entity_name, fields=FIELDS)
 
     channel_request = request.args.get("channel")
 
@@ -809,7 +812,7 @@ def entity_embedded_interface_card(entity_name):
         )
 
         libraries = logic.process_libraries(
-            publisher_api.get_charm_libraries(entity_name)
+            publisher_gateway.get_charm_libraries(entity_name)
         )
 
         context = {
@@ -839,7 +842,7 @@ def entity_icon(entity_name):
     package = None
 
     try:
-        package = app.store_api.get_item_details(
+        package = publisher_gateway.get_item_details(
             entity_name,
             fields=[
                 "result.media",
@@ -864,7 +867,7 @@ def entity_icon_missing(entity_name):
     package = None
 
     try:
-        package = app.store_api.get_item_details(
+        package = publisher_gateway.get_item_details(
             entity_name,
             fields=[
                 "result.media",

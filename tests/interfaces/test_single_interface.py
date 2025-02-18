@@ -1,20 +1,17 @@
 import json
 from unittest.mock import patch
 from unittest import TestCase
-
 import responses
 from webapp.app import app
 from webapp.integrations.logic import Interfaces
 
 
 class TestSingleInterface(TestCase):
-
     def setUp(self):
         app.config["TESTING"] = True
         app.config["DEBUG"] = True
         self.client = app.test_client()
         self.test_interfaces = Interfaces()
-        # mock_github_client = patch("webapp.integrations.logic.github_client")
 
         self.github_interfaces_url = "".join(
             [
@@ -74,7 +71,7 @@ class TestSingleInterface(TestCase):
         )
 
     @patch("webapp.integrations.logic.Interfaces")
-    @patch("webapp.app.app.store_api.find")
+    @patch("canonicalwebteam.store_api.publishergw.PublisherGW.find")
     def test_repo_has_no_interface(self, mock_find, mock_interfaces):
         mock_find.return_value = {
             "results": ["mock_providers", "mock_requirers"]

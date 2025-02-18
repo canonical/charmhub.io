@@ -2,7 +2,7 @@ import os
 import talisker
 import flask
 
-from canonicalwebteam.store_api.stores.charmstore import CharmPublisher
+from canonicalwebteam.store_api.publishergw import PublisherGW
 from flask_wtf.csrf import generate_csrf, validate_csrf
 
 from canonicalwebteam.candid import CandidClient
@@ -21,7 +21,7 @@ LOGIN_LAUNCHPAD_TEAM = os.getenv(
 
 request_session = talisker.requests.get_session()
 candid = CandidClient(request_session)
-publisher_api = CharmPublisher(request_session)
+publisher_gateway = PublisherGW("charm", request_session)
 
 
 @login.route("/logout")
@@ -36,7 +36,7 @@ def publisher_login():
 
     # Get a bakery v2 macaroon from the publisher API to be discharged
     # and save it in the session
-    flask.session["account-macaroon"] = publisher_api.issue_macaroon(
+    flask.session["account-macaroon"] = publisher_gateway.issue_macaroon(
         [
             "account-register-package",
             "account-view-packages",
@@ -81,13 +81,13 @@ def login_callback():
         flask.session["account-macaroon"], candid_macaroon
     )
 
-    flask.session["account-auth"] = publisher_api.exchange_macaroons(
+    flask.session["account-auth"] = publisher_gateway.exchange_macaroons(
         issued_macaroon
     )
 
     # Set "account", "permissions" and other properties from the API response
     flask.session.update(
-        publisher_api.macaroon_info(flask.session["account-auth"])
+        publisher_gateway.macaroon_info(flask.session["account-auth"])
     )
 
     return flask.redirect(

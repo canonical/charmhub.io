@@ -84,7 +84,6 @@ mock_interface = {
 
 
 class TestInterfaces(unittest.TestCase):
-
     @patch("webapp.integrations.logic.github_client")
     def setUp(self, mock_github_client):
         self.github_client = mock_github_client

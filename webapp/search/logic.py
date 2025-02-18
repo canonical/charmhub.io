@@ -1,16 +1,17 @@
-from flask import current_app as app
 from flask_caching import Cache
+
+from canonicalwebteam.store_api.publishergw import PublisherGW
+
+import talisker
 import requests
 from webapp.config import SEARCH_FIELDS
 from webapp.packages.logic import parse_package_for_card
-from webapp.packages.store_packages import CharmStore, CharmPublisher
-
 
 DISCOURSE_URL = "https://discourse.charmhub.io"
 DOCS_URL = "https://canonical-juju.readthedocs-hosted.com/"
 
-
 cache = Cache(config={"CACHE_TYPE": "simple"})
+publisher_gateway = PublisherGW("charm", talisker.requests.get_session())
 
 
 def search_discourse(
@@ -163,8 +164,8 @@ def search_topics(term: str, page: int, see_all=False) -> dict:
 
 def search_charms(term: str):
     return [
-        parse_package_for_card(package, CharmStore, CharmPublisher)
-        for package in app.store_api.find(
+        parse_package_for_card(package)
+        for package in publisher_gateway.find(
             term, type="charm", fields=SEARCH_FIELDS
         )["results"]
     ]
@@ -172,8 +173,8 @@ def search_charms(term: str):
 
 def search_bundles(term: str):
     return [
-        parse_package_for_card(package, CharmStore, CharmPublisher)
-        for package in app.store_api.find(
+        parse_package_for_card(package)
+        for package in publisher_gateway.find(
             term, type="bundle", fields=SEARCH_FIELDS
         )["results"]
     ]

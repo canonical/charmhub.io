@@ -1,13 +1,13 @@
 import re
 
 import talisker.requests
-from canonicalwebteam.store_api.stores.charmstore import (
-    CharmStore,
-    CharmPublisher,
-)
-from canonicalwebteam.candid import CandidClient
-from dateutil import parser
 from flask import render_template, make_response, request, session, escape
+from dateutil import parser
+
+from canonicalwebteam.candid import CandidClient
+from canonicalwebteam.flask_base.app import FlaskBase
+from canonicalwebteam.store_api.publishergw import PublisherGW
+
 from webapp.extensions import csrf
 from webapp.config import APP_NAME
 from webapp.handlers import set_handlers
@@ -20,7 +20,6 @@ from webapp.search.views import search
 from webapp.search.logic import cache
 from webapp.helpers import markdown_to_html
 from webapp.decorators import login_required
-from canonicalwebteam.flask_base.app import FlaskBase
 from webapp.packages.store_packages import store_packages
 
 
@@ -40,12 +39,9 @@ app.config["LOGIN_REQUIRED"] = login_required
 
 set_handlers(app)
 
-app.store_api = CharmStore(session=talisker.requests.get_session())
-
-
 request_session = talisker.requests.get_session()
 candid = CandidClient(request_session)
-publisher_api = CharmPublisher(request_session)
+publisher_gateway = PublisherGW("charm", request_session)
 
 
 @app.template_filter("linkify")
@@ -144,7 +140,7 @@ def site_map_links():
 
 @app.route("/sitemap-operators.xml")
 def site_map_operators():
-    charms = app.store_api.find(
+    charms = publisher_gateway.find(
         fields=["default-release.channel.released-at"]
     ).get("results", [])
 

@@ -1,16 +1,18 @@
 from datetime import datetime
+from talisker import requests
 
 from flask import (
     Blueprint,
     render_template,
     make_response,
-    current_app as app,
     redirect,
     abort,
 )
 from flask.json import jsonify
 from github import Github
 from os import getenv
+
+from canonicalwebteam.store_api.publishergw import PublisherGW
 
 from webapp.integrations.logic import Interfaces
 
@@ -91,9 +93,13 @@ def single_interface(path):
 def get_single_interface(interface_name, status):
     repo_has_interface = interface_logic.repo_has_interface(interface_name)
 
-    api = app.store_api
-    other_requirers = api.find(requires=[interface_name]).get("results", [])
-    other_providers = api.find(provides=[interface_name]).get("results", [])
+    publisher_gateway = PublisherGW("charm", requests.get_session())
+    other_requirers = publisher_gateway.find(requires=[interface_name]).get(
+        "results", []
+    )
+    other_providers = publisher_gateway.find(provides=[interface_name]).get(
+        "results", []
+    )
 
     res = {}
     # check if interface exists in github repo

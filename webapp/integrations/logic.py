@@ -29,7 +29,6 @@ class Interfaces:
             or not self.last_fetch
             or time.time() - self.last_fetch > 172800
         ):
-
             interfaces_contents = self.repo.get_contents("interfaces")
             interfaces_table = []
 

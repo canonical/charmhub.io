@@ -6,8 +6,11 @@ import talisker
 from flask import make_response
 from typing import List, Dict, TypedDict, Any, Union
 
-from canonicalwebteam.store_api.exceptions import StoreApiError
+from canonicalwebteam.store_api.publishergw import PublisherGW
+from canonicalwebteam.exceptions import StoreApiError
 from webapp.store.logic import format_slug
+
+publisher_gateway = PublisherGW("charm", talisker.requests.get_session())
 
 Packages = TypedDict(
     "Packages",
@@ -38,18 +41,16 @@ def get_icon(media):
     return ""
 
 
-def fetch_packages(store_api, fields: List[str], query_params) -> Packages:
+def fetch_packages(fields: List[str], query_params) -> Packages:
     """
     Fetches packages from the store API based on the specified fields.
 
-    :param: store_api: The specific store API object.
     :param: fields (List[str]): A list of fields to include in the package
     data.
     :param: query_params: A search query
 
     :returns: a dictionary containing the list of fetched packages.
     """
-    store = store_api(talisker.requests.get_session())
 
     category = query_params.get("categories", "")
     query = query_params.get("q", "")
@@ -79,7 +80,7 @@ def fetch_packages(store_api, fields: List[str], query_params) -> Packages:
         requires = requires.split(",")
         args["requires"] = requires
 
-    packages = store.find(**args).get("results", [])
+    packages = publisher_gateway.find(**args).get("results", [])
 
     if platform and platform != "all":
         filtered_packages = []
@@ -93,23 +94,21 @@ def fetch_packages(store_api, fields: List[str], query_params) -> Packages:
 
     if architecture and architecture != "all":
         args["architecture"] = architecture
-        packages = store.find(**args).get("results", [])
+        packages = publisher_gateway.find(**args).get("results", [])
 
     return packages
 
 
-def fetch_package(store_api, package_name: str, fields: List[str]) -> Package:
+def fetch_package(package_name: str, fields: List[str]) -> Package:
     """
     Fetches a package from the store API based on the specified package name.
 
-    :param: store_api: The specific store API object.
     :param: package_name (str): The name of the package to fetch.
     :param: fields (List[str]): A list of fields to include in the package
 
     :returns: a dictionary containing the fetched package.
     """
-    store = store_api(talisker.requests.get_session())
-    package = store.get_item_details(
+    package = publisher_gateway.get_item_details(
         name=package_name,
         fields=fields,
         api_version=2,
@@ -141,8 +140,6 @@ def get_bundle_charms(charm_apps):
 
 def parse_package_for_card(
     package: Dict[str, Any],
-    store_api: Any,
-    publisher_api: Any,
     libraries: bool = False,
 ) -> Package:
     """
@@ -157,8 +154,6 @@ def parse_package_for_card(
         so we won't have to check for the package type before parsing.
 
     """
-    store = store_api(talisker.requests.get_session())
-    publisher_api = publisher_api(talisker.requests.get_session())
     resp = {
         "package": {
             "description": "",
@@ -185,7 +180,7 @@ def parse_package_for_card(
     risk = channel.get("risk", "")
     track = channel.get("track", "")
     if libraries:
-        resp["package"]["libraries"] = publisher_api.get_charm_libraries(
+        resp["package"]["libraries"] = publisher_gateway.get_charm_libraries(
             package["name"]
         ).get("libraries", [])
     resp["package"]["type"] = package.get("type", "")
@@ -210,7 +205,7 @@ def parse_package_for_card(
 
     if resp["package"]["type"] == "bundle":
         name = package["name"]
-        default_release = store.get_item_details(
+        default_release = publisher_gateway.get_item_details(
             name, fields=["default-release"]
         )
         bundle_yaml = default_release["default-release"]["revision"][
@@ -260,8 +255,6 @@ def paginate(
 
 
 def get_packages(
-    store,
-    publisher: Any,
     libraries: bool,
     fields: List[str],
     size: int = 10,
@@ -284,7 +277,7 @@ def get_packages(
             the total pages
     """
 
-    packages = fetch_packages(store, fields, query_params)
+    packages = fetch_packages(fields, query_params)
 
     total_pages = -(len(packages) // -size)
 
@@ -294,12 +287,10 @@ def get_packages(
     packages_per_page = paginate(packages, page, size, total_pages)
     parsed_packages = []
     for package in packages_per_page:
-        parsed_packages.append(
-            parse_package_for_card(package, store, publisher, libraries)
-        )
+        parsed_packages.append(parse_package_for_card(package, libraries))
     res = parsed_packages
 
-    categories = get_store_categories(store)
+    categories = get_store_categories()
 
     return {
         "packages": res,
@@ -313,7 +304,7 @@ def parse_categories(
     categories_json: Dict[str, List[Dict[str, str]]]
 ) -> List[Dict[str, str]]:
     """
-    :param categories_json: The returned json from store_api.get_categories()
+    :param categories_json: The returned json from publishergw get_categories
     :returns: A list of categories in the format:
     [{"name": "Category", "slug": "category"}]
     """
@@ -329,17 +320,16 @@ def parse_categories(
     return categories
 
 
-def get_store_categories(store_api) -> List[Dict[str, str]]:
+def get_store_categories() -> List[Dict[str, str]]:
     """
     Fetches all store categories.
 
-    :param: store_api: The store API object used to fetch the categories.
+    :param: api_gw: The API object used to fetch the categories.
     :returns: A list of categories in the format:
     [{"name": "Category", "slug": "category"}]
     """
-    store = store_api(talisker.requests.get_session())
     try:
-        all_categories = store.get_categories()
+        all_categories = publisher_gateway.get_categories()
     except StoreApiError:
         all_categories = []
 
@@ -356,8 +346,6 @@ def get_store_categories(store_api) -> List[Dict[str, str]]:
 
 
 def get_package(
-    store,
-    publisher_api,
     package_name: str,
     fields: List[str],
     libraries: bool,
@@ -371,6 +359,6 @@ def get_package(
 
     :return: A dictionary containing the package.
     """
-    package = fetch_package(store, package_name, fields).get("package", {})
-    resp = parse_package_for_card(package, store, publisher_api, libraries)
+    package = fetch_package(package_name, fields).get("package", {})
+    resp = parse_package_for_card(package, libraries)
     return {"package": resp}
