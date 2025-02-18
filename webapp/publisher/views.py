@@ -39,8 +39,9 @@ def get_account_details():
 )
 @login_required
 def get_publisher(entity_name, path):
+    session["developer_token"] = session["account-auth"]
     package = publisher_gateway.get_package_metadata(
-        session["account-auth"], entity_name
+        session, entity_name
     )
 
     context = {
