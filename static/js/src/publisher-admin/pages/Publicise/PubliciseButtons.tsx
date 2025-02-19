@@ -47,7 +47,7 @@ function PubliciseButtons() {
             <a href={`/${encodeURIComponent(packageName || "")}`}>
               <img
                 alt=""
-                src={`/static/images/badges/${selectedLanguage}/charmhub-black.svg`}
+                src={`/static/images/badges/${encodeURIComponent(selectedLanguage)}/charmhub-black.svg`}
               />
             </a>
           </p>
@@ -88,7 +88,7 @@ function PubliciseButtons() {
             <a href={`/${encodeURIComponent(packageName || "")}`}>
               <img
                 alt=""
-                src={`/static/images/badges/${selectedLanguage}/charmhub-white.svg`}
+                src={`/static/images/badges/${encodeURIComponent(selectedLanguage)}/charmhub-white.svg`}
               />
             </a>
           </p>
