@@ -5,7 +5,7 @@
   {% if _context.has_rendered_content %}<hr class="p-separator--shallow">{% endif %}{% set _context.has_rendered_content = true %}
   {% if versions | length > 1 %}
     <label for="version-select" class="u-hide">Version</label>
-    <select name="version-select" id="version-select" onChange="window.location.href=this.value">
+    <select name="version-select" id="version-select">
       {% for version in versions %}
         {% set active = docs_version == version['path'] %}
         <option value="{{ version_paths[version['path']] }}"{% if active %} selected{% endif %}>Version {{ version['version'] }}</option>
@@ -163,3 +163,4 @@
 {% endif %}
 
 <script src="{{ versioned_static('js/dist/docs-side-nav.js') }}"></script>
+<script src="{{ versioned_static('js/dist/redirect-docs-url.js') }}"></script>
