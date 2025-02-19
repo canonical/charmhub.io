@@ -776,7 +776,7 @@ function loadBundleIcons() {
       });
       bundleIcon.innerHTML = "";
       bundleIcon.style.backgroundImage = "none";
-      icon.src = `/${name}/icon-no-default`;
+      icon.src = `/${encodeURIComponent(name)}/icon-no-default`;
 
       bundleIcon.appendChild(icon);
     });
