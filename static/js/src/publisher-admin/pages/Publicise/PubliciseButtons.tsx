@@ -44,7 +44,7 @@ function PubliciseButtons() {
       <Row>
         <Col size={7} className="col-start-large-3">
           <p>
-            <a href={`/${packageName}`}>
+            <a href={`/${encodeURIComponent(packageName || "")}`}>
               <img
                 alt=""
                 src={`/static/images/badges/${selectedLanguage}/charmhub-black.svg`}
@@ -85,7 +85,7 @@ function PubliciseButtons() {
       <Row>
         <Col size={7} className="col-start-large-3">
           <p>
-            <a href={`/${packageName}`}>
+            <a href={`/${encodeURIComponent(packageName || "")}`}>
               <img
                 alt=""
                 src={`/static/images/badges/${selectedLanguage}/charmhub-white.svg`}
