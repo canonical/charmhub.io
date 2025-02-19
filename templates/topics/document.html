@@ -43,12 +43,12 @@
     <aside class="col-3">
       {% if versions | length > 1 %}
       <label for="version-select" class="u-hide">Version</label>
-      <select name="version-select" id="version-select" onChange="window.location.href=this.value">
-      {% for version in versions %}
-        {% set active = docs_version == version['path'] %}
-        <option value="{{ version_paths[version['path']] }}"{% if active %} selected{% endif %}>Version {{ version['version'] }}</option>
-      {% endfor %}
-      <select>
+      <select name="version-select" id="version-select">
+        {% for version in versions %}
+          {% set active = docs_version == version['path'] %}
+          <option value="{{ version_paths[version['path']] }}"{% if active %} selected{% endif %}>Version {{ version['version'] }}</option>
+        {% endfor %}
+      </select>
       {% endif %}
 
       <nav data-js="navigation" class="p-side-navigation" id="{{ navigation['path'] or 'default' }}">
@@ -103,4 +103,5 @@
 </section>
 
 <script src="{{ versioned_static('js/dist/docs-side-nav.js') }}"></script>
+<script src="{{ versioned_static('js/dist/redirect-docs-url.js') }}"></script>
 {% endblock %}
