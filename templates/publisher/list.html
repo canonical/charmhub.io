@@ -188,7 +188,7 @@
                   {% endif %}
                 </td>
                 <td class="u-align--right">
-                  <button class="p-button--base u-no-margin--bottom" data-js="unregister-button" data-package-name="{{ registered_charm['name'] }}">Unregister</button>
+                  <button class="p-button--base is-dense u-no-margin--bottom" data-js="unregister-button" data-package-name="{{ registered_charm['name'] }}">Unregister</button>
                 </td>
               </tr>
               {% endfor %}
@@ -313,14 +313,14 @@
 
       const packageName = unregisterButton.dataset.packageName;
       currentPackage = packageName;
-      
+
       packageNameHolders.forEach((packageNameHolder) => {
         packageNameHolder.innerText = packageName;
       });
 
       unregisterConfirmationModal.classList.remove("u-hide");
     });
-  });  
+  });
 
   if (unregisterConfirmationModal) {
     unregisterConfirmationModal.addEventListener("click", (e) => {
@@ -332,12 +332,12 @@
     unregisterPackageButton.addEventListener("click", async () => {
       const formData = new FormData();
       formData.set("csrf_token", "{{ csrf_token() }}");
-        
+
       const response = await fetch(`/packages/${currentPackage}`, {
         method: "DELETE",
         body: formData,
       });
-      
+
       if (response.status === 200) {
         window.location.reload();
       } else {
