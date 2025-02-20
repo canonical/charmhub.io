@@ -29,19 +29,29 @@ async function renderSVG(block, index) {
   const content = block.innerText;
   const { svg } = await mermaid.render(`diagram-${index}`, content);
 
-  codeSnippet.innerHTML = `<div class="p-code-snippet__header">
-  <h5 class="p-code-snippet__title">Mermaid Diagram</h5>
+  codeSnippet.innerHTML = `
+    <div class="p-code-snippet__header">
+      <h5 class="p-code-snippet__title">Mermaid Diagram</h5>
+      <div class="p-code-snippet__dropdowns">
+        <select class="p-code-snippet__dropdown">
+          <option value="rendered">Rendered</option>
+          <option value="markup">Markup</option>
+        </select>
+      </div>
+    </div>
+  `;
 
-  <div class="p-code-snippet__dropdowns">
-    <select class="p-code-snippet__dropdown">
-      <option value="rendered">Rendered</option>
-      <option value="markup">Markup</option>
-    </select>
-  </div>
-</div>
+  const renderedDiv = document.createElement("div");
+  renderedDiv.className = "rendered";
+  renderedDiv.style.marginTop = "1rem";
+  renderedDiv.innerHTML = svg;
 
-<div class="rendered" style="margin-top: 1rem">${svg}</div>
-<div class="markup">${block.parentNode.outerHTML}</div>`;
+  const markupDiv = document.createElement("div");
+  markupDiv.className = "markup";
+  markupDiv.textContent = block.parentNode.outerHTML;
+
+  codeSnippet.appendChild(renderedDiv);
+  codeSnippet.appendChild(markupDiv);
 
   block.parentNode.parentNode.replaceChild(codeSnippet, block.parentNode);
 
@@ -81,7 +91,9 @@ async function initMermaid() {
   // Only if we have some blocks should we do anything
   if (mermaidBlocks) {
     mermaid.initialize({ startOnLoad: false, securityLevel: "antiscript" });
-    Promise.all(mermaidBlocks.map((block, index) => renderSVG(block, index)));
+    await Promise.all(
+      mermaidBlocks.map((block, index) => renderSVG(block, index))
+    );
   }
 }
 
