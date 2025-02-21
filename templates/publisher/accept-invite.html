@@ -102,7 +102,7 @@
       inviteSuccessPanel.classList.remove("u-hide");
 
       setTimeout(() => {
-        window.location = `/${package}/listing`;
+        window.location = `/${encodeURIComponent(package)}/listing`;
       }, 3000);
     }).catch((error) => {
       closeAllNotifcations();
