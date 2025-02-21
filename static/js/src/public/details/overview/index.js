@@ -12,14 +12,14 @@ const truncateSummary = (selector) => {
 
     if (summary.length > 103) {
       const truncatedSummary = truncateString(summary, 103);
-      summaryContentEl.innerHTML = truncatedSummary;
+      summaryContentEl.textContent = truncatedSummary;
 
       showMoreEl.classList.remove("u-hide");
 
       showMoreEl.addEventListener("click", (e) => {
         e.preventDefault();
         showMoreEl.classList.add("u-hide");
-        summaryContentEl.innerHTML = summary;
+        summaryContentEl.textContent = summary;
       });
     }
   }
