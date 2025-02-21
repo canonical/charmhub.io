@@ -1,4 +1,5 @@
 import mermaid from "mermaid";
+import DOMPurify from "dompurify";
 
 // We don't get the "mermaid" code block id through
 // so be really hacky about it
@@ -44,7 +45,12 @@ async function renderSVG(block, index) {
   const renderedDiv = document.createElement("div");
   renderedDiv.className = "rendered";
   renderedDiv.style.marginTop = "1rem";
-  renderedDiv.innerHTML = svg;
+
+  const sanitizedSVG = DOMPurify.sanitize(svg, {
+    ADD_TAGS: ["svg", "g", "path", "rect", "circle", "text", "foreignObject"],
+    ADD_ATTR: ["viewBox", "xmlns", "width", "height", "style", "class", "id"],
+  });
+  renderedDiv.innerHTML = sanitizedSVG;
 
   const markupDiv = document.createElement("div");
   markupDiv.className = "markup";
