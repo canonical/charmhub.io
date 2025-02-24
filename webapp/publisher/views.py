@@ -351,11 +351,16 @@ def register_name():
 @publisher.route("/register-name", methods=["POST"])
 @login_required
 def post_register_name():
+    VALID_TYPES = {"charm", "bundle"}
     data = {
         "name": request.form["name"],
         "type": request.form["type"],
         "private": True if request.form.get("private") == "private" else False,
     }
+
+    if data["type"] not in VALID_TYPES:
+        flash("Invalid type specified.", "negative")
+        return redirect(url_for(".register_name"))
 
     try:
         result = publisher_gateway.register_package_name(
