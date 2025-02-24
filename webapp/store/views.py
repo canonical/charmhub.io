@@ -281,7 +281,7 @@ def details_docs(entity_name, path=None):
 
     # If no docs, redirect to main page
     if not package["store_front"]["docs_topic"]:
-        return redirect(f"/{entity_name}")
+        return redirect(url_for(".details_overview", entity_name=entity_name))
 
     docs_url_prefix = f"/{package['name']}/docs"
 
@@ -380,12 +380,14 @@ def details_configuration(entity_name, path=None):
 
         if not path and bundle_charms:
             default_charm = bundle_charms[0]
-            redirect_url = (
-                f"/{entity_name}/configurations/{default_charm['name']}"
+            return redirect(
+                url_for(
+                    ".details_configuration",
+                    entity_name=entity_name,
+                    path=default_charm["name"],
+                    channel=channel_request,
+                )
             )
-            if channel_request:
-                redirect_url = redirect_url + f"?channel={channel_request}"
-            return redirect(redirect_url)
 
         if path:
             if not any(d["name"] == path for d in bundle_charms):
