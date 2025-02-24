@@ -8,7 +8,7 @@ from canonicalwebteam.flask_base.decorators import (
 from canonicalwebteam.exceptions import StoreApiResponseErrorList
 from canonicalwebteam.store_api.publishergw import PublisherGW
 from canonicalwebteam.store_api.devicegw import DeviceGW
-from flask import Blueprint, Response, abort
+from flask import Blueprint, Response, abort, url_for
 from flask import jsonify, redirect, render_template, request, make_response
 from pybadges import badge
 
@@ -437,7 +437,13 @@ def details_libraries(entity_name):
 
     if libraries:
         first_lib = libraries[0]["name"]
-        return redirect(f"/{entity_name}/libraries/{first_lib}")
+        return redirect(
+            url_for(
+                ".details_library",
+                entity_name=entity_name,
+                library_name=first_lib,
+            )
+        )
 
     return render_template(
         "details/libraries/no-libraries.html",
@@ -452,11 +458,6 @@ def details_libraries(entity_name):
     '/<regex("'
     + DETAILS_VIEW_REGEX
     + '"):entity_name>/libraries/<string:library_name>'
-)
-@store.route(
-    '/<regex("'
-    + DETAILS_VIEW_REGEX
-    + '"):entity_name>/libraries/<string:library_name>/source-code'
 )
 @store_maintenance
 @redirect_uppercase_to_lowercase
@@ -481,13 +482,8 @@ def details_library(entity_name, library_name):
     fetch_api = library["api"]
     fetch_string = f"charms.{fetch_charm}.v{fetch_api}.{library_name}"
 
-    if "source-code" in request.path[1:]:
-        template = "details/libraries/source-code.html"
-    else:
-        template = "details/libraries/docstring.html"
-
     return render_template(
-        template,
+        "details/libraries/docstring.html",
         entity_name=entity_name,
         package=package,
         libraries=libraries,
@@ -497,6 +493,40 @@ def details_library(entity_name, library_name):
         library_name=library_name,
         fetch_string=fetch_string,
         creation_date=logic.convert_date(library["created-at"]),
+    )
+
+
+@store.route(
+    '/<regex("'
+    + DETAILS_VIEW_REGEX
+    + '"):entity_name>/libraries/<string:library_name>/source-code'
+)
+@store_maintenance
+@redirect_uppercase_to_lowercase
+def details_library_source_code(entity_name, library_name):
+    channel_request = request.args.get("channel", default=None, type=str)
+    package = get_package(entity_name, channel_request, FIELDS)
+
+    libraries = logic.process_libraries(
+        publisher_gateway.get_charm_libraries(entity_name)
+    )
+
+    library_id = logic.get_library(library_name, libraries)
+    if not library_id:
+        abort(404)
+
+    library = publisher_gateway.get_charm_library(entity_name, library_id)
+    source_code = library.get("source-code", "")
+
+    return render_template(
+        "details/libraries/source-code.html",
+        entity_name=entity_name,
+        package=package,
+        libraries=libraries,
+        library=library,
+        source_code=source_code,
+        channel_requested=channel_request,
+        library_name=library_name,
     )
 
 
@@ -613,7 +643,13 @@ def details_resources(entity_name):
     # /resources redirect to the first resource
     if package["default-release"]["resources"]:
         name = package["default-release"]["resources"][0]["name"]
-        return redirect(f"/{entity_name}/resources/{name}")
+        return redirect(
+            url_for(
+                ".details_resource",
+                entity_name=entity_name,
+                resource_name=name,
+            )
+        )
     else:
         return render_template(
             "details/no-resources.html",
@@ -635,14 +671,14 @@ def details_resource(entity_name, resource_name):
     resources = package["default-release"]["resources"]
 
     if not resources:
-        return redirect(f"/{entity_name}/resources")
+        return redirect(url_for(".details_resources", entity_name=entity_name))
 
     resource = next(
         (item for item in resources if item["name"] == resource_name), None
     )
 
     if not resource:
-        return redirect(f"/{entity_name}/resources")
+        return redirect(url_for(".details_resources", entity_name=entity_name))
 
     # Get OCI image details
     if resource["type"] == "oci-image":
