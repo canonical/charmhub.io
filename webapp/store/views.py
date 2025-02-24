@@ -281,7 +281,7 @@ def details_docs(entity_name, path=None):
 
     # If no docs, redirect to main page
     if not package["store_front"]["docs_topic"]:
-        return redirect(f"/{entity_name}")
+        return redirect(url_for(".details_overview", entity_name=entity_name))
 
     docs_url_prefix = f"/{package['name']}/docs"
 
