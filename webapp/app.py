@@ -1,7 +1,5 @@
-import re
-
 import talisker.requests
-from flask import render_template, make_response, request, session, escape
+from flask import render_template, make_response, request, session
 from dateutil import parser
 
 from canonicalwebteam.candid import CandidClient
@@ -42,24 +40,6 @@ set_handlers(app)
 request_session = talisker.requests.get_session()
 candid = CandidClient(request_session)
 publisher_gateway = PublisherGW("charm", request_session)
-
-
-@app.template_filter("linkify")
-def linkify(text):
-    escaped_text = escape(text)
-    url_pattern = re.compile(
-        r"http[s]?://"
-        r"(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|"
-        r"(?:%[0-9a-fA-F][0-9a-fA-F]))+"
-        r"(?:#[\w-]+)?"
-    )
-
-    def replace_with_link(match):
-        url = match.group(0)
-        anchor_tag = f'<a href="{url}" target="_blank">{url}</a>'
-        return anchor_tag
-
-    return url_pattern.sub(replace_with_link, str(escaped_text))
 
 
 cache.init_app(app)
