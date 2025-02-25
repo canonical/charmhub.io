@@ -126,6 +126,7 @@ def param_redirect_capture(req, resp):
                 # Set expiration for 10 days in the future
                 expires=datetime.now() + timedelta(days=10),
                 secure=True,
+                httponly=True,
             )
 
     return resp
