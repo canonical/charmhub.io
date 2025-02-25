@@ -125,6 +125,7 @@ def param_redirect_capture(req, resp):
                 ),
                 # Set expiration for 10 days in the future
                 expires=datetime.now() + timedelta(days=10),
+                secure=True,
             )
 
     return resp
@@ -148,7 +149,9 @@ def param_redirect_exec(req, make_response, redirect):
             response = make_response(
                 redirect(f'{redirect_data["endpoint"]}?{"&".join(params)}')
             )
-            response.set_cookie("param_redirect", "", expires=0)
+            response.set_cookie(
+                "param_redirect", "", expires=0, secure=True, httponly=True
+            )
             return response
     return None
 
