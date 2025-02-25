@@ -7,6 +7,7 @@ from flask import (
     make_response,
     redirect,
     abort,
+    url_for,
 )
 from flask.json import jsonify
 from github import Github
@@ -80,7 +81,7 @@ def single_interface(path):
         and "status" in interface
         and interface["status"] == "draft"
     ):
-        return redirect(f"/integrations/{path}/draft")
+        return redirect(url_for(".single_interface", path=f"{path}/draft"))
 
     context = {"interface": interface}
     return render_template("interfaces/index.html", **context)
