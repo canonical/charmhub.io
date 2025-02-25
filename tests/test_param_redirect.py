@@ -10,8 +10,12 @@ class MockCookies:
     def __init__(self, cookie={}):
         self.cookie = cookie
 
-    def set_cookie(self, name, data, expires):
-        self.cookie[name] = {"data": data, "expires": expires}
+    def set_cookie(self, name, data, expires, secure=False):
+        self.cookie[name] = {
+            "data": data,
+            "expires": expires,
+            "secure": secure,
+        }
 
     def get(self, name):
         return self.cookie[name]
