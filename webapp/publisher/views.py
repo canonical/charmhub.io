@@ -406,7 +406,10 @@ def post_register_name():
                     )
                 )
 
-    return redirect(f"/{data['type']}s")
+    if data["type"] == "charm":
+        return redirect("/charms")
+    elif data["type"] == "bundle":
+        return redirect("/bundles")
 
 
 @publisher.route("/register-name-dispute")
