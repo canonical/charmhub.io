@@ -93,10 +93,10 @@
             <span id="modal-content" class="u-no-margin--bottom u-no-padding--top">
               {% if package.store_front["deployable-on"]|length == 1 and package.store_front["deployable-on"][0] == "kubernetes" %}
               <p>Deploy Kubernetes operators easily with Juju, the <a href="https://juju.is/overview">Universal Operator Lifecycle Manager</a>. Need a Kubernetes cluster? Install <a href="https://microk8s.io/">MicroK8s</a> to create a full <a href="https://www.cncf.io/certification/software-conformance/">CNCF-certified</a> Kubernetes system in under 60 seconds.</p>
-              <p class="u-no-margin--bottom"><a href="https://juju.is/docs/microk8s-cloud">Deploy using our Quickstart Guide</a></p>
+              <p class="u-no-margin--bottom"><a href="https://canonical-juju.readthedocs-hosted.com/en/3.6/user/reference/cloud/list-of-supported-clouds/the-microk8s-cloud-and-juju/">Deploy using our Quickstart Guide</a></p>
               {% else %}
               <p>Deploy universal operators easily with Juju, the <a href="https://juju.is/overview">Universal Operator Lifecycle Manager</a>.</p>
-              <p class="u-no-margin--bottom"><a href="https://juju.is/docs/deploying-applications#heading--deploying-from-the-charm-store">Learn how with our Quickstart Guide</a></p>
+              <p class="u-no-margin--bottom"><a href="https://canonical-juju.readthedocs-hosted.com/en/3.6/user/howto/manage-applications/#deploy-an-application">Learn how with our Quickstart Guide</a></p>
               {% endif %}
             </span>
           </div>
