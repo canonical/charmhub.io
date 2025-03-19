@@ -15,6 +15,8 @@ const START_SYNTAX = [
   "requirementDiagram",
   "gitGraph",
   "C4Context",
+  "C4Container",
+  "C4Component",
   "mindmap",
   "timeline",
   "pie",
