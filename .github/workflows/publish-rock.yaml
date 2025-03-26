@@ -3,8 +3,8 @@ name: Pack Rock and Publish Image
 on:
   push:
     branches:
-      # - main # Uncomment this line to run the workflow on main branch, for now using this to experiment with observability
-      - observability
+      - main
+      - deployment-action # Q/A only
 
 jobs:
   pack-rock:
@@ -25,7 +25,7 @@ jobs:
         uses: canonical/setup-lxd@main
 
       - name: Setup rockcraft
-        run: sudo snap install rockcraft --classic --channel=latest/edge
+        run: sudo snap install rockcraft --classic
 
       - name: Pack rock
         run: rockcraft pack
@@ -61,7 +61,7 @@ jobs:
         env:
           CHARMCRAFT_AUTH: ${{ secrets.CHARMHUB_TOKEN }}
         run: |
-            sudo snap install charmcraft --classic --channel=latest/edge
+            sudo snap install charmcraft --classic --channel latest/stable
             charmcraft upload-resource charmhub-io flask-app-image --image=`docker images --format "{{.ID}}" | head -n 1` --verbosity=trace
 
       - name: Attach resource to charm
@@ -70,5 +70,5 @@ jobs:
         run: |
           revision_number=$(charmcraft revisions charmhub-io | awk 'NR==2 {print $1}')
           resource_revision_number=$(charmcraft resource-revisions charmhub-io flask-app-image | awk 'NR==2 {print $1}')
-          charmcraft release charmhub-io --channel=beta --revision $revision_number --resource flask-app-image:$resource_revision_number
+          charmcraft release charmhub-io --channel=stable --revision $revision_number --resource flask-app-image:$resource_revision_number
 

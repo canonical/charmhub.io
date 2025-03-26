@@ -1,0 +1,52 @@
+name: Deploy with Juju
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      VAULT_APPROLE_ROLE_ID:
+        required: true
+      VAULT_APPROLE_SECRET_ID:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, self-hosted-linux-amd64-jammy-private-endpoint-medium]
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Install Dependencies
+        run: |
+          sudo snap install juju --channel=3.4/stable --classic
+          sudo snap install vault --classic
+
+      - name: Configure Vault and Juju
+        env:
+          VAULT_ADDR: "https://vault.admin.canonical.com:8200"
+          VAULT_ROLE_ID: ${{ secrets.VAULT_APPROLE_ROLE_ID }}
+          VAULT_SECRET_ID: ${{ secrets.VAULT_APPROLE_SECRET_ID }}
+        run: |
+          set -e
+          export CONTROLLER_NAME=${{ vars.JUJU_CONTROLLER_NAME }}
+          export MODEL_NAME=${{ vars.JUJU_MODEL_NAME }}
+          export VAULT_SECRET_PATH_ROLE=secret/prodstack6/roles/${MODEL_NAME}
+          export VAULT_SECRET_PATH_COMMON=secret/prodstack6/juju/common
+          export VAULT_TOKEN=$(vault write -f -field=token auth/approle/login role_id="$VAULT_ROLE_ID" secret_id="$VAULT_SECRET_ID") 
+          mkdir -p ~/.local/share/juju
+          vault read -field=controller_config "${VAULT_SECRET_PATH_COMMON}/controllers/${CONTROLLER_NAME}" | base64 -d > ~/.local/share/juju/controllers.yaml
+          USERNAME=$(vault read -field=username "${VAULT_SECRET_PATH_ROLE}/juju")
+          PASSWORD=$(vault read -field=password "${VAULT_SECRET_PATH_ROLE}/juju")
+          printf "controllers:\n  %s:\n    user: %s\n    password: %s\n" "$CONTROLLER_NAME" "$USERNAME" "$PASSWORD" > ~/.local/share/juju/accounts.yaml
+
+      - name: Deploy Application
+        run: |
+          export JUJU_MODEL=admin/${{ vars.JUJU_MODEL_NAME }}
+          export CHARM_NAME=${{ vars.CHARM_NAME }}
+          export CHANNEL=${{ vars.CHANNEL || 'latest/stable' }}
+          export resource_revision=$(juju charm-resources $CHARM_NAME --channel=$CHANNEL | awk 'NR==2 {print $2}')
+          juju refresh $CHARM_NAME --channel=$CHANNEL
+          juju refresh $CHARM_NAME --channel=$CHANNEL --resource flask-app-image=$resource_revision
+          juju wait-for application $CHARM_NAME --query="name=='$CHARM_NAME' && (status=='active' || status=='idle')"
+
