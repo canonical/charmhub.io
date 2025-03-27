@@ -53,7 +53,7 @@ jobs:
         uses: canonical/setup-lxd@main
 
       - name: Setup rockcraft
-        run: sudo snap install rockcraft --classic --channel=latest/edge
+        run: sudo snap install rockcraft --classic
 
       - name: Pack rock
         run: rockcraft pack

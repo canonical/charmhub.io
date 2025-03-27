@@ -9,6 +9,7 @@ on:
   pull_request:
     paths:
       - 'charm/**'
+  workflow_dispatch:
 
 jobs:
   pack-charm:
@@ -21,7 +22,7 @@ jobs:
         uses: canonical/setup-lxd@main
 
       - name: Setup charmcraft
-        run: sudo snap install charmcraft --classic --channel=latest/edge
+        run: sudo snap install charmcraft --classic --channel=latest/stable
 
       - name: Fetch libs
         run: |
@@ -32,7 +33,7 @@ jobs:
         run: charmcraft pack -v --project-dir ./charm
 
       - name: Upload charm (only runs on push to main)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
         env:
           CHARMCRAFT_AUTH: ${{ secrets.CHARMHUB_TOKEN }}
         run: charmcraft upload ./*.charm

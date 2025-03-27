@@ -1,0 +1,30 @@
+name: Deploy with Juju
+
+on:
+  workflow_run:
+    workflows: 
+      - "Pack and Publish Charm"
+      - "Pack Rock and Publish Image"
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  deploy-staging:
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/deployment-action' }}
+    uses: ./.github/workflows/juju_deploy.yaml
+    with:
+        environment: "Staging"
+    secrets:
+        VAULT_APPROLE_ROLE_ID: ${{ secrets.VAULT_APPROLE_ROLE_ID }}
+        VAULT_APPROLE_SECRET_ID: ${{ secrets.VAULT_APPROLE_SECRET_ID }}
+
+  deploy-prod:
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/deployment-action' }}
+    uses: ./.github/workflows/juju_deploy.yaml
+    with:
+        environment: "Production"
+    secrets:
+        VAULT_APPROLE_ROLE_ID: ${{ secrets.VAULT_APPROLE_ROLE_ID }}
+        VAULT_APPROLE_SECRET_ID: ${{ secrets.VAULT_APPROLE_SECRET_ID }}
+
