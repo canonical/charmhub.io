@@ -15,7 +15,9 @@ on:
 jobs:
   deploy:
     runs-on: [self-hosted, self-hosted-linux-amd64-jammy-private-endpoint-medium]
-    environment: ${{ inputs.environment }}
+    environment:
+      name: ${{ inputs.environment }}
+      url: ${{ vars.ENVIRONMENT_URL }}
     steps:
       - name: Install Dependencies
         run: |
