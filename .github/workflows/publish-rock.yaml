@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - deployment-action # Q/A only
 
 jobs:
   pack-rock:

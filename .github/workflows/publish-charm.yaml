@@ -4,12 +4,12 @@ on:
   push:
     branches:
       - main
-      - deployment-action # Q/A only
     paths:
       - 'charm/**' # Only trigger when changes are made to the ./charm/ directory
   pull_request:
     paths:
       - 'charm/**'
+  workflow_dispatch:
 
 jobs:
   pack-charm:
@@ -33,7 +33,7 @@ jobs:
         run: charmcraft pack -v --project-dir ./charm
 
       - name: Upload charm (only runs on push to main)
-        # if: github.event_name == 'push' && github.ref == 'refs/heads/main' commented out for Q/A
+        if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
         env:
           CHARMCRAFT_AUTH: ${{ secrets.CHARMHUB_TOKEN }}
         run: charmcraft upload ./*.charm

@@ -8,9 +8,6 @@ on:
     types:
       - completed
   workflow_dispatch:
-  push:
-    branches:
-      - deployment-action # just for Q/A
 
 jobs:
   deploy-staging:
