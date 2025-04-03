@@ -30,7 +30,7 @@
     "@canonical/global-nav": "3.6.4",
     "@canonical/react-components": "2.1.0",
     "@canonical/store-components": "0.53.0",
-    "@sentry/react": "8.48.0",
+    "@sentry/react": "9.11.0",
     "@testing-library/dom": "10.4.0",
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.1.0",
@@ -38,7 +38,7 @@
     "@types/jest": "29.5.14",
     "@types/react-router-dom": "5.3.3",
     "autoprefixer": "10.4.20",
-    "babel-loader": "9.2.1",
+    "babel-loader": "10.0.0",
     "css-loader": "7.1.2",
     "date-fns": "4.1.0",
     "dompurify": "^3.2.4",
@@ -49,10 +49,10 @@
     "postcss-cli": "11.0.0",
     "prettier": "3.4.2",
     "prismjs": "1.30.0",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "react-dropzone": "14.3.5",
-    "react-markdown": "9.0.3",
+    "react-markdown": "10.1.0",
     "react-query": "3.39.3",
     "react-router-dom": "7.1.1",
     "recoil": "0.7.7",
@@ -76,7 +76,7 @@
     "chokidar-cli": "^3.0.0",
     "concurrently": "9.1.2",
     "eslint": "^9.0.0",
-    "eslint-config-prettier": "9.1.0",
+    "eslint-config-prettier": "10.1.1",
     "eslint-plugin-jest": "28.10.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-prettier": "5.2.1",
@@ -90,7 +90,7 @@
     "undici": "7.2.3"
   },
   "resolutions": {
-    "@types/react": "18.3.18",
-    "@types/react-dom": "18.3.5"
+    "@types/react": "19.1.0",
+    "@types/react-dom": "19.1.1"
   }
 }
