@@ -32,6 +32,7 @@ export default function Releases() {
   const { packageName } = useParams();
   const { data: releaseData } = useReleases(packageName);
   const { data: packageData } = usePackage(packageName);
+  const { refetch } = usePackage(packageName);
 
   const [selectedTrack, setSelectedTrack] = useState<string>("");
   const [selectedArch, setSelectedArch] = useState<string>("");
@@ -206,6 +207,7 @@ export default function Releases() {
             onClose={() => setShowSidePanel(false)}
             setSelectedTrack={setSelectedTrack}
             onSuccess={() => {
+              refetch();
               setShowSuccessMessage(true);
             }}
           />
