@@ -464,7 +464,7 @@ def post_create_track(charm_name):
         auto_phasing_percentage = float(auto_phasing_percentage)
 
     response = publisher_gateway.create_track(
-        session["account-auth"],
+        session,
         charm_name,
         track_name,
         version_pattern,
