@@ -65,6 +65,10 @@ function Invites({
         },
         {
           content: "",
+          heading: "Revoke",
+        },
+        {
+          content: "",
           heading: "Actions",
         },
       ]}

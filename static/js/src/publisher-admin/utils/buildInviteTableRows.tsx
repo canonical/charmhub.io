@@ -52,59 +52,47 @@ function buildInviteTableRows(
           format(new Date(invite?.["expires-at"]), "dd/MM/yyyy"),
       },
       {
+        content:
+          status === "Pending" ? (
+            <Button
+              type="button"
+              dense
+              onClick={() => {
+                setActiveInviteEmail(invite?.email || "");
+                setShowRevokeModal(true);
+              }}
+            >
+              Revoke
+            </Button>
+          ) : null,
         className: "u-align--right",
-        content: (
-          <>
-            {status === "Pending" && (
-              <>
-                <Button
-                  type="button"
-                  dense
-                  onClick={() => {
-                    setActiveInviteEmail(invite?.email || "");
-                    setShowRevokeModal(true);
-                  }}
-                >
-                  Revoke
-                </Button>
-                <Button
-                  type="button"
-                  dense
-                  onClick={() => {
-                    setActiveInviteEmail(invite?.email || "");
-                    setShowResendModal(true);
-                  }}
-                >
-                  Resend
-                </Button>
-              </>
-            )}
-            {status === "Expired" && (
-              <Button
-                type="button"
-                dense
-                onClick={() => {
-                  setActiveInviteEmail(invite?.email || "");
-                  setShowReopenModal(true);
-                }}
-              >
-                Reopen
-              </Button>
-            )}
-            {status === "Revoked" && (
-              <Button
-                type="button"
-                dense
-                onClick={() => {
-                  setActiveInviteEmail(invite?.email || "");
-                  setShowReopenModal(true);
-                }}
-              >
-                Reopen
-              </Button>
-            )}
-          </>
-        ),
+      },
+      {
+        content:
+          status === "Pending" ? (
+            <Button
+              type="button"
+              dense
+              onClick={() => {
+                setActiveInviteEmail(invite?.email || "");
+                setShowResendModal(true);
+              }}
+            >
+              Copy invite URL
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              dense
+              onClick={() => {
+                setActiveInviteEmail(invite?.email || "");
+                setShowReopenModal(true);
+              }}
+            >
+              Reopen
+            </Button>
+          ),
+        className: "u-align--right",
       },
     ];
 
