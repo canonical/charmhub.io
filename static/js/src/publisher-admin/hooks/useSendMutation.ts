@@ -1,4 +1,5 @@
 import { QueryClient, useMutation } from "react-query";
+import { generateInviteToken } from "./generateInviteToken";
 
 function useSendMutation(
   packageName: string | undefined,
@@ -18,38 +19,28 @@ function useSendMutation(
         return;
       }
 
-      const formData = new FormData();
+      try {
+        const token = await generateInviteToken(
+          activeInviteEmail,
+          packageName!,
+          csrfToken
+        );
 
-      formData.set("collaborators", activeInviteEmail);
-      formData.set("csrf_token", csrfToken);
+        const inviteLink = `https://charmhub.io/accept-invite?package=${packageName}&token=${token}`;
+        setInviteLink(inviteLink);
+        setInviteEmailLink(
+          `mailto:${activeInviteEmail}?subject=${publisherName} has invited you to collaborate on ${packageName}&body=Click this link to accept the invite: ${encodeURIComponent(inviteLink)}`
+        );
 
-      const response = await fetch(`/api/packages/${packageName}/invites`, {
-        method: "POST",
-        body: formData,
-      });
+        if (setShowSidePanel) {
+          setShowSidePanel(false);
+        }
 
-      if (setShowSidePanel) {
-        setShowSidePanel(false);
-      }
-
-      if (!response.ok) {
+        setShowInviteSuccess(true);
+      } catch (err) {
         setShowInviteError(true);
-        throw new Error(response.statusText);
+        throw err;
       }
-
-      const inviteData = await response.json();
-
-      if (!inviteData.success) {
-        setShowInviteError(true);
-        throw new Error(inviteData.message);
-      }
-
-      // This shouldn't be necessary once emails are enabled
-      const inviteLink = `https://charmhub.io/accept-invite?package=${packageName}&token=${inviteData.data[0].token}`;
-      setInviteLink(inviteLink);
-      setInviteEmailLink(
-        `mailto:${inviteData.data[0].email}?subject=${publisherName} has invited you to collaborate on ${packageName}&body=Click this link to accept the invite: ${encodeURIComponent(inviteLink)}`
-      );
 
       setShowInviteSuccess(true);
     },

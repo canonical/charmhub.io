@@ -20,6 +20,7 @@ import {
 } from "../../state/atoms";
 import { useSendMutation } from "../../hooks";
 
+import { generateInviteToken } from "../../hooks/generateInviteToken";
 import { Invite } from "../../types";
 
 type Props = {
@@ -33,7 +34,7 @@ function InviteCollaborator({
   setShowInviteSuccess,
   setShowInviteError,
 }: Props) {
-  const { packageName } = useParams();
+  const { packageName } = useParams<{ packageName: string }>();
   const queryClient = useQueryClient();
   const [activeInviteEmail, setActiveInviteEmail] = useRecoilState(
     activeInviteEmailState
@@ -42,6 +43,7 @@ function InviteCollaborator({
   const setInviteEmailLink = useSetRecoilState(inviteEmailLinkState);
   const invitesList = useRecoilValue(invitesListState);
   const publisher = useRecoilValue(publisherState);
+  const inviteLink = useRecoilValue(inviteLinkState);
 
   const sendMutation = useSendMutation(
     packageName,
@@ -79,7 +81,7 @@ function InviteCollaborator({
   return (
     <Form
       style={{ height: "100%" }}
-      onSubmit={(e) => {
+      onSubmit={(e: { preventDefault: () => void }) => {
         e.preventDefault();
         sendMutation.mutate();
         setActiveInviteEmail("");
@@ -101,9 +103,12 @@ function InviteCollaborator({
           </div>
         </div>
         <div className="p-panel__content">
-          <Notification severity="caution" title="Role">
-            A collaborator is a store user that can have equal rights over a
-            particular package as the package publisher.
+          <Notification severity="caution" title="A collaborator can:">
+            <ul>
+              <li>Access and modify this charm</li>
+              <li>Publish new versions and manage releases</li>
+              <li>Represent the charm alongside you as a publisher</li>
+            </ul>
           </Notification>
           <Input
             type="email"
@@ -119,12 +124,51 @@ function InviteCollaborator({
             ) => {
               setActiveInviteEmail(e.target.value);
             }}
+            onBlur={async () => {
+              if (activeInviteEmail && isUnique(activeInviteEmail)) {
+                try {
+                  const token = await generateInviteToken(
+                    activeInviteEmail,
+                    packageName!,
+                    window.CSRF_TOKEN
+                  );
+                  const inviteLink = `https://charmhub.io/accept-invite?package=${packageName}&token=${token}`;
+                  setInviteLink(inviteLink);
+                } catch (err) {
+                  console.error("Error generating invite preview:", err);
+                }
+              }
+            }}
             error={
               !isUnique(activeInviteEmail)
                 ? "There is already a pending invite for this email address"
                 : ""
             }
           />
+          <div>
+            <h5>Invite Link</h5>
+            {inviteLink ? (
+              <code>{inviteLink}</code>
+            ) : (
+              <code>Enter email to generate a unique invitation link</code>
+            )}
+            <p className="u-text--muted">
+              Important: This link will <strong>NOT</strong> be automatically
+              sent.
+            </p>
+            <div className="u-text--muted">
+              After generating, you'll need to:
+              <ul>
+                <li>Copy the link</li>
+                <li>Share it with your collaborator</li>
+                <li>The link expires 30 days after generation</li>
+              </ul>
+            </div>
+            <p className="u-text--muted">
+              Once your collaborator uses the link, they'll gain access to the
+              charm.
+            </p>
+          </div>
         </div>
         <div className="p-panel__footer u-align--right">
           <Button
