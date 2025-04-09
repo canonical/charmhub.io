@@ -20,13 +20,12 @@ function useSendMutation(
       }
 
       try {
-        const token = await generateInviteToken(
+        const inviteLink = await generateInviteToken(
           activeInviteEmail,
           packageName!,
           csrfToken
         );
 
-        const inviteLink = `https://charmhub.io/accept-invite?package=${packageName}&token=${token}`;
         setInviteLink(inviteLink);
         setInviteEmailLink(
           `mailto:${activeInviteEmail}?subject=${publisherName} has invited you to collaborate on ${packageName}&body=Click this link to accept the invite: ${encodeURIComponent(inviteLink)}`

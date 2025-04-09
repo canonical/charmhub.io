@@ -34,7 +34,7 @@ function InviteCollaborator({
   setShowInviteSuccess,
   setShowInviteError,
 }: Props) {
-  const { packageName } = useParams<{ packageName: string }>();
+  const { packageName } = useParams();
   const queryClient = useQueryClient();
   const [activeInviteEmail, setActiveInviteEmail] = useRecoilState(
     activeInviteEmailState
@@ -129,12 +129,11 @@ function InviteCollaborator({
             onBlur={async () => {
               if (activeInviteEmail && isUnique(activeInviteEmail)) {
                 try {
-                  const token = await generateInviteToken(
+                  const inviteLink = await generateInviteToken(
                     activeInviteEmail,
                     packageName!,
                     window.CSRF_TOKEN
                   );
-                  const inviteLink = `https://charmhub.io/accept-invite?package=${packageName}&token=${token}`;
                   setInviteLink(inviteLink);
                 } catch (err) {
                   console.error("Error generating invite preview:", err);

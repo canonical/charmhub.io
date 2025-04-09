@@ -1,5 +1,6 @@
 import { useRecoilValue } from "recoil";
 import { MainTable } from "@canonical/react-components";
+import { useParams } from "react-router-dom";
 
 import { getInvitesByStatus, buildInviteTableRows } from "../../utils";
 
@@ -22,9 +23,12 @@ function Invites({
   const expiredInvites = getInvitesByStatus(invitesList, "expired");
   const revokedInvites = getInvitesByStatus(invitesList, "revoked");
 
+  const { packageName } = useParams();
+
   const pendingInvitesTableRows = buildInviteTableRows(
     pendingInvites,
     "Pending",
+    packageName!,
     setShowRevokeModal,
     setShowResendModal,
     setShowReopenModal
@@ -32,6 +36,7 @@ function Invites({
   const expiredInvitesTableRows = buildInviteTableRows(
     expiredInvites,
     "Expired",
+    packageName!,
     setShowRevokeModal,
     setShowResendModal,
     setShowReopenModal
@@ -39,6 +44,7 @@ function Invites({
   const revokedInvitesTableRows = buildInviteTableRows(
     revokedInvites,
     "Revoked",
+    packageName!,
     setShowRevokeModal,
     setShowResendModal,
     setShowReopenModal

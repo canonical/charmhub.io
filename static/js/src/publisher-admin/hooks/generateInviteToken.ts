@@ -23,5 +23,6 @@ export async function generateInviteToken(
   }
 
   const token = inviteData.data[0].token;
-  return token;
+
+  return `https://charmhub.io/accept-invite?package=${packageName}&token=${token}`;
 }
