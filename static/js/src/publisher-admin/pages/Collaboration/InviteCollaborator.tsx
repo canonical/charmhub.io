@@ -1,4 +1,4 @@
-import { SyntheticEvent } from "react";
+import { SyntheticEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
@@ -44,6 +44,8 @@ function InviteCollaborator({
   const invitesList = useRecoilValue(invitesListState);
   const publisher = useRecoilValue(publisherState);
   const inviteLink = useRecoilValue(inviteLinkState);
+
+  const [copied, setCopied] = useState(false);
 
   const sendMutation = useSendMutation(
     packageName,
@@ -148,7 +150,27 @@ function InviteCollaborator({
           <div>
             <h5>Invite Link</h5>
             {inviteLink ? (
-              <code>{inviteLink}</code>
+              <div className="grid-row">
+                <div className="grid-col-6">
+                  <pre className="p-code-snippet__block">
+                    <code>{inviteLink}</code>
+                  </pre>
+                </div>
+                <div className="grid-col-2">
+                  <Button
+                    type="button"
+                    appearance="base"
+                    className="p-button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(inviteLink);
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    }}
+                  >
+                    {copied ? "Copied!" : "Copy"}
+                  </Button>
+                </div>
+              </div>
             ) : (
               <code>Enter email to generate a unique invitation link</code>
             )}
