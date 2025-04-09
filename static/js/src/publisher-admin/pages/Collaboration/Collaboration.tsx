@@ -33,6 +33,7 @@ import {
   filteredInvitesListState,
 } from "../../state/selectors";
 import { useCollaboratorsQuery, useInvitesQuery } from "../../hooks";
+import { getUniqueInvites } from "../../utils/getUniqueInvites";
 
 function Collaboration() {
   const { packageName } = useParams();
@@ -192,7 +193,7 @@ function Collaboration() {
                     },
                     {
                       key: "invites",
-                      title: `Invites (${invitesList.length})`,
+                      title: `Invites (${getUniqueInvites(invitesList).length})`,
                       content: (
                         <Invites
                           setShowRevokeModal={setShowRevokeInviteModal}

@@ -20,7 +20,7 @@ import {
 } from "../../state/atoms";
 import { useSendMutation } from "../../hooks";
 
-import { generateInviteToken } from "../../hooks/generateInviteToken";
+import { generateInviteToken } from "../../utils/generateInviteToken";
 import { Invite } from "../../types";
 
 type Props = {

@@ -1,5 +1,5 @@
 import { QueryClient, useMutation } from "react-query";
-import { generateInviteToken } from "./generateInviteToken";
+import { generateInviteToken } from "../utils/generateInviteToken";
 
 function useSendMutation(
   packageName: string | undefined,

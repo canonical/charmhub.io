@@ -5,7 +5,7 @@ import { Button, MainTable } from "@canonical/react-components";
 import { activeInviteEmailState } from "../state/atoms";
 
 import type { Invite } from "../types";
-import { generateInviteToken } from "../hooks/generateInviteToken";
+import { generateInviteToken } from "./generateInviteToken";
 import { useState } from "react";
 
 type MainTableProps = Parameters<typeof MainTable>[0];

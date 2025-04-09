@@ -22,6 +22,9 @@ function Invites({
   const pendingInvites = getInvitesByStatus(invitesList, "pending");
   const expiredInvites = getInvitesByStatus(invitesList, "expired");
   const revokedInvites = getInvitesByStatus(invitesList, "revoked");
+  const uniqueRevokedInvites = Array.from(
+    new Map(revokedInvites.map((invite) => [invite.email, invite])).values()
+  );
 
   const { packageName } = useParams();
 
@@ -42,7 +45,7 @@ function Invites({
     setShowReopenModal
   );
   const revokedInvitesTableRows = buildInviteTableRows(
-    revokedInvites,
+    uniqueRevokedInvites,
     "Revoked",
     packageName!,
     setShowRevokeModal,
