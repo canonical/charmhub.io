@@ -19,6 +19,7 @@ import {
   publisherState,
 } from "../../state/atoms";
 import { useSendMutation } from "../../hooks";
+import { useHandleSidePanelClose } from "../../hooks/useHandleSidePanelClose";
 
 import { generateInviteToken } from "../../utils/generateInviteToken";
 import { Invite } from "../../types";
@@ -44,6 +45,8 @@ function InviteCollaborator({
   const invitesList = useRecoilValue(invitesListState);
   const publisher = useRecoilValue(publisherState);
   const inviteLink = useRecoilValue(inviteLinkState);
+
+  const { handleClose } = useHandleSidePanelClose(setShowSidePanel);
 
   const [copied, setCopied] = useState(false);
 
@@ -95,10 +98,9 @@ function InviteCollaborator({
           <div className="p-panel__controls">
             <Button
               hasIcon
+              type="button"
               className="p-button--base u-no-margin--bottom"
-              onClick={() => {
-                setShowSidePanel(false);
-              }}
+              onClick={handleClose}
             >
               <Icon name="close" />
             </Button>
@@ -195,9 +197,7 @@ function InviteCollaborator({
           <Button
             type="button"
             className="u-no-margin--bottom"
-            onClick={() => {
-              setShowSidePanel(false);
-            }}
+            onClick={handleClose}
           >
             Cancel
           </Button>

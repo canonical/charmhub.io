@@ -33,6 +33,7 @@ import {
   filteredInvitesListState,
 } from "../../state/selectors";
 import { useCollaboratorsQuery, useInvitesQuery } from "../../hooks";
+import { useHandleSidePanelClose } from "../../hooks/useHandleSidePanelClose";
 import { getUniqueInvites } from "../../utils/getUniqueInvites";
 
 function Collaboration() {
@@ -61,6 +62,8 @@ function Collaboration() {
   const filterQuery = useRecoilValue(filterQueryState);
   const { data: collaboratorsData } = useCollaboratorsQuery(packageName);
   const { data: invitesData } = useInvitesQuery(packageName);
+
+  const { handleClose } = useHandleSidePanelClose(setShowSidePanel);
 
   const getCollaboratorsCount = () => {
     if (publisher) {
@@ -211,9 +214,11 @@ function Collaboration() {
         <div
           className={`l-aside__overlay ${!showSidePanel && "u-hide"}`}
           onClick={() => {
+            handleClose();
             setShowSidePanel(false);
           }}
           onKeyDown={(e) => {
+            handleClose();
             if (e.key === "Enter" || e.key === "Escape") {
               setShowSidePanel(false);
             }
