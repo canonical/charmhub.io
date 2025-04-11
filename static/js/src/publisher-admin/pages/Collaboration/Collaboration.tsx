@@ -33,10 +33,11 @@ import {
   filteredInvitesListState,
 } from "../../state/selectors";
 import { useCollaboratorsQuery, useInvitesQuery } from "../../hooks";
-import { useHandleSidePanelClose } from "../../hooks/useHandleSidePanelClose";
 import { getUniqueInvites } from "../../utils/getUniqueInvites";
+import { useQueryClient } from "react-query";
 
 function Collaboration() {
+  const queryClient = useQueryClient();
   const { packageName } = useParams();
   const [showRevokeSuccess, setShowRevokeSuccess] = useState<boolean>(false);
   const [showRevokeError, setShowRevokeError] = useState<boolean>(false);
@@ -62,8 +63,6 @@ function Collaboration() {
   const filterQuery = useRecoilValue(filterQueryState);
   const { data: collaboratorsData } = useCollaboratorsQuery(packageName);
   const { data: invitesData } = useInvitesQuery(packageName);
-
-  const { handleClose } = useHandleSidePanelClose(setShowSidePanel);
 
   const getCollaboratorsCount = () => {
     if (publisher) {
@@ -214,13 +213,13 @@ function Collaboration() {
         <div
           className={`l-aside__overlay ${!showSidePanel && "u-hide"}`}
           onClick={() => {
-            handleClose();
             setShowSidePanel(false);
+            queryClient.invalidateQueries("invitesData");
           }}
           onKeyDown={(e) => {
-            handleClose();
             if (e.key === "Enter" || e.key === "Escape") {
               setShowSidePanel(false);
+              queryClient.invalidateQueries("invitesData");
             }
           }}
           role="button"

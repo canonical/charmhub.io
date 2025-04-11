@@ -8,6 +8,7 @@ import {
   Input,
   Button,
   Icon,
+  Spinner,
 } from "@canonical/react-components";
 
 import { isPending } from "../../utils";
@@ -19,7 +20,6 @@ import {
   publisherState,
 } from "../../state/atoms";
 import { useSendMutation } from "../../hooks";
-import { useHandleSidePanelClose } from "../../hooks/useHandleSidePanelClose";
 
 import { generateInviteToken } from "../../utils/generateInviteToken";
 import { Invite } from "../../types";
@@ -46,9 +46,8 @@ function InviteCollaborator({
   const publisher = useRecoilValue(publisherState);
   const inviteLink = useRecoilValue(inviteLinkState);
 
-  const { handleClose } = useHandleSidePanelClose(setShowSidePanel);
-
   const [copied, setCopied] = useState(false);
+  const [loadingInviteLink, setLoadingInviteLink] = useState(false);
 
   const sendMutation = useSendMutation(
     packageName,
@@ -100,7 +99,10 @@ function InviteCollaborator({
               hasIcon
               type="button"
               className="p-button--base u-no-margin--bottom"
-              onClick={handleClose}
+              onClick={() => {
+                setShowSidePanel(false);
+                queryClient.invalidateQueries("invitesData");
+              }}
             >
               <Icon name="close" />
             </Button>
@@ -117,9 +119,9 @@ function InviteCollaborator({
           <Input
             type="email"
             id="collaborator-email"
-            label="Email"
+            label={<strong>1. Email</strong>}
             placeholder="yourname@example.com"
-            help="The primary email for the Ubuntu One account"
+            help="Collaborator email linked to the Ubuntu One account"
             value={activeInviteEmail}
             onInput={(
               e: SyntheticEvent<HTMLInputElement> & {
@@ -127,20 +129,7 @@ function InviteCollaborator({
               }
             ) => {
               setActiveInviteEmail(e.target.value);
-            }}
-            onBlur={async () => {
-              if (activeInviteEmail && isUnique(activeInviteEmail)) {
-                try {
-                  const inviteLink = await generateInviteToken(
-                    activeInviteEmail,
-                    packageName!,
-                    window.CSRF_TOKEN
-                  );
-                  setInviteLink(inviteLink);
-                } catch (err) {
-                  console.error("Error generating invite preview:", err);
-                }
-              }
+              setInviteLink("");
             }}
             error={
               !isUnique(activeInviteEmail)
@@ -149,7 +138,37 @@ function InviteCollaborator({
             }
           />
           <div>
-            <h5>Invite Link</h5>
+            <h5>2. Invite Link</h5>
+            <Button
+              type="button"
+              appearance="positive"
+              disabled={!isUnique(activeInviteEmail) || loadingInviteLink}
+              onClick={async () => {
+                if (activeInviteEmail && isUnique(activeInviteEmail)) {
+                  try {
+                    setLoadingInviteLink(true);
+                    const inviteLink = await generateInviteToken(
+                      activeInviteEmail,
+                      packageName!,
+                      window.CSRF_TOKEN
+                    );
+                    setInviteLink(inviteLink);
+                  } catch (err) {
+                    console.error("Error generating invite preview:", err);
+                  } finally {
+                    setLoadingInviteLink(false);
+                  }
+                }
+              }}
+            >
+              {loadingInviteLink ? (
+                <>
+                  <Spinner text="Loading..." />
+                </>
+              ) : (
+                "Generate invite link"
+              )}
+            </Button>
             {inviteLink ? (
               <div className="grid-row">
                 <div className="grid-col-6">
@@ -173,7 +192,9 @@ function InviteCollaborator({
                 </div>
               </div>
             ) : (
-              <code>Enter email to generate a unique invitation link</code>
+              <pre className="p-code-snippet__block">
+                <code>Enter email to generate a unique invitation link</code>
+              </pre>
             )}
             <p className="u-text--muted">
               Important: This link will <strong>NOT</strong> be automatically
@@ -197,17 +218,12 @@ function InviteCollaborator({
           <Button
             type="button"
             className="u-no-margin--bottom"
-            onClick={handleClose}
+            onClick={() => {
+              setShowSidePanel(false);
+              queryClient.invalidateQueries("invitesData");
+            }}
           >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            appearance="positive"
-            className="u-no-margin--bottom"
-            disabled={!activeInviteEmail || !isUnique(activeInviteEmail)}
-          >
-            Add collaborator
+            Done
           </Button>
         </div>
       </div>
