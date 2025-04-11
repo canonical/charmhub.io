@@ -33,8 +33,11 @@ import {
   filteredInvitesListState,
 } from "../../state/selectors";
 import { useCollaboratorsQuery, useInvitesQuery } from "../../hooks";
+import { getUniqueInvites } from "../../utils/getUniqueInvites";
+import { useQueryClient } from "react-query";
 
 function Collaboration() {
+  const queryClient = useQueryClient();
   const { packageName } = useParams();
   const [showRevokeSuccess, setShowRevokeSuccess] = useState<boolean>(false);
   const [showRevokeError, setShowRevokeError] = useState<boolean>(false);
@@ -192,7 +195,7 @@ function Collaboration() {
                     },
                     {
                       key: "invites",
-                      title: `Invites (${invitesList.length})`,
+                      title: `Invites (${getUniqueInvites(invitesList).length})`,
                       content: (
                         <Invites
                           setShowRevokeModal={setShowRevokeInviteModal}
@@ -211,10 +214,12 @@ function Collaboration() {
           className={`l-aside__overlay ${!showSidePanel && "u-hide"}`}
           onClick={() => {
             setShowSidePanel(false);
+            queryClient.invalidateQueries("invitesData");
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === "Escape") {
               setShowSidePanel(false);
+              queryClient.invalidateQueries("invitesData");
             }
           }}
           role="button"

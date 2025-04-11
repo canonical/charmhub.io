@@ -1,4 +1,4 @@
-import { SyntheticEvent } from "react";
+import { SyntheticEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
@@ -8,6 +8,7 @@ import {
   Input,
   Button,
   Icon,
+  Spinner,
 } from "@canonical/react-components";
 
 import { isPending } from "../../utils";
@@ -20,6 +21,7 @@ import {
 } from "../../state/atoms";
 import { useSendMutation } from "../../hooks";
 
+import { generateInviteToken } from "../../utils/generateInviteToken";
 import { Invite } from "../../types";
 
 type Props = {
@@ -42,6 +44,10 @@ function InviteCollaborator({
   const setInviteEmailLink = useSetRecoilState(inviteEmailLinkState);
   const invitesList = useRecoilValue(invitesListState);
   const publisher = useRecoilValue(publisherState);
+  const inviteLink = useRecoilValue(inviteLinkState);
+
+  const [copied, setCopied] = useState(false);
+  const [loadingInviteLink, setLoadingInviteLink] = useState(false);
 
   const sendMutation = useSendMutation(
     packageName,
@@ -79,7 +85,7 @@ function InviteCollaborator({
   return (
     <Form
       style={{ height: "100%" }}
-      onSubmit={(e) => {
+      onSubmit={(e: { preventDefault: () => void }) => {
         e.preventDefault();
         sendMutation.mutate();
         setActiveInviteEmail("");
@@ -91,9 +97,11 @@ function InviteCollaborator({
           <div className="p-panel__controls">
             <Button
               hasIcon
+              type="button"
               className="p-button--base u-no-margin--bottom"
               onClick={() => {
                 setShowSidePanel(false);
+                queryClient.invalidateQueries("invitesData");
               }}
             >
               <Icon name="close" />
@@ -101,16 +109,19 @@ function InviteCollaborator({
           </div>
         </div>
         <div className="p-panel__content">
-          <Notification severity="caution" title="Role">
-            A collaborator is a store user that can have equal rights over a
-            particular package as the package publisher.
+          <Notification severity="caution" title="A collaborator can:">
+            <ul>
+              <li>Access and modify this charm</li>
+              <li>Publish new versions and manage releases</li>
+              <li>Represent the charm alongside you as a publisher</li>
+            </ul>
           </Notification>
           <Input
             type="email"
             id="collaborator-email"
-            label="Email"
+            label={<strong>1. Email</strong>}
             placeholder="yourname@example.com"
-            help="The primary email for the Ubuntu One account"
+            help="Collaborator email linked to the Ubuntu One account"
             value={activeInviteEmail}
             onInput={(
               e: SyntheticEvent<HTMLInputElement> & {
@@ -118,6 +129,7 @@ function InviteCollaborator({
               }
             ) => {
               setActiveInviteEmail(e.target.value);
+              setInviteLink("");
             }}
             error={
               !isUnique(activeInviteEmail)
@@ -125,6 +137,82 @@ function InviteCollaborator({
                 : ""
             }
           />
+          <div>
+            <h5>2. Invite Link</h5>
+            <Button
+              type="button"
+              appearance="positive"
+              disabled={!isUnique(activeInviteEmail) || loadingInviteLink}
+              onClick={async () => {
+                if (activeInviteEmail && isUnique(activeInviteEmail)) {
+                  try {
+                    setLoadingInviteLink(true);
+                    const inviteLink = await generateInviteToken(
+                      activeInviteEmail,
+                      packageName!,
+                      window.CSRF_TOKEN
+                    );
+                    setInviteLink(inviteLink);
+                  } catch (err) {
+                    console.error("Error generating invite preview:", err);
+                  } finally {
+                    setLoadingInviteLink(false);
+                  }
+                }
+              }}
+            >
+              {loadingInviteLink ? (
+                <>
+                  <Spinner text="Loading..." />
+                </>
+              ) : (
+                "Generate invite link"
+              )}
+            </Button>
+            {inviteLink ? (
+              <div className="grid-row">
+                <div className="grid-col-6">
+                  <pre className="p-code-snippet__block">
+                    <code>{inviteLink}</code>
+                  </pre>
+                </div>
+                <div className="grid-col-2">
+                  <Button
+                    type="button"
+                    appearance="base"
+                    className="p-button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(inviteLink);
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    }}
+                  >
+                    {copied ? "Copied!" : "Copy"}
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <pre className="p-code-snippet__block">
+                <code>Enter email to generate a unique invitation link</code>
+              </pre>
+            )}
+            <p className="u-text--muted">
+              Important: This link will <strong>NOT</strong> be automatically
+              sent.
+            </p>
+            <div className="u-text--muted">
+              After generating, you'll need to:
+              <ul>
+                <li>Copy the link</li>
+                <li>Share it with your collaborator</li>
+                <li>The link expires 30 days after generation</li>
+              </ul>
+            </div>
+            <p className="u-text--muted">
+              Once your collaborator uses the link, they'll gain access to the
+              charm.
+            </p>
+          </div>
         </div>
         <div className="p-panel__footer u-align--right">
           <Button
@@ -132,17 +220,10 @@ function InviteCollaborator({
             className="u-no-margin--bottom"
             onClick={() => {
               setShowSidePanel(false);
+              queryClient.invalidateQueries("invitesData");
             }}
           >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            appearance="positive"
-            className="u-no-margin--bottom"
-            disabled={!activeInviteEmail || !isUnique(activeInviteEmail)}
-          >
-            Add collaborator
+            Done
           </Button>
         </div>
       </div>
