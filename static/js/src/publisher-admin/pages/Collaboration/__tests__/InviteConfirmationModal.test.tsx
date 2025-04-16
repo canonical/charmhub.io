@@ -1,11 +1,12 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "react-query";
 import InviteConfirmationModal from "../InviteConfirmationModal";
 import { useSendMutation, useRevokeMutation } from "../../../hooks";
 import { useParams } from "react-router-dom";
+import userEvent from "@testing-library/user-event";
 
 jest.mock("../../../hooks");
 jest.mock("react-router-dom", () => ({
@@ -78,23 +79,40 @@ test("renders the modal with correct title and content for collaborators", () =>
   ).toBeInTheDocument();
 });
 
-test("closes the modal and resets the active invite email on Cancel button click", () => {
+test("closes the modal and resets the active invite email on Cancel button click", async () => {
   renderComponent();
+  const user = userEvent.setup();
 
   const cancelButton = screen.getByRole("button", { name: /cancel/i });
-  fireEvent.click(cancelButton);
+  user.click(cancelButton);
 
-  expect(mockSetShowModal).toHaveBeenCalledWith(false);
-  expect(mockSetShowModal).toHaveBeenCalledTimes(1);
-  expect(mockSetShowSuccess).not.toHaveBeenCalled();
-  expect(mockSetShowError).not.toHaveBeenCalled();
+  await waitFor(() => {
+    expect(mockSetShowModal).toHaveBeenCalledWith(false);
+    expect(mockSetShowModal).toHaveBeenCalledTimes(1);
+    expect(mockSetShowSuccess).not.toHaveBeenCalled();
+    expect(mockSetShowError).not.toHaveBeenCalled();
+  });
+});
+
+test("performs send mutation on Reopen action", async () => {
+  renderComponent({ action: "Reopen" });
+  const user = userEvent.setup();
+
+  const actionButton = screen.getByRole("button", { name: /reopen invite/i });
+  user.click(actionButton);
+
+  await waitFor(() => {
+    expect(sendMutation).toHaveBeenCalled();
+    expect(mockSetShowModal).toHaveBeenCalledWith(false);
+  });
 });
 
 test("performs revoke mutation on Revoke action and updates collaborators list", async () => {
   renderComponent({ action: "Revoke" });
+  const user = userEvent.setup();
 
   const actionButton = screen.getByRole("button", { name: /revoke invite/i });
-  fireEvent.click(actionButton);
+  user.click(actionButton);
 
   await waitFor(() => {
     expect(revokeMutation).toHaveBeenCalled();
