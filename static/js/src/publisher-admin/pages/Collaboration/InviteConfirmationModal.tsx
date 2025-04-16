@@ -110,7 +110,7 @@ function InviteConfirmationModal({
                 );
               }
 
-              if (action === "Resend" || action === "Reopen") {
+              if (action === "Reopen") {
                 sendMutation.mutate();
               }
 

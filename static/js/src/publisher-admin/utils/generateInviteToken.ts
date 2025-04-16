@@ -2,7 +2,7 @@ export async function generateInviteToken(
   email: string,
   packageName: string,
   csrfToken: string
-): Promise<string> {
+): Promise<{ token: string; inviteLink: string }> {
   const formData = new FormData();
   formData.set("collaborators", email);
   formData.set("csrf_token", csrfToken);
@@ -23,6 +23,7 @@ export async function generateInviteToken(
   }
 
   const token = inviteData.data[0].token;
+  const inviteLink = `https://charmhub.io/accept-invite?package=${packageName}&token=${token}`;
 
-  return `https://charmhub.io/accept-invite?package=${packageName}&token=${token}`;
+  return { token, inviteLink };
 }

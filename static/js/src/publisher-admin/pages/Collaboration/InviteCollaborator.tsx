@@ -122,7 +122,7 @@ function InviteCollaborator({ setShowSidePanel }: Props) {
                 if (activeInviteEmail && isUnique(activeInviteEmail)) {
                   try {
                     setLoadingInviteLink(true);
-                    const inviteLink = await generateInviteToken(
+                    const { inviteLink } = await generateInviteToken(
                       activeInviteEmail,
                       packageName!,
                       window.CSRF_TOKEN

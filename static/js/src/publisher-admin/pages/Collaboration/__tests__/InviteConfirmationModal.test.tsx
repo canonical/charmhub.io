@@ -90,18 +90,6 @@ test("closes the modal and resets the active invite email on Cancel button click
   expect(mockSetShowError).not.toHaveBeenCalled();
 });
 
-test("performs send mutation on Resend action and updates invite list", async () => {
-  renderComponent({ action: "Resend" });
-
-  const actionButton = screen.getByRole("button", { name: /resend invite/i });
-  fireEvent.click(actionButton);
-
-  await waitFor(() => {
-    expect(sendMutation).toHaveBeenCalled();
-    expect(mockSetShowModal).toHaveBeenCalledWith(false);
-  });
-});
-
 test("performs revoke mutation on Revoke action and updates collaborators list", async () => {
   renderComponent({ action: "Revoke" });
 

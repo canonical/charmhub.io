@@ -15,47 +15,35 @@ function useSendMutation(
 ) {
   return useMutation(
     async () => {
-      if (!activeInviteEmail) {
-        return;
-      }
+      if (!activeInviteEmail) return;
 
-      try {
-        const inviteLink = await generateInviteToken(
-          activeInviteEmail,
-          packageName!,
-          csrfToken
-        );
+      const { inviteLink } = await generateInviteToken(
+        activeInviteEmail,
+        packageName!,
+        csrfToken
+      );
 
-        setInviteLink(inviteLink);
-        setInviteEmailLink(
-          `mailto:${activeInviteEmail}?subject=${publisherName} has invited you to collaborate on ${packageName}&body=Click this link to accept the invite: ${encodeURIComponent(inviteLink)}`
-        );
+      setInviteLink(inviteLink);
 
-        if (setShowSidePanel) {
-          setShowSidePanel(false);
-        }
+      setInviteEmailLink(
+        `mailto:${activeInviteEmail}?subject=${publisherName} has invited you to collaborate on ${packageName}&body=Click this link to accept the invite: ${encodeURIComponent(inviteLink)}`
+      );
 
-        setShowInviteSuccess(true);
-      } catch (err) {
-        setShowInviteError(true);
-        throw err;
-      }
+      if (setShowSidePanel) setShowSidePanel(false);
 
       setShowInviteSuccess(true);
     },
     {
       onError: ({ context }) => {
         queryClient.setQueryData("invitesData", context?.previousInvites);
+        setShowInviteError(true);
       },
       onSettled: () => {
         queryClient.invalidateQueries();
-        window.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: "smooth",
-        });
+        window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
       },
     }
   );
 }
+
 export default useSendMutation;

@@ -86,7 +86,7 @@ function buildInviteTableRows(
                   setLoadingInviteUrl(invite.email || "");
                   setCopiedInviteUrl(null);
 
-                  const inviteLink = await generateInviteToken(
+                  const { inviteLink } = await generateInviteToken(
                     invite.email!,
                     packageName,
                     window.CSRF_TOKEN

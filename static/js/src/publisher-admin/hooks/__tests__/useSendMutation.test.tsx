@@ -71,7 +71,7 @@ describe("useSendMutation", () => {
     jest.spyOn(global, "scrollTo").mockImplementation(() => {});
   });
 
-  test("should call setInviteLink and setInviteEmailLink on successful invite", async () => {
+  const mockFetchSuccess = () => {
     jest.spyOn(global, "fetch").mockResolvedValueOnce({
       ok: true,
       json: async () => ({
@@ -79,25 +79,40 @@ describe("useSendMutation", () => {
         data: [{ token: "test-token", email: "test@example.com" }],
       }),
     } as Response);
+  };
 
-    const setInviteLink = jest.fn();
-    const setInviteEmailLink = jest.fn();
-    const setShowInviteSuccess = jest.fn();
-    const setShowInviteError = jest.fn();
-    const csrfToken = "test-csrf-token";
-    const packageName = "test-package";
-    const publisherName = "Test Publisher";
+  const mockFetchError = () => {
+    jest.spyOn(global, "fetch").mockResolvedValueOnce({
+      ok: false,
+      statusText: "Failed to send invite",
+    } as Response);
+  };
+
+  const setInviteLink = jest.fn();
+  const setInviteEmailLink = jest.fn();
+  const setShowInviteSuccess = jest.fn();
+  const setShowInviteError = jest.fn();
+  const setShowSidePanel = jest.fn();
+
+  const csrfToken = "test-csrf-token";
+  const packageName = "test-package";
+  const publisherName = "Test Publisher";
+  const email = "test@example.com";
+
+  test("successfully sends invite and updates state", async () => {
+    mockFetchSuccess();
 
     render(
       <TestComponent
         packageName={packageName}
         publisherName={publisherName}
-        activeInviteEmail="test@example.com"
+        activeInviteEmail={email}
         csrfToken={csrfToken}
         setInviteLink={setInviteLink}
         setInviteEmailLink={setInviteEmailLink}
         setShowInviteSuccess={setShowInviteSuccess}
         setShowInviteError={setShowInviteError}
+        setShowSidePanel={setShowSidePanel}
       />,
       { wrapper: createWrapper() }
     );
@@ -109,30 +124,21 @@ describe("useSendMutation", () => {
         `https://charmhub.io/accept-invite?package=${packageName}&token=test-token`
       );
       expect(setInviteEmailLink).toHaveBeenCalledWith(
-        `mailto:test@example.com?subject=${publisherName} has invited you to collaborate on ${packageName}&body=Click this link to accept the invite: https%3A%2F%2Fcharmhub.io%2Faccept-invite%3Fpackage%3Dtest-package%26token%3Dtest-token`
+        `mailto:${email}?subject=${publisherName} has invited you to collaborate on ${packageName}&body=Click this link to accept the invite: https%3A%2F%2Fcharmhub.io%2Faccept-invite%3Fpackage%3Dtest-package%26token%3Dtest-token`
       );
-      expect(screen.getByText("Invite sent successfully")).toBeInTheDocument();
       expect(setShowInviteSuccess).toHaveBeenCalled();
+      expect(setShowSidePanel).toHaveBeenCalledWith(false);
+      expect(screen.getByText("Invite sent successfully")).toBeInTheDocument();
     });
   });
 
-  test("should call setShowInviteError on failed invite", async () => {
-    jest.spyOn(global, "fetch").mockResolvedValueOnce({
-      ok: false,
-      statusText: "Failed to generate invite link",
-      json: async () => ({ success: false, message: "Invite sending failed" }),
-    } as Response);
-
-    const setInviteLink = jest.fn();
-    const setInviteEmailLink = jest.fn();
-    const setShowInviteSuccess = jest.fn();
-    const setShowInviteError = jest.fn();
-    const csrfToken = "test-csrf-token";
+  test("shows error and calls setShowInviteError on fetch fail", async () => {
+    mockFetchError();
 
     render(
       <TestComponent
-        packageName="test-package"
-        activeInviteEmail="test@example.com"
+        packageName={packageName}
+        activeInviteEmail={email}
         csrfToken={csrfToken}
         setInviteLink={setInviteLink}
         setInviteEmailLink={setInviteEmailLink}
@@ -147,21 +153,16 @@ describe("useSendMutation", () => {
     await waitFor(() => {
       expect(setShowInviteError).toHaveBeenCalled();
       expect(
-        screen.getByText(/Error: Failed to send invite/i)
+        screen.getByText(/Error: Failed to generate invite link/i)
       ).toBeInTheDocument();
     });
   });
 
   test("should do nothing if activeInviteEmail is not provided", async () => {
-    const setInviteLink = jest.fn();
-    const setInviteEmailLink = jest.fn();
-    const setShowInviteSuccess = jest.fn();
-    const setShowInviteError = jest.fn();
-    const csrfToken = "test-csrf-token";
-
     render(
       <TestComponent
-        packageName="test-package"
+        packageName={packageName}
+        activeInviteEmail={undefined}
         csrfToken={csrfToken}
         setInviteLink={setInviteLink}
         setInviteEmailLink={setInviteEmailLink}
@@ -178,44 +179,6 @@ describe("useSendMutation", () => {
       expect(setInviteEmailLink).not.toHaveBeenCalled();
       expect(setShowInviteSuccess).not.toHaveBeenCalled();
       expect(setShowInviteError).not.toHaveBeenCalled();
-    });
-  });
-
-  test("should call setShowSidePanel with false on successful invite if provided", async () => {
-    jest.spyOn(global, "fetch").mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        success: true,
-        data: [{ token: "test-token", email: "test@example.com" }],
-      }),
-    } as Response);
-
-    const setInviteLink = jest.fn();
-    const setInviteEmailLink = jest.fn();
-    const setShowInviteSuccess = jest.fn();
-    const setShowInviteError = jest.fn();
-    const setShowSidePanel = jest.fn();
-    const csrfToken = "test-csrf-token";
-
-    render(
-      <TestComponent
-        packageName="test-package"
-        publisherName="Test Publisher"
-        activeInviteEmail="test@example.com"
-        csrfToken={csrfToken}
-        setInviteLink={setInviteLink}
-        setInviteEmailLink={setInviteEmailLink}
-        setShowInviteSuccess={setShowInviteSuccess}
-        setShowInviteError={setShowInviteError}
-        setShowSidePanel={setShowSidePanel}
-      />,
-      { wrapper: createWrapper() }
-    );
-
-    fireEvent.click(screen.getByText("Send Invite"));
-
-    await waitFor(() => {
-      expect(setShowSidePanel).toHaveBeenCalledWith(false);
     });
   });
 });
