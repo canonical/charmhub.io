@@ -16,10 +16,7 @@ import {
   activeInviteEmailState,
   invitesListState,
   inviteLinkState,
-  inviteEmailLinkState,
-  publisherState,
 } from "../../state/atoms";
-import { useSendMutation } from "../../hooks";
 
 import { generateInviteToken } from "../../utils/generateInviteToken";
 import { Invite } from "../../types";
@@ -30,37 +27,18 @@ type Props = {
   setShowInviteError: (showInviteError: boolean) => void;
 };
 
-function InviteCollaborator({
-  setShowSidePanel,
-  setShowInviteSuccess,
-  setShowInviteError,
-}: Props) {
+function InviteCollaborator({ setShowSidePanel }: Props) {
   const { packageName } = useParams();
   const queryClient = useQueryClient();
   const [activeInviteEmail, setActiveInviteEmail] = useRecoilState(
     activeInviteEmailState
   );
   const setInviteLink = useSetRecoilState(inviteLinkState);
-  const setInviteEmailLink = useSetRecoilState(inviteEmailLinkState);
   const invitesList = useRecoilValue(invitesListState);
-  const publisher = useRecoilValue(publisherState);
   const inviteLink = useRecoilValue(inviteLinkState);
 
   const [copied, setCopied] = useState(false);
   const [loadingInviteLink, setLoadingInviteLink] = useState(false);
-
-  const sendMutation = useSendMutation(
-    packageName,
-    publisher?.["display-name"],
-    activeInviteEmail,
-    setInviteLink,
-    setInviteEmailLink,
-    setShowInviteSuccess,
-    setShowInviteError,
-    queryClient,
-    window.CSRF_TOKEN,
-    setShowSidePanel
-  );
 
   const isUnique = (email: string | undefined) => {
     if (!email) {
@@ -83,14 +61,7 @@ function InviteCollaborator({
   };
 
   return (
-    <Form
-      style={{ height: "100%" }}
-      onSubmit={(e: { preventDefault: () => void }) => {
-        e.preventDefault();
-        sendMutation.mutate();
-        setActiveInviteEmail("");
-      }}
-    >
+    <Form style={{ height: "100%" }}>
       <div className="p-panel">
         <div className="p-panel__header u-no-padding--left u-no-padding--right">
           <h4 className="p-panel__title">Add new collaborator</h4>
@@ -142,7 +113,11 @@ function InviteCollaborator({
             <Button
               type="button"
               appearance="positive"
-              disabled={!isUnique(activeInviteEmail) || loadingInviteLink}
+              disabled={
+                !activeInviteEmail ||
+                !isUnique(activeInviteEmail) ||
+                loadingInviteLink
+              }
               onClick={async () => {
                 if (activeInviteEmail && isUnique(activeInviteEmail)) {
                   try {

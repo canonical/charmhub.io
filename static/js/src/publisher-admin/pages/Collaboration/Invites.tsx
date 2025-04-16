@@ -8,15 +8,10 @@ import { filteredInvitesListState } from "../../state/selectors";
 
 type Props = {
   setShowRevokeModal: (showRevokeModal: boolean) => void;
-  setShowResendModal: (showResendModal: boolean) => void;
   setShowReopenModal: (showReopenModal: boolean) => void;
 };
 
-function Invites({
-  setShowRevokeModal,
-  setShowResendModal,
-  setShowReopenModal,
-}: Props) {
+function Invites({ setShowRevokeModal, setShowReopenModal }: Props) {
   const invitesList = useRecoilValue(filteredInvitesListState);
 
   const pendingInvites = getInvitesByStatus(invitesList, "pending");
@@ -33,7 +28,6 @@ function Invites({
     "Pending",
     packageName!,
     setShowRevokeModal,
-    setShowResendModal,
     setShowReopenModal
   );
   const expiredInvitesTableRows = buildInviteTableRows(
@@ -41,7 +35,6 @@ function Invites({
     "Expired",
     packageName!,
     setShowRevokeModal,
-    setShowResendModal,
     setShowReopenModal
   );
   const revokedInvitesTableRows = buildInviteTableRows(
@@ -49,7 +42,6 @@ function Invites({
     "Revoked",
     packageName!,
     setShowRevokeModal,
-    setShowResendModal,
     setShowReopenModal
   );
 

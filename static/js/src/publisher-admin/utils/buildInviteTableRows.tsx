@@ -17,7 +17,6 @@ function buildInviteTableRows(
   status: "Pending" | "Expired" | "Revoked",
   packageName: string,
   setShowRevokeModal: (showRevokeModal: boolean) => void,
-  setShowResendModal: (showResendModal: boolean) => void,
   setShowReopenModal: (showReopenModal: boolean) => void
 ) {
   const setActiveInviteEmail = useSetRecoilState(activeInviteEmailState);

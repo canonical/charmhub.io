@@ -119,7 +119,7 @@ describe("useSendMutation", () => {
   test("should call setShowInviteError on failed invite", async () => {
     jest.spyOn(global, "fetch").mockResolvedValueOnce({
       ok: false,
-      statusText: "Failed to send invite",
+      statusText: "Failed to generate invite link",
       json: async () => ({ success: false, message: "Invite sending failed" }),
     } as Response);
 

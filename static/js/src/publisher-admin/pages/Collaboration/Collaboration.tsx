@@ -50,8 +50,6 @@ function Collaboration() {
     useState<boolean>(false);
   const [showReopenInviteModal, setShowReopenInviteModal] =
     useState<boolean>(false);
-  const [showResendInviteModal, setShowResendInviteModal] =
-    useState<boolean>(false);
   const setCollaboratorsList = useSetRecoilState(collaboratorsListState);
   const collaboratorsList = useRecoilValue(filteredCollaboratorsListState);
   const [publisher, setPublisher] = useRecoilState(publisherState);
@@ -200,7 +198,6 @@ function Collaboration() {
                         <Invites
                           setShowRevokeModal={setShowRevokeInviteModal}
                           setShowReopenModal={setShowReopenInviteModal}
-                          setShowResendModal={setShowResendInviteModal}
                         />
                       ),
                     },
@@ -258,15 +255,6 @@ function Collaboration() {
           <InviteConfirmationModal
             action="Reopen"
             setShowModal={setShowReopenInviteModal}
-            setShowSuccess={setShowInviteSuccess}
-            setShowError={setShowInviteError}
-          />
-        )}
-
-        {showResendInviteModal && (
-          <InviteConfirmationModal
-            action="Resend"
-            setShowModal={setShowResendInviteModal}
             setShowSuccess={setShowInviteSuccess}
             setShowError={setShowInviteError}
           />
