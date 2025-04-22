@@ -11,7 +11,7 @@ on:
 
 jobs:
   deploy-staging:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/deployment-action' }}
+    if: ${{ ( github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success') || github.event_name == 'workflow_dispatch' }}
     uses: ./.github/workflows/juju_deploy.yaml
     with:
         environment: "Staging"
@@ -20,7 +20,7 @@ jobs:
         VAULT_APPROLE_SECRET_ID: ${{ secrets.VAULT_APPROLE_SECRET_ID }}
 
   deploy-prod:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/deployment-action' }}
+    if: ${{ ( github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success') || github.event_name == 'workflow_dispatch' }}
     uses: ./.github/workflows/juju_deploy.yaml
     with:
         environment: "Production"
