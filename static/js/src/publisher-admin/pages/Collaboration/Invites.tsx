@@ -1,5 +1,6 @@
 import { useRecoilValue } from "recoil";
 import { MainTable } from "@canonical/react-components";
+import { useParams } from "react-router-dom";
 
 import { getInvitesByStatus, buildInviteTableRows } from "../../utils";
 
@@ -7,40 +8,40 @@ import { filteredInvitesListState } from "../../state/selectors";
 
 type Props = {
   setShowRevokeModal: (showRevokeModal: boolean) => void;
-  setShowResendModal: (showResendModal: boolean) => void;
   setShowReopenModal: (showReopenModal: boolean) => void;
 };
 
-function Invites({
-  setShowRevokeModal,
-  setShowResendModal,
-  setShowReopenModal,
-}: Props) {
+function Invites({ setShowRevokeModal, setShowReopenModal }: Props) {
   const invitesList = useRecoilValue(filteredInvitesListState);
 
   const pendingInvites = getInvitesByStatus(invitesList, "pending");
   const expiredInvites = getInvitesByStatus(invitesList, "expired");
   const revokedInvites = getInvitesByStatus(invitesList, "revoked");
+  const uniqueRevokedInvites = Array.from(
+    new Map(revokedInvites.map((invite) => [invite.email, invite])).values()
+  );
+
+  const { packageName } = useParams();
 
   const pendingInvitesTableRows = buildInviteTableRows(
     pendingInvites,
     "Pending",
+    packageName!,
     setShowRevokeModal,
-    setShowResendModal,
     setShowReopenModal
   );
   const expiredInvitesTableRows = buildInviteTableRows(
     expiredInvites,
     "Expired",
+    packageName!,
     setShowRevokeModal,
-    setShowResendModal,
     setShowReopenModal
   );
   const revokedInvitesTableRows = buildInviteTableRows(
-    revokedInvites,
+    uniqueRevokedInvites,
     "Revoked",
+    packageName!,
     setShowRevokeModal,
-    setShowResendModal,
     setShowReopenModal
   );
 
@@ -62,6 +63,10 @@ function Invites({
         },
         {
           content: "Expires",
+        },
+        {
+          content: "",
+          heading: "Revoke",
         },
         {
           content: "",

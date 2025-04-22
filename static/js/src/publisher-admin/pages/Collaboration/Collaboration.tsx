@@ -25,7 +25,6 @@ import {
   invitesListState,
   activeInviteEmailState,
   inviteLinkState,
-  inviteEmailLinkState,
   filterQueryState,
 } from "../../state/atoms";
 import {
@@ -33,8 +32,11 @@ import {
   filteredInvitesListState,
 } from "../../state/selectors";
 import { useCollaboratorsQuery, useInvitesQuery } from "../../hooks";
+import { getUniqueInvites } from "../../utils/getUniqueInvites";
+import { useQueryClient } from "react-query";
 
 function Collaboration() {
+  const queryClient = useQueryClient();
   const { packageName } = useParams();
   const [showRevokeSuccess, setShowRevokeSuccess] = useState<boolean>(false);
   const [showRevokeError, setShowRevokeError] = useState<boolean>(false);
@@ -47,16 +49,14 @@ function Collaboration() {
     useState<boolean>(false);
   const [showReopenInviteModal, setShowReopenInviteModal] =
     useState<boolean>(false);
-  const [showResendInviteModal, setShowResendInviteModal] =
-    useState<boolean>(false);
   const setCollaboratorsList = useSetRecoilState(collaboratorsListState);
   const collaboratorsList = useRecoilValue(filteredCollaboratorsListState);
   const [publisher, setPublisher] = useRecoilState(publisherState);
+  const [copied, setCopied] = useState(false);
   const setInvitesList = useSetRecoilState(invitesListState);
   const invitesList = useRecoilValue(filteredInvitesListState);
   const activeInviteEmail = useRecoilValue(activeInviteEmailState);
   const inviteLink = useRecoilValue(inviteLinkState);
-  const inviteEmailLink = useRecoilValue(inviteEmailLinkState);
   const filterQuery = useRecoilValue(filterQueryState);
   const { data: collaboratorsData } = useCollaboratorsQuery(packageName);
   const { data: invitesData } = useInvitesQuery(packageName);
@@ -119,30 +119,35 @@ function Collaboration() {
             {showInviteSuccess && (
               <Notification
                 severity="positive"
-                title="An invite has been created"
+                title={`Invite for "${activeInviteEmail}" re-opened`}
                 onDismiss={() => {
                   setShowInviteSuccess(false);
                 }}
               >
                 <p>
-                  <a target="_blank" href={inviteEmailLink} rel="noreferrer">
-                    Send the invite by email
-                  </a>{" "}
-                  or copy link:
+                  Copy the invite URL and send it to the collaborator to grant
+                  access
                 </p>
-                <div>
-                  <input
-                    className="u-no-margin--bottom"
-                    type="text"
-                    readOnly
-                    value={inviteLink}
-                    style={{
-                      color: "inherit",
-                    }}
-                    onFocus={(e) => {
-                      e.target.select();
-                    }}
-                  />
+                <div className="grid-row">
+                  <div className="grid-col-7">
+                    <pre className="p-code-snippet__block">
+                      <code>{inviteLink}</code>
+                    </pre>
+                  </div>
+                  <div className="grid-col-1">
+                    <Button
+                      type="button"
+                      appearance="base"
+                      className="p-button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(inviteLink as string);
+                        setCopied(true);
+                        setTimeout(() => setCopied(false), 2000);
+                      }}
+                    >
+                      {copied ? "Copied!" : "Copy"}
+                    </Button>
+                  </div>
                 </div>
               </Notification>
             )}
@@ -192,12 +197,11 @@ function Collaboration() {
                     },
                     {
                       key: "invites",
-                      title: `Invites (${invitesList.length})`,
+                      title: `Invites (${getUniqueInvites(invitesList).length})`,
                       content: (
                         <Invites
                           setShowRevokeModal={setShowRevokeInviteModal}
                           setShowReopenModal={setShowReopenInviteModal}
-                          setShowResendModal={setShowResendInviteModal}
                         />
                       ),
                     },
@@ -211,10 +215,12 @@ function Collaboration() {
           className={`l-aside__overlay ${!showSidePanel && "u-hide"}`}
           onClick={() => {
             setShowSidePanel(false);
+            queryClient.invalidateQueries("invitesData");
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === "Escape") {
               setShowSidePanel(false);
+              queryClient.invalidateQueries("invitesData");
             }
           }}
           role="button"
@@ -253,15 +259,6 @@ function Collaboration() {
           <InviteConfirmationModal
             action="Reopen"
             setShowModal={setShowReopenInviteModal}
-            setShowSuccess={setShowInviteSuccess}
-            setShowError={setShowInviteError}
-          />
-        )}
-
-        {showResendInviteModal && (
-          <InviteConfirmationModal
-            action="Resend"
-            setShowModal={setShowResendInviteModal}
             setShowSuccess={setShowInviteSuccess}
             setShowError={setShowInviteError}
           />

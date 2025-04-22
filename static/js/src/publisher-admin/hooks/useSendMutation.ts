@@ -1,4 +1,5 @@
 import { QueryClient, useMutation } from "react-query";
+import { generateInviteToken } from "../utils/generateInviteToken";
 
 function useSendMutation(
   packageName: string | undefined,
@@ -18,54 +19,35 @@ function useSendMutation(
         return;
       }
 
-      const formData = new FormData();
+      const { inviteLink } = await generateInviteToken(
+        activeInviteEmail,
+        packageName!,
+        csrfToken
+      );
 
-      formData.set("collaborators", activeInviteEmail);
-      formData.set("csrf_token", csrfToken);
+      setInviteLink(inviteLink);
 
-      const response = await fetch(`/api/packages/${packageName}/invites`, {
-        method: "POST",
-        body: formData,
-      });
+      setInviteEmailLink(
+        `mailto:${activeInviteEmail}?subject=${publisherName} has invited you to collaborate on ${packageName}&body=Click this link to accept the invite: ${encodeURIComponent(inviteLink)}`
+      );
 
       if (setShowSidePanel) {
         setShowSidePanel(false);
       }
-
-      if (!response.ok) {
-        setShowInviteError(true);
-        throw new Error(response.statusText);
-      }
-
-      const inviteData = await response.json();
-
-      if (!inviteData.success) {
-        setShowInviteError(true);
-        throw new Error(inviteData.message);
-      }
-
-      // This shouldn't be necessary once emails are enabled
-      const inviteLink = `https://charmhub.io/accept-invite?package=${packageName}&token=${inviteData.data[0].token}`;
-      setInviteLink(inviteLink);
-      setInviteEmailLink(
-        `mailto:${inviteData.data[0].email}?subject=${publisherName} has invited you to collaborate on ${packageName}&body=Click this link to accept the invite: ${encodeURIComponent(inviteLink)}`
-      );
 
       setShowInviteSuccess(true);
     },
     {
       onError: ({ context }) => {
         queryClient.setQueryData("invitesData", context?.previousInvites);
+        setShowInviteError(true);
       },
       onSettled: () => {
         queryClient.invalidateQueries();
-        window.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: "smooth",
-        });
+        window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
       },
     }
   );
 }
+
 export default useSendMutation;
