@@ -15,7 +15,9 @@ function useSendMutation(
 ) {
   return useMutation(
     async () => {
-      if (!activeInviteEmail) return;
+      if (!activeInviteEmail) {
+        return;
+      }
 
       const { inviteLink } = await generateInviteToken(
         activeInviteEmail,
@@ -29,7 +31,9 @@ function useSendMutation(
         `mailto:${activeInviteEmail}?subject=${publisherName} has invited you to collaborate on ${packageName}&body=Click this link to accept the invite: ${encodeURIComponent(inviteLink)}`
       );
 
-      if (setShowSidePanel) setShowSidePanel(false);
+      if (setShowSidePanel) {
+        setShowSidePanel(false);
+      }
 
       setShowInviteSuccess(true);
     },

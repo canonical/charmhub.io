@@ -27,7 +27,7 @@ type Props = {
   setShowInviteError: (showInviteError: boolean) => void;
 };
 
-function InviteCollaborator({ setShowSidePanel }: Props) {
+function InviteCollaborator({ setShowSidePanel }: Props): JSX.Element {
   const { packageName } = useParams();
   const queryClient = useQueryClient();
   const [activeInviteEmail, setActiveInviteEmail] = useRecoilState(
