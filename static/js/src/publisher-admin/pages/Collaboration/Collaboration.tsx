@@ -25,7 +25,6 @@ import {
   invitesListState,
   activeInviteEmailState,
   inviteLinkState,
-  inviteEmailLinkState,
   filterQueryState,
 } from "../../state/atoms";
 import {
@@ -53,11 +52,11 @@ function Collaboration() {
   const setCollaboratorsList = useSetRecoilState(collaboratorsListState);
   const collaboratorsList = useRecoilValue(filteredCollaboratorsListState);
   const [publisher, setPublisher] = useRecoilState(publisherState);
+  const [copied, setCopied] = useState(false);
   const setInvitesList = useSetRecoilState(invitesListState);
   const invitesList = useRecoilValue(filteredInvitesListState);
   const activeInviteEmail = useRecoilValue(activeInviteEmailState);
   const inviteLink = useRecoilValue(inviteLinkState);
-  const inviteEmailLink = useRecoilValue(inviteEmailLinkState);
   const filterQuery = useRecoilValue(filterQueryState);
   const { data: collaboratorsData } = useCollaboratorsQuery(packageName);
   const { data: invitesData } = useInvitesQuery(packageName);
@@ -120,30 +119,35 @@ function Collaboration() {
             {showInviteSuccess && (
               <Notification
                 severity="positive"
-                title="An invite has been created"
+                title={`Invite for "${activeInviteEmail}" re-opened`}
                 onDismiss={() => {
                   setShowInviteSuccess(false);
                 }}
               >
                 <p>
-                  <a target="_blank" href={inviteEmailLink} rel="noreferrer">
-                    Send the invite by email
-                  </a>{" "}
-                  or copy link:
+                  Copy the invite URL and send it to the collaborator to grant
+                  access
                 </p>
-                <div>
-                  <input
-                    className="u-no-margin--bottom"
-                    type="text"
-                    readOnly
-                    value={inviteLink}
-                    style={{
-                      color: "inherit",
-                    }}
-                    onFocus={(e) => {
-                      e.target.select();
-                    }}
-                  />
+                <div className="grid-row">
+                  <div className="grid-col-7">
+                    <pre className="p-code-snippet__block">
+                      <code>{inviteLink}</code>
+                    </pre>
+                  </div>
+                  <div className="grid-col-1">
+                    <Button
+                      type="button"
+                      appearance="base"
+                      className="p-button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(inviteLink as string);
+                        setCopied(true);
+                        setTimeout(() => setCopied(false), 2000);
+                      }}
+                    >
+                      {copied ? "Copied!" : "Copy"}
+                    </Button>
+                  </div>
                 </div>
               </Notification>
             )}
