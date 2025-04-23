@@ -8,6 +8,7 @@ from typing import List, Dict, TypedDict, Any, Union
 
 from canonicalwebteam.store_api.publishergw import PublisherGW
 from canonicalwebteam.exceptions import StoreApiError
+from webapp.observability.utils import trace_function
 from webapp.store.logic import format_slug
 
 publisher_gateway = PublisherGW("charm", talisker.requests.get_session())
@@ -345,6 +346,7 @@ def get_store_categories() -> List[Dict[str, str]]:
     return categories
 
 
+@trace_function
 def get_package(
     package_name: str,
     fields: List[str],
