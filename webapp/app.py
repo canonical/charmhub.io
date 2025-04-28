@@ -19,6 +19,18 @@ from webapp.search.logic import cache
 from webapp.helpers import markdown_to_html
 from webapp.decorators import login_required
 from webapp.packages.store_packages import store_packages
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.resources import Resource
+
+# Setup tracing manually - this could be removed if we can run dotrun with opentelemetry
+resource = Resource.create()
+trace.set_tracer_provider(TracerProvider(resource=resource))
+tracer_provider = trace.get_tracer_provider()
+otlp_exporter = OTLPSpanExporter()  # reads env variables
+tracer_provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
 
 
 app = FlaskBase(

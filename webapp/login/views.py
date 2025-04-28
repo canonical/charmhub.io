@@ -8,6 +8,7 @@ from flask_wtf.csrf import generate_csrf, validate_csrf
 from canonicalwebteam.candid import CandidClient
 from webapp.helpers import is_safe_url
 from webapp import authentication
+from webapp.observability.utils import trace_function
 
 login = flask.Blueprint(
     "login", __name__, template_folder="/templates", static_folder="/static"
@@ -31,6 +32,7 @@ def logout():
 
 
 @login.route("/login")
+@trace_function
 def publisher_login():
     user_agent = flask.request.headers.get("User-Agent")
 
