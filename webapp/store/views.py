@@ -17,7 +17,7 @@ from webapp.decorators import (
     redirect_uppercase_to_lowercase,
     store_maintenance,
 )
-from webapp.helpers import discourse_api
+from webapp.helpers import discourse_api, markdown_to_html
 from webapp.store import logic
 from webapp.config import SEARCH_FIELDS
 
@@ -254,6 +254,7 @@ def details_overview(entity_name):
     else:
         navigation = None
         description, summary = logic.add_description_and_summary(package)
+        description = markdown_to_html(description)
 
     context["description"] = description
     context["summary"] = summary
