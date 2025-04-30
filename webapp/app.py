@@ -19,21 +19,9 @@ from webapp.search.logic import cache
 from webapp.helpers import markdown_to_html
 from webapp.decorators import login_required
 from webapp.packages.store_packages import store_packages
-from opentelemetry import trace
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
-    OTLPSpanExporter,
-)
-from opentelemetry.sdk.resources import Resource
-
-# Setup tracing manually -
-# this could be removed if we can run dotrun with opentelemetry
-resource = Resource.create()
-trace.set_tracer_provider(TracerProvider(resource=resource))
-tracer_provider = trace.get_tracer_provider()
-otlp_exporter = OTLPSpanExporter()  # reads env variables
-tracer_provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.trace import Span
 
 
 app = FlaskBase(
@@ -70,6 +58,24 @@ app.register_blueprint(search)
 
 
 app.jinja_env.filters["markdown"] = markdown_to_html
+
+# OpenTelemetry
+UNTRACED_ROUTES = [
+    "/_status",
+    ".*[.jpg|.jpeg|.png|.gif|.ico|.css|.js|.json]$",
+]
+
+
+def request_hook(span: Span, environ):
+    if span and span.is_recording():
+        span.update_name(f"{environ['REQUEST_METHOD']} {environ['PATH_INFO']}")
+
+
+# Add tracing auto instrumentation
+FlaskInstrumentor().instrument_app(
+    app, excluded_urls=",".join(UNTRACED_ROUTES), request_hook=request_hook
+)
+RequestsInstrumentor().instrument()
 
 
 @app.route("/account.json")
@@ -135,9 +141,9 @@ def site_map_links():
 
 @app.route("/sitemap-operators.xml")
 def site_map_operators():
-    charms = publisher_gateway.find(
-        fields=["default-release.channel.released-at"]
-    ).get("results", [])
+    charms = publisher_gateway.find(fields=["default-release.channel.released-at"]).get(
+        "results", []
+    )
 
     for charm in charms:
         charm["date"] = (
