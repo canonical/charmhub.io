@@ -7,8 +7,8 @@ distributor:
   receivers:
     otlp:
       protocols:
-        http:
-          endpoint: 0.0.0.0:4318
+        grpc:
+          endpoint: 0.0.0.0:4317
 ingester:
   trace_idle_period: 10s
   max_block_bytes: 5_000_000
