@@ -31,7 +31,9 @@
         {% if value.default %}
         <p style="overflow-wrap: break-word; white-space: pre-wrap;"><span class="u-text--muted">Default:</span> {{ value.default }}</p>
         {% endif %}
+        {% if value.description %}
         <p style="overflow-wrap: break-word; white-space: pre-wrap;">{{ value.description | markdown | safe }}</p>
+        {% endif %}
       </li>
       {% endfor %}
     </ul>
