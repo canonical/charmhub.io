@@ -80,7 +80,7 @@ FlaskInstrumentor().instrument_app(
 RequestsInstrumentor().instrument()
 
 
-@trace_function
+# @trace_function
 @app.route("/account.json")
 def get_account_json():
     """
@@ -98,25 +98,25 @@ def get_account_json():
     return response
 
 
-@trace_function
+# @trace_function
 @app.route("/contact-us")
 def contact_us():
     return render_template("contact-us.html")
 
 
-@trace_function
+# @trace_function
 @app.route("/thank-you")
 def thank_you():
     return render_template("thank-you.html")
 
 
-@trace_function
+# @trace_function
 @app.route("/icon-validator")
 def icon_validator():
     return render_template("icon-validator.html")
 
 
-@trace_function
+# @trace_function
 @app.route("/sitemap.xml")
 def site_map():
     xml_sitemap = render_template(
@@ -129,7 +129,7 @@ def site_map():
     return response
 
 
-@trace_function
+# @trace_function
 @app.route("/sitemap-links.xml")
 def site_map_links():
     links = [
@@ -147,7 +147,7 @@ def site_map_links():
     return response
 
 
-@trace_function
+# @trace_function
 @app.route("/sitemap-operators.xml")
 def site_map_operators():
     charms = publisher_gateway.find(fields=["default-release.channel.released-at"]).get(
