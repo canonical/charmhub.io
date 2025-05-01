@@ -6,6 +6,7 @@ import talisker
 import requests
 from webapp.config import SEARCH_FIELDS
 from webapp.packages.logic import parse_package_for_card
+from webapp.observability.utils import trace_function
 
 DISCOURSE_URL = "https://discourse.charmhub.io"
 DOCS_URL = "https://canonical-juju.readthedocs-hosted.com/"
@@ -14,6 +15,7 @@ cache = Cache(config={"CACHE_TYPE": "simple"})
 publisher_gateway = PublisherGW("charm", talisker.requests.get_session())
 
 
+@trace_function
 def search_discourse(
     query: str,
     page: int = 1,
@@ -111,6 +113,7 @@ def search_discourse(
     return result
 
 
+@trace_function
 def search_docs(term: str) -> dict:
     """
     Fetches documentation from discourse from the doc category and
@@ -139,6 +142,7 @@ def search_docs(term: str) -> dict:
     return results
 
 
+@trace_function
 def search_topics(term: str, page: int, see_all=False) -> dict:
     """
     Search discousre for a specific term and return the results.
@@ -162,6 +166,7 @@ def search_topics(term: str, page: int, see_all=False) -> dict:
     return result
 
 
+@trace_function
 def search_charms(term: str):
     return [
         parse_package_for_card(package)
@@ -171,6 +176,7 @@ def search_charms(term: str):
     ]
 
 
+@trace_function
 def search_bundles(term: str):
     return [
         parse_package_for_card(package)

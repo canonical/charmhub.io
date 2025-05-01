@@ -6,6 +6,7 @@ from os import getenv
 import requests
 
 from webapp.helpers import get_yaml_loader
+from webapp.observability.utils import trace_function
 
 GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 
@@ -23,6 +24,7 @@ class Interfaces:
             "canonical/charm-relation-interfaces"
         )
 
+    @trace_function
     def get_interfaces(self):
         if (
             len(self.interfaces) == 0
@@ -70,6 +72,7 @@ class Interfaces:
             self.last_fetch = time.time()
         return self.interfaces
 
+    @trace_function
     def repo_has_interface(self, interface):
         try:
             self.repo.get_contents("interfaces/{}".format(interface))
@@ -77,6 +80,7 @@ class Interfaces:
         except Exception:
             return False
 
+    @trace_function
     def get_interface_from_path(self, interface_name):
         interface_versions = self.repo.get_contents(
             "interfaces/{}".format(interface_name)
@@ -122,10 +126,12 @@ class Interfaces:
 
         return interface
 
+    @trace_function
     def get_h_content(self, text, pattern):
         start_index = text.index(pattern)
         return [start_index, start_index + len(pattern)]
 
+    @trace_function
     def extract_headings_and_content(self, text, level):
         headings = re.findall(
             r"^#{" + str(level) + r"}\s.*", text, flags=re.MULTILINE
@@ -149,6 +155,7 @@ class Interfaces:
             result.append([current_heading.strip(), body.strip()])
         return result
 
+    @trace_function
     def parse_text(self, interface, version, text):
         base_link = (
             "https://github.com/canonical/"
@@ -171,6 +178,7 @@ class Interfaces:
 
         return text
 
+    @trace_function
     def convert_readme(self, interface, version, text, level=2):
         headings_and_contents = self.extract_headings_and_content(text, level)
 
@@ -215,6 +223,7 @@ class Interfaces:
 
         return resulting_list
 
+    @trace_function
     def get_interface_name_from_readme(self, text):
         name = re.sub(r"[#` \n]", "", text.split("\n##", 1)[0]).split("/")[0]
         return name

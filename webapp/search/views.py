@@ -14,6 +14,7 @@ from webapp.search.logic import (
     search_charms,
     search_bundles,
 )
+from webapp.observability.utils import trace_function
 
 
 search = Blueprint(
@@ -23,11 +24,13 @@ search = Blueprint(
 publisher_gateway = PublisherGW("charm", requests.get_session())
 
 
+@trace_function
 @search.route("/all-search")
 def all_search():
     return render_template("all-search.html")
 
 
+@trace_function
 @search.route("/all-search.json")
 def all_search_json():
     params = request.args
@@ -46,6 +49,7 @@ def all_search_json():
     return jsonify(result)
 
 
+@trace_function
 @search.route("/all-charms")
 @search.route("/all-bundles")
 def all_charms() -> dict:
@@ -64,6 +68,7 @@ def all_charms() -> dict:
     return {f"{package_type}s": result[start:end]}
 
 
+@trace_function
 @search.route("/all-docs")
 def all_docs():
     search_term = request.args.get("q")
@@ -74,6 +79,7 @@ def all_docs():
     return jsonify({"docs": docs})
 
 
+@trace_function
 @search.route("/all-topics")
 def all_topics():
     search_term = request.args.get("q")

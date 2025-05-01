@@ -15,6 +15,7 @@ from flask.json import jsonify
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import login_required, cached_redirect
 from webapp.publisher.logic import get_all_architectures, process_releases
+from webapp.observability.utils import trace_function
 
 publisher = Blueprint(
     "publisher",
@@ -25,12 +26,14 @@ publisher = Blueprint(
 publisher_gateway = PublisherGW("charm", talisker.requests.get_session())
 
 
+@trace_function
 @publisher.route("/account/details")
 @login_required
 def get_account_details():
     return render_template("publisher/account-details.html")
 
 
+@trace_function
 @publisher.route(
     '/<regex("'
     + DETAILS_VIEW_REGEX
@@ -49,6 +52,7 @@ def get_publisher(entity_name, path):
     return render_template("publisher/publisher.html", **context)
 
 
+@trace_function
 @publisher.route(
     '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>',
 )
@@ -60,6 +64,7 @@ def get_package(entity_name):
     return jsonify({"data": package, "success": True})
 
 
+@trace_function
 @publisher.route(
     '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>',
     methods=["PATCH"],
@@ -93,6 +98,7 @@ def update_package(entity_name):
     return response
 
 
+@trace_function
 @publisher.route("/charms")
 @publisher.route("/bundles")
 @login_required
@@ -120,6 +126,7 @@ def list_page():
     return render_template("publisher/list.html", **context)
 
 
+@trace_function
 @publisher.route("/accept-invite")
 @login_required
 @cached_redirect
@@ -127,6 +134,7 @@ def accept_invite():
     return render_template("publisher/accept-invite.html")
 
 
+@trace_function
 @publisher.route("/accept-invite", methods=["POST"])
 @login_required
 def accept_post_invite():
@@ -161,6 +169,7 @@ def accept_post_invite():
     return make_response(res, 500)
 
 
+@trace_function
 @publisher.route("/reject-invite", methods=["POST"])
 @login_required
 def reject_post_invite():
@@ -196,6 +205,7 @@ def reject_post_invite():
     return response
 
 
+@trace_function
 @publisher.route(
     '/api/packages/<regex("'
     + DETAILS_VIEW_REGEX
@@ -224,6 +234,7 @@ def get_collaborators(entity_name):
     return response
 
 
+@trace_function
 @publisher.route(
     '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites',
 )
@@ -250,6 +261,7 @@ def get_pending_invites(entity_name):
     return response
 
 
+@trace_function
 @publisher.route(
     '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites',
     methods=["POST"],
@@ -280,6 +292,7 @@ def invite_collaborators(entity_name):
     return make_response(res, 500)
 
 
+@trace_function
 @publisher.route(
     '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/invites',
     methods=["DELETE"],
@@ -313,6 +326,7 @@ def revoke_invite(entity_name):
     return make_response(res, 500)
 
 
+@trace_function
 @publisher.route("/register-name")
 @login_required
 def register_name():
@@ -348,6 +362,7 @@ def register_name():
     return render_template("publisher/register-name.html", **context)
 
 
+@trace_function
 @publisher.route("/register-name", methods=["POST"])
 @login_required
 def post_register_name():
@@ -412,6 +427,7 @@ def post_register_name():
         return redirect("/bundles")
 
 
+@trace_function
 @publisher.route("/register-name-dispute")
 @login_required
 def register_name_dispute():
@@ -425,6 +441,7 @@ def register_name_dispute():
     )
 
 
+@trace_function
 @publisher.route("/register-name-dispute/thank-you")
 @login_required
 def register_name_dispute_thank_you():
@@ -439,6 +456,7 @@ def register_name_dispute_thank_you():
     )
 
 
+@trace_function
 @publisher.route("/packages/<package_name>", methods=["DELETE"])
 @login_required
 def delete_package(package_name):
@@ -453,6 +471,7 @@ def delete_package(package_name):
     )
 
 
+@trace_function
 @publisher.route("/<charm_name>/create-track", methods=["POST"])
 @login_required
 def post_create_track(charm_name):
@@ -485,6 +504,7 @@ def post_create_track(charm_name):
     return response.json(), response.status_code
 
 
+@trace_function
 @publisher.route(
     '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/releases',
 )

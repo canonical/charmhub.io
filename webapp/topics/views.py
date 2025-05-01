@@ -13,6 +13,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 
 from webapp.config import CATEGORIES
+from webapp.observability.utils import trace_function
 
 DISCOURSE_API_KEY = getenv("DISCOURSE_API_KEY")
 DISCOURSE_API_USERNAME = getenv("DISCOURSE_API_USERNAME")
@@ -27,6 +28,7 @@ with open("webapp/topics/topics.json") as f:
 
 
 class TopicParser(DocParser):
+    @trace_function
     def parse_topic(self, topic, docs_version=""):
         result = super().parse_topic(topic, docs_version)
 
@@ -35,6 +37,7 @@ class TopicParser(DocParser):
         result["body_html"] = soup
         return result
 
+    @trace_function
     def _parse_packages(self, soup):
         """
         Get a list of packages from all the
@@ -80,6 +83,7 @@ class TopicParser(DocParser):
             # Remplace tables with cards
             self._replace_packages(package_tables)
 
+    @trace_function
     def _replace_packages(self, package_tables):
         """
         Replace charm tables to cards
@@ -107,6 +111,7 @@ class TopicParser(DocParser):
             )
 
 
+@trace_function
 @topics.route("/topics.json")
 def topics_json():
     query = request.args.get("q", default=None, type=str)
@@ -134,6 +139,7 @@ def topics_json():
     )
 
 
+@trace_function
 @topics.route("/topics")
 def all_topics():
     context = {}
@@ -142,6 +148,7 @@ def all_topics():
     return render_template("topics/index.html", **context)
 
 
+@trace_function
 @topics.route("/topics/<string:topic_slug>")
 @topics.route("/topics/<string:topic_slug>/<path:path>")
 def topic_page(topic_slug, path=None):

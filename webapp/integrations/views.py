@@ -16,6 +16,7 @@ from os import getenv
 from canonicalwebteam.store_api.publishergw import PublisherGW
 
 from webapp.integrations.logic import Interfaces
+from webapp.observability.utils import trace_function
 
 interface_logic = Interfaces()
 
@@ -31,6 +32,7 @@ GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 github_client = Github(GITHUB_TOKEN)
 
 
+@trace_function
 def get_interfaces():
     interfaces = interface_logic.get_interfaces()
 
@@ -41,11 +43,13 @@ def get_interfaces():
     return response
 
 
+@trace_function
 @integrations.route("/integrations.json")
 def interfaces_json():
     return get_interfaces()
 
 
+@trace_function
 @integrations.route("/integrations", defaults={"path": ""})
 def all_interfaces(path):
     if not getenv("ENVIRONMENT") in ["devel", "staging"]:
@@ -56,6 +60,7 @@ def all_interfaces(path):
     return render_template("interfaces/index.html", **context)
 
 
+@trace_function
 @integrations.route("/integrations/<path:path>")
 def single_interface(path):
     is_draft = path.endswith("draft")
@@ -87,6 +92,7 @@ def single_interface(path):
     return render_template("interfaces/index.html", **context)
 
 
+@trace_function
 @integrations.route(
     "/integrations/<interface_name>.json", defaults={"status": ""}
 )

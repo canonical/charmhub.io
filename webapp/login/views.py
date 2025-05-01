@@ -25,14 +25,15 @@ candid = CandidClient(request_session)
 publisher_gateway = PublisherGW("charm", request_session)
 
 
+@trace_function
 @login.route("/logout")
 def logout():
     authentication.empty_session(flask.session)
     return flask.redirect("/")
 
 
-@login.route("/login")
 @trace_function
+@login.route("/login")
 def publisher_login():
     user_agent = flask.request.headers.get("User-Agent")
 
@@ -65,6 +66,7 @@ def publisher_login():
     return flask.redirect(login_url, 302)
 
 
+@trace_function
 @login.route("/login/callback")
 def login_callback():
     code = flask.request.args["code"]

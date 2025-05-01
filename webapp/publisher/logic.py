@@ -1,6 +1,7 @@
 from typing import TypedDict, List, Union, Dict
 from collections import Counter
 from datetime import datetime
+from webapp.observability.utils import trace_function
 from webapp.store.logic import process_revision
 
 Error = TypedDict("Error", {"code": str, "message": str})
@@ -39,6 +40,7 @@ ReleaseMap = TypedDict(
 )
 
 
+@trace_function
 def process_releases(
     channel_map, channels, revisions: List[Revision]
 ) -> Dict[str, ReleaseMap]:
@@ -93,6 +95,7 @@ def process_releases(
     return res
 
 
+@trace_function
 def get_all_architectures(releases: Dict[str, ReleaseMap]) -> List[str]:
     """
     Get all architectures from the releases

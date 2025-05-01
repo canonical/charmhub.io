@@ -13,6 +13,7 @@ from webapp.packages.logic import (
     get_package,
 )
 from webapp.config import SEARCH_FIELDS as FIELDS
+from webapp.observability.utils import trace_function
 
 from canonicalwebteam.store_api.publishergw import PublisherGW
 
@@ -23,6 +24,7 @@ store_packages = Blueprint(
 )
 
 
+@trace_function
 @store_packages.route("/store.json")
 def get_store_packages():
     args = dict(request.args)
@@ -38,6 +40,7 @@ def get_store_packages():
     return res
 
 
+@trace_function
 @store_packages.route("/<any(charms, bundles):package_type>")
 @login_required
 def package(package_type):
@@ -76,6 +79,7 @@ def package(package_type):
     return response
 
 
+@trace_function
 @store_packages.route("/<package_name>/card.json")
 def get_store_package(package_name):
     has_libraries = bool(request.args.get("fields", ""))
