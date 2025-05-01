@@ -35,6 +35,7 @@ Package = TypedDict(
 )
 
 
+@trace_function
 def get_icon(media):
     icons = [m["url"] for m in media if m["type"] == "icon"]
     if len(icons) > 0:
@@ -42,6 +43,7 @@ def get_icon(media):
     return ""
 
 
+@trace_function
 def fetch_packages(fields: List[str], query_params) -> Packages:
     """
     Fetches packages from the store API based on the specified fields.
@@ -100,6 +102,7 @@ def fetch_packages(fields: List[str], query_params) -> Packages:
     return packages
 
 
+@trace_function
 def fetch_package(package_name: str, fields: List[str]) -> Package:
     """
     Fetches a package from the store API based on the specified package name.
@@ -119,6 +122,7 @@ def fetch_package(package_name: str, fields: List[str]) -> Package:
     return response.json
 
 
+@trace_function
 def get_bundle_charms(charm_apps):
     result = []
 
@@ -139,6 +143,7 @@ def get_bundle_charms(charm_apps):
     return result
 
 
+@trace_function
 def parse_package_for_card(
     package: Dict[str, Any],
     libraries: bool = False,
@@ -224,6 +229,7 @@ def parse_package_for_card(
     return resp
 
 
+@trace_function
 def paginate(
     packages: List[Packages], page: int, size: int, total_pages: int
 ) -> List[Packages]:
@@ -255,6 +261,7 @@ def paginate(
     return packages[start:end]
 
 
+@trace_function
 def get_packages(
     libraries: bool,
     fields: List[str],
@@ -301,6 +308,7 @@ def get_packages(
     }
 
 
+@trace_function
 def parse_categories(
     categories_json: Dict[str, List[Dict[str, str]]]
 ) -> List[Dict[str, str]]:
@@ -321,6 +329,7 @@ def parse_categories(
     return categories
 
 
+@trace_function
 def get_store_categories() -> List[Dict[str, str]]:
     """
     Fetches all store categories.

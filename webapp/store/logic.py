@@ -11,6 +11,7 @@ from webapp.helpers import (
     discourse_api,
     get_yaml_loader,
 )
+from webapp.observability.utils import trace_function
 
 yaml = get_yaml_loader()
 
@@ -22,6 +23,7 @@ PLATFORMS = {
 ARCHITECTURES = ["amd64", "arm64", "ppc64el", "riscv64", "s390x"]
 
 
+@trace_function
 def add_description_and_summary(package):
     if package["type"] == "bundle":
         description = (
@@ -48,6 +50,7 @@ def add_description_and_summary(package):
     return description, summary
 
 
+@trace_function
 def get_banner_url(media):
     """
     Get banner url from media object
@@ -62,6 +65,7 @@ def get_banner_url(media):
     return None
 
 
+@trace_function
 def get_channel_map(channel_map):
     """
     Reformat channel map to return a channel map
@@ -81,6 +85,7 @@ def get_channel_map(channel_map):
     return new_map
 
 
+@trace_function
 def convert_channel_maps(channel_map):
     """
     Converts channel maps list to format easier to manipulate
@@ -203,6 +208,7 @@ def convert_channel_maps(channel_map):
     return result
 
 
+@trace_function
 def process_revision(revision):
     bases = []
 
@@ -215,6 +221,7 @@ def process_revision(revision):
     return {**revision, "bases": bases}
 
 
+@trace_function
 def extract_resources(channel):
     """
     Extract resources from channel map
@@ -235,6 +242,7 @@ def extract_resources(channel):
     return resources
 
 
+@trace_function
 def extract_default_release_architectures(channel):
     architectures = set()
 
@@ -251,6 +259,7 @@ def extract_default_release_architectures(channel):
     return sorted(architectures)
 
 
+@trace_function
 def extract_all_arch(channel_map, parent_dict):
     all_archy = set()
     all_channel_bases = {}
@@ -283,6 +292,7 @@ def extract_all_arch(channel_map, parent_dict):
     return
 
 
+@trace_function
 def extract_series(channel, long_name=False):
     """
     Extract ubuntu series from channel map
@@ -304,6 +314,7 @@ def extract_series(channel, long_name=False):
     return sorted(series, reverse=True)
 
 
+@trace_function
 def extract_bases(channel):
     bases = channel["revision"]["bases"]
     channel_bases = []
@@ -336,6 +347,7 @@ def extract_bases(channel):
     return channel_bases
 
 
+@trace_function
 def convert_date(date_to_convert):
     """
     Convert date to human readable format: Month Day Year
@@ -356,11 +368,13 @@ def convert_date(date_to_convert):
         return date_parsed.strftime("%d %b %Y")
 
 
+@trace_function
 def get_icons(package):
     media = package["result"]["media"]
     return [m["url"] for m in media if m["type"] == "icon"]
 
 
+@trace_function
 def get_docs_topic_id(metadata_yaml):
     """
     Return discourse topic ID or None
@@ -381,6 +395,7 @@ def get_docs_topic_id(metadata_yaml):
     return None
 
 
+@trace_function
 def convert_categories(api_categories):
     """
     The name property in the API response has a slug
@@ -399,6 +414,7 @@ def convert_categories(api_categories):
     return result
 
 
+@trace_function
 def add_store_front_data(package, details=False):
     extra = {}
 
@@ -479,6 +495,7 @@ def add_store_front_data(package, details=False):
     return package
 
 
+@trace_function
 def get_bundle_charms(charm_apps):
     result = []
 
@@ -499,6 +516,7 @@ def get_bundle_charms(charm_apps):
     return result
 
 
+@trace_function
 def process_python_docs(library, module_name):
     """Process libraries response from the API
     to generate the HTML output"""
@@ -512,6 +530,7 @@ def process_python_docs(library, module_name):
     return docstrings
 
 
+@trace_function
 def process_libraries(libraries):
     """Process the libraries response from the API"""
 
@@ -530,6 +549,7 @@ def process_libraries(libraries):
     return result
 
 
+@trace_function
 def get_library(library_name, libraries):
     library = next(
         (lib for lib in libraries if lib.get("name") == library_name),
@@ -542,6 +562,7 @@ def get_library(library_name, libraries):
     return library["id"]
 
 
+@trace_function
 def filter_charm(charm, categories=["all"], base="all"):
     """
     This filter will be done in the API soon.
@@ -563,6 +584,7 @@ def filter_charm(charm, categories=["all"], base="all"):
     return True
 
 
+@trace_function
 def format_slug(slug):
     """Format slug name into a standard title format
     :param slug: The hypen spaced, lowercase slug to be formatted

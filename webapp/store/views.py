@@ -20,6 +20,7 @@ from webapp.decorators import (
 from webapp.helpers import discourse_api, markdown_to_html
 from webapp.store import logic
 from webapp.config import SEARCH_FIELDS
+from webapp.observability.utils import trace_function
 
 
 store = Blueprint(
@@ -29,6 +30,7 @@ publisher_gateway = PublisherGW("charm", requests.get_session())
 device_gateway = DeviceGW("charm", requests.get_session())
 
 
+@trace_function
 @store.route("/publisher/<regex('[a-z0-9-]*[a-z][a-z0-9-]*'):publisher>")
 def get_publisher_details(publisher):
     """
@@ -68,6 +70,7 @@ def get_publisher_details(publisher):
     return jsonify(context), status_code
 
 
+@trace_function
 @store.route("/packages.json")
 def get_packages():
     query = request.args.get("q", default=None, type=str)
@@ -123,6 +126,7 @@ FIELDS = [
 ]
 
 
+@trace_function
 def get_package(entity_name, channel_request=None, fields=FIELDS):
     # Get entity info from API
     package = publisher_gateway.get_item_details(
@@ -150,6 +154,7 @@ def get_package(entity_name, channel_request=None, fields=FIELDS):
     return package
 
 
+@trace_function
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs')
 @store_maintenance
@@ -263,6 +268,7 @@ def details_overview(entity_name):
     return render_template("details/overview.html", **context)
 
 
+@trace_function
 @store.route(
     '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs/<path:path>'
 )
@@ -355,6 +361,7 @@ def details_docs(entity_name, path=None):
     return render_template("details/docs.html", **context)
 
 
+@trace_function
 @store.route(
     '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configurations'
 )
@@ -408,6 +415,7 @@ def details_configuration(entity_name, path=None):
     )
 
 
+@trace_function
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/actions')
 @store_maintenance
 @redirect_uppercase_to_lowercase
@@ -427,6 +435,7 @@ def details_actions(entity_name):
     )
 
 
+@trace_function
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/libraries')
 @store_maintenance
 @redirect_uppercase_to_lowercase
@@ -457,6 +466,7 @@ def details_libraries(entity_name):
     )
 
 
+@trace_function
 @store.route(
     '/<regex("'
     + DETAILS_VIEW_REGEX
@@ -499,6 +509,7 @@ def details_library(entity_name, library_name):
     )
 
 
+@trace_function
 @store.route(
     '/<regex("'
     + DETAILS_VIEW_REGEX
@@ -533,6 +544,7 @@ def details_library_source_code(entity_name, library_name):
     )
 
 
+@trace_function
 @store.route(
     '/<regex("'
     + DETAILS_VIEW_REGEX
@@ -572,6 +584,7 @@ def download_library(entity_name, library_name):
     )
 
 
+@trace_function
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/integrations')
 @store_maintenance
 @redirect_uppercase_to_lowercase
@@ -589,6 +602,7 @@ def details_integrations(entity_name):
     )
 
 
+@trace_function
 @store.route(
     '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/integrations.json'
 )
@@ -624,6 +638,7 @@ def details_integrations_data(entity_name):
     return jsonify({"grouped_relations": grouped_relations})
 
 
+@trace_function
 def add_required_fields(metadata_relations, relations):
     processed_relations = [
         {
@@ -636,6 +651,7 @@ def add_required_fields(metadata_relations, relations):
     return processed_relations
 
 
+@trace_function
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/resources')
 @store_maintenance
 @redirect_uppercase_to_lowercase
@@ -661,6 +677,7 @@ def details_resources(entity_name):
         )
 
 
+@trace_function
 @store.route(
     '/<regex("'
     + DETAILS_VIEW_REGEX
@@ -715,6 +732,7 @@ def details_resource(entity_name, resource_name):
     )
 
 
+@trace_function
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/integrate')
 @store_maintenance
 @redirect_uppercase_to_lowercase
@@ -729,6 +747,7 @@ def details_integrate(entity_name):
     )
 
 
+@trace_function
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/badge.svg')
 def entity_badge(entity_name):
     package = publisher_gateway.get_item_details(entity_name, fields=FIELDS)
@@ -793,6 +812,7 @@ def entity_badge(entity_name):
     return svg, 200, {"Content-Type": "image/svg+xml"}
 
 
+@trace_function
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/embedded')
 @exclude_xframe_options_header
 def entity_embedded_card(entity_name):
@@ -835,6 +855,7 @@ def entity_embedded_card(entity_name):
         )
 
 
+@trace_function
 @store.route(
     '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/embedded/interface'
 )
@@ -873,6 +894,7 @@ def entity_embedded_interface_card(entity_name):
         )
 
 
+@trace_function
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/icon')
 def entity_icon(entity_name):
     icon_url = (
@@ -899,6 +921,7 @@ def entity_icon(entity_name):
     )
 
 
+@trace_function
 @store.route(
     '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/icon-no-default'
 )
@@ -928,6 +951,7 @@ def entity_icon_missing(entity_name):
 
 # This method is a temporary hack to show bundle icons on the
 # homepage, and should be removed once the icons are available via the api
+@trace_function
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/charms.json')
 def get_charms_from_bundle(entity_name):
     package = get_package(entity_name)
@@ -938,6 +962,7 @@ def get_charms_from_bundle(entity_name):
     return jsonify({"charms": package["store_front"]["bundle"]["charms"]})
 
 
+@trace_function
 @store.route("/")
 def store_index():
     response = make_response(render_template("store.html"))

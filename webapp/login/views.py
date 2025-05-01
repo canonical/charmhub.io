@@ -8,6 +8,7 @@ from flask_wtf.csrf import generate_csrf, validate_csrf
 from canonicalwebteam.candid import CandidClient
 from webapp.helpers import is_safe_url
 from webapp import authentication
+from webapp.observability.utils import trace_function
 
 login = flask.Blueprint(
     "login", __name__, template_folder="/templates", static_folder="/static"
@@ -24,12 +25,14 @@ candid = CandidClient(request_session)
 publisher_gateway = PublisherGW("charm", request_session)
 
 
+@trace_function
 @login.route("/logout")
 def logout():
     authentication.empty_session(flask.session)
     return flask.redirect("/")
 
 
+@trace_function
 @login.route("/login")
 def publisher_login():
     user_agent = flask.request.headers.get("User-Agent")
@@ -63,6 +66,7 @@ def publisher_login():
     return flask.redirect(login_url, 302)
 
 
+@trace_function
 @login.route("/login/callback")
 def login_callback():
     code = flask.request.args["code"]
