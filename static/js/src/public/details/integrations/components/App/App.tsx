@@ -52,7 +52,7 @@ export const App = () => {
   const availableFilters = useRecoilValue(filterChipsSelector);
   const [fragment, setFragment] = useState(window.location.hash || "");
 
-  const { data } = useQuery(
+  const { data, status } = useQuery(
     ["integrations", charm],
     () => getIntegrations(charm),
     {
@@ -245,19 +245,7 @@ export const App = () => {
           </Col>
         </Row>
       )}
-      {!data && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: "10rem",
-          }}
-        >
-          <Spinner text="Loading..." />
-        </div>
-      )}
-      {integrationCount === 0 && (
+      {status === "success" && integrationCount === 0 && (
         <div className="p-strip u-no-padding--top">
           <div className="u-fixed-width u-equal-height">
             <div className="charm-empty-docs-icon u-vertically-center">
