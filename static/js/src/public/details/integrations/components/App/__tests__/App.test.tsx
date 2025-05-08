@@ -168,11 +168,15 @@ describe("getIntegrations function", () => {
 });
 
 describe("Empty App component", () => {
-  jest.mock("../App", () => ({
-    getIntegrations: jest.fn().mockResolvedValue([]),
-  }));
-
   const queryClient = new QueryClient();
+
+  beforeEach(() => {
+    global.fetch = jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        json: () => Promise.resolve({ grouped_relations: undefined }),
+      })
+    );
+  });
 
   test("should display message when no integrations are found", async () => {
     render(
@@ -184,10 +188,9 @@ describe("Empty App component", () => {
     );
 
     await waitFor(() => {
-      const message = screen.getByText(
-        /No Integrations have been added for this charm/i
-      );
-      expect(message).toBeInTheDocument();
+      expect(
+        screen.getByText(/No Integrations have been added for this charm/i)
+      ).toBeInTheDocument();
     });
   });
 });
