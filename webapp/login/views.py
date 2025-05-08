@@ -2,13 +2,13 @@ import os
 import talisker
 import flask
 
-from canonicalwebteam.store_api.publishergw import PublisherGW
 from flask_wtf.csrf import generate_csrf, validate_csrf
 
 from canonicalwebteam.candid import CandidClient
 from webapp.helpers import is_safe_url
 from webapp import authentication
 from webapp.observability.utils import trace_function
+from webapp.store_api import publisher_gateway
 
 login = flask.Blueprint(
     "login", __name__, template_folder="/templates", static_folder="/static"
@@ -22,7 +22,6 @@ LOGIN_LAUNCHPAD_TEAM = os.getenv(
 
 request_session = talisker.requests.get_session()
 candid = CandidClient(request_session)
-publisher_gateway = PublisherGW("charm", request_session)
 
 
 @trace_function

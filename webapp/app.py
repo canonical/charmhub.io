@@ -4,8 +4,8 @@ from dateutil import parser
 
 from canonicalwebteam.candid import CandidClient
 from canonicalwebteam.flask_base.app import FlaskBase
-from canonicalwebteam.store_api.publishergw import PublisherGW
 
+from webapp.store_api import publisher_gateway
 from webapp.extensions import csrf
 from webapp.config import APP_NAME
 from webapp.handlers import set_handlers
@@ -22,7 +22,6 @@ from webapp.packages.store_packages import store_packages
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.trace import Span
-from webapp.observability.utils import trace_function
 
 
 app = FlaskBase(
@@ -43,9 +42,6 @@ set_handlers(app)
 
 request_session = talisker.requests.get_session()
 candid = CandidClient(request_session)
-publisher_gateway = PublisherGW("charm", request_session)
-
-
 cache.init_app(app)
 csrf.init_app(app)
 
@@ -61,13 +57,9 @@ app.register_blueprint(search)
 app.jinja_env.filters["markdown"] = markdown_to_html
 
 # OpenTelemetry
-UNTRACED_ROUTES = [
-    "/_status",
-    ".*[.jpg|.jpeg|.png|.gif|.ico|.css|.js|.json]$",
-]
+UNTRACED_ROUTES = ["/_status", "/static", ".json"]
 
 
-@trace_function
 def request_hook(span: Span, environ):
     if span and span.is_recording():
         span.update_name(f"{environ['REQUEST_METHOD']} {environ['PATH_INFO']}")

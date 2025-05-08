@@ -1,4 +1,3 @@
-import talisker
 from webapp.decorators import login_required
 from flask import (
     Blueprint,
@@ -14,8 +13,7 @@ from webapp.packages.logic import (
 )
 from webapp.config import SEARCH_FIELDS as FIELDS
 from webapp.observability.utils import trace_function
-
-from canonicalwebteam.store_api.publishergw import PublisherGW
+from webapp.store_api import publisher_gateway
 
 
 store_packages = Blueprint(
@@ -51,8 +49,6 @@ def package(package_type):
     :returns: Response: The HTTP response containing the JSON data of the
     packages.
     """
-
-    publisher_gateway = PublisherGW("charm", talisker.requests.get_session())
 
     publisher_packages = publisher_gateway.get_account_packages(
         session["account-auth"], "charm", include_collaborations=True

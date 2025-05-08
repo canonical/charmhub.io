@@ -1,6 +1,4 @@
 from datetime import datetime
-from talisker import requests
-
 from flask import (
     Blueprint,
     render_template,
@@ -13,10 +11,9 @@ from flask.json import jsonify
 from github import Github
 from os import getenv
 
-from canonicalwebteam.store_api.publishergw import PublisherGW
-
 from webapp.integrations.logic import Interfaces
 from webapp.observability.utils import trace_function
+from webapp.store_api import publisher_gateway
 
 interface_logic = Interfaces()
 
@@ -100,7 +97,6 @@ def single_interface(path):
 def get_single_interface(interface_name, status):
     repo_has_interface = interface_logic.repo_has_interface(interface_name)
 
-    publisher_gateway = PublisherGW("charm", requests.get_session())
     other_requirers = publisher_gateway.find(requires=[interface_name]).get(
         "results", []
     )

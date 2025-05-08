@@ -4,9 +4,6 @@ from flask import (
     request,
     render_template,
 )
-from talisker import requests
-from canonicalwebteam.store_api.publishergw import PublisherGW
-
 from webapp.config import SEARCH_FIELDS
 from webapp.search.logic import (
     search_docs,
@@ -15,13 +12,12 @@ from webapp.search.logic import (
     search_bundles,
 )
 from webapp.observability.utils import trace_function
+from webapp.store_api import publisher_gateway
 
 
 search = Blueprint(
     "search", __name__, template_folder="/templates", static_folder="/static"
 )
-
-publisher_gateway = PublisherGW("charm", requests.get_session())
 
 
 @trace_function
