@@ -2,16 +2,14 @@ import re
 
 import yaml
 
-import talisker
 from flask import make_response
 from typing import List, Dict, TypedDict, Any, Union
 
-from canonicalwebteam.store_api.publishergw import PublisherGW
 from canonicalwebteam.exceptions import StoreApiError
 from webapp.observability.utils import trace_function
 from webapp.store.logic import format_slug
+from webapp.store_api import publisher_gateway
 
-publisher_gateway = PublisherGW("charm", talisker.requests.get_session())
 
 Packages = TypedDict(
     "Packages",
@@ -310,7 +308,7 @@ def get_packages(
 
 @trace_function
 def parse_categories(
-    categories_json: Dict[str, List[Dict[str, str]]]
+    categories_json: Dict[str, List[Dict[str, str]]],
 ) -> List[Dict[str, str]]:
     """
     :param categories_json: The returned json from publishergw get_categories
