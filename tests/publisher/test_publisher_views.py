@@ -45,10 +45,7 @@ class TestPublisherViews(unittest.TestCase):
         self.assertIn(b"test-email", res.data)
         self.assertIn(b"test-username", res.data)
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw."
-        "PublisherGW.get_package_metadata"
-    )
+    @patch("webapp.store_api.publisher_gateway.get_package_metadata")
     def test_get_publisher(self, mock_get_package_metadata):
         mock_get_package_metadata.return_value = sample_charm
         for endpoint in [
@@ -61,10 +58,7 @@ class TestPublisherViews(unittest.TestCase):
             res = self.client.get(f"/test-entity/{endpoint}")
             self.assertEqual(res.status_code, 200)
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw."
-        "PublisherGW.get_package_metadata"
-    )
+    @patch("webapp.store_api.publisher_gateway.get_package_metadata")
     def test_get_package(self, mock_get_package_metadata):
         mock_get_package_metadata.return_value = {"name": "test-package"}
         res = self.client.get("/api/packages/test-entity")
@@ -74,10 +68,7 @@ class TestPublisherViews(unittest.TestCase):
             {"success": True, "data": mock_get_package_metadata.return_value},
         )
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw."
-        "PublisherGW.update_package_metadata"
-    )
+    @patch("webapp.store_api.publisher_gateway.update_package_metadata")
     def test_update_package(self, mock_update_package_metadata):
         mock_update_package_metadata.return_value = {"name": "test-package"}
         res = self.client.patch(
@@ -85,10 +76,7 @@ class TestPublisherViews(unittest.TestCase):
         )
         self.assertEqual(res.status_code, 200)
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw."
-        "PublisherGW.update_package_metadata"
-    )
+    @patch("webapp.store_api.publisher_gateway.update_package_metadata")
     def test_update_package_failure(self, mock_update_package_metadata):
         mock_update_package_metadata.side_effect = StoreApiResponseErrorList(
             "test-error", 500, []
@@ -99,10 +87,7 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 500)
         self.assertEqual(res.json["success"], False)
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw."
-        "PublisherGW.update_package_metadata"
-    )
+    @patch("webapp.store_api.publisher_gateway.update_package_metadata")
     def test_update_package_unauthorized(self, mock_update_package_metadata):
         mock_update_package_metadata.side_effect = StoreApiResponseErrorList(
             "test-error", 500, [{"message": "unauthorized"}]
@@ -114,10 +99,7 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.json["success"], False)
         self.assertEqual(res.json["message"], "Package not found")
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw."
-        "PublisherGW.get_account_packages"
-    )
+    @patch("webapp.store_api.publisher_gateway.get_account_packages")
     def test_list_page(self, mock_get_account_packages):
         mock_get_account_packages.return_value = [
             {
@@ -152,7 +134,7 @@ class TestPublisherViews(unittest.TestCase):
         self.assertIn(b"Success", res.data)
         self.assertEqual(res.status_code, 200)
 
-    @patch("canonicalwebteam.store_api.publishergw.PublisherGW.accept_invite")
+    @patch("webapp.store_api.publisher_gateway.accept_invite")
     def test_accept_post_invite(self, mock_accept_invite):
         mock_accept_invite.return_value.status_code = 204
         res = self.client.post(
@@ -161,7 +143,7 @@ class TestPublisherViews(unittest.TestCase):
         )
         self.assertEqual(res.status_code, 200)
 
-    @patch("canonicalwebteam.store_api.publishergw.PublisherGW.accept_invite")
+    @patch("webapp.store_api.publisher_gateway.accept_invite")
     def test_accept_post_invite_failed(self, mock_accept_invite):
         mock_accept_invite.return_value.status_code = 401
         res = self.client.post(
@@ -171,7 +153,7 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 500)
         self.assertEqual(res.json["message"], "An error occured")
 
-    @patch("canonicalwebteam.store_api.publishergw.PublisherGW.reject_invite")
+    @patch("webapp.store_api.publisher_gateway.reject_invite")
     def test_reject_post_invite(self, mock_reject_invite):
         mock_reject_invite.return_value.status_code = 204
         res = self.client.post(
@@ -180,19 +162,13 @@ class TestPublisherViews(unittest.TestCase):
         )
         self.assertEqual(res.status_code, 200)
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw"
-        ".PublisherGW.get_collaborators"
-    )
+    @patch("webapp.store_api.publisher_gateway.get_collaborators")
     def test_get_collaborators(self, mock_get_collaborators):
         mock_get_collaborators.return_value = [{"name": "collaborator"}]
         res = self.client.get("/api/packages/test-entity/collaborators")
         self.assertEqual(res.status_code, 200)
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw"
-        ".PublisherGW.get_collaborators"
-    )
+    @patch("webapp.store_api.publisher_gateway.get_collaborators")
     def test_get_collaborators_failed(self, mock_get_collaborators):
         mock_get_collaborators.side_effect = StoreApiResponseErrorList(
             "test-error", 500, []
@@ -200,10 +176,7 @@ class TestPublisherViews(unittest.TestCase):
         res = self.client.get("/api/packages/test-entity/collaborators")
         self.assertEqual(res.status_code, 500)
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw"
-        ".PublisherGW.get_pending_invites"
-    )
+    @patch("webapp.store_api.publisher_gateway.get_pending_invites")
     def test_get_pending_invites(self, mock_get_pending_invites):
         mock_get_pending_invites.return_value = {
             "invites": [{"name": "invite"}]
@@ -211,10 +184,7 @@ class TestPublisherViews(unittest.TestCase):
         res = self.client.get("/api/packages/test-entity/invites")
         self.assertEqual(res.status_code, 200)
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw"
-        ".PublisherGW.invite_collaborators"
-    )
+    @patch("webapp.store_api.publisher_gateway.invite_collaborators")
     def test_invite_collaborators(self, mock_invite_collaborators):
         mock_invite_collaborators.return_value = {"tokens": ["token"]}
         res = self.client.post(
@@ -223,7 +193,7 @@ class TestPublisherViews(unittest.TestCase):
         )
         self.assertEqual(res.status_code, 200)
 
-    @patch("canonicalwebteam.store_api.publishergw.PublisherGW.revoke_invites")
+    @patch("webapp.store_api.publisher_gateway.revoke_invites")
     def test_revoke_invite(self, mock_revoke_invites):
         mock_revoke_invites.return_value.status_code = 204
         res = self.client.delete(
@@ -237,10 +207,7 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertIn(b"Register a new", res.data)
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw"
-        ".PublisherGW.register_package_name"
-    )
+    @patch("webapp.store_api.publisher_gateway.register_package_name")
     def test_post_register_name(self, mock_register_package_name):
         mock_register_package_name.return_value = True
         res = self.client.post(
@@ -253,10 +220,7 @@ class TestPublisherViews(unittest.TestCase):
         )
         self.assertEqual(res.status_code, 302)
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw"
-        ".PublisherGW.register_package_name"
-    )
+    @patch("webapp.store_api.publisher_gateway.register_package_name")
     def test_post_register_name_already_owned(
         self, mock_register_package_name
     ):
@@ -297,19 +261,13 @@ class TestPublisherViews(unittest.TestCase):
             res.data,
         )
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw"
-        ".PublisherGW.unregister_package_name"
-    )
+    @patch("webapp.store_api.publisher_gateway.unregister_package_name")
     def test_delete_package(self, mock_unregister_package_name):
         mock_unregister_package_name.return_value.status_code = 200
         res = self.client.delete("/packages/test-package")
         self.assertEqual(res.status_code, 200)
 
-    @patch(
-        "canonicalwebteam.store_api.publishergw"
-        ".PublisherGW.unregister_package_name"
-    )
+    @patch("webapp.store_api.publisher_gateway.unregister_package_name")
     def test_delete_package_failed(self, mock_unregister_package_name):
         mock_unregister_package_name.return_value.status_code = 500
         mock_unregister_package_name.return_value.json = {
@@ -318,7 +276,7 @@ class TestPublisherViews(unittest.TestCase):
         res = self.client.delete("/packages/test-package")
         self.assertEqual(res.status_code, 500)
 
-    @patch("canonicalwebteam.store_api.publishergw.PublisherGW.create_track")
+    @patch("webapp.store_api.publisher_gateway.create_track")
     def test_post_create_track(self, mock_create_track):
         mock_create_track.return_value.status_code = 201
         mock_create_track.return_value.json = lambda: {"track": "test-track"}
@@ -332,7 +290,7 @@ class TestPublisherViews(unittest.TestCase):
         )
         self.assertEqual(res.status_code, 201)
 
-    @patch("canonicalwebteam.store_api.publishergw.PublisherGW.create_track")
+    @patch("webapp.store_api.publisher_gateway.create_track")
     def test_post_create_track_already_exists(self, mock_create_track):
         mock_create_track.return_value.status_code = 409
         mock_create_track.return_value.json = lambda: {"track": "test-track"}
@@ -346,7 +304,7 @@ class TestPublisherViews(unittest.TestCase):
         )
         self.assertEqual(res.status_code, 409)
 
-    @patch("canonicalwebteam.store_api.publishergw.PublisherGW.get_releases")
+    @patch("webapp.store_api.publisher_gateway.get_releases")
     @patch("webapp.publisher.logic.process_releases")
     @patch("webapp.publisher.logic.get_all_architectures")
     def test_get_releases(

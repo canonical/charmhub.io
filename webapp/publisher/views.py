@@ -1,5 +1,3 @@
-import talisker
-from canonicalwebteam.store_api.publishergw import PublisherGW
 from canonicalwebteam.exceptions import StoreApiResponseErrorList
 from flask import (
     Blueprint,
@@ -16,6 +14,7 @@ from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import login_required, cached_redirect
 from webapp.publisher.logic import get_all_architectures, process_releases
 from webapp.observability.utils import trace_function
+from webapp.store_api import publisher_gateway
 
 publisher = Blueprint(
     "publisher",
@@ -23,7 +22,6 @@ publisher = Blueprint(
     template_folder="/templates",
     static_folder="/static",
 )
-publisher_gateway = PublisherGW("charm", talisker.requests.get_session())
 
 
 @trace_function

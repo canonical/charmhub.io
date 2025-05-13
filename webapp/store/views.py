@@ -1,17 +1,15 @@
 import humanize
-from talisker import requests
 from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.discourse.exceptions import PathNotFoundError
 from canonicalwebteam.flask_base.decorators import (
     exclude_xframe_options_header,
 )
 from canonicalwebteam.exceptions import StoreApiResponseErrorList
-from canonicalwebteam.store_api.publishergw import PublisherGW
-from canonicalwebteam.store_api.devicegw import DeviceGW
 from flask import Blueprint, Response, abort, url_for
 from flask import jsonify, redirect, render_template, request, make_response
 from pybadges import badge
 
+from webapp.store_api import publisher_gateway
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import (
     redirect_uppercase_to_lowercase,
@@ -21,16 +19,14 @@ from webapp.helpers import discourse_api, markdown_to_html
 from webapp.store import logic
 from webapp.config import SEARCH_FIELDS
 from webapp.observability.utils import trace_function
+from webapp.store_api import device_gateway
 
 
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
 )
-publisher_gateway = PublisherGW("charm", requests.get_session())
-device_gateway = DeviceGW("charm", requests.get_session())
 
 
-@trace_function
 @store.route("/publisher/<regex('[a-z0-9-]*[a-z][a-z0-9-]*'):publisher>")
 def get_publisher_details(publisher):
     """

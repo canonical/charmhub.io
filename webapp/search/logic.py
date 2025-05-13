@@ -1,18 +1,16 @@
 from flask_caching import Cache
 
-from canonicalwebteam.store_api.publishergw import PublisherGW
 
-import talisker
 import requests
 from webapp.config import SEARCH_FIELDS
 from webapp.packages.logic import parse_package_for_card
 from webapp.observability.utils import trace_function
+from webapp.store_api import publisher_gateway
 
 DISCOURSE_URL = "https://discourse.charmhub.io"
 DOCS_URL = "https://canonical-juju.readthedocs-hosted.com/"
 
 cache = Cache(config={"CACHE_TYPE": "simple"})
-publisher_gateway = PublisherGW("charm", talisker.requests.get_session())
 
 
 @trace_function
