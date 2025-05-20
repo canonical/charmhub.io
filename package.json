@@ -30,6 +30,9 @@
     "@canonical/global-nav": "3.6.4",
     "@canonical/react-components": "2.2.4",
     "@canonical/store-components": "0.53.0",
+    "@grafana/faro-transport-otlp-http": "^1.18.1",
+    "@grafana/faro-web-sdk": "^1.18.1",
+    "@grafana/faro-web-tracing": "^1.18.1",
     "@sentry/react": "8.48.0",
     "@testing-library/dom": "10.4.0",
     "@testing-library/jest-dom": "6.6.3",
@@ -61,7 +64,7 @@
     "style-loader": "4.0.0",
     "ts-loader": "9.5.1",
     "typescript": "5.7.2",
-    "vanilla-framework": "4.23.2",
+    "vanilla-framework": "4.24.0",
     "webpack": "5.97.1",
     "webpack-cli": "6.0.1"
   },
