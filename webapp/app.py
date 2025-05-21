@@ -1,5 +1,14 @@
 import talisker.requests
-from flask import render_template, make_response, request, session
+from flask import (
+    render_template,
+    make_response,
+    request,
+    session,
+    g,
+    has_request_context,
+)
+import logging
+import uuid
 from dateutil import parser
 
 from canonicalwebteam.candid import CandidClient
@@ -21,7 +30,11 @@ from webapp.decorators import login_required
 from webapp.packages.store_packages import store_packages
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.instrumentation.wsgi import OpenTelemetryMiddleware
+from opentelemetry.instrumentation.logging import LoggingInstrumentor
 from opentelemetry.trace import Span
+from opentelemetry import trace
+import logging
 
 
 app = FlaskBase(
@@ -70,6 +83,47 @@ FlaskInstrumentor().instrument_app(
     app, excluded_urls=",".join(UNTRACED_ROUTES), request_hook=request_hook
 )
 RequestsInstrumentor().instrument()
+
+app.wsgi_app = OpenTelemetryMiddleware(app.wsgi_app)
+
+import logging
+
+
+class LogfmtFormatter(logging.Formatter):
+    def format(self, record):
+        # gunicorn.access log records have some custom attributes:
+        # record.message, record.args typically include client address, request line, status, etc.
+        # We parse the record's `msg` assuming the default gunicorn format
+        raw_msg = record.getMessage()
+        # crude parsing (you may want to parse more robustly)
+        parts = raw_msg.split('"')
+        if len(parts) >= 3:
+            request_line = parts[1]
+            pre = parts[0].strip()
+            post = parts[2].strip()
+            client_ip = pre.split()[0]
+            status_code = post.split()[0] if post else ""
+        else:
+            request_line = raw_msg
+            client_ip = "-"
+            status_code = "-"
+
+        logfmt = (
+            f'time="{self.formatTime(record)}" '
+            f"level={record.levelname.lower()} "
+            f"client_ip={client_ip} "
+            f"status={status_code} "
+            f'request="{request_line}"'
+        )
+        return logfmt
+
+
+import logging
+
+# Apply the formatter to gunicorn.access logger
+access_logger = logging.getLogger("werkzeug")
+for handler in access_logger.handlers:
+    handler.setFormatter(LogfmtFormatter())
 
 
 @app.route("/account.json")
@@ -135,9 +189,9 @@ def site_map_links():
 
 @app.route("/sitemap-operators.xml")
 def site_map_operators():
-    charms = publisher_gateway.find(
-        fields=["default-release.channel.released-at"]
-    ).get("results", [])
+    charms = publisher_gateway.find(fields=["default-release.channel.released-at"]).get(
+        "results", []
+    )
 
     for charm in charms:
         charm["date"] = (

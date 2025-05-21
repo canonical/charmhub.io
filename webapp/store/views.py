@@ -184,7 +184,6 @@ def details_overview(entity_name):
     summary = None
 
     docs_topic = package["store_front"].get("docs_topic")
-    print(docs_topic)
 
     if docs_topic:
         docs_url_prefix = f"/{package['name']}/docs"
