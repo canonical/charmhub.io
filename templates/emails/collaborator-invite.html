@@ -1,0 +1,14 @@
+{% extends "emails/_emails-base.html" %}
+{% block content %}
+            <h2>You've been invited as a collaborator!</h2>
+            
+            <p>Hello,</p>
+            
+<p>You have been invited to collaborate on <b>{{charm_name}}</b> in Charmhub.</p>
+            
+            <a href="[INVITE_LINK]" class="p-button">Accept Invitation</a>
+            
+            <div class="disclaimer" style="font-size: 14px; color: #666666; margin-top: 30px; padding-top: 20px;">
+                <p>If you don't expect this invitation, you can safely ignore this email. The invitation will expire automatically if not accepted.</p>
+            </div>
+{% endblock content %}

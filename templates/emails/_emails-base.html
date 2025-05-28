@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preload" as="font" type="font/woff2" href="https://assets.ubuntu.com/v1/e8c07df6-Ubuntu-L_W.woff2" crossorigin>
+    <link rel="preload" as="font" type="font/woff2" href="https://assets.ubuntu.com/v1/fff37993-Ubuntu-R_W.woff2" crossorigin>
+    <style>
+        
+        body {
+            font-family: Ubuntu;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            padding: 30px 40px 20px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        
+        .logo {
+            width: 120px;
+            height: auto;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .content h2 {
+            font-weight: 300;
+            font-size: 24px;
+            margin: 0 0 20px 0;
+        }
+        
+        .content p {
+            margin: 0 0 20px 0;
+            font-size: 16px;
+        }
+        .footer {
+            border-top: 1px solid #e5e5e5;
+            padding: 20px 40px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <img src="https://assets.ubuntu.com/v1/5e6fb404-charmhub.svg" alt="Charmhub" class="logo">
+        </div>
+        <div class="content">
+		{% block content %}
+		{% endblock content %}
+        </div>
+        <div class="footer">
+            <p>© 2025 Canonical Ltd. | <a href="https://charmhub.io">Charmhub</a></p>
+        </div>
+    </div>
+</body>
+</html>
+
