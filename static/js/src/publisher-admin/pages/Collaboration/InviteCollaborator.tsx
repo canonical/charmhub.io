@@ -144,9 +144,16 @@ function InviteCollaborator({ setShowSidePanel }: Props): JSX.Element {
                 <Spinner text="Loading..." />
               </>
             ) : (
-              "Generate invite link"
+              "Send invite"
             )}
           </Button>
+          <p className="u-text--muted">
+            An email will be sent to the collaborator, it will expire after 30
+            days.
+          </p>
+          <p className="u-text--muted">
+            Alternatively, you can share the link below:
+          </p>
           {inviteLink ? (
             <div className="grid-row">
               <div className="grid-col-6">
@@ -174,18 +181,6 @@ function InviteCollaborator({ setShowSidePanel }: Props): JSX.Element {
               <code>Enter email to generate a unique invitation link</code>
             </pre>
           )}
-          <p className="u-text--muted">
-            Important: This link will <strong>NOT</strong> be automatically
-            sent.
-          </p>
-          <div className="u-text--muted">
-            After generating, you'll need to:
-            <ul>
-              <li>Copy the link</li>
-              <li>Share it with your collaborator</li>
-              <li>The link expires 30 days after generation</li>
-            </ul>
-          </div>
           <p className="u-text--muted">
             Once your collaborator uses the link, they'll gain access to the
             charm.
