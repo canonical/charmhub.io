@@ -1,30 +1,161 @@
-name: Deploy with Juju
+name: Pack and Deploy
 
 on:
-  workflow_run:
-    workflows: 
-      - "Pack and Publish Charm"
-      - "Pack Rock and Publish Image"
-    types:
-      - completed
+  push:
+    branches:
+      - main
+      - staging
+      - track-staging-branch-deploy
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment (Production or Staging)'
+        required: true
+        type: choice
+        options:
+          - Production
+          - Staging
+
+env:
+  CHARM_NAME: charmhub-io
 
 jobs:
-  deploy-staging:
-    if: ${{ ( github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success') || github.event_name == 'workflow_dispatch' }}
+  setup:
+    name: Setup
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.set_env.outputs.environment }}
+      charm_changed: ${{ steps.check.outputs.charm_changed }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Determine environment
+        id: set_env
+        run: |
+          if [[ -n "${{ github.event.inputs.environment }}" ]]; then
+            echo "environment=${{ github.event.inputs.environment }}" >> "$GITHUB_OUTPUT"
+          elif [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            echo "environment=Production" >> "$GITHUB_OUTPUT"
+          else
+            echo "environment=Staging" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check for charm/ changes
+        id: check
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^charm/'; then
+            echo "charm_changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "charm_changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  pack-rock:
+    name: Pack Rock
+    runs-on: ubuntu-latest
+    needs: setup
+    environment: ${{ needs.setup.outputs.environment }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup LXD
+        uses: canonical/setup-lxd@main
+
+      - name: Setup rockcraft
+        run: sudo snap install rockcraft --classic
+
+      - name: Pack rock
+        run: rockcraft pack
+
+      - name: Upload rock
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.CHARM_NAME }}-rock
+          path: ./*.rock
+
+  publish-image:
+    name: Publish OCI Image
+    runs-on: ubuntu-latest
+    needs: [setup, pack-rock]
+    environment: ${{ needs.setup.outputs.environment }}
+    outputs:
+      image_url: ${{ steps.set_image_url.outputs.image_url }}
+    steps:
+      - name: Get Rock
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.CHARM_NAME }}-rock
+
+      - name: Set image URL
+        id: set_image_url
+        run: echo "image_url=ghcr.io/${GITHUB_REPOSITORY}:$(date +%s)-${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT
+
+      - name: Push to GHCR
+        run: skopeo --insecure-policy copy oci-archive:$(ls *.rock) docker://${{ steps.set_image_url.outputs.image_url }} --dest-creds "canonical:${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Pull image into registry
+        run: docker pull ${{ steps.set_image_url.outputs.image_url }}
+
+      - name: Upload flask app OCI image
+        env:
+          CHARMCRAFT_AUTH: ${{ secrets.CHARMHUB_TOKEN }}
+        run: |
+          sudo snap install charmcraft --classic
+          charmcraft upload-resource ${{ env.CHARM_NAME }} flask-app-image --image=$(docker images --format "{{.ID}}" | head -n 1) --verbosity=trace
+
+      - name: Attach resource to charm
+        env:
+          CHARMCRAFT_AUTH: ${{ secrets.CHARMHUB_TOKEN }}
+        run: |
+          revision_number=$(charmcraft revisions "${{ env.CHARM_NAME }}" | awk 'NR==2 {print $1}')
+          resource_revision_number=$(charmcraft resource-revisions "${{ env.CHARM_NAME }}" flask-app-image | awk 'NR==2 {print $1}')
+          charmcraft release "${{ env.CHARM_NAME }}" --channel=${{ vars.CHANNEL }} --revision $revision_number --resource flask-app-image:$resource_revision_number
+
+  pack-charm:
+    name: Pack Charm
+    runs-on: ubuntu-latest
+    needs: setup
+    if: needs.setup.outputs.charm_changed == 'true'
+    environment: ${{ needs.setup.outputs.environment }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup LXD
+        uses: canonical/setup-lxd@main
+
+      - name: Setup charmcraft
+        run: sudo snap install charmcraft --classic --channel=latest/stable
+
+      - name: Fetch libs
+        run: |
+          cd ./charm
+          charmcraft fetch-libs
+
+      - name: Pack charm
+        run: charmcraft pack -v --project-dir ./charm
+
+      - name: Upload charm
+        env:
+          CHARMCRAFT_AUTH: ${{ secrets.CHARMHUB_TOKEN }}
+        run: charmcraft upload ./*.charm
+
+      - name: Release charm
+        env:
+          CHARMCRAFT_AUTH: ${{ secrets.CHARMHUB_TOKEN }}
+        run: |
+          revision_number=$(charmcraft revisions ${{ env.CHARM_NAME }} | awk 'NR==2 {print $1}')
+          charmcraft release ${{ env.CHARM_NAME }} --channel=${{ vars.CHANNEL }} --revision $revision_number
+
+  deploy:
+    name: Deploy to Environment
+    if: always()
+    needs: [setup, pack-rock, pack-charm, publish-image]
     uses: ./.github/workflows/juju_deploy.yaml
     with:
-        environment: "Staging"
+      environment: ${{ needs.setup.outputs.environment }}
     secrets:
-        VAULT_APPROLE_ROLE_ID: ${{ secrets.VAULT_APPROLE_ROLE_ID }}
-        VAULT_APPROLE_SECRET_ID: ${{ secrets.VAULT_APPROLE_SECRET_ID }}
-
-  deploy-prod:
-    if: ${{ ( github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success') || github.event_name == 'workflow_dispatch' }}
-    uses: ./.github/workflows/juju_deploy.yaml
-    with:
-        environment: "Production"
-    secrets:
-        VAULT_APPROLE_ROLE_ID: ${{ secrets.VAULT_APPROLE_ROLE_ID }}
-        VAULT_APPROLE_SECRET_ID: ${{ secrets.VAULT_APPROLE_SECRET_ID }}
-
+      VAULT_APPROLE_ROLE_ID: ${{ secrets.VAULT_APPROLE_ROLE_ID }}
+      VAULT_APPROLE_SECRET_ID: ${{ secrets.VAULT_APPROLE_SECRET_ID }}
