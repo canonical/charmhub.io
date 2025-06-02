@@ -129,10 +129,10 @@ export function ResourcesCell({ resources }: { resources: Resource[] }) {
 const PLATFORM_ICONS: { [key: string]: JSX.Element } = {
   ubuntu: (
     <img
-      src="https://assets.ubuntu.com/v1/adac6928-ubuntu.svg"
+      src="https://assets.ubuntu.com/v1/b4ba06f2-Ubuntu%20logo.svg"
       alt="Ubuntu"
-      width="89"
-      height="20"
+      width="85"
+      height="30"
       className="p-image--base"
     />
   ),
