@@ -59,6 +59,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+
+      - name: Build assets
+        run: |
+          yarn install
+          yarn run build
+
       - name: Setup LXD
         uses: canonical/setup-lxd@main
 
