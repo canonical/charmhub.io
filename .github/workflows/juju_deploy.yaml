@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Install Dependencies
         run: |
-          sudo snap install juju --channel=3.4/stable --classic
+          sudo snap install juju --classic
           sudo snap install vault --classic
 
       - name: Configure Vault and Juju
