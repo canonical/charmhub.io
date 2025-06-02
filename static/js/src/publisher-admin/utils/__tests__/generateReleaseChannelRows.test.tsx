@@ -117,7 +117,7 @@ describe("generateReleaseChannelRows", () => {
     expect(screen.getByText("7")).toBeInTheDocument();
     expect(screen.getByAltText("Ubuntu")).toHaveAttribute(
       "src",
-      "https://assets.ubuntu.com/v1/adac6928-ubuntu.svg"
+      "https://assets.ubuntu.com/v1/b4ba06f2-Ubuntu%20logo.svg"
     );
     expect(screen.getByAltText("CentOS")).toHaveAttribute(
       "src",
