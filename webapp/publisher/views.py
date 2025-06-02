@@ -277,7 +277,10 @@ def invite_collaborators(entity_name):
 
         token = result["tokens"][0]["token"]
 
-        invite_link = f"https://charmhub.io/accept-invite?package={entity_name}&token={token}"
+        invite_link = (
+            f"https://charmhub.io/accept-invite?package={entity_name}"
+            f"&token={token}"
+        )
         emailer.send_email_template(
             template_path="emails/collaborator-invite.html",
             to_email=collaborators,
@@ -285,7 +288,10 @@ def invite_collaborators(entity_name):
                 "charm_name": entity_name,
                 "invite_link": invite_link,
             },
-            subject=f"You have been invited to as a collaborator on {entity_name} in Charmhub",
+            subject=(
+                f"You have been invited to as a collaborator on "
+                f"{entity_name} in Charmhub"
+            ),
         )
 
         res["success"] = True
