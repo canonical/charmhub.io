@@ -41,17 +41,16 @@ def get_publisher_details(publisher):
         fields=SEARCH_FIELDS,
     )
 
-    publisher_details = response["publisher"]
-
     for charm in response["results"]:
         item = charm["result"]
-        item["package_name"] = charm["name"]
+        item["name"] = charm["name"]
         charms.append(item)
 
     context = {
         "charms": charms,
         "charms_count": len(charms),
-        "publisher": publisher_details,
+        "publisher": charms[0]["publisher"] if len(charms) > 0 
+            else { "display-name": publisher },
         "error_info": error_info,
     }
 

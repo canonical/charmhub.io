@@ -1,0 +1,27 @@
+{% extends 'base_layout.html' %}
+
+{% block meta_title %} {{ publisher["display-name"] }} {% endblock %}
+{% block meta_description %} {{ publisher["display-name"] }} - Publisher information page {% endblock %}
+
+{% block content %}
+
+<div class="p-strip--dark is-shallow">
+  <div class="u-fixed-width">
+    <h1 class="p-heading--2">{{ publisher["display-name"] }}</h1>
+    <p>
+      ({{ publisher["username"] }})
+    </p>
+  </div>
+</div>
+
+<div class="p-strip is-shallow">
+  <div class="row" style="margin-top: 1.5rem">
+    {% for charm in charms %}
+      <div class="col-3">
+        {% include "details/_charm-partial.html" %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
