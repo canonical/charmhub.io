@@ -24,14 +24,13 @@
         .email-container {
             max-width: 600px;
             margin: 0 auto;
-            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .header {
-            padding: 30px 40px 0px;
-            border-bottom: 1px solid #e5e5e5;
+	    border-bottom: 1px solid #e5e5e5;
+	    padding: 0 20px 20px 20px;
+	    background-color: #242424
         }
         
         .logo {
@@ -49,14 +48,8 @@
         }
         
         .content p {
-            margin: 0 0 20px 0;
+            margin: 0 0 10px 0;
             font-size: 16px;
-        }
-        .footer {
-            border-top: 1px solid #e5e5e5;
-            padding: 20px 40px;
-            text-align: center;
-            font-size: 14px;
         }
         </style>
     </head>
@@ -64,17 +57,12 @@
         <div class="email-container">
             <div class="header">
                 <img class="logo"
-                     src="https://assets.ubuntu.com/v1/738072b6-charmhub-logo%20false.png"
-                     alt="Charmhub Logo" />
+                     src="https://assets.ubuntu.com/v1/bb11f424-Canonical%20logo%20white.svg"
+                     alt="Canonical" />
             </div>
             <div class="content">
                 {% block content %}
                 {% endblock content %}
-            </div>
-            <div class="footer">
-                <p>
-                    © 2025 Canonical Ltd. | <a href="https://charmhub.io">Charmhub</a>
-                </p>
             </div>
         </div>
     </body>
