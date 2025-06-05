@@ -44,6 +44,7 @@ def get_publisher_details(publisher):
     for charm in response["results"]:
         item = charm["result"]
         item["name"] = charm["name"]
+        item["icon"] = next((media for media in item["media"] if media["type"] == "icon"), None)
         charms.append(item)
 
     context = {
@@ -107,6 +108,7 @@ FIELDS = [
     "default-release",
     "result.categories",
     "result.publisher.display-name",
+    "result.publisher.username",
     "result.title",
     "result.unlisted",
     "channel-map",

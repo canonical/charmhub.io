@@ -32,7 +32,15 @@
             <div class="p-media-object__content u-no-margin--bottom">
               <ul class="p-inline-list--middot">
                 <li class="p-inline-list__item">
-                  {% if package.store_front.publisher_name != None %}{{ package.store_front.publisher_name }}{% endif %}
+                  {% if package.store_front.publisher_name != None %}
+                    {% if package.store_front.username != None %}
+                      <a href="/publisher/{{ package.store_front.username | safe }}">
+                        {{ package.store_front.publisher_name }}
+                      </a>
+                    {% else %}
+                      {{ package.store_front.publisher_name }}
+                    {% endif %}
+                  {% endif %}
                   {% if package.type == "bundle" %}
                     <span class="p-muted-heading u-no-padding" style="font-size: .9rem;">| bundle</span>
                   {% endif %}
