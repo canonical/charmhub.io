@@ -1,0 +1,109 @@
+{% if item.icon.url %}
+  {% set icon_url = item.icon.url %}
+{% else %}
+  {% set icon_url = "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" %}
+{% endif %}
+
+{# Card #}
+<div
+  class="u-no-margin--bottom p-card"
+  role="group"
+>
+  <div class="p-card__content">
+    {# IconCard #}
+    <div
+      class="p-media-object u-no-margin--bottom"
+      style="height: 100%"
+    >
+      <img
+        src="{{ icon_url }}"
+        width="48"
+        height="48"
+        class="p-media-object__image"
+        alt="{{ item.title or item.name }}"
+      />
+      <div 
+        class="p-media-object__details"
+        style="height: 100%"
+      >
+        {# InnerCard #}
+        <div
+          class="sc-package-card"
+          style="height: 100%"
+        >
+          <div class="sc-package-card__body">
+            {% if item.type == "bundle" %}
+              <div class="sc-package-card__header">
+                <h3 class="p-muted-heading u-no-margin--bottom">Bundle</h3>
+              </div>
+            {% endif %}
+
+            <h2 class="sc-package-card__heading p-heading--5 u-no-margin--bottom">
+              <a
+                class="sc-package-card__heading-link"
+                href="/{{ item.name }}"
+              >
+                {{ item.title or item.name }}
+              </a>
+            </h2>
+
+            <p class="u-text--muted u-no-padding--top">
+              <em> {{ item.publisher["display-name"] }} </em>
+              {% if item.publisher.validation == "verified" %}
+                <img
+                  src="https://assets.ubuntu.com/v1/ba8a4b7b-Verified.svg"
+                  width="14"
+                  height="14"
+                  alt="Verified account"
+                  title="Verified account"
+                  class="sc-package-publisher-icon"
+                />
+              {% endif %}
+              {% if item.publisher.validation == "star" or item.publisher.validation == "starred" %}
+                <img
+                  src="https://assets.ubuntu.com/v1/d810dee9-Orange+Star.svg"
+                  width="14"
+                  height="14"
+                  alt="Star developer"
+                  title="Star developer"
+                  class="sc-package-publisher-icon"
+                />
+              {% endif %}
+            </p>
+
+            <p class="u-line-clamp">
+              {{ item.summary or item.description }}
+            </p>
+
+            <div class="sc-package-card__footer">
+              <hr />
+              <div class="sc-package-card__footer-content">
+                <div class="sc-platform u-align--right">
+                  {% set platforms = item["deployable-on"] %}
+                  {% if platforms | length > 0 and "kubernetes" is in(platforms) %}
+                    <img
+                      class="sc-platform-icon"
+                      src="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg"
+                      width="24"
+                      height="24"
+                      alt="Kubernetes"
+                    />
+                  {% else %}
+                    <img
+                      class="sc-platform-icon"
+                      src="https://assets.ubuntu.com/v1/bf61e269-machine-badge.svg"
+                      width="24"
+                      height="24"
+                      alt="Machine"
+                    />
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

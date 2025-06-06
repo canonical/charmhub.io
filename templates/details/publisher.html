@@ -5,22 +5,21 @@
 
 {% block content %}
 
-<div class="p-strip--dark is-shallow">
-  <div class="u-fixed-width">
-    <h1 class="p-heading--2">{{ publisher["display-name"] }}</h1>
-    <p>
-      ({{ publisher["username"] }})
-    </p>
+<div class="charmhub-publisher">
+  <div class="p-strip--dark is-shallow">
+    <div class="u-fixed-width">
+      <h1 class="p-heading--2">{{ publisher["display-name"] }}</h1>
+    </div>
   </div>
-</div>
 
-<div class="p-strip is-shallow">
-  <div class="row" style="margin-top: 1.5rem">
-    {% for charm in charms %}
-      <div class="col-3">
-        {% include "details/_charm-partial.html" %}
-      </div>
-    {% endfor %}
+  <div class="p-strip is-shallow">
+    <div class="row" style="margin-top: 1.5rem">
+      {% for item in items %}
+        <div class="col-3" style="margin-bottom: 1.5rem">
+          {% include "details/_card-partial.html" %}
+        </div>
+      {% endfor %}
+    </div>
   </div>
 </div>
 

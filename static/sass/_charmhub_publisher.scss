@@ -1,0 +1,82 @@
+@mixin charmhub-publisher {
+  .charmhub-publisher {
+    .p-card {
+      height: 100%;
+      overflow: hidden;
+
+      &__content {
+        cursor: pointer;
+        height: 100%;
+        overflow: hidden;
+      }
+    }
+
+    .sc-package-card {
+      width: 100%;
+      height: 100%;
+      align-items: stretch;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+
+      &__body {
+        flex-grow: 1;
+        display: flex;
+        flex-flow: column;
+      }
+
+      &__body:hover {
+        text-decoration: none;
+      }
+
+      &__heading {
+        text-transform: capitalize;
+      }
+
+      &__heading-link {
+        color: inherit;
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
+
+      &__header {
+        flex-shrink: 0;
+      }
+
+      &__footer {
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        margin-top: auto;
+      }
+
+      &__footer-content {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+
+    .sc-platform {
+      align-items: center;
+      display: flex;
+      margin-left: auto;
+
+      &-icon {
+        margin-right: 0.25rem;
+      }
+    }
+
+    .u-line-clamp {
+      -webkit-box-orient: vertical;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+
+    .sc-package-publisher-icon {
+      vertical-align: middle;
+    }
+  }
+}

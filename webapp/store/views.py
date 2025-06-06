@@ -34,23 +34,24 @@ def get_publisher_details(publisher):
     """
 
     error_info = {}
-    charms = []
+    items = []
 
     response = device_gateway.find(
         publisher=publisher,
         fields=SEARCH_FIELDS,
     )
 
-    for charm in response["results"]:
-        item = charm["result"]
-        item["name"] = charm["name"]
+    for package in response["results"]:
+        item = package["result"]
+        item["name"] = package["name"]
+        item["type"] = package["type"]
         item["icon"] = next((media for media in item["media"] if media["type"] == "icon"), None)
-        charms.append(item)
+        items.append(item)
 
     context = {
-        "charms": charms,
-        "charms_count": len(charms),
-        "publisher": charms[0]["publisher"] if len(charms) > 0 
+        "items": items,
+        "items_count": len(items),
+        "publisher": items[0]["publisher"] if len(items) > 0 
             else { "display-name": publisher },
         "error_info": error_info,
     }
