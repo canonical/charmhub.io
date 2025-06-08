@@ -35,10 +35,14 @@ def get_publisher_details(publisher):
 
     error_info = {}
     items = []
+    extra_fields = [
+        "result.publisher",
+        "result.description",
+    ]
 
     response = device_gateway.find(
-        publisher=publisher,
-        fields=SEARCH_FIELDS,
+        publisher = publisher,
+        fields = SEARCH_FIELDS.copy() + extra_fields,
     )
 
     for package in response["results"]:
@@ -109,7 +113,6 @@ FIELDS = [
     "default-release",
     "result.categories",
     "result.publisher.display-name",
-    "result.publisher.username",
     "result.title",
     "result.unlisted",
     "channel-map",
