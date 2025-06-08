@@ -41,22 +41,27 @@ def get_publisher_details(publisher):
     ]
 
     response = device_gateway.find(
-        publisher = publisher,
-        fields = SEARCH_FIELDS.copy() + extra_fields,
+        publisher=publisher,
+        fields=SEARCH_FIELDS.copy() + extra_fields,
     )
 
     for package in response["results"]:
         item = package["result"]
         item["name"] = package["name"]
         item["type"] = package["type"]
-        item["icon"] = next((media for media in item["media"] if media["type"] == "icon"), None)
+        item["icon"] = next(
+            (media for media in item["media"] if media["type"] == "icon"), None
+        )
         items.append(item)
 
     context = {
         "items": items,
         "items_count": len(items),
-        "publisher": items[0]["publisher"] if len(items) > 0 
-            else { "display-name": publisher },
+        "publisher": (
+            items[0]["publisher"]
+            if len(items) > 0
+            else {"display-name": publisher}
+        ),
         "error_info": error_info,
     }
 
