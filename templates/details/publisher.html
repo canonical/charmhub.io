@@ -38,10 +38,10 @@
 {% block page_scripts %}
 
 <script>
-(function(doc) {
-  doc.addEventListener("DOMContentLoaded", function() {
+(function() {
+  document.addEventListener("DOMContentLoaded", function() {
       // this function runs when the DOM is ready, i.e. when the document has been parsed
-      const cards = doc.getElementById("main-content").getElementsByClassName("p-card");
+      const cards = document.getElementById("main-content").getElementsByClassName("p-card");
       for (const card of cards) {
         card.addEventListener("click", (event) => {
           const link = card.querySelector("a");
@@ -51,7 +51,7 @@
         });
       }
   });
-})(document);
+})();
 </script>
 
 {% endblock %}
