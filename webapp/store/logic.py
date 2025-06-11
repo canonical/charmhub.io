@@ -478,6 +478,7 @@ def add_store_front_data(package, details=False):
         extra["publisher_name"] = package["result"]["publisher"][
             "display-name"
         ]
+        extra["username"] = package["result"]["publisher"]["username"]
 
         if "summary" in package["result"]:
             extra["summary"] = package["result"]["summary"]

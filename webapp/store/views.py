@@ -33,37 +33,40 @@ def get_publisher_details(publisher):
     A view to display the publisher details page for specific publisher.
     """
 
-    status_code = 200
     error_info = {}
-    charms_results = []
-    charms = []
-    charms_count = 0
-    publisher_details = {"display-name": publisher}
+    items = []
+    extra_fields = [
+        "result.publisher",
+        "result.description",
+    ]
 
-    charms_results = publisher_gateway.find(
+    response = device_gateway.find(
         publisher=publisher,
-        fields=SEARCH_FIELDS,
-    )["results"]
+        fields=SEARCH_FIELDS.copy() + extra_fields,
+    )
 
-    for charm in charms_results:
-        item = charm["result"]
-        item["package_name"] = charm["name"]
-        charms.append(item)
-
-    charms_count = len(charms)
-
-    if charms_count > 0:
-        publisher_details = charms[0]["publisher"]
+    for package in response["results"]:
+        item = package["result"]
+        item["name"] = package["name"]
+        item["type"] = package["type"]
+        item["icon"] = next(
+            (media for media in item["media"] if media["type"] == "icon"), None
+        )
+        items.append(item)
 
     context = {
-        "charms": charms,
-        "charms_count": charms_count,
-        "publisher": publisher_details,
+        "items": items,
+        "items_count": len(items),
+        "publisher": (
+            items[0]["publisher"]
+            if len(items) > 0
+            else {"display-name": publisher}
+        ),
         "error_info": error_info,
     }
 
     # HTML template will be returned here for the front end
-    return jsonify(context), status_code
+    return render_template("details/publisher.html", **context)
 
 
 @trace_function

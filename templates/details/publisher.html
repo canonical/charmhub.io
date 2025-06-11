@@ -1,0 +1,57 @@
+{% extends 'base_layout.html' %}
+
+{% block meta_title %} {{ publisher["display-name"] }} {% endblock %}
+{% block meta_description %} {{ publisher["display-name"] }} - Publisher information page {% endblock %}
+
+{% block content %}
+
+<div class="charmhub-publisher">
+  <div class="p-strip--dark is-shallow">
+    <div class="u-fixed-width">
+      <a href="/">&lt; All charms</a>
+      <h1 class="p-heading--2">{{ publisher["display-name"] }}</h1>
+    </div>
+  </div>
+
+  <div class="p-strip is-shallow">
+    <div class="row">
+      {% if items_count == 0 %}
+        <p>No items found</p>
+      {% elif items_count == 1 %}
+        <p>Showing {{ items_count }} item</p>
+      {% else %}
+        <p>Showing {{ items_count }} items</p>
+      {% endif %}
+    </div>
+    <div class="row">
+      {% for item in items %}
+        <div class="col-3" style="margin-bottom: 1.5rem">
+          {% include "details/_card-partial.html" %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block page_scripts %}
+
+<script>
+(function() {
+  document.addEventListener("DOMContentLoaded", function() {
+      // this function runs when the DOM is ready, i.e. when the document has been parsed
+      const cards = document.getElementById("main-content").getElementsByClassName("p-card");
+      for (const card of cards) {
+        card.addEventListener("click", (event) => {
+          const link = card.querySelector("a");
+          if (link) {
+            link.click();
+          }
+        });
+      }
+  });
+})();
+</script>
+
+{% endblock %}
