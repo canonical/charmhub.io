@@ -89,11 +89,21 @@
     fetch("/accept-invite", {
       method: "POST",
       body: formData
-    }).then((response) => {
-      if (response.status !== 200) {
-        closeAllNotifcations();
+    })
+    .then((response) => {
+      return response.json().then(data => {
+        return { status: response.status, body: data };
+      });
+    })
+    .then(({ status, body }) => {
+      closeAllNotifcations();
+
+      if (status !== 200) {
+        const errorMessage = body.message || "There was an unknown error accepting the invite.";
+        const errorParagraph = document.querySelector("#accept-invite-error-notification .p-notification__message");
+        errorParagraph.textContent = errorMessage;
         acceptInviteErrorNotification.classList.remove("u-hide");
-        throw new Error("Unable to accept invite");
+        throw new Error(errorMessage);
       }
 
       closeAllNotifcations();
@@ -104,10 +114,9 @@
       setTimeout(() => {
         window.location = `/${encodeURIComponent(package)}/listing`;
       }, 3000);
-    }).catch((error) => {
-      closeAllNotifcations();
-      acceptInviteErrorNotification.classList.remove("u-hide");
-      throw new Error(error.message);
+    })
+    .catch((error) => {
+      console.error(error);
     });
   });
 

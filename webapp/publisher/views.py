@@ -150,7 +150,10 @@ def accept_post_invite():
             return make_response(res, 200)
         else:
             res["success"] = False
-            res["message"] = "An error occured"
+            errors = response.json().get("error-list", [])
+            res["message"] = (
+                errors[0].get("message") if errors else "Unknown error"
+            )
             return make_response(res, 500)
 
     except StoreApiResponseErrorList as error_list:
