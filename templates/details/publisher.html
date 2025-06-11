@@ -14,7 +14,7 @@
   </div>
 
   <div class="p-strip is-shallow">
-    <div class="row" style="margin-top: 1.5rem">
+    <div class="row">
       {% if items_count == 0 %}
         <p>No items found</p>
       {% elif items_count == 1 %}
@@ -23,7 +23,7 @@
         <p>Showing {{ items_count }} items</p>
       {% endif %}
     </div>
-    <div class="row" style="margin-top: 1.5rem">
+    <div class="row">
       {% for item in items %}
         <div class="col-3" style="margin-bottom: 1.5rem">
           {% include "details/_card-partial.html" %}
@@ -32,5 +32,26 @@
     </div>
   </div>
 </div>
+
+{% endblock %}
+
+{% block page_scripts %}
+
+<script>
+(function(doc) {
+  doc.addEventListener("DOMContentLoaded", function() {
+      // this function runs when the DOM is ready, i.e. when the document has been parsed
+      const cards = doc.getElementById("main-content").getElementsByClassName("p-card");
+      for (const card of cards) {
+        card.addEventListener("click", (event) => {
+          const link = card.querySelector("a");
+          if (link) {
+            link.click();
+          }
+        });
+      }
+  });
+})(document);
+</script>
 
 {% endblock %}
