@@ -1086,10 +1086,10 @@
     react-table "7.8.0"
     react-useportal "1.0.19"
 
-"@canonical/react-components@2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@canonical/react-components/-/react-components-2.4.0.tgz#a9d982fb969952b52a8df292ed015f8b748ca31f"
-  integrity sha512-+bsKcdKwxKL8NMTLyuva/wWSZ8GLH0cUd9ytftUpmQho8uGPaqHNU1yIbMqu59QaeEnImtva7O75ya3R2bmpEA==
+"@canonical/react-components@2.7.0":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@canonical/react-components/-/react-components-2.7.0.tgz#a1ec781bcfbee214880dc735ff74abb301937114"
+  integrity sha512-6Pv49oiFjioPV30/+fQLSKxub6lleL4591KeImmGczbaYvfVxfVYZPiO+iJL9aBdTp/0ZuHgtrpEvYSzO2fKZA==
   dependencies:
     "@types/jest" "29.5.14"
     "@types/node" "20.17.19"
@@ -8504,10 +8504,10 @@ v8-to-istanbul@^9.0.1:
     "@types/istanbul-lib-coverage" "^2.0.1"
     convert-source-map "^2.0.0"
 
-vanilla-framework@4.23.2:
-  version "4.23.2"
-  resolved "https://registry.yarnpkg.com/vanilla-framework/-/vanilla-framework-4.23.2.tgz#41e1055502b70707c3e86a7eb8c2fd03fd15624a"
-  integrity sha512-+tPWTMjmzaH0M0AratJQO5iXnieIzzbwx1HLEDpEh9dA+SrLdzDd1MrNSBhKsnFlHMjDrhCzKSP4zID2DrVM+w==
+vanilla-framework@4.24.1:
+  version "4.24.1"
+  resolved "https://registry.yarnpkg.com/vanilla-framework/-/vanilla-framework-4.24.1.tgz#cd1f24ef3d048d410fda252aeafc015c44adc8cf"
+  integrity sha512-mX2kugxhMtoo1IbvRDyA0WY8IJ/z7Q3MO4k8LMz0Plc/ZnPTuOcUYretx/e/TmgLrCko0rmTLjrSiEkWJWySxA==
 
 vanilla-framework@4.9.0:
   version "4.9.0"
