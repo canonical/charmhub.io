@@ -109,12 +109,18 @@ def list_page():
 
     context = {
         "published": [
-            c
+            {
+                **c,
+                "is_owner": c["publisher"]["id"] == session["account"]["id"]
+            }
             for c in publisher_charms
             if c["status"] == "published" and c["type"] == page_type
         ],
         "registered": [
-            c
+            {
+                **c,
+                "is_owner": c["publisher"]["id"] == session["account"]["id"]
+            }
             for c in publisher_charms
             if c["status"] == "registered" and c["type"] == page_type
         ],
