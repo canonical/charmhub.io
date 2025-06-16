@@ -32,5 +32,5 @@ interfaces/(?P<interface>.*).json: /integrations/{interface}.json
 interfaces/(?P<interface>.*)/(?P<status>.*).json: /integrations/{interface}/{status}.json
 
 # RTD redirects
-postgresql/docs/(?P<path>.*)/?: https://canonical-charmed-postgresql.readthedocs-hosted.com/{path}/
-postgresql-k8s/docs/(?P<path>.*)/?: https://canonical-charmed-postgresql-k8s.readthedocs-hosted.com/{path}/
+postgresql/docs/(?P<path>.*)/?: https://canonical-charmed-postgresql.readthedocs-hosted.com/14/{path}/
+postgresql-k8s/docs/(?P<path>.*)/?: https://canonical-charmed-postgresql-k8s.readthedocs-hosted.com/14/{path}/
