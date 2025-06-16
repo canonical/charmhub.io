@@ -188,7 +188,20 @@
                   {% endif %}
                 </td>
                 <td class="u-align--right">
-                  <button class="p-button--base is-dense u-no-margin--bottom" data-js="unregister-button" data-package-name="{{ registered_charm['name'] }}">Unregister</button>
+                  {% if registered_charm.is_owner %}
+                    <button class="p-button--base is-dense u-no-margin--bottom"
+                            data-js="unregister-button"
+                            data-package-name="{{ registered_charm['name'] }}">
+                      Unregister
+                    </button>
+                  {% else %}
+                    <button class="p-button--base is-dense u-no-margin--bottom p-tooltip--left" aria-describedby="left"
+                            disabled
+                            aria-disabled="true">
+                      Unregister
+                      <span class="p-tooltip__message" role="tooltip" id="left">Charms can only be unregistered<br>by their owner.</span>
+                    </button>
+                  {% endif %}
                 </td>
               </tr>
               {% endfor %}

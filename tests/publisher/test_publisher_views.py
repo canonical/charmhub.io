@@ -114,12 +114,16 @@ class TestPublisherViews(unittest.TestCase):
                 "name": "postgresql",
                 "private": False,
                 "publisher": {
+                    "id": "test-id",
                     "display-name": "Canonical Data Platform",
                 },
                 "status": "published",
                 "type": "charm",
             },
         ]
+
+        with self.client.session_transaction() as session:
+            session["account"] = {"id": "test-id"}
 
         res = self.client.get("/charms")
         self.assertEqual(res.status_code, 200)
