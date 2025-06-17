@@ -1,0 +1,12 @@
+{% extends "base_layout.html" %}
+
+{% block meta_title %}{{ solution.name }} – Charmhub Solutions{% endblock %}
+{% block meta_description %}{{ solution.short_description }}{% endblock %}
+
+{% block content %}
+  <h1>{{ solution.name }}</h1>
+{% endblock %}
+
+{% block page_scripts %}
+  <script src="{{ versioned_static('js/dist/solutions.js') }}" defer></script>
+{% endblock %}
