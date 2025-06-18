@@ -11,27 +11,22 @@ logger = logging.getLogger(__name__)
 class Metric():
     """Abstraction over prometheus and statsd metrics."""
 
-    def __init__(self, name, statsd_template: Optional[str] = None):
+    def __init__(self, name: str):
         self.name = name
-        self.statsd_template = statsd_template
         self._client = statsd.StatsClient('localhost', 9125)
 
-
-    def _format_name(self, labels: Dict[str, str]) -> str:
-        name = self.name.replace('_', '.')
-        if self.statsd_template:
-            try:
-                name = self.statsd_template.format(name=name, **labels)
-            except Exception:
-                pass
-        return name
-
+    def _format_tags(self, labels: Dict[str, str]) -> str:
+        """Convert labels into StatsD-style tag string if supported."""
+        if labels:
+            tag_str = ",".join(f"{key}:{value}" for key, value in labels.items())
+            return f"|#{tag_str}"
+        return ""
 
 def _safe_call(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         try:
-            func(*args, **kwargs)
+            return func(*args, **kwargs)
         except Exception:
             logger.exception(f"Failed to call metric {func.__name__}")
     return wrapper
@@ -39,15 +34,16 @@ def _safe_call(func):
 class Counter(Metric):
     @_safe_call
     def inc(self, amount: int = 1, **labels: str):
-        name = self._format_name(labels)
-        self._client.incr(name, amount)
+        tag_str = self._format_tags(labels)
+        # Build raw message manually if needed
+        self._client._send(f"{self.name}:{amount}|c{tag_str}")
 
 class Histogram(Metric):
     @_safe_call
     def observe(self, amount: float, **labels: str):
         """Amount in milliseconds"""
-        name = self._format_name(labels)
-        self._client.timing(name, amount)
+        tag_str = self._format_tags(labels)
+        self._client._send(f"{self.name}:{amount}|ms{tag_str}")
 
     @contextmanager
     def time(self, **labels: str):
@@ -59,17 +55,6 @@ class Histogram(Metric):
             self.observe(duration_ms, **labels)
 
 class RequestsMetrics():
-    requests = Counter(
-        name='wsgi_requests',
-        statsd_template='{name}.{view}.{method}.{status}',
-    )
-
-    latency = Histogram(
-        name='wsgi_latency',
-        statsd_template='{name}.{view}.{method}.{status}',
-    )
-
-    errors = Counter(
-        name='wsgi_errors',
-        statsd_template='{name}.{view}.{method}.{status}',
-    )
+    requests = Counter(name='wsgi_requests')
+    latency = Histogram(name='wsgi_latency')
+    errors = Counter(name='wsgi_errors')
