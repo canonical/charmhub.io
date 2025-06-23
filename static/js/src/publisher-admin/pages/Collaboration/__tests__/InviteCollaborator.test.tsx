@@ -42,19 +42,19 @@ describe("InviteCollaborator", () => {
     jest.clearAllMocks();
   });
 
-  test("disables 'Generate invite link' button if no email", () => {
+  test("disables 'Send invite' button if no email", () => {
     renderComponent();
     const button = screen.getByRole("button", {
-      name: /generate invite link/i,
+      name: /send invite/i,
     });
     expect(button).toHaveAttribute("aria-disabled", "true");
   });
 
-  test("enables 'Generate invite link' when a valid email is typed", async () => {
+  test("enables 'Send invite' when a valid email is typed", async () => {
     renderComponent();
     const input = screen.getByLabelText(/1\. Email/i);
     const button = screen.getByRole("button", {
-      name: /generate invite link/i,
+      name: /send invite/i,
     });
 
     const user = userEvent.setup();
@@ -76,7 +76,7 @@ describe("InviteCollaborator", () => {
     const user = userEvent.setup();
     await user.type(input, "john.doe@canonical.com");
 
-    user.click(screen.getByRole("button", { name: /generate invite link/i }));
+    user.click(screen.getByRole("button", { name: /send invite/i }));
 
     expect(await screen.findByText(/loading/i)).toBeInTheDocument();
   });
@@ -91,7 +91,7 @@ describe("InviteCollaborator", () => {
     const user = userEvent.setup();
     await user.type(input, "john.doe@canonical.com");
 
-    user.click(screen.getByRole("button", { name: /generate invite link/i }));
+    user.click(screen.getByRole("button", { name: /send invite/i }));
 
     await waitFor(() => {
       expect(
@@ -110,7 +110,7 @@ describe("InviteCollaborator", () => {
     const user = userEvent.setup();
 
     await user.type(input, "john.doe@canonical.com");
-    user.click(screen.getByRole("button", { name: /generate/i }));
+    user.click(screen.getByRole("button", { name: /send/i }));
 
     await waitFor(() => {
       expect(
