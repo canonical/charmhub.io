@@ -12,7 +12,22 @@ extensions:
     - flask-framework
 
 parts:
+  build-ui:
+    plugin: nil
+    source: .
+    source-type: local
+    build-snaps:
+      - node/22/stable
+    override-build: |
+      set -eux
+      # install dependencies
+      npm install -g yarn
+      yarn install
+      # build the UI
+      yarn run build
   flask-framework/install-app:
+    after:
+      - build-ui
     prime:
       - flask/app/.env
       - flask/app/app.py
