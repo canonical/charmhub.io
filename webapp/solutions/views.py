@@ -30,4 +30,4 @@ def solution_details(entity_name):
     solution = next((s for s in solutions if s["entity_name"] == entity_name), None)
     if not solution:
         abort(404)
-    return render_template("solutions/solutions_details_layout.html", solution=solution)
+    return render_template("solutions/solutions_base_layout.html", solution=solution)

@@ -48,6 +48,7 @@
        "source": "https://github.com/canonical/observability/",
        "submit_bug": "https://github.com/canonical/observability-docs/issues/new?title=docs%3A+TYPE+YOUR+QUESTION+HERE&body=*Please%20describe%20the%20question%20or%20issue%20you%27re%20facing%20with%20%22Observability%20Documentation%22.*%0A%0A%0A%0A%0A---%0A*Reported+from%3A+https://charmhub.io*",
        "join_discussion": "https://discourse.charmhub.io/c/charm/observability/62"
-    }
+    },
+    "icon": "https://assets.ubuntu.com/v1/0ed605c0-ubuntu-cof-120.svg"
   }
 ]
