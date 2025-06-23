@@ -1,8 +1,8 @@
 [
   {
     "id": 1,
-    "entity_name": "canonical-observability-stack",
-    "name": "Canonical Observability Stack",
+    "entity_name": "canonical-observability-solution",
+    "name": "Canonical Observability Solution",
     "version": "1",
     "publisher": {
         "id": 4,
@@ -43,7 +43,10 @@
        { "charm_name": "tempo-coordinator-k8s" }
     ],
     "compatibility": { "juju_versions": [">=3.0"], "ubuntu_versions": ["22.04"] },
-    "maintainers": ["a@canonical.com", "b@canonical.com"],
+    "maintainers": [
+      {"display_name": "maintainerA", "email": "a@canonical.com"},
+      {"display_name": "maintainerB", "email": "b@canonical.com"}
+   ],
     "links": {
        "source": "https://github.com/canonical/observability/",
        "submit_bug": "https://github.com/canonical/observability-docs/issues/new?title=docs%3A+TYPE+YOUR+QUESTION+HERE&body=*Please%20describe%20the%20question%20or%20issue%20you%27re%20facing%20with%20%22Observability%20Documentation%22.*%0A%0A%0A%0A%0A---%0A*Reported+from%3A+https://charmhub.io*",

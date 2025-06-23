@@ -1,0 +1,64 @@
+<div class="p-section">
+  <h4 class="p-muted-heading">Solution details</h4>
+  <ul class="p-list">
+    {% if solution.documentation.main %}
+      <li class="p-list__item u-no-margin--bottom">
+        <a href="{{ solution.documentation.main }}"><i class="p-icon--file-blank"></i>&nbsp;&nbsp;Documentation</a>
+      </li>
+    {% endif %}
+    {% if solution.links.source %}
+      <li class="p-list__item">
+        <a href="{{ solution.links.source }}"><i class="p-icon--github"></i>&nbsp;&nbsp;Source</a>
+      </li>
+    {% endif %}
+    {% if solution.terraform_modules %}
+      <li class="p-list__item">
+        <a href="{{ solution.terraform_modules }}"><i class="p-icon--repository"></i>&nbsp;&nbsp;Terraform modules</a>
+      </li>
+    {% endif %}
+  </ul>
+
+  {% if solution.compatibility.juju_versions %}
+    <h5 class="p-muted-heading u-text--muted">Juju version</h5>
+    <p class="u-no-margin--bottom">{{ solution.compatibility.juju_versions | join(", ") }}</p>
+  {% endif %}
+
+  {% if solution.charms %}
+    <h5 class="p-muted-heading u-text--muted">Charms used</h5>
+    {% for charm in solution.charms %}
+      <div class="p-card" style="padding: 0.5rem; margin-bottom: 0.5rem;">
+        {% if charm.icon %}
+          <img class="p-card__thumbnail u-vertical-align--middle" src="{{ charm.icon }}" alt="{{ charm.charm_name }}" style="padding-right: 0.5rem;">
+        {% endif %}
+        <span>
+          <a class="u-vertical-align--middle p-link--soft" href="{{ charm.url }}">{{ (charm.display_name or charm.charm_name) | truncate(28) }}</a>
+        </span>
+      </div>
+    {% endfor %}    
+  {% endif %}
+
+  {% if solution.maintainers %}
+    <hr class="p-separator--shallow">
+    <h4 class="p-muted-heading">Contacts</h4>
+    <h5 class="p-muted-heading u-text--muted">Maintainers</h5>
+    {% for maintainer in solution.maintainers %}
+      <div>
+        <a href="mailto:{{ maintainer.email }}"><i class="p-icon--user"></i>&nbsp;&nbsp;{{ maintainer.display_name }}</a>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <hr class="p-separator--shallow p-rule--muted">
+
+  <div>
+    <a href="{{ solution.links.submit_bug }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
+  </div>
+
+  <hr class="p-separator--shallow p-rule--muted">
+
+  <div>
+    <p>Share your thoughts on this solution with the community on Discourse.</p>
+    <p><a class="p-button" href="{{ solution.links.join_discussion }}">Join the discussion</a></p>
+  </div>
+
+</div>
