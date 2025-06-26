@@ -1,0 +1,72 @@
+{% import '/partial/_macros.html' as macros %}
+
+<div>
+  <div class="p-section--shallow u-no-padding--top">
+    <h4 style="font-weight: 500">{{ solution.name }}</h4>
+    {{ solution.long_description_html | safe }}
+  </div>
+
+  {% if solution.use_cases %}
+    <hr class="p-separator--shallow">
+    <div class="p-section--shallow u-no-padding--top">
+      <h4 style="font-weight: 500">Use cases</h4>
+      <div class="row">
+        {% for use_case in solution.use_cases %}
+          {% for title, description in use_case.items() %}
+            <div class="col-3">
+              <hr class="p-rule--highlight">
+              <h5>{{ title }}</h5>
+              <p>{{ description }}</p>
+            </div>
+          {% endfor %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if solution.documentation.architecture_diagram %}
+    <hr class="p-separator--shallow">
+    <div class="p-section--shallow u-no-padding--top">
+      <h4 style="font-weight: 500">Architecture</h4>
+      <img src="{{ solution.documentation.architecture_diagram }}" alt="canonical observability architecture diagram" loading="lazy">
+    </div>
+  {% endif %}
+
+  {% if solution.charms %}
+    <hr class="p-separator--shallow">
+    <div class="p-section--shallow u-no-padding--top">
+      <h4 style="font-weight: 500">Charms</h4>
+      <div class="row--50-50">
+        {% for charm in solution.charms %}
+        <div class="col u-equal-height">
+          {% include '/solutions/_solution_charm_card.html' %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if solution.links %}
+    <hr class="p-separator--shallow">
+    <div class="p-section--shallow u-no-padding--top">
+      <div class="row">
+        <div class="col-3">
+          <h4 style="font-weight: 500">Useful links</h4>
+        </div>
+        <div class="col-3">
+        </div>
+        <div class="col-3">
+          <div>
+            <a href="{{ solution.source }}">Get started&nbsp;&rsaquo;</a>
+          </div>
+          <div>
+            <a href="{{ solution.submit_bug }}">Submit a bug&nbsp;&rsaquo;</a>
+          </div>
+          <div>
+            <a href="{{ solution.join_dicsussion }}">Join the discussion&nbsp;&rsaquo;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>

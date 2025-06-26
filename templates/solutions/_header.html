@@ -62,8 +62,8 @@
       </p>
       <div class="series-base">
         <div class="series-base__title">
-          {% for deployment in solution.deployment_types %}
-            {% if deployment == "k8s" %}
+          {% for deployment in solution["deployable-on"] %}
+            {% if deployment == "kubernetes" %}
               <img src="https://assets.ubuntu.com/v1/9f8a8273-2018-logo-kubernetes+%282%29.svg"
                    alt="Kubernetes"
                    width="160"

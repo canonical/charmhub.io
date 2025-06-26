@@ -3,6 +3,7 @@ import json
 from flask import Blueprint, abort, render_template
 from webapp.decorators import redirect_uppercase_to_lowercase
 from webapp.store_api import publisher_gateway
+from webapp.helpers import markdown_to_html
 
 solutions = Blueprint(
     "solutions",
@@ -20,6 +21,8 @@ FIELDS = [
     "result.title",
     "result.summary",
     "result.publisher.display-name",
+    "result.categories",
+    "result.deployable-on",
 ]
 
 
@@ -48,8 +51,11 @@ def get_charm_data(charm_name):
         "charm_name": charm_name,
         "display_name": charm["result"].get("title", charm_name),
         "summary": charm["result"].get("summary", ""),
+        "publisher": charm["result"].get("publisher"),
         "icon": icon,
         "url": f"https://charmhub.io/{charm_name}",
+        "categories": charm["result"].get("categories"),
+        "deployable-on": charm["result"].get("deployable-on")
     }
 
 
@@ -68,6 +74,8 @@ def solution_details(entity_name):
     if not solution:
         abort(404)
 
+    solution["long_description_html"] = markdown_to_html(solution.get("long_description", ""))  
+
     solution_charms = []
     for charm in solution.get("charms", []):
         charm_info = get_charm_data(charm["charm_name"])
@@ -76,4 +84,7 @@ def solution_details(entity_name):
 
     solution["charms"] = solution_charms
 
-    return render_template("solutions/solutions_base_layout.html", solution=solution)
+    return render_template(
+        "solutions/solutions_base_layout.html",
+        solution=solution,
+    )
