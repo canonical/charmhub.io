@@ -15,6 +15,7 @@ from webapp.decorators import login_required, cached_redirect
 from webapp.publisher.logic import get_all_architectures, process_releases
 from webapp.observability.utils import trace_function
 from webapp.store_api import publisher_gateway
+from webapp.utils.email import emailer
 
 publisher = Blueprint(
     "publisher",
@@ -276,6 +277,26 @@ def invite_collaborators(entity_name):
         result = publisher_gateway.invite_collaborators(
             session["account-auth"], entity_name, [collaborators]
         )
+
+        token = result["tokens"][0]["token"]
+
+        invite_link = (
+            f"https://charmhub.io/accept-invite?package={entity_name}"
+            f"&token={token}"
+        )
+        emailer.send_email_template(
+            template_path="emails/collaborator-invite.html",
+            to_email=collaborators,
+            context={
+                "charm_name": entity_name,
+                "invite_link": invite_link,
+            },
+            subject=(
+                f"You have been invited to as a collaborator on "
+                f"{entity_name} in Charmhub"
+            ),
+        )
+
         res["success"] = True
         res["data"] = result["tokens"]
         return make_response(res, 200)
@@ -289,6 +310,7 @@ def invite_collaborators(entity_name):
     except Exception:
         res["success"] = False
         res["message"] = "An error occurred"
+        raise
 
     return make_response(res, 500)
 

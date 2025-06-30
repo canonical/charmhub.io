@@ -16,10 +16,12 @@ import {
   activeInviteEmailState,
   invitesListState,
   inviteLinkState,
+  publisherState,
 } from "../../state/atoms";
 
 import { generateInviteToken } from "../../utils/generateInviteToken";
 import { Invite } from "../../types";
+import { filteredCollaboratorsListState } from "../../state/selectors";
 
 type Props = {
   setShowSidePanel: (showSidePanel: boolean) => void;
@@ -36,28 +38,28 @@ function InviteCollaborator({ setShowSidePanel }: Props): JSX.Element {
   const setInviteLink = useSetRecoilState(inviteLinkState);
   const invitesList = useRecoilValue(invitesListState);
   const inviteLink = useRecoilValue(inviteLinkState);
+  const publisher = useRecoilValue(publisherState);
+  const collaboratorsList = useRecoilValue(filteredCollaboratorsListState);
 
   const [copied, setCopied] = useState(false);
   const [loadingInviteLink, setLoadingInviteLink] = useState(false);
 
-  const isUnique = (email: string | undefined) => {
+  const hasPendingInvite = (email: string | undefined) =>
+    invitesList?.some(
+      (invite: Invite) => invite.email === email && isPending(invite)
+    );
+
+  const isCollaborator = (email: string | undefined) =>
+    collaboratorsList.some(
+      (collaborator) => collaborator?.account?.email === email
+    ) || publisher?.email === email;
+
+  const isValidEmail = (email: string | undefined) => {
     if (!email) {
       return true;
     }
 
-    if (!invitesList) {
-      return false;
-    }
-
-    const existingInvites = invitesList.filter((invite: Invite) => {
-      return invite.email === email && isPending(invite);
-    });
-
-    if (!existingInvites.length) {
-      return true;
-    }
-
-    return false;
+    return !hasPendingInvite(email) && !isCollaborator(email);
   };
 
   return (
@@ -106,9 +108,11 @@ function InviteCollaborator({ setShowSidePanel }: Props): JSX.Element {
             setInviteLink("");
           }}
           error={
-            !isUnique(activeInviteEmail)
-              ? "There is already a pending invite for this email address"
-              : ""
+            isCollaborator(activeInviteEmail)
+              ? "This email address is already a collaborator"
+              : hasPendingInvite(activeInviteEmail)
+                ? "There is already a pending invite for this email address"
+                : ""
           }
         />
         <div className="p-panel__content u-no-padding--top u-no-padding--bottom">
@@ -118,11 +122,11 @@ function InviteCollaborator({ setShowSidePanel }: Props): JSX.Element {
             appearance="positive"
             disabled={
               !activeInviteEmail ||
-              !isUnique(activeInviteEmail) ||
+              !isValidEmail(activeInviteEmail) ||
               loadingInviteLink
             }
             onClick={async () => {
-              if (activeInviteEmail && isUnique(activeInviteEmail)) {
+              if (activeInviteEmail && isValidEmail(activeInviteEmail)) {
                 try {
                   setLoadingInviteLink(true);
                   const { inviteLink } = await generateInviteToken(
@@ -144,9 +148,16 @@ function InviteCollaborator({ setShowSidePanel }: Props): JSX.Element {
                 <Spinner text="Loading..." />
               </>
             ) : (
-              "Generate invite link"
+              "Send invite"
             )}
           </Button>
+          <p className="u-text--muted">
+            An email will be sent to the collaborator, it will expire after 30
+            days.
+          </p>
+          <p className="u-text--muted">
+            Alternatively, you can share the link below:
+          </p>
           {inviteLink ? (
             <div className="grid-row">
               <div className="grid-col-6">
@@ -174,18 +185,6 @@ function InviteCollaborator({ setShowSidePanel }: Props): JSX.Element {
               <code>Enter email to generate a unique invitation link</code>
             </pre>
           )}
-          <p className="u-text--muted">
-            Important: This link will <strong>NOT</strong> be automatically
-            sent.
-          </p>
-          <div className="u-text--muted">
-            After generating, you'll need to:
-            <ul>
-              <li>Copy the link</li>
-              <li>Share it with your collaborator</li>
-              <li>The link expires 30 days after generation</li>
-            </ul>
-          </div>
           <p className="u-text--muted">
             Once your collaborator uses the link, they'll gain access to the
             charm.

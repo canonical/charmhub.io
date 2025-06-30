@@ -188,9 +188,15 @@ class TestPublisherViews(unittest.TestCase):
         res = self.client.get("/api/packages/test-entity/invites")
         self.assertEqual(res.status_code, 200)
 
+    @patch("webapp.utils.email.emailer.send_email_template")
     @patch("webapp.store_api.publisher_gateway.invite_collaborators")
-    def test_invite_collaborators(self, mock_invite_collaborators):
-        mock_invite_collaborators.return_value = {"tokens": ["token"]}
+    def test_invite_collaborators(
+        self, mock_invite_collaborators, mock_send_email_template
+    ):
+        mock_send_email_template.return_value = None
+        mock_invite_collaborators.return_value = {
+            "tokens": [{"token": "test-token"}]
+        }
         res = self.client.post(
             "/api/packages/test-entity/invites",
             data={"collaborators": "collaborator"},
