@@ -22,3 +22,7 @@ requires:
     interface: tracing
     optional: true
     limit: 1
+  smtp:
+    interface: smtp
+    optional: true
+    limit: 1
