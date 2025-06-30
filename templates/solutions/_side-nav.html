@@ -6,9 +6,9 @@
         <a href="{{ solution.documentation.main }}"><i class="p-icon--file-blank"></i>&nbsp;&nbsp;Documentation</a>
       </li>
     {% endif %}
-    {% if solution.links.source %}
+    {% if solution.documentation.source %}
       <li class="p-list__item">
-        <a href="{{ solution.links.source }}"><i class="p-icon--github"></i>&nbsp;&nbsp;Source</a>
+        <a href="{{ solution.documentation.source }}"><i class="p-icon--github"></i>&nbsp;&nbsp;Source</a>
       </li>
     {% endif %}
     {% if solution.terraform_modules %}
@@ -59,14 +59,14 @@
   <hr class="p-separator--shallow p-rule--muted">
 
   <div>
-    <a href="{{ solution.links.submit_bug }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
+    <a href="{{ solution.documentation.submit_a_bug }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
   </div>
 
   <hr class="p-separator--shallow p-rule--muted">
 
   <div>
     <p>Share your thoughts on this solution with the community on Discourse.</p>
-    <p><a class="p-button" href="{{ solution.links.join_discussion }}">Join the discussion</a></p>
+    <p><a class="p-button" href="{{ solution.documentation.community_discussion }}">Join the discussion</a></p>
   </div>
 
 </div>

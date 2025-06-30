@@ -10,13 +10,11 @@
       <h4 style="font-weight: 500">Use cases</h4>
       <div class="row">
         {% for use_case in solution.use_cases %}
-          {% for title, description in use_case.items() %}
-            <div class="col-3">
-              <hr class="p-rule--highlight">
-              <h5>{{ title }}</h5>
-              <p>{{ description }}</p>
-            </div>
-          {% endfor %}
+          <div class="col-3">
+            <hr class="p-rule--highlight">
+            <h5>{{ use_case.title }}</h5>
+            <p>{{ use_case.description }}</p>
+          </div>
         {% endfor %}
       </div>
     </div>
@@ -50,7 +48,7 @@
     </div>
   {% endif %}
 
-  {% if solution.links %}
+  {% if solution.useful_links %}
     <hr class="p-separator--shallow">
     <div class="p-section--shallow u-no-padding--top">
       <div class="row">
@@ -60,15 +58,11 @@
         <div class="col-3">
         </div>
         <div class="col-3">
-          <div>
-            <a href="{{ solution.source }}">Get started&nbsp;&rsaquo;</a>
-          </div>
-          <div>
-            <a href="{{ solution.submit_bug }}">Submit a bug&nbsp;&rsaquo;</a>
-          </div>
-          <div>
-            <a href="{{ solution.join_dicsussion }}">Join the discussion&nbsp;&rsaquo;</a>
-          </div>
+          {% for link in solution.useful_links %}
+            <div>
+              <a href="{{ link.url }}">{{ link.title }}&nbsp;&rsaquo;</a>
+            </div>
+          {% endfor %}
         </div>
       </div>
     </div>
