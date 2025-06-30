@@ -34,13 +34,19 @@
     <hr class="p-separator--shallow">
     <div class="p-section--shallow u-no-padding--top">
       <h4 style="font-weight: 500">Charms</h4>
-      <div class="row--50-50">
+      <div class="row--50-50" id="charm-card-list">
         {% for charm in solution.charms %}
-        <div class="col u-equal-height">
+        <div class="col u-equal-height charm-card-details" style="{% if loop.index > 4 %}display: none;{% endif %}">
           {% include '/solutions/_solution_charm_card.html' %}
         </div>
         {% endfor %}
       </div>
+      {% if solution.charms | length > 4 %}
+        <button id="load-more-charm-details" class="p-button">
+          <span class="button-text">See all ({{ solution.charms | length }})</span>
+          <i class="p-icon--spinner u-animation--spin" style="display: none;"></i>
+        </button>
+      {% endif %}
     </div>
   {% endif %}
 
@@ -68,3 +74,26 @@
     </div>
   {% endif %}
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const loadMoreButton = document.getElementById('load-more-charm-details');
+    if (loadMoreButton) {
+      const buttonText = loadMoreButton.querySelector('.button-text');
+      const spinner = loadMoreButton.querySelector('.p-icon--spinner');
+
+      loadMoreButton.addEventListener('click', () => {
+        buttonText.style.display = 'none';
+        spinner.style.display = 'inline-block';
+
+        setTimeout(() => {
+          const hiddenCharms = document.querySelectorAll('.charm-card-details[style*="display: none"]');
+          hiddenCharms.forEach(charm => {
+            charm.style.display = 'block';
+          });
+          loadMoreButton.style.display = 'none';
+        }, 500);
+      });
+    }
+  });
+</script>

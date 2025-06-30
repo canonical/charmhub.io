@@ -25,16 +25,24 @@
 
   {% if solution.charms %}
     <h5 class="p-muted-heading u-text--muted">Charms used</h5>
-    {% for charm in solution.charms %}
-      <div class="p-card" style="padding: 0.5rem; margin-bottom: 0.5rem;">
-        {% if charm.icon %}
-          <img class="p-card__thumbnail u-vertical-align--middle" src="{{ charm.icon }}" alt="{{ charm.display_name }}" style="padding-right: 0.5rem;">
-        {% endif %}
-        <span>
-          <a class="u-vertical-align--middle p-link--soft p-heading--5" href="{{ charm.url }}">{{ (charm.display_name or charm.charm_name) | truncate(28) }}</a>
-        </span>
-      </div>
-    {% endfor %}    
+    <div id="charms-list">
+      {% for charm in solution.charms %}
+        <div class="p-card charm-card" style="padding: 0.5rem; margin-bottom: 0.5rem; {% if loop.index > 5 %}display: none;{% endif %}">
+          {% if charm.icon %}
+            <img class="p-card__thumbnail u-vertical-align--middle" src="{{ charm.icon }}" alt="{{ charm.display_name }}" style="padding-right: 0.5rem;">
+          {% endif %}
+          <span>
+            <a class="u-vertical-align--middle p-link--soft p-heading--5" href="{{ charm.url }}">{{ (charm.display_name or charm.charm_name) | truncate(28) }}</a>
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+    {% if solution.charms | length > 5 %}
+      <button id="load-more-charms" class="p-button--link">
+        <span class="button-text">See all ({{ solution.charms | length }})</span>
+        <i class="p-icon--spinner u-animation--spin" style="display: none;"></i>
+      </button>
+    {% endif %}
   {% endif %}
 
   {% if solution.maintainers %}
@@ -62,3 +70,27 @@
   </div>
 
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const loadMoreButton = document.getElementById('load-more-charms');
+    if (loadMoreButton) {
+      const buttonText = loadMoreButton.querySelector('.button-text');
+      const spinner = loadMoreButton.querySelector('.p-icon--spinner');
+
+      loadMoreButton.addEventListener('click', () => {
+        buttonText.style.display = 'none';
+        spinner.style.display = 'inline-block';
+
+        setTimeout(() => {
+          const hiddenCharms = document.querySelectorAll('.charm-card[style*="display: none"]');
+          hiddenCharms.forEach(charm => {
+            charm.style.display = 'block';
+          });
+          loadMoreButton.style.display = 'none';
+        }, 500);
+      });
+    }
+  });
+</script>
+
