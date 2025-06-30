@@ -29,25 +29,15 @@
             <h1 class="p-media-object__title u-no-padding--top">{{ solution.name }}</h1>
             <div class="p-media-object__content u-no-margin--bottom">
               <ul class="p-inline-list">
-                  <li class="p-inline-list__item">
-                    By
-                    {% if solution.publisher.slug %}
-                      <a href="/publisher/{{ solution.publisher.slug | safe }}">
-                        {{ solution.publisher.name }}
-                      </a>
-                    {% else %}
-                      {{ solution.publisher.name }}
-                    {% endif %}
-                  </li>
-                <li class="p-inline-list__item u-no-margin--right">
-                  <button class="p-chip">
-                    <span class="p-chip__value">Observability</span>
-                  </button>
-                </li>
                 <li class="p-inline-list__item">
-                  <button class="p-chip--positive">
-                    <span class="p-chip__value">LTS</span>
-                  </button>
+                  By
+                  {% if solution.publisher.username %}
+                    <a href="/publisher/{{ solution.publisher.username | safe }}">
+                      {{ solution.publisher.display_name }}
+                    </a>
+                  {% else %}
+                    {{ solution.publisher.name }}
+                  {% endif %}
                 </li>
               </ul>
             </div>
@@ -56,35 +46,147 @@
       </div>
     </div>
 
-    <div class="col-3">
-      <p style="margin-bottom: 0.5rem;">
-        <small class="u-no-padding--top u-text--muted">PLATFORM:</small>
-      </p>
+  <div class="col-3">
+    {% if solution["deployable-on"] | length > 1 %}
+      <div style="display: flex; align-items: center; gap: 1rem; position: relative;">
+      <small class="u-no-padding--top u-text--muted">PLATFORM:</small>
+        <span class="p-contextual-menu">
+          <button class="p-button p-contextual-menu__toggle has-icon" aria-controls="platform-menu" aria-expanded="false" aria-haspopup="true">
+            <span data-js="platform-map-selected">{{ solution["deployable-on"][0]["platform"] | capitalize }}</span>
+            <i class="p-icon--chevron-down p-contextual-menu__indicator"></i>
+          </button>
+
+          <span class="p-contextual-menu__dropdown" id="platform-menu" aria-hidden="true">
+            <span class="p-contextual-menu__group">
+              {% for deployment in solution["deployable-on"] %}
+                <button class="p-contextual-menu__link platform-option" type="button" data-platform="{{ deployment['platform'] }}">
+                  {{ deployment["platform"] | capitalize }}
+                </button>
+              {% endfor %}
+            </span>
+          </span>
+        </span>
+      </div>
+
       <div class="series-base">
+        {% for deployment in solution["deployable-on"] %}
+        <div class="platform-content" id="platform-{{ deployment['platform'] }}" style="display: none; margin-top: 1rem;">
+          
+          {% if deployment["platform"] == "kubernetes" %}
+            <div class="series-base__title">
+              <img src="https://assets.ubuntu.com/v1/9f8a8273-2018-logo-kubernetes+%282%29.svg"
+                  alt="Kubernetes"
+                  width="160"
+                  height="27"
+                  class="p-image--base">
+            </div>
+            {% for version in deployment["version"] %}
+              <div class="u-text--muted">Version <strong>{{ version }}</strong></div>
+            {% endfor %}
+            {% if deployment["prerequisites"] %}
+              <div class="u-text--muted">
+                {{ deployment["prerequisites"] | join(", ") }}
+              </div>
+            {% endif %}
+
+          {% elif deployment["platform"] == "machine" %}
+            <div class="series-base__title">
+              <img src="https://assets.ubuntu.com/v1/b4ba06f2-Ubuntu%20logo.svg"
+                  alt="machine / Ubuntu"
+                  width="85"
+                  height="30"
+                  class="p-image--base">
+            {% for version in deployment["version"] %}
+              <div class="u-text--muted">Version <strong>{{ version }}</strong></div>
+            {% endfor %}
+            </div>
+            {% if deployment["prerequisites"] %}
+              <div class="u-text--muted">
+                {{ deployment["prerequisites"] | join(", ") }}
+              </div>
+            {% endif %}
+
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="col-3">
+        <p style="margin-bottom: 0.5rem;">
+          <small class="u-no-padding--top u-text--muted">PLATFORM:</small>
+        </p>
+      </div>
         <div class="series-base__title">
           {% for deployment in solution["deployable-on"] %}
-            {% if deployment == "kubernetes" %}
-              <img src="https://assets.ubuntu.com/v1/9f8a8273-2018-logo-kubernetes+%282%29.svg"
-                   alt="Kubernetes"
-                   width="160"
-                   height="27"
-                   class="p-image--base">
-            {% elif deployment == "vm" %}
-              <img src="https://assets.ubuntu.com/v1/b4ba06f2-Ubuntu%20logo.svg"
-                   alt="VM / Ubuntu"
-                   width="85"
-                   height="30"
-                   class="p-image--base">
+            {% if deployment["platform"] == "kubernetes" %}
+            <img src="https://assets.ubuntu.com/v1/9f8a8273-2018-logo-kubernetes+%282%29.svg"
+                    alt="Kubernetes"
+                    width="160"
+                    height="27"
+                    class="p-image--base">
+            {% elif deployment["platform"] == "machine" %}
+            <img src="https://assets.ubuntu.com/v1/b4ba06f2-Ubuntu%20logo.svg"
+                                alt="VM / Ubuntu"
+                    width="85"
+                    height="30"
+                    class="p-image--base">
             {% else %}
               <span>{{ deployment }}</span>
             {% endif %}
+            {% for version in deployment["version"] %}
+              <div class="u-text--muted">Version <strong>{{ version }}</strong></div>
+            {% endfor %}
+            {% if deployment["prerequisites"] %}
+              <div class="u-text--muted">
+                {{ deployment["prerequisites"] | join(", ") }}
+              </div>
+            {% endif %}
           {% endfor %}
         </div>
-      </div>
-      <div class="u-text--muted">Version <strong>{{ solution.version }}</strong></div>
+
+      {% endif %}
     </div>
     <div>
       <a href="{{ solution.documentation.get_started }}" class="p-button--positive">View implementation guide</a>
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+  const toggleButton = document.querySelector('.p-contextual-menu__toggle');
+  const menu = document.getElementById('platform-menu');
+  const selectedText = document.querySelector('[data-js="platform-map-selected"]');
+  const platformOptions = document.querySelectorAll('.platform-option');
+  const platformContents = document.querySelectorAll('.platform-content');
+
+  // Toggle menu open/close
+  toggleButton.addEventListener('click', () => {
+    const expanded = toggleButton.getAttribute('aria-expanded') === 'true';
+    toggleButton.setAttribute('aria-expanded', String(!expanded));
+    menu.setAttribute('aria-hidden', String(expanded));
+  });
+
+  // Handle selection
+  platformOptions.forEach(button => {
+    button.addEventListener('click', () => {
+      const selectedPlatform = button.getAttribute('data-platform');
+
+      selectedText.textContent = selectedPlatform.charAt(0).toUpperCase() + selectedPlatform.slice(1);
+
+      platformContents.forEach(el => {
+        el.style.display = el.id === `platform-${selectedPlatform}` ? 'block' : 'none';
+      });
+
+      toggleButton.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-hidden', 'true');
+    });
+  });
+
+  // Default to first platform
+  if (platformOptions.length > 0) {
+    platformOptions[0].click();
+  }
+});
+
+</script>
