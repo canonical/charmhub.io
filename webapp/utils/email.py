@@ -9,7 +9,7 @@ from flask import render_template
 from threading import Thread
 
 SMTPConfig = namedtuple(
-    "SMTPConfig", ["smtp_host", "smtp_port", "username", "password"]
+    "SMTPConfig", ["host", "port", "username", "password", "domain"]
 )
 
 logger = logging.getLogger("emailer")
@@ -42,7 +42,7 @@ class Emailer:
 
         return all(
             [
-                self.smtp_config.smtp_host,
+                self.smtp_config.host,
                 self.smtp_config.username,
                 self.smtp_config.password,
             ]
@@ -57,7 +57,11 @@ class Emailer:
     ) -> MIMEMultipart:
         """Create email message with proper headers"""
         msg = MIMEMultipart()
-        msg["From"] = self.smtp_config.username
+        # if username has the email format, use it as the sender
+        if "@" in self.smtp_config.username:
+            msg["From"] = self.smtp_config.username
+        else:
+            msg["From"] = f"noreply+{self.smtp_config.username}@{self.smtp_config.domain}"
         msg["Subject"] = subject
 
         if isinstance(to_email, list):
@@ -80,7 +84,7 @@ class Emailer:
             msg = self._create_message(subject, body, to_email, body_type)
 
             with smtplib.SMTP(
-                self.smtp_config.smtp_host, self.smtp_config.smtp_port
+                self.smtp_config.host, self.smtp_config.port
             ) as server:
                 server.starttls()
                 server.login(
@@ -114,10 +118,11 @@ class Emailer:
 
 
 smtp_config = SMTPConfig(
-    smtp_host=os.getenv("SMTP_HOST", None),
-    smtp_port=int(os.getenv("SMTP_PORT", 587)),
+    host=os.getenv("SMTP_HOST", None),
+    port=int(os.getenv("SMTP_PORT", 587)),
     username=os.getenv("SMTP_USER", None),
     password=os.getenv("SMTP_PASSWORD", None),
+    domain=os.getenv("SMTP_DOMAIN", "canonical.com"),
 )
 
 emailer = Emailer(smtp_config=smtp_config)

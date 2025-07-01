@@ -274,6 +274,11 @@ def invite_collaborators(entity_name):
 
     try:
         collaborators = request.form.get("collaborators")
+        if not collaborators:
+            res["success"] = False
+            res["message"] = "No collaborators provided"
+            return make_response(res, 400)
+
         result = publisher_gateway.invite_collaborators(
             session["account-auth"], entity_name, [collaborators]
         )
