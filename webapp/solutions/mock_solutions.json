@@ -39,7 +39,7 @@
       "source": "https://github.com/canonical/observability/",
       "get_started": "https://documentation.ubuntu.com/observability/tutorial/",
       "how_to_operate": "https://documentation.ubuntu.com/observability/how-to/",
-      "architecture_diagram": "https://assets.ubuntu.com/v1/55f212ec-grafana_landing_page.png",
+      "architecture_diagram": "https://assets.ubuntu.com/v1/58293406-cos.png",
       "architecture_explanation": "this is an explanation of how COS works",
       "submit_a_bug": "https://github.com/canonical/observability-docs/issues/new?title=docs%3A+TYPE+YOUR+QUESTION+HERE&body=*Please%20describe%20the%20question%20or%20issue%20you%27re%20facing%20with%20%22Observability%20Documentation%22.*%0A%0A%0A%0A%0A---%0A*Reported+from%3A+https://charmhub.io*",
       "community_discussion": "https://discourse.charmhub.io/c/charm/observability/62"

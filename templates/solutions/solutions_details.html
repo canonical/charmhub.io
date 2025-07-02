@@ -34,12 +34,12 @@
       <h4 style="font-weight: 500">Charms</h4>
       <div class="grid-row" id="charm-card-list">
         {% for charm in solution.charms %}
-          <div class="grid-col-2 charm-card-details" style="margin-bottom: 1.5rem; {% if loop.index > 4 %}display: none;{% endif %}">
+          <div class="grid-col-2 charm-card-details" style="margin-bottom: 1.5rem; {% if loop.index > 6 %}display: none;{% endif %}">
             {% include '/solutions/_solution_charm_card.html' %}
           </div>
         {% endfor %}
       </div>
-      {% if solution.charms | length > 4 %}
+      {% if solution.charms | length > 6 %}
         <button id="load-more-charm-details" class="p-button">
           <span class="button-text">See all ({{ solution.charms | length }})</span>
           <i class="p-icon--spinner u-animation--spin" style="display: none;"></i>
@@ -59,7 +59,7 @@
         </div>
         <div class="grid-col-2">
           {% for link in solution.useful_links %}
-            <div>
+            <div style="margin-bottom: 1rem;">
               <a href="{{ link.url }}">{{ link.title }}&nbsp;&rsaquo;</a>
             </div>
           {% endfor %}

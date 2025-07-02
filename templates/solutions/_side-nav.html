@@ -19,11 +19,13 @@
   </ul>
 
   {% if solution.compatibility.juju_versions %}
+    <hr class="p-separator--shallow">
     <h5 class="p-muted-heading u-text--muted">Juju version</h5>
     <p class="u-no-margin--bottom">{{ solution.compatibility.juju_versions | join(", ") }}</p>
   {% endif %}
 
   {% if solution.charms %}
+    <hr class="p-separator--shallow">
     <h5 class="p-muted-heading u-text--muted">Charms used</h5>
     <div id="charms-list">
       {% for charm in solution.charms %}
@@ -47,10 +49,9 @@
 
   {% if solution.maintainers %}
     <hr class="p-separator--shallow">
-    <h4 class="p-muted-heading">Contacts</h4>
     <h5 class="p-muted-heading u-text--muted">Maintainers</h5>
     {% for maintainer in solution.maintainers %}
-      <div>
+      <div style="margin-bottom: 0.5rem;">
         <a href="mailto:{{ maintainer.email }}"><i class="p-icon--user"></i>&nbsp;&nbsp;{{ maintainer.display_name }}</a>
       </div>
     {% endfor %}
