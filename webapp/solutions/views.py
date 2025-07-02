@@ -12,9 +12,7 @@ solutions = Blueprint(
     static_folder="../static",
 )
 
-DATA_PATH = os.path.join(
-    os.path.dirname(__file__), "mock_solutions.json"
-)
+DATA_PATH = os.path.join(os.path.dirname(__file__), "mock_solutions.json")
 
 FIELDS = [
     "result.media",
@@ -45,7 +43,10 @@ def get_charm_data(charm_name):
     if charm["result"].get("media"):
         icon = charm["result"]["media"][0]["url"]
     else:
-        icon = "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg"
+        icon = (
+            "https://assets.ubuntu.com/v1/"
+            "be6eb412-snapcraft-missing-icon.svg"
+        )
 
     return {
         "charm_name": charm_name,
@@ -55,7 +56,7 @@ def get_charm_data(charm_name):
         "icon": icon,
         "url": f"https://charmhub.io/{charm_name}",
         "categories": charm["result"].get("categories"),
-        "deployable-on": charm["result"].get("deployable-on")
+        "deployable-on": charm["result"].get("deployable-on"),
     }
 
 
@@ -69,12 +70,17 @@ def list_solutions():
 @redirect_uppercase_to_lowercase
 def solution_details(entity_name):
     solutions_data = load_solutions()
-    solution = next((s for s in solutions_data if s["entity_name"] == entity_name), None)
+    solution = next(
+        (s for s in solutions_data if s["entity_name"] == entity_name),
+        None,
+    )
 
     if not solution:
         abort(404)
 
-    solution["long_description_html"] = markdown_to_html(solution.get("long_description", ""))  
+    solution["long_description_html"] = markdown_to_html(
+        solution.get("long_description", "")
+    )
 
     solution_charms = []
     for charm in solution.get("charms", []):
