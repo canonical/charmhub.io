@@ -15,7 +15,7 @@ from webapp.decorators import login_required, cached_redirect
 from webapp.publisher.logic import get_all_architectures, process_releases
 from webapp.observability.utils import trace_function
 from webapp.store_api import publisher_gateway
-from webapp.utils.email import emailer
+from webapp.utils.email import get_emailer
 
 publisher = Blueprint(
     "publisher",
@@ -289,6 +289,7 @@ def invite_collaborators(entity_name):
             f"https://charmhub.io/accept-invite?package={entity_name}"
             f"&token={token}"
         )
+        emailer = get_emailer()
         emailer.send_email_template(
             template_path="emails/collaborator-invite.html",
             to_email=collaborators,

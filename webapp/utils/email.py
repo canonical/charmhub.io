@@ -125,4 +125,13 @@ smtp_config = SMTPConfig(
     domain=os.getenv("SMTP_DOMAIN", "canonical.com"),
 )
 
-emailer = Emailer(smtp_config=smtp_config)
+def get_emailer() -> Emailer:
+    smtp_config = SMTPConfig(
+        host=os.getenv("SMTP_HOST", None),
+        port=int(os.getenv("SMTP_PORT", 587)),
+        username=os.getenv("SMTP_USER", None),
+        password=os.getenv("SMTP_PASSWORD", None),
+        domain=os.getenv("SMTP_DOMAIN", "canonical.com"),
+    )
+    return Emailer(smtp_config=smtp_config)
+
