@@ -61,7 +61,10 @@ class Emailer:
         if "@" in self.smtp_config.username:
             msg["From"] = self.smtp_config.username
         else:
-            msg["From"] = f"noreply+{self.smtp_config.username}@{self.smtp_config.domain}"
+            msg["From"] = (
+                f"noreply+{self.smtp_config.username}"
+                f"@{self.smtp_config.domain}"
+            )
         msg["Subject"] = subject
 
         if isinstance(to_email, list):
@@ -125,6 +128,7 @@ smtp_config = SMTPConfig(
     domain=os.getenv("SMTP_DOMAIN", "canonical.com"),
 )
 
+
 def get_emailer() -> Emailer:
     smtp_config = SMTPConfig(
         host=os.getenv("SMTP_HOST", None),
@@ -134,4 +138,3 @@ def get_emailer() -> Emailer:
         domain=os.getenv("SMTP_DOMAIN", "canonical.com"),
     )
     return Emailer(smtp_config=smtp_config)
-

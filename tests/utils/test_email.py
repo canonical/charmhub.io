@@ -33,7 +33,6 @@ class TestEmailer(unittest.TestCase):
             self.smtp_config.username, self.smtp_config.password
         )
 
-
     @patch("smtplib.SMTP")
     def test_send_email_template_success(self, mock_smtp):
         with patch("webapp.utils.email.render_template") as mock_render:
@@ -66,7 +65,6 @@ class TestEmailer(unittest.TestCase):
 
     @patch("smtplib.SMTP")
     def test_send_raises_smtp_exception(self, mock_smtp):
-
         mock_smtp.side_effect = Exception("SMTP failure")
         subject = "Test"
         body = "Body"
@@ -83,9 +81,7 @@ class TestEmailer(unittest.TestCase):
         )
         self.assertIn("From", message)
         self.assertIn("To", message)
-        self.assertEqual(
-            message["From"], "testuser@canonical.com"
-        )
+        self.assertEqual(message["From"], "testuser@canonical.com")
 
         emailer2 = Emailer(
             SMTPConfig(
@@ -112,4 +108,3 @@ class TestEmailer(unittest.TestCase):
         emailer = Emailer(no_config)
         emailer.send_email("subject", "body", "to@example.com")
         self.assertFalse(emailer.is_configured)
-
