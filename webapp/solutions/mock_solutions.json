@@ -30,11 +30,6 @@
         "platform": "kubernetes",
         "version": [">= 1.19.0"],
         "prerequisites": ["dns", "hostpath-storage", "metallb"]
-      },
-      {
-        "platform": "machine",
-        "version": ["24.04", "22.04"],
-        "prerequisites": ["juju", "lxd"]
       }
     ],
     "created_at": "2025-05-22T12:00:00Z",

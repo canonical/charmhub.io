@@ -8,9 +8,9 @@
 <div
   class="p-card"
   role="group"
-  style="width: 100%;"
+  style="width: 100%; height: 100%; display: flex; flex-direction: column;"
 >
-  <div class="p-card__content">
+  <div class="p-card__content" style="display: flex; flex-direction: column; flex-grow: 1; height: 100%;">
     {# IconCard #}
     <div
       class="p-media-object u-no-margin--bottom"
@@ -25,14 +25,14 @@
       />
       <div 
         class="p-media-object__details"
-        style="height: 100%; width: 100%;"
+        style="height: 100%; width: 100%; display: flex; flex-direction: column; flex-grow: 1;"
       >
         {# InnerCard #}
         <div
           class="sc-package-card"
-          style="height: 100%"
+          style="height: 100%; display: flex; flex-direction: column; flex-grow: 1;"
         >
-          <div class="sc-package-card__body">
+          <div class="sc-package-card__body" style="display: flex; flex-direction: column; flex-grow: 1;">
             <h2 class="sc-package-card__heading p-heading--5 u-no-margin--bottom">
               <a class="sc-package-card__heading-link" href="/{{ charm.charm_name }}">
                 {{ charm.display_name or charm.charm_name }}
@@ -44,10 +44,10 @@
             </p>
 
             <p class="u-line-clamp">
-              {{ charm.summary }}
+              {{ charm.summary | truncate(50) }}
             </p>
 
-            <div class="sc-package-card__footer">
+            <div class="sc-package-card__footer" style="margin-top: auto;">
               <hr />
               <div class="sc-package-card__footer-content">
                 <div class="sc-platform u-align--right">

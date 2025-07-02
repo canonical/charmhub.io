@@ -1,6 +1,6 @@
 <div class="p-strip--light is-shallow">
-  <div class="row">
-    <div class="col-9">
+  <div class="grid-row">
+    <div class="grid-col-2">
       <div class="p-charm-header">
         <div class="p-media-object--large">
           {% if solution.icon %}
@@ -24,130 +24,57 @@
               attrs={"class": "p-media-object__image"}
             ) | safe }}
           {% endif %}
-          <div class="p-media-object__details">
-            <a href="/solutions" class="u-text--muted">&lt; ALL SOLUTIONS</a>
-            <h1 class="p-media-object__title u-no-padding--top">{{ solution.name }}</h1>
-            <div class="p-media-object__content u-no-margin--bottom">
-              <ul class="p-inline-list">
-                <li class="p-inline-list__item">
-                  By
-                  {% if solution.publisher.username %}
-                    <a href="/publisher/{{ solution.publisher.username | safe }}">
-                      {{ solution.publisher.display_name }}
-                    </a>
-                  {% else %}
-                    {{ solution.publisher.name }}
-                  {% endif %}
-                </li>
-              </ul>
-            </div>
-          </div>
         </div>
       </div>
     </div>
 
-  <div class="col-3">
-    {% if solution["deployable-on"] | length > 1 %}
-      <div style="display: flex; align-items: center; gap: 1rem; position: relative;">
-      <small class="u-no-padding--top u-text--muted">PLATFORM:</small>
-        <span class="p-contextual-menu">
-          <button class="p-button p-contextual-menu__toggle has-icon" aria-controls="platform-menu" aria-expanded="false" aria-haspopup="true">
-            <span data-js="platform-map-selected">{{ solution["deployable-on"][0]["platform"] | capitalize }}</span>
-            <i class="p-icon--chevron-down p-contextual-menu__indicator"></i>
-          </button>
-
-          <span class="p-contextual-menu__dropdown" id="platform-menu" aria-hidden="true">
-            <span class="p-contextual-menu__group">
-              {% for deployment in solution["deployable-on"] %}
-                <button class="p-contextual-menu__link platform-option" type="button" data-platform="{{ deployment['platform'] }}">
-                  {{ deployment["platform"] | capitalize }}
-                </button>
-              {% endfor %}
-            </span>
-          </span>
-        </span>
-      </div>
-
-      <div class="series-base">
-        {% for deployment in solution["deployable-on"] %}
-        <div class="platform-content" id="platform-{{ deployment['platform'] }}" style="display: none; margin-top: 1rem;">
-          
-          {% if deployment["platform"] == "kubernetes" %}
-            <div class="series-base__title">
-              <img src="https://assets.ubuntu.com/v1/9f8a8273-2018-logo-kubernetes+%282%29.svg"
-                  alt="Kubernetes"
-                  width="160"
-                  height="27"
-                  class="p-image--base">
-            </div>
-            {% for version in deployment["version"] %}
-              <div class="u-text--muted">Version <strong>{{ version }}</strong></div>
-            {% endfor %}
-            {% if deployment["prerequisites"] %}
-              <div class="u-text--muted">
-                {{ deployment["prerequisites"] | join(", ") }}
-              </div>
-            {% endif %}
-
-          {% elif deployment["platform"] == "machine" %}
-            <div class="series-base__title">
-              <img src="https://assets.ubuntu.com/v1/b4ba06f2-Ubuntu%20logo.svg"
-                  alt="machine / Ubuntu"
-                  width="85"
-                  height="30"
-                  class="p-image--base">
-            {% for version in deployment["version"] %}
-              <div class="u-text--muted">Version <strong>{{ version }}</strong></div>
-            {% endfor %}
-            </div>
-            {% if deployment["prerequisites"] %}
-              <div class="u-text--muted">
-                {{ deployment["prerequisites"] | join(", ") }}
-              </div>
-            {% endif %}
-
-          {% endif %}
-        </div>
-        {% endfor %}
-      </div>
-    {% else %}
-      <div class="col-3">
-        <p style="margin-bottom: 0.5rem;">
-          <small class="u-no-padding--top u-text--muted">PLATFORM:</small>
-        </p>
-      </div>
-        <div class="series-base__title">
-          {% for deployment in solution["deployable-on"] %}
-            {% if deployment["platform"] == "kubernetes" %}
-            <img src="https://assets.ubuntu.com/v1/9f8a8273-2018-logo-kubernetes+%282%29.svg"
-                    alt="Kubernetes"
-                    width="160"
-                    height="27"
-                    class="p-image--base">
-            {% elif deployment["platform"] == "machine" %}
-            <img src="https://assets.ubuntu.com/v1/b4ba06f2-Ubuntu%20logo.svg"
-                                alt="VM / Ubuntu"
-                    width="85"
-                    height="30"
-                    class="p-image--base">
-            {% else %}
-              <span>{{ deployment }}</span>
-            {% endif %}
-            {% for version in deployment["version"] %}
-              <div class="u-text--muted">Version <strong>{{ version }}</strong></div>
-            {% endfor %}
-            {% if deployment["prerequisites"] %}
-              <div class="u-text--muted">
-                {{ deployment["prerequisites"] | join(", ") }}
-              </div>
-            {% endif %}
-          {% endfor %}
-        </div>
-
-      {% endif %}
-    </div>
+    <div class="grid-col-4">
     <div>
-      <a href="{{ solution.documentation.get_started }}" class="p-button--positive">View implementation guide</a>
+      <a href="/solutions" class="u-text--muted p-text--small-caps">&lt; ALL SOLUTIONS</a>
+      <h3 class="u-no-margin--bottom">{{ solution.name }}</h3>
+      <p class="p-heading--6">
+        By
+          {% if solution.publisher.username %}
+            <a href="/publisher/{{ solution.publisher.username | safe }}">
+              {{ solution.publisher.display_name }}
+            </a>
+          {% else %}
+            {{ solution.publisher.name }}
+          {% endif %}
+      </p>
+    </div>
+  </div>
+  <div class="grid-col-2">
+    <p style="margin-bottom: 0.5rem;">
+      <small class="u-no-padding--top u-text--muted">PLATFORM:</small>
+    </p>
+    <div class="series-base__title">
+      {% for deployment in solution["deployable-on"] %}
+        {% if deployment["platform"] == "kubernetes" %}
+        <img src="https://assets.ubuntu.com/v1/9f8a8273-2018-logo-kubernetes+%282%29.svg"
+                alt="Kubernetes"
+                width="160"
+                height="27"
+                class="p-image--base">
+        {% elif deployment["platform"] == "machine" %}
+        <img src="https://assets.ubuntu.com/v1/b4ba06f2-Ubuntu%20logo.svg"
+                            alt="VM / Ubuntu"
+                width="85"
+                height="30"
+                class="p-image--base">
+        {% else %}
+          <span>{{ deployment }}</span>
+        {% endif %}
+        {% for version in deployment["version"] %}
+          <div class="u-text--muted">Version <strong>{{ version }}</strong></div>
+        {% endfor %}
+        {% if deployment["prerequisites"] %}
+          <div class="u-text--muted">
+            {{ deployment["prerequisites"] | join(", ") }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
     </div>
   </div>
 </div>
