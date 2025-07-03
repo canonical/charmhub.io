@@ -709,6 +709,16 @@ def details_resource(entity_name, resource_name):
         ].split("@")
         resource["short_digest"] = resource["digest"].split(":")[1][:12]
 
+    # Get upstream-source (if available)
+    metadata_resources = package["store_front"]["metadata"].get(
+        "resources", {}
+    )
+    if resource_name in metadata_resources:
+        upstream = metadata_resources[resource_name].get("upstream-source")
+        resource["upstream_source"] = upstream
+    else:
+        resource["upstream_source"] = None
+
     revisions = device_gateway.get_resource_revisions(
         entity_name, resource_name
     )
