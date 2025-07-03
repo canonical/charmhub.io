@@ -54,7 +54,7 @@ function InviteCollaborator({ setShowSidePanel }: Props): JSX.Element {
       (collaborator) => collaborator?.account?.email === email
     ) || publisher?.email === email;
 
-  const isValidEmail = (email: string | undefined) => {
+  const isEligibleForInvite = (email: string | undefined) => {
     if (!email) {
       return true;
     }
