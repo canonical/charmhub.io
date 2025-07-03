@@ -44,7 +44,7 @@
       "submit_a_bug": "https://github.com/canonical/observability-docs/issues/new?title=docs%3A+TYPE+YOUR+QUESTION+HERE&body=*Please%20describe%20the%20question%20or%20issue%20you%27re%20facing%20with%20%22Observability%20Documentation%22.*%0A%0A%0A%0A%0A---%0A*Reported+from%3A+https://charmhub.io*",
       "community_discussion": "https://discourse.charmhub.io/c/charm/observability/62"
     },
-    "terraform_modules": "https://github.com/canonical/observability/tree/main/terraform/modules",
+    "terraform_modules": "https://github.com/canonical/observability-stack/tree/main/terraform",
     "charms": [
       { "charm_name": "grafana-k8s" },
       { "charm_name": "traefik-k8s" },
@@ -61,8 +61,7 @@
       { "charm_name": "tempo-coordinator-k8s" }
     ],
     "compatibility": {
-      "juju_versions": [">=3.0"],
-      "ubuntu_versions": ["22.04"]
+      "juju_versions": [">=3.0"]
     },
     "maintainers": [
       { "display_name": "maintainerA", "email": "a@canonical.com" },
@@ -80,6 +79,84 @@
       {
         "title": "Community Discussion",
         "url": "https://discourse.charmhub.io/c/charm/observability/62"
+      }
+    ],
+    "icon": "https://assets.ubuntu.com/v1/0ed605c0-ubuntu-cof-120.svg"
+  },
+  {
+    "id": 2,
+    "entity_name": "canonical-5g-telco-solution",
+    "name": "Canonical 5G Telco Solution",
+    "version": "1",
+    "publisher": {
+      "display_name": "Canonical Telco",
+      "id": "JSuLhtqK5qyUsKkRFhqOCoOZf6qvThUZ",
+      "username": "telco-charmers"
+    },
+    "short_description": "A solution to deploy and operate Grafana Tempo, a distributed tracing backend that natively integrates with COS Lite, on Juju.",
+    "long_description": "The Canonical 5G Telco Solution provides a complete, cloud-native 5G mobile core network (Aether SD-Core) powered by Juju and Kubernetes. It enables telecommunications service providers and enterprises to deploy, manage, and scale 5G network functions following a disaggregated, microservices-based architecture with Control and User Plane Separation (CUPS).\n\nBy leveraging the topology model of Juju to manage deployment relationships, and charm relations to automate configuration and integration, it provides a low-operations 5G core with enterprise-grade reliability and security.\n\nFor Telecommunications providers and enterprises building private 5G networks, the Canonical 5G Telco Solution provides a production-ready, standards-compliant 5G core network with reduced operational complexity.",
+    "use_cases": [
+      {
+        "title": "Enterprise Private 5G Networks",
+        "description": "Organizations requiring dedicated, secure, and high-performance wireless connectivity can deploy private 5G networks to support critical applications. The solution provides complete control over network resources, security policies, and quality of service guarantees."
+      },
+      {
+        "title": "5G Core for Telecommunications Service Providers",
+        "description": "Mobile network operators can use the solution as a foundation for deploying 5G services to customers, offering modern cellular connectivity with simplified operations compared to traditional 4G/LTE networks."
+      },
+      {
+        "title": "Edge Computing Infrastructure",
+        "description": "Organizations deploying edge computing workloads can use the 5G connectivity provided by this solution to enable reliable, high-bandwidth connections between edge nodes and central systems."
+      }
+    ],
+    "deployable-on": [
+      {
+        "platform": "kubernetes",
+        "version": [">= 1.25"],
+        "prerequisites": []
+      }
+    ],
+    "created_at": "2025-07-02T12:00:00Z",
+    "last_updated": "2025-07-02T12:00:00Z",
+    "documentation": {
+      "main": "https://canonical.com/solutions/telco",
+      "source": "https://github.com/canonical/telco/",
+      "get_started": "https://documentation.ubuntu.com/telco/tutorial/",
+      "how_to_operate": "https://documentation.ubuntu.com/telco/how-to/",
+      "architecture_diagram": "https://assets.ubuntu.com/v1/f7326a20-telco.png",
+      "architecture_explanation": "",
+      "submit_a_bug": "https://github.com/canonical/telco",
+      "community_discussion": "https://discourse.ubuntu.com"
+    },
+    "terraform_modules": "",
+    "charms": [
+      { "charm_name": "grafana-agent-k8s" },
+      { "charm_name": "mongodb" },
+      { "charm_name": "traefik-k8s" },
+      { "charm_name": "self-signed-certificates" },
+      { "charm_name": "sdcore-amf-k8s" },
+      { "charm_name": "catalogue-k8s" },
+      { "charm_name": "s3-integrator" }
+    ],
+    "compatibility": {
+      "juju_versions": [">=3.0.3"]
+    },
+    "maintainers": [
+      { "display_name": "maintainerA", "email": "a@canonical.com" },
+      { "display_name": "maintainerB", "email": "b@canonical.com" }
+    ],
+    "useful_links": [
+      {
+        "title": "Source Code",
+        "url": "https://github.com/canonical/telco/"
+      },
+      {
+        "title": "Report a Bug",
+        "url": "https://github.com/canonical/telco"
+      },
+      {
+        "title": "Community Discussion",
+        "url": "https://discourse.telco.io"
       }
     ],
     "icon": "https://assets.ubuntu.com/v1/0ed605c0-ubuntu-cof-120.svg"
