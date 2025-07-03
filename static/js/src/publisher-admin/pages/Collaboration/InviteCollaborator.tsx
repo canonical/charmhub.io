@@ -107,6 +107,7 @@ function InviteCollaborator({ setShowSidePanel }: Props): JSX.Element {
             setActiveInviteEmail(e.target.value);
             setInviteLink("");
           }}
+          success={inviteLink ? "Invite sent successfully" : undefined}
           error={
             isCollaborator(activeInviteEmail)
               ? "This email address is already a collaborator"
@@ -122,11 +123,11 @@ function InviteCollaborator({ setShowSidePanel }: Props): JSX.Element {
             appearance="positive"
             disabled={
               !activeInviteEmail ||
-              !isValidEmail(activeInviteEmail) ||
+              !isEligibleForInvite(activeInviteEmail) ||
               loadingInviteLink
             }
             onClick={async () => {
-              if (activeInviteEmail && isValidEmail(activeInviteEmail)) {
+              if (activeInviteEmail && isEligibleForInvite(activeInviteEmail)) {
                 try {
                   setLoadingInviteLink(true);
                   const { inviteLink } = await generateInviteToken(
