@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preload"
+              as="font"
+              type="font/woff2"
+              href="https://assets.ubuntu.com/v1/e8c07df6-Ubuntu-L_W.woff2"
+              crossorigin>
+        <link rel="preload"
+              as="font"
+              type="font/woff2"
+              href="https://assets.ubuntu.com/v1/fff37993-Ubuntu-R_W.woff2"
+              crossorigin>
+        <style>
+        body {
+            font-family: Ubuntu;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        
+        .header {
+	    border-bottom: 1px solid #e5e5e5;
+	    padding: 0 20px 20px 20px;
+	    background-color: #242424
+        }
+        
+        .logo {
+            width: 150px;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .content h2 {
+            font-weight: 300;
+            font-size: 24px;
+            margin: 0 0 20px 0;
+        }
+        
+        .content p {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="email-container">
+            <div class="header">
+                <img class="logo"
+                     src="https://assets.ubuntu.com/v1/b1be8d0c-svgviewer-png-output.png"
+                     alt="Canonical" />
+            </div>
+            <div class="content">
+                {% block content %}
+                {% endblock content %}
+            </div>
+        </div>
+    </body>
+</html>
