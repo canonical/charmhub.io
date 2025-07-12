@@ -29,3 +29,5 @@ opentelemetry-instrumentation-wsgi==0.53b1
 opentelemetry-instrumentation-flask==0.53b1
 opentelemetry-instrumentation-requests==0.53b1
 opentelemetry-sdk==1.32.1
+# Metrics
+statsd==4.0.1
