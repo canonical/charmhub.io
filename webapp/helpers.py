@@ -9,6 +9,7 @@ from talisker import requests
 from datetime import datetime, timedelta
 import mistune
 from canonicalwebteam.discourse import DiscourseAPI
+from dateutil import parser
 
 session = requests.get_session()
 discourse_api = DiscourseAPI(
@@ -163,3 +164,10 @@ def get_csp_as_str(csp={}):
         csp_value = " ".join(values)
         csp_str += f"{key} {csp_value}; "
     return csp_str.strip()
+
+
+def humanize_date(date_str):
+    if not date_str:
+        return ""
+    date_obj = parser.parse(date_str)
+    return date_obj.strftime("%-d %B %Y")
