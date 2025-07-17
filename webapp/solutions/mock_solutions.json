@@ -28,11 +28,17 @@
     "deployable-on": [
       {
         "platform": "kubernetes",
-        "version": [">= 1.19.0"],
-        "prerequisites": ["dns", "hostpath-storage", "metallb"]
+        "version": [
+          ">= 1.19.0"
+        ],
+        "prerequisites": [
+          "dns",
+          "hostpath-storage",
+          "metallb"
+        ]
       }
     ],
-    "created_at": "2025-05-22T12:00:00Z",
+    "created": "2025-05-22T12:00:00Z",
     "last_updated": "2025-05-27T09:30:00Z",
     "documentation": {
       "main": "https://documentation.ubuntu.com/observability/",
@@ -45,26 +51,60 @@
     },
     "terraform_modules": "https://github.com/canonical/observability-stack/tree/main/terraform",
     "charms": [
-      { "name": "grafana-k8s" },
-      { "name": "traefik-k8s" },
-      { "name": "prometheus-k8s" },
-      { "name": "alertmanager-k8s" },
-      { "name": "loki-worker-k8s" },
-      { "name": "loki-coordinator-k8s" },
-      { "name": "mimir-worker-k8s" },
-      { "name": "mimir-coordinator-k8s" },
-      { "name": "catalogue-k8s" },
-      { "name": "s3-integrator" },
-      { "name": "self-signed-certificates" },
-      { "name": "tempo-worker-k8s" },
-      { "name": "tempo-coordinator-k8s" }
+      {
+        "name": "grafana-k8s"
+      },
+      {
+        "name": "traefik-k8s"
+      },
+      {
+        "name": "prometheus-k8s"
+      },
+      {
+        "name": "alertmanager-k8s"
+      },
+      {
+        "name": "loki-worker-k8s"
+      },
+      {
+        "name": "loki-coordinator-k8s"
+      },
+      {
+        "name": "mimir-worker-k8s"
+      },
+      {
+        "name": "mimir-coordinator-k8s"
+      },
+      {
+        "name": "catalogue-k8s"
+      },
+      {
+        "name": "s3-integrator"
+      },
+      {
+        "name": "self-signed-certificates"
+      },
+      {
+        "name": "tempo-worker-k8s"
+      },
+      {
+        "name": "tempo-coordinator-k8s"
+      }
     ],
     "compatibility": {
-      "juju_versions": [">=3.0"]
+      "juju_versions": [
+        ">=3.0"
+      ]
     },
     "maintainers": [
-      { "display_name": "maintainerA", "email": "a@canonical.com" },
-      { "display_name": "maintainerB", "email": "b@canonical.com" }
+      {
+        "display_name": "maintainerA",
+        "email": "a@canonical.com"
+      },
+      {
+        "display_name": "maintainerB",
+        "email": "b@canonical.com"
+      }
     ],
     "useful_links": [
       {
@@ -114,11 +154,15 @@
     "deployable-on": [
       {
         "platform": "kubernetes",
-        "version": [">= 1.25"],
-        "prerequisites": []
+        "version": [
+          ">= 1.25"
+        ],
+        "prerequisites": [
+          
+        ]
       }
     ],
-    "created_at": "2025-07-02T12:00:00Z",
+    "created": "2025-07-02T12:00:00Z",
     "last_updated": "2025-07-02T12:00:00Z",
     "documentation": {
       "main": "https://canonical.com/solutions/telco",
@@ -131,20 +175,66 @@
     },
     "terraform_modules": "",
     "charms": [
-      { "name": "grafana-agent-k8s" },
-      { "name": "mongodb" },
-      { "name": "traefik-k8s" },
-      { "name": "self-signed-certificates" },
-      { "name": "sdcore-amf-k8s" },
-      { "name": "catalogue-k8s" },
-      { "name": "s3-integrator" }
+      {
+        "name": "grafana-agent-k8s"
+      },
+      {
+        "name": "mongodb-k8s"
+      },
+      {
+        "name": "traefik-k8s"
+      },
+      {
+        "name": "self-signed-certificates"
+      },
+      {
+        "name": "sdcore-amf-k8s"
+      },
+      {
+        "name": "sdcore-ausf-k8s"
+      },
+      {
+        "name": "sdcore-gnbsim-k8s"
+      },
+      {
+        "name": "sdcore-nms-k8s"
+      },
+      {
+        "name": "sdcore-nrf-k8s"
+      },
+      {
+        "name": "sdcore-nssf-k8s"
+      },
+      {
+        "name": "sdcore-pcf-k8s"
+      },
+      {
+        "name": "sdcore-smf-k8s"
+      },
+      {
+        "name": "sdcore-udm-k8s"
+      },
+      {
+        "name": "sdcore-udr-k8s"
+      },
+      {
+        "name": "sdcore-upf-k8s"
+      }
     ],
     "compatibility": {
-      "juju_versions": [">=3.0.3"]
+      "juju_versions": [
+        ">=3.0.3"
+      ]
     },
     "maintainers": [
-      { "display_name": "maintainerA", "email": "a@canonical.com" },
-      { "display_name": "maintainerB", "email": "b@canonical.com" }
+      {
+        "display_name": "maintainerA",
+        "email": "a@canonical.com"
+      },
+      {
+        "display_name": "maintainerB",
+        "email": "b@canonical.com"
+      }
     ],
     "useful_links": [
       {
@@ -163,6 +253,197 @@
     "media": {
       "icon": "https://assets.ubuntu.com/v1/0ed605c0-ubuntu-cof-120.svg",
       "architecture_diagram": "https://assets.ubuntu.com/v1/f7326a20-telco.png"
+    }
+  },
+  {
+    "id": 3,
+    "name": "canonical-charmed-kubeflow",
+    "title": "Charmed Kubeflow",
+    "revision": "1",
+    "publisher": {
+      "display_name": "Kubeflow Charmers",
+      "id": "jhMA7Ov7i9R6qUCj6Cy7B2YgAyrGs7SY",
+      "username": "kubeflow-charmers"
+    },
+    "summary": "Canonical Charmed Kubeflow is a state of the art, fully supported MLOps platform that helps data scientists collaborate on AI innovation on any cloud from concept to production, offered by Canonical - the open source experts.",
+    "description": "Charmed Kubeflow (CKF) is an open-source, end-to-end, production-ready MLOps platform on top of cloud-native technologies.\n\nIt translates Machine Learning (ML) steps into complete workflows, including training, tuning, and shipping of ML models. It enables automation of workflows, increases quality of models, and simplifies deployment of ML workloads into production in a reliable way.\n\nCKF meets the need of building ML applications in a structured and consistent manner while contributing to higher productivity and better collaboration within teams.\n\nIt is intended for data scientists and ML engineers, providing an advanced toolkit to organise and scale their work.",
+    "use_cases": [
+      {
+        "title": "Data Science Exploration",
+        "description": "Organizations requiring dedicated, secure environments for data exploration & model experimentation can deploy Charmed Kubeflow to provide Jupyter notebooks, data processing tools, and visualization capabilities for data scientists."
+      },
+      {
+        "title": "ML Model Training Pipeline",
+        "description": "ML engineers can use Charmed Kubeflow as a foundation for automating model training workflows, enabling reproducible pipelines, hyperparameter tuning, and tracking of experiments with simplified operations compared to custom solutions."
+      },
+      {
+        "title": "Production Model Deployment",
+        "description": "Organizations deploying machine learning models into production can use Charmed Kubeflow to enable reliable, scalable model serving with features like A/B testing, canary deployments, and monitoring of model performance."
+      }
+    ],
+    "deployable-on": [
+      {
+        "platform": "kubernetes",
+        "version": [
+          ">= 1.12"
+        ],
+        "prerequisites": []
+      }
+    ],
+    "created": "2025-03-02T12:00:00Z",
+    "last_updated": "2025-06-24T12:00:00Z",
+    "documentation": {
+      "main": "https://charmed-kubeflow.io/docs",
+      "source": "https://github.com/canonical/charmed-kubeflow-solutions",
+      "get_started": "https://charmed-kubeflow.io/docs/get-started",
+      "how_to_operate": "https://charmed-kubeflow.io/docs/how-to",
+      "architecture_explanation": "",
+      "submit_a_bug": "https://github.com/canonical/bundle-kubeflow",
+      "community_discussion": "https://discourse.charmhub.io/tag/kubeflow"
+    },
+    "terraform_modules": "https://github.com/canonical/charmed-kubeflow-solutions/tree/track/1.10/modules",
+    "charms": [
+      {
+        "name": "grafana-agent-k8s"
+      },
+      {
+        "name": "argo-controller"
+      },
+      {
+        "name": "admission-webhook"
+      },
+      {
+        "name": "dex-auth"
+      },
+      {
+        "name": "envoy"
+      },
+      {
+        "name": "istio-ingressgateway"
+      },
+      {
+        "name": "istio-pilot"
+      },
+      {
+        "name": "jupyter-controller"
+      },
+      {
+        "name": "jupyter-ui"
+      },
+      {
+        "name": "katib-controller"
+      },
+      {
+        "name": "katib-db"
+      },
+      {
+        "name": "katib-ui"
+      },
+      {
+        "name": "kfp-api"
+      },
+      {
+        "name": "kfp-db"
+      },
+      {
+        "name": "kfp-metadata-writer"
+      },
+      {
+        "name": "kfp-persistence"
+      },
+      {
+        "name": "kfp-profile-controller"
+      },
+      {
+        "name": "kfp-schedwf"
+      },
+      {
+        "name": "kfp-ui"
+      },
+      {
+        "name": "kfp-viewer"
+      },
+      {
+        "name": "kfp-viz"
+      },
+      {
+        "name": "knative-eventing"
+      },
+      {
+        "name": "knative-serving"
+      },
+      {
+        "name": "knative-operator"
+      },
+      {
+        "name": "kserve-controller"
+      },
+      {
+        "name": "kubeflow-dashboard"
+      },
+      {
+        "name": "kubeflow-profiles"
+      },
+      {
+        "name": "kubeflow-volumes"
+      },
+      {
+        "name": "metacontroller-operator"
+      },
+      {
+        "name": "mlmd"
+      },
+      {
+        "name": "minio"
+      },
+      {
+        "name": "oidc-gatekeeper"
+      },
+      {
+        "name": "pvcviewer-operator"
+      },
+      {
+        "name": "tensorboard-controller"
+      },
+      {
+        "name": "tensorboards-web-app"
+      },
+      {
+        "name": "training-operator"
+      }
+    ],
+    "compatibility": {
+      "juju_versions": [
+        ">=3.1.0"
+      ]
+    },
+    "maintainers": [
+      {
+        "display_name": "maintainerA",
+        "email": "a@canonical.com"
+      },
+      {
+        "display_name": "maintainerB",
+        "email": "b@canonical.com"
+      }
+    ],
+    "useful_links": [
+      {
+        "title": "Get started",
+        "url": "https://charmed-kubeflow.io/docs/get-started"
+      },
+      {
+        "title": "Report a Bug",
+        "url": "https://github.com/canonical/charmed-kubeflow-solutions/issues/new?title=docs%3A+TYPE+YOUR+QUESTION+HERE&body=*Please%20describe%20the%20question%20or%20issue%20you%27re%20facing%20with%20Charmed%20Kubeflow.*%0A%0A%0A%0A%0A---%0A*Reported+from%3A+https://charmhub.io*"
+      },
+      {
+        "title": "Community Discussion",
+        "url": "https://discourse.charmhub.io/tag/kubeflow"
+      }
+    ],
+    "media": {
+      "icon": "https://assets.ubuntu.com/v1/385d2521-kubeflow-logo-1.png",
+      "architecture_diagram": "https://assets.ubuntu.com/v1/40b7f87e-40b7f87eb37f33b4e6cb3453827112fb48808ce3.png"
     }
   }
 ]
