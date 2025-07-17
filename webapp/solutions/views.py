@@ -49,8 +49,8 @@ def get_charm_data(charm_name):
         )
 
     return {
-        "charm_name": charm_name,
-        "display_name": charm["result"].get("title", charm_name),
+        "name": charm_name,
+        "title": charm["result"].get("title", charm_name),
         "summary": charm["result"].get("summary", ""),
         "publisher": charm["result"].get("publisher"),
         "icon": icon,
@@ -66,25 +66,25 @@ def list_solutions():
     return render_template("solutions/index.html", solutions=solutions_data)
 
 
-@solutions.route("/solutions/<entity_name>")
+@solutions.route("/solutions/<name>")
 @redirect_uppercase_to_lowercase
-def solution_details(entity_name):
+def solution_details(name):
     solutions_data = load_solutions()
     solution = next(
-        (s for s in solutions_data if s["entity_name"] == entity_name),
+        (s for s in solutions_data if s["name"] == name),
         None,
     )
 
     if not solution:
         abort(404)
 
-    solution["long_description_html"] = markdown_to_html(
-        solution.get("long_description", "")
+    solution["description_html"] = markdown_to_html(
+        solution.get("description", "")
     )
 
     solution_charms = []
     for charm in solution.get("charms", []):
-        charm_info = get_charm_data(charm["charm_name"])
+        charm_info = get_charm_data(charm["name"])
         if charm_info:
             solution_charms.append(charm_info)
 

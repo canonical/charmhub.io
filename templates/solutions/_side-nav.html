@@ -31,10 +31,10 @@
       {% for charm in solution.charms %}
         <div class="charm-card" style="padding: 0.5rem; margin-bottom: 0.5rem; {% if loop.index > 5 %}display: none;{% endif %}">
           {% if charm.icon %}
-            <img class="p-card__thumbnail u-vertical-align--middle" src="{{ charm.icon }}" alt="{{ charm.display_name }}" style="padding-right: 0.5rem;">
+            <img class="p-card__thumbnail u-vertical-align--middle" src="{{ charm.icon }}" alt="{{ charm.title }}" style="padding-right: 0.5rem;">
           {% endif %}
           <span>
-            <a class="u-vertical-align--middle" href="{{ charm.url }}">{{ (charm.display_name or charm.charm_name) | truncate(28) }}</a>
+            <a class="u-vertical-align--middle" href="{{ charm.url }}">{{ (charm.title or charm.name) | truncate(28) }}</a>
           </span>
         </div>
       {% endfor %}

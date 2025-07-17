@@ -4,9 +4,9 @@
   <ul>
     {% for solution in solutions %}
       <li>
-        <a href="{{ url_for('solutions.solution_details', entity_name=solution.entity_name) }}">
-          {{ solution.name }}
-        </a> — {{ solution.short_description }}
+        <a href="{{ url_for('solutions.solution_details', name=solution.name) }}">
+          {{ solution.title }}
+        </a> — {{ solution.summary }}
       </li>
     {% endfor %}
   </ul>

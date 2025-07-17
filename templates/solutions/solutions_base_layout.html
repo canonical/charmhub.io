@@ -1,7 +1,7 @@
 {% extends 'base_layout.html' %}
 
 {% block meta_title %}{{ solution.name }} – Charmhub Solutions{% endblock %}
-{% block meta_description %}{{ solution.short_description }}{% endblock %}
+{% block meta_description %}{{ solution.summary }}{% endblock %}
 {% block meta_image %}{{ solution.documentation.architecture_diagram }}{% endblock %}
 {% block meta_image_alt %}{{ solution.name }} logo{% endblock %}
 
@@ -10,11 +10,11 @@
   {
     "@context": "http://schema.org",
     "@type": "Product",
-    "name": "{{ solution.name }}",
-    "description": "{{ solution.short_description }}",
-    "icon": "{{ solution.icon }}",
+    "title": "{{ solution.title }}",
+    "description": "{{ solution.summary }}",
+    "icon": "{{ solution.media.icon }}",
     "brand": "{{ solution.publisher.name }}",
-    "version": "{{ solution.version }}",
+    "revision": "{{ solution.revision }}",
     "url": "{{ request.url }}"
   }
   </script>

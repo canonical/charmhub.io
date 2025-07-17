@@ -1,7 +1,7 @@
 <div>
   <div class="p-section--shallow u-no-padding--top">
-    <h4 style="font-weight: 500">{{ solution.name }}</h4>
-    {{ solution.long_description_html | safe }}
+    <h4 style="font-weight: 500">{{ solution.title }}</h4>
+    {{ solution.description_html | safe }}
   </div>
 
   {% if solution.use_cases %}

@@ -12,19 +12,19 @@
         width="48"
         height="48"
         class="p-media-object__image"
-        alt="{{ charm.display_name or charm.charm_name }}"
+        alt="{{ charm.title or charm.name }}"
       />
       <div class="p-media-object__details sc-solution-charm-card__details">
         <h2 class="p-heading--5 u-no-margin--bottom">
-          <a href="/{{ charm.charm_name }}" class="p-link--soft">
-            {{ charm.display_name or charm.charm_name }}
+          <a href="/{{ charm.name }}" class="p-link--soft">
+            {{ charm.title or charm.name }}
           </a>
         </h2>
         <p class="u-text--muted u-no-padding--top">
           <em>{{ charm.publisher["display-name"] }}</em>
         </p>
         <p class="u-line-clamp">
-          {{ charm.summary }}
+          {{ charm.summary | truncate(90)  }}
         </p>
         <div class="sc-solution-charm-card__footer">
           <hr />
