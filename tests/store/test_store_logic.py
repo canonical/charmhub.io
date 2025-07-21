@@ -9,6 +9,7 @@ from webapp.store.logic import (
     process_libraries,
     add_store_front_data,
     process_revision,
+    add_overlay_data,
 )
 from mock_data.mock_store_logic import (
     sample_channel_map,
@@ -186,3 +187,15 @@ class TestProcessRevision(TestCase):
         }
 
         self.assertEqual(process_revision(revision), processed_revision)
+
+
+class TestAddOverlayData(TestCase):
+    def test_add_overlay_data(self):
+        package = { "name": "postgresql-k8s", "other": "test data" }
+        result = add_overlay_data(package)
+        self.assertEqual({ "juju_cmd_extra_flags": "--trust" }, result["overlay_data"])
+
+    def test_overlay_data_not_needed(self):
+        package = { "name": "no-data", "other": "test data" }
+        result = add_overlay_data(package)
+        self.assertEqual(package, result)

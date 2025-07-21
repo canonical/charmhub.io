@@ -614,6 +614,5 @@ def add_overlay_data(package):
 
     if overlay.get(package["name"]) is not None:
         package["overlay_data"] = overlay[package["name"]].copy()
-        print(package["overlay_data"])
 
     return package
