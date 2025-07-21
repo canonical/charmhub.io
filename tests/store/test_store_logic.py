@@ -191,11 +191,13 @@ class TestProcessRevision(TestCase):
 
 class TestAddOverlayData(TestCase):
     def test_add_overlay_data(self):
-        package = { "name": "postgresql-k8s", "other": "test data" }
+        package = {"name": "postgresql-k8s", "other": "test data"}
         result = add_overlay_data(package)
-        self.assertEqual({ "juju_cmd_extra_flags": "--trust" }, result["overlay_data"])
+        self.assertEqual(
+            {"juju_cmd_extra_flags": "--trust"}, result["overlay_data"]
+        )
 
     def test_overlay_data_not_needed(self):
-        package = { "name": "no-data", "other": "test data" }
+        package = {"name": "no-data", "other": "test data"}
         result = add_overlay_data(package)
         self.assertEqual(package, result)

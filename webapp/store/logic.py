@@ -601,15 +601,18 @@ def format_slug(slug):
         .replace("Iot", "IoT")
     )
 
+
 with open("webapp/store/overlay.json") as overlay_file:
     overlay = json.load(overlay_file)
+
 
 @trace_function
 def add_overlay_data(package):
     """
     Adds custom hard-coded overlay.json data to the package object
     :param package: The package object retrieved from the snapcraft API
-    :return: The package object with an additional "overlay" key containing extra info
+    :return: The package object with an additional "overlay" key
+    containing extra info
     """
 
     if overlay.get(package["name"]) is not None:
