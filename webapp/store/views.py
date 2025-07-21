@@ -144,6 +144,7 @@ def get_package(entity_name, channel_request=None, fields=FIELDS):
         package["channel-map"] = channel_map["channel-map"]
 
     package = logic.add_store_front_data(package, True)
+    package = logic.add_overlay_data(package)
 
     for channel in package["channel-map"]:
         channel["channel"]["released-at"] = logic.convert_date(
