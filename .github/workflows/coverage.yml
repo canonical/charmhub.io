@@ -103,7 +103,7 @@ jobs:
 
 
   tics-report:
-    runs-on: [self-hosted, linux, amd64, tiobe, jammy]
+    runs-on: [self-hosted, linux, amd64, tiobe, noble]
     needs: publish-coverage-report
     steps:
       - uses: actions/checkout@v4
