@@ -125,10 +125,10 @@ jobs:
           pip install -r requirements.txt
           pip install pylint
       
-      - name: Set up Node.js 18
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
           cache: 'yarn'
       - name: Install JavaScript dependencies
         run: yarn install --immutable
