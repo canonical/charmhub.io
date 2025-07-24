@@ -188,7 +188,7 @@ class TestPublisherViews(unittest.TestCase):
         res = self.client.get("/api/packages/test-entity/invites")
         self.assertEqual(res.status_code, 200)
 
-    @patch("webapp.utils.email.Emailer.send_email_template")
+    @patch("webapp.utils.emailer.Emailer.send_email_template")
     @patch("webapp.store_api.publisher_gateway.invite_collaborators")
     def test_invite_collaborators(
         self, mock_invite_collaborators, mock_send_email_template

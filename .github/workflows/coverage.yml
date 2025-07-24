@@ -2,6 +2,9 @@ name: Test coverage
 on:
   schedule:
     - cron: "0 22 * * 5"
+  push:
+    branches:
+      - update-tiobe
 
 jobs:
   test:
@@ -100,7 +103,7 @@ jobs:
 
 
   tics-report:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, amd64, tiobe, noble]
     needs: publish-coverage-report
     steps:
       - uses: actions/checkout@v4
@@ -111,21 +114,31 @@ jobs:
           name: charmhubio-coverage
           path: coverage
 
-      - name: Install Python requirements
-        run: |
-          sudo pip3 install -r requirements.txt
-
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
       - name: Install Python dependencies
-        run: sudo pip3 install pylint
-
-      - name: Install JS dependencies
-        run: yarn install
-
-      - name: Produce TICS report
-        shell: bash
         run: |
-          set -x
-          export TICSAUTHTOKEN=${{ secrets.TICSAUTHTOKEN }}
-          curl --silent --show-error "https://canonical.tiobe.com/tiobeweb/TICS/api/public/v1/fapi/installtics/Script?cfg=default&platform=linux&url=https://canonical.tiobe.com/tiobeweb/TICS/" > install_tics.sh
-          . ./install_tics.sh
-          TICSQServer -project charmhub.io -tmpdir /tmp/tics -branchdir .
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pylint
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'yarn'
+      - name: Install JavaScript dependencies
+        run: yarn install --immutable
+
+      - name: Run TICS analysis with github-action
+        uses: tiobe/tics-github-action@v3
+        with:
+          mode: qserver
+          project: charmhub.io
+          branchdir: .
+          viewerUrl: https://canonical.tiobe.com/tiobeweb/TICS/api/cfg?name=default
+          ticsAuthToken: ${{ secrets.TICSAUTHTOKEN }}
+          installTics: true
