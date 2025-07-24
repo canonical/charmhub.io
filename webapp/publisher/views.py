@@ -15,7 +15,7 @@ from webapp.decorators import login_required, cached_redirect
 from webapp.publisher.logic import get_all_architectures, process_releases
 from webapp.observability.utils import trace_function
 from webapp.store_api import publisher_gateway
-from webapp.utils.email import get_emailer
+from webapp.utils.emailer import get_emailer
 
 publisher = Blueprint(
     "publisher",

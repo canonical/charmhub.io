@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from webapp.utils.email import Emailer, SMTPConfig, EmailerError
+from webapp.utils.emailer import Emailer, SMTPConfig, EmailerError
 
 
 class TestEmailer(unittest.TestCase):
@@ -35,7 +35,7 @@ class TestEmailer(unittest.TestCase):
 
     @patch("smtplib.SMTP")
     def test_send_email_template_success(self, mock_smtp):
-        with patch("webapp.utils.email.render_template") as mock_render:
+        with patch("webapp.utils.emailer.render_template") as mock_render:
             mock_render.return_value = "<h1>Hello</h1>"
             mock_server = MagicMock()
             mock_smtp.return_value.__enter__.return_value = mock_server
