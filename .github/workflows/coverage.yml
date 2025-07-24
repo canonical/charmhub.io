@@ -114,18 +114,24 @@ jobs:
           name: charmhubio-coverage
           path: coverage
 
-      - name: Install Python requirements
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - name: Install Python dependencies
         run: |
-          sudo apt install python3.12-venv -y
-          python3 -m venv .venv
-          source .venv/bin/activate
-          pip3 install -r requirements.txt
-          pip3 install pylint
-      - name: Install JS dependencies
-        run: |
-          sudo snap install node --channel=22/stable --classic
-          export PATH=/snap/bin:$PATH # use /snap/bin/node rather than /usr/bin/node
-          yarn install --immutable
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pylint
+      
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+      - name: Install JavaScript dependencies
+        run: yarn install --immutable
 
       - name: Run TICS analysis with github-action
         uses: tiobe/tics-github-action@v3
