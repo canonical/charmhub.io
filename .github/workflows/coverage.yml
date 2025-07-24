@@ -2,9 +2,6 @@ name: Test coverage
 on:
   schedule:
     - cron: "0 22 * * 5"
-  push:
-    branches:
-      - update-tiobe
 
 jobs:
   test:
