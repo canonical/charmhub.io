@@ -116,13 +116,16 @@ jobs:
 
       - name: Install Python requirements
         run: |
-          sudo pip3 install -r requirements.txt
-
-      - name: Install Python dependencies
-        run: sudo pip3 install pylint
-
+          sudo apt install python3.12-venv -y
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip3 install -r requirements.txt
+          pip3 install pylint
       - name: Install JS dependencies
-        run: yarn install
+        run: |
+          sudo snap install node --channel=22/stable --classic
+          export PATH=/snap/bin:$PATH # use /snap/bin/node rather than /usr/bin/node
+          yarn install --immutable
 
       - name: Run TICS analysis with github-action
         uses: tiobe/tics-github-action@v3
