@@ -21,7 +21,7 @@
           <ul class="p-side-navigation__list">
             {% for lib in libraries %}
             <li class="p-side-navigation__item">
-                <a class="p-side-navigation__link" {% if request.path.endswith(lib['name']) or request.path.endswith(lib['name'] + '/source-code') %}aria-current="page"{% endif %} href="/{{ entity_name }}/libraries/{{ lib['name'] }}" style="color: #111;">{{ lib["name"] }}</a>
+                <a class="p-side-navigation__link" {% if request.path.endswith('libraries/' + lib['name']) or request.path.endswith('libraries/' + lib['name'] + '/source-code') %}aria-current="page"{% endif %} href="/{{ entity_name }}/libraries/{{ lib['name'] }}" style="color: #111;">{{ lib["name"] }}</a>
             </li>
             {% endfor %}
           </ul>
