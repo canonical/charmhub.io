@@ -79,4 +79,38 @@
       vertical-align: middle;
     }
   }
+
+  .sc-solution-charm-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .p-card__content {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      height: 100%;
+    }
+
+    &__media {
+      display: flex;
+      flex-grow: 1;
+      height: 100%;
+    }
+
+    &__details {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    &__footer {
+      margin-top: auto;
+    }
+
+    &__footer-content {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
 }

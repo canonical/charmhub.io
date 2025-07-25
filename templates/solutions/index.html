@@ -1,0 +1,13 @@
+{% extends "base_layout.html" %}
+{% block content %}
+  <h1>Solutions</h1>
+  <ul>
+    {% for solution in solutions %}
+      <li>
+        <a href="{{ url_for('solutions.solution_details', name=solution.name) }}">
+          {{ solution.title }}
+        </a> — {{ solution.summary }}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
