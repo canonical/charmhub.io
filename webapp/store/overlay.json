@@ -10,5 +10,8 @@
   },
   "mysql-k8s": {
     "juju_cmd_extra_flags": "--trust"
+  },
+  "grafana-k8s": {
+    "juju_cmd_extra_flags": "--trust"
   }
 }
