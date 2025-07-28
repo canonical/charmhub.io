@@ -7,10 +7,12 @@ import humanize
 from dateutil import parser
 from mistune import html
 from canonicalwebteam.docstring_extractor import get_docstrings
-from webapp.helpers import get_soup, modify_headers
 from webapp.helpers import (
     discourse_api,
     get_yaml_loader,
+    markdown_to_html,
+    get_soup,
+    modify_headers,
 )
 from webapp.observability.utils import trace_function
 
@@ -25,17 +27,29 @@ ARCHITECTURES = ["amd64", "arm64", "ppc64el", "riscv64", "s390x"]
 
 
 @trace_function
-def add_description_and_summary(package):
+def get_summary(package):
+    if package["type"] == "bundle":
+        summary = (
+            package.get("store_front", {})
+            .get("bundle", {})
+            .get("summary", None)
+        )
+    else:
+        summary = (
+            package.get("store_front", {})
+            .get("metadata", {})
+            .get("summary", None)
+        )
+    return summary
+
+
+@trace_function
+def get_description(package, parse_to_html=False):
     if package["type"] == "bundle":
         description = (
             package.get("store_front", {})
             .get("bundle", {})
             .get("description", None)
-        )
-        summary = (
-            package.get("store_front", {})
-            .get("bundle", {})
-            .get("summary", None)
         )
     else:
         description = (
@@ -43,12 +57,7 @@ def add_description_and_summary(package):
             .get("metadata", {})
             .get("description", None)
         )
-        summary = (
-            package.get("store_front", {})
-            .get("metadata", {})
-            .get("summary", None)
-        )
-    return description, summary
+    return markdown_to_html(description) if parse_to_html else description
 
 
 @trace_function
@@ -619,3 +628,12 @@ def add_overlay_data(package):
         package["overlay_data"] = overlay[package["name"]].copy()
 
     return package
+
+
+@trace_function
+def get_doc_link(package):
+    """
+    Returns the documentation link of a package
+    """
+    docs = package.get("result", {}).get("links", {}).get("docs", [])
+    return docs[0] if docs else None
