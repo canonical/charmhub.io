@@ -497,3 +497,130 @@ sample_charm = {
     },
     "type": "charm",
 }
+
+sample_package_detail = {
+    "channel-map": [
+        {
+            "channel": {
+                "base": {
+                    "architecture": "amd64",
+                    "channel": "22.04",
+                    "name": "ubuntu",
+                },
+                "name": "1.16/stable",
+                "released-at": "2025-01-20T21:44:16.705435+00:00",
+                "risk": "stable",
+                "track": "1.16",
+            },
+            "revision": {
+                "attributes": {"framework": "operator", "language": "python"},
+                "bases": [
+                    {
+                        "architecture": "amd64",
+                        "channel": "22.04",
+                        "name": "ubuntu",
+                    }
+                ],
+                "created-at": "2025-01-17T21:09:54.005947+00:00",
+                "download": {
+                    "hash-sha-256": "xx",
+                    "size": 35749287,
+                    "url": "https://api.charmhub.io/xxx.charm",
+                },
+                "revision": 323,
+                "version": "323",
+            },
+        }
+    ],
+    "default-release": {
+        "channel": {
+            "base": {
+                "architecture": "amd64",
+                "channel": "22.04",
+                "name": "ubuntu",
+            },
+            "name": "1.16/stable",
+            "released-at": "2025-01-20T21:44:16.705435+00:00",
+            "risk": "stable",
+            "track": "1.16",
+        },
+        "resources": [
+            {
+                "created-at": "2024-08-07T10:21:41.554301",
+                "description": "OCI image for Vault",
+                "download": {
+                    "hash-sha-256": "xxxx",
+                    "hash-sha-384": "xxxx",
+                    "hash-sha-512": "xxxx",
+                    "hash-sha3-384": "xxxx",
+                    "size": 501,
+                    "url": "https://xxx",
+                },
+                "filename": "",
+                "name": "vault-image",
+                "revision": 84,
+                "type": "oci-image",
+            }
+        ],
+        "revision": {
+            "actions-yaml": "{}\n",
+            "attributes": {"framework": "operator", "language": "python"},
+            "bases": [
+                {"architecture": "amd64", "channel": "22.04", "name": "ubuntu"}
+            ],
+            "bundle-yaml": "{}\n",
+            "config-yaml": "{}\n",
+            "created-at": "2025-01-17T21:09:54.005947+00:00",
+            "download": {
+                "hash-sha-256": "xxx",
+                "size": 35749287,
+                "url": "https://xxx",
+            },
+            "metadata-yaml": "{}\n",
+            "readme-md": "# Vault",
+            "relations": {
+                "provides": {
+                    "grafana-dashboard": {"interface": "grafana_dashboard"},
+                },
+                "requires": {
+                    "ingress": {"interface": "ingress"},
+                },
+            },
+            "revision": 323,
+            "version": "323",
+        },
+    },
+    "id": "mangoawzhPY46mXnnG8h9MKhY6SUF5Pn",
+    "name": "test",
+    "result": {
+        "bugs-url": "https://github.com/canonical/xxx",
+        "categories": [],
+        "deployable-on": ["kubernetes"],
+        "links": {
+            "contact": ["https://test"],
+            "docs": ["https://discourse.charmhub.io/t/xxx"],
+            "issues": ["https://github.com/canonical/xxx"],
+            "source": ["https://github.com/canonical/xxx"],
+            "website": ["https://charmhub.io/xxx"],
+        },
+        "media": [
+            {
+                "height": None,
+                "type": "icon",
+                "url": "https://api.charmhub.io/xxx",
+                "width": None,
+            }
+        ],
+        "publisher": {
+            "display-name": "Test Publisher",
+            "id": "xxxx",
+            "username": "publisher",
+            "validation": "unproven",
+        },
+        "summary": "A tool for managing secrets",
+        "title": "Test",
+        "unlisted": False,
+        "website": "https://charmhub.io/xxx",
+    },
+    "type": "charm",
+}
