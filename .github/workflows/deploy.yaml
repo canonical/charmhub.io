@@ -14,6 +14,8 @@ on:
         options:
           - Production
           - Staging
+permissions:
+  contents: read
 jobs:
   setup:
     runs-on: ubuntu-latest

@@ -7,6 +7,9 @@ on:
 env:
   SECRET_KEY: insecure_test_key
 
+permissions:
+  contents: read
+
 jobs:
   run-image:
     runs-on: ubuntu-latest
@@ -212,6 +215,9 @@ jobs:
 
   check-inclusive-naming:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
 
     steps:
       - name: Checkout
