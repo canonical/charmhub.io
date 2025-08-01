@@ -27,11 +27,11 @@ function pageArray<T>(items: T[], count: number) {
 }
 
 function sortInterfaces(a: InterfaceItem, b: InterfaceItem) {
-  if (a.status === "live" && b.status !== "live") {
+  if (a.status === "published" && b.status !== "published") {
     return -1;
   }
 
-  if (a.status !== "live" && b.status === "live") {
+  if (a.status !== "published" && b.status === "published") {
     return 1;
   }
 
@@ -184,18 +184,18 @@ function InterfacesIndex({ interfacesList }: Props) {
                           display: "flex",
                         }}
                       >
-                        {item?.status === "live" && (
+                        {item?.status === "published" && (
                           <Link to={`/integrations/${item?.name}`}>
                             {item?.name}
                           </Link>
                         )}
-                        {item?.status !== "live" && (
+                        {item?.status !== "published" && (
                           <>
                             <StatusLabel style={{ marginRight: "1rem" }}>
                               {item?.status}
                             </StatusLabel>
                             <Link
-                              to={`/integrations/${item?.name}/${item?.status}`}
+                              to={`/integrations/${item?.name}`}
                             >
                               {item?.name}
                             </Link>

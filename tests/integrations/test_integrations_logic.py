@@ -92,22 +92,6 @@ class TestInterfaces(unittest.TestCase):
         mock_github_client.get_repo.return_value = self.repo
         self.interfaces = Interfaces()
 
-    def test_repo_has_interface(self):
-        self.repo.get_contents.return_value = ["This is the content"]
-        self.assertTrue(self.interfaces.repo_has_interface("test_interface"))
-        self.repo.get_contents.assert_called_once_with(
-            "interfaces/test_interface"
-        )
-
-    def test_repo_has_no_interface(self):
-        self.repo.get_contents.side_effect = Exception
-        self.assertFalse(
-            self.interfaces.repo_has_interface("non_existent_interface")
-        )
-        self.repo.get_contents.assert_called_once_with(
-            "interfaces/non_existent_interface"
-        )
-
     def test_get_h_content(self):
         self.assertEqual(self.interfaces.get_h_content("abcd", "abc"), [0, 3])
         self.assertRaises(

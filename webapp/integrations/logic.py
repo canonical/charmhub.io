@@ -1,91 +1,58 @@
 import re
-import time
+from typing import  TypedDict
 from github import Github
 from os import getenv
-
-import requests
+from functools import lru_cache
 
 from webapp.helpers import get_yaml_loader
 from webapp.observability.utils import trace_function
+from webapp.packages.logic import (
+    get_package,
+)
 
 GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 
 github_client = Github(GITHUB_TOKEN)
 yaml = get_yaml_loader()
 
+class InterfaceItem(TypedDict):
+    name: str
+    version: int
+    status: str
+
 
 class Interfaces:
-    interfaces = []
-    last_fetch = None
-    repo = None
 
     def __init__(self):
         self.repo = github_client.get_repo(
             "canonical/charm-relation-interfaces"
         )
 
+    @lru_cache(maxsize=None)
     @trace_function
-    def get_interfaces(self):
-        if (
-            len(self.interfaces) == 0
-            or not self.last_fetch
-            or time.time() - self.last_fetch > 172800
-        ):
-            interfaces_contents = self.repo.get_contents("interfaces")
-            interfaces_table = []
-
-            for interface in interfaces_contents:
-                if interface.name.startswith("__"):
-                    continue
-                interface_content = self.repo.get_contents(
-                    f"interfaces/{interface.name}"
-                )
-                for version in interface_content:
-                    interface_details = {}
-                    version_content = self.repo.get_contents(
-                        f"interfaces/{interface.name}/{version.name}"
-                    )
-                    for details in version_content:
-                        if details.name == "interface.yaml":
-                            interface_yaml = yaml.load(
-                                details.decoded_content.decode("utf-8")
-                            )
-                            interface_details["name"] = interface_yaml.get(
-                                "name", interface.name
-                            )
-
-                            if interface_yaml.get("status") == "published":
-                                interface_details["status"] = "live"
-                            elif interface_yaml.get("status") == "draft":
-                                interface_details["status"] = "draft"
-                            interface_details["version"] = interface_yaml.get(
-                                "version", version.name[1:]
-                            )
-                        if details.name == "README.md":
-                            interface_details["readme_path"] = details.html_url
-                    if interface_details.get("status", "") in [
-                        "live",
-                        "draft",
-                    ]:
-                        interfaces_table.append(interface_details)
-            self.interfaces = interfaces_table
-            self.last_fetch = time.time()
-        return self.interfaces
-
-    @trace_function
-    def repo_has_interface(self, interface):
+    def get_interfaces(self) -> list[InterfaceItem]:
         try:
-            self.repo.get_contents("interfaces/{}".format(interface))
-            return True
+            index = self.repo.get_contents("index.json")
+            if isinstance(index, list):
+                index = index[0]
+            index_content = index.decoded_content.decode("utf-8")
+            interfaces = yaml.load(index_content)
+            return interfaces
         except Exception:
-            return False
+            return []
 
+    @lru_cache(maxsize=None)
     @trace_function
     def get_interface_from_path(self, interface_name):
-        interface_versions = self.repo.get_contents(
-            "interfaces/{}".format(interface_name)
-        )
+        try:
+            interface_versions = self.repo.get_contents(
+                "interfaces/{}".format(interface_name)
+            )
+        except Exception:
+            return None
         versions = []
+        if not isinstance(interface_versions, list):
+            interface_versions = [interface_versions]
         for i, version in enumerate(interface_versions):
             if version.type == "dir" and version.name.startswith("v"):
                 versions.append(version.name)
@@ -103,26 +70,26 @@ class Interfaces:
 
         active_providers = []
         active_requirers = []
-        url = "https://charmhub.io/"
+
         if "providers" in interface and interface["providers"]:
+            active_providers = []
             for provider in interface["providers"]:
                 try:
-                    p = requests.get(f"{url}/{provider['name']}")
-                    if p.status_code != 404:
-                        active_providers.append(provider)
+                    get_package(provider["name"], [], False)
+                    active_providers.append(provider)
                 except Exception:
                     continue
+            interface["providers"] = active_providers
 
-                interface["providers"] = active_providers
         if "requirers" in interface and interface["requirers"]:
+            active_requirers = []
             for requirer in interface["requirers"]:
                 try:
-                    c = requests.get(f"{url}/{requirer['name']}")
-                    if c.status_code != 404:
-                        active_requirers.append(requirer)
+                    get_package(requirer["name"], [], False)
+                    active_requirers.append(requirer)
                 except Exception:
                     continue
-                interface["requirers"] = active_requirers
+            interface["requirers"] = active_requirers
 
         return interface
 
