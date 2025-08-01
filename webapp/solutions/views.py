@@ -74,7 +74,6 @@ def solution_details(name):
 
     if preview_id:
         solution = get_solution_from_backend(preview_id)
-        print(f"[DEBUG] solution = {solution}")
         if not solution:
             abort(404)
     else:
