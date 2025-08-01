@@ -1,5 +1,4 @@
 import re
-from typing import  TypedDict
 from github import Github
 from os import getenv
 from functools import lru_cache
@@ -15,22 +14,22 @@ GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 github_client = Github(GITHUB_TOKEN)
 yaml = get_yaml_loader()
 
-class InterfaceItem(TypedDict):
-    name: str
-    version: int
-    status: str
-
 
 class Interfaces:
-
     def __init__(self):
-        self.repo = github_client.get_repo(
-            "canonical/charm-relation-interfaces"
-        )
+        self._repo = None
+
+    @property
+    def repo(self):
+        if self._repo is None:
+            self._repo = github_client.get_repo(
+                "canonical/charm-relation-interfaces"
+            )
+        return self._repo
 
     @lru_cache(maxsize=None)
     @trace_function
-    def get_interfaces(self) -> list[InterfaceItem]:
+    def get_interfaces(self):
         try:
             index = self.repo.get_contents("index.json")
             if isinstance(index, list):
@@ -53,7 +52,7 @@ class Interfaces:
         versions = []
         if not isinstance(interface_versions, list):
             interface_versions = [interface_versions]
-        for i, version in enumerate(interface_versions):
+        for _, version in enumerate(interface_versions):
             if version.type == "dir" and version.name.startswith("v"):
                 versions.append(version.name)
 
@@ -194,3 +193,6 @@ class Interfaces:
     def get_interface_name_from_readme(self, text):
         name = re.sub(r"[#` \n]", "", text.split("\n##", 1)[0]).split("/")[0]
         return name
+
+
+interface_logic = Interfaces()

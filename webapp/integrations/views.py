@@ -6,11 +6,10 @@ from flask import (
 )
 from flask.json import jsonify
 
-from webapp.integrations.logic import Interfaces
+from webapp.integrations.logic import interface_logic
 from webapp.observability.utils import trace_function
 from webapp.store_api import publisher_gateway
 
-interface_logic = Interfaces()
 
 integrations = Blueprint(
     "integrations",
@@ -18,6 +17,7 @@ integrations = Blueprint(
     template_folder="/templates",
     static_folder="/static",
 )
+
 
 @trace_function
 @integrations.route("/integrations.json")
@@ -40,10 +40,13 @@ def all_interfaces():
     return render_template("interfaces/index.html", **context)
 
 
-
 def fetch_interface_details(interface_name):
-    other_requirers = publisher_gateway.find(requires=[interface_name]).get("results", [])
-    other_providers = publisher_gateway.find(provides=[interface_name]).get("results", [])
+    other_requirers = publisher_gateway.find(requires=[interface_name]).get(
+        "results", []
+    )
+    other_providers = publisher_gateway.find(provides=[interface_name]).get(
+        "results", []
+    )
 
     res = {
         "other_charms": {
@@ -54,30 +57,34 @@ def fetch_interface_details(interface_name):
 
     interface = interface_logic.get_interface_from_path(interface_name)
     if interface is None:
-        if not other_providers and not other_requirers:
+        if other_providers or other_requirers:
             return res
         return None
 
-    readme_path = f"interfaces/{interface_name}/v{interface['version']}/README.md"
+    readme_path = (
+        f"interfaces/{interface_name}/v{interface['version']}/README.md"
+    )
     readme_contentfile = interface_logic.repo.get_contents(readme_path)
     readme = readme_contentfile.decoded_content.decode("utf-8")
     last_modified = datetime.strptime(
         readme_contentfile.last_modified, "%a, %d %b %Y %H:%M:%S %Z"
     ).isoformat()
 
-    res.update({
-        "body": interface_logic.convert_readme(
-            interface_name, f"v{interface['version']}", readme, 2
-        ),
-        "name": interface_logic.get_interface_name_from_readme(readme),
-        "charms": {
-            "providers": interface["providers"],
-            "requirers": interface["requirers"],
-        },
-        "last_modified": last_modified,
-        "status": interface["status"],
-        "version": interface["version"],
-    })
+    res.update(
+        {
+            "body": interface_logic.convert_readme(
+                interface_name, f"v{interface['version']}", readme, 2
+            ),
+            "name": interface_logic.get_interface_name_from_readme(readme),
+            "charms": {
+                "providers": interface["providers"],
+                "requirers": interface["requirers"],
+            },
+            "last_modified": last_modified,
+            "status": interface["status"],
+            "version": interface["version"],
+        }
+    )
 
     return res
 
@@ -85,7 +92,6 @@ def fetch_interface_details(interface_name):
 @trace_function
 @integrations.route("/integrations/<path:path>")
 def get_single_interface(path):
-
     interface_data = fetch_interface_details(path)
 
     if interface_data is None:

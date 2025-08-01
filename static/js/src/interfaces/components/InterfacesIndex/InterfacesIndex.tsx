@@ -194,9 +194,7 @@ function InterfacesIndex({ interfacesList }: Props) {
                             <StatusLabel style={{ marginRight: "1rem" }}>
                               {item?.status}
                             </StatusLabel>
-                            <Link
-                              to={`/integrations/${item?.name}`}
-                            >
+                            <Link to={`/integrations/${item?.name}`}>
                               {item?.name}
                             </Link>
                           </>
