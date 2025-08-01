@@ -111,8 +111,14 @@
       inviteActionsPanel.classList.add("u-hide");
       inviteSuccessPanel.classList.remove("u-hide");
 
-      setTimeout(() => {
-        window.location = `/${encodeURIComponent(package)}/listing`;
+      setTimeout(() => { 
+        // Validate the package value before using it in a path
+        const allowedPackagePattern = /^[a-z0-9\-]+$/;
+        if (allowedPattern.test(package)) {
+          window.location = `/${encodeURIComponent(package)}/listing`;
+        } else {
+          throw new Error("Invalid package name.");
+        }
       }, 3000);
     })
     .catch((error) => {
