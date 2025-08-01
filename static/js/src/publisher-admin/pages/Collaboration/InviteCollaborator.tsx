@@ -96,7 +96,7 @@ function InviteCollaborator({ setShowSidePanel }: Props): JSX.Element {
           type="email"
           id="collaborator-email"
           label={<strong>1. Email</strong>}
-          placeholder="yourname@example.com"
+          placeholder="colleague@company.com"
           help="Collaborator email linked to the Ubuntu One account"
           value={activeInviteEmail}
           onInput={(
