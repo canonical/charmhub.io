@@ -1,9 +1,10 @@
 import os
 import json
-from flask import Blueprint, abort, render_template
+from flask import Blueprint, abort, render_template, request
 from webapp.decorators import redirect_uppercase_to_lowercase
 from webapp.store_api import publisher_gateway
 from webapp.helpers import markdown_to_html
+from webapp.helpers import get_solution_from_backend
 
 solutions = Blueprint(
     "solutions",
@@ -69,14 +70,21 @@ def list_solutions():
 @solutions.route("/solutions/<name>")
 @redirect_uppercase_to_lowercase
 def solution_details(name):
-    solutions_data = load_solutions()
-    solution = next(
-        (s for s in solutions_data if s["name"] == name),
-        None,
-    )
+    preview_id = request.args.get("preview")
 
-    if not solution:
-        abort(404)
+    if preview_id:
+        solution = get_solution_from_backend(preview_id)
+        print(f"[DEBUG] solution = {solution}")
+        if not solution:
+            abort(404)
+    else:
+        solutions_data = load_solutions()
+        solution = next(
+            (s for s in solutions_data if s["name"] == name),
+            None,
+        )
+        if not solution:
+            abort(404)
 
     solution["description_html"] = markdown_to_html(
         solution.get("description", "")
@@ -84,7 +92,7 @@ def solution_details(name):
 
     solution_charms = []
     for charm in solution.get("charms", []):
-        charm_info = get_charm_data(charm["name"])
+        charm_info = get_charm_data(charm["charm_name"])
         if charm_info:
             solution_charms.append(charm_info)
 

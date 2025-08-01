@@ -21,6 +21,16 @@
 {% endblock %}
 
 {% block content %}
+  {% if request.args.get('preview') %}
+    <div class="p-strip is-shallow grid-row">
+      <div class="p-notification--caution">
+        <div class="p-notification__content">
+          <h5 class="p-notification__title">Preview mode</h5>
+          <p class="p-notification__message">You are viewing a preview of a solution.</p>
+        </div>
+      </div>
+    </div>
+  {% endif %}
   {% include 'solutions/_header.html' %}
   <div class="p-block"></div>
   <div class="grid-row">
