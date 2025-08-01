@@ -40,6 +40,10 @@ jobs:
     needs: setup
     name: Deploy
     uses: canonical/webteam-devops/.github/workflows/deploy.yaml@main
+    permissions:
+      packages: write
+      id-token: write
+      contents: read
     with:
       environment: ${{ needs.setup.outputs.environment }}
       charm_name: ${{ needs.setup.outputs.charm_name }}
