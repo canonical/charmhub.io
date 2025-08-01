@@ -5,6 +5,7 @@ from webapp.decorators import redirect_uppercase_to_lowercase
 from webapp.store_api import publisher_gateway
 from webapp.helpers import markdown_to_html
 from webapp.helpers import get_solution_from_backend
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 solutions = Blueprint(
     "solutions",
@@ -89,11 +90,24 @@ def solution_details(name):
         solution.get("description", "")
     )
 
-    solution_charms = []
-    for charm in solution.get("charms", []):
-        charm_info = get_charm_data(charm["charm_name"])
-        if charm_info:
-            solution_charms.append(charm_info)
+    # Fetch charm data in parallel
+    charm_names = [c["charm_name"] for c in solution.get("charms", [])]
+
+    def fetch(name):
+        return name, get_charm_data(name)
+
+    charm_data_map = {}
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        futures = {executor.submit(fetch, name): name for name in charm_names}
+        for future in as_completed(futures):
+            name, data = future.result()
+            if data:
+                charm_data_map[name] = data
+
+    # Preserve charm order
+    solution_charms = [
+        charm_data_map[name] for name in charm_names if name in charm_data_map
+    ]
 
     solution["charms"] = solution_charms
 
