@@ -1,0 +1,93 @@
+<div>
+  <div class="p-section--shallow u-no-padding--top">
+    <h4 style="font-weight: 500">{{ solution.title }}</h4>
+    {{ solution.description_html | safe }}
+  </div>
+
+  {% if solution.use_cases %}
+    <hr class="p-separator--shallow">
+    <div class="p-section--shallow u-no-padding--top">
+      <h4 style="font-weight: 500">Use cases</h4>
+      <div class="grid-row">
+        {% for use_case in solution.use_cases %}
+          <div class="grid-col-2 solution-use-case">
+            <hr class="p-rule--highlight">
+            <h5>{{ use_case.title }}</h5>
+            <p>{{ use_case.description }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if solution.media.architecture_diagram %}
+    <hr class="p-separator--shallow">
+    <div class="p-section--shallow u-no-padding--top">
+      <h4 style="font-weight: 500">Architecture</h4>
+      <img src="{{ solution.media.architecture_diagram }}" alt="canonical observability architecture diagram" loading="lazy">
+    </div>
+  {% endif %}
+
+  {% if solution.charms %}
+    <hr class="p-separator--shallow">
+    <div class="p-section--shallow u-no-padding--top">
+      <h4 style="font-weight: 500">Charms</h4>
+      <div class="grid-row" id="charm-card-list">
+        {% for charm in solution.charms %}
+          <div class="grid-col-2 charm-card-details" style="margin-bottom: 1.5rem; {% if loop.index > 6 %}display: none;{% endif %}">
+            {% include '/solutions/_solution_charm_card.html' %}
+          </div>
+        {% endfor %}
+      </div>
+      {% if solution.charms | length > 6 %}
+        <button id="load-more-charm-details" class="p-button">
+          <span class="button-text">See all ({{ solution.charms | length }})</span>
+          <i class="p-icon--spinner u-animation--spin" style="display: none;"></i>
+        </button>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if solution.useful_links %}
+    <hr class="p-separator--shallow">
+    <div class="p-section--deep u-no-padding--top">
+      <div class="grid-row">
+        <div class="grid-col-2">
+          <h4 style="font-weight: 500">Useful links</h4>
+        </div>
+        <div class="grid-col-2">
+        </div>
+        <div class="grid-col-2">
+          {% for link in solution.useful_links %}
+            <div style="margin-bottom: 1rem;">
+              <a href="{{ link.url }}">{{ link.title }}&nbsp;&rsaquo;</a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const loadMoreButton = document.getElementById('load-more-charm-details');
+    if (loadMoreButton) {
+      const buttonText = loadMoreButton.querySelector('.button-text');
+      const spinner = loadMoreButton.querySelector('.p-icon--spinner');
+
+      loadMoreButton.addEventListener('click', () => {
+        buttonText.style.display = 'none';
+        spinner.style.display = 'inline-block';
+
+        setTimeout(() => {
+          const hiddenCharms = document.querySelectorAll('.charm-card-details[style*="display: none"]');
+          hiddenCharms.forEach(charm => {
+            charm.style.display = 'block';
+          });
+          loadMoreButton.style.display = 'none';
+        }, 500);
+      });
+    }
+  });
+</script>
