@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="1990" lines-covered="1324" line-rate="0.6653" branches-valid="1275" branches-covered="720" branch-rate="0.5647" timestamp="1754085959834" complexity="0" version="0.1">
+<coverage lines-valid="1990" lines-covered="1324" line-rate="0.6653" branches-valid="1275" branches-covered="720" branch-rate="0.5647" timestamp="1754690775675" complexity="0" version="0.1">
   <sources>
     <source>/home/runner/work/charmhub.io/charmhub.io</source>
   </sources>
@@ -638,7 +638,7 @@
             </method>
             <method name="(anonymous_13)" hits="0" signature="()V">
               <lines>
-                <line number="224" hits="0"/>
+                <line number="222" hits="0"/>
               </lines>
             </method>
           </methods>
@@ -688,11 +688,11 @@
             <line number="108" hits="19" branch="false"/>
             <line number="145" hits="0" branch="false"/>
             <line number="178" hits="25" branch="false"/>
-            <line number="225" hits="0" branch="false"/>
-            <line number="226" hits="0" branch="false"/>
-            <line number="228" hits="0" branch="true" condition-coverage="0% (0/2)"/>
+            <line number="223" hits="0" branch="false"/>
+            <line number="224" hits="0" branch="false"/>
+            <line number="226" hits="0" branch="true" condition-coverage="0% (0/2)"/>
+            <line number="227" hits="0" branch="false"/>
             <line number="229" hits="0" branch="false"/>
-            <line number="231" hits="0" branch="false"/>
           </lines>
         </class>
       </classes>
