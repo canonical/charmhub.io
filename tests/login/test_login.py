@@ -1,12 +1,12 @@
 import unittest
 from flask import session
 
-import talisker
 from canonicalwebteam.candid import CandidClient
 from webapp.app import app
 import responses
+import requests
 
-request_session = talisker.requests.get_session()
+request_session = requests.Session()
 candid = CandidClient(request_session)
 
 
