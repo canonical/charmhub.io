@@ -1,4 +1,3 @@
-import talisker.requests
 from flask import render_template, make_response, request, session
 from dateutil import parser
 
@@ -22,6 +21,7 @@ from webapp.packages.store_packages import store_packages
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.trace import Span
+import requests
 
 
 app = FlaskBase(
@@ -40,7 +40,7 @@ app.config["LOGIN_REQUIRED"] = login_required
 
 set_handlers(app)
 
-request_session = talisker.requests.get_session()
+request_session = requests.Session()
 candid = CandidClient(request_session)
 cache.init_app(app)
 csrf.init_app(app)

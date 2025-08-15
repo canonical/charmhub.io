@@ -1,5 +1,5 @@
 import os
-import talisker
+import requests
 import flask
 
 from flask_wtf.csrf import generate_csrf, validate_csrf
@@ -20,7 +20,7 @@ LOGIN_LAUNCHPAD_TEAM = os.getenv(
 )
 
 
-request_session = talisker.requests.get_session()
+request_session = requests.Session()
 candid = CandidClient(request_session)
 
 
