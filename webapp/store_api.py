@@ -1,4 +1,4 @@
-import talisker
+import requests
 from canonicalwebteam.store_api.devicegw import DeviceGW
 from canonicalwebteam.store_api.publishergw import PublisherGW
 from webapp.observability.utils import trace_function
@@ -23,6 +23,7 @@ def decorate_all_methods(decorator, cls):
 TracedPubilsherGW = decorate_all_methods(trace_function, PublisherGW)
 TracedDeviceGW = decorate_all_methods(trace_function, DeviceGW)
 
-request_session = talisker.requests.get_session()
+
+request_session = requests.Session()
 publisher_gateway = TracedPubilsherGW("charm", request_session)
 device_gateway = TracedDeviceGW("charm", request_session)
