@@ -55,10 +55,6 @@ RUN rm -rf package.json yarn.lock babel.config.json webpack.config.js requiremen
 COPY --from=build-js /srv/static/js static/js
 COPY --from=build-css /srv/static/css static/css
 
-# Set build ID
-ARG BUILD_ID
-ENV TALISKER_REVISION_ID "${BUILD_ID}"
-
 
 # Setup commands to run server
 ENTRYPOINT ["./entrypoint"]

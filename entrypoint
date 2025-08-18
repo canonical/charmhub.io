@@ -3,11 +3,11 @@
 set -e
 
 
-RUN_COMMAND="talisker.gunicorn.gevent webapp.app:app --bind $1 --worker-class gevent --name talisker-`hostname`"
+RUN_COMMAND="gunicorn webapp.app:app --bind $1 --worker-class gevent --access-logfile - --error-logfile - --name `hostname`"
 
 
 if [ "${FLASK_DEBUG}" = true ] || [ "${FLASK_DEBUG}" = 1 ]; then
-    RUN_COMMAND="${RUN_COMMAND} --reload --log-level debug --timeout 9999"
+    RUN_COMMAND="${RUN_COMMAND} --reload --timeout 9999"
 fi
 
 # if OTEL_SERVICE_NAME is defined, inject OTEL sdk
