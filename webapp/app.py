@@ -20,7 +20,7 @@ from webapp.decorators import login_required
 from webapp.packages.store_packages import store_packages
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
-from opentelemetry.trace import Span,get_current_span
+from opentelemetry.trace import Span, get_current_span
 import requests
 
 

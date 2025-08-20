@@ -7,22 +7,18 @@ datasources:
     url: http://tempo:3200
     isDefault: true
     editable: true
-    uid: tempo-ds
+    uid: tempo
 
   - name: Loki
     type: loki
     access: proxy
     url: http://loki:3100
     editable: true
-    # jsonData:
-    #   derivedFields:
-    #     - datasourceUid: tempo-ds   # use UID instead of name
-    #       matcherRegex: "(?i)trace_id=([0-9a-f]{32})"
-    #       name: Trace
-    #       url: "/explore?left=%7B%22datasource%22%3A%22tempo-ds%22%7D&traceID=$1"
-    #       datasource: Tempo
-    #     - datasourceUid: loki
-    #       matcherRegex: "(?i)trace_id=([0-9a-f]{32})"
-    #       name: Logs
-    #       url: "/explore?left=%7B%22datasource%22%3A%22loki%22%2C%22expr%22%3A%22%7Btrace_id%3D%5C%22$1%5C%22%7D%22%7D"
-    #       datasource: Loki
+    uid: loki
+
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    editable: true
+    uid: prometheus
