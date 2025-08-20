@@ -7,8 +7,30 @@ services:
       - ./grafana/provisioning:/etc/grafana/provisioning
     depends_on:
       - tempo
+      - loki
     networks:
       - observability
+  loki:
+    image: grafana/loki:latest
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"  # Loki API
+    volumes:
+      - ./loki/loki.yaml:/etc/loki/local-config.yaml
+    networks:
+      - observability
+
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./promtail/promtail.yaml:/etc/promtail/config.yaml
+    command: -config.file=/etc/promtail/config.yaml
+    networks:
+      - observability
+    depends_on:
+      - loki
+
 
   tempo:
     image: grafana/tempo:latest
