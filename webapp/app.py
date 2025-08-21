@@ -20,8 +20,8 @@ from webapp.decorators import login_required
 from webapp.packages.store_packages import store_packages
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
-from opentelemetry.trace import Span, get_current_span
 import requests
+from opentelemetry.trace import Span
 
 
 app = FlaskBase(
@@ -70,17 +70,6 @@ FlaskInstrumentor().instrument_app(
     app, excluded_urls=",".join(UNTRACED_ROUTES), request_hook=request_hook
 )
 RequestsInstrumentor().instrument()
-
-
-@app.after_request
-def add_trace_id_header(response):
-    span = get_current_span()
-    ctx = span.get_span_context()
-    if ctx and ctx.trace_id != 0:
-        # trace_id is an int → format as 32-char hex (standard W3C format)
-        trace_id_hex = format(ctx.trace_id, "032x")
-        response.headers["X-Request-ID"] = trace_id_hex
-    return response
 
 
 @app.route("/account.json")

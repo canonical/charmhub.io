@@ -15,7 +15,7 @@ exporters:
     tls:
       insecure: true
 
-  otlphttp:
+  otlphttp/loki:
     endpoint: http://loki:3100/otlp
 
   prometheus:
@@ -29,7 +29,7 @@ service:
 
     logs:
       receivers: [faro]
-      exporters: [otlphttp]
+      exporters: [otlphttp/loki]
 
     metrics:
       receivers: [otlp]

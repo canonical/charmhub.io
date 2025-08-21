@@ -8,6 +8,15 @@ datasources:
     isDefault: true
     editable: true
     uid: tempo
+    jsonData:
+      tracesToLogsV2:
+        datasourceUid: 'loki'
+        spanStartTimeShift: '-10m'
+        spanEndTimeShift: '10m'
+        filterByTraceID: false
+        filterBySpanID: false
+        customQuery: true
+        query: '{${__tags} }|= "${__span.traceId}"'
 
   - name: Loki
     type: loki
