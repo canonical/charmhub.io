@@ -26,6 +26,10 @@ requires:
     interface: smtp
     optional: true
     limit: 1
+  redis:
+    interface: redis
+    optional: true
+    limit: 1
 
 config:
   options:
