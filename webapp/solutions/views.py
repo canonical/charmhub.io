@@ -91,7 +91,7 @@ def solution_details(name):
     )
 
     # Fetch charm data in parallel
-    charm_names = [c["charm_name"] for c in solution.get("charms", [])]
+    charm_names = [c["name"] for c in solution.get("charms", [])]
 
     def fetch(name):
         return name, get_charm_data(name)
