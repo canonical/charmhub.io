@@ -1,0 +1,17 @@
+{
+  "postgresql-k8s": {
+    "juju_cmd_extra_flags": "--trust"
+  },
+  "pgbouncer-k8s": {
+    "juju_cmd_extra_flags": "--trust"
+  },
+  "mongodb-k8s": {
+    "juju_cmd_extra_flags": "--trust"
+  },
+  "mysql-k8s": {
+    "juju_cmd_extra_flags": "--trust"
+  },
+  "grafana-k8s": {
+    "juju_cmd_extra_flags": "--trust"
+  }
+}

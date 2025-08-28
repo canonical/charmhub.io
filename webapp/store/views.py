@@ -144,6 +144,7 @@ def get_package(entity_name, channel_request=None, fields=FIELDS):
         package["channel-map"] = channel_map["channel-map"]
 
     package = logic.add_store_front_data(package, True)
+    package = logic.add_overlay_data(package)
 
     for channel in package["channel-map"]:
         channel["channel"]["released-at"] = logic.convert_date(
@@ -171,6 +172,7 @@ def details_overview(entity_name):
         "result.website",
         "result.summary",
         "default-release.revision.metadata-yaml",
+        "default-release.revision.readme-md",
         "result.links",
     ]
 
@@ -190,9 +192,29 @@ def details_overview(entity_name):
     description = None
     summary = None
 
-    docs_topic = package["store_front"].get("docs_topic")
+    doc = logic.get_doc_link(package)
 
-    if docs_topic:
+    # If the doc link does NOT include "discourse",
+    # it is accepted as a ReadTheDocs link.
+    # Update this logic when a better way to distinguish
+    # ReadTheDocs links becomes available.
+    is_rtd = doc and "discourse" not in doc.lower()
+
+    docs_topic = package["store_front"].get("docs_topic")
+    if is_rtd:
+        readme = (
+            package.get("default-release", {})
+            .get("revision", {})
+            .get("readme-md")
+        )
+        summary = logic.get_summary(package)
+        description = (
+            markdown_to_html(readme)
+            if readme
+            else logic.get_description(package, parse_to_html=True)
+        )
+        navigation = None
+    elif docs_topic:
         docs_url_prefix = f"/{package['name']}/docs"
 
         docs = DocParser(
@@ -251,19 +273,18 @@ def details_overview(entity_name):
         except Exception as e:
             if e.response.status_code == 404:
                 navigation = None
-                description, summary = logic.add_description_and_summary(
-                    package
-                )
-
+                description = logic.get_description(package)
+                summary = logic.get_summary(package)
     else:
         navigation = None
-        description, summary = logic.add_description_and_summary(package)
-        description = markdown_to_html(description)
+        description = logic.get_description(package, parse_to_html=True)
+        summary = logic.get_summary(package)
 
     context["description"] = description
     context["summary"] = summary
     context["package_type"] = package["type"]
-
+    context["doc_url"] = doc
+    context["is_rtd"] = is_rtd
     return render_template("details/overview.html", **context)
 
 
@@ -708,6 +729,16 @@ def details_resource(entity_name, resource_name):
             "ImageName"
         ].split("@")
         resource["short_digest"] = resource["digest"].split(":")[1][:12]
+
+    # Get upstream-source (if available)
+    metadata_resources = package["store_front"]["metadata"].get(
+        "resources", {}
+    )
+    if resource_name in metadata_resources:
+        upstream = metadata_resources[resource_name].get("upstream-source")
+        resource["upstream_source"] = upstream
+    else:
+        resource["upstream_source"] = None
 
     revisions = device_gateway.get_resource_revisions(
         entity_name, resource_name

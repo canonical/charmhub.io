@@ -81,7 +81,17 @@
   <div class="p-charm-header__code">
     <div class="p-tooltip--information">
       <div>
-        <code>juju deploy {{ package["name"] }}{% if package["default-release"]["channel"]["name"] and package["default-release"]["channel"]["name"] != "stable" %} --channel {{ package["default-release"]["channel"]["name"] }}{% endif %}</code>
+        {% block juju_cmd %}
+          {% set channel_part = "" %}
+          {% set extra_flags_part = "" %}
+          {% if package["default-release"]["channel"]["name"] and package["default-release"]["channel"]["name"] != "stable" %}
+            {% set channel_cmd_part = "--channel " + package["default-release"]["channel"]["name"] %}
+          {% endif %}
+          {% if package["overlay_data"] and package["overlay_data"]["juju_cmd_extra_flags"] %}
+            {% set extra_flags_part = package["overlay_data"]["juju_cmd_extra_flags"] %}
+          {% endif %}
+          <code>juju deploy {{ package["name"] }} {{ channel_cmd_part }} {{ extra_flags_part }}</code>
+        {% endblock %}
       </div>
       <div class="instruction-tooltip">
         <div class="p-tooltip__button" role="button" aria-controls="icon-tooltip-modal" tabindex="0">

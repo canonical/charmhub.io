@@ -83,7 +83,7 @@ describe("InterfacesIndex", () => {
     fireEvent.click(interfaceLink);
 
     await waitFor(() => {
-      expect(window.location.pathname).toBe("/integrations/interface1/test");
+      expect(window.location.pathname).toBe("/integrations/interface1");
     });
   });
 

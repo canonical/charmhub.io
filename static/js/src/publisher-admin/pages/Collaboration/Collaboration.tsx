@@ -125,8 +125,9 @@ function Collaboration() {
                 }}
               >
                 <p>
-                  Copy the invite URL and send it to the collaborator to grant
-                  access
+                  An email has been sent to {activeInviteEmail} with a link to
+                  accept the invite. Alternatively, you can share the invite
+                  link below:
                 </p>
                 <div className="grid-row">
                   <div className="grid-col-7">

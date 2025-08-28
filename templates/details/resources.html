@@ -30,6 +30,10 @@
       </span>
     </h2>
 
+    {% if resource.upstream_source %}
+      <p><strong>Upstream source:</strong> {{ resource.upstream_source }}</p>
+    {% endif %}
+
     <ul class="p-detail-inline-list">
       <li class="p-inline-list__item">
         <i class="p-icon--revisions" style="margin-right: 5px;"></i> Revision: {{ resource.revision }}
@@ -59,7 +63,7 @@
       </li>
     </ul>
 
-    <p>{{ resource.description }}</p>
+    <p>{{ resource.description | markdown | safe }}</p>
 
     <h3 class="p-heading--5">Release history</h3>
 

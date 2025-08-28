@@ -6,13 +6,13 @@ from bs4 import BeautifulSoup
 from flask import request
 from ruamel.yaml import YAML
 from slugify import slugify
-from talisker import requests
 from datetime import datetime, timedelta
 import mistune
 from canonicalwebteam.discourse import DiscourseAPI
 from dateutil import parser
+import requests
 
-session = requests.get_session()
+session = requests.Session()
 discourse_api = DiscourseAPI(
     base_url="https://discourse.charmhub.io/",
     session=session,

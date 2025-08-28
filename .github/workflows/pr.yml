@@ -7,6 +7,9 @@ on:
 env:
   SECRET_KEY: insecure_test_key
 
+permissions:
+  contents: read
+
 jobs:
   run-image:
     runs-on: ubuntu-latest
@@ -84,11 +87,16 @@ jobs:
             py:
               - '**/*.py'
 
+      - uses: actions/setup-python@v5
+        if: ${{ steps.filter.outputs.py == 'true' }}
+        with:
+          python-version: '3.10'
+
       - name: Install Python dependencies
         if: ${{ steps.filter.outputs.py == 'true' }}
         run: |
-          python3 -m pip install --upgrade pip
-          sudo pip3 install -r requirements.txt
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
       - name: Lint Python
         if: ${{ steps.filter.outputs.py == 'true' }}
@@ -155,11 +163,17 @@ jobs:
             py:
               - '**/*.py'
 
+      - uses: actions/setup-python@v5
+        if: ${{ steps.filter.outputs.py == 'true' }}
+        with:
+          python-version: '3.10'
+
       - name: Install Python dependencies
         if: ${{ steps.filter.outputs.py == 'true' }}
         run: |
-          sudo pip3 install -r requirements.txt
-          sudo pip3 install coverage
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install coverage
 
       - name: Run Python tests with coverage
         if: ${{ steps.filter.outputs.py == 'true' }}
@@ -212,6 +226,9 @@ jobs:
 
   check-inclusive-naming:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
 
     steps:
       - name: Checkout
