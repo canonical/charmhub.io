@@ -1,5 +1,4 @@
 import requests
-import requests, hmac, hashlib, time
 import hashlib
 import hmac
 import time
@@ -7,6 +6,7 @@ import os
 
 HMAC_SECRET = os.getenv("HMAC_SECRET_KEY")
 BASE_URL = os.getenv("SOLUTIONS_API_BASE", "http://localhost:5000/api")
+
 
 def login(username: str) -> str:
     if not HMAC_SECRET:
@@ -16,12 +16,10 @@ def login(username: str) -> str:
     msg = f"{username}|{timestamp}".encode()
     sig = hmac.new(HMAC_SECRET.encode(), msg, hashlib.blake2b).hexdigest()
 
-    r = requests.post(f"{BASE_URL}/login", json={
-        "username": username,
-        "timestamp": timestamp,
-        "signature": sig
-    })
+    r = requests.post(
+        f"{BASE_URL}/login",
+        json={"username": username, "timestamp": timestamp, "signature": sig},
+    )
 
     r.raise_for_status()
     return r.json()["token"]
-
