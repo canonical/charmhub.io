@@ -1,0 +1,95 @@
+<div class="p-strip is-shallow">
+  <div class="grid-row">
+    <div class="grid-col-2">
+      <div class="p-charm-header">
+        <div class="p-media-object--large">
+          {% if solution.media.icon %}
+            {{ image(
+              url=solution.media.icon,
+              alt=solution.title,
+              width="100",
+              height="100",
+              hi_def=True,
+              fill=True,
+              attrs={"class": "p-media-object__image"}
+            ) | safe }}
+          {% else %}
+            {{ image(
+              url="https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg",
+              alt=solution.title,
+              width="100",
+              height="100",
+              hi_def=True,
+              fill=True,
+              attrs={"class": "p-media-object__image"}
+            ) | safe }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-col-4">
+      <div>
+        <a href="/solutions" class="u-text--muted p-text--small-caps">&lt; ALL SOLUTIONS</a>
+        <h3 class="u-no-margin--bottom">{{ solution.title }}</h3>
+        <p class="p-heading--6">
+          By
+            {% if solution.publisher.username %}
+              <a href="/publisher/{{ solution.publisher.username | safe }}">
+                {{ solution.publisher.display_name }}
+              </a>
+            {% else %}
+              {{ solution.publisher.name }}
+            {% endif %}
+        </p>
+      </div>
+    </div>
+    <div class="grid-col-2">
+      <p style="margin-bottom: 0.5rem;">
+        <small class="u-no-padding--top u-text--muted">PLATFORM:</small>
+      </p>
+      <div class="series-base__title">
+        {% for deployment in solution["deployable-on"] %}
+          {% if deployment["platform"] == "kubernetes" %}
+          <img src="https://assets.ubuntu.com/v1/9f8a8273-2018-logo-kubernetes+%282%29.svg"
+                  alt="Kubernetes"
+                  width="160"
+                  height="27"
+                  class="p-image--base">
+          {% elif deployment["platform"] == "machine" %}
+          <img src="https://assets.ubuntu.com/v1/b4ba06f2-Ubuntu%20logo.svg"
+                              alt="VM / Ubuntu"
+                  width="85"
+                  height="30"
+                  class="p-image--base">
+          {% else %}
+            <span>{{ deployment }}</span>
+          {% endif %}
+          {% for version in deployment["version"] %}
+            <div class="u-text--muted">Version <strong>{{ version }}</strong></div>
+          {% endfor %}
+          {% if deployment["prerequisites"] %}
+            <div class="u-text--muted">
+              {{ deployment["prerequisites"] | join(", ") }}
+              <span class="p-tooltip--btm-right" aria-describedby="btm-rgt">
+                <i class="p-icon--information"></i>
+                <span class="p-tooltip__message" role="tooltip" id="btm-rgt">These tools must be configured before deploying this solution.</span>
+              </span>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="grid-row">
+    <div class="grid-col-2"></div>
+    <div class="grid-col-6 p-section--shallow u-no-padding--bottom">
+      <hr class="p-separator--shallow p-rule--muted u-no-margin--top">
+      <a class="p-button--positive" href="{{ solution.documentation.get_started }}">View implementation guide</a>
+      <span>
+        <i class="p-icon--revisions"></i>
+        <span class="u-text--muted">Updated {{ solution.last_updated | humanize_date }}</span>
+      </span>
+    </div>
+  </div>
+</div>

@@ -15,7 +15,8 @@ from webapp.store.views import store
 from webapp.integrations.views import integrations
 from webapp.search.views import search
 from webapp.search.logic import cache
-from webapp.helpers import markdown_to_html
+from webapp.solutions.views import solutions
+from webapp.helpers import markdown_to_html, humanize_date
 from webapp.decorators import login_required
 from webapp.packages.store_packages import store_packages
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
@@ -52,9 +53,11 @@ app.register_blueprint(login)
 app.register_blueprint(topics)
 app.register_blueprint(integrations)
 app.register_blueprint(search)
+app.register_blueprint(solutions)
 
 
 app.jinja_env.filters["markdown"] = markdown_to_html
+app.jinja_env.filters["humanize_date"] = humanize_date
 
 # OpenTelemetry
 UNTRACED_ROUTES = ["/_status", "/static", ".json"]
