@@ -1,0 +1,15 @@
+{% from "details/_package_header_data.jinja" import package_header_data %}
+
+{% macro package_header(package, developer_validation, image) %}
+  <div class="row">
+    <div class="col-9">
+      <div class="p-charm-header">
+        {{ package_header_data(package, developer_validation, image) }}
+        {{ caller("channel_map") }}
+      </div>
+    </div>
+    <div class="col-3">
+      {{ caller("platforms") }}
+    </div>
+  </div>
+{% endmacro %}
