@@ -35,7 +35,7 @@ def get_account_details():
     context = {
         "has_solutions": publisher_has_solutions(username),
     }
-    
+
     return render_template("publisher/account-details.html", **context)
 
 
@@ -139,12 +139,12 @@ def list_page():
 @login_required
 def solutions_page():
     username = session["account"]["username"]
-    
+
     # Check if user has access to solutions - redirect to /charms if not
     has_solutions = publisher_has_solutions(username)
     if not has_solutions:
         return redirect("/charms")
-    
+
     # Get solutions data according to launchpad group
     solutions = get_publisher_solutions(username)
 
