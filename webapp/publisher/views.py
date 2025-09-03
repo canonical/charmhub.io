@@ -16,6 +16,8 @@ from webapp.publisher.logic import get_all_architectures, process_releases
 from webapp.observability.utils import trace_function
 from webapp.store_api import publisher_gateway
 from webapp.utils.emailer import get_emailer
+from webapp.helpers import get_publisher_solutions, publisher_has_solutions
+
 
 publisher = Blueprint(
     "publisher",
@@ -29,7 +31,12 @@ publisher = Blueprint(
 @publisher.route("/account/details")
 @login_required
 def get_account_details():
-    return render_template("publisher/account-details.html")
+    username = session["account"]["username"]
+    context = {
+        "has_solutions": publisher_has_solutions(username),
+    }
+    
+    return render_template("publisher/account-details.html", **context)
 
 
 @trace_function
@@ -107,8 +114,10 @@ def list_page():
     )
 
     page_type = request.path[1:-1]
+    username = session["account"]["username"]
 
     context = {
+        "has_solutions": publisher_has_solutions(username),
         "published": [
             {**c, "is_owner": c["publisher"]["id"] == session["account"]["id"]}
             for c in publisher_charms
@@ -123,6 +132,29 @@ def list_page():
     }
 
     return render_template("publisher/list.html", **context)
+
+
+@trace_function
+@publisher.route("/solutions")
+@login_required
+def solutions_page():
+    username = session["account"]["username"]
+    
+    # Check if user has access to solutions - redirect to /charms if not
+    has_solutions = publisher_has_solutions(username)
+    if not has_solutions:
+        return redirect("/charms")
+    
+    # Get solutions data according to launchpad group
+    solutions = get_publisher_solutions(username)
+
+    context = {
+        "has_solutions": has_solutions,
+        "solutions": solutions,
+        "page_type": "solution",
+    }
+
+    return render_template("publisher/solutions.html", **context)
 
 
 @trace_function
