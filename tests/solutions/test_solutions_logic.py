@@ -76,7 +76,7 @@ class TestSolutionsLogic(unittest.TestCase):
     @patch("webapp.solutions.logic.get_publisher_solutions")
     def test_publisher_has_solutions_true(self, mock_get_solutions):
         mock_get_solutions.return_value = [{"uuid": "solution1"}]
-        
+
         mock_session = {}
         with patch("flask.session", mock_session):
             result = publisher_has_solutions("testuser")
@@ -88,7 +88,7 @@ class TestSolutionsLogic(unittest.TestCase):
     @patch("webapp.solutions.logic.get_publisher_solutions")
     def test_publisher_has_solutions_false(self, mock_get_solutions):
         mock_get_solutions.return_value = []
-        
+
         mock_session = {}
         with patch("flask.session", mock_session):
             result = publisher_has_solutions("testuser")

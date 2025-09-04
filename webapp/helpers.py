@@ -171,5 +171,3 @@ def humanize_date(date_str):
         return ""
     date_obj = parser.parse(date_str)
     return date_obj.strftime("%-d %B %Y")
-
-
