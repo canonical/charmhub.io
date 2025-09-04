@@ -117,7 +117,15 @@
                   By {{ package.store_front.publisher_name }}
                   {% if developer_validation == "verified" %}
                   <span class="p-tooltip--top-center" aria-describedby="verified-tooltip">
-                    <img src="https://assets.ubuntu.com/v1/75654c90-rosette.svg">
+                    {# forcing format to "svg" to avoid scaling issues with Cloudinary #}
+                    {{ image(url="https://assets.ubuntu.com/v1/75654c90-rosette.svg",
+                                    alt="",
+                                    width="12",
+                                    height="12",
+                                    hi_def=True,
+                                    loading="auto",
+                                    fmt="svg") | safe
+                    }}
                     <span class="p-tooltip__message" role="tooltip" id="verified-tooltip">Verified account</span>
                   </span>
                   {% endif %}
