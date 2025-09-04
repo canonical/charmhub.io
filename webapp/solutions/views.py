@@ -4,7 +4,7 @@ from flask import Blueprint, abort, render_template, request
 from webapp.decorators import redirect_uppercase_to_lowercase
 from webapp.store_api import publisher_gateway
 from webapp.helpers import markdown_to_html
-from webapp.helpers import get_solution_from_backend
+from webapp.solutions.logic import get_solution_from_backend
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 solutions = Blueprint(
