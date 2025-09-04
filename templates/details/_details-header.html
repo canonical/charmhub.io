@@ -1,75 +1,20 @@
+{% from "details/_package_header.jinja" import package_header %}
+
 <div class="p-strip--light is-shallow">
   {% if request.path.startswith("/kubeflow") and schedule_banner("2023-03-08", "2023-03-22") %}
     {% include "partial/_kubeflow-beta-banner.html" %}
   {% endif %}
-  <div class="row">
-    <div class="col-9">
-      <div class="p-charm-header">
-        <div class="p-media-object--large">
-          {% if package.type == "charm" %}
-            {% if package["store_front"]["icons"] %}
-              {{ image(url=package.store_front.icons[0],
-                            alt=package.name,
-                            width="100",
-                            height="100",
-                            hi_def=True,
-                            fill=True,
-                            attrs={"class": "p-media-object__image"},) | safe
-              }}
-            {% else %}
-              {{ image(url="https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg",
-                            alt=package.name,
-                            width="100",
-                            height="100",
-                            hi_def=True,
-                            fill=True,
-                            attrs={"class": "p-media-object__image"},) | safe
-              }}
-            {% endif %}
-          {% endif %}
-          <div class="p-media-object__details">
-            <h1 class="p-media-object__title">{{ package.store_front["display-name"] }}</h1>
-            <div class="p-media-object__content u-no-margin--bottom">
-              <ul class="p-inline-list--middot">
-                <li class="p-inline-list__item">
-                  {% if package.store_front.publisher_name != None %}
-                    {% if package.store_front.username != None %}
-                      <a href="/publisher/{{ package.store_front.username | safe }}">
-                        {{ package.store_front.publisher_name }}
-                      </a>
-                    {% else %}
-                      {{ package.store_front.publisher_name }}
-                    {% endif %}
-                  {% endif %}
-                  {% if package.type == "bundle" %}
-                    <span class="p-muted-heading u-no-padding" style="font-size: .9rem;">| bundle</span>
-                  {% endif %}
-                  {% if developer_validation == "verified" %}
-                    <span class="p-tooltip--top-center" aria-describedby="openstack-tooltip">
-                      <img src="https://assets.ubuntu.com/v1/75654c90-rosette.svg">
-                      <span class="p-tooltip__message" role="tooltip" id="default-tooltip">Verified account</span>
-                    </span>
-                  {% endif %}
-                </li>
-                {% if package.store_front.categories %}
-                  <li class="p-inline-list__item">
-                    <a href="/?filter={{ package.store_front.categories[0].slug }}">{{
-                    package.store_front.categories[0].name }}</a>
-                  </li>
-                {% endif %}
-              </ul>
-            </div>
-          </div>
-        </div>
-        {% include "partial/_channel-map.html" %}
-      </div>
-    </div>
-    <div class="col-3">
+
+  {% call(slot) package_header(package, developer_validation, image) %}
+    {% if slot == "channel_map" %}
+      {% include "partial/_channel-map.html" %}
+    {% endif %}
+
+    {% if slot == "platforms" %}
       <p style="margin-bottom: 0.5rem;">
         <small class="u-no-padding--top u-text--muted">Platform:</small>
       </p>
-      {% if package.store_front["deployable-on"]|length == 1 and package.store_front["deployable-on"][0] == "kubernetes"
-        %}
+      {% if package.store_front["deployable-on"]|length == 1 and package.store_front["deployable-on"][0] == "kubernetes" %}
         <div class="series-base">
           <div class="series-base__title">
             <img src="https://assets.ubuntu.com/v1/9f8a8273-2018-logo-kubernetes+%282%29.svg"
@@ -122,6 +67,7 @@
           </div>
         {% endfor %}
       {% endif %}
-    </div>
-  </div>
+    {% endif %}
+  {% endcall %}
 </div>
+
