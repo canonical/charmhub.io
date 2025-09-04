@@ -16,7 +16,7 @@ from webapp.publisher.logic import get_all_architectures, process_releases
 from webapp.observability.utils import trace_function
 from webapp.store_api import publisher_gateway
 from webapp.utils.emailer import get_emailer
-from webapp.helpers import get_publisher_solutions, publisher_has_solutions
+from webapp.solutions.logic import get_publisher_solutions, publisher_has_solutions
 
 
 publisher = Blueprint(
