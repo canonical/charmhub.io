@@ -6,7 +6,7 @@ from flask import make_response
 from typing import List, Dict, TypedDict, Any, Union
 
 from canonicalwebteam.exceptions import StoreApiError
-from cache.cache_utility import redis_cache
+from redis_cache.cache_utility import redis_cache
 from webapp.observability.utils import trace_function
 from webapp.store.logic import format_slug
 from webapp.store_api import publisher_gateway
