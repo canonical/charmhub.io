@@ -1,4 +1,4 @@
-from cache.cache_utility import redis_cache
+from redis_cache.cache_utility import redis_cache
 from canonicalwebteam.exceptions import StoreApiResponseErrorList
 from flask import (
     Blueprint,
