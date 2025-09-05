@@ -24,6 +24,7 @@ class TestPublisherViews(unittest.TestCase):
                 "display-name": "test-display-name",
                 "email": "test-email",
                 "username": "test-username",
+                "id": "test-id",
             }
             session["account-auth"] = "test-auth"
 
