@@ -43,9 +43,12 @@ def get_icon(media):
 
 
 @trace_function
-def fetch_packages(fields: List[str], query_params: Dict[str, Any], libraries: bool = False) -> Packages:
+def fetch_packages(
+    fields: List[str], query_params: Dict[str, Any], libraries: bool = False
+) -> Packages:
     """
-    Fetches packages from the store API based on the specified fields and parse the packages.
+    Fetches packages from the store API based on the specified fields
+    and parse the packages.
 
     :param: fields (List[str]): A list of fields to include in the package
     data.
@@ -347,7 +350,8 @@ def get_store_categories() -> List[Dict[str, str]]:
 
         categories = list(
             filter(
-                lambda cat: cat["name"] != "featured", all_categories["categories"]
+                lambda cat: cat["name"] != "featured",
+                all_categories["categories"],
             )
         )
         redis_cache.set(key, categories, ttl=3600)
