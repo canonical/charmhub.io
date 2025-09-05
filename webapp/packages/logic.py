@@ -307,27 +307,6 @@ def get_packages(
 
 
 @trace_function
-def parse_categories(
-    categories_json: Dict[str, List[Dict[str, str]]],
-) -> List[Dict[str, str]]:
-    """
-    :param categories_json: The returned json from publishergw get_categories
-    :returns: A list of categories in the format:
-    [{"name": "Category", "slug": "category"}]
-    """
-
-    categories = []
-
-    if "categories" in categories_json:
-        for category in categories_json["categories"]:
-            categories.append(
-                {"slug": category, "name": format_slug(category)}
-            )
-
-    return categories
-
-
-@trace_function
 def get_store_categories() -> List[Dict[str, str]]:
     """
     Fetches all store categories.
