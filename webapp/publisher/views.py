@@ -1,6 +1,3 @@
-import json
-
-from cachetools import cached
 from cache.cache_utility import redis_cache
 from canonicalwebteam.exceptions import StoreApiResponseErrorList
 from flask import (
@@ -16,7 +13,6 @@ from flask import (
 from flask.json import jsonify
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import login_required, cached_redirect
-from webapp.packages.store_packages import package
 from webapp.publisher.logic import get_all_architectures, process_releases
 from webapp.observability.utils import trace_function
 from webapp.store_api import publisher_gateway
@@ -45,6 +41,7 @@ def get_package_metadata(entity_name):
         package = publisher_gateway.get_package_metadata(session, entity_name)
         redis_cache.set(key, package, ttl=300)
     return package
+
 
 @trace_function
 @publisher.route(
@@ -114,24 +111,22 @@ def update_package(entity_name):
 @login_required
 def list_page():
     key = f"account_packages:{session['account']['id']}:{request.path[1:-1]}"
-    cached = redis_cache.get(key, expected_type=dict)
-    if cached:
-        context = cached
-    else:
+    context = redis_cache.get(key, expected_type=dict)
+    if not context:
         publisher_charms = publisher_gateway.get_account_packages(
             session["account-auth"], "charm", include_collaborations=True
         )
 
         page_type = request.path[1:-1]
-
+        acc_id = session["account"]["id"]
         context = {
             "published": [
-                {**c, "is_owner": c["publisher"]["id"] == session["account"]["id"]}
+                {**c, "is_owner": c["publisher"]["id"] == acc_id}
                 for c in publisher_charms
                 if c["status"] == "published" and c["type"] == page_type
             ],
             "registered": [
-                {**c, "is_owner": c["publisher"]["id"] == session["account"]["id"]}
+                {**c, "is_owner": c["publisher"]["id"] == acc_id}
                 for c in publisher_charms
                 if c["status"] == "registered" and c["type"] == page_type
             ],
