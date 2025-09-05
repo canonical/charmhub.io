@@ -1,5 +1,4 @@
 import json
-from pprint import pprint
 
 from cachetools import cached
 from cache.cache_utility import redis_cache
