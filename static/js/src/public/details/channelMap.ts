@@ -53,7 +53,7 @@ const init = (packageName: string, channelMapButton: HTMLElement) => {
     }
 
     const selected = document.querySelector(
-      `[data-channel-map-track="${track}"][data-channel-map-channel="${channel}"]`
+      `[data-channel-map-track="${track}"][data-channel-map-channel="${channel}"][data-channel-map-version="${channelMapState.version}"]`
     );
 
     selected?.classList.add("is-active");
@@ -102,17 +102,46 @@ const init = (packageName: string, channelMapButton: HTMLElement) => {
   });
 
   function hideOlderChannels() {
-    const seen = new Set();
+    const channelRevisions = new Map();
+
+    // find the highest revision for each channel
     channelsToBeFiltered.forEach((el) => {
-      const track = `${el.getAttribute("data-channel-map-track")}${el.getAttribute("data-channel-map-channel")}`;
       if (el.classList.contains("u-hide")) {
         return;
       }
 
-      if (seen.has(track)) {
+      const track = el.getAttribute("data-channel-map-track");
+      const channel = el.getAttribute("data-channel-map-channel");
+      const version = el.getAttribute("data-channel-map-version");
+
+      if (!track || !channel || !version) return;
+
+      const trackChannel = `${track}${channel}`;
+
+      if (
+        !channelRevisions.has(trackChannel) ||
+        parseInt(version) > parseInt(channelRevisions.get(trackChannel)!)
+      ) {
+        channelRevisions.set(trackChannel, version);
+      }
+    });
+
+    // hide revisions that aren't the highest
+    channelsToBeFiltered.forEach((el) => {
+      if (el.classList.contains("u-hide")) {
+        return;
+      }
+
+      const track = el.getAttribute("data-channel-map-track");
+      const channel = el.getAttribute("data-channel-map-channel");
+      const version = el.getAttribute("data-channel-map-version");
+
+      if (!track || !channel || !version) return;
+
+      const trackChannel = `${track}${channel}`;
+
+      if (version !== channelRevisions.get(trackChannel)) {
         el.classList.add("u-hide");
-      } else {
-        seen.add(track);
       }
     });
   }

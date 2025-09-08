@@ -31,6 +31,7 @@ describe("channelMap", () => {
     selectedEl = document.createElement("div");
     selectedEl.setAttribute("data-channel-map-track", "latest");
     selectedEl.setAttribute("data-channel-map-channel", "stable");
+    selectedEl.setAttribute("data-channel-map-version", "1.0.0");
     selectedEl.setAttribute("data-channel-map-arch-filter", "arm64");
 
     archFilterEl = document.createElement("select");
@@ -60,10 +61,10 @@ describe("channelMap", () => {
     document.body.appendChild(selectedEl);
 
     channelsToBeFiltered = [
-      createChannelElement("latest", "stable", "arm64", "20.04"),
-      createChannelElement("latest", "candidate", "amd64", "18.04"),
-      createChannelElement("2.0", "stable", "arm64", "20.04"),
-      createChannelElement("2.0", "candidate", "arm64", "20.04"),
+      createChannelElement("latest", "stable", "1.0.0", "arm64", "20.04"),
+      createChannelElement("latest", "candidate", "1.1.0", "amd64", "18.04"),
+      createChannelElement("2.0", "stable", "2.0.0", "arm64", "20.04"),
+      createChannelElement("2.0", "candidate", "2.1.0", "arm64", "20.04"),
     ];
 
     channelsToBeFiltered.forEach((el) => channelMapContentEl.appendChild(el));
@@ -106,7 +107,7 @@ describe("channelMap", () => {
 
     await waitFor(() => {
       const selected = document.querySelector(
-        `[data-channel-map-track="latest"][data-channel-map-channel="stable"]`
+        `[data-channel-map-track="latest"][data-channel-map-channel="stable"][data-channel-map-version="1.0.0"]`
       );
       expect(selected).not.toBeNull();
       expect(selected?.classList.contains("is-active")).toBe(true);
@@ -179,12 +180,14 @@ describe("channelMap", () => {
   function createChannelElement(
     track: string,
     channel: string,
+    version: string,
     arch: string,
     base: string
   ): HTMLElement {
     const el = document.createElement("div");
     el.setAttribute("data-channel-map-track", track);
     el.setAttribute("data-channel-map-channel", channel);
+    el.setAttribute("data-channel-map-version", version);
     el.setAttribute("data-channel-map-arch-filter", arch);
     el.setAttribute("data-channel-map-base-filter", base);
     return el;
