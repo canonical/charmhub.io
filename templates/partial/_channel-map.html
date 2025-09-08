@@ -2,7 +2,8 @@
   <div style="position: relative;">
     <button class="p-button p-channel-map__button" data-controls="channel-map-versions" aria-controls="channel-map-versions" data-js="channel-map">
       <span data-js="channel-map-selected">
-        {{ package["default-release"].channel.name }} {{ package["default-release"].revision.version }}
+        {% set default_channel = package["default-release"].channel %}
+        {{ default_channel.name }} {{ package.store_front.channel_map[default_channel.get("track", "latest")][default_channel.risk].latest.version }}
       </span>
       &nbsp;&nbsp;<i class="p-icon--chevron-down"></i>
     </button>
