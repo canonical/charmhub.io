@@ -1,3 +1,4 @@
+from redis_cache.cache_utility import redis_cache
 from canonicalwebteam.exceptions import StoreApiResponseErrorList
 from flask import (
     Blueprint,
@@ -33,6 +34,16 @@ def get_account_details():
 
 
 @trace_function
+def get_package_metadata(entity_name):
+    key = f"package_metadata:{session['account']['id']}:{entity_name}"
+    package = redis_cache.get(key, expected_type=dict)
+    if not package:
+        package = publisher_gateway.get_package_metadata(session, entity_name)
+        redis_cache.set(key, package, ttl=300)
+    return package
+
+
+@trace_function
 @publisher.route(
     '/<regex("'
     + DETAILS_VIEW_REGEX
@@ -42,12 +53,10 @@ def get_account_details():
 @login_required
 def get_publisher(entity_name, path):
     session["developer_token"] = session["account-auth"]
-    package = publisher_gateway.get_package_metadata(session, entity_name)
-
+    package = get_package_metadata(entity_name)
     context = {
         "package": package,
     }
-
     return render_template("publisher/publisher.html", **context)
 
 
@@ -58,8 +67,7 @@ def get_publisher(entity_name, path):
 @login_required
 def get_package(entity_name):
     session["developer_token"] = session["account-auth"]
-    package = publisher_gateway.get_package_metadata(session, entity_name)
-
+    package = get_package_metadata(entity_name)
     return jsonify({"data": package, "success": True})
 
 
@@ -102,26 +110,29 @@ def update_package(entity_name):
 @publisher.route("/bundles")
 @login_required
 def list_page():
-    publisher_charms = publisher_gateway.get_account_packages(
-        session["account-auth"], "charm", include_collaborations=True
-    )
+    key = f"account_packages:{session['account']['id']}:{request.path[1:-1]}"
+    context = redis_cache.get(key, expected_type=dict)
+    if not context:
+        publisher_charms = publisher_gateway.get_account_packages(
+            session["account-auth"], "charm", include_collaborations=True
+        )
 
-    page_type = request.path[1:-1]
-
-    context = {
-        "published": [
-            {**c, "is_owner": c["publisher"]["id"] == session["account"]["id"]}
-            for c in publisher_charms
-            if c["status"] == "published" and c["type"] == page_type
-        ],
-        "registered": [
-            {**c, "is_owner": c["publisher"]["id"] == session["account"]["id"]}
-            for c in publisher_charms
-            if c["status"] == "registered" and c["type"] == page_type
-        ],
-        "page_type": page_type,
-    }
-
+        page_type = request.path[1:-1]
+        acc_id = session["account"]["id"]
+        context = {
+            "published": [
+                {**c, "is_owner": c["publisher"]["id"] == acc_id}
+                for c in publisher_charms
+                if c["status"] == "published" and c["type"] == page_type
+            ],
+            "registered": [
+                {**c, "is_owner": c["publisher"]["id"] == acc_id}
+                for c in publisher_charms
+                if c["status"] == "registered" and c["type"] == page_type
+            ],
+            "page_type": page_type,
+        }
+        redis_cache.set(key, context, ttl=600)
     return render_template("publisher/list.html", **context)
 
 
@@ -539,24 +550,27 @@ def post_create_track(charm_name):
 )
 @login_required
 def get_releases(entity_name: str):
-    res = {}
+    key = f"package_releases:{session['account']['id']}:{entity_name}"
+    res = redis_cache.get(key, expected_type=dict) or {}
 
     try:
-        release_data = publisher_gateway.get_releases(
-            session["account-auth"], entity_name
-        )
-        res["success"] = True
+        if not res:
+            release_data = publisher_gateway.get_releases(
+                session["account-auth"], entity_name
+            )
+            res["success"] = True
 
-        res["data"] = {}
+            res["data"] = {}
 
-        res["data"]["releases"] = process_releases(
-            release_data["channel-map"],
-            release_data["package"]["channels"],
-            release_data["revisions"],
-        )
-        res["data"]["all_architectures"] = get_all_architectures(
-            res["data"]["releases"]
-        )
+            res["data"]["releases"] = process_releases(
+                release_data["channel-map"],
+                release_data["package"]["channels"],
+                release_data["revisions"],
+            )
+            res["data"]["all_architectures"] = get_all_architectures(
+                res["data"]["releases"]
+            )
+            redis_cache.set(key, res, ttl=300)
         response = make_response(res, 200)
 
     except StoreApiResponseErrorList as error_list:

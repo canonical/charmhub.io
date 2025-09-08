@@ -112,6 +112,7 @@ def get_all_architectures(releases: Dict[str, ReleaseMap]) -> List[str]:
     for channel in releases:
         for release in releases[channel]["releases"]:
             for base in release["revision"]["bases"]:
-                architectures.update([base["architecture"]])
+                if base:
+                    architectures.update([base["architecture"]])
 
     return [arch for arch, _ in architectures.most_common()]
