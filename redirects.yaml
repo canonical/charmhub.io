@@ -36,3 +36,5 @@ postgresql/docs/(?P<path>.*)/?: https://canonical-charmed-postgresql.readthedocs
 postgresql-k8s/docs/(?P<path>.*)/?: https://canonical-charmed-postgresql-k8s.readthedocs-hosted.com/14/{path}/
 mysql/docs/(?P<path>.*)/?: https://canonical-charmed-mysql.readthedocs-hosted.com/{path}/
 mysql-k8s/docs/(?P<path>.*)/?: https://canonical-charmed-mysql-k8s.readthedocs-hosted.com/{path}/
+kafka/docs/(?P<path>.*)/?: https://documentation.ubuntu.com/charmed-kafka/3/{path}/
+kafka-k8s/docs/(?P<path>.*)/?: https://documentation.ubuntu.com/charmed-kafka-k8s/3/{path}/
