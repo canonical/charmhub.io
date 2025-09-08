@@ -7,6 +7,7 @@ from canonicalwebteam.discourse.exceptions import (
     RedirectFoundError,
 )
 from flask import Blueprint, abort, jsonify, render_template, request, redirect
+from redis_cache.cache_utility import redis_cache
 from webapp.helpers import discourse_api
 from jinja2 import Template
 from bs4 import BeautifulSoup
@@ -34,7 +35,7 @@ class TopicParser(DocParser):
 
         soup = BeautifulSoup(result["body_html"], features="html.parser")
         self._parse_packages(soup)
-        result["body_html"] = soup
+        result["body_html"] = str(soup)
         return result
 
     @trace_function
@@ -115,20 +116,31 @@ class TopicParser(DocParser):
 @topics.route("/topics.json")
 def topics_json():
     query = request.args.get("q", default=None, type=str)
-
-    if query:
-        query = query.lower()
-        matched = []
-        unmatched = []
-
-        for t in topic_list:
-            if query in t["name"].lower() or query in t["categories"]:
-                matched.append(t)
-            else:
-                unmatched.append(t)
-        results = matched + unmatched
+    key = ("topics-json", ({"q": query}))
+    results = redis_cache.get(key, expected_type=list)
+    if results:
+        return jsonify(
+            {
+                "topics": results,
+                "q": query,
+                "size": len(results),
+            }
+        )
     else:
-        results = topic_list
+        if query:
+            query = query.lower()
+            matched = []
+            unmatched = []
+
+            for t in topic_list:
+                if query in t["name"].lower() or query in t["categories"]:
+                    matched.append(t)
+                else:
+                    unmatched.append(t)
+            results = matched + unmatched
+        else:
+            results = topic_list
+        redis_cache.set(key, results, ttl=43200)
 
     return jsonify(
         {
@@ -152,6 +164,10 @@ def all_topics():
 @topics.route("/topics/<string:topic_slug>")
 @topics.route("/topics/<string:topic_slug>/<path:path>")
 def topic_page(topic_slug, path=None):
+    key = ("topic-page", ({"topic_slug": topic_slug, "path": path}))
+    cached_page = redis_cache.get(key, expected_type=dict)
+    if cached_page:
+        return render_template("topics/document.html", **cached_page)
     topic = next((t for t in topic_list if t["slug"] == topic_slug), None)
 
     if not topic:
@@ -182,11 +198,11 @@ def topic_page(topic_slug, path=None):
         topic = docs.index_topic
 
     document = docs.parse_topic(topic)
-
     context = {
         "navigation": docs.navigation,
         "forum_url": docs.api.base_url,
         "document": document,
     }
+    redis_cache.set(key, context, ttl=3600)
 
     return render_template("topics/document.html", **context)
