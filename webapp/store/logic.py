@@ -214,7 +214,9 @@ def convert_channel_maps(channel_map):
 
             latest_revision_key = max(
                 result[track][risk]["releases"].keys(),
-                key=lambda k: result[track][risk]["releases"][k]["released_at"]
+                key=lambda k: result[track][risk]["releases"][k][
+                    "released_at"
+                ],
             )
             result[track][risk]["latest"] = result[track][risk]["releases"][
                 latest_revision_key
