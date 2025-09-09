@@ -97,7 +97,7 @@ def all_topics():
     topics = redis_cache.get(key, expected_type=dict)
     if topics:
         return jsonify(topics)
-    
+
     all_topics = search_topics(search_term, page, True)[:limit]
     total_pages = -(len(all_topics) // -limit)
     start = (page - 1) * limit

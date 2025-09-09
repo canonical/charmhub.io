@@ -1,7 +1,5 @@
-from flask_caching import Cache
-
-
 import requests
+
 from redis_cache.cache_utility import redis_cache
 from webapp.config import SEARCH_FIELDS
 from webapp.packages.logic import parse_package_for_card
