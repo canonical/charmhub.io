@@ -75,7 +75,7 @@
               </div>
             </td>
             <td role="gridcell" aria-label="status">
-                {{ solution.status }}
+                {{ solution.status | capitalize }}
             </td>
             <td role="gridcell" aria-label="visibility">
               {% if solution.visibility == 'PUBLIC' %}

@@ -43,6 +43,7 @@ class TestSolutionsLogic(unittest.TestCase):
 
         self.assertIsNone(result)
 
+    @patch("webapp.solutions.logic.flask_session", {})
     @patch("webapp.solutions.logic.session")
     @patch("webapp.solutions.logic.login")
     def test_get_publisher_solutions_success(self, mock_login, mock_session):
@@ -52,14 +53,15 @@ class TestSolutionsLogic(unittest.TestCase):
         mock_response.json.return_value = [
             {"uuid": "solution1", "name": "Solution 1"}
         ]
-        mock_session.get.return_value = mock_response
+        mock_session.request.return_value = mock_response
 
         result = get_publisher_solutions("testuser")
 
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0]["name"], "Solution 1")
         mock_login.assert_called_once_with("testuser")
-        mock_session.get.assert_called_once_with(
+        mock_session.request.assert_called_once_with(
+            "GET",
             "http://localhost:5000/api/publisher/solutions",
             headers={"Authorization": "Bearer fake-token"},
             timeout=5,
@@ -78,7 +80,7 @@ class TestSolutionsLogic(unittest.TestCase):
         mock_get_solutions.return_value = [{"uuid": "solution1"}]
 
         mock_session = {}
-        with patch("flask.session", mock_session):
+        with patch("webapp.solutions.logic.flask_session", mock_session):
             result = publisher_has_solutions("testuser")
 
         self.assertTrue(result)
@@ -90,7 +92,7 @@ class TestSolutionsLogic(unittest.TestCase):
         mock_get_solutions.return_value = []
 
         mock_session = {}
-        with patch("flask.session", mock_session):
+        with patch("webapp.solutions.logic.flask_session", mock_session):
             result = publisher_has_solutions("testuser")
 
         self.assertFalse(result)
