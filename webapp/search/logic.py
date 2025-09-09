@@ -2,6 +2,7 @@ from flask_caching import Cache
 
 
 import requests
+from redis_cache.cache_utility import redis_cache
 from webapp.config import SEARCH_FIELDS
 from webapp.packages.logic import parse_package_for_card
 from webapp.observability.utils import trace_function
@@ -10,11 +11,9 @@ from webapp.store_api import publisher_gateway
 DISCOURSE_URL = "https://discourse.charmhub.io"
 DOCS_URL = "https://canonical-juju.readthedocs-hosted.com/"
 
-cache = Cache(config={"CACHE_TYPE": "simple"})
-
 
 @trace_function
-def search_discourse(
+def search_topics(
     query: str,
     page: int = 1,
     see_all: bool = False,
@@ -37,7 +36,8 @@ def search_discourse(
         This function makes use of a cache to store result for a fetched search
         terms, this helps in reducing redundant requests to the discourse API.
     """
-    cached_page = cache.get(f"{query}-{page}")
+    key = ("search-topics", {"q": query, "pg": page})
+    cached_page = redis_cache.get(key, expected_type=list)
 
     if not see_all:
         if cached_page:
@@ -57,7 +57,8 @@ def search_discourse(
                     None,
                 )
                 topic["post"] = post
-            cache.set(f"{query}-{page}", topics, timeout=300)
+            topics = [topic for topic in topics if topic["category_id"] != 22]
+            redis_cache.set(key, topics, ttl=3600)
             return topics
 
     # Note: this logic is currently slower than it should ordinarily
@@ -73,7 +74,8 @@ def search_discourse(
     more_pages = True
 
     while more_pages:
-        cached_page = cache.get(f"{query}-{page}")
+        key = ("search-topics", {"q": query, "pg": page})
+        cached_page = redis_cache.get(key, expected_type=list)
         if cached_page:
             result.extend(cached_page)
             page += 1
@@ -96,13 +98,24 @@ def search_discourse(
                     None,
                 )
                 topic["post"] = post
-            cache.set(f"{query}-{page}", topics, timeout=300)
+            redis_cache.set(key, topics, ttl=3600)
             result.extend(topics)
             page += 1
-            next_resp = requests.get(
-                f"{DISCOURSE_URL}/search.json?q={query}&page={page}"
-            )
-            next_topics = next_resp.json().get("topics", [])
+            key = ("search-topics", {"q": query, "pg": page})
+
+            cached_next_topics = redis_cache.get(key, expected_type=list)
+            if cached_next_topics:
+                next_topics = cached_next_topics
+            else:
+                next_resp = requests.get(
+                    f"{DISCOURSE_URL}/search.json?q={query}&page={page}"
+                )
+                next_topics = [
+                    topic
+                    for topic in next_resp.json().get("topics", [])
+                    if topic["category_id"] != 22
+                ]
+                redis_cache.set(key, next_topics, ttl=3600)
             if not next_topics or next_topics[0]["id"] == topics[0]["id"]:
                 more_pages = False
         else:
@@ -127,7 +140,10 @@ def search_docs(term: str) -> dict:
     Returns:
         dict: A dictionary containing the retrieved dtopics.
     """
-
+    key = ("search-docs", {"q": term})
+    results = redis_cache.get(key, expected_type=list)
+    if results:
+        return results
     search_url = (
         f"{DOCS_URL}/_/api/v3/search/?q=project%3Acanonical-juju+{term}"
     )
@@ -136,49 +152,38 @@ def search_docs(term: str) -> dict:
     data = resp.json()
 
     results = data.get("results", [])
+    redis_cache.set(key, results, ttl=3600)
 
     return results
 
 
 @trace_function
-def search_topics(term: str, page: int, see_all=False) -> dict:
-    """
-    Search discousre for a specific term and return the results.
-    It searches from all categories except doc category.
-
-    Parameters:
-        term (str): The search term used to find relevant documentation.
-        page (int): The page number of the search results to retrieve.
-        see_all (bool, optional): If True, retrieves all available search
-        results. If False (default), returns the first page only
-
-    Returns:
-        dict: A dictionary containing the retrieved topics.
-    """
-    query = term
-
-    result = search_discourse(query, page, see_all)
-
-    result = [topic for topic in result if topic["category_id"] != 22]
-
-    return result
-
-
-@trace_function
 def search_charms(term: str):
-    return [
+    key = ("search-charms", {"q": term})
+    charms = redis_cache.get(key, expected_type=list)
+    if charms:
+        return charms
+    charms = [
         parse_package_for_card(package)
         for package in publisher_gateway.find(
             term, type="charm", fields=SEARCH_FIELDS
         )["results"]
     ]
+    redis_cache.set(key, charms, ttl=3600)
+    return charms
 
 
 @trace_function
 def search_bundles(term: str):
-    return [
+    key = ("search-bundles", {"q": term})
+    bundles = redis_cache.get(key, expected_type=list)
+    if bundles:
+        return bundles
+    bundles = [
         parse_package_for_card(package)
         for package in publisher_gateway.find(
             term, type="bundle", fields=SEARCH_FIELDS
         )["results"]
     ]
+    redis_cache.set(key, bundles, ttl=3600)
+    return bundles

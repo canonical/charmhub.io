@@ -14,7 +14,6 @@ from webapp.publisher.views import publisher
 from webapp.store.views import store
 from webapp.integrations.views import integrations
 from webapp.search.views import search
-from webapp.search.logic import cache
 from webapp.helpers import markdown_to_html
 from webapp.decorators import login_required
 from webapp.packages.store_packages import store_packages
@@ -42,7 +41,6 @@ set_handlers(app)
 
 request_session = requests.Session()
 candid = CandidClient(request_session)
-cache.init_app(app)
 csrf.init_app(app)
 
 app.register_blueprint(store_packages)
