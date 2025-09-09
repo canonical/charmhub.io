@@ -580,28 +580,6 @@ def get_library(library_name, libraries):
 
 
 @trace_function
-def filter_charm(charm, categories=["all"], base="all"):
-    """
-    This filter will be done in the API soon.
-    :returns: boolean
-    """
-    # When all is present there is no need to filter
-    if categories and "all" not in categories:
-        charm_categories = [
-            cat["slug"] for cat in charm["store_front"]["categories"]
-        ]
-
-        if not any(x in categories for x in charm_categories):
-            return False
-
-    # Filter platforms
-    if base != "all" and base not in charm["store_front"]["base"]:
-        return False
-
-    return True
-
-
-@trace_function
 def format_slug(slug):
     """Format slug name into a standard title format
     :param slug: The hypen spaced, lowercase slug to be formatted
