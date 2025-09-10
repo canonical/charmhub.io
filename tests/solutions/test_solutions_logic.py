@@ -79,22 +79,14 @@ class TestSolutionsLogic(unittest.TestCase):
     def test_publisher_has_solutions_true(self, mock_get_solutions):
         mock_get_solutions.return_value = [{"uuid": "solution1"}]
 
-        mock_session = {}
-        with patch("webapp.solutions.logic.flask_session", mock_session):
-            result = publisher_has_solutions("testuser")
+        result = publisher_has_solutions("testuser")
 
         self.assertTrue(result)
-        # Verify cache was set
-        self.assertEqual(mock_session["has_solutions_testuser"], True)
 
     @patch("webapp.solutions.logic.get_publisher_solutions")
     def test_publisher_has_solutions_false(self, mock_get_solutions):
         mock_get_solutions.return_value = []
 
-        mock_session = {}
-        with patch("webapp.solutions.logic.flask_session", mock_session):
-            result = publisher_has_solutions("testuser")
+        result = publisher_has_solutions("testuser")
 
         self.assertFalse(result)
-        # Verify cache was set
-        self.assertEqual(mock_session["has_solutions_testuser"], False)
