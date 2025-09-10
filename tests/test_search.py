@@ -39,6 +39,7 @@ class TestSearchPackage(TestCase):
             ]
         )
 
+    @responses.activate
     def test_all_charms(self):
         responses.add(
             responses.Response(
@@ -49,15 +50,16 @@ class TestSearchPackage(TestCase):
             )
         )
 
-        response1 = self.client.get("/all-charms?q=juju&limit=3")
-        self.assertEqual(response1.status_code, 200)
-        self.assertEqual(len(response1.json["charms"]), 3)
-        self.assertEqual(len(response1.json), 1)
-        self.assertIsInstance(response1.json["charms"], list)
-        self.assertNotIn("bundles", response1.json)
-        self.assertNotIn("docs", response1.json)
-        self.assertNotIn("topics", response1.json)
+        response = self.client.get("/all-charms?q=juju&limit=3")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json["charms"]), 3)
+        self.assertEqual(len(response.json), 1)
+        self.assertIsInstance(response.json["charms"], list)
+        self.assertNotIn("bundles", response.json)
+        self.assertNotIn("docs", response.json)
+        self.assertNotIn("topics", response.json)
 
+    @responses.activate
     def test_all_bundles(self):
         responses.add(
             responses.Response(
@@ -82,10 +84,10 @@ class TestAllSearchView(TestCase):
     def setUp(self):
         self.client = app.test_client()
 
-    @patch("webapp.search.logic.search_topics")
-    @patch("webapp.search.logic.search_docs")
-    @patch("webapp.search.logic.search_bundles")
-    @patch("webapp.search.logic.search_charms")
+    @patch("webapp.search.views.search_topics")
+    @patch("webapp.search.views.search_docs")
+    @patch("webapp.search.views.search_bundles")
+    @patch("webapp.search.views.search_charms")
     def test_search(
         self,
         mock_search_charms,
@@ -93,44 +95,84 @@ class TestAllSearchView(TestCase):
         mock_search_docs,
         mock_search_topics,
     ):
-        mock_search_charms.return_value = sample_charms
-        mock_search_bundles.return_value = sample_bundles
-        mock_search_docs.return_value.json = sample_docs
-        mock_search_topics.return_value = sample_topics
+        mock_search_charms.return_value = sample_charms["charms"]
+        mock_search_bundles.return_value = sample_bundles["bundles"]
+        mock_search_docs.return_value = sample_docs["docs"]
+        mock_search_topics.return_value = sample_topics["topics"]
 
-        all_search_response = self.client.get("/all-search.json?q=juju")
-        all_docs_response = self.client.get("/all-docs?q=juju&limit=3")
-        all_topics_response = self.client.get("/all-topics?q=juju")
+        all_search_response = self.client.get("/all-search.json?q=test")
 
         self.assertEqual(all_search_response.status_code, 200)
-        self.assertIn("docs", all_docs_response.json)
+        self.assertIn("docs", all_search_response.json)
         self.assertIn("charms", all_search_response.json)
         self.assertIn("bundles", all_search_response.json)
-        self.assertIn("docs", all_search_response.json)
+        self.assertIn("topics", all_search_response.json)
         self.assertIsInstance(all_search_response.json["charms"], list)
         self.assertIsInstance(all_search_response.json["bundles"], list)
         self.assertIsInstance(all_search_response.json["docs"], list)
         self.assertIsInstance(all_search_response.json["topics"], list)
 
-        self.assertEqual(all_docs_response.status_code, 200)
-        self.assertLessEqual(len(all_docs_response.json["docs"]), 3)
-        self.assertIn("path", all_docs_response.json["docs"][0])
+        self.assertEqual(all_search_response.status_code, 200)
+        self.assertLessEqual(len(all_search_response.json["docs"]), 5)
+        self.assertIn("path", all_search_response.json["docs"][0])
 
-        self.assertEqual(all_topics_response.status_code, 200)
         self.assertTrue(
             all(
                 topic.get("archived", False) is not True
-                for topic in all_topics_response.json["topics"]
+                for topic in all_search_response.json["topics"]
             )
         )
 
-    @patch("webapp.search.logic.search_charms")
-    def test_search_with_single_type(self, mock_search_charms):
-        mock_search_charms.return_value = sample_charms
+    @patch("webapp.search.views.search_docs")
+    def test_search_all_docs(self, mock_search_docs):
+        mock_search_docs.return_value = sample_docs["docs"]
+        all_docs_response = self.client.get("/all-docs?q=test")
+
+        self.assertEqual(all_docs_response.status_code, 200)
+        self.assertIn("docs", all_docs_response.json)
+        self.assertIsInstance(all_docs_response.json["docs"], list)
+        self.assertEqual(len(all_docs_response.json["docs"]), 2)
+
+    @patch("webapp.search.views.search_topics")
+    def test_search_all_topics(self, mock_search_topics):
+        mock_search_topics.return_value = sample_topics["topics"]
+        all_topics_response = self.client.get("/all-topics?q=test")
+
+        self.assertEqual(all_topics_response.status_code, 200)
+        self.assertIn("topics", all_topics_response.json)
+        self.assertIn("total_pages", all_topics_response.json)
+        self.assertEqual(all_topics_response.json["total_pages"], 1)
+        self.assertIsInstance(all_topics_response.json["topics"], list)
+        self.assertEqual(len(all_topics_response.json["topics"]), 5)
+
+    @patch("webapp.search.views.search_topics")
+    @patch("webapp.search.views.search_docs")
+    @patch("webapp.search.views.search_bundles")
+    @patch("webapp.search.views.search_charms")
+    def test_search_with_limit(
+        self,
+        mock_search_charms,
+        mock_search_bundles,
+        mock_search_docs,
+        mock_search_topics,
+    ):
+        mock_search_charms.return_value = sample_charms["charms"]
+        mock_search_bundles.return_value = sample_bundles["bundles"]
+        mock_search_docs.return_value = sample_docs["docs"]
+        mock_search_topics.return_value = sample_topics["topics"]
+
         response = self.client.get("/all-search.json?q=test&limit=2")
-        data = json.loads(response.data)
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("charms", data)
-        self.assertIsInstance(data["charms"], list)
-        self.assertEqual(len(data["charms"]), 2)
+        self.assertIn("charms", response.json)
+        self.assertIsInstance(response.json["charms"], list)
+        self.assertEqual(len(response.json["charms"]), 2)
+        self.assertIn("bundles", response.json)
+        self.assertIsInstance(response.json["bundles"], list)
+        self.assertEqual(len(response.json["bundles"]), 2)
+        self.assertIn("docs", response.json)
+        self.assertIsInstance(response.json["docs"], list)
+        self.assertEqual(len(response.json["docs"]), 2)
+        self.assertIn("topics", response.json)
+        self.assertIsInstance(response.json["topics"], list)
+        self.assertEqual(len(response.json["topics"]), 2)
