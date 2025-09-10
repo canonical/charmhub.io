@@ -78,15 +78,6 @@ def get_publisher_solutions(username):
 def publisher_has_solutions(username):
     """
     Checks if the user logged in has access to any solutions
-    - adds simple caching because it's quite slow right now
     """
-    cache_key = f"has_solutions_{username}"
-    if cache_key in flask_session:
-        return flask_session[cache_key]
-
     solutions = get_publisher_solutions(username)
-    has_solutions = bool(solutions and len(solutions) > 0)
-
-    flask_session[cache_key] = has_solutions
-
-    return has_solutions
+    return bool(solutions and len(solutions) > 0)
