@@ -99,8 +99,10 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.json["success"], False)
         self.assertEqual(res.json["message"], "Package not found")
 
+    @patch("webapp.solutions.logic.publisher_has_solutions")
     @patch("webapp.store_api.publisher_gateway.get_account_packages")
-    def test_list_page(self, mock_get_account_packages):
+    def test_list_page(self, mock_get_account_packages, mock_has_solutions):
+        mock_has_solutions.return_value = False
         mock_get_account_packages.return_value = [
             {
                 "contact": "email",
@@ -123,7 +125,7 @@ class TestPublisherViews(unittest.TestCase):
         ]
 
         with self.client.session_transaction() as session:
-            session["account"] = {"id": "test-id"}
+            session["account"] = {"id": "test-id", "username": "test-username"}
 
         res = self.client.get("/charms")
         self.assertEqual(res.status_code, 200)

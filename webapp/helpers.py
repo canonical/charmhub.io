@@ -1,4 +1,3 @@
-import os
 import re
 import json
 
@@ -172,14 +171,3 @@ def humanize_date(date_str):
         return ""
     date_obj = parser.parse(date_str)
     return date_obj.strftime("%-d %B %Y")
-
-
-def get_solution_from_backend(uuid):
-    BASE_URL = os.getenv("SOLUTIONS_API_BASE", "http://localhost:5000/api")
-    try:
-        resp = session.get(f"{BASE_URL}/solutions/preview/{uuid}", timeout=5)
-        if resp.status_code == 200:
-            return resp.json()
-    except Exception:
-        pass
-    return None
