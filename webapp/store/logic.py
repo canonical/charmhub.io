@@ -517,7 +517,7 @@ def get_bundle_charms(charm_apps):
     result = []
 
     if charm_apps:
-        for app_name, data in charm_apps.items():
+        for _, data in charm_apps.items():
             # Charm names could be with the old prefix/suffix
             # Like: cs:~charmed-osm/mariadb-k8s-35
             name = data["charm"]
