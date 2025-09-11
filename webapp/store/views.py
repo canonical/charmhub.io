@@ -177,7 +177,7 @@ def get_package(entity_name, channel_request=None, fields=FIELDS):
         return package
     package = get_package_details(entity_name, channel_request, fields)
     # If the package is not published, return a 404
-    if not package["default-release"]:
+    if not package.get("default-release"):
         abort(404)
 
     # Fix issue #1010
