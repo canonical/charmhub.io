@@ -36,7 +36,7 @@ def all_search_json():
 
     if not term:
         return {"error": "No search term provided"}
-    key = ("all-search-json", {"q": term})
+    key = ("all-search-json", {"q": term, "limit": limit})
     result = redis_cache.get(key, expected_type=dict)
     if result:
         return jsonify(result)
