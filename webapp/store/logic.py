@@ -517,7 +517,7 @@ def get_bundle_charms(charm_apps):
     result = []
 
     if charm_apps:
-        for app_name, data in charm_apps.items():
+        for _, data in charm_apps.items():
             # Charm names could be with the old prefix/suffix
             # Like: cs:~charmed-osm/mariadb-k8s-35
             name = data["charm"]
@@ -577,28 +577,6 @@ def get_library(library_name, libraries):
         return None
 
     return library["id"]
-
-
-@trace_function
-def filter_charm(charm, categories=["all"], base="all"):
-    """
-    This filter will be done in the API soon.
-    :returns: boolean
-    """
-    # When all is present there is no need to filter
-    if categories and "all" not in categories:
-        charm_categories = [
-            cat["slug"] for cat in charm["store_front"]["categories"]
-        ]
-
-        if not any(x in categories for x in charm_categories):
-            return False
-
-    # Filter platforms
-    if base != "all" and base not in charm["store_front"]["base"]:
-        return False
-
-    return True
 
 
 @trace_function

@@ -9,6 +9,7 @@ from flask import Blueprint, Response, abort, url_for
 from flask import jsonify, redirect, render_template, request, make_response
 from pybadges import badge
 
+from redis_cache.cache_utility import redis_cache
 from webapp.store_api import publisher_gateway
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import (
@@ -25,6 +26,35 @@ from webapp.store_api import device_gateway
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
 )
+
+
+@trace_function
+def get_libraries(entity_name):
+    key = f"{entity_name}:libraries"
+    libraries = redis_cache.get(key, expected_type=list)
+    if libraries:
+        return libraries
+    libraries = logic.process_libraries(
+        publisher_gateway.get_charm_libraries(entity_name)
+    )
+    redis_cache.set(key, libraries, ttl=600)
+    return libraries
+
+
+@trace_function
+def get_package_details(entity_name, channel_request=None, fields=[]):
+    key = (
+        f"package_details:{entity_name}",
+        {"channel": channel_request, "fields": ",".join(sorted(fields))},
+    )
+    package_details = redis_cache.get(key, expected_type=dict)
+    if package_details:
+        return package_details
+    package_details = device_gateway.get_item_details(
+        entity_name, channel=channel_request, fields=fields
+    )
+    redis_cache.set(key, package_details, ttl=600)
+    return package_details
 
 
 @store.route("/publisher/<regex('[a-z0-9-]*[a-z][a-z0-9-]*'):publisher>")
@@ -75,6 +105,15 @@ def get_packages():
     query = request.args.get("q", default=None, type=str)
     provides = request.args.get("provides", default=None, type=str)
     requires = request.args.get("requires", default=None, type=str)
+
+    key = (
+        "packages.json",
+        ({"q": query, "provides": provides, "requires": requires}),
+    )
+    context = redis_cache.get(key, expected_type=dict)
+    if context:
+        return context
+
     context = {"packages": [], "size": 0}
 
     if query:
@@ -102,14 +141,14 @@ def get_packages():
     packages = []
     total_packages = 0
 
-    for i, item in enumerate(results):
+    for i, _ in enumerate(results):
         total_packages += 1
         package = logic.add_store_front_data(results[i], False)
         packages.append(package)
 
     context["packages"] = packages
     context["size"] = total_packages
-
+    redis_cache.set(key, context, ttl=600)
     return context
 
 
@@ -128,19 +167,22 @@ FIELDS = [
 @trace_function
 def get_package(entity_name, channel_request=None, fields=FIELDS):
     # Get entity info from API
-    package = publisher_gateway.get_item_details(
-        entity_name, channel=channel_request, fields=fields
+    key = (
+        f"package:{entity_name}",
+        {"channel": channel_request, "fields": ",".join(sorted(fields))},
     )
 
+    package = redis_cache.get(key, expected_type=dict)
+    if package:
+        return package
+    package = get_package_details(entity_name, channel_request, fields)
     # If the package is not published, return a 404
-    if not package["default-release"]:
+    if not package.get("default-release"):
         abort(404)
 
     # Fix issue #1010
     if channel_request:
-        channel_map = publisher_gateway.get_item_details(
-            entity_name, fields=["channel-map"]
-        )
+        channel_map = get_package_details(entity_name, fields=["channel-map"])
         package["channel-map"] = channel_map["channel-map"]
 
     package = logic.add_store_front_data(package, True)
@@ -150,7 +192,7 @@ def get_package(entity_name, channel_request=None, fields=FIELDS):
         channel["channel"]["released-at"] = logic.convert_date(
             channel["channel"]["released-at"]
         )
-
+    redis_cache.set(key, package, ttl=600)
     return package
 
 
@@ -175,11 +217,15 @@ def details_overview(entity_name):
         "default-release.revision.readme-md",
         "result.links",
     ]
-
-    package = get_package(
-        entity_name, channel_request, FIELDS.copy() + extra_fields
+    all_fields = FIELDS.copy() + extra_fields
+    package = get_package(entity_name, channel_request, all_fields)
+    key = (
+        f"{entity_name}:details-overview",
+        {"channel": channel_request, "fields": ",".join(sorted(all_fields))},
     )
-
+    context = redis_cache.get(key, expected_type=dict)
+    if context:
+        return render_template("details/overview.html", **context)
     context = {
         "package": package,
         "channel_requested": channel_request,
@@ -285,6 +331,7 @@ def details_overview(entity_name):
     context["package_type"] = package["type"]
     context["doc_url"] = doc
     context["is_rtd"] = is_rtd
+    redis_cache.set(key, context, ttl=3600)
     return render_template("details/overview.html", **context)
 
 
@@ -301,15 +348,19 @@ def details_docs(entity_name, path=None):
         "result.bugs-url",
         "result.website",
     ]
-
-    package = get_package(
-        entity_name, channel_request, FIELDS.copy() + extra_fields
-    )
+    all_fields = FIELDS.copy() + extra_fields
+    package = get_package(entity_name, channel_request, all_fields)
 
     # If no docs, redirect to main page
     if not package["store_front"]["docs_topic"]:
         return redirect(url_for(".details_overview", entity_name=entity_name))
-
+    key = (
+        f"{entity_name}:details-docs",
+        {"channel": channel_request, "fields": ",".join(sorted(all_fields))},
+    )
+    context = redis_cache.get(key, expected_type=dict)
+    if context:
+        return render_template("details/docs.html", **context)
     docs_url_prefix = f"/{package['name']}/docs"
 
     docs = DocParser(
@@ -377,7 +428,7 @@ def details_docs(entity_name, path=None):
         "topic_path": document["topic_path"],
         "channel_requested": channel_request,
     }
-
+    redis_cache.set(key, context, ttl=3600)
     return render_template("details/docs.html", **context)
 
 
@@ -463,9 +514,7 @@ def details_libraries(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request, FIELDS)
 
-    libraries = logic.process_libraries(
-        publisher_gateway.get_charm_libraries(entity_name)
-    )
+    libraries = get_libraries(entity_name)
 
     if libraries:
         first_lib = libraries[0]["name"]
@@ -498,9 +547,7 @@ def details_library(entity_name, library_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request, FIELDS)
 
-    libraries = logic.process_libraries(
-        publisher_gateway.get_charm_libraries(entity_name)
-    )
+    libraries = get_libraries(entity_name)
 
     library_id = logic.get_library(library_name, libraries)
 
@@ -541,9 +588,7 @@ def details_library_source_code(entity_name, library_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request, FIELDS)
 
-    libraries = logic.process_libraries(
-        publisher_gateway.get_charm_libraries(entity_name)
-    )
+    libraries = get_libraries(entity_name)
 
     library_id = logic.get_library(library_name, libraries)
     if not library_id:
@@ -580,9 +625,7 @@ def download_library(entity_name, library_name):
     else:
         lib_name = library_name
 
-    libraries = logic.process_libraries(
-        publisher_gateway.get_charm_libraries(entity_name)
-    )
+    libraries = get_libraries(entity_name)
 
     library = next(
         (lib for lib in libraries if lib.get("name") == lib_name),
@@ -780,7 +823,7 @@ def details_integrate(entity_name):
 @trace_function
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/badge.svg')
 def entity_badge(entity_name):
-    package = publisher_gateway.get_item_details(entity_name, fields=FIELDS)
+    package = get_package_details(entity_name, fields=FIELDS)
 
     channel_request = request.args.get("channel")
 
@@ -901,9 +944,7 @@ def entity_embedded_interface_card(entity_name):
             )
         )
 
-        libraries = logic.process_libraries(
-            publisher_gateway.get_charm_libraries(entity_name)
-        )
+        libraries = get_libraries(entity_name)
 
         context = {
             "package": package,
@@ -933,12 +974,7 @@ def entity_icon(entity_name):
     package = None
 
     try:
-        package = publisher_gateway.get_item_details(
-            entity_name,
-            fields=[
-                "result.media",
-            ],
-        )
+        package = get_package_details(entity_name, fields=["result.media"])
     except StoreApiResponseErrorList:
         pass
 
@@ -959,12 +995,7 @@ def entity_icon_missing(entity_name):
     package = None
 
     try:
-        package = publisher_gateway.get_item_details(
-            entity_name,
-            fields=[
-                "result.media",
-            ],
-        )
+        package = get_package_details(entity_name, fields=["result.media"])
     except StoreApiResponseErrorList:
         pass
 
