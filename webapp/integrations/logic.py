@@ -1,8 +1,9 @@
 import re
+import pickle
 from github import Github
 from os import getenv
-from functools import lru_cache
 
+from redis_cache.cache_utility import redis_cache
 from webapp.helpers import get_yaml_loader
 from webapp.observability.utils import trace_function
 from webapp.packages.logic import (
@@ -16,33 +17,39 @@ yaml = get_yaml_loader()
 
 
 class Interfaces:
-    def __init__(self):
-        self._repo = None
-
     @property
     def repo(self):
-        if self._repo is None:
-            self._repo = github_client.get_repo(
-                "canonical/charm-relation-interfaces"
-            )
-        return self._repo
+        key = "charm-relation-interfaces-repo"
+        repo = redis_cache.get(key, expected_type=dict)
+        if repo:
+            return pickle.loads(repo)
+        repo = github_client.get_repo("canonical/charm-relation-interfaces")
+        redis_cache.set(key, pickle.dumps(repo), ttl=86400)
+        return repo
 
-    @lru_cache(maxsize=None)
     @trace_function
     def get_interfaces(self):
+        key = "get-interfaces"
+        interfaces = redis_cache.get(key, expected_type=list)
+        if interfaces:
+            return interfaces
         try:
             index = self.repo.get_contents("index.json")
             if isinstance(index, list):
                 index = index[0]
             index_content = index.decoded_content.decode("utf-8")
             interfaces = yaml.load(index_content)
+            redis_cache.set(key, interfaces, ttl=86400)
             return interfaces
         except Exception:
             return []
 
-    @lru_cache(maxsize=None)
     @trace_function
     def get_interface_from_path(self, interface_name):
+        key = f"get-interface-from-path:{interface_name}"
+        interface = redis_cache.get(key, expected_type=dict)
+        if interface:
+            return interface
         try:
             interface_versions = self.repo.get_contents(
                 "interfaces/{}".format(interface_name)
@@ -89,7 +96,7 @@ class Interfaces:
                 except Exception:
                     continue
             interface["requirers"] = active_requirers
-
+        redis_cache.set(key, interface, ttl=86400)
         return interface
 
     @trace_function

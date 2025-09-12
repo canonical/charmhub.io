@@ -6,6 +6,7 @@ from flask import (
 )
 from flask.json import jsonify
 
+from redis_cache.cache_utility import redis_cache
 from webapp.integrations.logic import interface_logic
 from webapp.observability.utils import trace_function
 from webapp.store_api import publisher_gateway
@@ -41,6 +42,11 @@ def all_interfaces():
 
 
 def fetch_interface_details(interface_name):
+    key = f"get-interface-details:{interface_name}"
+    interface_details = redis_cache.get(key, expected_type=dict)
+    if interface_details:
+        return interface_details
+
     other_requirers = publisher_gateway.find(requires=[interface_name]).get(
         "results", []
     )
@@ -85,7 +91,7 @@ def fetch_interface_details(interface_name):
             "version": interface["version"],
         }
     )
-
+    redis_cache.set(key, res, ttl=86400)
     return res
 
 
