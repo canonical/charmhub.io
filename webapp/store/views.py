@@ -165,10 +165,10 @@ FIELDS = [
 
 
 @trace_function
-def get_package(entity_name, channel_request=None, fields=FIELDS):
+def get_package(entity_name, channel_request=None, fields=FIELDS, path=None):
     # Get entity info from API
     key = (
-        f"package:{entity_name}",
+        f"package:{entity_name}{':' + path if path else ''}",
         {"channel": channel_request, "fields": ",".join(sorted(fields))},
     )
 
@@ -349,7 +349,7 @@ def details_docs(entity_name, path=None):
         "result.website",
     ]
     all_fields = FIELDS.copy() + extra_fields
-    package = get_package(entity_name, channel_request, all_fields)
+    package = get_package(entity_name, channel_request, all_fields, path)
 
     # If no docs, redirect to main page
     if not package["store_front"]["docs_topic"]:
@@ -450,7 +450,7 @@ def details_configuration(entity_name, path=None):
     ]
 
     package = get_package(
-        entity_name, channel_request, FIELDS.copy() + extra_fields
+        entity_name, channel_request, FIELDS.copy() + extra_fields, path
     )
     subpackage = None
 
