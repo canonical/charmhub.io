@@ -355,7 +355,7 @@ def details_docs(entity_name, path=None):
     if not package["store_front"]["docs_topic"]:
         return redirect(url_for(".details_overview", entity_name=entity_name))
     key = (
-        f"{entity_name}:details-docs",
+        f"{entity_name}:details-docs:{path}",
         {"channel": channel_request, "fields": ",".join(sorted(all_fields))},
     )
     context = redis_cache.get(key, expected_type=dict)
