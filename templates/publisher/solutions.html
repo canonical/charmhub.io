@@ -44,6 +44,9 @@
           </ul>
         </nav>
       </li>
+      <li class="p-inline-list__item u-align--right">
+        <a href="/register-solution" class="p-button--base">Register a new solution</a>
+      </li>
     </ul>
   </div>
 
@@ -60,6 +63,7 @@
             <th>Visibility</th>
             <th>Publisher</th>
             <th>Last Updated</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -69,20 +73,20 @@
               <div class="p-heading-icon--x-small">
                 <span class="p-heading-icon__header">
                   <p class="u-no-margin--bottom u-no-padding--top">
-                    <a href="/solutions/{{ solution.name }}">{{ solution.title }}</a>
+                    {% if solution.status == 'published' %}
+                      <a href="/solutions/{{ solution.name }}">{{ solution.title }}</a>
+                    {% else %}
+                      {{ solution.title }}
+                    {% endif %}
                   </p>
                 </span>
               </div>
             </td>
             <td role="gridcell" aria-label="status">
-                {{ solution.status | capitalize }}
+                {{ solution.status | format_solution_status }}
             </td>
             <td role="gridcell" aria-label="visibility">
-              {% if solution.visibility == 'PUBLIC' %}
-                Public
-              {% else %}
-                Private
-              {% endif %}
+              {{ solution.visibility | capitalize }}
             </td>
             <td role="gridcell" aria-label="publisher">
               {% if solution.publisher.display_name %}
@@ -95,6 +99,9 @@
             </td>
             <td role="gridcell" aria-label="last updated">
               {{ solution.last_updated | humanize_date if solution.last_updated else '-' }}
+            </td>
+            <td role="gridcell" aria-label="actions">
+              <a href="/solutions/preview/{{ solution.hash }}" class="p-button--base">Preview</a>
             </td>
           </tr>
           {% endfor %}
