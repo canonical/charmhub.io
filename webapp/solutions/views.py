@@ -68,41 +68,36 @@ def list_solutions():
     return render_template("solutions/index.html", solutions=solutions_data)
 
 
-@solutions.route("/solutions/<name>")
-@redirect_uppercase_to_lowercase
-def solution_details(name):
-    preview_id = request.args.get("preview")
-
-    if preview_id:
-        solution = get_solution_from_backend(preview_id)
-        if not solution:
-            abort(404)
-    else:
-        solutions_data = load_solutions()
-        solution = next(
-            (s for s in solutions_data if s["name"] == name),
-            None,
-        )
-        if not solution:
-            abort(404)
-
+def render_solution(solution):
     solution["description_html"] = markdown_to_html(
         solution.get("description", "")
     )
 
-    # Fetch charm data in parallel
-    charm_names = [c["name"] for c in solution.get("charms", [])]
+    charm_names = []
+    for charm in solution.get("charms", []):
+        if isinstance(charm, dict):
+            if "name" in charm:
+                charm_names.append(charm["name"])
+            elif "charm_name" in charm:
+                charm_names.append(charm["charm_name"])
+            elif "title" in charm:
+                charm_names.append(charm["title"])
+        elif isinstance(charm, str):
+            charm_names.append(charm)
 
     def fetch(name):
         return name, get_charm_data(name)
 
     charm_data_map = {}
-    with ThreadPoolExecutor(max_workers=8) as executor:
-        futures = {executor.submit(fetch, name): name for name in charm_names}
-        for future in as_completed(futures):
-            name, data = future.result()
-            if data:
-                charm_data_map[name] = data
+    if charm_names:
+        with ThreadPoolExecutor(max_workers=8) as executor:
+            futures = {
+                executor.submit(fetch, name): name for name in charm_names
+            }
+            for future in as_completed(futures):
+                name, data = future.result()
+                if data:
+                    charm_data_map[name] = data
 
     # Preserve charm order
     solution_charms = [
@@ -110,8 +105,47 @@ def solution_details(name):
     ]
 
     solution["charms"] = solution_charms
+    return solution
+
+
+@solutions.route("/solutions/preview/<hash>")
+def solution_preview(hash):
+    solution = get_solution_from_backend(hash)
+    if not solution:
+        abort(404)
+
+    solution = render_solution(solution)
 
     return render_template(
         "solutions/solutions_base_layout.html",
         solution=solution,
+        is_preview=True,
+    )
+
+
+@solutions.route("/solutions/<name>")
+@redirect_uppercase_to_lowercase
+def solution_details(name):
+    preview_id = request.args.get("preview")
+
+    if preview_id:
+        solution = get_solution_from_backend(preview_id)
+        is_preview = True
+    else:
+        solutions_data = load_solutions()
+        solution = next(
+            (s for s in solutions_data if s["name"] == name),
+            None,
+        )
+        is_preview = False
+
+    if not solution:
+        abort(404)
+
+    solution = render_solution(solution)
+
+    return render_template(
+        "solutions/solutions_base_layout.html",
+        solution=solution,
+        is_preview=is_preview,
     )

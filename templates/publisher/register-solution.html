@@ -1,0 +1,221 @@
+{% extends 'publisher/publisher_layout.html' %}
+
+{% block title %}Register a new solution{% endblock %}
+{% block meta_copydoc %}{% endblock meta_copydoc %}
+{% block meta_description %}{% endblock %}
+
+{% block content %}
+<section class="p-strip--grey is-shallow">
+  <div class="u-fixed-width">
+    <a href="/solutions">&lsaquo;&nbsp;My solutions</a>
+    <h1 class="p-heading--2">
+      Register a new solution
+    </h1>
+    <p>
+      The first step to create a new solution is to register a name and provide some basic metadata.
+      This will then be reviewed and you will be able to provide the remaining metadata for the solution.
+    </p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="p-notification p-notification--{{ 'negative' if category == 'negative' else 'positive' }}" role="alert"">
+            <p class="p-notification__response">{{ message }}</p>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if errors %}
+      <div class="p-notification--negative">
+        <ul class="p-list p-notification__content u-no-padding--top" role="status">
+          {% for e in errors %}
+            <li class="p-list__item p-notification__status">{{ e.message }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<section class="p-strip is-shallow">
+  <form class="p-form" method="POST" action="{{ url_for('publisher.submit_register_solution') }}">
+    <div class="p-form__group row">
+      <div class="col-2">
+        <label for="name" class="p-form__label">Name:</label>
+      </div>
+      <div class="col-8 col-x-large-6">
+        <div class="p-form__control">
+          <input
+            class="p-form__control"
+            id="name"
+            name="name"
+            type="text"
+            required
+            value="{{ (form_data.name if form_data else '') | e }}"
+          >
+          <p class="p-form-help-text">This will be the slug for the solution URL. It should only have ASCII lowercase letters, numbers, and hyphens, and must have at least one letter</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-form__group row">
+      <div class="col-2">
+        <label for="title" class="p-form__label">Title:</label>
+      </div>
+      <div class="col-8 col-x-large-6">
+        <div class="p-form__control">
+          <input
+            class="p-form__control"
+            id="title"
+            name="title"
+            type="text"
+            required
+            value="{{ (form_data.title if form_data else '') | e }}"
+          >
+          <p class="p-form-help-text">A human-readable title for your solution</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-form__group row">
+      <div class="col-2">
+        <label for="summary" class="p-form__label">Description:</label>
+      </div>
+      <div class="col-8 col-x-large-6">
+        <div class="p-form__control">
+          <textarea
+            class="p-form__control"
+            id="summary"
+            name="summary"
+            rows="4"
+            required
+          >{{ (form_data.summary if form_data else '') | e }}</textarea>
+          <p class="p-form-help-text">A brief description of what your solution does</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-form__group row">
+      <div class="col-2">
+        <label for="publisher" class="p-form__label">Publisher:</label>
+      </div>
+      <div class="col-8 col-x-large-6">
+        <div class="p-form__control">
+          <select class="p-form__control" id="publisher" name="publisher" required>
+            <option value="">Select a publisher</option>
+            {% for team in user_teams %}
+              <option
+                value="{{ team }}"
+                {% if form_data and form_data.publisher == team %}selected{% endif %}
+              >{{ team }}</option>
+            {% endfor %}
+          </select>
+          <p class="p-form-help-text">Select the Launchpad team that will own this solution</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-form__group row">
+      <div class="col-2">
+        <span class="p-form__label">Platform:</span>
+      </div>
+      <div class="col-8 col-x-large-6">
+        <div class="p-form__control">
+          <label class="p-radio">
+            <input
+              type="radio"
+              class="p-radio__input"
+              name="platform"
+              value="kubernetes"
+              aria-labelledby="kubernetes"
+              {% if not form_data or form_data.platform == 'kubernetes' %}checked{% endif %}
+            >
+            <span class="p-radio__label" id="kubernetes">Kubernetes</span>
+          </label>
+          <p class="p-form-help-text">Solution designed for Kubernetes environments</p>
+
+          <label class="p-radio">
+            <input
+              type="radio"
+              class="p-radio__input"
+              name="platform"
+              value="machine"
+              aria-labelledby="machine"
+              {% if form_data and form_data.platform == 'machine' %}checked{% endif %}
+            >
+            <span class="p-radio__label" id="machine">Machine</span>
+          </label>
+          <p class="p-form-help-text">Solution designed for traditional VM environments</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-form__group row">
+      <div class="col-2">
+        <label for="creator_email" class="p-form__label">Contact Email:</label>
+      </div>
+      <div class="col-8 col-x-large-6">
+        <div class="p-form__control">
+          <input
+            class="p-form__control"
+            id="creator_email"
+            name="creator_email"
+            type="email"
+            required
+            value="{{ (form_data.creator_email if form_data else '') | e }}"
+          >
+          <p class="p-form-help-text">Contact email for this solution</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-form__group row">
+      <div class="col-2">
+        <label for="mattermost_handle" class="p-form__label">Mattermost Handle:</label>
+      </div>
+      <div class="col-8 col-x-large-6">
+      <div class="p-form__control">
+          <input
+            class="p-form__control"
+            id="mattermost_handle"
+            name="mattermost_handle"
+            type="text"
+            value="{{ (form_data.mattermost_handle if form_data else '') | e }}"
+          >
+          <p class="p-form-help-text">Optional: Your Mattermost handle for communication during review</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-form__group row">
+      <div class="col-2">
+        <label for="matrix_handle" class="p-form__label">Matrix Handle:</label>
+      </div>
+      <div class="col-8 col-x-large-6">
+        <div class="p-form__control">
+          <input
+            class="p-form__control"
+            id="matrix_handle"
+            name="matrix_handle"
+            type="text"
+            value="{{ (form_data.matrix_handle if form_data else '') | e }}"
+          >
+          <p class="p-form-help-text">Optional: Your Matrix handle for communication during review</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="u-fixed-width">
+      <hr >
+      <div class="u-align--right">
+        <a class="p-button--base" href="/solutions"">Cancel</a>
+        <button type="submit" class="p-button--positive">
+          Register Solution
+        </button>
+      </div>
+    </div>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+  </form>
+</section>
+{% endblock %}

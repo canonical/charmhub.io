@@ -171,3 +171,9 @@ def humanize_date(date_str):
         return ""
     date_obj = parser.parse(date_str)
     return date_obj.strftime("%-d %B %Y")
+
+
+def format_solution_status(status):
+    if not status:
+        return status
+    return status.replace("_", " ").title()
