@@ -85,42 +85,39 @@ def fetch_packages(
         requires = requires.split(",")
         args["requires"] = requires
 
-    parts = ["fetch-packages"]
-    if category:
-        parts.append(f"cat-{category}")
-    if query:
-        parts.append(f"query-{query}")
-    if platform:
-        parts.append(f"plat-{platform}")
-    if architecture:
-        parts.append(f"arch-{architecture}")
-    if package_type:
-        parts.append(f"type-{package_type}")
-    if libraries:
-        parts.append(f"lib-{libraries}")
-
-    key = ":".join(parts)
+    key = (
+        "fetch-packages",
+        {
+            "category": category,
+            "q": query,
+            "platform": platform,
+            "arch": architecture,
+            "type": package_type,
+            "lib": libraries,
+        },
+    )
     result = redis_cache.get(key, expected_type=dict)
-    if not result:
+    if result:
+        return {"data": result}
+    packages = publisher_gateway.find(**args).get("results", [])
+    if platform and platform != "all":
+        filtered_packages = []
+        for p in packages:
+            platforms = p["result"].get("deployable-on", [])
+            if not platforms:
+                platforms = ["vm"]
+            if platform in platforms:
+                filtered_packages.append(p)
+        packages = filtered_packages
+
+    if architecture and architecture != "all":
+        args["architecture"] = architecture
         packages = publisher_gateway.find(**args).get("results", [])
-        if platform and platform != "all":
-            filtered_packages = []
-            for p in packages:
-                platforms = p["result"].get("deployable-on", [])
-                if not platforms:
-                    platforms = ["vm"]
-                if platform in platforms:
-                    filtered_packages.append(p)
-            packages = filtered_packages
 
-        if architecture and architecture != "all":
-            args["architecture"] = architecture
-            packages = publisher_gateway.find(**args).get("results", [])
-
-        result = [
-            parse_package_for_card(package, libraries) for package in packages
-        ]
-        redis_cache.set(key, result, ttl=600)
+    result = [
+        parse_package_for_card(package, libraries) for package in packages
+    ]
+    redis_cache.set(key, result, ttl=600)
 
     return {"data": result}
 
@@ -309,8 +306,6 @@ def get_packages(
     """
 
     packages = fetch_packages(fields, query_params, libraries).get("data", [])
-
-    total_pages = -(len(packages) // -size)
 
     total_pages = -(len(packages) // -size)
     total_items = len(packages)
