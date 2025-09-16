@@ -33,6 +33,7 @@ class TestDetailsOverview(TestCase):
         mock_cache_get.return_value = None
         response = self.client.get("/test")
         self.assertIn(b"Read documentation", response.data)
+        self.assertNotIn(b"Add docs to a charm", response.data)
         self.assertEqual(response.status_code, 200)
 
     @patch("webapp.store.logic.process_libraries")
