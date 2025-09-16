@@ -162,7 +162,7 @@
     <hr class="p-separator--shallow" />
   {% endif %}
 {% endif %}
-{% if not navigation %}
+{% if not package["store_front"]["metadata"]["docs"] %}
   {% if _context.has_rendered_content %}<hr class="p-separator--shallow">{% endif %}{% set _context.has_rendered_content = true %}
   <a class="p-button--positive" href="https://juju.is/docs/sdk/add-docs-to-your-charmhub-page">Add docs to a charm</a>
 {% endif %}
