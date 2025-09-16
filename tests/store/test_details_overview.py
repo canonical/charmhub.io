@@ -20,7 +20,9 @@ class TestDetailsOverview(TestCase):
     @patch("webapp.store_api.publisher_gateway.get_item_details")
     def test_details_with_readthedocs_link(self, mock_find):
         data = copy.deepcopy(sample_package_detail)
-        data["default-release"]["revision"]["metadata-yaml"] = """
+        data["default-release"]["revision"][
+            "metadata-yaml"
+        ] = """
         docs: https://readthedocs.charmhub.io/t/xxx
         """
         mock_find.return_value = data
