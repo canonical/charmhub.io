@@ -619,5 +619,5 @@ def get_doc_link(package):
     """
     Returns the documentation link of a package
     """
-    docs = package.get("result", {}).get("links", {}).get("docs", [])
-    return docs[0] if docs else None
+    docs = package.get("store_front", {}).get("metadata", {}).get("docs", None)
+    return docs

@@ -24,9 +24,11 @@ class TestDetailsOverview(TestCase):
     @patch("webapp.store.views.get_package_details")
     def test_details_with_readthedocs_link(self, mock_find, mock_cache_get):
         data = copy.deepcopy(sample_package_detail)
-        data["result"]["links"]["docs"] = [
-            "https://readthedocs.charmhub.io/t/xxx"
-        ]
+        data["default-release"]["revision"][
+            "metadata-yaml"
+        ] = """
+        docs: https://readthedocs.charmhub.io/t/xxx
+        """
         mock_find.return_value = data
         mock_cache_get.return_value = None
         response = self.client.get("/test")
