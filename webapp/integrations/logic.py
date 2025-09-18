@@ -1,5 +1,4 @@
 import re
-import pickle
 from github import Github
 from os import getenv
 
