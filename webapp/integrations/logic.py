@@ -1,5 +1,4 @@
 import re
-import pickle
 from github import Github
 from os import getenv
 
@@ -17,15 +16,16 @@ yaml = get_yaml_loader()
 
 
 class Interfaces:
+    def __init__(self):
+        self._repo = None
+
     @property
     def repo(self):
-        key = "charm-relation-interfaces-repo"
-        repo = redis_cache.get(key, expected_type=dict)
-        if repo:
-            return pickle.loads(repo)
-        repo = github_client.get_repo("canonical/charm-relation-interfaces")
-        redis_cache.set(key, pickle.dumps(repo), ttl=86400)
-        return repo
+        if self._repo is None:
+            self._repo = github_client.get_repo(
+                "canonical/charm-relation-interfaces"
+            )
+        return self._repo
 
     @trace_function
     def get_interfaces(self):
