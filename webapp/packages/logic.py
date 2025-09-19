@@ -44,9 +44,10 @@ def get_icon(media):
 
 @trace_function
 def fetch_packages(
-    fields: List[str], query_params: Dict[str, Any]) -> list[Package]:
+    fields: List[str], query_params: Dict[str, Any]
+) -> list[Package]:
     """
-    Fetches and parses packages from the store API based on the specified fields.
+    Fetches and parses packages from the store API.
 
     :param: fields (List[str]): A list of fields to include in the package
     data.
@@ -92,12 +93,10 @@ def fetch_packages(
                 filtered_packages.append(p)
         packages = filtered_packages
 
-    result = [
-        parse_package_for_card(package) for package in packages
-    ]
+    result = [parse_package_for_card(package) for package in packages]
     redis_cache.set(key, result, ttl=600)
 
-    return result         
+    return result
 
 
 @trace_function

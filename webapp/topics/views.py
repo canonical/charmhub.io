@@ -116,7 +116,8 @@ class TopicParser(DocParser):
 @topics.route("/topics.json")
 def topics_json():
     query = request.args.get("q", default=None, type=str)
-    key = ("topics-json", ({"q": query}))
+    q = None if query in (None, "", "null") else query
+    key = ("topics-json", {"q": q})
     results = redis_cache.get(key, expected_type=list)
     if results:
         return jsonify(
@@ -164,7 +165,7 @@ def all_topics():
 @topics.route("/topics/<string:topic_slug>")
 @topics.route("/topics/<string:topic_slug>/<path:path>")
 def topic_page(topic_slug, path=None):
-    key = ("topic-page", ({"topic_slug": topic_slug, "path": path}))
+    key = ("topic-page", {"topic_slug": topic_slug, "path": path})
     cached_page = redis_cache.get(key, expected_type=dict)
     if cached_page:
         return render_template("topics/document.html", **cached_page)
