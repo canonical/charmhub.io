@@ -31,6 +31,11 @@ def _check_solutions_access(username):
     """
     has_solutions = publisher_has_solutions(username)
     if not has_solutions:
+        flash(
+            "You don't have access to solutions." \
+            "Solutions access is granted based on Launchpad team membership.",
+            "negative",
+        )
         return redirect("/charms")
     return True
 
