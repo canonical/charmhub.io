@@ -44,29 +44,22 @@ def get_icon(media):
 
 @trace_function
 def fetch_packages(
-    fields: List[str], query_params: Dict[str, Any], libraries: bool = False
-) -> Packages:
+    fields: List[str], query_params: Dict[str, Any]
+) -> list[Package]:
     """
-    Fetches packages from the store API based on the specified fields
-    and parse the packages.
+    Fetches and parses packages from the store API.
 
     :param: fields (List[str]): A list of fields to include in the package
     data.
     :param: query_params: A search query
 
-    :returns: a dictionary containing the list of parsed packages.
+    :returns: a list of parsed packages.
     """
 
     category = query_params.get("categories", "")
     query = query_params.get("q", "")
     package_type = query_params.get("type", None)
     platform = query_params.get("platforms", "")
-    architecture = query_params.get("architecture", "")
-    provides = query_params.get("provides", None)
-    requires = query_params.get("requires", None)
-
-    if package_type == "all":
-        package_type = None
 
     args = {
         "category": category,
@@ -74,16 +67,8 @@ def fetch_packages(
         "query": query,
     }
 
-    if package_type:
+    if package_type and package_type != "all":
         args["type"] = package_type
-
-    if provides:
-        provides = provides.split(",")
-        args["provides"] = provides
-
-    if requires:
-        requires = requires.split(",")
-        args["requires"] = requires
 
     key = (
         "fetch-packages",
@@ -91,35 +76,27 @@ def fetch_packages(
             "category": category,
             "q": query,
             "platform": platform,
-            "arch": architecture,
             "type": package_type,
-            "lib": libraries,
         },
     )
-    result = redis_cache.get(key, expected_type=dict)
+    result = redis_cache.get(key, expected_type=list)
     if result:
-        return {"data": result}
+        return result
     packages = publisher_gateway.find(**args).get("results", [])
     if platform and platform != "all":
         filtered_packages = []
         for p in packages:
-            platforms = p["result"].get("deployable-on", [])
+            platforms = p.get("result", {}).get("deployable-on", [])
             if not platforms:
                 platforms = ["vm"]
             if platform in platforms:
                 filtered_packages.append(p)
         packages = filtered_packages
 
-    if architecture and architecture != "all":
-        args["architecture"] = architecture
-        packages = publisher_gateway.find(**args).get("results", [])
-
-    result = [
-        parse_package_for_card(package, libraries) for package in packages
-    ]
+    result = [parse_package_for_card(package) for package in packages]
     redis_cache.set(key, result, ttl=600)
 
-    return {"data": result}
+    return result
 
 
 @trace_function
@@ -283,17 +260,13 @@ def paginate(
 
 @trace_function
 def get_packages(
-    libraries: bool,
     fields: List[str],
+    query_params: Dict[str, Any],
     size: int = 10,
-    query_params: Dict[str, Any] = {},
-) -> List[Dict[str, Any]]:
+) -> Dict[str, Any]:
     """
-    Retrieves a list of packages from the store based on the specified
-    parameters.The returned packages are paginated and parsed using the
-    card schema.
+    Retrieves a list of packages and paginate.
 
-    :param: store: The store object.
     :param: fields (List[str]): A list of fields to include in the
             package data.
     :param: size (int, optional): The number of packages to include
@@ -305,7 +278,7 @@ def get_packages(
             the total pages
     """
 
-    packages = fetch_packages(fields, query_params, libraries).get("data", [])
+    packages = fetch_packages(fields, query_params)
 
     total_pages = -(len(packages) // -size)
     total_items = len(packages)
