@@ -26,13 +26,11 @@ store_packages = Blueprint(
 @store_packages.route("/store.json")
 def get_store_packages():
     args = dict(request.args)
-    libraries = bool(args.pop("fields", ""))
-    res = make_response(
+    res = jsonify(
         get_packages(
-            libraries,
             FIELDS,
-            12,
             args,
+            12,
         )
     )
     return res
