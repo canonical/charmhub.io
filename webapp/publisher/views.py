@@ -22,22 +22,24 @@ from webapp.solutions.logic import (
     register_solution,
     get_user_teams_for_solutions,
 )
+import functools
 
 
-def _check_solutions_access(username):
-    """
-    Check if user has solutions access
-    Redirect to /charms if not
-    """
-    has_solutions = publisher_has_solutions(username)
-    if not has_solutions:
-        flash(
-            "You don't have access to solutions." \
-            "Solutions access is granted based on Launchpad team membership.",
-            "negative",
-        )
-        return redirect("/charms")
-    return True
+def requires_solutions_access(func):
+    @functools.wraps(func)
+    def has_solutions_access(*args, **kwargs):
+        username = session["account"]["username"]
+        has_solutions = publisher_has_solutions(username)
+        if not has_solutions:
+            flash(
+                "You don't have access to solutions. "
+                "Solutions access is granted based on Launchpad team membership.",
+                "negative",
+            )
+            return redirect("/charms")
+        response = make_response(func(*args, **kwargs))
+        return response
+    return has_solutions_access
 
 
 publisher = Blueprint(
@@ -158,12 +160,9 @@ def list_page():
 @trace_function
 @publisher.route("/solutions")
 @login_required
+@requires_solutions_access
 def solutions_page():
     username = session["account"]["username"]
-
-    access_check = _check_solutions_access(username)
-    if access_check is not True:
-        return access_check
 
     # Get solutions data according to launchpad group
     solutions = get_publisher_solutions(username)
@@ -625,12 +624,9 @@ def get_releases(entity_name: str):
 
 @publisher.route("/register-solution")
 @login_required
+@requires_solutions_access
 def show_register_solution_form():
     username = session["account"]["username"]
-
-    access_check = _check_solutions_access(username)
-    if access_check is not True:
-        return access_check
 
     user_teams = get_user_teams_for_solutions(username)
 
@@ -643,12 +639,9 @@ def show_register_solution_form():
 
 @publisher.route("/register-solution", methods=["POST"])
 @login_required
+@requires_solutions_access
 def submit_register_solution():
     username = session["account"]["username"]
-
-    access_check = _check_solutions_access(username)
-    if access_check is not True:
-        return access_check
 
     form_data = {
         "name": request.form.get("name", "").strip(),
