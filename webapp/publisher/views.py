@@ -139,9 +139,11 @@ def list_page():
 
     page_type = request.path[1:-1]
     username = session["account"]["username"]
+    has_solutions = publisher_has_solutions(username)
+    g.has_solutions = has_solutions
 
     context = {
-        "has_solutions": publisher_has_solutions(username),
+        "has_solutions": has_solutions,
         "published": [
             {**c, "is_owner": c["publisher"]["id"] == session["account"]["id"]}
             for c in publisher_charms
