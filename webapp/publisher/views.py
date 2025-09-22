@@ -8,6 +8,7 @@ from flask import (
     session,
     url_for,
     make_response,
+    g,
 )
 from flask.json import jsonify
 from webapp.config import DETAILS_VIEW_REGEX
@@ -37,6 +38,8 @@ def requires_solutions_access(func):
                 "negative",
             )
             return redirect("/charms")
+
+        g.has_solutions = True
         response = make_response(func(*args, **kwargs))
         return response
     return has_solutions_access
@@ -54,12 +57,8 @@ publisher = Blueprint(
 @publisher.route("/account/details")
 @login_required
 def get_account_details():
-    username = session["account"]["username"]
-    context = {
-        "has_solutions": publisher_has_solutions(username),
-    }
 
-    return render_template("publisher/account-details.html", **context)
+    return render_template("publisher/account-details.html")
 
 
 @trace_function
@@ -168,7 +167,6 @@ def solutions_page():
     solutions = get_publisher_solutions(username)
 
     context = {
-        "has_solutions": True,
         "solutions": solutions,
         "page_type": "solution",
     }
@@ -631,7 +629,6 @@ def show_register_solution_form():
     user_teams = get_user_teams_for_solutions(username)
 
     context = {
-        "has_solutions": True,
         "user_teams": user_teams,
     }
     return render_template("publisher/register-solution.html", **context)
@@ -658,7 +655,6 @@ def submit_register_solution():
 
     def render_with_errors(errors, status=400):
         context = {
-            "has_solutions": True,
             "user_teams": user_teams,
             "form_data": form_data,
             "errors": errors,
