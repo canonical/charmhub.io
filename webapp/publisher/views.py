@@ -641,14 +641,17 @@ def submit_register_solution():
     username = session["account"]["username"]
 
     form_data = {
-        "name": request.form.get("name", "").strip(),
-        "title": request.form.get("title", "").strip(),
-        "summary": request.form.get("summary", "").strip(),
-        "publisher": request.form.get("publisher", "").strip(),
-        "platform": request.form.get("platform", "kubernetes"),
-        "creator_email": request.form.get("creator_email", "").strip(),
-        "mattermost_handle": request.form.get("mattermost_handle", "").strip(),
-        "matrix_handle": request.form.get("matrix_handle", "").strip(),
+        field: request.form.get(field, "").strip()
+        for field in [
+            "name",
+            "title",
+            "summary",
+            "publisher",
+            "platform",
+            "creator_email",
+            "mattermost_handle",
+            "matrix_handle",
+        ]
     }
 
     user_teams = get_user_teams_for_solutions(username)
