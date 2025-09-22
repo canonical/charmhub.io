@@ -34,7 +34,8 @@ def requires_solutions_access(func):
         if not has_solutions:
             flash(
                 "You don't have access to solutions. "
-                "Solutions access is granted based on Launchpad team membership.",
+                "Solutions access is granted based on "
+                "Launchpad team membership.",
                 "negative",
             )
             return redirect("/charms")
@@ -42,6 +43,7 @@ def requires_solutions_access(func):
         g.has_solutions = True
         response = make_response(func(*args, **kwargs))
         return response
+
     return has_solutions_access
 
 
