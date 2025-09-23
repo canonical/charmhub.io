@@ -60,6 +60,8 @@ def fetch_packages(
     query = query_params.get("q", "")
     package_type = query_params.get("type", None)
     platform = query_params.get("platforms", "")
+    provides = query_params.get("provides", None)
+    requires = query_params.get("requires", None)
 
     args = {
         "category": category,
@@ -67,16 +69,20 @@ def fetch_packages(
         "query": query,
     }
 
+    if provides:
+        args["provides"] = provides.split(",")
+
+    if requires:
+        args["requires"] = requires.split(",")
+
     if package_type and package_type != "all":
         args["type"] = package_type
 
     key = (
         "fetch-packages",
         {
-            "category": category,
-            "q": query,
-            "platform": platform,
-            "type": package_type,
+            **query_params,
+            "fields": tuple(fields),
         },
     )
     result = redis_cache.get(key, expected_type=list)
