@@ -133,7 +133,7 @@ def get_user_teams_for_solutions(username):
         if resp.status_code == 200:
             user_data = resp.json()
             teams = user_data.get("user", {}).get("teams", [])
-            return teams
+            return sorted(teams)
 
     except Exception:
         pass
