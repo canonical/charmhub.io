@@ -8,6 +8,7 @@ from flask import (
     session,
     url_for,
     make_response,
+    g,
 )
 from flask.json import jsonify
 from webapp.config import DETAILS_VIEW_REGEX
@@ -19,7 +20,31 @@ from webapp.utils.emailer import get_emailer
 from webapp.solutions.logic import (
     get_publisher_solutions,
     publisher_has_solutions,
+    register_solution,
+    get_user_teams_for_solutions,
 )
+import functools
+
+
+def requires_solutions_access(func):
+    @functools.wraps(func)
+    def has_solutions_access(*args, **kwargs):
+        username = session["account"]["username"]
+        has_solutions = publisher_has_solutions(username)
+        if not has_solutions:
+            flash(
+                "You don't have access to solutions. "
+                "Solutions access is granted based on "
+                "Launchpad team membership.",
+                "negative",
+            )
+            return redirect("/charms")
+
+        g.has_solutions = True
+        response = make_response(func(*args, **kwargs))
+        return response
+
+    return has_solutions_access
 
 
 publisher = Blueprint(
@@ -34,12 +59,8 @@ publisher = Blueprint(
 @publisher.route("/account/details")
 @login_required
 def get_account_details():
-    username = session["account"]["username"]
-    context = {
-        "has_solutions": publisher_has_solutions(username),
-    }
 
-    return render_template("publisher/account-details.html", **context)
+    return render_template("publisher/account-details.html")
 
 
 @trace_function
@@ -118,9 +139,11 @@ def list_page():
 
     page_type = request.path[1:-1]
     username = session["account"]["username"]
+    has_solutions = publisher_has_solutions(username)
+    g.has_solutions = has_solutions
 
     context = {
-        "has_solutions": publisher_has_solutions(username),
+        "has_solutions": has_solutions,
         "published": [
             {**c, "is_owner": c["publisher"]["id"] == session["account"]["id"]}
             for c in publisher_charms
@@ -140,19 +163,14 @@ def list_page():
 @trace_function
 @publisher.route("/solutions")
 @login_required
+@requires_solutions_access
 def solutions_page():
     username = session["account"]["username"]
-
-    # Check if user has access to solutions - redirect to /charms if not
-    has_solutions = publisher_has_solutions(username)
-    if not has_solutions:
-        return redirect("/charms")
 
     # Get solutions data according to launchpad group
     solutions = get_publisher_solutions(username)
 
     context = {
-        "has_solutions": has_solutions,
         "solutions": solutions,
         "page_type": "solution",
     }
@@ -604,3 +622,101 @@ def get_releases(entity_name: str):
         response = make_response(res, 500)
 
     return response
+
+
+@publisher.route("/register-solution")
+@login_required
+@requires_solutions_access
+def show_register_solution_form():
+    username = session["account"]["username"]
+
+    user_teams = get_user_teams_for_solutions(username)
+
+    context = {
+        "user_teams": user_teams,
+    }
+    return render_template("publisher/register-solution.html", **context)
+
+
+@publisher.route("/register-solution", methods=["POST"])
+@login_required
+@requires_solutions_access
+def submit_register_solution():
+    username = session["account"]["username"]
+
+    form_data = {
+        field: request.form.get(field, "").strip()
+        for field in [
+            "name",
+            "title",
+            "summary",
+            "publisher",
+            "platform",
+            "creator_email",
+            "mattermost_handle",
+            "matrix_handle",
+        ]
+    }
+
+    user_teams = get_user_teams_for_solutions(username)
+
+    def render_with_errors(errors, status=400):
+        context = {
+            "user_teams": user_teams,
+            "form_data": form_data,
+            "errors": errors,
+        }
+        return (
+            render_template("publisher/register-solution.html", **context),
+            status,
+        )
+
+    if not all(
+        [
+            form_data["name"],
+            form_data["title"],
+            form_data["summary"],
+            form_data["publisher"],
+            form_data["creator_email"],
+        ]
+    ):
+        return render_with_errors(
+            [
+                {
+                    "code": "missing-fields",
+                    "message": "All required fields must be filled.",
+                }
+            ]
+        )
+
+    solution_data = {
+        "name": form_data["name"],
+        "title": form_data["title"],
+        "summary": form_data["summary"],
+        "publisher": form_data["publisher"],
+        "platform": form_data["platform"],
+        "creator_email": form_data["creator_email"],
+    }
+    if form_data["mattermost_handle"]:
+        solution_data["mattermost_handle"] = form_data["mattermost_handle"]
+    if form_data["matrix_handle"]:
+        solution_data["matrix_handle"] = form_data["matrix_handle"]
+
+    result = register_solution(username, solution_data)
+
+    if "error" in result:
+        return render_with_errors(
+            [{"code": "api-error", "message": result["error"]}]
+        )
+    if "error-list" in result and result["error-list"]:
+        return render_with_errors(result["error-list"], status=422)
+
+    flash(
+        (
+            f"Your solution '{form_data['title']}' has been successfully "
+            "registered and is pending name review."
+        ),
+        "positive",
+    )
+
+    return redirect("/solutions")
