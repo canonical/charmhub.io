@@ -194,25 +194,27 @@ export default function Releases() {
           aria-label="Close side panel"
         />
       )}
-      <AppAside className={`${!showSidePanel && "is-collapsed"}`}>
-        {showSidePanel === SidePanelType.RequestTrack && (
-          <RequestTrackPanel
-            charmName={packageName || ""}
-            onClose={() => setShowSidePanel(false)}
-          />
-        )}
-        {showSidePanel === SidePanelType.AddTrack && (
-          <AddTrackPanel
-            charmName={packageName || ""}
-            onClose={() => setShowSidePanel(false)}
-            setSelectedTrack={setSelectedTrack}
-            onSuccess={() => {
-              refetch();
-              setShowSuccessMessage(true);
-            }}
-          />
-        )}
-      </AppAside>
+      {showSidePanel && (
+        <AppAside className={`${!showSidePanel && "is-collapsed"}`}>
+          {showSidePanel === SidePanelType.RequestTrack && (
+            <RequestTrackPanel
+              charmName={packageName || ""}
+              onClose={() => setShowSidePanel(false)}
+            />
+          )}
+          {showSidePanel === SidePanelType.AddTrack && (
+            <AddTrackPanel
+              charmName={packageName || ""}
+              onClose={() => setShowSidePanel(false)}
+              setSelectedTrack={setSelectedTrack}
+              onSuccess={() => {
+                refetch();
+                setShowSuccessMessage(true);
+              }}
+            />
+          )}
+        </AppAside>
+      )}
     </>
   );
 }
