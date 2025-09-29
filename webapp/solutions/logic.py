@@ -52,6 +52,30 @@ def get_solution_from_backend(uuid):
         )
         if resp.status_code == 200:
             return resp.json()
+
+        username = flask_session.get("account", {}).get("username")
+        if username:
+            auth_resp = make_authenticated_request(
+                "GET",
+                f"{SOLUTIONS_API_BASE}/publisher/solutions",
+                username,
+                timeout=5,
+            )
+            if auth_resp.status_code == 200:
+                solutions = auth_resp.json()
+                for solution in solutions:
+                    if solution.get("hash") == uuid:
+                        return solution
+    except Exception:
+        pass
+    return None
+
+
+def get_published_solution_by_name(name):
+    try:
+        resp = session.get(f"{SOLUTIONS_API_BASE}/solutions/{name}", timeout=5)
+        if resp.status_code == 200:
+            return resp.json()
     except Exception:
         pass
     return None
@@ -94,6 +118,40 @@ def register_solution(username, data):
         )
 
         if resp.status_code == 201:
+            return resp.json()
+        elif resp.status_code == 400:
+            try:
+                error_data = resp.json()
+                if "error-list" in error_data:
+                    return {"error-list": error_data["error-list"]}
+                else:
+                    return {
+                        "error": error_data.get(
+                            "error", "Invalid request data"
+                        )
+                    }
+            except Exception:
+                return {"error": f"API error (400): {resp.text}"}
+        else:
+            return {"error": f"API error ({resp.status_code}): {resp.text}"}
+
+    except Exception as e:
+        return {
+            "error": f"Failed to communicate with solutions service: {str(e)}"
+        }
+
+
+def update_solution(username, name, revision, data):
+    try:
+        resp = make_authenticated_request(
+            "PATCH",
+            f"{SOLUTIONS_API_BASE}/publisher/solutions/{name}/{revision}",
+            username,
+            json=data,
+            timeout=10,
+        )
+
+        if resp.status_code == 200:
             return resp.json()
         elif resp.status_code == 400:
             try:

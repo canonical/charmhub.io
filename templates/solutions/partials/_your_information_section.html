@@ -1,0 +1,51 @@
+<div class="u-fixed-width">
+  <h4 class="p-heading--4">Your Information</h4>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="creator_email">Contact Email:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <input class="is-dense"
+      id="creator_email"
+      name="creator_email"
+      type="email"
+      class="is-dense"
+      value="{{ (form_data.creator_email if form_data else (solution.creator.email if solution.creator.email is not none else '')) | e }}"
+    >
+    <p class="p-form-help-text">Contact email for this solution</p>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="mattermost_handle">Mattermost Handle:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <input class="is-dense"
+      id="mattermost_handle"
+      name="mattermost_handle"
+      type="text"
+      class="is-dense"
+      value="{{ (form_data.mattermost_handle if form_data else (solution.creator.mattermost_handle if solution.creator.mattermost_handle is not none else '')) | e }}"
+    >
+    <p class="p-form-help-text">Optional: Your Mattermost handle for communication</p>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="matrix_handle">Matrix Handle:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <input class="is-dense"
+      id="matrix_handle"
+      name="matrix_handle"
+      type="text"
+      class="is-dense"
+      value="{{ (form_data.matrix_handle if form_data else (solution.creator.matrix_handle if solution.creator.matrix_handle is not none else '')) | e }}"
+    >
+    <p class="p-form-help-text">Optional: Your Matrix handle for communication</p>
+  </div>
+</div>

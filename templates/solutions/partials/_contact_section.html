@@ -1,0 +1,64 @@
+<div class="u-fixed-width">
+  <h4 class="p-heading--4">Contact Information</h4>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="submit_bug_url">Submit a Bug URL:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <input class="is-dense"
+      id="submit_bug_url"
+      name="submit_bug_url"
+      type="url"
+      value="{{ (form_data.submit_bug_url if form_data else (solution.documentation.submit_a_bug if solution.documentation.submit_a_bug is not none else '')) | e }}"
+    >
+    <p class="p-form-help-text">URL to submit bugs/issues (e.g., GitHub Issues, Launchpad)</p>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="community_discussion_url">Join the Discussion URL:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <input class="is-dense"
+      id="community_discussion_url"
+      name="community_discussion_url"
+      type="url"
+      value="{{ (form_data.community_discussion_url if form_data else (solution.documentation.community_discussion if solution.documentation.community_discussion is not none else '')) | e }}"
+    >
+    <p class="p-form-help-text">URL to community discussions (e.g., Discourse, Matrix)</p>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <span>Maintainers:</span>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <div id="maintainers-section">
+      <div id="maintainers-list">
+        {% if solution.maintainers %}
+          {% for maintainer in solution.maintainers %}
+            <div class="maintainer-item p-form--inline">
+              <button type="button" class="p-button--negative has-icon is-small remove-maintainer" aria-label="Remove {{ maintainer.email }}"><i class="p-icon--delete is-dark"></i></button>
+              <div class="p-form__group">
+                <div class="p-form__control">
+                  <input class="p-form__control maintainer-email"
+                    type="email"
+                    name="maintainers_email[]"
+                    value="{{ maintainer.email | e }}"
+                    placeholder="john@canonical.com"
+                  >
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <button type="button" id="add-maintainer" class="p-button--base">Add Maintainer</button>
+      <p class="p-form-help-text">Add the email addresses of maintainers who help maintain this solution.</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+<div class="u-fixed-width">
+  <h4 class="p-heading--4">Charms</h4>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="charm-search">Search for Charms:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <div class="p-search-and-filter" id="charm-search-filter">
+      <div class="p-search-and-filter__search-container" aria-expanded="false" data-active="true" data-empty="true">
+        <div class="p-search-and-filter__box" data-overflowing="false">
+          <label class="u-off-screen" for="charm-search">Search for charms</label>
+          <input autocomplete="off" class="p-search-and-filter__input" id="charm-search" name="charm-search" placeholder="Search for charms to add..." type="search" value="">
+          <button alt="search" class="p-search-and-filter__search-button" type="button">Search</button>
+        </div>
+      </div>
+      <div class="p-search-and-filter__panel" aria-hidden="true" id="charm-results-panel">
+        <div class="p-filter-panel-section" id="charm-results-section" style="display: none;">
+          <h5 class="p-filter-panel-section__heading">Available Charms</h5>
+          <div class="p-filter-panel-section__chips" id="charm-results" aria-expanded="false">
+          </div>
+        </div>
+        <div class="p-filter-panel-section" id="charm-no-results" style="display: none;">
+          <p>No charms found. Try a different search term.</p>
+        </div>
+      </div>
+    </div>
+    <p class="p-form-help-text" style="padding-top: 0.5rem;">Search and select charms that are part of this solution</p>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="manual-charm-name">Add Unpublished Charm:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <div class="p-form--inline">
+      <div class="p-form__group">
+        <input class="is-dense"
+          id="manual-charm-name"
+          type="text"
+          placeholder="charm-name"
+        >
+        <button type="button" id="add-manual-charm" class="p-button--base is-inline">Add</button>
+      </div>
+    </div>
+    <p class="p-form-help-text" style="padding-top: 0.5rem;">Enter the slug of an unpublished charm to add it manually</p>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <span>Selected Charms:</span>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <div id="selected-charms">
+      {% if solution.charms %}
+        {% for charm in solution.charms %}
+          <div data-charm-name="{{ charm.charm_name }}">
+            <button type="button" class="p-button--negative has-icon is-small charm-remove" aria-label="Remove {{ charm.charm_name }}"><i class="p-icon--delete is-dark"></i></button>
+            <span>{{ charm.charm_name }}</span>
+            <input type="hidden" name="charms[]" value="{{ charm.charm_name }}">
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+    <p class="p-form-help-text" style="padding-top: 0.5rem;">Selected charms will be included in the solution</p>
+  </div>
+</div>

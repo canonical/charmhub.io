@@ -1,0 +1,79 @@
+<div class="u-fixed-width">
+  <h4 class="p-heading--4">Basic Information</h4>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="title">Title:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <input id="title"
+      name="title"
+      type="text"
+      class="is-dense p-form-validation is-required"
+      required
+      value="{{ (form_data.title if form_data else solution.title) | e }}"
+    >
+    <p class="p-form-help-text">A human-readable title for your solution</p>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="summary">Summary:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <textarea
+      id="summary"
+      name="summary"
+      class="is-dense"
+      rows="4"
+    >{{ (form_data.summary if form_data else (solution.summary if solution.summary is not none else '')) | e }}</textarea>
+    <p class="p-form-help-text">A brief summary of what your solution does</p>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="description">Description:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <textarea
+      id="description"
+      name="description"
+      class="is-dense"
+      rows="8"
+    >{{ (form_data.description if form_data else (solution.description if solution.description is not none else '')) | e }}</textarea>
+    <p class="p-form-help-text">Detailed description of your solution (Markdown supported)</p>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="get_started_url">Get Started URL:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <input class="is-dense"
+      id="get_started_url"
+      name="get_started_url"
+      type="url"
+      value="{{ (form_data.get_started_url if form_data else (solution.documentation.get_started if solution.documentation.get_started is not none else '')) | e }}"
+    >
+    <p class="p-form-help-text">URL to a Getting Started or Implementation Guide</p>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="icon">Icon URL:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <input class="is-dense"
+      id="icon"
+      name="icon"
+      type="url"
+      value="{{ (form_data.icon if form_data else (solution.media.icon if solution.media.icon is not none else '')) | e }}"
+    >
+    <p class="p-form-help-text">URL to the icon on Asset Manager</p>
+  </div>
+</div>

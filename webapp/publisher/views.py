@@ -22,6 +22,12 @@ from webapp.solutions.logic import (
     publisher_has_solutions,
     register_solution,
     get_user_teams_for_solutions,
+    get_solution_from_backend,
+    update_solution,
+)
+from webapp.publisher.form_processors import (
+    process_solution_form_data,
+    create_error_context,
 )
 import functools
 
@@ -45,6 +51,17 @@ def requires_solutions_access(func):
         return response
 
     return has_solutions_access
+
+
+def render_solution_form_with_errors(
+    template_name, errors, form_data=None, solution=None, status=400
+):
+    username = session["account"]["username"]
+    user_teams = get_user_teams_for_solutions(username)
+
+    context = create_error_context(errors, solution, user_teams, form_data)
+
+    return render_template(template_name, **context), status
 
 
 publisher = Blueprint(
@@ -658,19 +675,6 @@ def submit_register_solution():
         ]
     }
 
-    user_teams = get_user_teams_for_solutions(username)
-
-    def render_with_errors(errors, status=400):
-        context = {
-            "user_teams": user_teams,
-            "form_data": form_data,
-            "errors": errors,
-        }
-        return (
-            render_template("publisher/register-solution.html", **context),
-            status,
-        )
-
     if not all(
         [
             form_data["name"],
@@ -680,13 +684,15 @@ def submit_register_solution():
             form_data["creator_email"],
         ]
     ):
-        return render_with_errors(
+        return render_solution_form_with_errors(
+            "publisher/register-solution.html",
             [
                 {
                     "code": "missing-fields",
                     "message": "All required fields must be filled.",
                 }
-            ]
+            ],
+            form_data,
         )
 
     solution_data = {
@@ -705,11 +711,18 @@ def submit_register_solution():
     result = register_solution(username, solution_data)
 
     if "error" in result:
-        return render_with_errors(
-            [{"code": "api-error", "message": result["error"]}]
+        return render_solution_form_with_errors(
+            "publisher/register-solution.html",
+            [{"code": "api-error", "message": result["error"]}],
+            form_data,
         )
     if "error-list" in result and result["error-list"]:
-        return render_with_errors(result["error-list"], status=422)
+        return render_solution_form_with_errors(
+            "publisher/register-solution.html",
+            result["error-list"],
+            form_data,
+            status=422,
+        )
 
     flash(
         (
@@ -718,5 +731,96 @@ def submit_register_solution():
         ),
         "positive",
     )
+
+    return redirect("/solutions")
+
+
+@publisher.route("/solutions/edit/<hash>")
+@login_required
+@requires_solutions_access
+def edit_solution_form(hash):
+
+    solution = get_solution_from_backend(hash)
+    if not solution:
+        flash("Solution not found.", "negative")
+        return redirect("/solutions")
+
+    if solution.get("status") not in ["draft", "published"]:
+        flash(
+            "This solution cannot be edited in its current status.", "negative"
+        )
+        return redirect("/solutions")
+
+    username = session["account"]["username"]
+    user_teams = get_user_teams_for_solutions(username)
+
+    context = {
+        "user_teams": user_teams,
+        "solution": solution,
+    }
+    return render_template("solutions/edit-solution.html", **context)
+
+
+@publisher.route("/solutions/edit/<hash>", methods=["POST"])
+@login_required
+@requires_solutions_access
+def submit_edit_solution(hash):
+
+    # Get solution data from backend first
+    solution = get_solution_from_backend(hash)
+    if not solution:
+        flash("Solution not found.", "negative")
+        return redirect("/solutions")
+
+    # Check if solution can be edited (only draft or published solutions)
+    if solution.get("status") not in ["draft", "published"]:
+        flash(
+            "This solution cannot be edited in its current status.", "negative"
+        )
+        return redirect("/solutions")
+
+    username = session["account"]["username"]
+
+    form_data = process_solution_form_data()
+
+    action = request.form.get("action", "save_draft")
+    update_data = {k: v for k, v in form_data.items() if k != "action"}
+
+    result = update_solution(
+        username, solution["name"], solution["revision"], update_data
+    )
+
+    if "error" in result:
+        flash(f"Failed to update solution: {result['error']}", "negative")
+        return render_solution_form_with_errors(
+            "solutions/edit-solution.html",
+            [{"code": "api-error", "message": result["error"]}],
+            form_data,
+            solution,
+        )
+
+    if "error-list" in result and result["error-list"]:
+        flash(
+            "Failed to update solution due to validation errors.", "negative"
+        )
+        return render_solution_form_with_errors(
+            "solutions/edit-solution.html",
+            result["error-list"],
+            form_data,
+            solution,
+        )
+
+    if action == "submit_for_review":
+        flash(
+            f"Your solution '{form_data['title']}' "
+            "has been submitted for metadata review.",
+            "positive",
+        )
+    elif action == "update":
+        flash(
+            f"Your solution '{form_data['title']}' "
+            "has been successfully updated.",
+            "positive",
+        )
 
     return redirect("/solutions")

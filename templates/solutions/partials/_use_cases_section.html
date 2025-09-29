@@ -1,0 +1,45 @@
+<div class="u-fixed-width">
+  <h4 class="p-heading--4">Use Cases</h4>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <span>Use Cases:</span>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <div id="use-cases-section">
+      <div id="use-cases-list">
+        {% if solution.use_cases %}
+          {% for use_case in solution.use_cases %}
+            <div class="use-case-item">
+              <div class="p-form--inline">
+                <button type="button" class="p-button--negative has-icon is-small remove-use-case" aria-label="Remove use case"><i class="p-icon--delete is-dark"></i></button>
+                <div class="p-form__group">
+                  <div class="p-form__control">
+                    <input class="p-form__control use-case-title"
+                      type="text"
+                      name="use_cases_title[]"
+                      value="{{ use_case.title | e }}"
+                      placeholder="Title: e.g., Log aggregation"
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="p-form__group">
+                <div class="p-form__control">
+                  <textarea class="p-form__control use-case-description"
+                    name="use_cases_description[]"
+                    rows="2"
+                    placeholder="Description: Describe this use case..."
+                  >{{ use_case.description | e }}</textarea>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <button type="button" id="add-use-case" class="p-button--base">Add Use Case</button>
+      <p class="p-form-help-text">Add use cases to describe how your solution can be used (maximum 3)</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+<div class="u-fixed-width">
+  <h4 class="p-heading--4">Useful Links</h4>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <span>Useful Links:</span>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <div id="useful-links-section">
+      <div id="useful-links-list">
+        {% if solution.useful_links %}
+          {% for link in solution.useful_links %}
+            <div class="useful-link-item p-form--inline">
+              <button type="button" class="p-button--negative has-icon is-small remove-useful-link" aria-label="Remove link"><i class="p-icon--delete is-dark"></i></button>
+              <div class="p-form__group">
+                <div class="p-form__control">
+                  <input class="p-form__control useful-link-title"
+                    type="text"
+                    name="useful_links_title[]"
+                    value="{{ link.title | e }}"
+                    placeholder="Title: e.g., How to operate"
+                  >
+                </div>
+              </div>
+              <div class="p-form__group">
+                <div class="p-form__control">
+                  <input class="p-form__control useful-link-url"
+                    type="url"
+                    name="useful_links_url[]"
+                    value="{{ link.url | e }}"
+                    placeholder="URL: https://example.com"
+                  >
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <button type="button" id="add-useful-link" class="p-button--base">Add Useful Link</button>
+      <p class="p-form-help-text">Add links to documentation, guides, bug reports, discussions, etc. (maximum 3)</p>
+    </div>
+  </div>
+</div>
