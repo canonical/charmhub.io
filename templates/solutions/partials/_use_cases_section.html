@@ -1,3 +1,31 @@
+<template id="use-case-template">
+  <div class="use-case-item">
+    <div class="p-form--inline">
+      <div class="p-form__group">
+        <div class="p-form__control">
+          <input class="p-form__control use-case-title"
+            type="text"
+            name="use_cases_title[]"
+            placeholder="Title: e.g., Log aggregation"
+          >
+        </div>
+      </div>
+      <button type="button" class="p-button--negative has-icon is-small remove-use-case" aria-label="Remove use case">
+        <i class="p-icon--delete is-dark"></i>
+      </button>
+    </div>
+    <div class="p-form__group">
+      <div class="p-form__control">
+        <textarea class="p-form__control use-case-description"
+          name="use_cases_description[]"
+          rows="2"
+          placeholder="Description: Describe this use case..."
+        ></textarea>
+      </div>
+    </div>
+  </div>
+</template>
+
 <div class="u-fixed-width">
   <h4 class="p-heading--4">Use Cases</h4>
 </div>

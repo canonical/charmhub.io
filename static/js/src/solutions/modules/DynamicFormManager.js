@@ -3,9 +3,19 @@ class DynamicFormManager {
     this.listContainer = document.getElementById(config.listContainerId);
     this.addButton = document.getElementById(config.addButtonId);
     this.createItemFunction = config.createItemFunction;
+    this.templateId = config.templateId;
     this.maxItems = config.maxItems || Infinity;
     this.removeSelector = config.removeSelector;
     this.itemSelector = config.itemSelector;
+
+    if (this.templateId && !this.createItemFunction) {
+      const template = document.getElementById(this.templateId);
+      if (template) {
+        this.createItemFunction = () => {
+          return template.content.cloneNode(true).firstElementChild;
+        };
+      }
+    }
 
     this.init();
   }

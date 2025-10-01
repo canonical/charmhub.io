@@ -32,6 +32,23 @@
   </div>
 </div>
 
+<template id="maintainer-template">
+  <div class="maintainer-item p-form--inline">
+    <button type="button" class="p-button--negative has-icon is-small remove-maintainer" aria-label="Remove maintainer">
+      <i class="p-icon--delete is-dark"></i>
+    </button>
+    <div class="p-form__group">
+      <div class="p-form__control">
+        <input class="p-form__control maintainer-email"
+          type="email"
+          name="maintainers_email[]"
+          placeholder="john@canonical.com"
+        >
+      </div>
+    </div>
+  </div>
+</template>
+
 <div class="p-form__group row">
   <div class="col-2">
     <span>Maintainers:</span>

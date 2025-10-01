@@ -1,3 +1,54 @@
+<template id="platform-version-template">
+  <div class="platform-version-item p-form--inline">
+    <button type="button" class="p-button--negative has-icon is-small remove-platform-version" aria-label="Remove version">
+      <i class="p-icon--delete is-dark"></i>
+    </button>
+    <div class="p-form__group">
+      <div class="p-form__control">
+        <input class="p-form__control platform-version-input"
+          type="text"
+          name="platform_version[]"
+          placeholder="e.g., 1.25"
+        >
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="platform-prerequisite-template">
+  <div class="platform-prerequisite-item p-form--inline">
+    <button type="button" class="p-button--negative has-icon is-small remove-platform-prerequisite" aria-label="Remove prerequisite">
+      <i class="p-icon--delete is-dark"></i>
+    </button>
+    <div class="p-form__group">
+      <div class="p-form__control">
+        <input class="p-form__control platform-prerequisite-input"
+          type="text"
+          name="platform_prerequisites[]"
+          placeholder="e.g., GPU support"
+        >
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="juju-version-template">
+  <div class="juju-version-item p-form--inline">
+    <button type="button" class="p-button--negative has-icon is-small remove-juju-version" aria-label="Remove version">
+      <i class="p-icon--delete is-dark"></i>
+    </button>
+    <div class="p-form__group">
+      <div class="p-form__control">
+        <input class="p-form__control juju-version-input"
+          type="text"
+          name="juju_versions[]"
+          placeholder="e.g., 3.1"
+        >
+      </div>
+    </div>
+  </div>
+</template>
+
 <div class="u-fixed-width">
   <h4 class="p-heading--4">Platform & Compatibility</h4>
 </div>
