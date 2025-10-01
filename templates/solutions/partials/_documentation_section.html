@@ -11,7 +11,7 @@
       id="documentation_main"
       name="documentation_main"
       type="url"
-      value="{{ (form_data.documentation_main if form_data else (solution.documentation.main if solution.documentation.main is not none else '')) | e }}"
+      value="{{ form_value(form_data, solution, 'documentation_main', 'documentation.main') | e }}"
     >
     <p class="p-form-help-text">URL to main documentation</p>
   </div>
@@ -26,7 +26,7 @@
       id="documentation_source"
       name="documentation_source"
       type="url"
-      value="{{ (form_data.documentation_source if form_data else (solution.documentation.source if solution.documentation.source is not none else '')) | e }}"
+      value="{{ form_value(form_data, solution, 'documentation_source', 'documentation.source') | e }}"
     >
     <p class="p-form-help-text">URL to source code repository</p>
   </div>
@@ -41,7 +41,7 @@
       id="terraform_modules"
       name="terraform_modules"
       type="url"
-      value="{{ (form_data.terraform_modules if form_data else (solution.terraform_modules if solution.terraform_modules is not none else '')) | e }}"
+      value="{{ form_value(form_data, solution, 'terraform_modules') | e }}"
     >
     <p class="p-form-help-text">URL to Terraform modules for this solution</p>
   </div>

@@ -52,7 +52,7 @@
             name="name"
             type="text"
             required
-            value="{{ (form_data.name if form_data else '') | e }}"
+            value="{{ form_value(form_data, None, 'name') | e }}"
           >
           <p class="p-form-help-text">This will be the slug for the solution URL. It should only have ASCII lowercase letters, numbers, and hyphens, and must have at least one letter</p>
         </div>
@@ -71,7 +71,7 @@
             name="title"
             type="text"
             required
-            value="{{ (form_data.title if form_data else '') | e }}"
+            value="{{ form_value(form_data, None, 'title') | e }}"
           >
           <p class="p-form-help-text">A human-readable title for your solution</p>
         </div>
@@ -90,7 +90,7 @@
             name="summary"
             rows="4"
             required
-          >{{ (form_data.summary if form_data else '') | e }}</textarea>
+          >{{ form_value(form_data, None, 'summary') | e }}</textarea>
           <p class="p-form-help-text">A brief description of what your solution does</p>
         </div>
       </div>
@@ -163,7 +163,7 @@
             name="creator_email"
             type="email"
             required
-            value="{{ (form_data.creator_email if form_data else '') | e }}"
+            value="{{ form_value(form_data, None, 'creator_email') | e }}"
           >
           <p class="p-form-help-text">Contact email for this solution</p>
         </div>
@@ -181,7 +181,7 @@
             id="mattermost_handle"
             name="mattermost_handle"
             type="text"
-            value="{{ (form_data.mattermost_handle if form_data else '') | e }}"
+            value="{{ form_value(form_data, None, 'mattermost_handle') | e }}"
           >
           <p class="p-form-help-text">Optional: Your Mattermost handle for communication during review</p>
         </div>
@@ -199,7 +199,7 @@
             id="matrix_handle"
             name="matrix_handle"
             type="text"
-            value="{{ (form_data.matrix_handle if form_data else '') | e }}"
+            value="{{ form_value(form_data, None, 'matrix_handle') | e }}"
           >
           <p class="p-form-help-text">Optional: Your Matrix handle for communication during review</p>
         </div>

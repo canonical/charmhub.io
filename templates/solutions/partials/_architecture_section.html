@@ -11,7 +11,7 @@
       id="architecture_diagram_url"
       name="architecture_diagram_url"
       type="url"
-      value="{{ (form_data.architecture_diagram_url if form_data else (solution.media.architecture_diagram if solution.media.architecture_diagram is not none else '')) | e }}"
+      value="{{ form_value(form_data, solution, 'architecture_diagram_url', 'media.architecture_diagram') | e }}"
     >
     <p class="p-form-help-text">URL to architecture diagram on Asset Manager</p>
   </div>
@@ -26,7 +26,7 @@
       id="architecture_explanation"
       name="architecture_explanation"
       rows="6"
-    >{{ (form_data.architecture_explanation if form_data else (solution.documentation.architecture_explanation if solution.documentation.architecture_explanation is not none else '')) | e }}</textarea>
+    >{{ form_value(form_data, solution, 'architecture_explanation', 'documentation.architecture_explanation') | e }}</textarea>
     <p class="p-form-help-text">Explanation of the solution architecture (Markdown supported)</p>
   </div>
 </div>

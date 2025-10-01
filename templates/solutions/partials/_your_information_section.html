@@ -12,7 +12,7 @@
       name="creator_email"
       type="email"
       class="is-dense"
-      value="{{ (form_data.creator_email if form_data else (solution.creator.email if solution.creator.email is not none else '')) | e }}"
+      value="{{ form_value(form_data, solution, 'creator_email', 'creator.email') | e }}"
     >
     <p class="p-form-help-text">Contact email for this solution</p>
   </div>
@@ -28,7 +28,7 @@
       name="mattermost_handle"
       type="text"
       class="is-dense"
-      value="{{ (form_data.mattermost_handle if form_data else (solution.creator.mattermost_handle if solution.creator.mattermost_handle is not none else '')) | e }}"
+      value="{{ form_value(form_data, solution, 'mattermost_handle', 'creator.mattermost_handle') | e }}"
     >
     <p class="p-form-help-text">Optional: Your Mattermost handle for communication</p>
   </div>
@@ -44,7 +44,7 @@
       name="matrix_handle"
       type="text"
       class="is-dense"
-      value="{{ (form_data.matrix_handle if form_data else (solution.creator.matrix_handle if solution.creator.matrix_handle is not none else '')) | e }}"
+      value="{{ form_value(form_data, solution, 'matrix_handle', 'creator.matrix_handle') | e }}"
     >
     <p class="p-form-help-text">Optional: Your Matrix handle for communication</p>
   </div>

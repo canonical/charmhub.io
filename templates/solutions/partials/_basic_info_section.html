@@ -12,7 +12,7 @@
       type="text"
       class="is-dense p-form-validation is-required"
       required
-      value="{{ (form_data.title if form_data else solution.title) | e }}"
+      value="{{ form_value(form_data, solution, 'title') | e }}"
     >
     <p class="p-form-help-text">A human-readable title for your solution</p>
   </div>
@@ -28,7 +28,7 @@
       name="summary"
       class="is-dense"
       rows="4"
-    >{{ (form_data.summary if form_data else (solution.summary if solution.summary is not none else '')) | e }}</textarea>
+    >{{ form_value(form_data, solution, 'summary') | e }}</textarea>
     <p class="p-form-help-text">A brief summary of what your solution does</p>
   </div>
 </div>
@@ -43,7 +43,7 @@
       name="description"
       class="is-dense"
       rows="8"
-    >{{ (form_data.description if form_data else (solution.description if solution.description is not none else '')) | e }}</textarea>
+    >{{ form_value(form_data, solution, 'description') | e }}</textarea>
     <p class="p-form-help-text">Detailed description of your solution (Markdown supported)</p>
   </div>
 </div>
@@ -57,7 +57,7 @@
       id="get_started_url"
       name="get_started_url"
       type="url"
-      value="{{ (form_data.get_started_url if form_data else (solution.documentation.get_started if solution.documentation.get_started is not none else '')) | e }}"
+      value="{{ form_value(form_data, solution, 'get_started_url', 'documentation.get_started') | e }}"
     >
     <p class="p-form-help-text">URL to a Getting Started or Implementation Guide</p>
   </div>
@@ -72,7 +72,7 @@
       id="icon"
       name="icon"
       type="url"
-      value="{{ (form_data.icon if form_data else (solution.media.icon if solution.media.icon is not none else '')) | e }}"
+      value="{{ form_value(form_data, solution, 'icon', 'media.icon') | e }}"
     >
     <p class="p-form-help-text">URL to the icon on Asset Manager</p>
   </div>
