@@ -784,10 +784,9 @@ def submit_edit_solution(hash):
     form_data = process_solution_form_data()
 
     action = request.form.get("action", "save_draft")
-    update_data = {k: v for k, v in form_data.items() if k != "action"}
 
     result = update_solution(
-        username, solution["name"], solution["revision"], update_data
+        username, solution["name"], solution["revision"], form_data
     )
 
     if "error" in result:
