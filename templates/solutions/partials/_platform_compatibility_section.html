@@ -9,6 +9,7 @@
           type="text"
           name="platform_version[]"
           placeholder="e.g., 1.25"
+          required
         >
       </div>
     </div>
@@ -26,6 +27,7 @@
           type="text"
           name="platform_prerequisites[]"
           placeholder="e.g., GPU support"
+          required
         >
       </div>
     </div>
@@ -43,6 +45,7 @@
           type="text"
           name="juju_versions[]"
           placeholder="e.g., 3.1"
+          required
         >
       </div>
     </div>
@@ -71,6 +74,7 @@
                     name="platform_version[]"
                     value="{{ version | e }}"
                     placeholder="e.g., 1.25"
+                    required
                   >
                 </div>
               </div>
@@ -102,6 +106,7 @@
                     name="platform_prerequisites[]"
                     value="{{ prerequisite | e }}"
                     placeholder="e.g., GPU support"
+                    required
                   >
                 </div>
               </div>
@@ -133,6 +138,7 @@
                     name="juju_versions[]"
                     value="{{ version | e }}"
                     placeholder="e.g., 3.1"
+                    required
                   >
                 </div>
               </div>
