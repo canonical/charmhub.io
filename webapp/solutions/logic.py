@@ -118,29 +118,22 @@ def register_solution(username, data):
             json=data,
             timeout=10,
         )
-
-        if resp.status_code == 201:
-            return resp.json()
-        elif resp.status_code == 400:
-            try:
-                error_data = resp.json()
-                if "error-list" in error_data:
-                    return {"error-list": error_data["error-list"]}
-                else:
-                    return {
-                        "error": error_data.get(
-                            "error", "Invalid request data"
-                        )
-                    }
-            except Exception:
-                return {"error": f"API error (400): {resp.text}"}
-        else:
-            return {"error": f"API error ({resp.status_code}): {resp.text}"}
-
     except Exception as e:
-        return {
-            "error": f"Failed to communicate with solutions service: {str(e)}"
-        }
+        return {"error": f"Failed to communicate with solutions service: {e}"}
+
+    if resp.status_code == 201:
+        return resp.json()
+
+    if resp.status_code == 400:
+        try:
+            error_data = resp.json()
+            return error_data if "error-list" in error_data else {
+                "error": error_data.get("error", "Invalid request data")
+            }
+        except Exception:
+            return {"error": f"API error (400): {resp.text}"}
+
+    return {"error": f"API error ({resp.status_code}): {resp.text}"}
 
 
 def update_solution(username, name, revision, data):
@@ -152,29 +145,22 @@ def update_solution(username, name, revision, data):
             json=data,
             timeout=10,
         )
-
-        if resp.status_code == 200:
-            return resp.json()
-        elif resp.status_code == 400:
-            try:
-                error_data = resp.json()
-                if "error-list" in error_data:
-                    return {"error-list": error_data["error-list"]}
-                else:
-                    return {
-                        "error": error_data.get(
-                            "error", "Invalid request data"
-                        )
-                    }
-            except Exception:
-                return {"error": f"API error (400): {resp.text}"}
-        else:
-            return {"error": f"API error ({resp.status_code}): {resp.text}"}
-
     except Exception as e:
-        return {
-            "error": f"Failed to communicate with solutions service: {str(e)}"
-        }
+        return {"error": f"Failed to communicate with solutions service: {e}"}
+
+    if resp.status_code == 200:
+        return resp.json()
+
+    if resp.status_code == 400:
+        try:
+            error_data = resp.json()
+            return error_data if "error-list" in error_data else {
+                "error": error_data.get("error", "Invalid request data")
+            }
+        except Exception:
+            return {"error": f"API error (400): {resp.text}"}
+
+    return {"error": f"API error ({resp.status_code}): {resp.text}"}
 
 
 def get_user_teams_for_solutions(username):
