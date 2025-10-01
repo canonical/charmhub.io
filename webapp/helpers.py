@@ -179,7 +179,9 @@ def format_solution_status(status):
     return status.replace("_", " ").title()
 
 
-def get_solution_form_value(form_data, solution, form_field_name, solution_path=None, default=""):
+def get_solution_form_value(
+    form_data, solution, form_field_name, solution_path=None, default=""
+):
     """
     When updating a solution, get form field value
     When first loading edit form, shows current solution values
@@ -197,7 +199,7 @@ def get_solution_form_value(form_data, solution, form_field_name, solution_path=
         path = solution_path if solution_path else form_field_name
 
         current_value = solution
-        for key in path.split('.'):
+        for key in path.split("."):
             if isinstance(current_value, dict) and key in current_value:
                 current_value = current_value[key]
             else:

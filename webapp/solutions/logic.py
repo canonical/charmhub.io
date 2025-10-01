@@ -127,9 +127,11 @@ def register_solution(username, data):
     if resp.status_code == 400:
         try:
             error_data = resp.json()
-            return error_data if "error-list" in error_data else {
-                "error": error_data.get("error", "Invalid request data")
-            }
+            return (
+                error_data
+                if "error-list" in error_data
+                else {"error": error_data.get("error", "Invalid request data")}
+            )
         except Exception:
             return {"error": f"API error (400): {resp.text}"}
 
@@ -154,9 +156,11 @@ def update_solution(username, name, revision, data):
     if resp.status_code == 400:
         try:
             error_data = resp.json()
-            return error_data if "error-list" in error_data else {
-                "error": error_data.get("error", "Invalid request data")
-            }
+            return (
+                error_data
+                if "error-list" in error_data
+                else {"error": error_data.get("error", "Invalid request data")}
+            )
         except Exception:
             return {"error": f"API error (400): {resp.text}"}
 
