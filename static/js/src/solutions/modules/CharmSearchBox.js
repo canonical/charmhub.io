@@ -11,6 +11,12 @@ class CharmSearchBox {
     );
     this.manualCharmInput = document.getElementById(config.manualCharmInputId);
     this.addManualButton = document.getElementById(config.addManualButtonId);
+    this.validationContainer = document.getElementById(
+      "manual-charm-validation"
+    );
+    this.validationMessage = document.getElementById(
+      "charm-validation-message"
+    );
 
     this.searchTimeout = null;
     this.apiEndpoint = config.apiEndpoint || "/all-charms";
@@ -68,11 +74,29 @@ class CharmSearchBox {
     });
 
     if (this.addManualButton && this.manualCharmInput) {
-      this.addManualButton.addEventListener("click", () => {
+      this.addManualButton.addEventListener("click", async () => {
         const charmName = this.manualCharmInput.value.trim();
         if (charmName) {
-          this.addCharm({ name: charmName });
-          this.manualCharmInput.value = "";
+          this.hideValidationError();
+
+          const originalContent = this.addManualButton.textContent;
+          this.addManualButton.disabled = true;
+          this.addManualButton.innerHTML =
+            '<i class="p-icon--spinner u-animation--spin"></i>';
+
+          const exists = await this.validateCharm(charmName);
+
+          this.addManualButton.disabled = false;
+          this.addManualButton.textContent = originalContent;
+
+          if (exists) {
+            this.addCharm({ name: charmName });
+            this.manualCharmInput.value = "";
+          } else {
+            this.showValidationError(
+              `"${charmName}" does not exist in Charmhub. Please check the name and try again.`
+            );
+          }
         }
       });
     }
@@ -170,15 +194,22 @@ class CharmSearchBox {
       return;
     }
 
-    const charmDiv = document.createElement("div");
+    const template = document.getElementById("charm-item-template");
+    if (!template) {
+      console.error("Charm item template not found");
+      return;
+    }
+
+    const charmDiv = template.content.cloneNode(true).firstElementChild;
     charmDiv.setAttribute("data-charm-name", charm.name);
-    charmDiv.innerHTML = `
-      <button type="button" class="p-button--negative has-icon is-small charm-remove" aria-label="Remove ${charm.name}">
-        <i class="p-icon--delete is-dark"></i>
-      </button>
-      <span>${charm.name}</span>
-      <input type="hidden" name="charms[]" value="${charm.name}">
-    `;
+
+    const button = charmDiv.querySelector(".charm-remove");
+    const span = charmDiv.querySelector("span");
+    const input = charmDiv.querySelector("input[name='charms[]']");
+
+    button.setAttribute("aria-label", `Remove ${charm.name}`);
+    span.textContent = charm.name;
+    input.value = charm.name;
 
     this.selectedContainer.appendChild(charmDiv);
     this.searchInput.value = "";
@@ -189,6 +220,40 @@ class CharmSearchBox {
     return Array.from(
       this.selectedContainer.querySelectorAll("[data-charm-name]")
     ).map((div) => div.getAttribute("data-charm-name"));
+  }
+
+  async validateCharm(charmName) {
+    try {
+      const response = await fetch(
+        `/validate-charm?name=${encodeURIComponent(charmName)}`
+      );
+      const data = await response.json();
+      return data.exists;
+    } catch (error) {
+      console.error("Error validating charm:", error);
+      return false;
+    }
+  }
+
+  showValidationError(message) {
+    if (this.validationContainer && this.validationMessage) {
+      this.validationMessage.textContent = message;
+      this.validationContainer.classList.add("is-error");
+      this.manualCharmInput.setAttribute("aria-invalid", "true");
+      this.manualCharmInput.setAttribute(
+        "aria-describedby",
+        "charm-validation-message"
+      );
+    }
+  }
+
+  hideValidationError() {
+    if (this.validationContainer && this.validationMessage) {
+      this.validationMessage.textContent = "";
+      this.validationContainer.classList.remove("is-error");
+      this.manualCharmInput.removeAttribute("aria-invalid");
+      this.manualCharmInput.removeAttribute("aria-describedby");
+    }
   }
 }
 

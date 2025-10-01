@@ -1,3 +1,13 @@
+<template id="charm-item-template">
+  <div data-charm-name="">
+    <button type="button" class="p-button--negative has-icon is-small charm-remove" aria-label="Remove charm">
+      <i class="p-icon--delete is-dark"></i>
+    </button>
+    <span></span>
+    <input type="hidden" name="charms[]" value="">
+  </div>
+</template>
+
 <div class="u-fixed-width">
   <h4 class="p-heading--4">Charms</h4>
 </div>
@@ -35,15 +45,18 @@
     <label for="manual-charm-name">Add Unpublished Charm:</label>
   </div>
   <div class="col-8 col-x-large-6">
-    <div class="p-form--inline">
-      <div class="p-form__group">
-        <input class="is-dense"
-          id="manual-charm-name"
-          type="text"
-          placeholder="charm-name"
-        >
-        <button type="button" id="add-manual-charm" class="p-button--base is-inline">Add</button>
+    <div class="p-form-validation" id="manual-charm-validation">
+      <div class="p-form--inline">
+        <div class="p-form__group">
+          <input class="p-form-validation__input"
+            id="manual-charm-name"
+            type="text"
+            placeholder="charm-name"
+          >
+          <button type="button" id="add-manual-charm" class="p-button--base is-inline">Add</button>
+        </div>
       </div>
+      <p class="p-form-validation__message" id="charm-validation-message"></p>
     </div>
     <p class="p-form-help-text" style="padding-top: 0.5rem;">Enter the slug of an unpublished charm to add it manually</p>
   </div>

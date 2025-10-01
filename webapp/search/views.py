@@ -91,3 +91,21 @@ def all_topics():
     return jsonify(
         {"topics": all_topics[start:end], "total_pages": total_pages}
     )
+
+
+@search.route("/validate-charm")
+def validate_charm():
+    charm_name = request.args.get("name", "").strip()
+
+    if not charm_name:
+        return jsonify({"exists": False, "error": "No charm name provided"})
+
+    try:
+        charm = publisher_gateway.get_item_details(charm_name)
+
+        if charm and "name" in charm:
+            return jsonify({"exists": True, "name": charm["name"]})
+
+        return jsonify({"exists": False})
+    except Exception:
+        return jsonify({"exists": False})
