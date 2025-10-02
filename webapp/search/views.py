@@ -6,9 +6,6 @@ from flask import (
     render_template,
 )
 from webapp.config import SEARCH_FIELDS
-
-
-logger = logging.getLogger(__name__)
 from webapp.search.logic import (
     search_docs,
     search_topics,
@@ -18,6 +15,8 @@ from webapp.search.logic import (
 from webapp.observability.utils import trace_function
 from webapp.store_api import publisher_gateway
 
+
+logger = logging.getLogger(__name__)
 
 search = Blueprint(
     "search", __name__, template_folder="/templates", static_folder="/static"
