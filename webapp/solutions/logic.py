@@ -72,8 +72,8 @@ def get_solution_from_backend(uuid):
                 for solution in solutions:
                     if solution.get("hash") == uuid:
                         return solution
-    except Exception:
-        pass
+    except Exception as e:
+        logger.exception(f"Failed to fetch solution from backend: {e}")
     return None
 
 
@@ -82,8 +82,8 @@ def get_published_solution_by_name(name):
         resp = session.get(f"{SOLUTIONS_API_BASE}/solutions/{name}", timeout=5)
         if resp.status_code == 200:
             return resp.json()
-    except Exception:
-        pass
+    except Exception as e:
+        logger.exception(f"Failed to fetch published solution by name: {e}")
     return None
 
 
@@ -99,8 +99,8 @@ def get_publisher_solutions(username):
             solutions = resp.json()
             return solutions if solutions else []
 
-    except Exception:
-        pass
+    except Exception as e:
+        logger.exception(f"Failed to fetch publisher solutions: {e}")
 
     return []
 
@@ -137,7 +137,8 @@ def register_solution(username, data):
                 if "error-list" in error_data
                 else {"error": error_data.get("error", "Invalid request data")}
             )
-        except Exception:
+        except Exception as e:
+            logger.exception(f"Failed to parse error response from API: {e}")
             return {"error": f"API error (400): {resp.text}"}
 
     return {"error": f"API error ({resp.status_code}): {resp.text}"}
@@ -167,7 +168,8 @@ def update_solution(username, name, revision, data):
                 if "error-list" in error_data
                 else {"error": error_data.get("error", "Invalid request data")}
             )
-        except Exception:
+        except Exception as e:
+            logger.exception(f"Failed to parse error response from API: {e}")
             return {"error": f"API error (400): {resp.text}"}
 
     return {"error": f"API error ({resp.status_code}): {resp.text}"}
@@ -191,7 +193,7 @@ def get_user_teams_for_solutions(username):
             teams = user_data.get("user", {}).get("teams", [])
             return sorted(teams)
 
-    except Exception:
-        pass
+    except Exception as e:
+        logger.exception(f"Failed to fetch user teams for solutions: {e}")
 
     return []
