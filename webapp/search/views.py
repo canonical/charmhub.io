@@ -1,3 +1,4 @@
+import logging
 from flask import (
     Blueprint,
     jsonify,
@@ -5,6 +6,9 @@ from flask import (
     render_template,
 )
 from webapp.config import SEARCH_FIELDS
+
+
+logger = logging.getLogger(__name__)
 from webapp.search.logic import (
     search_docs,
     search_topics,
@@ -107,5 +111,6 @@ def validate_charm():
             return jsonify({"exists": True, "name": charm["name"]})
 
         return jsonify({"exists": False})
-    except Exception:
-        return jsonify({"exists": False})
+    except Exception as e:
+        logger.exception(f"Failed to validate charm: {e}")
+        return jsonify({"exists": False, "error": "Network or API error"})
