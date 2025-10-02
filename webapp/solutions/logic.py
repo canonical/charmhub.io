@@ -1,7 +1,11 @@
 import os
+import logging
 import requests
 from flask import session as flask_session
 from webapp.solutions.auth import login
+
+
+logger = logging.getLogger(__name__)
 
 session = requests.Session()
 
@@ -119,7 +123,8 @@ def register_solution(username, data):
             timeout=10,
         )
     except Exception as e:
-        return {"error": f"Failed to communicate with solutions service: {e}"}
+        logger.exception(f"Failed to communicate with solutions service: {e}")
+        return {"error": "Failed to communicate with solutions service"}
 
     if resp.status_code == 201:
         return resp.json()
@@ -148,7 +153,8 @@ def update_solution(username, name, revision, data):
             timeout=10,
         )
     except Exception as e:
-        return {"error": f"Failed to communicate with solutions service: {e}"}
+        logger.exception(f"Failed to communicate with solutions service: {e}")
+        return {"error": "Failed to communicate with solutions service"}
 
     if resp.status_code == 200:
         return resp.json()
