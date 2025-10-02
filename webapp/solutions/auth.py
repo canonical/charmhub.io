@@ -4,7 +4,7 @@ import hmac
 import time
 import os
 
-HMAC_SECRET = os.getenv("HMAC_SECRET_KEY")
+HMAC_SECRET = os.getenv("FLASK_HMAC_SECRET_KEY")
 BASE_URL = os.getenv(
     "SOLUTIONS_API_BASE", "http://solutions.staging.charmhub.io/api"
 )
