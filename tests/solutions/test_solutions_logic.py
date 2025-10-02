@@ -22,7 +22,8 @@ class TestSolutionsLogic(unittest.TestCase):
 
         self.assertEqual(result, {"uuid": "123", "name": "Test Solution"})
         mock_session.get.assert_called_once_with(
-            "http://solutions.staging.charmhub.io/api/solutions/preview/123", timeout=5
+            "http://solutions.staging.charmhub.io/api/solutions/preview/123",
+            timeout=5,
         )
 
     @patch("webapp.solutions.logic.session")
