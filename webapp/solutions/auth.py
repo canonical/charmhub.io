@@ -5,7 +5,7 @@ import time
 import os
 
 HMAC_SECRET = os.getenv("HMAC_SECRET_KEY")
-BASE_URL = os.getenv("SOLUTIONS_API_BASE", "http://localhost:5000/api")
+BASE_URL = os.getenv("SOLUTIONS_API_BASE", "http://solutions.staging.charmhub.io/api")
 
 
 def login(username: str) -> str:
