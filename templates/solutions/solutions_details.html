@@ -20,11 +20,16 @@
     </div>
   {% endif %}
 
-  {% if solution.media.architecture_diagram %}
+  {% if solution.media.architecture_diagram or solution.documentation.architecture_explanation %}
     <hr class="p-separator--shallow">
     <div class="p-section--shallow u-no-padding--top">
       <h4 style="font-weight: 500">Architecture</h4>
-      <img src="{{ solution.media.architecture_diagram }}" alt="canonical observability architecture diagram" loading="lazy">
+      {% if solution.media.architecture_diagram %}
+        <img src="{{ solution.media.architecture_diagram }}" alt="{{ solution.title }} architecture diagram" loading="lazy">
+      {% endif %}
+      {% if solution.documentation.architecture_explanation and solution.documentation.architecture_explanation != "None" %}
+        <div class="u-sv1">{{ solution.architecture_explanation_html | safe }}</div>
+      {% endif %}
     </div>
   {% endif %}
 

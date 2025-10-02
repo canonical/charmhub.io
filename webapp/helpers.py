@@ -177,3 +177,34 @@ def format_solution_status(status):
     if not status:
         return status
     return status.replace("_", " ").title()
+
+
+def get_solution_form_value(
+    form_data, solution, form_field_name, solution_path=None, default=""
+):
+    """
+    When updating a solution, get form field value
+    When first loading edit form, shows current solution values
+    When re-displaying form after validation errors,
+    shows user's submitted values
+
+    E.g.:
+        get_solution_form_value(form_data, solution, 'title')
+        # checks: form_data.title -> solution.title -> ""
+    """
+    if form_data and form_field_name in form_data:
+        return form_data.get(form_field_name, default)
+
+    if solution:
+        path = solution_path if solution_path else form_field_name
+
+        current_value = solution
+        for key in path.split("."):
+            if isinstance(current_value, dict) and key in current_value:
+                current_value = current_value[key]
+            else:
+                return default
+
+        return current_value if current_value is not None else default
+
+    return default

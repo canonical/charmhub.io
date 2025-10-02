@@ -58,15 +58,15 @@
       <table class="p-table--mobile-card" role="grid">
         <thead>
           <tr role="row">
-            <th style="width: 30%;">Name</th>
-            <th>Status</th>
-            <th>Visibility</th>
+            <th>Name</th>
+            <th style="width: 15%;">Status</th>
+            <th style="width: 15%;">Visibility</th>
             <th>Publisher</th>
             <th>Last Updated</th>
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody> 
           {% for solution in solutions %}
           <tr role="row">
             <td role="rowheader" class="p-table--mobile-card__header">
@@ -101,7 +101,10 @@
               {{ solution.last_updated | humanize_date if solution.last_updated else '-' }}
             </td>
             <td role="gridcell" aria-label="actions">
-              <a href="/solutions/preview/{{ solution.hash }}" class="p-button--base">Preview</a>
+              <a href="/solutions/preview/{{ solution.hash }}" class="p-button--base is-dense">Preview</a>
+              {% if solution.status in ['draft', 'published'] %}
+                <a href="/solutions/edit/{{ solution.hash }}" class="p-button--base is-dense">Edit</a>
+              {% endif %}
             </td>
           </tr>
           {% endfor %}

@@ -1,0 +1,48 @@
+<div class="u-fixed-width">
+  <h4 class="p-heading--4">Documentation Links</h4>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="documentation_main">Main Documentation:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <input class="is-dense"
+      id="documentation_main"
+      name="documentation_main"
+      type="url"
+      value="{{ form_value(form_data, solution, 'documentation_main', 'documentation.main') | e }}"
+    >
+    <p class="p-form-help-text">URL to main documentation</p>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="documentation_source">Source Repository:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <input class="is-dense"
+      id="documentation_source"
+      name="documentation_source"
+      type="url"
+      value="{{ form_value(form_data, solution, 'documentation_source', 'documentation.source') | e }}"
+    >
+    <p class="p-form-help-text">URL to source code repository</p>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="terraform_modules">Terraform Modules:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <input class="is-dense"
+      id="terraform_modules"
+      name="terraform_modules"
+      type="url"
+      value="{{ form_value(form_data, solution, 'terraform_modules') | e }}"
+    >
+    <p class="p-form-help-text">URL to Terraform modules for this solution</p>
+  </div>
+</div>

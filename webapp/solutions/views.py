@@ -6,6 +6,8 @@ from webapp.store_api import publisher_gateway
 from webapp.helpers import markdown_to_html
 from webapp.solutions.logic import get_solution_from_backend
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from webapp.solutions.logic import get_published_solution_by_name
+
 
 solutions = Blueprint(
     "solutions",
@@ -73,6 +75,15 @@ def render_solution(solution):
         solution.get("description", "")
     )
 
+    architecture_explanation = ""
+    if solution.get("documentation", {}).get("architecture_explanation"):
+        architecture_explanation = solution["documentation"][
+            "architecture_explanation"
+        ]
+    solution["architecture_explanation_html"] = markdown_to_html(
+        architecture_explanation
+    )
+
     charm_names = []
     for charm in solution.get("charms", []):
         if isinstance(charm, dict):
@@ -132,11 +143,15 @@ def solution_details(name):
         solution = get_solution_from_backend(preview_id)
         is_preview = True
     else:
-        solutions_data = load_solutions()
-        solution = next(
-            (s for s in solutions_data if s["name"] == name),
-            None,
-        )
+        solution = get_published_solution_by_name(name)
+
+        if not solution:
+            solutions_data = load_solutions()
+            solution = next(
+                (s for s in solutions_data if s["name"] == name),
+                None,
+            )
+
         is_preview = False
 
     if not solution:

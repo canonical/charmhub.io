@@ -1,0 +1,32 @@
+<div class="u-fixed-width">
+  <h4 class="p-heading--4">Architecture Information</h4>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="architecture_diagram_url">Architecture Diagram URL:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <input class="is-dense"
+      id="architecture_diagram_url"
+      name="architecture_diagram_url"
+      type="url"
+      value="{{ form_value(form_data, solution, 'architecture_diagram_url', 'media.architecture_diagram') | e }}"
+    >
+    <p class="p-form-help-text">URL to architecture diagram on Asset Manager</p>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="architecture_explanation">Architecture Description:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <textarea class="is-dense"
+      id="architecture_explanation"
+      name="architecture_explanation"
+      rows="6"
+    >{{ form_value(form_data, solution, 'architecture_explanation', 'documentation.architecture_explanation') | e }}</textarea>
+    <p class="p-form-help-text">Explanation of the solution architecture (Markdown supported)</p>
+  </div>
+</div>

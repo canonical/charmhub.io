@@ -20,6 +20,7 @@ from webapp.helpers import (
     markdown_to_html,
     humanize_date,
     format_solution_status,
+    get_solution_form_value,
 )
 from webapp.decorators import login_required
 from webapp.packages.store_packages import store_packages
@@ -63,6 +64,7 @@ app.register_blueprint(solutions)
 app.jinja_env.filters["markdown"] = markdown_to_html
 app.jinja_env.filters["humanize_date"] = humanize_date
 app.jinja_env.filters["format_solution_status"] = format_solution_status
+app.jinja_env.globals["form_value"] = get_solution_form_value
 
 # OpenTelemetry
 UNTRACED_ROUTES = ["/_status", "/static", ".json"]

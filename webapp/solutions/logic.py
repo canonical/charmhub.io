@@ -1,7 +1,11 @@
 import os
+import logging
 import requests
 from flask import session as flask_session
 from webapp.solutions.auth import login
+
+
+logger = logging.getLogger(__name__)
 
 session = requests.Session()
 
@@ -47,13 +51,39 @@ def make_authenticated_request(method, url, username, **kwargs):
 
 def get_solution_from_backend(uuid):
     try:
+        # public preview endpoint for published solutions
         resp = session.get(
             f"{SOLUTIONS_API_BASE}/solutions/preview/{uuid}", timeout=5
         )
         if resp.status_code == 200:
             return resp.json()
-    except Exception:
-        pass
+
+        # fallback for publishers to preview their own draft solutions
+        username = flask_session.get("account", {}).get("username")
+        if username:
+            auth_resp = make_authenticated_request(
+                "GET",
+                f"{SOLUTIONS_API_BASE}/publisher/solutions",
+                username,
+                timeout=5,
+            )
+            if auth_resp.status_code == 200:
+                solutions = auth_resp.json()
+                for solution in solutions:
+                    if solution.get("hash") == uuid:
+                        return solution
+    except Exception as e:
+        logger.exception(f"Failed to fetch solution from backend: {e}")
+    return None
+
+
+def get_published_solution_by_name(name):
+    try:
+        resp = session.get(f"{SOLUTIONS_API_BASE}/solutions/{name}", timeout=5)
+        if resp.status_code == 200:
+            return resp.json()
+    except Exception as e:
+        logger.exception(f"Failed to fetch published solution by name: {e}")
     return None
 
 
@@ -69,8 +99,8 @@ def get_publisher_solutions(username):
             solutions = resp.json()
             return solutions if solutions else []
 
-    except Exception:
-        pass
+    except Exception as e:
+        logger.exception(f"Failed to fetch publisher solutions: {e}")
 
     return []
 
@@ -92,29 +122,57 @@ def register_solution(username, data):
             json=data,
             timeout=10,
         )
-
-        if resp.status_code == 201:
-            return resp.json()
-        elif resp.status_code == 400:
-            try:
-                error_data = resp.json()
-                if "error-list" in error_data:
-                    return {"error-list": error_data["error-list"]}
-                else:
-                    return {
-                        "error": error_data.get(
-                            "error", "Invalid request data"
-                        )
-                    }
-            except Exception:
-                return {"error": f"API error (400): {resp.text}"}
-        else:
-            return {"error": f"API error ({resp.status_code}): {resp.text}"}
-
     except Exception as e:
-        return {
-            "error": f"Failed to communicate with solutions service: {str(e)}"
-        }
+        logger.exception(f"Failed to communicate with solutions service: {e}")
+        return {"error": "Failed to communicate with solutions service"}
+
+    if resp.status_code == 201:
+        return resp.json()
+
+    if resp.status_code == 400:
+        try:
+            error_data = resp.json()
+            return (
+                error_data
+                if "error-list" in error_data
+                else {"error": error_data.get("error", "Invalid request data")}
+            )
+        except Exception as e:
+            logger.exception(f"Failed to parse error response from API: {e}")
+            return {"error": f"API error (400): {resp.text}"}
+
+    return {"error": f"API error ({resp.status_code}): {resp.text}"}
+
+
+def update_solution(username, name, revision, data):
+    try:
+        resp = make_authenticated_request(
+            "PATCH",
+            f"{SOLUTIONS_API_BASE}/publisher/solutions/{name}/{revision}",
+            username,
+            json=data,
+            timeout=10,
+        )
+    except Exception as e:
+        logger.exception(f"Failed to communicate with solutions service: {e}")
+        return {"error": "Failed to communicate with solutions service"}
+
+    if resp.status_code == 200:
+        return resp.json()
+
+    if resp.status_code == 400:
+        try:
+            error_data = resp.json()
+            return (
+                error_data
+                if "error-list" in error_data
+                else {"error": error_data.get("error", "Invalid request data")}
+            )
+        except Exception as e:
+            logger.exception(f"Failed to parse error response from API: {e}")
+            return {"error": f"API error (400): {resp.text}"}
+
+    return {"error": f"API error ({resp.status_code}): {resp.text}"}
 
 
 def get_user_teams_for_solutions(username):
@@ -135,7 +193,7 @@ def get_user_teams_for_solutions(username):
             teams = user_data.get("user", {}).get("teams", [])
             return sorted(teams)
 
-    except Exception:
-        pass
+    except Exception as e:
+        logger.exception(f"Failed to fetch user teams for solutions: {e}")
 
     return []

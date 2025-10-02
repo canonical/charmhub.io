@@ -1,6 +1,6 @@
 {% extends 'base_layout.html' %}
 
-{% block meta_title %}{{ solution.name }} – Charmhub Solutions{% endblock %}
+{% block meta_title %}{{ solution.title }} – Charmhub Solutions{% endblock %}
 {% block meta_description %}{{ solution.summary }}{% endblock %}
 {% block meta_image %}{{ solution.media.icon }}{% endblock %}
 {% block meta_image_alt %}{{ solution.name }} logo{% endblock %}
@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block content %}
-  {% if request.args.get('preview') %}
+  {% if request.args.get('preview') or is_preview %}
     <div class="p-strip is-shallow grid-row">
       <div class="p-notification--caution">
         <div class="p-notification__content">

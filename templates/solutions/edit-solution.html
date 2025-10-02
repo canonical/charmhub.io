@@ -1,0 +1,96 @@
+{% extends 'publisher/publisher_layout.html' %}
+
+{% block title %}Edit solution - {{ solution.title }}{% endblock %}
+{% block meta_copydoc %}{% endblock meta_copydoc %}
+{% block meta_description %}{% endblock %}
+
+{% block content %}
+<section class="p-strip--grey is-shallow">
+  <div class="u-fixed-width">
+    <a href="/solutions">&lsaquo;&nbsp;My solutions</a>
+    <h1 class="p-heading--2">
+      Edit solution: {{ solution.title }}
+    </h1>
+    {% if solution.status == 'draft' and solution.revision == 1 %}
+      <p>
+        Add the remaining metadata for your solution.<br>
+        Changes will need to be reviewed before being published.
+      </p>
+    {% elif solution.status == 'published' %}
+      <p>
+        Edit the metadata for your solution.
+      </p>
+    {% endif %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="p-notification p-notification--{{ 'negative' if category == 'negative' else 'positive' }}" role="alert">
+            <p class="p-notification__response">{{ message }}</p>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if errors %}
+      <div class="p-notification--negative">
+        <ul class="p-list p-notification__content u-no-padding--top" role="status">
+          {% for e in errors %}
+            <li class="p-list__item p-notification__status">{{ e.message }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<section class="p-strip is-shallow">
+  <div class="u-fixed-width">
+    <form class="p-form" method="POST" action="{{ url_for('publisher.submit_edit_solution', hash=solution.hash) }}">
+
+      {% include 'solutions/partials/_basic_info_section.html' %}
+      <hr>
+      {% include 'solutions/partials/_platform_compatibility_section.html' %}
+      <hr>
+      {% include 'solutions/partials/_documentation_section.html' %}
+      <hr>
+      {% include 'solutions/partials/_contact_section.html' %}
+      <hr>
+      {% include 'solutions/partials/_use_cases_section.html' %}
+      <hr>
+      {% include 'solutions/partials/_architecture_section.html' %}
+      <hr>
+      {% include 'solutions/partials/_charms_section.html' %}
+      <hr>
+      {% include 'solutions/partials/_useful_links_section.html' %}
+      <hr>
+      {% include 'solutions/partials/_your_information_section.html' %}
+
+      <hr>
+
+      <div class="u-fixed-width">
+        <div class="u-align--right">
+          <a class="p-button--base" href="/solutions">Cancel</a>
+          {% if solution.status == 'draft' and solution.revision == 1 %}
+            <button type="submit" name="action" value="submit_for_review" class="p-button--positive">
+              Submit metadata for review
+            </button>
+          {% elif solution.status == 'published' %}
+            <button type="submit" name="action" value="update" class="p-button--positive">
+              Update solution
+            </button>
+          {% else %}
+            <button type="submit" name="action" value="save_draft" class="p-button--positive">
+              Save draft
+            </button>
+          {% endif %}
+        </div>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      </div>
+
+    </form>
+  </div>
+</section>
+
+<script src="{{ url_for('static', filename='js/dist/edit-solution.js') }}"></script>
+{% endblock %}

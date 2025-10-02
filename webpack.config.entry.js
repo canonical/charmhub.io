@@ -18,5 +18,6 @@ module.exports = {
   interfaces: "./static/js/src/interfaces/index.tsx",
   store: "./static/js/src/store/index.tsx",
   publisher: "./static/js/src/publisher-admin/index.tsx",
+  "edit-solution": "./static/js/src/solutions/edit-solution.js",
   search: "./static/js/src/search/App.tsx",
 };
