@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 session = requests.Session()
 
 SOLUTIONS_API_BASE = os.getenv(
-    "SOLUTIONS_API_BASE", "http://localhost:5000/api"
+    "SOLUTIONS_API_BASE", "http://solutions.staging.charmhub.io/api"
 )
 
 

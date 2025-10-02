@@ -22,7 +22,8 @@ class TestSolutionsLogic(unittest.TestCase):
 
         self.assertEqual(result, {"uuid": "123", "name": "Test Solution"})
         mock_session.get.assert_called_once_with(
-            "http://localhost:5000/api/solutions/preview/123", timeout=5
+            "http://solutions.staging.charmhub.io/api/solutions/preview/123",
+            timeout=5,
         )
 
     @patch("webapp.solutions.logic.session")
@@ -62,7 +63,7 @@ class TestSolutionsLogic(unittest.TestCase):
         mock_login.assert_called_once_with("testuser")
         mock_session.request.assert_called_once_with(
             "GET",
-            "http://localhost:5000/api/publisher/solutions",
+            "http://solutions.staging.charmhub.io/api/publisher/solutions",
             headers={"Authorization": "Bearer fake-token"},
             timeout=5,
         )

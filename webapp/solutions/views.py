@@ -1,5 +1,5 @@
 import os
-import json
+import requests
 from flask import Blueprint, abort, render_template, request
 from webapp.decorators import redirect_uppercase_to_lowercase
 from webapp.store_api import publisher_gateway
@@ -16,8 +16,6 @@ solutions = Blueprint(
     static_folder="../static",
 )
 
-DATA_PATH = os.path.join(os.path.dirname(__file__), "mock_solutions.json")
-
 FIELDS = [
     "result.media",
     "result.title",
@@ -26,11 +24,6 @@ FIELDS = [
     "result.categories",
     "result.deployable-on",
 ]
-
-
-def load_solutions():
-    with open(DATA_PATH, "r", encoding="utf‑8") as f:
-        return json.load(f)
 
 
 def get_charm_data(charm_name):
@@ -66,7 +59,18 @@ def get_charm_data(charm_name):
 
 @solutions.route("/solutions")
 def list_solutions():
-    solutions_data = load_solutions()
+    try:
+        api_base = os.getenv(
+            "SOLUTIONS_API_BASE", "http://solutions.staging.charmhub.io/api"
+        )
+        response = requests.get(f"{api_base}/solutions", timeout=5)
+        if response.status_code == 200:
+            solutions_data = response.json()
+        else:
+            solutions_data = []
+    except Exception:
+        solutions_data = []
+
     return render_template("solutions/index.html", solutions=solutions_data)
 
 
@@ -144,14 +148,6 @@ def solution_details(name):
         is_preview = True
     else:
         solution = get_published_solution_by_name(name)
-
-        if not solution:
-            solutions_data = load_solutions()
-            solution = next(
-                (s for s in solutions_data if s["name"] == name),
-                None,
-            )
-
         is_preview = False
 
     if not solution:
