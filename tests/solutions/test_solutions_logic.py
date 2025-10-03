@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 from webapp.solutions.logic import (
     get_solution_from_backend,
     get_publisher_solutions,
-    publisher_has_solutions,
+    publisher_has_solutions_access,
 )
 
 
@@ -80,7 +80,7 @@ class TestSolutionsLogic(unittest.TestCase):
     def test_publisher_has_solutions_true(self, mock_get_solutions):
         mock_get_solutions.return_value = [{"uuid": "solution1"}]
 
-        result = publisher_has_solutions("testuser")
+        result = publisher_has_solutions_access("testuser")
 
         self.assertTrue(result)
 
@@ -88,6 +88,6 @@ class TestSolutionsLogic(unittest.TestCase):
     def test_publisher_has_solutions_false(self, mock_get_solutions):
         mock_get_solutions.return_value = []
 
-        result = publisher_has_solutions("testuser")
+        result = publisher_has_solutions_access("testuser")
 
         self.assertFalse(result)
