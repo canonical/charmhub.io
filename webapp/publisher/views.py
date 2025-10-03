@@ -19,7 +19,7 @@ from webapp.store_api import publisher_gateway
 from webapp.utils.emailer import get_emailer
 from webapp.solutions.logic import (
     get_publisher_solutions,
-    publisher_has_solutions,
+    publisher_has_solutions_access,
     register_solution,
     get_user_teams_for_solutions,
     get_solution_from_backend,
@@ -36,7 +36,7 @@ def requires_solutions_access(func):
     @functools.wraps(func)
     def has_solutions_access(*args, **kwargs):
         username = session["account"]["username"]
-        has_solutions = publisher_has_solutions(username)
+        has_solutions = publisher_has_solutions_access(username)
         if not has_solutions:
             flash(
                 "You don't have access to solutions. "
@@ -156,7 +156,7 @@ def list_page():
 
     page_type = request.path[1:-1]
     username = session["account"]["username"]
-    has_solutions = publisher_has_solutions(username)
+    has_solutions = publisher_has_solutions_access(username)
     g.has_solutions = has_solutions
 
     context = {
