@@ -1,3 +1,6 @@
+from gevent import monkey
+monkey.patch_all()
+
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.sdk.trace import TracerProvider
