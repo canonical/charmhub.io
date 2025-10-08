@@ -8,6 +8,7 @@ RUN_COMMAND="gunicorn webapp.app:app --bind $1 --worker-class gevent --access-lo
 
 if [ "${FLASK_DEBUG}" = true ] || [ "${FLASK_DEBUG}" = 1 ]; then
     RUN_COMMAND="${RUN_COMMAND} --reload --timeout 9999"
+    RUN_COMMAND="${RUN_COMMAND} --logger-class canonicalwebteam.flask_base.log_utils.GunicornDevLogger"
 fi
 
 # if OTEL_SERVICE_NAME is defined, inject OTEL sdk

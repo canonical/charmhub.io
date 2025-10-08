@@ -178,35 +178,3 @@ def set_handlers(app):
         response.headers["Cross-Origin-Resource-Policy"] = "cross-origin"
         response.headers["X-Permitted-Cross-Domain-Policies"] = "none"
         return response
-
-    # OpenTelemetry tracing
-    @app.after_request
-    def add_trace_id_header(response):
-        trace_id = get_trace_id()
-        if trace_id:
-            response.headers["X-Request-ID"] = trace_id
-        return response
-
-    @app.before_request
-    def extract_trace_context():
-        """Extract trace context from traceparent header if present"""
-        traceparent = request.headers.get("traceparent")
-        if traceparent:
-            carrier = {"traceparent": traceparent}
-            context = propagate.extract(carrier)
-            g._otel_token = attach(context)
-
-    @app.teardown_request
-    def detach_trace_context(exception=None):
-        """Detach the trace context at the end of the request"""
-        token = getattr(g, "_otel_token", None)
-        if token is not None:
-            detach(token)
-
-
-def get_trace_id():
-    span = get_current_span()
-    ctx = span.get_span_context()
-    if ctx and ctx.trace_id != 0:
-        return format(ctx.trace_id, "032x")
-    return None

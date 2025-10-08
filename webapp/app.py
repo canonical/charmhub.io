@@ -18,10 +18,7 @@ from webapp.search.logic import cache
 from webapp.helpers import markdown_to_html
 from webapp.decorators import login_required
 from webapp.packages.store_packages import store_packages
-from opentelemetry.instrumentation.requests import RequestsInstrumentor
-from opentelemetry.instrumentation.flask import FlaskInstrumentor
 import requests
-from opentelemetry.trace import Span
 
 
 app = FlaskBase(
@@ -32,6 +29,7 @@ app = FlaskBase(
     favicon_url="https://assets.ubuntu.com/v1/5d4edefd-jaas-favicon.png",
     static_folder="../static",
     template_folder="../templates",
+    untraced_routes=["/_status", "/static", ".json"],
 )
 
 
@@ -55,21 +53,6 @@ app.register_blueprint(search)
 
 
 app.jinja_env.filters["markdown"] = markdown_to_html
-
-# OpenTelemetry
-UNTRACED_ROUTES = ["/_status", "/static", ".json"]
-
-
-def request_hook(span: Span, environ):
-    if span and span.is_recording():
-        span.update_name(f"{environ['REQUEST_METHOD']} {environ['PATH_INFO']}")
-
-
-# Add tracing auto instrumentation
-FlaskInstrumentor().instrument_app(
-    app, excluded_urls=",".join(UNTRACED_ROUTES), request_hook=request_hook
-)
-RequestsInstrumentor().instrument()
 
 
 @app.route("/account.json")
