@@ -7,7 +7,9 @@ from webapp.solutions.logic import (
 )
 
 
-@patch("webapp.solutions.logic.SOLUTIONS_API_BASE", "http://localhost:5000/api")
+@patch(
+    "webapp.solutions.logic.SOLUTIONS_API_BASE", "http://localhost:5000/api"
+)
 @patch("webapp.solutions.logic.flask_session", {})
 class TestSolutionsLogic(unittest.TestCase):
     @patch("webapp.solutions.logic.session")
