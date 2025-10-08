@@ -109,12 +109,8 @@ def publisher_has_solutions(username):
     """
     Checks if the user logged in has access to any solutions
     """
-    # solutions = get_publisher_solutions(username)
-    # return bool(solutions and len(solutions) > 0)
-
-    # TEMPORARY for QA reasons
-    # TO DO: I will remove this after PR is approved
-    return True
+    solutions = get_publisher_solutions(username)
+    return bool(solutions and len(solutions) > 0)
 
 
 def register_solution(username, data):
