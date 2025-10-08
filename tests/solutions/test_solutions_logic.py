@@ -76,14 +76,15 @@ class TestSolutionsLogic(unittest.TestCase):
 
         self.assertEqual(result, [])
 
-    @patch("webapp.solutions.logic.SOLUTIONS_API_BASE", "http://localhost:5000/api")
+    @patch(
+        "webapp.solutions.logic.SOLUTIONS_API_BASE",
+        "http://localhost:5000/api",
+    )
     @patch("webapp.solutions.logic.make_authenticated_request")
     def test_publisher_has_solutions_true(self, mock_auth_request):
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.json.return_value = {
-            "user": {"is_publisher": True}
-        }
+        mock_response.json.return_value = {"user": {"is_publisher": True}}
         mock_auth_request.return_value = mock_response
 
         result = publisher_has_solutions_access("testuser")
@@ -96,14 +97,15 @@ class TestSolutionsLogic(unittest.TestCase):
             timeout=5,
         )
 
-    @patch("webapp.solutions.logic.SOLUTIONS_API_BASE", "http://localhost:5000/api")
+    @patch(
+        "webapp.solutions.logic.SOLUTIONS_API_BASE",
+        "http://localhost:5000/api",
+    )
     @patch("webapp.solutions.logic.make_authenticated_request")
     def test_publisher_has_solutions_false(self, mock_auth_request):
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.json.return_value = {
-            "user": {"is_publisher": False}
-        }
+        mock_response.json.return_value = {"user": {"is_publisher": False}}
         mock_auth_request.return_value = mock_response
 
         result = publisher_has_solutions_access("testuser")
@@ -116,7 +118,10 @@ class TestSolutionsLogic(unittest.TestCase):
             timeout=5,
         )
 
-    @patch("webapp.solutions.logic.SOLUTIONS_API_BASE", "http://localhost:5000/api")
+    @patch(
+        "webapp.solutions.logic.SOLUTIONS_API_BASE",
+        "http://localhost:5000/api",
+    )
     @patch("webapp.solutions.logic.make_authenticated_request")
     def test_publisher_has_solutions_api_failure(self, mock_auth_request):
         mock_response = MagicMock()
@@ -127,7 +132,10 @@ class TestSolutionsLogic(unittest.TestCase):
 
         self.assertFalse(result)
 
-    @patch("webapp.solutions.logic.SOLUTIONS_API_BASE", "http://localhost:5000/api")
+    @patch(
+        "webapp.solutions.logic.SOLUTIONS_API_BASE",
+        "http://localhost:5000/api",
+    )
     @patch("webapp.solutions.logic.make_authenticated_request")
     def test_publisher_has_solutions_exception(self, mock_auth_request):
         mock_auth_request.side_effect = Exception("Network error")
