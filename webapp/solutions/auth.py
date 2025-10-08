@@ -6,7 +6,7 @@ import os
 
 HMAC_SECRET = os.getenv("FLASK_HMAC_SECRET_KEY")
 BASE_URL = os.getenv(
-    "FLASK_SOLUTIONS_API_BASE", "http://solutions.staging.charmhub.io/api"
+    "FLASK_SOLUTIONS_API_BASE", "https://solutions.staging.charmhub.io/api"
 )
 
 

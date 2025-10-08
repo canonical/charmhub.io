@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 session = requests.Session()
 
 SOLUTIONS_API_BASE = os.getenv(
-    "FLASK_SOLUTIONS_API_BASE", "http://solutions.staging.charmhub.io/api"
+    "FLASK_SOLUTIONS_API_BASE", "https://solutions.staging.charmhub.io/api"
 )
 
 
@@ -116,7 +116,6 @@ def publisher_has_solutions_access(username):
             username,
             timeout=5,
         )
-        print(resp.text)
 
         if resp.status_code == 200:
             user_data = resp.json()
