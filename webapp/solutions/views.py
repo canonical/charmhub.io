@@ -1,5 +1,3 @@
-import os
-import requests
 from flask import Blueprint, abort, render_template, request
 from webapp.decorators import redirect_uppercase_to_lowercase
 from webapp.store_api import publisher_gateway
@@ -55,24 +53,6 @@ def get_charm_data(charm_name):
         "categories": charm["result"].get("categories"),
         "deployable-on": charm["result"].get("deployable-on"),
     }
-
-
-@solutions.route("/solutions")
-def list_solutions():
-    try:
-        api_base = os.getenv(
-            "FLASK_SOLUTIONS_API_BASE",
-            "https://solutions.staging.charmhub.io/api",
-        )
-        response = requests.get(f"{api_base}/solutions", timeout=5)
-        if response.status_code == 200:
-            solutions_data = response.json()
-        else:
-            solutions_data = []
-    except Exception:
-        solutions_data = []
-
-    return render_template("solutions/index.html", solutions=solutions_data)
 
 
 def render_solution(solution):

@@ -51,66 +51,80 @@
   </div>
 
   <div class="p-strip is-shallow u-no-padding--top">
-    <div class="u-fixed-width">
-      <h2 class="p-heading--4">My solutions</h2>
-    </div>
-    <div class="u-fixed-width">
-      <table class="p-table--mobile-card" role="grid">
-        <thead>
-          <tr role="row">
-            <th>Name</th>
-            <th style="width: 15%;">Status</th>
-            <th style="width: 15%;">Visibility</th>
-            <th>Publisher</th>
-            <th>Last Updated</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody> 
-          {% for solution in solutions %}
-          <tr role="row">
-            <td role="rowheader" class="p-table--mobile-card__header">
-              <div class="p-heading-icon--x-small">
-                <span class="p-heading-icon__header">
-                  <p class="u-no-margin--bottom u-no-padding--top">
-                    {% if solution.status == 'published' %}
-                      <a href="/solutions/{{ solution.name }}">{{ solution.title }}</a>
-                    {% else %}
-                      {{ solution.title }}
-                    {% endif %}
-                  </p>
-                </span>
-              </div>
-            </td>
-            <td role="gridcell" aria-label="status">
-                {{ solution.status | format_solution_status }}
-            </td>
-            <td role="gridcell" aria-label="visibility">
-              {{ solution.visibility | capitalize }}
-            </td>
-            <td role="gridcell" aria-label="publisher">
-              {% if solution.publisher.display_name %}
-                {{ solution.publisher.display_name }}
-              {% elif solution.publisher.username %}
-                {{ solution.publisher.username }}
-              {% else %}
-                -
-              {% endif %}
-            </td>
-            <td role="gridcell" aria-label="last updated">
-              {{ solution.last_updated | humanize_date if solution.last_updated else '-' }}
-            </td>
-            <td role="gridcell" aria-label="actions">
-              <a href="/solutions/preview/{{ solution.hash }}" class="p-button--base is-dense">Preview</a>
-              {% if solution.status in ['draft', 'published'] %}
-                <a href="/solutions/edit/{{ solution.hash }}" class="p-button--base is-dense">Edit</a>
-              {% endif %}
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+    {% if solutions|length == 0 %}
+      <div class="p-strip">
+        <div class="row">
+          <div class="u-align--right col-4 col-medium-2 col-small-1">
+            <img src="https://assets.ubuntu.com/v1/3234f995-Generic_chamhub_NoDocs.svg" alt="no solutions available" width="121" height="121">
+          </div>
+          <div class="u-align--left col-8 col-medium-4 col-small-3">
+            <p class="p-heading--4">No published solutions available</p>
+            <a href="/register-solution" class="p-button--positive">Register a new solution</a>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="u-fixed-width">
+        <h2 class="p-heading--4">My solutions</h2>
+      </div>
+      <div class="u-fixed-width">
+        <table class="p-table--mobile-card" role="grid">
+          <thead>
+            <tr role="row">
+              <th>Name</th>
+              <th style="width: 15%;">Status</th>
+              <th style="width: 15%;">Visibility</th>
+              <th>Publisher</th>
+              <th>Last Updated</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody> 
+            {% for solution in solutions %}
+            <tr role="row">
+              <td role="rowheader" class="p-table--mobile-card__header">
+                <div class="p-heading-icon--x-small">
+                  <span class="p-heading-icon__header">
+                    <p class="u-no-margin--bottom u-no-padding--top">
+                      {% if solution.status == 'published' %}
+                        <a href="/solutions/{{ solution.name }}">{{ solution.title }}</a>
+                      {% else %}
+                        {{ solution.title }}
+                      {% endif %}
+                    </p>
+                  </span>
+                </div>
+              </td>
+              <td role="gridcell" aria-label="status">
+                  {{ solution.status | format_solution_status }}
+              </td>
+              <td role="gridcell" aria-label="visibility">
+                {{ solution.visibility | capitalize }}
+              </td>
+              <td role="gridcell" aria-label="publisher">
+                {% if solution.publisher.display_name %}
+                  {{ solution.publisher.display_name }}
+                {% elif solution.publisher.username %}
+                  {{ solution.publisher.username }}
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+              <td role="gridcell" aria-label="last updated">
+                {{ solution.last_updated | humanize_date if solution.last_updated else '-' }}
+              </td>
+              <td role="gridcell" aria-label="actions">
+                <a href="/solutions/preview/{{ solution.hash }}" class="p-button--base is-dense">Preview</a>
+                {% if solution.status in ['draft', 'published'] %}
+                  <a href="/solutions/edit/{{ solution.hash }}" class="p-button--base is-dense">Edit</a>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
   </div>
 
 </section>
