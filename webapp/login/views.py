@@ -14,7 +14,7 @@ login = flask.Blueprint(
     "login", __name__, template_folder="/templates", static_folder="/static"
 )
 
-LOGIN_URL = os.getenv("LOGIN_URL", "https://login.ubuntu.com")
+LOGIN_URL = os.getenv("FLASK_LOGIN_URL", "https://login.ubuntu.com")
 LOGIN_LAUNCHPAD_TEAM = os.getenv(
     "LOGIN_LAUNCHPAD_TEAM", "canonical-webmonkeys"
 )

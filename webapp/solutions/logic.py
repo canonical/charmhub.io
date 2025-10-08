@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 session = requests.Session()
 
 SOLUTIONS_API_BASE = os.getenv(
-    "SOLUTIONS_API_BASE", "http://solutions.staging.charmhub.io/api"
+    "FLASK_SOLUTIONS_API_BASE", "https://solutions.staging.charmhub.io/api"
 )
 
 
@@ -105,12 +105,26 @@ def get_publisher_solutions(username):
     return []
 
 
-def publisher_has_solutions(username):
+def publisher_has_solutions_access(username):
     """
     Checks if the user logged in has access to any solutions
     """
-    solutions = get_publisher_solutions(username)
-    return bool(solutions and len(solutions) > 0)
+    try:
+        resp = make_authenticated_request(
+            "GET",
+            f"{SOLUTIONS_API_BASE}/me",
+            username,
+            timeout=5,
+        )
+
+        if resp.status_code == 200:
+            user_data = resp.json()
+            has_access = user_data.get("user", {}).get("is_publisher", False)
+            return has_access
+
+    except Exception as e:
+        logger.exception(f"User does not have access to solutions: {e}")
+    return False
 
 
 def register_solution(username, data):

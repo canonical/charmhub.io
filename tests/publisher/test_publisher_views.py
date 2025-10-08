@@ -99,7 +99,7 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.json["success"], False)
         self.assertEqual(res.json["message"], "Package not found")
 
-    @patch("webapp.solutions.logic.publisher_has_solutions")
+    @patch("webapp.solutions.logic.publisher_has_solutions_access")
     @patch("webapp.store_api.publisher_gateway.get_account_packages")
     def test_list_page(self, mock_get_account_packages, mock_has_solutions):
         mock_has_solutions.return_value = False
