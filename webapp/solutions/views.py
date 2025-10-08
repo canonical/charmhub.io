@@ -57,23 +57,6 @@ def get_charm_data(charm_name):
     }
 
 
-@solutions.route("/solutions")
-def list_solutions():
-    try:
-        api_base = os.getenv(
-            "SOLUTIONS_API_BASE", "http://solutions.staging.charmhub.io/api"
-        )
-        response = requests.get(f"{api_base}/solutions", timeout=5)
-        if response.status_code == 200:
-            solutions_data = response.json()
-        else:
-            solutions_data = []
-    except Exception:
-        solutions_data = []
-
-    return render_template("solutions/index.html", solutions=solutions_data)
-
-
 def render_solution(solution):
     solution["description_html"] = markdown_to_html(
         solution.get("description", "")
