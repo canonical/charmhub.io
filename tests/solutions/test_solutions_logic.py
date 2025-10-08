@@ -22,7 +22,7 @@ class TestSolutionsLogic(unittest.TestCase):
 
         self.assertEqual(result, {"uuid": "123", "name": "Test Solution"})
         mock_session.get.assert_called_once_with(
-            "http://solutions.staging.charmhub.io/api/solutions/preview/123",
+            "http://localhost:5000/api/solutions/preview/123",
             timeout=5,
         )
 
@@ -63,7 +63,7 @@ class TestSolutionsLogic(unittest.TestCase):
         mock_login.assert_called_once_with("testuser")
         mock_session.request.assert_called_once_with(
             "GET",
-            "http://solutions.staging.charmhub.io/api/publisher/solutions",
+            "http://localhost:5000/api/publisher/solutions",
             headers={"Authorization": "Bearer fake-token"},
             timeout=5,
         )
@@ -76,17 +76,61 @@ class TestSolutionsLogic(unittest.TestCase):
 
         self.assertEqual(result, [])
 
-    @patch("webapp.solutions.logic.get_publisher_solutions")
-    def test_publisher_has_solutions_true(self, mock_get_solutions):
-        mock_get_solutions.return_value = [{"uuid": "solution1"}]
+    @patch("webapp.solutions.logic.SOLUTIONS_API_BASE", "http://localhost:5000/api")
+    @patch("webapp.solutions.logic.make_authenticated_request")
+    def test_publisher_has_solutions_true(self, mock_auth_request):
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "user": {"is_publisher": True}
+        }
+        mock_auth_request.return_value = mock_response
 
         result = publisher_has_solutions_access("testuser")
 
         self.assertTrue(result)
+        mock_auth_request.assert_called_once_with(
+            "GET",
+            "http://localhost:5000/api/me",
+            "testuser",
+            timeout=5,
+        )
 
-    @patch("webapp.solutions.logic.get_publisher_solutions")
-    def test_publisher_has_solutions_false(self, mock_get_solutions):
-        mock_get_solutions.return_value = []
+    @patch("webapp.solutions.logic.SOLUTIONS_API_BASE", "http://localhost:5000/api")
+    @patch("webapp.solutions.logic.make_authenticated_request")
+    def test_publisher_has_solutions_false(self, mock_auth_request):
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "user": {"is_publisher": False}
+        }
+        mock_auth_request.return_value = mock_response
+
+        result = publisher_has_solutions_access("testuser")
+
+        self.assertFalse(result)
+        mock_auth_request.assert_called_once_with(
+            "GET",
+            "http://localhost:5000/api/me",
+            "testuser",
+            timeout=5,
+        )
+
+    @patch("webapp.solutions.logic.SOLUTIONS_API_BASE", "http://localhost:5000/api")
+    @patch("webapp.solutions.logic.make_authenticated_request")
+    def test_publisher_has_solutions_api_failure(self, mock_auth_request):
+        mock_response = MagicMock()
+        mock_response.status_code = 500
+        mock_auth_request.return_value = mock_response
+
+        result = publisher_has_solutions_access("testuser")
+
+        self.assertFalse(result)
+
+    @patch("webapp.solutions.logic.SOLUTIONS_API_BASE", "http://localhost:5000/api")
+    @patch("webapp.solutions.logic.make_authenticated_request")
+    def test_publisher_has_solutions_exception(self, mock_auth_request):
+        mock_auth_request.side_effect = Exception("Network error")
 
         result = publisher_has_solutions_access("testuser")
 
