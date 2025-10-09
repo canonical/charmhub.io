@@ -1,74 +1,83 @@
 <div class="p-section">
-  <h4 class="p-muted-heading">Solution details</h4>
-  <ul class="p-list">
-    {% if solution.documentation.main %}
-      <li class="p-list__item u-no-margin--bottom">
-        <a href="{{ solution.documentation.main }}"><i class="p-icon--file-blank"></i>&nbsp;&nbsp;Documentation</a>
-      </li>
+  {% if is_preview and solution.status == "pending_name_review" %}
+      <h4 class="p-muted-heading">Preview Mode</h4>
+      <p class="u-text--muted">This is a preview of your registered solution. Additional details can be added after approval.</p>
+  {% else %}
+    <h4 class="p-muted-heading">Solution details</h4>
+    {% if solution.documentation.main or solution.documentation.source or solution.terraform_modules %}
+      <ul class="p-list">
+        {% if solution.documentation.main %}
+          <li class="p-list__item u-no-margin--bottom">
+            <a href="{{ solution.documentation.main }}"><i class="p-icon--file-blank"></i>&nbsp;&nbsp;Documentation</a>
+          </li>
+        {% endif %}
+        {% if solution.documentation.source %}
+          <li class="p-list__item">
+            <a href="{{ solution.documentation.source }}"><i class="p-icon--github"></i>&nbsp;&nbsp;Source</a>
+          </li>
+        {% endif %}
+        {% if solution.terraform_modules %}
+          <li class="p-list__item">
+            <a href="{{ solution.terraform_modules }}"><i class="p-icon--repository"></i>&nbsp;&nbsp;Terraform modules</a>
+          </li>
+        {% endif %}
+      </ul>
     {% endif %}
-    {% if solution.documentation.source %}
-      <li class="p-list__item">
-        <a href="{{ solution.documentation.source }}"><i class="p-icon--github"></i>&nbsp;&nbsp;Source</a>
-      </li>
-    {% endif %}
-    {% if solution.terraform_modules %}
-      <li class="p-list__item">
-        <a href="{{ solution.terraform_modules }}"><i class="p-icon--repository"></i>&nbsp;&nbsp;Terraform modules</a>
-      </li>
-    {% endif %}
-  </ul>
 
-  {% if solution.compatibility.juju_versions %}
-    <hr class="p-separator--shallow">
-    <h5 class="p-muted-heading u-text--muted">Juju version</h5>
-    <p class="u-no-margin--bottom">{{ solution.compatibility.juju_versions | join(", ") }}</p>
-  {% endif %}
+    {% if solution.compatibility.juju_versions and solution.compatibility.juju_versions | length > 0 %}
+      <hr class="p-separator--shallow">
+      <h5 class="p-muted-heading u-text--muted">Juju version</h5>
+      <p class="u-no-margin--bottom">{{ solution.compatibility.juju_versions | join(", ") }}</p>
+    {% endif %}
 
-  {% if solution.charms %}
-    <hr class="p-separator--shallow">
-    <h5 class="p-muted-heading u-text--muted">Charms used</h5>
-    <div id="charms-list">
-      {% for charm in solution.charms %}
-        <div class="charm-card" style="padding: 0.5rem; margin-bottom: 0.5rem; {% if loop.index > 5 %}display: none;{% endif %}">
-          {% if charm.icon %}
-            <img class="p-card__thumbnail u-vertical-align--middle" src="{{ charm.icon }}" alt="{{ charm.title }}" style="padding-right: 0.5rem;">
-          {% endif %}
-          <span>
-            <a class="u-vertical-align--middle" href="{{ charm.url }}">{{ (charm.title or charm.name) | truncate(28) }}</a>
-          </span>
+    {% if solution.charms and solution.charms | length > 0 %}
+      <hr class="p-separator--shallow">
+      <h5 class="p-muted-heading u-text--muted">Charms used</h5>
+      <div id="charms-list">
+        {% for charm in solution.charms %}
+          <div class="charm-card" style="padding: 0.5rem; margin-bottom: 0.5rem; {% if loop.index > 5 %}display: none;{% endif %}">
+            {% if charm.icon %}
+              <img class="p-card__thumbnail u-vertical-align--middle" src="{{ charm.icon }}" alt="{{ charm.title }}" style="padding-right: 0.5rem;">
+            {% endif %}
+            <span>
+              <a class="u-vertical-align--middle" href="{{ charm.url }}">{{ (charm.title or charm.name) | truncate(28) }}</a>
+            </span>
+          </div>
+        {% endfor %}
+      </div>
+      {% if solution.charms | length > 5 %}
+        <button id="load-more-charms" class="p-button--link">
+          <span class="button-text">See all ({{ solution.charms | length }})</span>
+          <i class="p-icon--spinner u-animation--spin" style="display: none;"></i>
+        </button>
+      {% endif %}
+    {% endif %}
+
+    {% if solution.maintainers and solution.maintainers | length > 0 %}
+      <hr class="p-separator--shallow">
+      <h5 class="p-muted-heading u-text--muted">Maintainers</h5>
+      {% for maintainer in solution.maintainers %}
+        <div style="margin-bottom: 0.5rem;">
+          <a href="mailto:{{ maintainer.email }}"><i class="p-icon--user"></i>&nbsp;&nbsp;{{ maintainer.display_name }}</a>
         </div>
       {% endfor %}
-    </div>
-    {% if solution.charms | length > 5 %}
-      <button id="load-more-charms" class="p-button--link">
-        <span class="button-text">See all ({{ solution.charms | length }})</span>
-        <i class="p-icon--spinner u-animation--spin" style="display: none;"></i>
-      </button>
+    {% endif %}
+
+    {% if solution.documentation.submit_a_bug %}
+      <hr class="p-separator--shallow p-rule--muted">
+      <div>
+        <a href="{{ solution.documentation.submit_a_bug }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
+      </div>
+    {% endif %}
+
+    {% if solution.documentation.community_discussion %}
+      <hr class="p-separator--shallow p-rule--muted">
+      <div>
+        <p>Share your thoughts on this solution with the community on Discourse.</p>
+        <p><a class="p-button" href="{{ solution.documentation.community_discussion }}">Join the discussion</a></p>
+      </div>
     {% endif %}
   {% endif %}
-
-  {% if solution.maintainers %}
-    <hr class="p-separator--shallow">
-    <h5 class="p-muted-heading u-text--muted">Maintainers</h5>
-    {% for maintainer in solution.maintainers %}
-      <div style="margin-bottom: 0.5rem;">
-        <a href="mailto:{{ maintainer.email }}"><i class="p-icon--user"></i>&nbsp;&nbsp;{{ maintainer.display_name }}</a>
-      </div>
-    {% endfor %}
-  {% endif %}
-
-  <hr class="p-separator--shallow p-rule--muted">
-
-  <div>
-    <a href="{{ solution.documentation.submit_a_bug }}"><i class="p-icon--bug"></i>&nbsp;&nbsp;Submit a bug</a>
-  </div>
-
-  <hr class="p-separator--shallow p-rule--muted">
-
-  <div>
-    <p>Share your thoughts on this solution with the community on Discourse.</p>
-    <p><a class="p-button" href="{{ solution.documentation.community_discussion }}">Join the discussion</a></p>
-  </div>
 
 </div>
 
