@@ -65,10 +65,12 @@
           {% else %}
             <span>{{ deployment }}</span>
           {% endif %}
-          {% for version in deployment["version"] %}
-            <div class="u-text--muted">Version <strong>{{ version }}</strong></div>
-          {% endfor %}
-          {% if deployment["prerequisites"] %}
+          {% if deployment.get("version") and deployment["version"] | length > 0 %}
+            {% for version in deployment["version"] %}
+              <div class="u-text--muted">Version <strong>{{ version }}</strong></div>
+            {% endfor %}
+          {% endif %}
+          {% if deployment.get("prerequisites") and deployment["prerequisites"] | length > 0 %}
             <div class="u-text--muted">
               {{ deployment["prerequisites"] | join(", ") }}
               <span class="p-tooltip--btm-right" aria-describedby="btm-rgt">
@@ -85,11 +87,15 @@
     <div class="grid-col-2"></div>
     <div class="grid-col-6 p-section--shallow u-no-padding--bottom">
       <hr class="p-separator--shallow p-rule--muted u-no-margin--top">
-      <a class="p-button--positive" href="{{ solution.documentation.get_started }}">View implementation guide</a>
-      <span>
-        <i class="p-icon--revisions"></i>
-        <span class="u-text--muted">Updated {{ solution.last_updated | humanize_date }}</span>
-      </span>
+      {% if solution.documentation.get_started %}
+        <a class="p-button--positive" href="{{ solution.documentation.get_started }}">View implementation guide</a>
+      {% endif %}
+      {% if solution.last_updated %}
+        <span>
+          <i class="p-icon--revisions"></i>
+          <span class="u-text--muted">Updated {{ solution.last_updated | humanize_date }}</span>
+        </span>
+      {% endif %}
     </div>
   </div>
 </div>
