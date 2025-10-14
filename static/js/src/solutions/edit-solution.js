@@ -1,7 +1,30 @@
 import DynamicFormManager from "./modules/DynamicFormManager.js";
 import CharmSearchBox from "./modules/CharmSearchBox.js";
+import initConfirmationModal from "./modules/ConfirmationModal.js";
+
+function getEditMessage(formData, form) {
+  const solutionTitle =
+    document.querySelector('input[name="title"]')?.value ||
+    "[title not provided]";
+
+  const submitter = form.querySelector('button[type="submit"]:focus');
+  const action = submitter?.value || formData.action;
+
+  if (action === "submit_for_review") {
+    return `Are you sure you want to submit the metadata for "${solutionTitle}" for review? 
+            Once submitted, the solution will be reviewed before being published.`;
+  } else if (action === "update") {
+    return `Are you sure you want to update the metadata for "${solutionTitle}"? 
+            These changes will be published immediately without review.`;
+  }
+}
 
 document.addEventListener("DOMContentLoaded", function () {
+  initConfirmationModal({
+    formSelector: ".p-form",
+    getMessage: getEditMessage,
+  });
+
   new CharmSearchBox({
     searchFilterId: "charm-search-filter",
     searchInputId: "charm-search",
