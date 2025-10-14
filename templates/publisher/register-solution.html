@@ -57,9 +57,10 @@
             name="name"
             type="text"
             required
+            maxlength="40"
             value="{{ form_value(form_data, None, 'name') | e }}"
           >
-          <p class="p-form-help-text">The slug for the solution URL: it should only contain ASCII lowercase letters, numbers, and hyphens, and must have at least one letter</p>
+          <p class="p-form-help-text">The slug for the solution URL: it should only contain ASCII lowercase letters, numbers, and hyphens, and must have at least one letter (maximum 40 characters)</p>
         </div>
       </div>
     </div>
@@ -76,9 +77,10 @@
             name="title"
             type="text"
             required
+            maxlength="40"
             value="{{ form_value(form_data, None, 'title') | e }}"
           >
-          <p class="p-form-help-text">A human-readable title for your solution</p>
+          <p class="p-form-help-text">A human-readable title for your solution (maximum 40 characters)</p>
         </div>
       </div>
     </div>

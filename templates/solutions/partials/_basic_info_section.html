@@ -12,9 +12,10 @@
       type="text"
       class="is-dense p-form-validation is-required"
       required
+      maxlength="40"
       value="{{ form_value(form_data, solution, 'title') | e }}"
     >
-    <p class="p-form-help-text">A human-readable title for your solution</p>
+    <p class="p-form-help-text">A human-readable title for your solution (maximum 40 characters)</p>
   </div>
 </div>
 
