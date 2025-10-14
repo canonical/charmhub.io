@@ -209,4 +209,7 @@
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
   </form>
 </section>
+
+{% include 'solutions/partials/_confirmation_modal.html' %}
+<script src="{{ url_for('static', filename='js/dist/register-solution.js') }}"></script>
 {% endblock %}
