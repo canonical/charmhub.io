@@ -45,6 +45,7 @@ class TestSolutionsLogic(unittest.TestCase):
 
         self.assertIsNone(result)
 
+    @patch("webapp.solutions.logic.flask_session", {})
     @patch("webapp.solutions.logic.session")
     @patch("webapp.solutions.logic.login")
     def test_get_publisher_solutions_success(self, mock_login, mock_session):
