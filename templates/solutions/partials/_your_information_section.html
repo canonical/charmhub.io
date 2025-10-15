@@ -31,18 +31,3 @@
     <p class="p-form-help-text">Optional: Your Mattermost handle for communication</p>
   </div>
 </div>
-
-<div class="p-form__group row">
-  <div class="col-2">
-    <label for="matrix_handle">Matrix Handle:</label>
-  </div>
-  <div class="col-8 col-x-large-6">
-    <input class="is-dense"
-      id="matrix_handle"
-      name="matrix_handle"
-      type="text"
-      value="{{ form_value(form_data, solution, 'matrix_handle', 'creator.matrix_handle') | e }}"
-    >
-    <p class="p-form-help-text">Optional: Your Matrix handle for communication</p>
-  </div>
-</div>

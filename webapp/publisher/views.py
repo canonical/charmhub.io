@@ -671,7 +671,6 @@ def submit_register_solution():
             "platform",
             "creator_email",
             "mattermost_handle",
-            "matrix_handle",
         ]
     }
 
@@ -705,8 +704,6 @@ def submit_register_solution():
     }
     if form_data["mattermost_handle"]:
         solution_data["mattermost_handle"] = form_data["mattermost_handle"]
-    if form_data["matrix_handle"]:
-        solution_data["matrix_handle"] = form_data["matrix_handle"]
 
     result = register_solution(username, solution_data)
 
