@@ -8,7 +8,6 @@ def extract_basic_form_fields():
         "description",
         "creator_email",
         "mattermost_handle",
-        "matrix_handle",
         "icon",
         "terraform_modules",
         "documentation_main",

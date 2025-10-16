@@ -93,10 +93,10 @@ class TestAllSearchView(TestCase):
         mock_search_docs,
         mock_search_topics,
     ):
-        mock_search_charms.return_value = sample_charms
-        mock_search_bundles.return_value = sample_bundles
-        mock_search_docs.return_value.json = sample_docs
-        mock_search_topics.return_value = sample_topics
+        mock_search_charms.return_value = sample_charms["charms"]
+        mock_search_bundles.return_value = sample_bundles["bundles"]
+        mock_search_docs.return_value = sample_docs["docs"]
+        mock_search_topics.return_value = sample_topics["topics"]
 
         all_search_response = self.client.get("/all-search.json?q=juju")
         all_docs_response = self.client.get("/all-docs?q=juju&limit=3")
@@ -124,9 +124,22 @@ class TestAllSearchView(TestCase):
             )
         )
 
+    @patch("webapp.search.logic.search_topics")
+    @patch("webapp.search.logic.search_docs")
+    @patch("webapp.search.logic.search_bundles")
     @patch("webapp.search.logic.search_charms")
-    def test_search_with_single_type(self, mock_search_charms):
-        mock_search_charms.return_value = sample_charms
+    def test_search_with_single_type(
+        self,
+        mock_search_charms,
+        mock_search_bundles,
+        mock_search_docs,
+        mock_search_topics,
+    ):
+        mock_search_charms.return_value = sample_charms["charms"]
+        mock_search_bundles.return_value = sample_bundles["bundles"]
+        mock_search_docs.return_value = sample_docs["docs"]
+        mock_search_topics.return_value = sample_topics["topics"]
+
         response = self.client.get("/all-search.json?q=test&limit=2")
         data = json.loads(response.data)
 
