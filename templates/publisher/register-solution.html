@@ -9,12 +9,16 @@
   <div class="u-fixed-width">
     <a href="/solutions">&lsaquo;&nbsp;My solutions</a>
     <h1 class="p-heading--2">
-      Register a new solution
+      Register solution
     </h1>
-    <p>
-      The first step to create a new solution is to register a name and provide some basic metadata.
-      This will then be reviewed and you will be able to provide the remaining metadata for the solution.
-    </p>
+    <div class="p-notification--information">
+      <div class="p-notification__content">
+        <p class="p-notification__message">
+          Solution name registrations are subject to manual review.
+          Once approved, you will be able to add the remaining metadata for the solution.
+        </p>
+      </div>
+    </div>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -41,6 +45,7 @@
 <section class="p-strip is-shallow">
   <form class="p-form" method="POST" action="{{ url_for('publisher.submit_register_solution') }}">
     <div class="p-form__group row">
+      <h2 class="p-heading--4">Solution information</h2>
       <div class="col-2">
         <label for="name" class="p-form__label">Name:</label>
       </div>
@@ -52,9 +57,10 @@
             name="name"
             type="text"
             required
+            maxlength="40"
             value="{{ form_value(form_data, None, 'name') | e }}"
           >
-          <p class="p-form-help-text">This will be the slug for the solution URL. It should only have ASCII lowercase letters, numbers, and hyphens, and must have at least one letter</p>
+          <p class="p-form-help-text">The slug for the solution URL: it should only contain ASCII lowercase letters, numbers, and hyphens, and must have at least one letter (maximum 40 characters)</p>
         </div>
       </div>
     </div>
@@ -71,9 +77,10 @@
             name="title"
             type="text"
             required
+            maxlength="40"
             value="{{ form_value(form_data, None, 'title') | e }}"
           >
-          <p class="p-form-help-text">A human-readable title for your solution</p>
+          <p class="p-form-help-text">A human-readable title for your solution (maximum 40 characters)</p>
         </div>
       </div>
     </div>
@@ -152,6 +159,8 @@
     </div>
 
     <div class="p-form__group row">
+      <h2 class="p-heading--4">Your contact information</h2>
+      <p class="p-form-help-text">This information will not be publicly displayed on Charmhub.io.<br>It is used for communication purposes with solution reviewers only.</p>
       <div class="col-2">
         <label for="creator_email" class="p-form__label">Contact Email:</label>
       </div>
