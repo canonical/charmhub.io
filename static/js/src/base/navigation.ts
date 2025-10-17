@@ -82,7 +82,8 @@ if (navAccountContainer) {
     });
 }
 
-initNavDropdowns(".p-navigation__item--dropdown-toggle");
+// To be re-added once the changes from global-nav have been undone (WD-29514)
+// initNavDropdowns(".p-navigation__item--dropdown-toggle");
 
 export {
   toggleDropdown,
