@@ -12,7 +12,7 @@ BASE_URL = os.getenv(
 
 def login(username: str) -> str:
     if not HMAC_SECRET:
-        raise ValueError("HMAC_SECRET_KEY environment variable is not set")
+        raise ValueError("FLASK_HMAC_SECRET_KEY env variable not set")
 
     timestamp = str(int(time.time()))
     msg = f"{username}|{timestamp}".encode()
