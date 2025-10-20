@@ -4,7 +4,7 @@
 
 <div class="p-form__group row">
   <div class="col-2">
-    <label for="documentation_main">Main Documentation:</label>
+    <label for="documentation_main" class="is-required">Main Documentation:</label>
   </div>
   <div class="col-8 col-x-large-6">
     <input class="is-dense"
@@ -12,6 +12,7 @@
       name="documentation_main"
       type="url"
       value="{{ form_value(form_data, solution, 'documentation_main', 'documentation.main') | e }}"
+      required
     >
     <p class="p-form-help-text">URL to main documentation</p>
   </div>
@@ -19,13 +20,14 @@
 
 <div class="p-form__group row">
   <div class="col-2">
-    <label for="documentation_source">Source Repository:</label>
+    <label for="documentation_source" class="is-required">Source Repository:</label>
   </div>
   <div class="col-8 col-x-large-6">
     <input class="is-dense"
       id="documentation_source"
       name="documentation_source"
       type="url"
+      required
       value="{{ form_value(form_data, solution, 'documentation_source', 'documentation.source') | e }}"
     >
     <p class="p-form-help-text">URL to source code repository</p>

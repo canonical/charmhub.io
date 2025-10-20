@@ -44,10 +44,13 @@
 
 <section class="p-strip is-shallow">
   <form class="p-form" method="POST" action="{{ url_for('publisher.submit_register_solution') }}">
+    <div class="u-fixed-width">
+      <p class="p-form-help-text"><span class="is-required">*</span> Indicates a required field</p>
+    </div>
     <div class="p-form__group row">
       <h2 class="p-heading--4">Solution information</h2>
       <div class="col-2">
-        <label for="name" class="p-form__label">Name:</label>
+        <label for="name" class="p-form__label is-required">Name:</label>
       </div>
       <div class="col-8 col-x-large-6">
         <div class="p-form__control">
@@ -67,7 +70,7 @@
 
     <div class="p-form__group row">
       <div class="col-2">
-        <label for="title" class="p-form__label">Title:</label>
+        <label for="title" class="p-form__label is-required">Title:</label>
       </div>
       <div class="col-8 col-x-large-6">
         <div class="p-form__control">
@@ -87,7 +90,7 @@
 
     <div class="p-form__group row">
       <div class="col-2">
-        <label for="summary" class="p-form__label">Summary:</label>
+        <label for="summary" class="p-form__label is-required">Summary:</label>
       </div>
       <div class="col-8 col-x-large-6">
         <div class="p-form__control">
@@ -105,7 +108,7 @@
 
     <div class="p-form__group row">
       <div class="col-2">
-        <label for="publisher" class="p-form__label">Publisher:</label>
+        <label for="publisher" class="p-form__label is-required">Publisher:</label>
       </div>
       <div class="col-8 col-x-large-6">
         <div class="p-form__control">
@@ -125,7 +128,7 @@
 
     <div class="p-form__group row">
       <div class="col-2">
-        <span class="p-form__label">Platform:</span>
+        <label class="p-form__label is-required">Platform:</label>
       </div>
       <div class="col-8 col-x-large-6">
         <div class="p-form__control">
@@ -162,7 +165,7 @@
       <h2 class="p-heading--4">Your contact information</h2>
       <p class="p-form-help-text">This information will not be publicly displayed on Charmhub.io.<br>It is used for communication purposes with solution reviewers only.</p>
       <div class="col-2">
-        <label for="creator_email" class="p-form__label">Contact Email:</label>
+        <label for="creator_email" class="p-form__label is-required">Contact Email:</label>
       </div>
       <div class="col-8 col-x-large-6">
         <div class="p-form__control">
@@ -181,7 +184,7 @@
 
     <div class="p-form__group row">
       <div class="col-2">
-        <label for="mattermost_handle" class="p-form__label">Mattermost Handle:</label>
+        <label for="mattermost_handle" class="p-form__label is-required">Mattermost Handle:</label>
       </div>
       <div class="col-8 col-x-large-6">
       <div class="p-form__control">
@@ -190,9 +193,10 @@
             id="mattermost_handle"
             name="mattermost_handle"
             type="text"
+            required
             value="{{ form_value(form_data, None, 'mattermost_handle') | e }}"
           >
-          <p class="p-form-help-text">Optional: Your Mattermost handle for communication during review</p>
+          <p class="p-form-help-text">Your Mattermost handle for communication during review</p>
         </div>
       </div>
     </div>
@@ -200,7 +204,7 @@
     <div class="u-fixed-width">
       <hr >
       <div class="u-align--right">
-        <a class="p-button--base" href="/solutions"">Cancel</a>
+        <a class="p-button--base" href="/solutions">Cancel</a>
         <button type="submit" class="p-button--positive">
           Register Solution
         </button>

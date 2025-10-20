@@ -64,20 +64,23 @@
 
 <div class="p-form__group row">
   <div class="col-2">
-    <span>Selected Charms:</span>
+    <label class="is-required">Selected Charms:</label>
   </div>
   <div class="col-8 col-x-large-6">
-    <div id="selected-charms">
-      {% if solution.charms %}
-        {% for charm in solution.charms %}
-          <div data-charm-name="{{ charm.charm_name }}">
-            <button type="button" class="p-button--negative has-icon is-small charm-remove" aria-label="Remove {{ charm.charm_name }}"><i class="p-icon--delete is-dark"></i></button>
-            <span>{{ charm.charm_name }}</span>
-            <input type="hidden" name="charms[]" value="{{ charm.charm_name }}">
-          </div>
-        {% endfor %}
-      {% endif %}
+    <div class="p-form-validation" id="selected-charms-section">
+      <div id="selected-charms" data-validation-required="true" style="padding-top: 0.25rem;">
+        {% if solution.charms %}
+          {% for charm in solution.charms %}
+            <div data-charm-name="{{ charm.charm_name }}">
+              <button type="button" class="p-button--negative has-icon is-small charm-remove" aria-label="Remove {{ charm.charm_name }}"><i class="p-icon--delete is-dark"></i></button>
+              <span>{{ charm.charm_name }}</span>
+              <input type="hidden" name="charms[]" value="{{ charm.charm_name }}">
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <p class="p-form-validation__message" id="charm-error">At least one charm is required</p>
+      <p class="p-form-help-text" style="padding-top: 1rem;">At least one charm must be selected</p>
     </div>
-    <p class="p-form-help-text" style="padding-top: 0.5rem;">Selected charms will be included in the solution</p>
   </div>
 </div>

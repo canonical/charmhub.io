@@ -7,6 +7,7 @@ class DynamicFormManager {
     this.maxItems = config.maxItems || Infinity;
     this.removeSelector = config.removeSelector;
     this.itemSelector = config.itemSelector;
+    this.onChange = config.onChange;
 
     if (this.templateId && !this.createItemFunction) {
       const template = document.getElementById(this.templateId);
@@ -40,6 +41,7 @@ class DynamicFormManager {
     });
 
     this.updateAddButton();
+    this.handleChange();
   }
 
   addItem() {
@@ -54,6 +56,7 @@ class DynamicFormManager {
     const newItem = this.createItemFunction();
     this.listContainer.appendChild(newItem);
     this.updateAddButton();
+    this.handleChange();
   }
 
   removeItem(event) {
@@ -61,6 +64,7 @@ class DynamicFormManager {
     if (item) {
       item.remove();
       this.updateAddButton();
+      this.handleChange();
     }
   }
 
@@ -72,6 +76,12 @@ class DynamicFormManager {
     ).length;
     this.addButton.style.display =
       currentCount >= this.maxItems ? "none" : "inline-block";
+  }
+
+  handleChange() {
+    if (typeof this.onChange === "function") {
+      this.onChange(this.getCurrentCount());
+    }
   }
 
   getCurrentCount() {

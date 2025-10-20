@@ -50,6 +50,9 @@
 <section class="p-strip is-shallow">
   <div class="u-fixed-width">
     <form class="p-form" method="POST" action="{{ url_for('publisher.submit_edit_solution', hash=solution.hash) }}">
+      <div class="u-fixed-width">
+        <p class="p-form-help-text"><span class="is-required">*</span> Indicates a required field</p>
+      </div>
 
       {% include 'solutions/partials/_basic_info_section.html' %}
       <hr>

@@ -25,6 +25,96 @@ document.addEventListener("DOMContentLoaded", function () {
     getMessage: getEditMessage,
   });
 
+  const hideValidationMessage = (container) => {
+    const message = container.querySelector(".p-form-validation__message");
+
+    if (message) {
+      message.setAttribute("hidden", "");
+    }
+  };
+
+  const showValidationMessage = (container) => {
+    const message = container.querySelector(".p-form-validation__message");
+
+    if (message) {
+      message.removeAttribute("hidden");
+    }
+  };
+
+  document.querySelectorAll(".p-form-validation").forEach((container) => {
+    if (!container.classList.contains("is-error")) {
+      hideValidationMessage(container);
+    }
+  });
+
+  const clearValidationState = (sectionId) => {
+    const section = document.getElementById(sectionId);
+
+    if (section) {
+      section.classList.remove("is-error");
+      hideValidationMessage(section);
+    }
+  };
+
+  const form = document.querySelector("form.p-form");
+  if (form) {
+    form.addEventListener("submit", function (event) {
+      document.querySelectorAll(".p-form-validation.is-error").forEach((el) => {
+        el.classList.remove("is-error");
+        hideValidationMessage(el);
+      });
+
+      const requiredValidationFields = [
+        {
+          listId: "platform-version-list",
+          sectionId: "platform-version-section",
+          selector: ".platform-version-item",
+        },
+        {
+          listId: "juju-versions-list",
+          sectionId: "juju-versions-section",
+          selector: ".juju-version-item",
+        },
+        {
+          listId: "maintainers-list",
+          sectionId: "maintainers-section",
+          selector: ".maintainer-item",
+        },
+        {
+          listId: "use-cases-list",
+          sectionId: "use-cases-section",
+          selector: ".use-case-item",
+        },
+        {
+          listId: "selected-charms",
+          sectionId: "selected-charms-section",
+          selector: "[data-charm-name]",
+        },
+      ];
+
+      for (const field of requiredValidationFields) {
+        const container = document.getElementById(field.listId);
+        const section = document.getElementById(field.sectionId);
+
+        if (container && section) {
+          const items = container.querySelectorAll(field.selector);
+          if (items.length === 0) {
+            event.preventDefault();
+
+            section.classList.add("is-error");
+            showValidationMessage(section);
+
+            section.scrollIntoView({
+              behavior: "smooth",
+            });
+
+            return false;
+          }
+        }
+      }
+    });
+  }
+
   new CharmSearchBox({
     searchFilterId: "charm-search-filter",
     searchInputId: "charm-search",
@@ -33,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
     resultsSectionId: "charm-results-section",
     noResultsSectionId: "charm-no-results",
     selectedContainerId: "selected-charms",
+    selectedSectionId: "selected-charms-section",
     manualCharmInputId: "manual-charm-name",
     addManualButtonId: "add-manual-charm",
     apiEndpoint: "/all-charms",
@@ -54,6 +145,11 @@ document.addEventListener("DOMContentLoaded", function () {
     removeSelector: "remove-use-case",
     itemSelector: ".use-case-item",
     templateId: "use-case-template",
+    onChange: (count) => {
+      if (count > 0) {
+        clearValidationState("use-cases-section");
+      }
+    },
   });
 
   void new DynamicFormManager({
@@ -62,6 +158,11 @@ document.addEventListener("DOMContentLoaded", function () {
     removeSelector: "remove-maintainer",
     itemSelector: ".maintainer-item",
     templateId: "maintainer-template",
+    onChange: (count) => {
+      if (count > 0) {
+        clearValidationState("maintainers-section");
+      }
+    },
   });
 
   void new DynamicFormManager({
@@ -70,6 +171,11 @@ document.addEventListener("DOMContentLoaded", function () {
     removeSelector: "remove-platform-version",
     itemSelector: ".platform-version-item",
     templateId: "platform-version-template",
+    onChange: (count) => {
+      if (count > 0) {
+        clearValidationState("platform-version-section");
+      }
+    },
   });
 
   void new DynamicFormManager({
@@ -86,5 +192,10 @@ document.addEventListener("DOMContentLoaded", function () {
     removeSelector: "remove-juju-version",
     itemSelector: ".juju-version-item",
     templateId: "juju-version-template",
+    onChange: (count) => {
+      if (count > 0) {
+        clearValidationState("juju-versions-section");
+      }
+    },
   });
 });

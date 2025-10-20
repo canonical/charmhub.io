@@ -27,7 +27,6 @@
           type="text"
           name="platform_prerequisites[]"
           placeholder="e.g., GPU support"
-          required
         >
       </div>
     </div>
@@ -58,10 +57,10 @@
 
 <div class="p-form__group row">
   <div class="col-2">
-    <label for="platform_version">Platform Versions:</label>
+    <label for="platform_version" class="is-required">Platform Versions:</label>
   </div>
   <div class="col-8 col-x-large-6">
-    <div id="platform-version-section">
+    <div class="p-form-validation" id="platform-version-section">
       <div id="platform-version-list">
         {% if solution['deployable-on'] and solution['deployable-on'][0] and solution['deployable-on'][0].version %}
           {% for version in solution['deployable-on'][0].version %}
@@ -83,6 +82,7 @@
         {% endif %}
       </div>
       <button type="button" id="add-platform-version" class="p-button--base">Add Platform Version</button>
+      <p class="p-form-validation__message" id="platform-version-error">At least one platform version is required</p>
       <p class="p-form-help-text">Add supported platform versions (e.g., Kubernetes versions)</p>
     </div>
   </div>
@@ -106,7 +106,6 @@
                     name="platform_prerequisites[]"
                     value="{{ prerequisite | e }}"
                     placeholder="e.g., GPU support"
-                    required
                   >
                 </div>
               </div>
@@ -122,10 +121,10 @@
 
 <div class="p-form__group row">
   <div class="col-2">
-    <label for="juju_versions">Juju Versions:</label>
+    <label for="juju_versions" class="is-required">Juju Versions:</label>
   </div>
   <div class="col-8 col-x-large-6">
-    <div id="juju-versions-section">
+    <div class="p-form-validation" id="juju-versions-section">
       <div id="juju-versions-list">
         {% if solution.compatibility and solution.compatibility.juju_versions %}
           {% for version in solution.compatibility.juju_versions %}
@@ -147,6 +146,7 @@
         {% endif %}
       </div>
       <button type="button" id="add-juju-version" class="p-button--base">Add Juju Version</button>
+      <p class="p-form-validation__message" id="juju-version-error">At least one Juju version is required</p>
       <p class="p-form-help-text">Add supported Juju versions (e.g., 3.1, 2.9)</p>
     </div>
   </div>
