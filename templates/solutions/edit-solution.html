@@ -12,10 +12,13 @@
       Edit solution: {{ solution.title }}
     </h1>
     {% if solution.status == 'draft' and solution.revision == 1 %}
-      <p>
-        Add the remaining metadata for your solution.<br>
-        Changes will need to be reviewed before being published.
-      </p>
+      <div class="p-notification--information">
+        <div class="p-notification__content">
+          <p class="p-notification__message">
+            Add the remaining metadata for your solution. Changes will need to be reviewed before being published.
+          </p>
+        </div>
+      </div>
     {% elif solution.status == 'published' %}
       <p>
         Edit the metadata for your solution.
