@@ -4,13 +4,13 @@
 
 <div class="p-form__group row">
   <div class="col-2">
-    <label for="title">Title:</label>
+    <label for="title" class="is-required">Title:</label>
   </div>
   <div class="col-8 col-x-large-6">
     <input id="title"
       name="title"
       type="text"
-      class="is-dense p-form-validation is-required"
+      class="is-dense"
       required
       maxlength="40"
       value="{{ form_value(form_data, solution, 'title') | e }}"
@@ -21,7 +21,7 @@
 
 <div class="p-form__group row">
   <div class="col-2">
-    <label for="summary">Summary:</label>
+    <label for="summary" class="is-required">Summary:</label>
   </div>
   <div class="col-8 col-x-large-6">
     <textarea
@@ -29,6 +29,7 @@
       name="summary"
       class="is-dense"
       rows="4"
+      required
     >{{ form_value(form_data, solution, 'summary') | e }}</textarea>
     <p class="p-form-help-text">A brief summary of what your solution does</p>
   </div>
@@ -36,7 +37,7 @@
 
 <div class="p-form__group row">
   <div class="col-2">
-    <label for="description">Description:</label>
+    <label for="description" class="is-required">Description:</label>
   </div>
   <div class="col-8 col-x-large-6">
     <textarea
@@ -44,6 +45,7 @@
       name="description"
       class="is-dense"
       rows="8"
+      required
     >{{ form_value(form_data, solution, 'description') | e }}</textarea>
     <p class="p-form-help-text">Detailed description of your solution (Markdown supported)</p>
   </div>
@@ -66,13 +68,14 @@
 
 <div class="p-form__group row">
   <div class="col-2">
-    <label for="icon">Icon URL:</label>
+    <label for="icon" class="is-required">Icon URL:</label>
   </div>
   <div class="col-8 col-x-large-6">
     <input class="is-dense"
       id="icon"
       name="icon"
       type="url"
+      required
       value="{{ form_value(form_data, solution, 'icon', 'media.icon') | e }}"
     >
     <p class="p-form-help-text">URL to the icon on Asset Manager</p>

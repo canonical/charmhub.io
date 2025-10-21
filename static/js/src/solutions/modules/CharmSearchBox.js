@@ -9,6 +9,9 @@ class CharmSearchBox {
     this.selectedContainer = document.getElementById(
       config.selectedContainerId
     );
+    this.selectedValidationSection = document.getElementById(
+      config.selectedSectionId
+    );
     this.manualCharmInput = document.getElementById(config.manualCharmInputId);
     this.addManualButton = document.getElementById(config.addManualButtonId);
     this.validationContainer = document.getElementById(
@@ -31,6 +34,7 @@ class CharmSearchBox {
     }
 
     this.setupEventListeners();
+    this.handleSelectedChange();
   }
 
   setupEventListeners() {
@@ -69,6 +73,7 @@ class CharmSearchBox {
         const charmDiv = e.target.closest("[data-charm-name]");
         if (charmDiv) {
           charmDiv.remove();
+          this.handleSelectedChange();
         }
       }
     });
@@ -212,6 +217,7 @@ class CharmSearchBox {
     input.value = charm.name;
 
     this.selectedContainer.appendChild(charmDiv);
+    this.handleSelectedChange();
     this.searchInput.value = "";
     this.hideResults();
   }
@@ -220,6 +226,22 @@ class CharmSearchBox {
     return Array.from(
       this.selectedContainer.querySelectorAll("[data-charm-name]")
     ).map((div) => div.getAttribute("data-charm-name"));
+  }
+
+  handleSelectedChange() {
+    if (!this.selectedValidationSection) return;
+
+    if (this.getSelectedCharmNames().length > 0) {
+      this.selectedValidationSection.classList.remove("is-error");
+
+      const message = this.selectedValidationSection.querySelector(
+        ".p-form-validation__message"
+      );
+
+      if (message) {
+        message.setAttribute("hidden", "");
+      }
+    }
   }
 
   async validateCharm(charmName) {
@@ -238,6 +260,7 @@ class CharmSearchBox {
   showValidationError(message) {
     if (this.validationContainer && this.validationMessage) {
       this.validationMessage.textContent = message;
+      this.validationMessage.removeAttribute("hidden");
       this.validationContainer.classList.add("is-error");
       this.manualCharmInput.setAttribute("aria-invalid", "true");
       this.manualCharmInput.setAttribute(
@@ -250,6 +273,7 @@ class CharmSearchBox {
   hideValidationError() {
     if (this.validationContainer && this.validationMessage) {
       this.validationMessage.textContent = "";
+      this.validationMessage.setAttribute("hidden", "");
       this.validationContainer.classList.remove("is-error");
       this.manualCharmInput.removeAttribute("aria-invalid");
       this.manualCharmInput.removeAttribute("aria-describedby");
