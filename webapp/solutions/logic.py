@@ -87,6 +87,20 @@ def get_published_solution_by_name(name):
     return None
 
 
+def solution_name_exists(name):
+    try:
+        resp = session.get(
+            f"{SOLUTIONS_API_BASE}/solutions/check-name/{name}", timeout=5
+        )
+        if resp.status_code == 200:
+            data = resp.json()
+            return data.get("exists", False)
+    except Exception as e:
+        logger.exception(f"Failed to check if solution name exists: {e}")
+
+    return False
+
+
 def get_publisher_solutions(username):
     try:
         resp = make_authenticated_request(
