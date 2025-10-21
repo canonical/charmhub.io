@@ -4,13 +4,14 @@
 
 <div class="p-form__group row">
   <div class="col-2">
-    <label for="architecture_diagram_url">Architecture Diagram URL:</label>
+    <label for="architecture_diagram_url" class="is-required">Architecture Diagram URL:</label>
   </div>
   <div class="col-8 col-x-large-6">
     <input class="is-dense"
       id="architecture_diagram_url"
       name="architecture_diagram_url"
       type="url"
+      required
       value="{{ form_value(form_data, solution, 'architecture_diagram_url', 'media.architecture_diagram') | e }}"
     >
     <p class="p-form-help-text">URL to architecture diagram on Asset Manager</p>
