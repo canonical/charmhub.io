@@ -56,64 +56,63 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
-  const form = document.querySelector("form.p-form");
-  if (form) {
-    form.addEventListener("submit", function (event) {
-      document.querySelectorAll(".p-form-validation.is-error").forEach((el) => {
-        el.classList.remove("is-error");
-        hideValidationMessage(el);
-      });
+  const validateForm = () => {
+    document.querySelectorAll(".p-form-validation.is-error").forEach((el) => {
+      el.classList.remove("is-error");
+      hideValidationMessage(el);
+    });
 
-      const requiredValidationFields = [
-        {
-          listId: "platform-version-list",
-          sectionId: "platform-version-section",
-          selector: ".platform-version-item",
-        },
-        {
-          listId: "juju-versions-list",
-          sectionId: "juju-versions-section",
-          selector: ".juju-version-item",
-        },
-        {
-          listId: "maintainers-list",
-          sectionId: "maintainers-section",
-          selector: ".maintainer-item",
-        },
-        {
-          listId: "use-cases-list",
-          sectionId: "use-cases-section",
-          selector: ".use-case-item",
-        },
-        {
-          listId: "selected-charms",
-          sectionId: "selected-charms-section",
-          selector: "[data-charm-name]",
-        },
-      ];
+    const requiredValidationFields = [
+      {
+        listId: "platform-version-list",
+        sectionId: "platform-version-section",
+        selector: ".platform-version-item",
+      },
+      {
+        listId: "juju-versions-list",
+        sectionId: "juju-versions-section",
+        selector: ".juju-version-item",
+      },
+      {
+        listId: "maintainers-list",
+        sectionId: "maintainers-section",
+        selector: ".maintainer-item",
+      },
+      {
+        listId: "use-cases-list",
+        sectionId: "use-cases-section",
+        selector: ".use-case-item",
+      },
+      {
+        listId: "selected-charms",
+        sectionId: "selected-charms-section",
+        selector: "[data-charm-name]",
+      },
+    ];
 
-      for (const field of requiredValidationFields) {
-        const container = document.getElementById(field.listId);
-        const section = document.getElementById(field.sectionId);
+    for (const field of requiredValidationFields) {
+      const container = document.getElementById(field.listId);
+      const section = document.getElementById(field.sectionId);
 
-        if (container && section) {
-          const items = container.querySelectorAll(field.selector);
-          if (items.length === 0) {
-            event.preventDefault();
+      if (container && section) {
+        const items = container.querySelectorAll(field.selector);
+        if (items.length === 0) {
+          section.classList.add("is-error");
+          showValidationMessage(section);
 
-            section.classList.add("is-error");
-            showValidationMessage(section);
+          section.scrollIntoView({
+            behavior: "smooth",
+          });
 
-            section.scrollIntoView({
-              behavior: "smooth",
-            });
-
-            return false;
-          }
+          return false;
         }
       }
-    });
-  }
+    }
+
+    return true;
+  };
+
+  window.validateSolutionForm = validateForm;
 
   new CharmSearchBox({
     searchFilterId: "charm-search-filter",
