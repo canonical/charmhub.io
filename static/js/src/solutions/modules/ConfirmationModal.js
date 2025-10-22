@@ -21,6 +21,10 @@ function initConfirmationModal(config) {
     event.preventDefault();
     event.stopPropagation();
 
+    if (window.validateSolutionForm && !window.validateSolutionForm()) {
+      return;
+    }
+
     const formData = new FormData(form);
     const formObject = Object.fromEntries(formData.entries());
     const message = config.getMessage(formObject, form);
