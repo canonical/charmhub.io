@@ -53,7 +53,7 @@
         <label for="name" class="p-form__label is-required">Name:</label>
       </div>
       <div class="col-8 col-x-large-6">
-        <div class="p-form__control">
+        <div class="p-form__control" id="solution-name-validation">
           <input
             class="p-form__control"
             id="name"
@@ -63,6 +63,7 @@
             maxlength="40"
             value="{{ form_value(form_data, None, 'name') | e }}"
           >
+          <p class="p-form-validation__message" id="solution-name-validation-message" role="alert"></p>
           <p class="p-form-help-text">The slug for the solution URL: it should only contain ASCII lowercase letters, numbers, and hyphens, and must have at least one letter (maximum 40 characters)</p>
         </div>
       </div>

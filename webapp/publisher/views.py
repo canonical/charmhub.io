@@ -24,6 +24,7 @@ from webapp.solutions.logic import (
     get_user_teams_for_solutions,
     get_solution_from_backend,
     update_solution,
+    solution_name_exists,
 )
 from webapp.publisher.form_processors import (
     process_solution_form_data,
@@ -641,6 +642,19 @@ def get_releases(entity_name: str):
     return response
 
 
+@publisher.route("/validate-solution-name")
+@login_required
+@requires_solutions_access
+def validate_solution_name():
+    name = request.args.get("name", "").strip()
+
+    if not name:
+        return jsonify({"exists": False})
+
+    exists = solution_name_exists(name)
+    return jsonify({"exists": exists})
+
+
 @publisher.route("/register-solution")
 @login_required
 @requires_solutions_access
@@ -689,6 +703,22 @@ def submit_register_solution():
                 {
                     "code": "missing-fields",
                     "message": "All required fields must be filled.",
+                }
+            ],
+            form_data,
+        )
+
+    if solution_name_exists(form_data["name"]):
+        return render_solution_form_with_errors(
+            "publisher/register-solution.html",
+            [
+                {
+                    "code": "name-already-exists",
+                    "message": (
+                        "A solution with the name "
+                        f"'{form_data['name']}' already exists. "
+                        "Please choose a different name."
+                    ),
                 }
             ],
             form_data,
