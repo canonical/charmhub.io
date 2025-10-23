@@ -124,7 +124,7 @@ class TestPublisherViews(unittest.TestCase):
         ]
 
         with self.client.session_transaction() as session:
-            session["account"] = {"id": "test-id"}
+            session["account"] = {"id": "test-id", "email": "test@example.com"}
 
         res = self.client.get("/charms")
         self.assertEqual(res.status_code, 200)
