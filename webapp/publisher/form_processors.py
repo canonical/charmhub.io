@@ -66,6 +66,7 @@ def extract_platform_data():
         ]
 
     return {
+        "platform": request.form.get("platform").strip(),
         "platform_version": clean_list("platform_version[]"),
         "platform_prerequisites": clean_list("platform_prerequisites[]"),
         "juju_versions": clean_list("juju_versions[]"),

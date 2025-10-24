@@ -57,6 +57,43 @@
 
 <div class="p-form__group row">
   <div class="col-2">
+    <label class="p-form__label">Platform:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <div class="p-form__control">
+      {% set current_platform = solution.get('deployable-on', [{}])[0].get('platform', 'kubernetes') %}
+      <label class="p-radio">
+        <input
+          type="radio"
+          class="p-radio__input"
+          name="platform_display"
+          value="kubernetes"
+          aria-labelledby="kubernetes-edit"
+          {% if current_platform == 'kubernetes' %}checked{% endif %}
+          disabled
+        >
+        <span class="p-radio__label" id="kubernetes-edit">Kubernetes</span>
+      </label>
+      <label class="p-radio">
+        <input
+          type="radio"
+          class="p-radio__input"
+          name="platform_display"
+          value="machine"
+          aria-labelledby="machine-edit"
+          {% if current_platform == 'machine' %}checked{% endif %}
+          disabled
+        >
+        <span class="p-radio__label" id="machine-edit">Machine</span>
+      </label>
+      <input type="hidden" name="platform" value="{{ current_platform }}">
+      <p class="p-form-help-text">Platform type was set during registration and cannot be changed</p>
+    </div>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
     <label for="platform_version" class="is-required">Platform Versions:</label>
   </div>
   <div class="col-8 col-x-large-6">

@@ -31,6 +31,10 @@ from webapp.publisher.form_processors import (
     create_error_context,
 )
 import functools
+from datetime import datetime
+import uuid
+
+preview_cache = {}
 
 
 def requires_solutions_access(func):
@@ -788,6 +792,17 @@ def edit_solution_form(hash):
     return render_template("solutions/edit-solution.html", **context)
 
 
+def cleanup_old_previews():
+    now = datetime.now()
+    expired_keys = [
+        key
+        for key, (timestamp) in preview_cache.items()
+        if (now - timestamp).total_seconds() > 300
+    ]
+    for key in expired_keys:
+        del preview_cache[key]
+
+
 @publisher.route("/solutions/edit/<hash>", methods=["POST"])
 @login_required
 @requires_solutions_access
@@ -811,6 +826,18 @@ def submit_edit_solution(hash):
     form_data = process_solution_form_data()
 
     action = request.form.get("action", "save_draft")
+
+    if action == "preview":
+        preview_key = str(uuid.uuid4().hex[:16])
+
+        cleanup_old_previews()
+
+        preview_cache[preview_key] = (
+            {"solution": solution, "form_data": form_data},
+            datetime.now(),
+        )
+
+        return jsonify({"success": True, "preview_key": preview_key})
 
     result = update_solution(
         username, solution["name"], solution["revision"], form_data

@@ -50,6 +50,29 @@
 <section class="p-strip is-shallow">
   <div class="u-fixed-width">
     <form class="p-form" method="POST" action="{{ url_for('publisher.submit_edit_solution', hash=solution.hash) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <div class="u-align--right">
+        <a class="p-button--base" href="/solutions">Cancel</a>
+        <button type="button" id="preview-button" class="p-button">
+          Preview
+        </button>
+        {% if solution.status == 'draft' and solution.revision == 1 %}
+          <button type="submit" name="action" value="submit_for_review" class="p-button--positive">
+            Submit metadata for review
+          </button>
+        {% elif solution.status == 'published' %}
+          <button type="submit" name="action" value="update" class="p-button--positive">
+            Update solution
+          </button>
+        {% else %}
+          <button type="submit" name="action" value="save_draft" class="p-button--positive">
+            Save draft
+          </button>
+        {% endif %}
+      </div>
+
+      <hr>
+
       <div class="u-fixed-width">
         <p class="p-form-help-text"><span class="is-required">*</span> Indicates a required field</p>
       </div>
@@ -72,28 +95,9 @@
       <hr>
       {% include 'solutions/partials/_your_information_section.html' %}
 
-      <hr>
-
-      <div class="u-fixed-width">
-        <div class="u-align--right">
-          <a class="p-button--base" href="/solutions">Cancel</a>
-          {% if solution.status == 'draft' and solution.revision == 1 %}
-            <button type="submit" name="action" value="submit_for_review" class="p-button--positive">
-              Submit metadata for review
-            </button>
-          {% elif solution.status == 'published' %}
-            <button type="submit" name="action" value="update" class="p-button--positive">
-              Update solution
-            </button>
-          {% else %}
-            <button type="submit" name="action" value="save_draft" class="p-button--positive">
-              Save draft
-            </button>
-          {% endif %}
-        </div>
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <div class="p-top">
+        <a href="#" class="p-top__link">Back to top</a>
       </div>
-
     </form>
   </div>
 </section>
