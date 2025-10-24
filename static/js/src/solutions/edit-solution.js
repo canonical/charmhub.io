@@ -25,6 +25,75 @@ document.addEventListener("DOMContentLoaded", function () {
     getMessage: getEditMessage,
   });
 
+  const previewButton = document.getElementById("preview-button");
+
+  if (previewButton) {
+    const form = document.querySelector("form.p-form");
+    if (!form) {
+      return;
+    }
+    previewButton.addEventListener("click", async function (event) {
+      event.preventDefault();
+
+      previewButton.disabled = true;
+      previewButton.textContent = "Generating preview...";
+
+      const formData = new FormData(form);
+      formData.set("action", "preview");
+
+      try {
+        const formAction = form.getAttribute("action");
+        const response = await fetch(formAction, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const data = await response.json();
+            let errorMessage =
+              "Failed to save and preview. Please check the form for errors.";
+
+            if (data.error) {
+              errorMessage = data.error;
+            } else if (data.errors && data.errors.length > 0) {
+              errorMessage = data.errors.map((e) => e.message).join("\n");
+            }
+
+            alert(errorMessage);
+          } else {
+            alert(
+              `Server error (${response.status}). Please check the form for errors.`
+            );
+          }
+          previewButton.disabled = false;
+          previewButton.textContent = "Preview";
+          return;
+        }
+
+        const data = await response.json();
+
+        if (data.success && data.preview_key) {
+          window.open(`/solutions/preview-draft/${data.preview_key}`, "_blank");
+
+          previewButton.disabled = false;
+          previewButton.textContent = "Preview";
+        } else {
+          alert(
+            "Failed to generate preview. Please check the form for errors."
+          );
+          previewButton.disabled = false;
+          previewButton.textContent = "Preview";
+        }
+      } catch (error) {
+        alert(`Failed to generate preview: ${error.message}`);
+        previewButton.disabled = false;
+        previewButton.textContent = "Preview";
+      }
+    });
+  }
+
   const hideValidationMessage = (container) => {
     const message = container.querySelector(".p-form-validation__message");
 

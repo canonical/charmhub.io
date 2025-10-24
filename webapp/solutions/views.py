@@ -5,6 +5,7 @@ from webapp.helpers import markdown_to_html
 from webapp.solutions.logic import get_solution_from_backend
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from webapp.solutions.logic import get_published_solution_by_name
+from webapp.publisher.views import preview_cache
 
 
 solutions = Blueprint(
@@ -115,6 +116,83 @@ def solution_preview(hash):
     return render_template(
         "solutions/solutions_base_layout.html",
         solution=solution,
+        is_preview=True,
+    )
+
+
+@solutions.route("/solutions/preview-draft/<preview_key>")
+def solution_preview_draft(preview_key):
+
+    cache_entry = preview_cache.get(preview_key)
+    if not cache_entry:
+        abort(404)
+
+    preview_data, _timestamp = cache_entry
+    preview_cache.pop(preview_key, None)
+
+    solution = preview_data["solution"]
+    form_data = preview_data["form_data"]
+
+    # Merge form data into solution for preview
+    preview_solution = {**solution}
+
+    preview_solution.update(
+        {
+            "title": form_data.get("title", solution.get("title")),
+            "summary": form_data.get("summary", solution.get("summary")),
+            "description": form_data.get(
+                "description", solution.get("description")
+            ),
+            "terraform_modules": form_data.get("terraform_modules"),
+        }
+    )
+
+    preview_solution["documentation"] = {
+        "main": form_data.get("documentation_main"),
+        "source": form_data.get("documentation_source"),
+        "get_started": form_data.get("get_started_url"),
+        "how_to_operate": form_data.get("how_to_operate_url"),
+        "architecture_explanation": form_data.get("architecture_explanation"),
+        "submit_a_bug": form_data.get("submit_bug_url"),
+        "community_discussion": form_data.get("community_discussion_url"),
+    }
+
+    preview_solution["media"] = {
+        "icon": form_data.get("icon"),
+        "architecture_diagram": form_data.get("architecture_diagram_url"),
+    }
+
+    preview_solution["deployable-on"] = [
+        {
+            "platform": form_data.get("platform"),
+            "version": form_data.get("platform_version", []),
+            "prerequisites": form_data.get("platform_prerequisites", []),
+        }
+    ]
+
+    preview_solution["compatibility"] = {
+        "juju_versions": form_data.get("juju_versions", []),
+    }
+
+    charms_list = form_data.get("charms", [])
+    preview_solution["charms"] = [
+        {"charm_name": charm} for charm in charms_list
+    ]
+
+    preview_solution["use_cases"] = form_data.get("use_cases", [])
+    preview_solution["useful_links"] = form_data.get("useful_links", [])
+
+    maintainers_emails = form_data.get("maintainers", [])
+    preview_solution["maintainers"] = [
+        {"email": email, "display_name": email.split("@")[0]}
+        for email in maintainers_emails
+    ]
+
+    preview_solution = render_solution(preview_solution)
+
+    return render_template(
+        "solutions/solutions_base_layout.html",
+        solution=preview_solution,
         is_preview=True,
     )
 
