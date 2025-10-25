@@ -15,7 +15,7 @@ python-slugify==8.0.4
 ruamel.yaml.clib==0.2.12
 ruamel.yaml==0.18.9
 PyGithub==2.5.0
-black==24.10.0
+black==25.9.0
 flake8==7.1.1
 Flask-Caching==2.3.0
 responses==0.25.3
@@ -31,5 +31,5 @@ opentelemetry-instrumentation-requests==0.53b1
 opentelemetry-sdk==1.32.1
 
 # Cache
-redis==6.4.0
+redis==7.0.0
 cachetools==6.2.0
