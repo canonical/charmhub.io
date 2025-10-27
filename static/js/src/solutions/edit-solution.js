@@ -32,12 +32,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!form) {
       return;
     }
-    previewButton.addEventListener("click", async function (event) {
-      event.preventDefault();
 
-      previewButton.disabled = true;
-      previewButton.textContent = "Generating preview...";
-
+    const submitPreviewForm = async () => {
       const formData = new FormData(form);
       formData.set("action", "preview");
 
@@ -67,8 +63,6 @@ document.addEventListener("DOMContentLoaded", function () {
               `Server error (${response.status}). Please check the form for errors.`
             );
           }
-          previewButton.disabled = false;
-          previewButton.textContent = "Preview";
           return;
         }
 
@@ -76,21 +70,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (data.success && data.preview_key) {
           window.open(`/solutions/preview-draft/${data.preview_key}`, "_blank");
-
-          previewButton.disabled = false;
-          previewButton.textContent = "Preview";
         } else {
           alert(
             "Failed to generate preview. Please check the form for errors."
           );
-          previewButton.disabled = false;
-          previewButton.textContent = "Preview";
         }
       } catch (error) {
         alert(`Failed to generate preview: ${error.message}`);
-        previewButton.disabled = false;
-        previewButton.textContent = "Preview";
       }
+    };
+
+    previewButton.addEventListener("click", async (event) => {
+      event.preventDefault();
+
+      previewButton.disabled = true;
+      previewButton.textContent = "Generating preview...";
+
+      await submitPreviewForm();
+
+      previewButton.disabled = false;
+      previewButton.textContent = "Preview";
     });
   }
 
