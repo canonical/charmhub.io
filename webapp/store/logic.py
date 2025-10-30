@@ -212,8 +212,14 @@ def convert_channel_maps(channel_map):
                 for base in base_names
             ]
 
+            latest_revision_key = max(
+                result[track][risk]["releases"].keys(),
+                key=lambda k: result[track][risk]["releases"][k][
+                    "released_at"
+                ],
+            )
             result[track][risk]["latest"] = result[track][risk]["releases"][
-                max(result[track][risk]["releases"].keys())
+                latest_revision_key
             ]
     return result
 
@@ -511,7 +517,7 @@ def get_bundle_charms(charm_apps):
     result = []
 
     if charm_apps:
-        for app_name, data in charm_apps.items():
+        for _, data in charm_apps.items():
             # Charm names could be with the old prefix/suffix
             # Like: cs:~charmed-osm/mariadb-k8s-35
             name = data["charm"]
@@ -574,28 +580,6 @@ def get_library(library_name, libraries):
 
 
 @trace_function
-def filter_charm(charm, categories=["all"], base="all"):
-    """
-    This filter will be done in the API soon.
-    :returns: boolean
-    """
-    # When all is present there is no need to filter
-    if categories and "all" not in categories:
-        charm_categories = [
-            cat["slug"] for cat in charm["store_front"]["categories"]
-        ]
-
-        if not any(x in categories for x in charm_categories):
-            return False
-
-    # Filter platforms
-    if base != "all" and base not in charm["store_front"]["base"]:
-        return False
-
-    return True
-
-
-@trace_function
 def format_slug(slug):
     """Format slug name into a standard title format
     :param slug: The hypen spaced, lowercase slug to be formatted
@@ -635,5 +619,5 @@ def get_doc_link(package):
     """
     Returns the documentation link of a package
     """
-    docs = package.get("result", {}).get("links", {}).get("docs", [])
-    return docs[0] if docs else None
+    docs = package.get("store_front", {}).get("metadata", {}).get("docs", None)
+    return docs

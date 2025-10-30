@@ -34,8 +34,9 @@ parts:
       - flask/app/.env
       - flask/app/app.py
       - flask/app/webapp
+      - flask/app/redis_cache
       - flask/app/templates
       - flask/app/static
       - flask/app/redirects.yaml
-      - flask/app/security.txt
+      - flask/app/security.md
       - flask/app/robots.txt

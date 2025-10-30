@@ -1,12 +1,16 @@
 # Core packages
 import os
 import functools
+import logging
+from datetime import datetime, timezone
 from distutils.util import strtobool
 
 # Third party packages
 import flask
 from webapp import authentication
 from webapp.helpers import param_redirect_capture, param_redirect_exec
+
+logger = logging.getLogger(__name__)
 
 
 def cached_redirect(func):
@@ -37,7 +41,19 @@ def login_required(func):
 
     @functools.wraps(func)
     def is_user_logged_in(*args, **kwargs):
+        date = datetime.now(timezone.utc)
+        date_str = date.strftime("%Y-%m-%dT%H:%M:%S")
+
         if not authentication.is_authenticated(flask.session):
+            logger.warning(
+                "User login failed",
+                extra={
+                    "datetime": date_str,
+                    "appid": "charmhub-io",
+                    "event": "authn_login_fail",
+                },
+            )
+
             response = flask.make_response(
                 flask.redirect("/login?next=" + flask.request.path)
             )
@@ -45,6 +61,18 @@ def login_required(func):
             response = param_redirect_capture(flask.request, response)
 
             return response
+
+        account = flask.session.get("account")
+        user = account["email"]
+
+        logger.info(
+            f"User {user} login successfully",
+            extra={
+                "datetime": date_str,
+                "appid": "charmhub-io",
+                "event": f"authn_login_successafterfail:{user}",
+            },
+        )
 
         return func(*args, **kwargs)
 

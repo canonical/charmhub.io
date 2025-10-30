@@ -6,6 +6,7 @@ from flask import make_response
 from typing import List, Dict, TypedDict, Any, Union
 
 from canonicalwebteam.exceptions import StoreApiError
+from redis_cache.cache_utility import redis_cache
 from webapp.observability.utils import trace_function
 from webapp.store.logic import format_slug
 from webapp.store_api import publisher_gateway
@@ -42,27 +43,25 @@ def get_icon(media):
 
 
 @trace_function
-def fetch_packages(fields: List[str], query_params) -> Packages:
+def fetch_packages(
+    fields: List[str], query_params: Dict[str, Any]
+) -> list[Package]:
     """
-    Fetches packages from the store API based on the specified fields.
+    Fetches and parses packages from the store API.
 
     :param: fields (List[str]): A list of fields to include in the package
     data.
     :param: query_params: A search query
 
-    :returns: a dictionary containing the list of fetched packages.
+    :returns: a list of parsed packages.
     """
 
     category = query_params.get("categories", "")
     query = query_params.get("q", "")
     package_type = query_params.get("type", None)
     platform = query_params.get("platforms", "")
-    architecture = query_params.get("architecture", "")
     provides = query_params.get("provides", None)
     requires = query_params.get("requires", None)
-
-    if package_type == "all":
-        package_type = None
 
     args = {
         "category": category,
@@ -70,34 +69,40 @@ def fetch_packages(fields: List[str], query_params) -> Packages:
         "query": query,
     }
 
-    if package_type:
-        args["type"] = package_type
-
     if provides:
-        provides = provides.split(",")
-        args["provides"] = provides
+        args["provides"] = provides.split(",")
 
     if requires:
-        requires = requires.split(",")
-        args["requires"] = requires
+        args["requires"] = requires.split(",")
 
+    if package_type and package_type != "all":
+        args["type"] = package_type
+
+    key = (
+        "fetch-packages",
+        {
+            **query_params,
+            "fields": tuple(fields),
+        },
+    )
+    result = redis_cache.get(key, expected_type=list)
+    if result:
+        return result
     packages = publisher_gateway.find(**args).get("results", [])
-
     if platform and platform != "all":
         filtered_packages = []
         for p in packages:
-            platforms = p["result"].get("deployable-on", [])
+            platforms = p.get("result", {}).get("deployable-on", [])
             if not platforms:
                 platforms = ["vm"]
             if platform in platforms:
                 filtered_packages.append(p)
         packages = filtered_packages
 
-    if architecture and architecture != "all":
-        args["architecture"] = architecture
-        packages = publisher_gateway.find(**args).get("results", [])
+    result = [parse_package_for_card(package) for package in packages]
+    redis_cache.set(key, result, ttl=600)
 
-    return packages
+    return result
 
 
 @trace_function
@@ -125,7 +130,7 @@ def get_bundle_charms(charm_apps):
     result = []
 
     if charm_apps:
-        for app_name, data in charm_apps.items():
+        for _, data in charm_apps.items():
             # Charm names could be with the old prefix/suffix
             # Like: cs:~charmed-osm/mariadb-k8s-35
             name = data["charm"]
@@ -261,17 +266,13 @@ def paginate(
 
 @trace_function
 def get_packages(
-    libraries: bool,
     fields: List[str],
+    query_params: Dict[str, Any],
     size: int = 10,
-    query_params: Dict[str, Any] = {},
-) -> List[Dict[str, Any]]:
+) -> Dict[str, Any]:
     """
-    Retrieves a list of packages from the store based on the specified
-    parameters.The returned packages are paginated and parsed using the
-    card schema.
+    Retrieves a list of packages and paginate.
 
-    :param: store: The store object.
     :param: fields (List[str]): A list of fields to include in the
             package data.
     :param: size (int, optional): The number of packages to include
@@ -286,15 +287,10 @@ def get_packages(
     packages = fetch_packages(fields, query_params)
 
     total_pages = -(len(packages) // -size)
-
-    total_pages = -(len(packages) // -size)
     total_items = len(packages)
     page = int(query_params.get("page", 1))
-    packages_per_page = paginate(packages, page, size, total_pages)
-    parsed_packages = []
-    for package in packages_per_page:
-        parsed_packages.append(parse_package_for_card(package, libraries))
-    res = parsed_packages
+
+    res = paginate(packages, page, size, total_pages)
 
     categories = get_store_categories()
 
@@ -307,27 +303,6 @@ def get_packages(
 
 
 @trace_function
-def parse_categories(
-    categories_json: Dict[str, List[Dict[str, str]]],
-) -> List[Dict[str, str]]:
-    """
-    :param categories_json: The returned json from publishergw get_categories
-    :returns: A list of categories in the format:
-    [{"name": "Category", "slug": "category"}]
-    """
-
-    categories = []
-
-    if "categories" in categories_json:
-        for category in categories_json["categories"]:
-            categories.append(
-                {"slug": category, "name": format_slug(category)}
-            )
-
-    return categories
-
-
-@trace_function
 def get_store_categories() -> List[Dict[str, str]]:
     """
     Fetches all store categories.
@@ -336,20 +311,24 @@ def get_store_categories() -> List[Dict[str, str]]:
     :returns: A list of categories in the format:
     [{"name": "Category", "slug": "category"}]
     """
-    try:
-        all_categories = publisher_gateway.get_categories()
-    except StoreApiError:
-        all_categories = []
+    key = "store-categories"
+    categories = redis_cache.get(key, expected_type=list)
+    if not categories:
+        try:
+            all_categories = publisher_gateway.get_categories()
+        except StoreApiError:
+            all_categories = []
 
-    for cat in all_categories["categories"]:
-        cat["display_name"] = format_slug(cat["name"])
+        for cat in all_categories["categories"]:
+            cat["display_name"] = format_slug(cat["name"])
 
-    categories = list(
-        filter(
-            lambda cat: cat["name"] != "featured", all_categories["categories"]
+        categories = list(
+            filter(
+                lambda cat: cat["name"] != "featured",
+                all_categories["categories"],
+            )
         )
-    )
-
+        redis_cache.set(key, categories, ttl=3600)
     return categories
 
 
@@ -368,6 +347,16 @@ def get_package(
 
     :return: A dictionary containing the package.
     """
-    package = fetch_package(package_name, fields).get("package", {})
-    resp = parse_package_for_card(package, libraries)
+
+    key = (
+        f"get-package:{package_name}:lib-{libraries}"
+        if libraries
+        else f"get-package:{package_name}"
+    )
+    resp = redis_cache.get(key, expected_type=dict)
+    if not resp:
+        package = fetch_package(package_name, fields).get("package", {})
+        resp = parse_package_for_card(package, libraries)
+        redis_cache.set(key, resp, ttl=600)
+
     return {"package": resp}

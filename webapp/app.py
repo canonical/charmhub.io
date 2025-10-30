@@ -48,7 +48,6 @@ set_handlers(app)
 
 request_session = requests.Session()
 candid = CandidClient(request_session)
-cache.init_app(app)
 csrf.init_app(app)
 
 app.register_blueprint(store_packages)
