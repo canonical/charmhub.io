@@ -1,0 +1,16 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Copy webapp code for the store API
+COPY webapp ./webapp
+
+# Copy observability files
+COPY observability/requirements.txt .
+COPY observability/metrics_collector.py .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Run the collector
+CMD ["python", "metrics_collector.py"]

@@ -25,3 +25,14 @@ scrape_configs:
       replacement: "charmhub-io"
     - target_label: service_name
       replacement: "charmhub-io"
+
+  - job_name: 'metrics-collector'
+    static_configs:
+      - targets: ['metrics-collector:8000']
+    scrape_interval: 60s
+    metrics_path: /metrics
+    relabel_configs:
+    - target_label: service
+      replacement: "charmhub-metrics"
+    - target_label: service_name
+      replacement: "charmhub-metrics"

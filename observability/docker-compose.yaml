@@ -65,6 +65,22 @@ services:
       - "9125:9125/udp"  # StatsD endpoint
     networks:
       - observability
+
+  metrics-collector:
+    build:
+      context: ..
+      dockerfile: observability/Dockerfile.metrics
+    ports:
+      - "8000:8000"  # Prometheus metrics endpoint
+    environment:
+      - CHARMHUB_API_URL=https://api.charmhub.io/v2/charms
+      - COLLECTION_INTERVAL=600  # Collect every 10 minutes (fetching real data is slower)
+      - METRICS_PORT=8000
+      - MAX_PACKAGES=0  # 0 = fetch all packages
+      - API_TIMEOUT=30
+    networks:
+      - observability
+    restart: unless-stopped
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.132.0
     command: [ "--config=/etc/otel-collector-config.yaml" ]
