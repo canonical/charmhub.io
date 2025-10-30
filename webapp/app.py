@@ -14,7 +14,6 @@ from webapp.publisher.views import publisher
 from webapp.store.views import store
 from webapp.integrations.views import integrations
 from webapp.search.views import search
-from webapp.search.logic import cache
 from webapp.solutions.views import solutions
 from webapp.helpers import (
     markdown_to_html,
