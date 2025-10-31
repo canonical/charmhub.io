@@ -106,7 +106,11 @@ def redirect_uppercase_to_lowercase(func):
 
     @functools.wraps(func)
     def is_uppercase(*args, **kwargs):
-        name = kwargs["entity_name"]
+        if "entity_name" in kwargs:
+            name = kwargs["entity_name"]
+        else:
+            # For solutions - fallback to name if entity_name is not provided
+            name = kwargs["name"]
 
         ENV = os.getenv("ENVIRONMENT", "devel").strip()
         redirect = flask.request.url.lower()

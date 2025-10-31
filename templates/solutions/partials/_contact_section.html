@@ -1,0 +1,86 @@
+<div class="u-fixed-width">
+  <h4 class="p-heading--4">Contact Information</h4>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="submit_bug_url" class="is-required">Submit a Bug URL:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <input class="is-dense"
+      id="submit_bug_url"
+      name="submit_bug_url"
+      type="url"
+      required
+      value="{{ form_value(form_data, solution, 'submit_bug_url', 'documentation.submit_a_bug') | e }}"
+    >
+    <p class="p-form-help-text">URL to submit bugs/issues (e.g., GitHub Issues, Launchpad)</p>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="community_discussion_url" class="is-required">Join the Discussion URL:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <input class="is-dense"
+      id="community_discussion_url"
+      name="community_discussion_url"
+      type="url"
+      required
+      value="{{ form_value(form_data, solution, 'community_discussion_url', 'documentation.community_discussion') | e }}"
+    >
+    <p class="p-form-help-text">URL to community discussions (e.g., Discourse, Matrix)</p>
+  </div>
+</div>
+
+<template id="maintainer-template">
+  <div class="maintainer-item p-form--inline">
+    <button type="button" class="p-button--negative has-icon is-small remove-maintainer" aria-label="Remove maintainer">
+      <i class="p-icon--delete is-dark"></i>
+    </button>
+    <div class="p-form__group">
+      <div class="p-form__control">
+        <input class="p-form__control maintainer-email"
+          type="email"
+          name="maintainers_email[]"
+          placeholder="john@canonical.com"
+          required
+        >
+      </div>
+    </div>
+  </div>
+</template>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label class="is-required">Maintainers:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <div class="p-form-validation" id="maintainers-section">
+      <div id="maintainers-list">
+        {% if solution.maintainers %}
+          {% for maintainer in solution.maintainers %}
+            <div class="maintainer-item p-form--inline">
+              <button type="button" class="p-button--negative has-icon is-small remove-maintainer" aria-label="Remove {{ maintainer.email }}"><i class="p-icon--delete is-dark"></i></button>
+              <div class="p-form__group">
+                <div class="p-form__control">
+                  <input class="p-form__control maintainer-email"
+                    type="email"
+                    name="maintainers_email[]"
+                    value="{{ maintainer.email | e }}"
+                    placeholder="john@canonical.com"
+                    required
+                  >
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <button type="button" id="add-maintainer" class="p-button--base">Add Maintainer</button>
+      <p class="p-form-help-text">Add the email addresses of maintainers who help maintain this solution (minimum 1)</p>
+      <p class="p-form-validation__message" id="maintainer-error">At least one maintainer is required</p>
+    </div>
+  </div>
+</div>

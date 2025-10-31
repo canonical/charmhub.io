@@ -1,0 +1,36 @@
+<div class="u-fixed-width">
+  <h4 class="p-heading--4">Your Information</h4>
+  <p class="p-form-help-text">This information will not be publicly displayed on Charmhub.io.<br>It is used for communication purposes with solution reviewers only.</p>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="creator_email" class="is-required">Contact Email:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <input class="is-dense"
+      id="creator_email"
+      name="creator_email"
+      type="email"
+      required
+      value="{{ form_value(form_data, solution, 'creator_email', 'creator.email') | e }}"
+    >
+    <p class="p-form-help-text">Contact email for this solution</p>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="mattermost_handle" class="is-required">Mattermost Handle:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <input class="is-dense"
+      id="mattermost_handle"
+      name="mattermost_handle"
+      type="text"
+      required
+      value="{{ form_value(form_data, solution, 'mattermost_handle', 'creator.mattermost_handle') | e }}"
+    >
+    <p class="p-form-help-text">Your Mattermost handle for communication</p>
+  </div>
+</div>

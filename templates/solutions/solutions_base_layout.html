@@ -1,0 +1,62 @@
+{% extends 'base_layout.html' %}
+
+{% block meta_title %}{{ solution.title }} – Charmhub Solutions{% endblock %}
+{% block meta_description %}{{ solution.summary }}{% endblock %}
+{% block meta_image %}{{ solution.media.icon }}{% endblock %}
+{% block meta_image_alt %}{{ solution.name }} logo{% endblock %}
+
+{% block structure_data_markup %}
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Product",
+    "title": "{{ solution.title }}",
+    "description": "{{ solution.summary }}",
+    "icon": "{{ solution.media.icon }}",
+    "brand": "{{ solution.publisher.name }}",
+    "revision": "{{ solution.revision }}",
+    "url": "{{ request.url }}"
+  }
+  </script>
+{% endblock %}
+
+{% block content %}
+  {% if request.args.get('preview') or is_preview %}
+    <div class="p-strip is-shallow grid-row">
+      <div class="p-notification--caution">
+        <div class="p-notification__content">
+          <h5 class="p-notification__title">Preview mode</h5>
+          <p class="p-notification__message">You are viewing a preview of a solution.</p>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% include 'solutions/_header.html' %}
+  <div class="p-block"></div>
+  <div class="grid-row">
+    <div class="grid-col-2">
+    </div>
+    <div class="grid-col-6">
+      <hr class="p-separator--shallow p-rule--muted u-no-margin--bottom u-no-margin--top">
+    </div>
+  </div>
+  <div class="grid-row">
+    <div class="grid-col-2">
+      {% include '/solutions/_side-nav.html' %}
+    </div>
+    <div class="grid-col-6">
+      {% include '/solutions/solutions_details.html' %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block page_scripts %}
+  <script src="{{ versioned_static('js/dist/solutions.js') }}" defer></script>
+  {% block solutions_init %}
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      charmhub.solutions.init({{ solution | tojson }});
+    });
+  </script>
+  {% endblock %}
+{% endblock %}

@@ -36,3 +36,14 @@ config:
     github-token:
       description: Github token used to communicate with the GitHub API.
       type: string
+    login-url:
+      description: The U1 SSO login url
+      default: https://login.ubuntu.com
+      type: string
+    solutions-api-base:
+      description: The base URL for the solutions service API
+      default: http://solutions.staging.charmhub.io/api
+      type: string
+    hmac-secret:
+      description: The secret containing the HMAC-key for solutions service
+      type: secret

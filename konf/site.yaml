@@ -26,6 +26,14 @@ env:
       key: github-api-token
       name: charmhub-io
 
+  - name: FLASK_SOLUTIONS_API_BASE
+    value: https://solutions.staging.charmhub.io/api
+
+  - name: FLASK_HMAC_SECRET_KEY
+    secretKeyRef:
+      key: hmac-secret-key
+      name: charmhub-io
+
 extraHosts:
   - domain: jujucharms.com
   - domain: openoperatorcollection.io

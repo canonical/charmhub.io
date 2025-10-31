@@ -1,0 +1,190 @@
+<template id="platform-version-template">
+  <div class="platform-version-item p-form--inline">
+    <button type="button" class="p-button--negative has-icon is-small remove-platform-version" aria-label="Remove version">
+      <i class="p-icon--delete is-dark"></i>
+    </button>
+    <div class="p-form__group">
+      <div class="p-form__control">
+        <input class="p-form__control platform-version-input"
+          type="text"
+          name="platform_version[]"
+          placeholder="e.g., 1.25"
+          required
+        >
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="platform-prerequisite-template">
+  <div class="platform-prerequisite-item p-form--inline">
+    <button type="button" class="p-button--negative has-icon is-small remove-platform-prerequisite" aria-label="Remove prerequisite">
+      <i class="p-icon--delete is-dark"></i>
+    </button>
+    <div class="p-form__group">
+      <div class="p-form__control">
+        <input class="p-form__control platform-prerequisite-input"
+          type="text"
+          name="platform_prerequisites[]"
+          placeholder="e.g., GPU support"
+        >
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="juju-version-template">
+  <div class="juju-version-item p-form--inline">
+    <button type="button" class="p-button--negative has-icon is-small remove-juju-version" aria-label="Remove version">
+      <i class="p-icon--delete is-dark"></i>
+    </button>
+    <div class="p-form__group">
+      <div class="p-form__control">
+        <input class="p-form__control juju-version-input"
+          type="text"
+          name="juju_versions[]"
+          placeholder="e.g., 3.1"
+          required
+        >
+      </div>
+    </div>
+  </div>
+</template>
+
+<div class="u-fixed-width">
+  <h4 class="p-heading--4">Platform & Compatibility</h4>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label class="p-form__label">Platform:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <div class="p-form__control">
+      {% set current_platform = solution.get('deployable-on', [{}])[0].get('platform', 'kubernetes') %}
+      <label class="p-radio">
+        <input
+          type="radio"
+          class="p-radio__input"
+          name="platform_display"
+          value="kubernetes"
+          aria-labelledby="kubernetes-edit"
+          {% if current_platform == 'kubernetes' %}checked{% endif %}
+          disabled
+        >
+        <span class="p-radio__label" id="kubernetes-edit">Kubernetes</span>
+      </label>
+      <label class="p-radio">
+        <input
+          type="radio"
+          class="p-radio__input"
+          name="platform_display"
+          value="machine"
+          aria-labelledby="machine-edit"
+          {% if current_platform == 'machine' %}checked{% endif %}
+          disabled
+        >
+        <span class="p-radio__label" id="machine-edit">Machine</span>
+      </label>
+      <input type="hidden" name="platform" value="{{ current_platform }}">
+      <p class="p-form-help-text">Platform type was set during registration and cannot be changed</p>
+    </div>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="platform_version" class="is-required">Platform Versions:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <div class="p-form-validation" id="platform-version-section">
+      <div id="platform-version-list">
+        {% if solution['deployable-on'] and solution['deployable-on'][0] and solution['deployable-on'][0].version %}
+          {% for version in solution['deployable-on'][0].version %}
+            <div class="platform-version-item p-form--inline">
+              <button type="button" class="p-button--negative has-icon is-small remove-platform-version" aria-label="Remove version"><i class="p-icon--delete is-dark"></i></button>
+              <div class="p-form__group">
+                <div class="p-form__control">
+                  <input class="p-form__control platform-version-input"
+                    type="text"
+                    name="platform_version[]"
+                    value="{{ version | e }}"
+                    placeholder="e.g., 1.25"
+                    required
+                  >
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <button type="button" id="add-platform-version" class="p-button--base">Add Platform Version</button>
+      <p class="p-form-validation__message" id="platform-version-error">At least one platform version is required</p>
+      <p class="p-form-help-text">Add supported platform versions (e.g., Kubernetes versions)</p>
+    </div>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="platform_prerequisites">Platform Prerequisites:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <div id="platform-prerequisites-section">
+      <div id="platform-prerequisites-list">
+        {% if solution['deployable-on'] and solution['deployable-on'][0] and solution['deployable-on'][0].prerequisites %}
+          {% for prerequisite in solution['deployable-on'][0].prerequisites %}
+            <div class="platform-prerequisite-item p-form--inline">
+              <button type="button" class="p-button--negative has-icon is-small remove-platform-prerequisite" aria-label="Remove prerequisite"><i class="p-icon--delete is-dark"></i></button>
+              <div class="p-form__group">
+                <div class="p-form__control">
+                  <input class="p-form__control platform-prerequisite-input"
+                    type="text"
+                    name="platform_prerequisites[]"
+                    value="{{ prerequisite | e }}"
+                    placeholder="e.g., GPU support"
+                  >
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <button type="button" id="add-platform-prerequisite" class="p-button--base">Add Platform Prerequisite</button>
+      <p class="p-form-help-text">Add a list of platform prerequisites (e.g., GPU support, storage requirements)</p>
+    </div>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="juju_versions" class="is-required">Juju Versions:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <div class="p-form-validation" id="juju-versions-section">
+      <div id="juju-versions-list">
+        {% if solution.compatibility and solution.compatibility.juju_versions %}
+          {% for version in solution.compatibility.juju_versions %}
+            <div class="juju-version-item p-form--inline">
+              <button type="button" class="p-button--negative has-icon is-small remove-juju-version" aria-label="Remove version"><i class="p-icon--delete is-dark"></i></button>
+              <div class="p-form__group">
+                <div class="p-form__control">
+                  <input class="p-form__control juju-version-input"
+                    type="text"
+                    name="juju_versions[]"
+                    value="{{ version | e }}"
+                    placeholder="e.g., 3.1"
+                    required
+                  >
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <button type="button" id="add-juju-version" class="p-button--base">Add Juju Version</button>
+      <p class="p-form-validation__message" id="juju-version-error">At least one Juju version is required</p>
+      <p class="p-form-help-text">Add supported Juju versions (e.g., 3.1, 2.9)</p>
+    </div>
+  </div>
+</div>

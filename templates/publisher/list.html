@@ -21,7 +21,7 @@
         </li>
       </ul>
     {% else %}
-      <h1 class="p-heading--2">My charms and bundles</h1>
+      <h1 class="p-heading--2">{% if g.get('has_solutions', False) %}My charms, bundles and solutions{% else %}My charms and bundles{% endif %}</h1>
     {% endif %}
   </div>
 </section>
@@ -55,6 +55,11 @@
               <li class="p-tabs__item" role="presentation">
                 <a href="/bundles" class="p-tabs__link" role="tab" aria-controls="bundles" {% if page_type=='bundle' %}aria-selected="true" {% endif %}>Bundles</a>
               </li>
+              {% if g.get('has_solutions', False) %}
+              <li class="p-tabs__item" role="presentation">
+                <a href="/solutions" class="p-tabs__link" role="tab" aria-controls="solutions">Solutions</a>
+              </li>
+              {% endif %}
             </ul>
           </nav>
         </li>

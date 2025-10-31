@@ -1,4 +1,3 @@
-
 # Working on charmhub.io
 
 ## Use staging APIs
@@ -31,7 +30,7 @@ The application will be reporting errors to your `sentry.io` project from now on
 
 Install the [`dotrun`](https://snapcraft.io/dotrun) snap.
 
-``` bash
+```bash
 dotrun test
 ```
 
@@ -43,3 +42,11 @@ Now visit http://127.0.0.1:8045/_status to see the endpoints provided by Taliske
 
 - http://127.0.0.1:8045/_status/check - A basic check that the site is running
 - http://127.0.0.1:8045/_status/metrics - The prometheus metrics for the application
+
+## Working on Solutions
+
+To test solutions locally against local solutions service backend, add this to your `.env.local`:
+
+```
+SOLUTIONS_API_BASE=http://localhost:5000/api
+```

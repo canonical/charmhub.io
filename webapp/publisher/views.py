@@ -9,6 +9,7 @@ from flask import (
     session,
     url_for,
     make_response,
+    g,
 )
 from flask.json import jsonify
 from webapp.config import DETAILS_VIEW_REGEX
@@ -17,6 +18,57 @@ from webapp.publisher.logic import get_all_architectures, process_releases
 from webapp.observability.utils import trace_function
 from webapp.store_api import publisher_gateway
 from webapp.utils.emailer import get_emailer
+from webapp.solutions.logic import (
+    get_publisher_solutions,
+    publisher_has_solutions_access,
+    register_solution,
+    get_user_teams_for_solutions,
+    get_solution_from_backend,
+    update_solution,
+    solution_name_exists,
+)
+from webapp.publisher.form_processors import (
+    process_solution_form_data,
+    create_error_context,
+)
+import functools
+from datetime import datetime
+import uuid
+
+preview_cache = {}
+
+
+def requires_solutions_access(func):
+    @functools.wraps(func)
+    def has_solutions_access(*args, **kwargs):
+        username = session["account"]["username"]
+        has_solutions = publisher_has_solutions_access(username)
+        if not has_solutions:
+            flash(
+                "You don't have access to solutions. "
+                "Solutions access is granted based on "
+                "Launchpad team membership.",
+                "negative",
+            )
+            return redirect("/charms")
+
+        g.has_solutions = True
+        response = make_response(func(*args, **kwargs))
+        return response
+
+    return has_solutions_access
+
+
+def render_solution_form_with_errors(
+    template_name, errors, form_data=None, solution=None, status=400
+):
+    username = session["account"]["username"]
+    user_teams = get_user_teams_for_solutions(username)
+
+    context = create_error_context(errors, solution, user_teams, form_data)
+
+    return render_template(template_name, **context), status
+
 
 publisher = Blueprint(
     "publisher",
@@ -30,6 +82,7 @@ publisher = Blueprint(
 @publisher.route("/account/details")
 @login_required
 def get_account_details():
+
     return render_template("publisher/account-details.html")
 
 
@@ -133,7 +186,32 @@ def list_page():
             "page_type": page_type,
         }
         redis_cache.set(key, context, ttl=600)
+
+    # Add solutions access check (from staging)
+    username = session["account"]["username"]
+    has_solutions = publisher_has_solutions_access(username)
+    g.has_solutions = has_solutions
+    context["has_solutions"] = has_solutions
+
     return render_template("publisher/list.html", **context)
+
+
+@trace_function
+@publisher.route("/solutions")
+@login_required
+@requires_solutions_access
+def solutions_page():
+    username = session["account"]["username"]
+
+    # Get solutions data according to launchpad group
+    solutions = get_publisher_solutions(username)
+
+    context = {
+        "solutions": solutions,
+        "page_type": "solution",
+    }
+
+    return render_template("publisher/solutions.html", **context)
 
 
 @trace_function
@@ -583,3 +661,236 @@ def get_releases(entity_name: str):
         response = make_response(res, 500)
 
     return response
+
+
+@publisher.route("/validate-solution-name")
+@login_required
+@requires_solutions_access
+def validate_solution_name():
+    name = request.args.get("name", "").strip()
+
+    if not name:
+        return jsonify({"exists": False})
+
+    exists = solution_name_exists(name)
+    return jsonify({"exists": exists})
+
+
+@publisher.route("/register-solution")
+@login_required
+@requires_solutions_access
+def show_register_solution_form():
+    username = session["account"]["username"]
+
+    user_teams = get_user_teams_for_solutions(username)
+
+    context = {
+        "user_teams": user_teams,
+    }
+    return render_template("publisher/register-solution.html", **context)
+
+
+@publisher.route("/register-solution", methods=["POST"])
+@login_required
+@requires_solutions_access
+def submit_register_solution():
+    username = session["account"]["username"]
+
+    form_data = {
+        field: request.form.get(field, "").strip()
+        for field in [
+            "name",
+            "title",
+            "summary",
+            "publisher",
+            "platform",
+            "creator_email",
+            "mattermost_handle",
+        ]
+    }
+
+    if not all(
+        [
+            form_data["name"],
+            form_data["title"],
+            form_data["summary"],
+            form_data["publisher"],
+            form_data["creator_email"],
+        ]
+    ):
+        return render_solution_form_with_errors(
+            "publisher/register-solution.html",
+            [
+                {
+                    "code": "missing-fields",
+                    "message": "All required fields must be filled.",
+                }
+            ],
+            form_data,
+        )
+
+    if solution_name_exists(form_data["name"]):
+        return render_solution_form_with_errors(
+            "publisher/register-solution.html",
+            [
+                {
+                    "code": "name-already-exists",
+                    "message": (
+                        "A solution with the name "
+                        f"'{form_data['name']}' already exists. "
+                        "Please choose a different name."
+                    ),
+                }
+            ],
+            form_data,
+        )
+
+    solution_data = {
+        "name": form_data["name"],
+        "title": form_data["title"],
+        "summary": form_data["summary"],
+        "publisher": form_data["publisher"],
+        "platform": form_data["platform"],
+        "creator_email": form_data["creator_email"],
+    }
+    if form_data["mattermost_handle"]:
+        solution_data["mattermost_handle"] = form_data["mattermost_handle"]
+
+    result = register_solution(username, solution_data)
+
+    if "error" in result:
+        return render_solution_form_with_errors(
+            "publisher/register-solution.html",
+            [{"code": "api-error", "message": result["error"]}],
+            form_data,
+        )
+    if "error-list" in result and result["error-list"]:
+        return render_solution_form_with_errors(
+            "publisher/register-solution.html",
+            result["error-list"],
+            form_data,
+            status=422,
+        )
+
+    flash(
+        (
+            f"Your solution '{form_data['title']}' has been successfully "
+            "registered and is pending name review."
+        ),
+        "positive",
+    )
+
+    return redirect("/solutions")
+
+
+@publisher.route("/solutions/edit/<hash>")
+@login_required
+@requires_solutions_access
+def edit_solution_form(hash):
+
+    solution = get_solution_from_backend(hash)
+    if not solution:
+        flash("Solution not found.", "negative")
+        return redirect("/solutions")
+
+    if solution.get("status") not in ["draft", "published"]:
+        flash(
+            "This solution cannot be edited in its current status.", "negative"
+        )
+        return redirect("/solutions")
+
+    username = session["account"]["username"]
+    user_teams = get_user_teams_for_solutions(username)
+
+    context = {
+        "user_teams": user_teams,
+        "solution": solution,
+    }
+    return render_template("solutions/edit-solution.html", **context)
+
+
+def cleanup_old_previews():
+    now = datetime.now()
+    expired_keys = [
+        key
+        for key, (timestamp) in preview_cache.items()
+        if (now - timestamp).total_seconds() > 300
+    ]
+    for key in expired_keys:
+        del preview_cache[key]
+
+
+@publisher.route("/solutions/edit/<hash>", methods=["POST"])
+@login_required
+@requires_solutions_access
+def submit_edit_solution(hash):
+
+    # Get solution data from backend first
+    solution = get_solution_from_backend(hash)
+    if not solution:
+        flash("Solution not found.", "negative")
+        return redirect("/solutions")
+
+    # Check if solution can be edited (only draft or published solutions)
+    if solution.get("status") not in ["draft", "published"]:
+        flash(
+            "This solution cannot be edited in its current status.", "negative"
+        )
+        return redirect("/solutions")
+
+    username = session["account"]["username"]
+
+    form_data = process_solution_form_data()
+
+    action = request.form.get("action", "save_draft")
+
+    if action == "preview":
+        preview_key = str(uuid.uuid4().hex[:16])
+
+        cleanup_old_previews()
+
+        preview_cache[preview_key] = (
+            {"solution": solution, "form_data": form_data},
+            datetime.now(),
+        )
+
+        return jsonify({"success": True, "preview_key": preview_key})
+
+    result = update_solution(
+        username, solution["name"], solution["revision"], form_data
+    )
+
+    if "error" in result:
+        flash(f"Failed to update solution: {result['error']}", "negative")
+        return render_solution_form_with_errors(
+            "solutions/edit-solution.html",
+            [{"code": "api-error", "message": result["error"]}],
+            form_data,
+            solution,
+        )
+
+    if "error-list" in result and result["error-list"]:
+        flash(
+            "Failed to update solution due to validation errors.", "negative"
+        )
+        return render_solution_form_with_errors(
+            "solutions/edit-solution.html",
+            result["error-list"],
+            form_data,
+            solution,
+        )
+
+    if action == "submit_for_review":
+        flash(
+            f"Your solution '{form_data['title']}' "
+            "has been submitted for metadata review.",
+            "positive",
+        )
+    elif action == "update":
+        flash(
+            f"Your solution '{form_data['title']}' "
+            "has been successfully updated.",
+            "positive",
+        )
+
+    return redirect("/solutions")
