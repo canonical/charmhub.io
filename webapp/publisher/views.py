@@ -813,7 +813,7 @@ def cleanup_old_previews():
     now = datetime.now()
     expired_keys = [
         key
-        for key, (timestamp) in preview_cache.items()
+        for key, (_, timestamp) in preview_cache.items()
         if (now - timestamp).total_seconds() > 300
     ]
     for key in expired_keys:
