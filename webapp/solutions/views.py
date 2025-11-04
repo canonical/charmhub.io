@@ -5,7 +5,7 @@ from webapp.helpers import markdown_to_html
 from webapp.solutions.logic import get_solution_from_backend
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from webapp.solutions.logic import get_published_solution_by_name
-from webapp.publisher.views import preview_cache
+from redis_cache.cache_utility import redis_cache
 
 
 solutions = Blueprint(
@@ -123,12 +123,10 @@ def solution_preview(hash):
 @solutions.route("/solutions/preview-draft/<preview_key>")
 def solution_preview_draft(preview_key):
 
-    cache_entry = preview_cache.get(preview_key)
-    if not cache_entry:
+    cache_key = f"solution_preview:{preview_key}"
+    preview_data = redis_cache.get(cache_key, expected_type=dict)
+    if not preview_data:
         abort(404)
-
-    preview_data, _timestamp = cache_entry
-    preview_cache.pop(preview_key, None)
 
     solution = preview_data["solution"]
     form_data = preview_data["form_data"]
