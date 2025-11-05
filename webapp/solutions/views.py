@@ -128,7 +128,6 @@ def solution_preview_draft(preview_key):
         abort(404)
 
     preview_data, _timestamp = cache_entry
-    preview_cache.pop(preview_key, None)
 
     solution = preview_data["solution"]
     form_data = preview_data["form_data"]
