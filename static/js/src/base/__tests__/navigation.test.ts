@@ -1,10 +1,5 @@
 import "@testing-library/jest-dom";
 import { fireEvent } from "@testing-library/react";
-import {
-  toggleDropdown,
-  closeAllDropdowns,
-  handleClickOutside,
-} from "../navigation";
 
 // Mock the fetch function
 global.fetch = jest.fn(() =>
