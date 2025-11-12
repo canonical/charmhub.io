@@ -19,6 +19,14 @@
           </p>
         </div>
       </div>
+    {% elif solution.status == 'pending_metadata_review' %}
+      <div class="p-notification--information">
+        <div class="p-notification__content">
+          <p class="p-notification__message">
+            Your solution is currently under review. You can still make changes to the metadata before it is published.
+          </p>
+        </div>
+      </div>
     {% elif solution.status == 'published' %}
       <p>
         Edit the metadata for your solution.
@@ -59,6 +67,10 @@
         {% if solution.status == 'draft' and solution.revision == 1 %}
           <button type="submit" name="action" value="submit_for_review" class="p-button--positive">
             Submit metadata for review
+          </button>
+        {% elif solution.status == 'pending_metadata_review' %}
+          <button type="submit" name="action" value="submit_for_review" class="p-button--positive">
+            Update and resubmit for review
           </button>
         {% elif solution.status == 'published' %}
           <button type="submit" name="action" value="update" class="p-button--positive">
