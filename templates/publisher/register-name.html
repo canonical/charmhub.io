@@ -1,6 +1,6 @@
 {% extends 'publisher/publisher_layout.html' %}
 
-{% block title %}Register a new charm or bundle{% endblock %}
+{% block title %}Register a new charm{% endblock %}
 {% block meta_copydoc %}{% endblock meta_copydoc %}
 {% block meta_description %}{% endblock %}
 
@@ -9,9 +9,9 @@
   <div class="u-fixed-width">
     <a href="/charms">&lsaquo;&nbsp;My charms &amp; bundles</a>
     <h1 class="p-heading--2">
-      Register a new charm or bundle
+      Register a new charm
     </h1>
-    <p>You must register a name before you publish a new charm or bundle to the store.</p>
+    <p>You must register a name before you publish a new charm to the store.</p>
   </div>
 </section>
 <section class="p-strip is-shallow">
@@ -74,27 +74,6 @@
             </p>
           {% endif %}
         </div>
-      </div>
-    </div>
-    <div class="u-fixed-width">
-      <hr class="p-separator--2rem">
-    </div>
-    <div class="row p-form__group">
-      <div class="col-2">
-        <p class="is-label p-form__label">Type:</p>
-      </div>
-      <div class="col-8 col-x-large-6">
-        <p>This can <strong>NOT</strong> be changed after the initial upload</p>
-        <label class="p-radio">
-          <input type="radio" class="p-radio__input" name="type" checked="" aria-labelledby="charm" value="charm">
-          <span class="p-radio__label" id="charm">Charm</span>
-        </label>
-        <p class="p-form-help-text">Contains all the instructions necessary for deploying and configuring application units</p>
-        <label class="p-radio">
-          <input type="radio" class="p-radio__input" name="type" aria-labelledby="bundle" value="bundle">
-          <span class="p-radio__label" id="bundle">Bundle</span>
-        </label>
-        <p class="p-form-help-text">A collection of charms which have been carefully combined and configured in order to automate a multi-charm solution</p>
       </div>
     </div>
     <div class="u-fixed-width">
