@@ -23,8 +23,8 @@ jobs:
       - name: Run image
         run: |
           docker run -d -p 80:80 --env-file .env charmhub-io
-          sleep 1
-          curl --head --fail --retry-delay 1 --retry 30 --retry-connrefused http://localhost
+          sleep 5
+          curl --head --fail --retry-delay 5 --retry 30 --retry-connrefused http://localhost
 
   run-dotrun:
     runs-on: ubuntu-latest
