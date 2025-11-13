@@ -1,4 +1,4 @@
-import "./navigation";
+import setupLogin from "./login";
 
 import { createNav as createAllCanonicalNav } from "@canonical/global-nav";
 import { initNavigationListeners } from "./listeners";
@@ -10,4 +10,5 @@ window.addEventListener("DOMContentLoaded", function () {
   createAllCanonicalNav({ breakpoint: 1220 });
   patchAllCanonicalMobileMarkup();
   initNavigationListeners();
+  setupLogin();
 });
