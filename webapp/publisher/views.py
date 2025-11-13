@@ -579,7 +579,7 @@ def delete_package(package_name):
     if resp.status_code == 200:
         return ("", 200)
     return (
-        jsonify({"error": resp.json["error-list"][0]["message"]}),
+        jsonify({"error": resp.json()["error-list"][0]["message"]}),
         resp.status_code,
     )
 

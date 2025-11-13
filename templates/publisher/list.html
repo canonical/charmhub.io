@@ -362,6 +362,7 @@
         const responseData = await response.json();
         unregisterErrorMessage.innerText = responseData.error;
         unregisterError.classList.remove("u-hide");
+	unregisterConfirmationModal.classList.add("u-hide");
       }
     });
 

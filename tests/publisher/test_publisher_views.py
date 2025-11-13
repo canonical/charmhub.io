@@ -287,7 +287,7 @@ class TestPublisherViews(unittest.TestCase):
     @patch("webapp.store_api.publisher_gateway.unregister_package_name")
     def test_delete_package_failed(self, mock_unregister_package_name):
         mock_unregister_package_name.return_value.status_code = 500
-        mock_unregister_package_name.return_value.json = {
+        mock_unregister_package_name.return_value.json = lambda: {
             "error-list": [{"message": "test-error"}]
         }
         res = self.client.delete("/packages/test-package")
