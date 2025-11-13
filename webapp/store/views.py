@@ -7,7 +7,7 @@ from canonicalwebteam.flask_base.decorators import (
 from canonicalwebteam.exceptions import StoreApiResponseErrorList
 from flask import Blueprint, Response, abort, url_for
 from flask import jsonify, redirect, render_template, request, make_response
-from pybadges import badge
+from badgepy import badge
 
 from redis_cache.cache_utility import redis_cache
 from webapp.store_api import publisher_gateway
