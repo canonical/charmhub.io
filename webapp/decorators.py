@@ -3,7 +3,6 @@ import os
 import functools
 import logging
 from datetime import datetime, timezone
-from distutils.util import strtobool
 
 # Third party packages
 import flask
@@ -11,6 +10,11 @@ from webapp import authentication
 from webapp.helpers import param_redirect_capture, param_redirect_exec
 
 logger = logging.getLogger(__name__)
+
+
+def strtobool(s: str) -> bool:
+    """Convert a string representation of truth to true (1) or false (0)."""
+    return s.lower() in ("yes", "true", "on", "1")
 
 
 def cached_redirect(func):
