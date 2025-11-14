@@ -788,7 +788,11 @@ def edit_solution_form(hash):
         flash("Solution not found.", "negative")
         return redirect("/solutions")
 
-    if solution.get("status") not in ["draft", "published"]:
+    if solution.get("status") not in [
+        "draft",
+        "published",
+        "pending_metadata_review",
+    ]:
         flash(
             "This solution cannot be edited in its current status.", "negative"
         )
@@ -826,8 +830,13 @@ def submit_edit_solution(hash):
         flash("Solution not found.", "negative")
         return redirect("/solutions")
 
-    # Check if solution can be edited (only draft or published solutions)
-    if solution.get("status") not in ["draft", "published"]:
+    # Check if solution can be edited
+    # (only draft, published, or pending_metadata_review solutions)
+    if solution.get("status") not in [
+        "draft",
+        "published",
+        "pending_metadata_review",
+    ]:
         flash(
             "This solution cannot be edited in its current status.", "negative"
         )
