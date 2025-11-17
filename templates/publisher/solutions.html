@@ -115,7 +115,7 @@
               </td>
               <td role="gridcell" aria-label="actions">
                 <a href="/solutions/preview/{{ solution.hash }}" class="p-button--base is-dense">Preview</a>
-                {% if solution.status in ['draft', 'published'] %}
+                {% if solution.status in ['draft', 'published', 'pending_metadata_review'] %}
                   <a href="/solutions/edit/{{ solution.hash }}" class="p-button--base is-dense">Edit</a>
                 {% endif %}
               </td>

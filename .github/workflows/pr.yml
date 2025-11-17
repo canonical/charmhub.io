@@ -61,7 +61,6 @@ jobs:
       - name: Pack rock
         run: rockcraft pack
 
-
   check-prettier:
     runs-on: ubuntu-latest
 
@@ -90,7 +89,7 @@ jobs:
       - uses: actions/setup-python@v5
         if: ${{ steps.filter.outputs.py == 'true' }}
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Install Python dependencies
         if: ${{ steps.filter.outputs.py == 'true' }}
@@ -166,7 +165,7 @@ jobs:
       - uses: actions/setup-python@v5
         if: ${{ steps.filter.outputs.py == 'true' }}
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Install Python dependencies
         if: ${{ steps.filter.outputs.py == 'true' }}
@@ -179,7 +178,7 @@ jobs:
         if: ${{ steps.filter.outputs.py == 'true' }}
         run: |
           SECRET_KEY=insecure_secret_key coverage run  --source=. -m unittest discover tests
-          
+
       - name: Upload coverage to Codecov
         if: ${{ steps.filter.outputs.py == 'true' }}
         uses: codecov/codecov-action@v5
