@@ -1,3 +1,6 @@
+// This same code can be found duplicated in snapcraft.io
+// If you modify these files for some reason it is likely that you will also need to modify snapcraft.io's ones
+
 import setupLogin from "./login";
 
 import { createNav as createAllCanonicalNav } from "@canonical/global-nav";
