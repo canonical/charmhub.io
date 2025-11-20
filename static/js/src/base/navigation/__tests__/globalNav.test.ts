@@ -1,15 +1,13 @@
 import "@testing-library/jest-dom";
 
 import "./navigationTemplate";
-import { getNavigationTemplate } from "./navigationTemplate";
+import setUpNavigation from "./navigationTemplate";
 import { patchAllCanonicalMobileMarkup } from "../globalNav";
 
 describe("patchAllCanonicalMobileMarkup", () => {
   beforeEach(() => {
     jest.resetModules();
-    document.body.innerHTML = "";
-    // base navigation template (keeps tests meaningful)
-    document.body.appendChild(getNavigationTemplate());
+    setUpNavigation();
   });
 
   test("adds Back button items to mobile sections", () => {

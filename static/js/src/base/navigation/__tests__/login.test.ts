@@ -1,15 +1,14 @@
 import "@testing-library/jest-dom";
 
 import "./navigationTemplate";
-import { getNavigationTemplate } from "./navigationTemplate";
+import setUpNavigation from "./navigationTemplate";
 
 const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 describe("Navigation login (login.ts)", () => {
   beforeEach(() => {
     jest.resetModules();
-    document.body.innerHTML = "";
-    document.body.appendChild(getNavigationTemplate());
+    setUpNavigation();
 
     // Mock fetch for each test
     global.fetch = jest.fn(() =>
