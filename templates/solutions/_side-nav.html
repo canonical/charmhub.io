@@ -40,7 +40,7 @@
               <img class="p-card__thumbnail u-vertical-align--middle" src="{{ charm.icon }}" alt="{{ charm.title }}" style="padding-right: 0.5rem;">
             {% endif %}
             <span>
-              <a class="u-vertical-align--middle" href="{{ charm.url }}">{{ (charm.title or charm.name) | truncate(28) }}</a>
+              <a class="u-vertical-align--middle" href="{{ charm.url }}">{{ (charm.title or charm.name) | truncate(27, True, leeway=0) }}</a>
             </span>
           </div>
         {% endfor %}
