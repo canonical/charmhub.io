@@ -1,0 +1,121 @@
+// This same code can be found duplicated in snapcraft.io
+// If you modify this file for some reason it is likely that you will also need to modify snapcraft.io's one
+
+@mixin charmhub-p-navigation {
+  @media (width < $breakpoint-navigation-threshold) {
+    #navigation.p-navigation--sliding {
+      @property --right {
+        inherits: false;
+        initial-value: 0%;
+        syntax: "<percentage>";
+      }
+
+      .p-navigation__nav {
+        display: block;
+        margin-top: 3.5rem;
+        min-width: 100%;
+        position: absolute;
+        transform: translateX(var(--right));
+
+        // same function as for the global-nav dropdown
+        transition: transform 0.333s cubic-bezier(0.215, 0.61, 0.355, 1);
+
+        // starts on the right outside of the screen
+        --right: 110%;
+
+        &--wrapper {
+          position: relative;
+        }
+      }
+
+      .p-navigation__items {
+        padding-bottom: 0;
+        position: static;
+      }
+
+      &.has-menu-open {
+        overflow-x: hidden;
+      }
+
+      &.has-menu-open .p-navigation__nav {
+        --right: 0%;
+      }
+
+      &.menu-closing .p-navigation__nav {
+        --right: 110%;
+      }
+
+      .p-navigation__dropdown {
+        // to match the styling from p-navigation__items coming from vanilla
+        margin-top: -1px;
+
+        &[aria-hidden="false"] {
+          transform: translateX(-100vw);
+        }
+      }
+
+      // fix some stylings from vanilla-framework
+      #all-canonical-mobile {
+        .global-nav__header-link-anchor::after {
+          right: 1rem;
+        }
+      }
+    }
+  }
+
+  @media (min-width: $breakpoint-navigation-threshold) {
+    #navigation.p-navigation--sliding {
+      &.has-menu-open {
+        box-shadow: none;
+      }
+
+      @property --up {
+        inherits: false;
+        initial-value: 0%;
+        syntax: "<percentage>";
+      }
+
+      .p-navigation__nav--wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      .p-navigation__item--dropdown-toggle {
+        position: relative;
+      }
+
+      .p-navigation__dropdown--container {
+        // a bit extra % to be able to show the shadow of the box if present
+        clip-path: rect(0 105% 105% 0);
+        display: none;
+        min-width: 100%;
+        position: absolute;
+
+        > .p-navigation__dropdown {
+          display: block;
+          position: static;
+          transform: translateY(calc(-1 * var(--up)));
+
+          // same function as for the global-nav dropdown
+          transition: transform 0.333s cubic-bezier(0.215, 0.61, 0.355, 1);
+
+          &[aria-hidden="true"] {
+            // extra 10% to not let the shadow show underneath the navbar
+            --up: 110%;
+          }
+
+          &[aria-hidden="false"] {
+            --up: 0%;
+          }
+        }
+      }
+
+      .js-animation-playing .p-navigation__dropdown--container,
+      .is-active .p-navigation__dropdown--container {
+        display: block;
+      }
+    }
+  }
+}

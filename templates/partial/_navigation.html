@@ -1,4 +1,9 @@
-<header id="navigation" class="p-navigation is-dark">
+<!--
+  This same code can be found duplicated in snapcraft.io
+  If you modify this file for some reason it is likely that you will also need to modify snapcraft.io's one
+-->
+
+<header id="navigation" class="p-navigation--sliding is-dark">
   <div class="p-navigation__row--25-75">
     <div class="p-navigation__banner">
       <div class="p-navigation__tagged-logo">
@@ -17,78 +22,98 @@
       </ul>
     </div>
     <nav class="p-navigation__nav">
-      <ul class="p-navigation__items">
-        <li class="p-navigation__item">
-          <a class="p-navigation__link" href="http://juju.is/why-juju">How Juju Works</a>
-        </li>
-        <li class="p-navigation__item{% if request.path == '/' %} is-selected{% endif %}">
-          <a class="p-navigation__link" href="/">Charmhub</a>
-        </li>
-        <li class="p-navigation__item--dropdown-toggle" id="community-link">
-          <a class="p-navigation__link" href="#community-link-menu" aria-controls="community-link-menu">Community</a>
-          <ul class="p-navigation__dropdown" id="community-link-menu" aria-hidden="true">
-            <li>
-              <a href="https://discourse.charmhub.io" class="p-navigation__dropdown-item">
-                Discourse forum
-              </a>
-            </li>
-            <li>
-              <a href="https://matrix.to/#/#charmhub:ubuntu.com" class="p-navigation__dropdown-item">
-                Matrix chat
-              </a>
-            </li>
-            <li>
-              <a class="p-navigation__dropdown-item" href="https://juju.is/operator-day">Operator Day</a>
-            </li>
-          </ul>
-        </li>
-        <li class="p-navigation__item">
-          <a class="p-navigation__link" href="https://juju.is/docs">Docs</a>
-        </li>
-        <li class="p-navigation__item">
-          <a class="p-navigation__link" href="https://ubuntu.com/blog/tag/juju">Blog</a>
-        </li>
-      </ul>
-      <ul class="p-navigation__items global-nav">
-        <li class="p-navigation__item js-nav-account" id="user-link">
-          {# Authenticated #}
-          <a href="#user-link-menu" aria-controls="user-link-menu" class="p-navigation__link js-nav-account--authenticated u-hide js-account--name account-name">My account</a>
-          <ul class="p-navigation__dropdown--right" id="user-link-menu" aria-hidden="true">
-            <li>
-              <a href="/charms" class="p-navigation__dropdown-item">My charms and bundles</a>
-            </li>
-            <li>
-              <a href="/logout" class="p-navigation__dropdown-item">Sign out</a>
-            </li>
-          </ul>
-          {# Not authenticated #}
-          <a class="p-navigation__link js-nav-account--notauthenticated" href="/charms">
-            Sign in
-            <i class="p-icon--user is-light"></i>
-          </a>
-        </li>
+      <div class="p-navigation__nav--wrapper">
+        <ul class="p-navigation__items">
           <li class="p-navigation__item">
-            <a href="/all-search"
-               class="js-search-button p-navigation__link--search-toggle"
-               aria-label="Search"></a>
+            <a class="p-navigation__link" href="http://juju.is/why-juju">How Juju Works</a>
           </li>
-      </ul>
-      <div class="p-navigation__search">
-          <form action="/all-search" class="p-search-box is-light">
-            <input type="search"
-                   class="p-search-box__input"
-                   name="q"
-                   placeholder="Search Charmhub"
-                   required=""
-                   aria-label="Search Charmhub" />
-            <button type="reset" class="p-search-box__reset">
-              <i class="p-icon--close"></i>
-            </button>
-            <button type="submit" class="p-search-box__button">
-              <i class="p-icon--search"></i>
-            </button>
-          </form>
+          <li class="p-navigation__item{% if request.path == '/' %} is-selected{% endif %}">
+            <a class="p-navigation__link" href="/">Charmhub</a>
+          </li>
+          <li class="p-navigation__item--dropdown-toggle" id="community-link">
+            <a class="p-navigation__link" href="#community-link-menu" aria-controls="community-link-menu">Community</a>
+            <div class="p-navigation__dropdown--container">
+              <ul class="p-navigation__dropdown" id="community-link-menu" aria-hidden="true">
+                <li class="p-navigation__item--dropdown-close">
+                  <a href="#community-link-menu" aria-controls="community-link-menu" class="p-navigation__link js-back-button">
+                    Back
+                  </a>
+                </li>
+                <li>
+                  <a href="https://discourse.charmhub.io" class="p-navigation__dropdown-item">
+                    Discourse forum
+                  </a>
+                </li>
+                <li>
+                  <a href="https://matrix.to/#/#charmhub:ubuntu.com" class="p-navigation__dropdown-item">
+                    Matrix chat
+                  </a>
+                </li>
+                <li>
+                  <a class="p-navigation__dropdown-item" href="https://juju.is/operator-day">Operator Day</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="p-navigation__item">
+            <a class="p-navigation__link" href="https://juju.is/docs">Docs</a>
+          </li>
+          <li class="p-navigation__item">
+            <a class="p-navigation__link" href="https://ubuntu.com/blog/tag/juju">Blog</a>
+          </li>
+        </ul>
+        <div>
+          <ul class="p-navigation__items global-nav">
+            {# Authenticated #}
+            <li class="p-navigation__item p-navigation__item--dropdown-toggle js-nav-account js-nav-account--authenticated u-hide" id="user-link">
+              <a href="#user-link-menu" aria-controls="user-link-menu" class="p-navigation__link js-account--name account-name">My account</a>
+              <div class="p-navigation__dropdown--container">
+                <ul class="p-navigation__dropdown" id="user-link-menu" aria-hidden="true">
+                  <li class="p-navigation__item--dropdown-close">
+                    <a href="#user-link-menu" aria-controls="user-link-menu" class="p-navigation__link js-back-button">
+                      Back
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/charms" class="p-navigation__dropdown-item">My charms and bundles</a>
+                  </li>
+                  <li>
+                    <a href="/logout" class="p-navigation__dropdown-item">Sign out</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            {# Not authenticated #}
+            <li class="p-navigation__item js-nav-account js-nav-account--notauthenticated" role="menuitem">
+              <a class="p-navigation__link" href="/charms">
+                Sign in
+                <i class="p-icon--user is-light"></i>
+              </a>
+            </li>
+            <li class="p-navigation__item">
+              <a href="/all-search"
+                class="js-search-button p-navigation__link--search-toggle"
+                aria-label="Search"></a>
+            </li>
+          </ul>
+          <div class="p-navigation__search">
+            <form action="/all-search" class="p-search-box is-light">
+              <input type="search"
+                      class="p-search-box__input"
+                      name="q"
+                      placeholder="Search Charmhub"
+                      required=""
+                      aria-label="Search Charmhub" />
+              <button type="reset" class="p-search-box__reset">
+                <i class="p-icon--close"></i>
+              </button>
+              <button type="submit" class="p-search-box__button">
+                <i class="p-icon--search"></i>
+              </button>
+            </form>
+          </div>
         </div>
+      </div>
     </nav>
   </div>
    <div class="p-navigation__search-overlay"></div>

@@ -89,6 +89,8 @@ $breakpoint-navigation-threshold: 1220px; // keep it in sync with juju.is and br
 @include charmhub-publisher;
 @include vf-p-icon-file-blank;
 @include vf-p-icon-repository;
+@import "charmhub_p-navigation";
+@include charmhub-p-navigation;
 
 
 // Remove table row borders

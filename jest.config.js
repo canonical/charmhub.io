@@ -6,7 +6,9 @@ module.exports = {
   },
   coverageReporters: ["html", "cobertura"],
   coverageDirectory: "coverage/js",
-  transformIgnorePatterns: ["node_modules/@canonical/(?!react-components)"],
+  transformIgnorePatterns: [
+    "node_modules/@canonical/(?!(react-components|global-nav))",
+  ],
   moduleNameMapper: {
     "\\.(scss|sass|css)$": "identity-obj-proxy",
   },

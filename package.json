@@ -27,7 +27,7 @@
     "@babel/preset-react": "7.26.3",
     "@babel/preset-typescript": "7.26.0",
     "@canonical/cookie-policy": "3.6.5",
-    "@canonical/global-nav": "3.7.3",
+    "@canonical/global-nav": "3.8.0",
     "@canonical/react-components": "2.16.1",
     "@canonical/store-components": "0.54.2",
     "@sentry/react": "8.48.0",
