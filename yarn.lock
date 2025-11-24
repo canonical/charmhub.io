@@ -1057,10 +1057,10 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-7.1.1.tgz#15e19737d946559289b915e5dad3b4c28407735e"
   integrity sha512-i1L7noDNxtFyL5DmZafWy1wRVhGehQmzZaz1HiN5e7iylJMSZR7ekOV7NsIqa5qBldlLrsKv4HbgFUVlQrz8Mw==
 
-"@canonical/cookie-policy@3.6.5":
-  version "3.6.5"
-  resolved "https://registry.yarnpkg.com/@canonical/cookie-policy/-/cookie-policy-3.6.5.tgz#50d82df6da2970b6b5d78d066dd94fcc1317e591"
-  integrity sha512-CQJKSkuLXhSumkIIw4YPSjR7k9561hZ3EEdMPQTkAVTxXURhm3WzJm/uyrvcAuU/a//jzWa8ScltCaHFBdACew==
+"@canonical/cookie-policy@3.7.4":
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/@canonical/cookie-policy/-/cookie-policy-3.7.4.tgz#612419cb0610f0ca86c6b04df48d48c3b9fc221e"
+  integrity sha512-sDiGXhh1X6SeHy9RgXZm56P+zwGqkTJbqiQg34tkSI8oHPZ/6zWycEoUSR9DX3EaUrKdJtl69rDgM54SyOe5FQ==
 
 "@canonical/global-nav@3.8.0":
   version "3.8.0"
@@ -1068,23 +1068,6 @@
   integrity sha512-ioJE4tUENS2L8ubD/lUAA+CvIrtqXB1RTv89vyAW/6eDJWRW8U9Fks+SdKoeoa/IwOtzSC02AOWTPo7rxgj+Mw==
   dependencies:
     vanilla-framework "4.35.0"
-
-"@canonical/react-components@1.9.0":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@canonical/react-components/-/react-components-1.9.0.tgz#9337b35e632d7419eddf51823a5243156893185e"
-  integrity sha512-CB2xHvGs/KFsCAbh79pSsJfg+j5Pxmye1qXCeAoirTWj1WIwRiDVV32R07Xys/bAafzINy6kStqJHkq8XUld/g==
-  dependencies:
-    "@types/jest" "29.5.12"
-    "@types/node" "20.16.3"
-    "@types/react" "18.3.5"
-    "@types/react-dom" "18.3.0"
-    "@types/react-table" "7.7.20"
-    classnames "2.5.1"
-    jest-environment-jsdom "29.7.0"
-    lodash.isequal "4.5.0"
-    prop-types "15.8.1"
-    react-table "7.8.0"
-    react-useportal "1.0.19"
 
 "@canonical/react-components@2.16.1":
   version "2.16.1"
@@ -1102,12 +1085,28 @@
     prop-types "15.8.1"
     react-table "7.8.0"
 
-"@canonical/store-components@0.54.2":
-  version "0.54.2"
-  resolved "https://registry.yarnpkg.com/@canonical/store-components/-/store-components-0.54.2.tgz#d281835da2519530dda2b0b4faeaa6d10dac86ce"
-  integrity sha512-FzKAHNk1d0knvICPpOcis0fGnDU3ozJ4Fnx+X6iXX5K82ZKXB5bCYlcOPwKFmuSpbvjGkpM08WS2xBqHLgn1bw==
+"@canonical/react-components@3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@canonical/react-components/-/react-components-3.6.0.tgz#59a1c48ad6c0d4425e1a7a0f96b7d3e5d592b1bd"
+  integrity sha512-yEj3RIQJgMSJUF3Anxz3JmxGFCZ80hL1qCWL1BaBiIPwvltIEp55NvFd6k79Rbwts9dJJMP+7xSs7f40fbtj9w==
   dependencies:
-    "@canonical/react-components" "1.9.0"
+    "@types/jest" "29.5.14"
+    "@types/node" "20.17.19"
+    "@types/react" "19.0.10"
+    "@types/react-dom" "19.0.4"
+    "@types/react-table" "7.7.20"
+    classnames "2.5.1"
+    fast-deep-equal "3.1.3"
+    jest-environment-jsdom "29.7.0"
+    prop-types "15.8.1"
+    react-table "7.8.0"
+
+"@canonical/store-components@0.55.0":
+  version "0.55.0"
+  resolved "https://registry.yarnpkg.com/@canonical/store-components/-/store-components-0.55.0.tgz#4ca8d7813f1c61a687ae9e8242557a9d0fa82c63"
+  integrity sha512-h5BJcBJ/13zzd86QspTdpX8FOdCh/lzoW3EZLjTt/eyj7DRKaDMbjIjHtkK6K6D/CvBTkKfQgwwUIyhTjkXvPA==
+  dependencies:
+    "@canonical/react-components" "3.6.0"
     "@types/jest" "27.5.2"
     "@types/node" "18.19.71"
     "@types/react" "17.0.83"
@@ -2149,14 +2148,6 @@
     jest-matcher-utils "^27.0.0"
     pretty-format "^27.0.0"
 
-"@types/jest@29.5.12":
-  version "29.5.12"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.5.12.tgz#7f7dc6eb4cf246d2474ed78744b05d06ce025544"
-  integrity sha512-eDC8bTvT/QhYdxJAulQikueigY5AsdBRH2yDKW3yveW7svY3+DzN84/2NUgkw10RTiJbWqZrTtoGVdYlvFJdLw==
-  dependencies:
-    expect "^29.0.0"
-    pretty-format "^29.0.0"
-
 "@types/jest@29.5.14":
   version "29.5.14"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.5.14.tgz#2b910912fa1d6856cadcd0c1f95af7df1d6049e5"
@@ -2205,13 +2196,6 @@
   dependencies:
     undici-types "~5.26.4"
 
-"@types/node@20.16.3":
-  version "20.16.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.16.3.tgz#7b4f9a37091cf03a0c2561bf76a9a55f03f4f523"
-  integrity sha512-/wdGiWRkMOm53gAsSyFMXFZHbVg7C6CbkrzHNpaHoYfsUWPg7m6ZRKtvQjgvQ9i8WT540a3ydRlRQbxjY30XxQ==
-  dependencies:
-    undici-types "~6.19.2"
-
 "@types/node@20.17.19":
   version "20.17.19"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-20.17.19.tgz#0f2869555719bef266ca6e1827fcdca903c1a697"
@@ -2224,7 +2208,7 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.14.tgz#1433419d73b2a7ebfc6918dcefd2ec0d5cd698f2"
   integrity sha512-gNMvNH49DJ7OJYv+KAKn0Xp45p8PLl6zo2YnvDIbTd4J6MER2BmWN49TG7n9LvkyihINxeKW8+3bfS2yDC9dzQ==
 
-"@types/react-dom@17.0.26", "@types/react-dom@18.3.0", "@types/react-dom@18.3.5", "@types/react-dom@19.0.4":
+"@types/react-dom@17.0.26", "@types/react-dom@18.3.5", "@types/react-dom@19.0.4":
   version "18.3.5"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.3.5.tgz#45f9f87398c5dcea085b715c58ddcf1faf65f716"
   integrity sha512-P4t6saawp+b/dFrUr2cvkVsfvPguwsxtH6dNIYRllMsefqFzkZk5UIjzyDOv5g1dXIPdG4Sp1yCR4Z6RCUsG/Q==
@@ -2236,7 +2220,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@17.0.83", "@types/react@18.3.18", "@types/react@18.3.5", "@types/react@19.0.10":
+"@types/react@*", "@types/react@17.0.83", "@types/react@18.3.18", "@types/react@19.0.10":
   version "18.3.18"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.18.tgz#9b382c4cd32e13e463f97df07c2ee3bbcd26904b"
   integrity sha512-t4yC+vtgnkYjNSKlFx1jkAhH8LgTo2N/7Qvi83kdEaUtMDiwpbLAktKDaAMlRcJ5eSxZkH74eEGt1ky31d7kfQ==
@@ -6059,11 +6043,6 @@ lodash.debounce@^4.0.8:
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
   integrity sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==
 
-lodash.isequal@4.5.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
-  integrity sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==
-
 lodash.merge@^4.6.2:
   version "4.6.2"
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
@@ -8478,15 +8457,15 @@ v8-to-istanbul@^9.0.1:
     "@types/istanbul-lib-coverage" "^2.0.1"
     convert-source-map "^2.0.0"
 
-vanilla-framework@4.34.1:
-  version "4.34.1"
-  resolved "https://registry.yarnpkg.com/vanilla-framework/-/vanilla-framework-4.34.1.tgz#99da5661c10fa1539b263b87df9b455cc09761f6"
-  integrity sha512-ycuVdn0yYsDuRbMD7mTbGPQ2r8y0FtL601Sa0id5ozHS24wzBd7Yp1w1TLYprvP5q7dCO5r6fne/k/bw08e0tg==
-
 vanilla-framework@4.35.0:
   version "4.35.0"
   resolved "https://registry.yarnpkg.com/vanilla-framework/-/vanilla-framework-4.35.0.tgz#b01bbb525ad3211690c9f10580ca2e00a37a8ab1"
   integrity sha512-vF8M9vsXiOpJEonFXiTVhY0rXOzNtoWpkhBcCVpyPb4+oHBx0/FaNcX5GAiQpfdT6Q/AAeRYyWwRUDObq6R8uw==
+
+vanilla-framework@4.37.1:
+  version "4.37.1"
+  resolved "https://registry.yarnpkg.com/vanilla-framework/-/vanilla-framework-4.37.1.tgz#55b1ab2c8119d3668c2d613c151f0647b8941cca"
+  integrity sha512-03ovgbZxa1x/3OI3MjVENILXUSEU4VTtYRVuS72XAgyJ1pdjSvsR2C7q0uLkvL/1kC73UEVbihz4eGnLN9r/zw==
 
 vfile-location@^5.0.0:
   version "5.0.3"
