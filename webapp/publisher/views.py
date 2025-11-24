@@ -82,7 +82,6 @@ publisher = Blueprint(
 @publisher.route("/account/details")
 @login_required
 def get_account_details():
-
     return render_template("publisher/account-details.html")
 
 
@@ -501,15 +500,9 @@ def post_register_name():
             )
     except StoreApiResponseErrorList as api_response_error_list:
         for error in api_response_error_list.errors:
-            if error["code"] == "api-error":
-                return redirect(
-                    url_for(
-                        ".register_name",
-                        entity_name=data["name"],
-                        invalid_name=True,
-                    )
-                )
-            elif error["code"] == "reserved-name":
+            error_message = error.get("message", "").lower()
+
+            if error["code"] == "reserved-name":
                 return redirect(
                     url_for(
                         ".register_name",
@@ -533,6 +526,27 @@ def post_register_name():
                         already_owned=True,
                     )
                 )
+            elif error["code"] == "api-error":
+                # Check if the error message indicates the name
+                # is already registered. This is because sometimes
+                # the API returns an api-error code for this case.
+                if "already registered" in error_message:
+                    return redirect(
+                        url_for(
+                            ".register_name",
+                            entity_name=data["name"],
+                            already_registered=True,
+                        )
+                    )
+                else:
+                    # Default to invalid name format error
+                    return redirect(
+                        url_for(
+                            ".register_name",
+                            entity_name=data["name"],
+                            invalid_name=True,
+                        )
+                    )
 
     if data["type"] == "charm":
         return redirect("/charms")
@@ -782,7 +796,6 @@ def submit_register_solution():
 @login_required
 @requires_solutions_access
 def edit_solution_form(hash):
-
     solution = get_solution_from_backend(hash)
     if not solution:
         flash("Solution not found.", "negative")
@@ -823,7 +836,6 @@ def cleanup_old_previews():
 @login_required
 @requires_solutions_access
 def submit_edit_solution(hash):
-
     # Get solution data from backend first
     solution = get_solution_from_backend(hash)
     if not solution:
