@@ -10,6 +10,7 @@ from redis_cache.cache_utility import redis_cache
 from webapp.observability.utils import trace_function
 from webapp.store.logic import format_slug
 from webapp.store_api import publisher_gateway
+from webapp.config import CATEGORIES
 
 
 Packages = TypedDict(
@@ -319,8 +320,12 @@ def get_store_categories() -> List[Dict[str, str]]:
         except StoreApiError:
             all_categories = []
 
+        category_map = {cat["slug"]: cat["name"] for cat in CATEGORIES}
+
         for cat in all_categories["categories"]:
-            cat["display_name"] = format_slug(cat["name"])
+            cat["display_name"] = category_map.get(
+                cat["name"], format_slug(cat["name"])
+            )
 
         categories = list(
             filter(
