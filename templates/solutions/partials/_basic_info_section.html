@@ -78,6 +78,11 @@
       required
       value="{{ form_value(form_data, solution, 'icon', 'media.icon') | e }}"
     >
-    <p class="p-form-help-text">URL to the icon on Asset Manager</p>
+    <p class="p-form-help-text">URL to the icon on <a href="https://assets.ubuntu.com/manager/create" target="_blank">Asset Manager</a>
+      <span class="p-tooltip--right" aria-describedby="rght">
+        <i class="p-icon--information"></i>
+        <span class="p-tooltip__message" role="tooltip" id="rght">Upload your asset to the Canonical Asset Manager and paste the Asset link provided here.</span>
+      </span>
+    </p>
   </div>
 </div>
