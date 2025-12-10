@@ -331,6 +331,7 @@ def details_overview(entity_name):
     context["package_type"] = package["type"]
     context["doc_url"] = doc
     context["is_rtd"] = is_rtd
+    context["has_sbom"] = True
     redis_cache.set(key, context, ttl=3600)
     return render_template("details/overview.html", **context)
 
