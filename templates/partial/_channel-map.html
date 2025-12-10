@@ -49,7 +49,7 @@
                 {% if package.type == "charm" %}
                   <th>Runs on</th>
                 {% endif %}
-                {% if has_sbom %}
+                {% if has_sboms %}
                   <th>Download SBOM</th>
                 {% endif %}
               </tr>
@@ -71,7 +71,7 @@
                     </div>
                   </td>
                 {% endif %}
-                {% if has_sbom %}
+                {% if has_sboms %}
                   <td data-heading="Download SBOM">Not available</td>
                 {% endif %}
               </tr>
