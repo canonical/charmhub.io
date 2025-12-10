@@ -197,6 +197,7 @@ def get_package(entity_name, channel_request=None, fields=FIELDS, path=None):
     return package
 
 
+@trace_function
 def package_has_sboms(revisions, package_id):
     if not revisions:
         return False
