@@ -197,6 +197,23 @@ def get_package(entity_name, channel_request=None, fields=FIELDS, path=None):
     return package
 
 
+def package_has_sboms(revisions, package_id):
+    if not revisions:
+        return False
+
+    sbom_path = f"download/sbom_snap_{package_id}_{revisions[0]}.spdx2.3.json"
+    endpoint = device_gateway_sbom.get_endpoint_url(sbom_path)
+
+    res = requests.head(endpoint)
+
+    # backend returns 302 instead of 200 for a successful request
+    # adding the check for 200 in case this is changed without us knowing
+    if res.status_code == 200 or res.status_code == 302:
+        return True
+
+    return False
+
+
 @trace_function
 @store.route("/download/sbom_charm_<package_id>_<revision>.spdx2.3.json")
 def get_sbom(package_id, revision):
