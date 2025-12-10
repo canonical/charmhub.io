@@ -356,12 +356,16 @@ def details_overview(entity_name):
         description = logic.get_description(package, parse_to_html=True)
         summary = logic.get_summary(package)
 
+    revisions = logic.get_revisions(package["channel-map"])
+
     context["description"] = description
     context["summary"] = summary
     context["package_type"] = package["type"]
     context["doc_url"] = doc
     context["is_rtd"] = is_rtd
-    context["has_sboms"] = package_has_sboms([], context["package"]["id"])
+    context["has_sboms"] = package_has_sboms(
+        revisions, context["package"]["id"]
+    )
     redis_cache.set(key, context, ttl=3600)
     return render_template("details/overview.html", **context)
 
