@@ -7,6 +7,7 @@ from canonicalwebteam.flask_base.decorators import (
 from canonicalwebteam.exceptions import StoreApiResponseErrorList
 from flask import Blueprint, Response, abort, url_for
 from flask import jsonify, redirect, render_template, request, make_response
+import requests
 from badgepy import badge
 
 from redis_cache.cache_utility import redis_cache
@@ -20,7 +21,7 @@ from webapp.helpers import discourse_api, markdown_to_html
 from webapp.store import logic
 from webapp.config import SEARCH_FIELDS
 from webapp.observability.utils import trace_function
-from webapp.store_api import device_gateway
+from webapp.store_api import device_gateway, device_gateway_sbom
 
 
 store = Blueprint(
@@ -194,6 +195,17 @@ def get_package(entity_name, channel_request=None, fields=FIELDS, path=None):
         )
     redis_cache.set(key, package, ttl=600)
     return package
+
+
+@trace_function
+@store.route("/download/sbom_charm_<package_id>_<revision>.spdx2.3.json")
+def get_sbom(package_id, revision):
+    sbom_path = f"download/sbom_charm_{package_id}_{revision}.spdx2.3.json"
+    endpoint = device_gateway_sbom.get_endpoint_url(sbom_path)
+
+    res = requests.get(endpoint)
+
+    return jsonify(res.json())
 
 
 @trace_function
