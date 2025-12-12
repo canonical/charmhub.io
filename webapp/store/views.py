@@ -202,8 +202,10 @@ def package_has_sboms(revisions, package_id):
     if not revisions:
         return False
 
-    sbom_path = f"download/sbom_snap_{package_id}_{revisions[0]}.spdx2.3.json"
+    sbom_path = f"download/sbom_charm_{package_id}_{revisions[0]}.spdx2.3.json"
     endpoint = device_gateway_sbom.get_endpoint_url(sbom_path)
+
+    print("ENDPOINT", endpoint)
 
     res = requests.head(endpoint)
 
