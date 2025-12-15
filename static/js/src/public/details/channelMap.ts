@@ -53,8 +53,13 @@ const init = (packageName: string, channelMapButton: HTMLElement) => {
           const res = await fetch(sbomUrl, { method: "HEAD" });
 
           if (res.status === 200) {
-            const link = `<a href="${sbomUrl}" download><i class="p-icon--begin-downloading"></i>&nbsp;SPDX file</a>`;
-            cell.innerHTML = link;
+            const link = document.createElement("a");
+            link.setAttribute("href", sbomUrl);
+            link.setAttribute("download", "");
+            link.innerHTML =
+              "<i class='p-icon--begin-downloading'></i>&nbsp;SPDX file";
+            cell.innerHTML = "";
+            cell.appendChild(link);
           } else {
             cell.innerHTML = "Not available";
           }
