@@ -72,7 +72,13 @@
                   </td>
                 {% endif %}
                 {% if has_sboms %}
-                  <td data-heading="Download SBOM">Not available</td>
+                  <td 
+                    data-heading="Download SBOM" 
+                    data-js="sbom-cell"
+                    data-sbom-url="/download/sbom_charm_{{package.id}}_{{release_data.revision.revision}}.spdx2.3.json"
+                  >
+                    Checking SBOM...
+                  </td>
                 {% endif %}
               </tr>
               {% endfor %}

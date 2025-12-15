@@ -40,7 +40,28 @@ const init = (packageName: string, channelMapButton: HTMLElement) => {
     }
   };
 
+  const channelMapCells: NodeListOf<HTMLElement> = document.querySelectorAll(
+    "[data-js='sbom-cell']"
+  );
+
   const showChannelMap = () => {
+    if (channelMapCells) {
+      channelMapCells.forEach(async (cell) => {
+        const sbomUrl = cell.getAttribute("data-sbom-url");
+
+        if (sbomUrl) {
+          const res = await fetch(sbomUrl, { method: "HEAD" });
+
+          if (res.status === 200) {
+            const link = `<a href="${sbomUrl}" download><i class="p-icon--begin-downloading"></i>&nbsp;SPDX file</a>`;
+            cell.innerHTML = link;
+          } else {
+            cell.innerHTML = "Not available";
+          }
+        }
+      });
+    }
+
     channelMap?.classList.remove("u-hide");
     channelMapButton.setAttribute("aria-expanded", "true");
 
