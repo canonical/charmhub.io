@@ -627,7 +627,7 @@ def get_doc_link(package):
 def get_revisions(channel_maps: list) -> list:
     """Gets a sorted list of unique revisions
 
-    :param channel_map: Channel map list
+    :param channel_maps: Channel map list
 
     :returns: A sorted list of unique revisions
     """

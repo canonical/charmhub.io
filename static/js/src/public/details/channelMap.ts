@@ -45,27 +45,25 @@ const init = (packageName: string, channelMapButton: HTMLElement) => {
   );
 
   const showChannelMap = () => {
-    if (channelMapCells) {
-      channelMapCells.forEach(async (cell) => {
-        const sbomUrl = cell.getAttribute("data-sbom-url");
+    channelMapCells.forEach(async (cell) => {
+      const sbomUrl = cell.getAttribute("data-sbom-url");
 
-        if (sbomUrl) {
-          const res = await fetch(sbomUrl, { method: "HEAD" });
+      if (sbomUrl) {
+        const res = await fetch(sbomUrl, { method: "HEAD" });
 
-          if (res.status === 200) {
-            const link = document.createElement("a");
-            link.setAttribute("href", sbomUrl);
-            link.setAttribute("download", "");
-            link.innerHTML =
-              "<i class='p-icon--begin-downloading'></i>&nbsp;SPDX file";
-            cell.innerHTML = "";
-            cell.appendChild(link);
-          } else {
-            cell.innerHTML = "Not available";
-          }
+        if (res.status === 200) {
+          const link = document.createElement("a");
+          link.setAttribute("href", sbomUrl);
+          link.setAttribute("download", "");
+          link.innerHTML =
+            "<i class='p-icon--begin-downloading'></i>&nbsp;SPDX file";
+          cell.innerHTML = "";
+          cell.appendChild(link);
+        } else {
+          cell.innerHTML = "Not available";
         }
-      });
-    }
+      }
+    });
 
     channelMap?.classList.remove("u-hide");
     channelMapButton.setAttribute("aria-expanded", "true");
