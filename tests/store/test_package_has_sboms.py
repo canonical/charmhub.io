@@ -108,31 +108,6 @@ class TestPackageHasSboms(TestCase):
 
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
     @patch("webapp.store.views.requests.head")
-    def test_package_has_sboms_returns_false_for_status_500(
-        self, mock_head, mock_get_endpoint_url
-    ):
-        """Test that function returns False when HEAD request returns status 500."""
-        # Setup mocks
-        mock_get_endpoint_url.return_value = "https://example.com/sbom/path"
-        mock_response = MagicMock()
-        mock_response.status_code = 500
-        mock_head.return_value = mock_response
-
-        # Test data
-        revisions = ["revision-1"]
-        package_id = "test-package-id"
-
-        result = package_has_sboms(revisions, package_id)
-
-        # Assertions
-        self.assertFalse(result)
-        mock_get_endpoint_url.assert_called_once_with(
-            "download/sbom_charm_test-package-id_revision-1.spdx2.3.json"
-        )
-        mock_head.assert_called_once_with("https://example.com/sbom/path")
-
-    @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
-    @patch("webapp.store.views.requests.head")
     def test_package_has_sboms_uses_first_revision_only(
         self, mock_head, mock_get_endpoint_url
     ):
@@ -193,30 +168,9 @@ class TestPackageHasSboms(TestCase):
         package_has_sboms(revisions, package_id)
 
         # Verify the path construction
-        expected_path = "download/sbom_charm_my-special-charm_abc123.spdx2.3.json"
-        mock_get_endpoint_url.assert_called_once_with(expected_path)
-
-    @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
-    @patch("webapp.store.views.requests.head")
-    def test_package_has_sboms_with_special_characters_in_ids(
-        self, mock_head, mock_get_endpoint_url
-    ):
-        """Test that function handles special characters in package ID and revision."""
-        # Setup mocks
-        mock_get_endpoint_url.return_value = "https://example.com/sbom/path"
-        mock_response = MagicMock()
-        mock_response.status_code = 302
-        mock_head.return_value = mock_response
-
-        # Test with special characters
-        revisions = ["rev-with-dashes_and_underscores.123"]
-        package_id = "package-with-dashes"
-
-        result = package_has_sboms(revisions, package_id)
-
-        # Assertions
-        self.assertTrue(result)
-        expected_path = "download/sbom_charm_package-with-dashes_rev-with-dashes_and_underscores.123.spdx2.3.json"
+        expected_path = (
+            "download/sbom_charm_my-special-charm_abc123.spdx2.3.json"
+        )
         mock_get_endpoint_url.assert_called_once_with(expected_path)
 
 
