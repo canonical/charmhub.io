@@ -10,6 +10,7 @@ from webapp.store.logic import (
     add_store_front_data,
     process_revision,
     add_overlay_data,
+    get_revisions,
 )
 from mock_data.mock_store_logic import (
     sample_channel_map,
@@ -193,11 +194,66 @@ class TestAddOverlayData(TestCase):
     def test_add_overlay_data(self):
         package = {"name": "postgresql-k8s", "other": "test data"}
         result = add_overlay_data(package)
-        self.assertEqual(
-            {"juju_cmd_extra_flags": "--trust"}, result["overlay_data"]
-        )
+        self.assertEqual({"juju_cmd_extra_flags": "--trust"}, result["overlay_data"])
 
     def test_overlay_data_not_needed(self):
         package = {"name": "no-data", "other": "test data"}
         result = add_overlay_data(package)
         self.assertEqual(package, result)
+
+
+class TestGetRevisions(TestCase):
+    def test_get_revisions_sorted_unique(self):
+        """Test that get_revisions returns sorted unique revisions in descending order"""
+        channel_maps = [
+            {"revision": {"revision": 5}, "channel": {"name": "stable"}},
+            {"revision": {"revision": 3}, "channel": {"name": "edge"}},
+            {"revision": {"revision": 8}, "channel": {"name": "candidate"}},
+            {
+                "revision": {"revision": 3},  # Duplicate revision
+                "channel": {"name": "beta"},
+            },
+        ]
+
+        result = get_revisions(channel_maps)
+        expected = [8, 5, 3]  # Sorted in descending order, unique
+
+        self.assertEqual(result, expected)
+
+    def test_get_revisions_single_revision(self):
+        """Test with a single revision"""
+        channel_maps = [{"revision": {"revision": 42}, "channel": {"name": "stable"}}]
+
+        result = get_revisions(channel_maps)
+        expected = [42]
+
+        self.assertEqual(result, expected)
+
+    def test_get_revisions_empty_list(self):
+        """Test with empty channel maps list"""
+        channel_maps = []
+
+        result = get_revisions(channel_maps)
+        expected = []
+
+        self.assertEqual(result, expected)
+
+    def test_get_revisions_all_same_revision(self):
+        """Test with all channel maps having the same revision"""
+        channel_maps = [
+            {"revision": {"revision": 7}, "channel": {"name": "stable"}},
+            {"revision": {"revision": 7}, "channel": {"name": "candidate"}},
+            {"revision": {"revision": 7}, "channel": {"name": "edge"}},
+        ]
+
+        result = get_revisions(channel_maps)
+        expected = [7]  # Only one unique revision
+
+        self.assertEqual(result, expected)
+
+    def test_get_revisions_with_sample_data(self):
+        """Test with existing sample channel map data"""
+        result = get_revisions(sample_channel_map)
+        expected = [2, 1]  # Based on sample_channel_map revisions
+
+        self.assertEqual(result, expected)
