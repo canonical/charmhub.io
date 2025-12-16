@@ -15,7 +15,9 @@ class TestGetSbom(TestCase):
 
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
     @patch("webapp.store.views.requests.get")
-    def test_get_sbom_successful_response(self, mock_get, mock_get_endpoint_url):
+    def test_get_sbom_successful_response(
+        self, mock_get, mock_get_endpoint_url
+    ):
         """Test successful SBOM retrieval with valid JSON response."""
         # Setup mocks
         mock_endpoint = "https://example.com/sbom/endpoint"
@@ -42,7 +44,9 @@ class TestGetSbom(TestCase):
         mock_get.return_value = mock_response
 
         # Make request
-        response = self.client.get("/download/sbom_charm_test-package_123.spdx2.3.json")
+        response = self.client.get(
+            "/download/sbom_charm_test-package_123.spdx2.3.json"
+        )
 
         # Assertions
         self.assertEqual(response.status_code, 200)
@@ -59,7 +63,9 @@ class TestGetSbom(TestCase):
 
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
     @patch("webapp.store.views.requests.get")
-    def test_get_sbom_with_hyphenated_package_id(self, mock_get, mock_get_endpoint_url):
+    def test_get_sbom_with_hyphenated_package_id(
+        self, mock_get, mock_get_endpoint_url
+    ):
         """Test SBOM retrieval with hyphenated package ID."""
         mock_endpoint = "https://example.com/sbom/endpoint"
         mock_get_endpoint_url.return_value = mock_endpoint
@@ -80,7 +86,9 @@ class TestGetSbom(TestCase):
 
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
     @patch("webapp.store.views.requests.get")
-    def test_get_sbom_with_numeric_revision(self, mock_get, mock_get_endpoint_url):
+    def test_get_sbom_with_numeric_revision(
+        self, mock_get, mock_get_endpoint_url
+    ):
         """Test SBOM retrieval with numeric revision."""
         mock_endpoint = "https://example.com/sbom/endpoint"
         mock_get_endpoint_url.return_value = mock_endpoint
@@ -90,7 +98,9 @@ class TestGetSbom(TestCase):
         mock_response.json.return_value = mock_sbom_data
         mock_get.return_value = mock_response
 
-        response = self.client.get("/download/sbom_charm_testpackage_789.spdx2.3.json")
+        response = self.client.get(
+            "/download/sbom_charm_testpackage_789.spdx2.3.json"
+        )
 
         self.assertEqual(response.status_code, 200)
 
@@ -118,7 +128,9 @@ class TestGetSbom(TestCase):
 
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
     @patch("webapp.store.views.requests.get")
-    def test_get_sbom_complex_json_response(self, mock_get, mock_get_endpoint_url):
+    def test_get_sbom_complex_json_response(
+        self, mock_get, mock_get_endpoint_url
+    ):
         """Test SBOM retrieval with complex nested JSON response."""
         mock_endpoint = "https://example.com/sbom/endpoint"
         mock_get_endpoint_url.return_value = mock_endpoint
@@ -147,7 +159,7 @@ class TestGetSbom(TestCase):
                         {
                             "referenceCategory": "SECURITY",
                             "referenceType": "cpe23Type",
-                            "referenceLocator": "cpe:2.3:a:vendor:package2:2.1.0:*:*:*:*:*:*:*",
+                            "referenceLocator": "cpe:2.3",
                         }
                     ],
                 },
@@ -209,7 +221,9 @@ class TestGetSbom(TestCase):
         mock_get.return_value = mock_response
 
         # The function doesn't handle JSON decode errors
-        response = self.client.get("/download/sbom_charm_invalid-json_777.spdx2.3.json")
+        response = self.client.get(
+            "/download/sbom_charm_invalid-json_777.spdx2.3.json"
+        )
 
         # Flask will return 500 for unhandled exceptions
         self.assertEqual(response.status_code, 500)
@@ -226,7 +240,11 @@ class TestGetSbom(TestCase):
 
             # Test various package ID and revision combinations
             test_cases = [
-                ("simple", "123", "download/sbom_charm_simple_123.spdx2.3.json"),
+                (
+                    "simple",
+                    "123",
+                    "download/sbom_charm_simple_123.spdx2.3.json",
+                ),
                 (
                     "hyphen-package",
                     "456",
@@ -237,18 +255,24 @@ class TestGetSbom(TestCase):
                     "789",
                     "download/sbom_charm_under_score_789.spdx2.3.json",
                 ),
-                ("mixedCase", "abc", "download/sbom_charm_mixedCase_abc.spdx2.3.json"),
+                (
+                    "mixedCase",
+                    "abc",
+                    "download/sbom_charm_mixedCase_abc.spdx2.3.json",
+                ),
             ]
 
-            for package_id, revision, expected_path in test_cases:
-                with self.subTest(package_id=package_id, revision=revision):
+            for id, revision, expected_path in test_cases:
+                with self.subTest(package_id=id, revision=revision):
                     mock_get_endpoint_url.reset_mock()
 
                     self.client.get(
-                        f"/download/sbom_charm_{package_id}_{revision}.spdx2.3.json"
+                        f"/download/sbom_charm_{id}_{revision}.spdx2.3.json"
                     )
 
-                    mock_get_endpoint_url.assert_called_once_with(expected_path)
+                    mock_get_endpoint_url.assert_called_once_with(
+                        expected_path
+                    )
 
     def test_get_sbom_route_pattern_matching(self):
         """Test that the route correctly matches expected URL patterns."""
@@ -277,7 +301,7 @@ class TestGetSbom(TestCase):
                 # Invalid URLs that should NOT match the route
                 invalid_urls = [
                     "/download/sbom_charm_.spdx2.3.json",  # empty package_id
-                    "/download/sbom_charm_test_.spdx2.3.json",  # empty revision
+                    "/download/sbom_charm_test_.spdx2.3.json",  # empty rev
                     "/download/sbom_test_123.spdx2.3.json",  # wrong prefix
                     "/download/sbom_charm_test_123.json",  # wrong extension
                 ]

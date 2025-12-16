@@ -194,7 +194,9 @@ class TestAddOverlayData(TestCase):
     def test_add_overlay_data(self):
         package = {"name": "postgresql-k8s", "other": "test data"}
         result = add_overlay_data(package)
-        self.assertEqual({"juju_cmd_extra_flags": "--trust"}, result["overlay_data"])
+        self.assertEqual(
+            {"juju_cmd_extra_flags": "--trust"}, result["overlay_data"]
+        )
 
     def test_overlay_data_not_needed(self):
         package = {"name": "no-data", "other": "test data"}
@@ -204,7 +206,7 @@ class TestAddOverlayData(TestCase):
 
 class TestGetRevisions(TestCase):
     def test_get_revisions_sorted_unique(self):
-        """Test that get_revisions returns sorted unique revisions in descending order"""
+        """Test that get_revisions returns sorted unique revisions"""
         channel_maps = [
             {"revision": {"revision": 5}, "channel": {"name": "stable"}},
             {"revision": {"revision": 3}, "channel": {"name": "edge"}},
@@ -222,7 +224,9 @@ class TestGetRevisions(TestCase):
 
     def test_get_revisions_single_revision(self):
         """Test with a single revision"""
-        channel_maps = [{"revision": {"revision": 42}, "channel": {"name": "stable"}}]
+        channel_maps = [
+            {"revision": {"revision": 42}, "channel": {"name": "stable"}}
+        ]
 
         result = get_revisions(channel_maps)
         expected = [42]

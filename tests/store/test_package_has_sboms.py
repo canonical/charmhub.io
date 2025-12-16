@@ -36,7 +36,7 @@ class TestPackageHasSboms(TestCase):
     def test_package_has_sboms_returns_true_for_status_200(
         self, mock_head, mock_get_endpoint_url
     ):
-        """Test that function returns True when HEAD request returns status 200."""
+        """Test that function returns True when HEAD request returns 200."""
         # Setup mocks
         mock_get_endpoint_url.return_value = "https://example.com/sbom/path"
         mock_response = MagicMock()
@@ -61,7 +61,7 @@ class TestPackageHasSboms(TestCase):
     def test_package_has_sboms_returns_true_for_status_302(
         self, mock_head, mock_get_endpoint_url
     ):
-        """Test that function returns True when HEAD request returns status 302."""
+        """Test that function returns True when HEAD request returns 302."""
         # Setup mocks
         mock_get_endpoint_url.return_value = "https://example.com/sbom/path"
         mock_response = MagicMock()
@@ -86,7 +86,7 @@ class TestPackageHasSboms(TestCase):
     def test_package_has_sboms_returns_false_for_status_404(
         self, mock_head, mock_get_endpoint_url
     ):
-        """Test that function returns False when HEAD request returns status 404."""
+        """Test that function returns False when HEAD request returns 404."""
         # Setup mocks
         mock_get_endpoint_url.return_value = "https://example.com/sbom/path"
         mock_response = MagicMock()
