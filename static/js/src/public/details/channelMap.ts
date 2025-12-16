@@ -53,10 +53,17 @@ const init = (packageName: string, channelMapButton: HTMLElement) => {
 
         if (res.status === 200) {
           const link = document.createElement("a");
+          const icon = document.createElement("i");
+          const iconText = document.createElement("span");
+
+          icon.className = "p-icon--begin-downloading";
+          iconText.innerText = " SPDX file"; // Leading space is intentional
+
           link.setAttribute("href", sbomUrl);
           link.setAttribute("download", "");
-          link.innerHTML =
-            "<i class='p-icon--begin-downloading'></i>&nbsp;SPDX file";
+          link.appendChild(icon);
+          link.appendChild(iconText);
+
           cell.innerHTML = "";
           cell.appendChild(link);
         } else {
