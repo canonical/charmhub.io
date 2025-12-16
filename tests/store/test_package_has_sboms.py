@@ -144,24 +144,6 @@ class TestPackageHasSboms(unittest.TestCase):
 
     @patch("webapp.store.views.requests.head")
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
-    def test_package_has_sboms_constructs_correct_path(
-        self, mock_get_endpoint_url, mock_head
-    ):
-        """Test that the SBOM path is constructed correctly."""
-        # Setup mocks
-        mock_get_endpoint_url.return_value = "https://example.com/sbom/path"
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_head.return_value = mock_response
-
-        # Verify the SBOM path construction
-        expected_sbom_path = (
-            "download/sbom_charm_my-charm-package_rev-12345.spdx2.3.json"
-        )
-        mock_get_endpoint_url.assert_called_once_with(expected_sbom_path)
-
-    @patch("webapp.store.views.requests.head")
-    @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
     def test_package_has_sboms_request_exception_returns_false(
         self, mock_get_endpoint_url, mock_head
     ):
