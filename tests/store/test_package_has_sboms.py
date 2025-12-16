@@ -154,11 +154,6 @@ class TestPackageHasSboms(unittest.TestCase):
         mock_response.status_code = 200
         mock_head.return_value = mock_response
 
-        revisions = ["rev-12345"]
-        package_id = "my-charm-package"
-
-        result = package_has_sboms(revisions, package_id)
-
         # Verify the SBOM path construction
         expected_sbom_path = (
             "download/sbom_charm_my-charm-package_rev-12345.spdx2.3.json"
