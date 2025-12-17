@@ -623,7 +623,6 @@ def get_doc_link(package):
     return docs
 
 
-@trace_function
 def get_revisions(channel_maps: list) -> list:
     """Gets a sorted list of unique revisions
 
