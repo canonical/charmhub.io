@@ -49,6 +49,9 @@
                 {% if package.type == "charm" %}
                   <th>Runs on</th>
                 {% endif %}
+                {% if has_sboms %}
+                  <th>Download SBOM</th>
+                {% endif %}
               </tr>
             </thead>
             <tbody>
@@ -66,6 +69,15 @@
                     <span class="series-tag" data-base-supported-archs="{% for arch in base.architectures %}{{arch}} {% endfor %}" >{{ base.name }}</span>
                         {% endfor %}
                     </div>
+                  </td>
+                {% endif %}
+                {% if has_sboms %}
+                  <td 
+                    data-heading="Download SBOM" 
+                    data-js="sbom-cell"
+                    data-sbom-url="/download/sbom_charm_{{package.id}}_{{release_data.revision.revision}}.spdx2.3.json"
+                  >
+                    Checking SBOM...
                   </td>
                 {% endif %}
               </tr>

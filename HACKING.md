@@ -5,7 +5,7 @@
 To use staging APIs locally you can add the following lines to an `.env.local` file:
 
 ```bash
-DEVICE_GATEWAY_API_URL=https://api.staging.snapcraft.io/
+DEVICEGW_URL=https://api.staging.snapcraft.io/
 PUBLISHER_GATEWAY_API_URL=https://api.staging.charmhub.io/
 CANDID_API_URL=https://api.staging.jujucharms.com/identity/
 ```

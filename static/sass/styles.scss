@@ -90,6 +90,7 @@ $breakpoint-navigation-threshold: 1220px; // keep it in sync with juju.is and br
 @include vf-p-icon-file-blank;
 @include vf-p-icon-repository;
 @include vf-p-icon-fork;
+@include vf-p-icon-begin-downloading;
 @import "charmhub_p-navigation";
 @include charmhub-p-navigation;
 

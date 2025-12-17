@@ -621,3 +621,16 @@ def get_doc_link(package):
     """
     docs = package.get("store_front", {}).get("metadata", {}).get("docs", None)
     return docs
+
+
+def get_revisions(channel_maps: list) -> list:
+    """Gets a sorted list of unique revisions
+
+    :param channel_maps: Channel map list
+
+    :returns: A sorted list of unique revisions
+    """
+    revisions = {
+        channel_map["revision"]["revision"] for channel_map in channel_maps
+    }
+    return list(reversed(sorted(revisions)))

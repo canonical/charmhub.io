@@ -7,6 +7,7 @@ from canonicalwebteam.flask_base.decorators import (
 from canonicalwebteam.exceptions import StoreApiResponseErrorList
 from flask import Blueprint, Response, abort, url_for
 from flask import jsonify, redirect, render_template, request, make_response
+import requests
 from badgepy import badge
 
 from redis_cache.cache_utility import redis_cache
@@ -20,7 +21,7 @@ from webapp.helpers import discourse_api, markdown_to_html
 from webapp.store import logic
 from webapp.config import SEARCH_FIELDS
 from webapp.observability.utils import trace_function
-from webapp.store_api import device_gateway
+from webapp.store_api import device_gateway, device_gateway_sbom
 
 
 store = Blueprint(
@@ -197,6 +198,35 @@ def get_package(entity_name, channel_request=None, fields=FIELDS, path=None):
 
 
 @trace_function
+def package_has_sboms(revisions, package_id):
+    if not revisions:
+        return False
+
+    sbom_path = f"download/sbom_charm_{package_id}_{revisions[0]}.spdx2.3.json"
+    endpoint = device_gateway_sbom.get_endpoint_url(sbom_path)
+
+    res = requests.head(endpoint)
+
+    # backend returns 302 instead of 200 for a successful request
+    # adding the check for 200 in case this is changed without us knowing
+    if res.status_code == 200 or res.status_code == 302:
+        return True
+
+    return False
+
+
+@trace_function
+@store.route("/download/sbom_charm_<package_id>_<revision>.spdx2.3.json")
+def get_sbom(package_id, revision):
+    sbom_path = f"download/sbom_charm_{package_id}_{revision}.spdx2.3.json"
+    endpoint = device_gateway_sbom.get_endpoint_url(sbom_path)
+
+    res = requests.get(endpoint)
+
+    return jsonify(res.json())
+
+
+@trace_function
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>')
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs')
 @store_maintenance
@@ -326,11 +356,16 @@ def details_overview(entity_name):
         description = logic.get_description(package, parse_to_html=True)
         summary = logic.get_summary(package)
 
+    revisions = logic.get_revisions(package["channel-map"])
+
     context["description"] = description
     context["summary"] = summary
     context["package_type"] = package["type"]
     context["doc_url"] = doc
     context["is_rtd"] = is_rtd
+    context["has_sboms"] = package_has_sboms(
+        revisions, context["package"]["id"]
+    )
     redis_cache.set(key, context, ttl=3600)
     return render_template("details/overview.html", **context)
 
