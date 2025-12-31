@@ -43,7 +43,7 @@
     "dompurify": "^3.2.4",
     "expose-loader": "5.0.0",
     "identity-obj-proxy": "3.0.0",
-    "mermaid": "11.4.1",
+    "mermaid": "11.10.0",
     "postcss": "8",
     "postcss-cli": "11.0.0",
     "prettier": "3.4.2",
