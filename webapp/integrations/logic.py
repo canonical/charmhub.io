@@ -8,6 +8,9 @@ from webapp.observability.utils import trace_function
 from webapp.packages.logic import (
     get_package,
 )
+import logging
+
+logger = logging.getLogger(__name__)
 
 GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 
@@ -22,7 +25,7 @@ class Interfaces:
     @property
     def repo(self):
         if self._repo is None:
-            self._repo = github_client.get_repo("canonical/charm-relation-interfaces")
+            self._repo = github_client.get_repo("canonical/charmlibs")
         return self._repo
 
     @trace_function
@@ -32,7 +35,7 @@ class Interfaces:
         if interfaces:
             return interfaces
         try:
-            index = self.repo.get_contents("index.json")
+            index = self.repo.get_contents("interfaces/index.json")
             if isinstance(index, list):
                 index = index[0]
             index_content = index.decoded_content.decode("utf-8")
@@ -50,10 +53,13 @@ class Interfaces:
             return interface
         try:
             interface_versions = self.repo.get_contents(
-                "interfaces/{}".format(interface_name)
+                "interfaces/{}/interface".format(interface_name)
             )
-        except Exception:
+
+        except Exception as e:
+            logger.warning(f"Interface {interface_name} not found: {e}")
             return None
+
         versions = []
         if not isinstance(interface_versions, list):
             interface_versions = [interface_versions]
@@ -66,7 +72,9 @@ class Interfaces:
         latest_version = versions.pop()
 
         latest_version_interface = self.repo.get_contents(
-            "interfaces/{}/{}/interface.yaml".format(interface_name, latest_version)
+            "interfaces/{}/interface/{}/interface.yaml".format(
+                interface_name, latest_version
+            )
         ).decoded_content.decode("utf-8")
         interface = yaml.load(latest_version_interface)
 

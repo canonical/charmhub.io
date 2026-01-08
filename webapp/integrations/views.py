@@ -67,7 +67,9 @@ def fetch_interface_details(interface_name):
             return res
         return None
 
-    readme_path = f"interfaces/{interface_name}/v{interface['version']}/README.md"
+    readme_path = (
+        f"interfaces/{interface_name}/interface/v{interface['version']}/README.md"
+    )
     readme_contentfile = interface_logic.repo.get_contents(readme_path)
     readme = readme_contentfile.decoded_content.decode("utf-8")
     last_modified = datetime.strptime(
