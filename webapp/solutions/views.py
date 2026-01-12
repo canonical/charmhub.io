@@ -39,10 +39,7 @@ def get_charm_data(charm_name):
     if charm["result"].get("media"):
         icon = charm["result"]["media"][0]["url"]
     else:
-        icon = (
-            "https://assets.ubuntu.com/v1/"
-            "be6eb412-snapcraft-missing-icon.svg"
-        )
+        icon = "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg"
 
     return {
         "name": charm_name,
@@ -57,15 +54,11 @@ def get_charm_data(charm_name):
 
 
 def render_solution(solution):
-    solution["description_html"] = markdown_to_html(
-        solution.get("description", "")
-    )
+    solution["description_html"] = markdown_to_html(solution.get("description", ""))
 
     architecture_explanation = ""
     if solution.get("documentation", {}).get("architecture_explanation"):
-        architecture_explanation = solution["documentation"][
-            "architecture_explanation"
-        ]
+        architecture_explanation = solution["documentation"]["architecture_explanation"]
     solution["architecture_explanation_html"] = markdown_to_html(
         architecture_explanation
     )
@@ -88,9 +81,7 @@ def render_solution(solution):
     charm_data_map = {}
     if charm_names:
         with ThreadPoolExecutor(max_workers=8) as executor:
-            futures = {
-                executor.submit(fetch, name): name for name in charm_names
-            }
+            futures = {executor.submit(fetch, name): name for name in charm_names}
             for future in as_completed(futures):
                 name, data = future.result()
                 if data:
@@ -122,7 +113,6 @@ def solution_preview(hash):
 
 @solutions.route("/solutions/preview-draft/<preview_key>")
 def solution_preview_draft(preview_key):
-
     cache_entry = preview_cache.get(preview_key)
     if not cache_entry:
         abort(404)
@@ -139,9 +129,7 @@ def solution_preview_draft(preview_key):
         {
             "title": form_data.get("title", solution.get("title")),
             "summary": form_data.get("summary", solution.get("summary")),
-            "description": form_data.get(
-                "description", solution.get("description")
-            ),
+            "description": form_data.get("description", solution.get("description")),
             "terraform_modules": form_data.get("terraform_modules"),
         }
     )
@@ -174,9 +162,7 @@ def solution_preview_draft(preview_key):
     }
 
     charms_list = form_data.get("charms", [])
-    preview_solution["charms"] = [
-        {"charm_name": charm} for charm in charms_list
-    ]
+    preview_solution["charms"] = [{"charm_name": charm} for charm in charms_list]
 
     preview_solution["use_cases"] = form_data.get("use_cases", [])
     preview_solution["useful_links"] = form_data.get("useful_links", [])

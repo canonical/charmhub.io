@@ -25,9 +25,7 @@ class TestEmailer(unittest.TestCase):
 
         self.emailer.send_email(subject, body, to_email)
 
-        mock_smtp.assert_called_once_with(
-            self.smtp_config.host, self.smtp_config.port
-        )
+        mock_smtp.assert_called_once_with(self.smtp_config.host, self.smtp_config.port)
         mock_server.starttls.assert_called_once()
         mock_server.login.assert_called_with(
             self.smtp_config.username, self.smtp_config.password
@@ -47,9 +45,7 @@ class TestEmailer(unittest.TestCase):
                 context={"name": "Test"},
             )
 
-            mock_render.assert_called_once_with(
-                "template.html", **{"name": "Test"}
-            )
+            mock_render.assert_called_once_with("template.html", **{"name": "Test"})
             mock_server.send_message.assert_called()
 
     def test_validate_config_missing_fields(self):
@@ -92,9 +88,7 @@ class TestEmailer(unittest.TestCase):
                 domain="example.com",
             )
         )
-        message2 = emailer2._create_message(
-            "Sub", "Body", "someone@example.com"
-        )
+        message2 = emailer2._create_message("Sub", "Body", "someone@example.com")
         self.assertTrue(message2["From"].startswith("noreply+"))
 
     def test_send_email_no_configuration(self):

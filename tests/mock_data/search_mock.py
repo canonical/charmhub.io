@@ -40,9 +40,7 @@ sample_docs = {
                 {
                     "content": "Source: https://github.com/juju/juju",
                     "highlights": {
-                        "content": [
-                            "util functions designed to help in creating"
-                        ],
+                        "content": ["util functions designed to help in creating"],
                         "title": ["<span>Test</span> includes"],
                     },
                     "id": "test-includes",
@@ -63,9 +61,7 @@ sample_docs = {
                 {
                     "content": "Source: https://github.com/juju/juju",
                     "highlights": {
-                        "content": [
-                            "Integration <span>test</span> suites are often "
-                        ],
+                        "content": ["Integration <span>test</span> suites are often "],
                         "title": ["Integration <span>test</span> suite"],
                     },
                     "id": "integration-test-suite",
