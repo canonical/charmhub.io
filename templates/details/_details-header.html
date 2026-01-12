@@ -1,4 +1,4 @@
-{% from "details/_package_header.jinja" import package_header %}
+{% from "details/_package_header.html" import package_header %}
 
 <div class="p-strip--light is-shallow">
   {% if request.path.startswith("/kubeflow") and schedule_banner("2023-03-08", "2023-03-22") %}
