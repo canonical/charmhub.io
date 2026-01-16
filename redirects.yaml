@@ -38,3 +38,5 @@ mysql/docs/(?P<path>.*)/?: https://canonical-charmed-mysql.readthedocs-hosted.co
 mysql-k8s/docs/(?P<path>.*)/?: https://canonical-charmed-mysql-k8s.readthedocs-hosted.com/{path}/
 kafka/docs/(?P<path>.*)/?: https://documentation.ubuntu.com/charmed-kafka/3/{path}/
 kafka-k8s/docs/(?P<path>.*)/?: https://documentation.ubuntu.com/charmed-kafka-k8s/3/{path}/
+opensearch/docs: https://canonical-charmed-opensearch.readthedocs-hosted.com/2
+opensearch/docs/(?P<path>.*)/?: https://canonical-charmed-opensearch.readthedocs-hosted.com/2/{path}/
