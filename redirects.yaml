@@ -32,11 +32,17 @@ interfaces/(?P<interface>.*).json: /integrations/{interface}.json
 interfaces/(?P<interface>.*)/(?P<status>.*).json: /integrations/{interface}/{status}.json
 
 # RTD redirects
+postgresql/docs: https://canonical-charmed-postgresql.readthedocs-hosted.com/14
 postgresql/docs/(?P<path>.*)/?: https://canonical-charmed-postgresql.readthedocs-hosted.com/14/{path}/
+postgresql-k8s/docs: https://canonical-charmed-postgresql-k8s.readthedocs-hosted.com/14
 postgresql-k8s/docs/(?P<path>.*)/?: https://canonical-charmed-postgresql-k8s.readthedocs-hosted.com/14/{path}/
+mysql/docs: https://canonical-charmed-mysql.readthedocs-hosted.com/
 mysql/docs/(?P<path>.*)/?: https://canonical-charmed-mysql.readthedocs-hosted.com/{path}/
+mysql-k8s/docs: https://canonical-charmed-mysql-k8s.readthedocs-hosted.com/
 mysql-k8s/docs/(?P<path>.*)/?: https://canonical-charmed-mysql-k8s.readthedocs-hosted.com/{path}/
+kafka/docs: https://documentation.ubuntu.com/charmed-kafka/3
 kafka/docs/(?P<path>.*)/?: https://documentation.ubuntu.com/charmed-kafka/3/{path}/
+kafka-k8s/docs: https://documentation.ubuntu.com/charmed-kafka-k8s/3
 kafka-k8s/docs/(?P<path>.*)/?: https://documentation.ubuntu.com/charmed-kafka-k8s/3/{path}/
 opensearch/docs: https://canonical-charmed-opensearch.readthedocs-hosted.com/2
 opensearch/docs/(?P<path>.*)/?: https://canonical-charmed-opensearch.readthedocs-hosted.com/2/{path}/
