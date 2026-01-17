@@ -24,9 +24,7 @@ class TestDetailsOverview(TestCase):
     @patch("webapp.store.views.get_package_details")
     def test_details_with_readthedocs_link(self, mock_find, mock_cache_get):
         data = copy.deepcopy(sample_package_detail)
-        data["default-release"]["revision"][
-            "metadata-yaml"
-        ] = """
+        data["default-release"]["revision"]["metadata-yaml"] = """
         docs: https://readthedocs.charmhub.io/t/xxx
         """
         mock_find.return_value = data
@@ -49,9 +47,7 @@ class TestDetailsOverview(TestCase):
         mock_process.assert_not_called()
         mock_cache_set.assert_not_called()
 
-    @patch(
-        "webapp.store.logic.process_libraries", return_value=["processed-lib"]
-    )
+    @patch("webapp.store.logic.process_libraries", return_value=["processed-lib"])
     @patch(
         "webapp.store_api.publisher_gateway.get_charm_libraries",
         return_value=["raw-lib"],
@@ -75,9 +71,7 @@ class TestDetailsOverview(TestCase):
         return_value={"name": "test-package"},
     )
     def test_get_package_details_from_cache(self, _, mock_cache_set):
-        result = get_package_details(
-            "test-package", "stable", fields=["result.name"]
-        )
+        result = get_package_details("test-package", "stable", fields=["result.name"])
         self.assertEqual(result, {"name": "test-package"})
         mock_cache_set.assert_not_called()
 
@@ -90,9 +84,7 @@ class TestDetailsOverview(TestCase):
     def test_get_package_details_from_gateway_on_cache_miss(
         self, _, mock_set, mock_publishergw
     ):
-        result = get_package_details(
-            "test-package", "stable", fields=["result.name"]
-        )
+        result = get_package_details("test-package", "stable", fields=["result.name"])
         expected_key = (
             "package_details:test-package",
             {"channel": "stable", "fields": "result.name"},

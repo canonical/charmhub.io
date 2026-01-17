@@ -62,8 +62,7 @@ class Emailer:
             msg["From"] = self.smtp_config.username
         else:
             msg["From"] = (
-                f"noreply+{self.smtp_config.username}"
-                f"@{self.smtp_config.domain}"
+                f"noreply+{self.smtp_config.username}@{self.smtp_config.domain}"
             )
         msg["Subject"] = subject
 
@@ -86,17 +85,11 @@ class Emailer:
         try:
             msg = self._create_message(subject, body, to_email, body_type)
 
-            with smtplib.SMTP(
-                self.smtp_config.host, self.smtp_config.port
-            ) as server:
+            with smtplib.SMTP(self.smtp_config.host, self.smtp_config.port) as server:
                 server.starttls()
-                server.login(
-                    self.smtp_config.username, self.smtp_config.password
-                )
+                server.login(self.smtp_config.username, self.smtp_config.password)
 
-                to_addrs = (
-                    to_email if isinstance(to_email, list) else [to_email]
-                )
+                to_addrs = to_email if isinstance(to_email, list) else [to_email]
                 server.send_message(msg, to_addrs=to_addrs)
 
         except smtplib.SMTPException as e:
@@ -106,18 +99,14 @@ class Emailer:
             logger.error(f"Unexpected error sending email: {e}")
             raise EmailerError(f"Failed to send email: {e}")
 
-    def send_email(
-        self, subject: str, body: str, to_email: Union[str, List[str]]
-    ):
+    def send_email(self, subject: str, body: str, to_email: Union[str, List[str]]):
         Thread(target=self._send, args=(subject, body, to_email)).start()
 
     def send_email_template(
         self, to_email: str, subject: str, template_path: str, context: dict
     ):
         body = render_template(template_path, **context)
-        Thread(
-            target=self._send, args=(subject, body, to_email, "html")
-        ).start()
+        Thread(target=self._send, args=(subject, body, to_email, "html")).start()
 
 
 smtp_config = SMTPConfig(

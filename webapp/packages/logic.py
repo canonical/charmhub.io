@@ -27,11 +27,7 @@ Packages = TypedDict(
 
 Package = TypedDict(
     "Package",
-    {
-        "package": Dict[
-            str, Union[Dict[str, str], List[str], List[Dict[str, str]]]
-        ]
-    },
+    {"package": Dict[str, Union[Dict[str, str], List[str], List[Dict[str, str]]]]},
 )
 
 
@@ -44,9 +40,7 @@ def get_icon(media):
 
 
 @trace_function
-def fetch_packages(
-    fields: List[str], query_params: Dict[str, Any]
-) -> list[Package]:
+def fetch_packages(fields: List[str], query_params: Dict[str, Any]) -> list[Package]:
     """
     Fetches and parses packages from the store API.
 
@@ -136,9 +130,7 @@ def get_bundle_charms(charm_apps):
             # Like: cs:~charmed-osm/mariadb-k8s-35
             name = data["charm"]
             if name.startswith("cs:") or name.startswith("ch:"):
-                name = re.match(r"(?:cs:|ch:)(?:.+/)?(\S*?)(?:-\d+)?$", name)[
-                    1
-                ]
+                name = re.match(r"(?:cs:|ch:)(?:.+/)?(\S*?)(?:-\d+)?$", name)[1]
 
             charm = {"display_name": format_slug(name), "name": name}
 
@@ -218,15 +210,11 @@ def parse_package_for_card(
         default_release = publisher_gateway.get_item_details(
             name, fields=["default-release"]
         )
-        bundle_yaml = default_release["default-release"]["revision"][
-            "bundle-yaml"
-        ]
+        bundle_yaml = default_release["default-release"]["revision"]["bundle-yaml"]
 
         bundle_details = yaml.load(bundle_yaml, Loader=yaml.FullLoader)
         bundle_charms = get_bundle_charms(
-            bundle_details.get(
-                "applications", bundle_details.get("services", [])
-            )
+            bundle_details.get("applications", bundle_details.get("services", []))
         )
         resp["package"]["charms"] = bundle_charms
 

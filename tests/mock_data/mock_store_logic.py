@@ -126,9 +126,7 @@ converted_sample_channel_map = OrderedDict(
                                         "name": "ubuntu",
                                     }
                                 ],
-                                "released_at": (
-                                    "2021-10-21" "T16:45:42.323000+00:00"
-                                ),
+                                "released_at": ("2021-10-21T16:45:42.323000+00:00"),
                                 "release_date": "21 Oct 2021",
                                 "revision": {
                                     "bases": [
@@ -203,39 +201,33 @@ converted_sample_channel_map = OrderedDict(
                                                 }
                                             ],
                                             "released_at": (
-                                                "2021-10-21"
-                                                "T16:45:42.323000+00:00"
+                                                "2021-10-21T16:45:42.323000+00:00"
                                             ),
                                             "release_date": "21 Oct 2021",
                                             "revision": {
                                                 "bases": [
                                                     {
-                                                        "arch"
-                                                        "itecture": "amd64",
+                                                        "architecture": "amd64",
                                                         "channel": "12.04",
                                                         "name": "ubuntu",
                                                     },
                                                     {
-                                                        "arch"
-                                                        "itecture": "arm64",
+                                                        "architecture": "arm64",
                                                         "channel": "12.04",
                                                         "name": "ubuntu",
                                                     },
                                                     {
-                                                        "arch"
-                                                        "itecture": "ppc64el",
+                                                        "architecture": "ppc64el",
                                                         "channel": "12.04",
                                                         "name": "ubuntu",
                                                     },
                                                     {
-                                                        "arch"
-                                                        "itecture": "riscv64",
+                                                        "architecture": "riscv64",
                                                         "channel": "12.04",
                                                         "name": "ubuntu",
                                                     },
                                                     {
-                                                        "arch"
-                                                        "itecture": "s390x",
+                                                        "architecture": "s390x",
                                                         "channel": "12.04",
                                                         "name": "ubuntu",
                                                     },
@@ -293,9 +285,7 @@ converted_sample_channel_map = OrderedDict(
                                         "name": "ubuntu",
                                     }
                                 ],
-                                "released_at": (
-                                    "2022-10-21" "T16:45:42.323000+00:00"
-                                ),
+                                "released_at": ("2022-10-21T16:45:42.323000+00:00"),
                                 "release_date": "21 Oct 2022",
                                 "revision": {
                                     "bases": [
@@ -349,8 +339,7 @@ converted_sample_channel_map = OrderedDict(
                                                 }
                                             ],
                                             "released_at": (
-                                                "2022-10-21"
-                                                "T16:45:42.323000+00:00"
+                                                "2022-10-21T16:45:42.323000+00:00"
                                             ),
                                             "release_date": "21 Oct 2022",
                                             "revision": {
@@ -565,9 +554,7 @@ sample_package_detail = {
         "revision": {
             "actions-yaml": "{}\n",
             "attributes": {"framework": "operator", "language": "python"},
-            "bases": [
-                {"architecture": "amd64", "channel": "22.04", "name": "ubuntu"}
-            ],
+            "bases": [{"architecture": "amd64", "channel": "22.04", "name": "ubuntu"}],
             "bundle-yaml": "{}\n",
             "config-yaml": "{}\n",
             "created-at": "2025-01-17T21:09:54.005947+00:00",
