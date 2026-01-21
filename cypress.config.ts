@@ -1,8 +1,9 @@
 import { defineConfig } from "cypress";
 
 export default defineConfig({
+  viewportWidth: 1036,
   e2e: {
-    setupNodeEvents(on, config) {
+    setupNodeEvents() {
       // implement node event listeners here
     },
     supportFile: false,
@@ -11,7 +12,7 @@ export default defineConfig({
       "analytics.google.com",
       "*.analytics.google.com",
       "www.google-analytics.com",
-      "assets.ubuntu.com"
+      "assets.ubuntu.com",
     ],
   },
 });

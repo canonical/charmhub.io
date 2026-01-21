@@ -1,5 +1,5 @@
 module.exports = {
-  docs: "./static/js/src/public/docs/index.js",
+  docs: "./static/js/src/public/docs/index.js", // unused
   navigation: "./static/js/src/base/navigation/index.ts",
   "docs-side-nav": "./static/js/src/base/docs-side-nav.ts",
   "redirect-docs-url": "./static/js/src/base/redirect-docs-url.ts",
