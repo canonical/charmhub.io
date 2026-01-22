@@ -5,6 +5,7 @@ describe("Test docs-side-nav.js bundle on /nginx-ingress-integrator/docs/getting
     cy.visit(
       "http://localhost:8045/nginx-ingress-integrator/docs/getting-started"
     );
+    cy.get("#cookie-policy-button-accept-all").click();
   });
 
   it("side nav is initialized correctly", () => {
@@ -22,7 +23,7 @@ describe("Test docs-side-nav.js bundle on /nginx-ingress-integrator/docs/getting
         .should("eq", "true");
 
       getDropdown()
-        .click({ force: true })
+        .click()
         .invoke("attr", "aria-expanded")
         .should("eq", "false");
     });
