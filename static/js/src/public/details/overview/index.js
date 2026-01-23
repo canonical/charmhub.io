@@ -1,4 +1,5 @@
 import { truncateString } from "../../../libs/truncate-string";
+import declareGlobal from "../../../libs/declare";
 
 const truncateSummary = (selector) => {
   const summaryEl = document.querySelector(selector);
@@ -63,3 +64,5 @@ const init = () => {
 };
 
 export { init };
+
+declareGlobal("charmhub.details.overview", { init });
