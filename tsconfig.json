@@ -18,12 +18,10 @@
     "isolatedModules": true,
     "noEmit": false,
     "sourceMap": true,
-    "strictPropertyInitialization": false
-  },
-  "include": ["./static/js/"],
-  "paths": [
-    {
+    "strictPropertyInitialization": false,
+    "paths": {
       "*": ["types/*.d.ts"]
     }
-  ]
+  },
+  "include": ["./static/js/"],
 }
