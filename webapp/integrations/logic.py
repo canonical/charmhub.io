@@ -22,9 +22,7 @@ class Interfaces:
     @property
     def repo(self):
         if self._repo is None:
-            self._repo = github_client.get_repo(
-                "canonical/charm-relation-interfaces"
-            )
+            self._repo = github_client.get_repo("canonical/charm-relation-interfaces")
         return self._repo
 
     @trace_function
@@ -68,9 +66,7 @@ class Interfaces:
         latest_version = versions.pop()
 
         latest_version_interface = self.repo.get_contents(
-            "interfaces/{}/{}/interface.yaml".format(
-                interface_name, latest_version
-            )
+            "interfaces/{}/{}/interface.yaml".format(interface_name, latest_version)
         ).decoded_content.decode("utf-8")
         interface = yaml.load(latest_version_interface)
 
@@ -106,13 +102,9 @@ class Interfaces:
 
     @trace_function
     def extract_headings_and_content(self, text, level):
-        headings = re.findall(
-            r"^#{" + str(level) + r"}\s.*", text, flags=re.MULTILINE
-        )
+        headings = re.findall(r"^#{" + str(level) + r"}\s.*", text, flags=re.MULTILINE)
 
-        start_end = {
-            heading: self.get_h_content(text, heading) for heading in headings
-        }
+        start_end = {heading: self.get_h_content(text, heading) for heading in headings}
         result = []
         for i in range(len(headings)):
             current_heading = headings[i]
@@ -167,9 +159,7 @@ class Interfaces:
 
             children = []
 
-            result = self.convert_readme(
-                interface, version, content, level + 1
-            )
+            result = self.convert_readme(interface, version, content, level + 1)
 
             if len(content) > 0:
                 body = content.split("#")[0].strip()
