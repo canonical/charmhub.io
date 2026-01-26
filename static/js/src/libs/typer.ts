@@ -100,9 +100,7 @@ export function createTyper(element: HTMLElement): Typer {
 
       let randomDelay = typer.delay;
       if (p.building) {
-        randomDelay =
-          typer.delay +
-          Math.floor(Math.random() * 2 * typer.delay);
+        randomDelay = typer.delay + Math.floor(Math.random() * 2 * typer.delay);
       }
 
       if (typer.words[w][c] === "") {
@@ -122,6 +120,12 @@ export function createTyper(element: HTMLElement): Typer {
 
   const colors = typer.colors;
   typer.element.style.color = colors[0];
+
+  window.setTimeout(() => {
+    if (typer.typing) {
+      typer.doTyping();
+    }
+  }, 0);
 
   return typer;
 }
@@ -164,7 +168,7 @@ export function TyperSetup() {
           t.element.style.opacity = "1";
           t.on = true;
         }
-      }
+      },
     };
     const owner = typers[e.dataset.owner as string];
     if (owner) {
