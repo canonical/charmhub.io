@@ -50,3 +50,7 @@ To test solutions locally against local solutions service backend, add this to y
 ```
 SOLUTIONS_API_BASE=http://localhost:5000/api
 ```
+
+## Vite setup details
+This project relies on Vite for processing and bundling TypeScript and SCSS source files; referencing these files and the resulting bundles in templates is done through a `vite_import` template function provided by the [Canonical Webteam Flask-Vite integration](https://github.com/canonical/canonicalwebteam.flask-vite) package. The extension is configured via `VITE_*` variables that get loaded into the Flask `app.config` object where the extension reads them from.
+Files referenced via `vite_import` are automatically detected and added as entry points in the Vite config when running the build command.

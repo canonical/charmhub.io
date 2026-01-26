@@ -25,6 +25,7 @@ ADD static/js static/js
 ADD webpack.config.js .
 ADD webpack.config.entry.js .
 ADD webpack.config.rules.js .
+ADD vite.config.js .
 ADD tsconfig.json .
 ADD babel.config.json .
 RUN yarn install
