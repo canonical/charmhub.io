@@ -49,14 +49,3 @@
     </div>
   </div>
 {% endblock %}
-
-{% block page_scripts %}
-  <script src="{{ versioned_static('js/dist/solutions.js') }}" defer></script>
-  {% block solutions_init %}
-  <script>
-    window.addEventListener("DOMContentLoaded", () => {
-      charmhub.solutions.init({{ solution | tojson }});
-    });
-  </script>
-  {% endblock %}
-{% endblock %}
