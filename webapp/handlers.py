@@ -69,6 +69,7 @@ if IS_DEVELOPMENT:
     CSP["connect-src"].append(f"ws://localhost:{VITE_PORT}")
     CSP["style-src"].append(f"localhost:{VITE_PORT}")
 
+
 def charmhub_utility_processor():
     """
     This defines the set of properties and functions that will be added

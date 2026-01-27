@@ -39,7 +39,7 @@ const searchMatches = (pluginConfig) => {
 
   const regexMatches = globMatches
     .map((f) =>
-      Array.from(readFileSync(f).toString().matchAll(regex)).map(matchCallback),
+      Array.from(readFileSync(f).toString().matchAll(regex)).map(matchCallback)
     )
     .flat();
 
@@ -58,7 +58,7 @@ const prettyPrintInput = (input) => {
     "🔍 Detected entry points:\n" +
       input
         .map((file, i) => (i === input.length - 1 ? " └─ " : " ├─ ") + file)
-        .join("\n"),
+        .join("\n")
   );
 };
 
