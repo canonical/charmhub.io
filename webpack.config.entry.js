@@ -11,6 +11,7 @@ module.exports = {
   details_integrations: "./static/js/src/public/details/integrations/index.tsx",
   "store-details": "./static/js/src/public/store-details/index.js",
   topics: "./static/js/src/public/topics/index.js",
+  typer: "./static/js/src/libs/typer.ts",
   "highlight-nav": "./static/js/src/libs/highlight-nav.js",
   "highlight-js": "./static/js/src/base/highlight.js",
   "navigation-events": "./static/js/src/public/navigation-events.ts",
