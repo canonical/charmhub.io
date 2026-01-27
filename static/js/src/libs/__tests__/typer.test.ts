@@ -49,7 +49,7 @@ describe("Create Typer", () => {
   test("should start typing when start() is called", () => {
     const element = document.getElementById("testTyper") as HTMLElement;
     const typer = createTyper(element);
-    
+
     jest.spyOn(typer, "doTyping").mockImplementation(() => {});
 
     typer.start();
@@ -61,7 +61,7 @@ describe("Create Typer", () => {
     const typer = createTyper(element);
 
     jest.spyOn(typer, "doTyping").mockImplementation(() => {});
-    
+
     typer.start();
     expect(typer.typing).toBe(true);
     typer.stop();
@@ -76,18 +76,22 @@ describe("Typer setup", () => {
 
     jest.spyOn(typer, "start").mockImplementation(() => {});
     jest.spyOn(typer, "stop").mockImplementation(() => {});
-      
+
     const startHandler = jest.fn();
     const stopHandler = jest.fn();
-      
-    const startButton = document.querySelector(".typer-start") as HTMLButtonElement;
-    const stopButton = document.querySelector(".typer-stop") as HTMLButtonElement;
-      
+
+    const startButton = document.querySelector(
+      ".typer-start"
+    ) as HTMLButtonElement;
+    const stopButton = document.querySelector(
+      ".typer-stop"
+    ) as HTMLButtonElement;
+
     startButton.addEventListener("click", startHandler);
     stopButton.addEventListener("click", stopHandler);
-      
+
     TyperSetup();
-      
+
     startButton.click();
     stopButton.click();
 
@@ -104,16 +108,16 @@ describe("Cursor functionality", () => {
     const typer = createTyper(element);
 
     if (typer.cursor) {
-    typer.cursor.updateBlinkState();
-    expect(typer.cursor.element.style.opacity).toBe("0");
+      typer.cursor.updateBlinkState();
+      expect(typer.cursor.element.style.opacity).toBe("0");
 
-    jest.advanceTimersByTime(400);
-    expect(typer.cursor.element.style.opacity).toBe("1");
+      jest.advanceTimersByTime(400);
+      expect(typer.cursor.element.style.opacity).toBe("1");
 
-    jest.advanceTimersByTime(400);
-    expect(typer.cursor.element.style.opacity).toBe("0");
+      jest.advanceTimersByTime(400);
+      expect(typer.cursor.element.style.opacity).toBe("0");
     }
 
     jest.useRealTimers();
-  });  
-});    
+  });
+});
