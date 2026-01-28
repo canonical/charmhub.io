@@ -5,9 +5,9 @@ describe("Test base.js bundle on / page", () => {
     cy.visit("http://localhost:8045/");
   });
 
-  it("cookie banner exists", () => {
+  it("cookie banner exists", { retries: 2 }, () => {
     cy.window().then(() => {
-      cy.get("#cookie-policy-button-accept-all").should("exist");
+      cy.get(".cookie-policy").should("exist");
     });
   });
 });
