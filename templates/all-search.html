@@ -1,5 +1,5 @@
 {% extends 'base_layout.html' %}
 
 {% block content %}
-<script src="{{ versioned_static('js/dist/search.js') }}" defer></script>
+{{ vite_import('static/js/src/search/App.tsx') }}
 {% endblock content %}

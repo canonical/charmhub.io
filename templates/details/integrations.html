@@ -7,5 +7,5 @@
 {% endblock %}
 
 {% block details_scripts %}
-<script src="{{ versioned_static('js/dist/details_integrations.js') }}"></script>
+  {{ vite_import('static/js/src/public/details/integrations/index.tsx') }}
 {% endblock %}

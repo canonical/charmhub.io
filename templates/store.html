@@ -6,5 +6,5 @@
 
 {% block content %}
 <main id="root"></main>
-<script src="{{ versioned_static('js/dist/store.js') }}" defer></script>
+{{ vite_import('static/js/src/store/index.tsx') }}
 {% endblock content %}
