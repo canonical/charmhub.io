@@ -45,8 +45,8 @@
 {% endblock %}
 
 {% block page_scripts %}
-  <script src="{{ versioned_static('js/dist/details.js') }}" defer></script>
-  <script src="{{ versioned_static('js/dist/highlight-js.js') }}" defer></script>
+  {{ vite_import('static/js/src/public/details/index.ts') }}
+  {{ vite_import('static/js/src/base/highlight.js') }}
   <script>
     window.addEventListener("DOMContentLoaded", function () {
       charmhub.details.init("{{ package.name }}");
