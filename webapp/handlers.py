@@ -1,5 +1,5 @@
 from flask import render_template, session
-from webapp.config import SENTRY_DSN
+from webapp.config import SENTRY_DSN, IS_DEVELOPMENT, VITE_CONFIG
 
 from canonicalwebteam.exceptions import (
     StoreApiError,
@@ -61,6 +61,13 @@ CSP = {
         "'unsafe-inline'",
     ],
 }
+
+if IS_DEVELOPMENT:
+    VITE_PORT = VITE_CONFIG["VITE_PORT"]
+    CSP["script-src-elem"].append(f"localhost:{VITE_PORT}")
+    CSP["connect-src"].append(f"localhost:{VITE_PORT}")
+    CSP["connect-src"].append(f"ws://localhost:{VITE_PORT}")
+    CSP["style-src"].append(f"localhost:{VITE_PORT}")
 
 
 def charmhub_utility_processor():

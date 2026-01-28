@@ -57,7 +57,7 @@
     "react-router-dom": "7.5.2",
     "recoil": "0.7.7",
     "remark-mermaidjs": "7.0.0",
-    "sass": "1.83.1",
+    "sass-embedded": "1.93.2",
     "style-loader": "4.0.0",
     "ts-loader": "9.5.1",
     "typescript": "5.7.2",

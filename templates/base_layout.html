@@ -48,7 +48,7 @@
 
     <link rel="preconnect" href="https://assets.ubuntu.com">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ versioned_static('css/styles.css') }}" />
+    {{ vite_import('static/sass/styles.scss') }}
 
     <link rel="icon" type="image/png"  href="{{ versioned_static('images/favicon.png') }}" />
 
@@ -73,9 +73,9 @@
 
     {% include 'partial/_footer.html' %}
 
-    <script src="{{ versioned_static('js/dist/base.js') }}"></script>
-    <script src="{{ versioned_static('js/dist/navigation-events.js') }}"></script>
-    <script src="{{ versioned_static('js/dist/navigation.js') }}"></script>
+    {{ vite_import('static/js/src/base/base.js') }}
+    {{ vite_import('static/js/src/public/navigation-events.ts') }}
+    {{ vite_import('static/js/src/base/navigation/index.ts') }}
 
     {% block page_scripts %}{% endblock page_scripts %}
 

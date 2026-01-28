@@ -1,12 +1,18 @@
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig, loadEnv } from "vite";
 import autoprefixer from "autoprefixer";
-import entry from "./webpack.config.entry.js";
+import vitePluginDetectInput from "./vitePluginDetectInput";
 
 const env = loadEnv("all", process.cwd());
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    vitePluginDetectInput({
+      regex: /vite_import\(["'](.+)["']\)/g,
+      glob: "./templates/**/*.html",
+    }),
+    react(),
+  ],
   server: {
     port: env?.VITE_PORT || 5173,
     host: true,
@@ -38,7 +44,6 @@ export default defineConfig({
     sourcemap: "hidden",
     outDir: env?.VITE_OUTDIR || "static/js/dist/vite",
     rollupOptions: {
-      input: entry,
       output: {
         entryFileNames: `[name]--[hash].js`,
         chunkFileNames: `chunks/[name]--[hash].js`,

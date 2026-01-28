@@ -23,7 +23,7 @@ module.exports = [
         options: {
           sassOptions: {
             quietDeps: true,
-            silenceDeprecations: ["import", "global-builtin", "mixed-decls"],
+            silenceDeprecations: ["import", "global-builtin"],
           },
         },
       },

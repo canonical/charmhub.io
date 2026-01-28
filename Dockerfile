@@ -21,13 +21,15 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn yarn install --produc
 # Build stage: Run "yarn run build-js"
 # ===
 FROM yarn-dependencies AS build-js
-ADD static/js static/js
+ADD static static
 ADD webpack.config.js .
 ADD webpack.config.entry.js .
 ADD webpack.config.rules.js .
 ADD vite.config.js .
 ADD tsconfig.json .
 ADD babel.config.json .
+ADD templates templates
+ADD vitePluginDetectInput.js .
 RUN yarn install
 RUN yarn run build-js
 
