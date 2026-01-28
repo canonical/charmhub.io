@@ -40,6 +40,15 @@ export default defineConfig({
       map: false,
     },
   },
+  resolve: {
+    alias: [
+      // by default react-components exports a CJS module that can't be tree-shaken, we consume the ESM instead
+      {
+        find: /^@canonical\/react-components$/,
+        replacement: "@canonical/react-components/dist/esm",
+      },
+    ],
+  },
   base: "./", // use the script's URL path as base when loading assets in dynamic imports
   build: {
     manifest: true,
