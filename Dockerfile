@@ -33,12 +33,6 @@ ADD vitePluginDetectInput.js .
 RUN yarn install
 RUN yarn run build-js
 
-# Build stage: Run "yarn run build-css"
-# ===
-FROM yarn-dependencies AS build-css
-ADD . .
-RUN yarn run build-css
-
 # Set up environment
 ENV LANG C.UTF-8
 WORKDIR /srv
@@ -56,7 +50,6 @@ ENV PATH="/venv/bin:${PATH}"
 ADD . .
 RUN rm -rf package.json yarn.lock babel.config.json webpack.config.js requirements.txt
 COPY --from=build-js /srv/static/js static/js
-COPY --from=build-css /srv/static/css static/css
 
 
 # Setup commands to run server

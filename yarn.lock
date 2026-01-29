@@ -9811,6 +9811,11 @@ vfile@^6.0.0:
     "@types/unist" "^3.0.0"
     vfile-message "^4.0.0"
 
+vite-plugin-prismjs-plus@1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/vite-plugin-prismjs-plus/-/vite-plugin-prismjs-plus-1.0.4.tgz#aa1112e7e2c68bf627a3b3086b9c2d063429df30"
+  integrity sha512-Zce0abH8JWkMl6YRp1mC4P0xQrWPpbqrNHGjcpzgZVxxcpZPOP9QsRUGGAmxHchthuGLqji1+J+NBCAOWRMnRQ==
+
 vite@7.3.1:
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/vite/-/vite-7.3.1.tgz#7f6cfe8fb9074138605e822a75d9d30b814d6507"

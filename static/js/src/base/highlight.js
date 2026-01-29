@@ -1,4 +1,4 @@
-import Prism from "prismjs";
+import Prism from "virtual:prismjs";
 
 window.addEventListener("DOMContentLoaded", () => {
   Prism.highlightAll();

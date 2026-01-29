@@ -43,9 +43,9 @@
 {% endblock %}
 
 {% block details_scripts %}
-  <script src="{{ versioned_static('js/dist/details_overview.js') }}" defer></script>
+  {{ vite_import('static/js/src/public/details/overview/index.js') }}
   {% if package.type == "bundle" %}
-    <script src="{{ versioned_static('js/dist/store-details.js') }}" defer></script>
+    {{ vite_import('static/js/src/public/store-details/index.js') }}
   {% endif %}
   <script>
     window.addEventListener("DOMContentLoaded", function () {

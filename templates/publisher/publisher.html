@@ -5,5 +5,5 @@
     window.CSRF_TOKEN = "{{ csrf_token() }}";
     window.SENTRY_DSN = "{{ SENTRY_DSN }}";
   </script>
-  <script src="{{ versioned_static('js/dist/publisher.js') }}"></script>
+  {{ vite_import('static/js/src/publisher-admin/index.tsx') }}
 {% endblock %}

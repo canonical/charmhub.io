@@ -11,9 +11,9 @@
   <link rel="preconnect" href="https://assets.ubuntu.com">
 
   {% if store_design %}
-  <link rel="stylesheet" type="text/css" media="screen" href="{{url_for('static', filename='css/styles.css')}}" />
+  {{ vite_import('static/sass/styles.scss') }}
   {% else %}
-  <link rel="stylesheet" type="text/css" media="screen" href="{{ versioned_static('css/styles-embedded.css') }}" />
+  {{ vite_import('static/sass/styles-embedded.scss') }}
   {% endif %}
 
   <meta name="description" content="{% block meta_description %}Universal operators for application lifecycle management on Linux, Windows and Kubernetes.{% endblock %}">
@@ -92,7 +92,7 @@
     </a>
   </div>
   {% if package.type == "bundle" %}
-    <script src="{{ versioned_static('js/dist/store-details.js') }}"></script>
+    {{ vite_import('static/js/src/public/store-details/index.js') }}
     <script>
       window.addEventListener("DOMContentLoaded", () => {
         charmhub.store.handleBundleIcons(document.querySelector(".p-card--button"));

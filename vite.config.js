@@ -1,6 +1,7 @@
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig, loadEnv } from "vite";
 import autoprefixer from "autoprefixer";
+import prismjsPlugin from "vite-plugin-prismjs-plus";
 import vitePluginDetectInput from "./vitePluginDetectInput";
 
 const env = loadEnv("all", process.cwd());
@@ -10,6 +11,9 @@ export default defineConfig({
     vitePluginDetectInput({
       regex: /vite_import\(["'](.+)["']\)/g,
       glob: "./templates/**/*.html",
+    }),
+    prismjsPlugin({
+      languages: ["python", "bash", "shell"],
     }),
     react(),
   ],
@@ -35,6 +39,15 @@ export default defineConfig({
       plugins: [autoprefixer()],
       map: false,
     },
+  },
+  resolve: {
+    alias: [
+      // by default react-components exports a CJS module that can't be tree-shaken, we consume the ESM instead
+      {
+        find: /^@canonical\/react-components$/,
+        replacement: "@canonical/react-components/dist/esm",
+      },
+    ],
   },
   base: "./", // use the script's URL path as base when loading assets in dynamic imports
   build: {

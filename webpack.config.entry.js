@@ -13,7 +13,7 @@ module.exports = {
   topics: "./static/js/src/public/topics/index.js",
   typer: "./static/js/src/libs/typer.ts",
   "highlight-nav": "./static/js/src/libs/highlight-nav.js",
-  "highlight-js": "./static/js/src/base/highlight.js",
+  // "highlight-js": "./static/js/src/base/highlight.js",
   "navigation-events": "./static/js/src/public/navigation-events.ts",
   "icon-validator": "./static/js/src/public/icon-validator/index.tsx",
   interfaces: "./static/js/src/interfaces/index.tsx",

@@ -120,7 +120,7 @@
   </div>
 </div>
 
-<script src="{{ versioned_static('js/dist/details_resources.js') }}" defer></script>
+{{ vite_import('static/js/src/public/details/resources/index.ts') }}
 
 <script>
   function handleShowMoreRevisions(resourceType, revisions) {
