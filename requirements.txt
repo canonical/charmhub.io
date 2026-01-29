@@ -1,5 +1,5 @@
 canonicalwebteam.flask-base==3.1.1
-beautifulsoup4==4.12.3
+beautifulsoup4==4.14.3
 canonicalwebteam.candid==0.9.0
 canonicalwebteam.discourse==7.1.1
 canonicalwebteam.image-template==1.9.0
@@ -7,28 +7,28 @@ canonicalwebteam.store-api==7.3.8
 canonicalwebteam.docstring-extractor==1.2.0
 
 Flask-WTF==1.2.2
-humanize==4.11.0
-mistune==3.1.0
+humanize==4.15.0
+mistune==3.2.0
 badgepy==1.2.0
 pymacaroons==0.13.0
 python-slugify==8.0.4
-ruamel.yaml.clib==0.2.12
-ruamel.yaml==0.18.9
-PyGithub==2.5.0
-ruff==0.14.11
-Flask-Caching==2.3.0
-responses==0.25.3
+ruamel.yaml.clib==0.2.15
+ruamel.yaml==0.19.1
+PyGithub==2.8.1
+ruff==0.14.14
+Flask-Caching==2.3.1
+responses==0.25.8
 
 # Observability
-opentelemetry-api==1.32.1
-opentelemetry-exporter-otlp==1.32.1
-opentelemetry-exporter-otlp-proto-http==1.32.1
-opentelemetry-instrumentation==0.53b1
-opentelemetry-instrumentation-wsgi==0.53b1
-opentelemetry-instrumentation-flask==0.53b1
-opentelemetry-instrumentation-requests==0.53b1
-opentelemetry-sdk==1.32.1
+opentelemetry-api==1.39.1
+opentelemetry-exporter-otlp==1.39.1
+opentelemetry-exporter-otlp-proto-http==1.39.1
+opentelemetry-instrumentation==0.60b1
+opentelemetry-instrumentation-wsgi==0.60b1
+opentelemetry-instrumentation-flask==0.60b1
+opentelemetry-instrumentation-requests==0.60b1
+opentelemetry-sdk==1.39.1
 
 # Cache
 redis==6.4.0
-cachetools==6.2.0
+cachetools==6.2.6
