@@ -34,7 +34,7 @@ const createWrapper = () => {
 
 describe("useInvitesQuery", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test("should display loading state initially", async () => {
@@ -52,7 +52,7 @@ describe("useInvitesQuery", () => {
       success: true,
       data: [{ id: 1, email: "invite@example.com" }],
     };
-    jest.spyOn(global, "fetch").mockResolvedValue({
+    vi.spyOn(global, "fetch").mockResolvedValue({
       ok: true,
       json: async () => mockData,
     } as Response);
@@ -68,7 +68,7 @@ describe("useInvitesQuery", () => {
 
   test("should display a message when no packageName is provided", async () => {
     const mockData = { success: true, data: [] };
-    jest.spyOn(global, "fetch").mockResolvedValue({
+    vi.spyOn(global, "fetch").mockResolvedValue({
       ok: true,
       json: async () => mockData,
     } as Response);

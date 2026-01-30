@@ -4,16 +4,21 @@ import "@testing-library/jest-dom";
 import DocumentationSection from "../DocumentationSection";
 import mermaid from "mermaid";
 
-jest.mock("mermaid", () => ({
-  initialize: jest.fn(),
+vi.mock("mermaid", async (importOriginal) => ({
+  default: {
+    ...(await importOriginal<typeof mermaid>()),
+    initialize: vi.fn(),
+  },
 }));
 
-jest.mock("../../MermaidDiagram", () => (props: { code: string }) => (
-  <div data-testid="mermaid-diagram">{props.code}</div>
-));
+vi.mock("../../MermaidDiagram", () => ({
+  default: (props: { code: string }) => (
+    <div data-testid="mermaid-diagram">{props.code}</div>
+  ),
+}));
 
 beforeAll(() => {
-  global.crypto.randomUUID = jest.fn();
+  globalThis.crypto.randomUUID = vi.fn();
 });
 
 const mockSubSubSectionData = {

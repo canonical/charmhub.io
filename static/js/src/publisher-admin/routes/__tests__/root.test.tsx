@@ -5,26 +5,27 @@ import { RecoilRoot } from "recoil";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { usePackage } from "../../hooks";
 import Root from "../root";
+import { Mock } from "vitest";
 
-const mockSetPackageData = jest.fn();
+const mockSetPackageData = vi.fn();
 
-jest.mock("recoil", () => ({
-  ...jest.requireActual("recoil"),
+vi.mock("recoil", async (importOriginal) => ({
+  ...(await importOriginal()),
   useSetRecoilState: () => mockSetPackageData,
 }));
 
-jest.mock("../../hooks", () => ({
-  usePackage: jest.fn(),
+vi.mock("../../hooks", () => ({
+  usePackage: vi.fn(),
 }));
 
-jest.mock("../../components", () => ({
+vi.mock("../../components", () => ({
   SectionHeader: () => <div>SectionHeader</div>,
   SectionNav: () => <div>SectionNav</div>,
 }));
 
 describe("Root component", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function renderWithRouterAndRecoil(
@@ -43,7 +44,7 @@ describe("Root component", () => {
   }
 
   test("should render the component with its child components", () => {
-    (usePackage as jest.Mock).mockReturnValue({
+    (usePackage as Mock).mockReturnValue({
       data: null,
       status: "idle",
     });
@@ -57,7 +58,7 @@ describe("Root component", () => {
   test("should call setPackageData with packageData when status is success", () => {
     const mockPackageData = { id: "123", name: "Test Package" };
 
-    (usePackage as jest.Mock).mockReturnValue({
+    (usePackage as Mock).mockReturnValue({
       data: mockPackageData,
       status: "success",
     });
@@ -68,7 +69,7 @@ describe("Root component", () => {
   });
 
   test("should not call setPackageData when status is not success", () => {
-    (usePackage as jest.Mock).mockReturnValue({
+    (usePackage as Mock).mockReturnValue({
       data: null,
       status: "loading",
     });
@@ -81,7 +82,7 @@ describe("Root component", () => {
   test("should use packageName from useParams", () => {
     const mockPackageData = { id: "123", name: "Test Package" };
 
-    (usePackage as jest.Mock).mockImplementation((packageName) => {
+    (usePackage as Mock).mockImplementation((packageName) => {
       expect(packageName).toBe("test-package");
       return {
         data: mockPackageData,
@@ -95,7 +96,7 @@ describe("Root component", () => {
   });
 
   test("should render Outlet component for nested routes", () => {
-    (usePackage as jest.Mock).mockReturnValue({
+    (usePackage as Mock).mockReturnValue({
       data: null,
       status: "idle",
     });

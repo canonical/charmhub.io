@@ -17,9 +17,9 @@ function setupMockDOM() {
 
 describe("initTopicFilters", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     setupMockDOM();
-    window.history.pushState = jest.fn();
+    window.history.pushState = vi.fn();
   });
 
   test("should initialise without errors", () => {
@@ -84,7 +84,7 @@ describe("initTopicFilters", () => {
       initTopicFilters();
 
       toggleButtons.forEach((toggle) => {
-        const clickHandler = jest.fn();
+        const clickHandler = vi.fn();
         toggle.addEventListener("click", clickHandler);
 
         toggle.dispatchEvent(new Event("click"));

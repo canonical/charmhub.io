@@ -2,7 +2,7 @@ import { init } from "../index";
 import { truncateString } from "../../../../libs/truncate-string";
 import { fireEvent } from "@testing-library/dom";
 
-jest.mock("../../../../libs/truncate-string");
+vi.mock("../../../../libs/truncate-string");
 
 describe("DOM manipulation tests", () => {
   let originalBodyHTML;
@@ -25,7 +25,7 @@ describe("DOM manipulation tests", () => {
 
   afterEach(() => {
     document.body.innerHTML = originalBodyHTML;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe("index.js", () => {

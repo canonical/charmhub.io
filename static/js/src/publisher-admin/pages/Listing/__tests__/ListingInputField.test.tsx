@@ -14,7 +14,7 @@ const renderComponent = (props?: Partial<ListingInputFieldProps>) => {
       label="Title"
       name="title"
       value={mockPackage.title}
-      handleInputChange={jest.fn()}
+      handleInputChange={vi.fn()}
       {...props}
     />
   );
@@ -37,7 +37,7 @@ describe("ListingInputField", () => {
 
   test("calls onChange handler", async () => {
     const user = userEvent.setup();
-    const handleInputChange = jest.fn();
+    const handleInputChange = vi.fn();
 
     renderComponent({ handleInputChange });
     await user.type(screen.getByLabelText("Title:"), mockPackage.title);

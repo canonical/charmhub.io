@@ -6,14 +6,14 @@ import {
 } from "../docs-side-nav";
 import { fireEvent } from "@testing-library/react";
 
-jest.mock("../docs-side-nav", () => {
-  const docsSideNav = jest.requireActual("../docs-side-nav");
+vi.mock("../docs-side-nav", async (importOriginal) => {
+  const docsSideNav = await importOriginal<typeof import("../docs-side-nav")>();
 
   return {
     ...docsSideNav,
-    toggleDrawer: jest.fn(docsSideNav.toggleDrawer),
-    setupSideNavigation: jest.fn(docsSideNav.setupSideNavigation),
-    setupSideNavigations: jest.fn(docsSideNav.setupSideNavigations),
+    toggleDrawer: vi.fn(docsSideNav.toggleDrawer),
+    setupSideNavigation: vi.fn(docsSideNav.setupSideNavigation),
+    setupSideNavigations: vi.fn(docsSideNav.setupSideNavigations),
   };
 });
 
@@ -128,7 +128,7 @@ describe("setupSideNavigations", () => {
   let mockSideNavigationElements: HTMLElement[];
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     document.body.innerHTML = `
         <div class="p-side-navigation" id="side-navigation-1">

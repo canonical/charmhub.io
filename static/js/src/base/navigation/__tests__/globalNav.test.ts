@@ -6,7 +6,7 @@ import { patchAllCanonicalMobileMarkup } from "../globalNav";
 
 describe("patchAllCanonicalMobileMarkup", () => {
   beforeEach(() => {
-    jest.resetModules();
+    vi.resetModules();
     setUpNavigation();
   });
 

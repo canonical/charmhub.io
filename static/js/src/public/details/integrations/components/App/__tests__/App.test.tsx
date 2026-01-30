@@ -4,6 +4,7 @@ import "@testing-library/jest-dom";
 import { App, getIntegrations } from "../App";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
+import { Mock } from "vitest";
 
 const mockData = {
   grouped_relations: {
@@ -33,11 +34,11 @@ const mockData = {
 };
 
 beforeAll(() => {
-  global.fetch = jest.fn(() =>
+  global.fetch = vi.fn(() =>
     Promise.resolve({
       json: () => Promise.resolve(mockData),
     })
-  ) as jest.Mock;
+  ) as Mock;
 });
 
 const queryClient = new QueryClient();
@@ -52,7 +53,7 @@ const renderWithProviders = (ui: React.ReactElement) => {
 
 describe("App component", () => {
   beforeEach(() => {
-    (global.fetch as jest.Mock).mockClear();
+    (global.fetch as Mock).mockClear();
   });
 
   test("should render loading spinner initially", async () => {
@@ -156,7 +157,7 @@ describe("getIntegrations function", () => {
   });
 
   test("should return an empty array if grouped_relations is not present", async () => {
-    (global.fetch as jest.Mock).mockImplementationOnce(() =>
+    (global.fetch as Mock).mockImplementationOnce(() =>
       Promise.resolve({
         json: () => Promise.resolve({}),
       })
@@ -171,7 +172,7 @@ describe("Empty App component", () => {
   const queryClient = new QueryClient();
 
   beforeEach(() => {
-    global.fetch = jest.fn().mockImplementation(() =>
+    global.fetch = vi.fn().mockImplementation(() =>
       Promise.resolve({
         json: () => Promise.resolve({ grouped_relations: undefined }),
       })
