@@ -18,20 +18,16 @@ ADD package.json .
 ADD yarn.lock .
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn yarn install --production
 
-# Build stage: Run "yarn run build-js"
+# Build stage: Run "yarn run build"
 # ===
-FROM yarn-dependencies AS build-js
+FROM yarn-dependencies AS build
 ADD static static
-ADD webpack.config.js .
-ADD webpack.config.entry.js .
-ADD webpack.config.rules.js .
 ADD vite.config.js .
 ADD tsconfig.json .
-ADD babel.config.json .
 ADD templates templates
 ADD vitePluginDetectInput.js .
 RUN yarn install
-RUN yarn run build-js
+RUN yarn run build
 
 # Set up environment
 ENV LANG C.UTF-8
@@ -48,8 +44,8 @@ ENV PATH="/venv/bin:${PATH}"
 
 # Import code, build assets
 ADD . .
-RUN rm -rf package.json yarn.lock babel.config.json webpack.config.js requirements.txt
-COPY --from=build-js /srv/static/js static/js
+RUN rm -rf package.json yarn.lock babel.config.json requirements.txt
+COPY --from=build /srv/static/js static/js
 
 
 # Setup commands to run server
