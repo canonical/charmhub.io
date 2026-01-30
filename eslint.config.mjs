@@ -1,5 +1,4 @@
 import vitest from "@vitest/eslint-plugin";
-import jest from "eslint-plugin-jest";
 import react from "eslint-plugin-react";
 import prettier from "eslint-plugin-prettier";
 import globals from "globals";
@@ -37,7 +36,6 @@ export default [
     ),
     {
         plugins: {
-            jest,
             vitest,
             react,
             prettier,
@@ -47,7 +45,6 @@ export default [
                 Object.entries({
                     ...globals.browser,
                     ...globals.node,
-                    ...jest.environments.globals.globals,
                     ...vitest.environments.env.globals,
                 }).map(([key, value]) => [key.trim(), value])
             ),
