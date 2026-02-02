@@ -5,8 +5,8 @@ import userEvent from "@testing-library/user-event";
 
 import PubliciseCards from "../PubliciseCards";
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+vi.mock("react-router-dom", async (importOriginal) => ({
+  ...(await importOriginal()),
   useParams: () => ({
     packageName: "test-charm-name",
   }),

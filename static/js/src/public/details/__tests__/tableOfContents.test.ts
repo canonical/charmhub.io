@@ -1,15 +1,13 @@
 import { TableOfContents } from "../tableOfContents";
 import { HistoryState } from "../historyState";
 
-jest.mock("../historyState", () => {
-  return {
-    HistoryState: jest.fn().mockImplementation(() => ({
-      path: [],
-      addPopListener: jest.fn(),
-      updatePath: jest.fn(),
-    })),
-  };
-});
+vi.mock("../historyState", () => ({
+  HistoryState: vi.fn(() => ({
+    path: [],
+    addPopListener: vi.fn(),
+    updatePath: vi.fn(),
+  })),
+}));
 
 describe("TableOfContents", () => {
   let el: HTMLElement;

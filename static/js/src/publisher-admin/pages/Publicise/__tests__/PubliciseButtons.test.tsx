@@ -7,8 +7,8 @@ import PubliciseButtons from "../PubliciseButtons";
 
 import { languages } from "../../../utils";
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+vi.mock("react-router-dom", async (importOriginal) => ({
+  ...(await importOriginal()),
   useParams: () => ({
     packageName: "test-charm-name",
   }),

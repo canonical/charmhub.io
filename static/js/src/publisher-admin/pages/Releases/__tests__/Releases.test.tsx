@@ -10,19 +10,20 @@ import { Package } from "../../../types";
 import useReleases, { ReleaseMap } from "../../../hooks/useReleases";
 import { mockReleaseChannel } from "../../../mocks/mockReleaseChannel";
 import { usePackage } from "../../../hooks";
+import { Mock } from "vitest";
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+vi.mock("react-router-dom", async (importOriginal) => ({
+  ...(await importOriginal()),
   useParams: () => ({
     packageName: "test-charm-name",
   }),
 }));
 
-jest.mock("../../../hooks/useReleases");
-const mockUseReleases = useReleases as jest.Mock;
+vi.mock("../../../hooks/useReleases");
+const mockUseReleases = useReleases as Mock;
 
-jest.mock("../../../hooks/usePackage");
-const mockUsePackage = usePackage as jest.Mock;
+vi.mock("../../../hooks/usePackage");
+const mockUsePackage = usePackage as Mock;
 
 mockUsePackage.mockReturnValue({ data: mockPackage });
 

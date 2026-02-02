@@ -6,6 +6,7 @@ import "@testing-library/jest-dom";
 import { InterfaceItem } from "../InterfaceItem";
 import { IInterfaceData } from "../../types";
 import { ICharm } from "../../../../../shared/types";
+import { Mock } from "vitest";
 
 const queryClient = new QueryClient();
 
@@ -59,10 +60,11 @@ const mockCharms: ICharm[] = [
 ];
 
 beforeEach(() => {
-  jest.resetAllMocks();
-  jest.mock("recoil", () => ({
-    useRecoilValue: jest.fn(() => [{ lead: "Platform", value: "Kubernetes" }]),
-    useSetRecoilState: jest.fn(),
+  vi.resetAllMocks();
+  vi.mock("recoil", async (importOriginal) => ({
+    ...(await importOriginal()),
+    useRecoilValue: vi.fn(() => []),
+    useSetRecoilState: vi.fn(() => vi.fn()),
   }));
 });
 
@@ -112,7 +114,7 @@ describe("InterfaceItem Component", () => {
   });
 
   test("shows loading spinner while data is being fetched", async () => {
-    global.fetch = jest.fn(() => new Promise(() => {})) as jest.Mock;
+    global.fetch = vi.fn(() => new Promise(() => {})) as Mock;
 
     await act(async () => {
       render(
@@ -138,11 +140,11 @@ describe("InterfaceItem Component", () => {
       ...mockData,
       interface: "nonexistent_interface",
     };
-    global.fetch = jest.fn(() =>
+    global.fetch = vi.fn(() =>
       Promise.resolve({
         json: () => Promise.resolve({ packages: [] }),
       })
-    ) as jest.Mock;
+    ) as Mock;
 
     await act(async () => {
       render(
@@ -164,11 +166,11 @@ describe("InterfaceItem Component", () => {
   });
 
   test("renders charms correctly with mock charms data", async () => {
-    global.fetch = jest.fn(() =>
+    global.fetch = vi.fn(() =>
       Promise.resolve({
         json: () => Promise.resolve({ packages: mockCharms }),
       })
-    ) as jest.Mock;
+    ) as Mock;
 
     await act(async () => {
       render(

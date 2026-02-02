@@ -73,3 +73,4 @@ dist/
 *.charm
 *.rock
 cypress/screenshots/
+coverage/
