@@ -275,7 +275,7 @@ def details_overview(entity_name):
     docs_topic = package["store_front"].get("docs_topic")
     if is_rtd:
         readme = package.get("default-release", {}).get("revision", {}).get("readme-md")
-        summary = markdown_to_html(logic.get_summary(package))
+        summary = logic.get_summary(package)
         description = sanitize_html(
             markdown_to_html(readme)
             if readme
