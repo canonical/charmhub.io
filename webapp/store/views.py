@@ -17,7 +17,7 @@ from webapp.decorators import (
     redirect_uppercase_to_lowercase,
     store_maintenance,
 )
-from webapp.helpers import discourse_api, markdown_to_html
+from webapp.helpers import discourse_api, markdown_to_html, sanitize_html
 from webapp.store import logic
 from webapp.config import SEARCH_FIELDS
 from webapp.observability.utils import trace_function
@@ -276,7 +276,7 @@ def details_overview(entity_name):
     if is_rtd:
         readme = package.get("default-release", {}).get("revision", {}).get("readme-md")
         summary = logic.get_summary(package)
-        description = (
+        description = sanitize_html(
             markdown_to_html(readme)
             if readme
             else logic.get_description(package, parse_to_html=True)
@@ -294,7 +294,7 @@ def details_overview(entity_name):
             docs.parse()
             topic = docs.index_topic
             docs_content = docs.parse_topic(topic)
-            description = docs_content.get("body_html", "")
+            description = sanitize_html(docs_content.get("body_html", ""))
 
             navigation = docs.navigation
 
@@ -339,11 +339,13 @@ def details_overview(entity_name):
         except Exception as e:
             if e.response.status_code == 404:
                 navigation = None
-                description = logic.get_description(package)
+                description = sanitize_html(
+                    logic.get_description(package, parse_to_html=True)
+                )
                 summary = logic.get_summary(package)
     else:
         navigation = None
-        description = logic.get_description(package, parse_to_html=True)
+        description = sanitize_html(logic.get_description(package, parse_to_html=True))
         summary = logic.get_summary(package)
 
     revisions = logic.get_revisions(package["channel-map"])
@@ -404,6 +406,8 @@ def details_docs(entity_name, path=None):
 
     document = docs.parse_topic(topic)
 
+    body_html = sanitize_html(document.get("body_html", ""))
+
     navigation = docs.navigation
 
     overview = {
@@ -442,7 +446,7 @@ def details_docs(entity_name, path=None):
     context = {
         "package": package,
         "navigation": navigation,
-        "body_html": document["body_html"],
+        "body_html": body_html,
         "last_update": document["updated"],
         "forum_url": docs.api.base_url,
         "topic_path": document["topic_path"],

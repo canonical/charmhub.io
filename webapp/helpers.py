@@ -7,6 +7,7 @@ from ruamel.yaml import YAML
 from slugify import slugify
 from datetime import datetime, timedelta
 import mistune
+import bleach
 from canonicalwebteam.discourse import DiscourseAPI
 from dateutil import parser
 import requests
@@ -98,6 +99,54 @@ def schedule_banner(start_date: str, end_date: str):
 def markdown_to_html(markdown_text):
     markdown = mistune.create_markdown(renderer=mistune.HTMLRenderer())
     return markdown(markdown_text)
+
+
+ALLOWED_HTML_TAGS = set(bleach.sanitizer.ALLOWED_TAGS).union(
+    {
+        "br",
+        "code",
+        "div",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "hr",
+        "img",
+        "p",
+        "pre",
+        "span",
+        "table",
+        "tbody",
+        "td",
+        "tfoot",
+        "th",
+        "thead",
+        "tr",
+    }
+)
+ALLOWED_HTML_ATTRIBUTES = {
+    **bleach.sanitizer.ALLOWED_ATTRIBUTES,
+    "*": ["class", "id"],
+    "a": ["href", "rel", "target", "title"],
+    "img": ["alt", "height", "src", "title", "width"],
+    "td": ["colspan", "rowspan"],
+    "th": ["colspan", "rowspan"],
+}
+ALLOWED_HTML_PROTOCOLS = ["http", "https", "mailto", "tel"]
+
+
+def sanitize_html(html_content):
+    if not html_content:
+        return ""
+    return bleach.clean(
+        html_content,
+        tags=ALLOWED_HTML_TAGS,
+        attributes=ALLOWED_HTML_ATTRIBUTES,
+        protocols=ALLOWED_HTML_PROTOCOLS,
+        strip=True,
+    )
 
 
 def param_redirect_capture(req, resp):
