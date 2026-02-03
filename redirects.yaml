@@ -46,3 +46,5 @@ kafka-k8s/docs: https://documentation.ubuntu.com/charmed-kafka-k8s/3
 kafka-k8s/docs/(?P<path>.*)/?: https://documentation.ubuntu.com/charmed-kafka-k8s/3/{path}/
 opensearch/docs: https://canonical-charmed-opensearch.readthedocs-hosted.com/2
 opensearch/docs/(?P<path>.*)/?: https://canonical-charmed-opensearch.readthedocs-hosted.com/2/{path}/
+spark-k8s-bundle/docs: https://canonical-charmed-spark.readthedocs-hosted.com/main
+spark-k8s-bundle/docs/(?P<path>.*)/?: https://canonical-charmed-spark.readthedocs-hosted.com/main/{path}/
