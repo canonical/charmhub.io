@@ -24,11 +24,11 @@ const renderComponent = (mockPackageData: Package) => {
 };
 
 beforeEach(() => {
-  global.fetch = vi.fn();
+  global.fetch = jest.fn();
 });
 
 afterEach(() => {
-  vi.resetAllMocks();
+  jest.resetAllMocks();
 });
 
 describe("Listing", () => {

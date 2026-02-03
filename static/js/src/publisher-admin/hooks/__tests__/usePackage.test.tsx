@@ -33,7 +33,7 @@ const createWrapper = () => {
 
 describe("usePackage", () => {
   beforeEach(() => {
-    vi.resetAllMocks();
+    jest.resetAllMocks();
   });
 
   test("should display loading state initially", async () => {
@@ -52,7 +52,7 @@ describe("usePackage", () => {
       name: "Test Package",
       description: "This is a test package",
     };
-    vi.spyOn(global, "fetch").mockResolvedValueOnce({
+    jest.spyOn(global, "fetch").mockResolvedValueOnce({
       ok: true,
       json: async () => ({ success: true, data: mockData }),
     } as Response);
@@ -71,7 +71,7 @@ describe("usePackage", () => {
   });
 
   test("should display a message when no packageName is provided", async () => {
-    vi.spyOn(global, "fetch").mockResolvedValueOnce({
+    jest.spyOn(global, "fetch").mockResolvedValueOnce({
       ok: true,
       json: async () => ({ success: true, data: null }),
     } as Response);

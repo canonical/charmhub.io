@@ -1,7 +1,9 @@
-import vitest from "@vitest/eslint-plugin";
+
+import jest from "eslint-plugin-jest";
 import react from "eslint-plugin-react";
 import prettier from "eslint-plugin-prettier";
 import globals from "globals";
+import babelParser from "@babel/eslint-parser";
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import path from "node:path";
@@ -35,7 +37,7 @@ export default [
     ),
     {
         plugins: {
-            vitest,
+            jest,
             react,
             prettier,
         },
@@ -44,9 +46,10 @@ export default [
                 Object.entries({
                     ...globals.browser,
                     ...globals.node,
-                    ...vitest.environments.env.globals,
+                    ...jest.environments.globals.globals,
                 }).map(([key, value]) => [key.trim(), value])
             ),
+            parser: babelParser,
             ecmaVersion: 2020,
             sourceType: "module",
             parserOptions: {

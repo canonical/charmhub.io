@@ -18,7 +18,7 @@ const setupMockDOM = (markup: string) => {
 
 describe("navigation-events main navigation", () => {
   beforeEach(() => {
-    vi.resetModules();
+    jest.resetModules();
     mockDataLayer.length = 0;
   });
 
@@ -63,7 +63,7 @@ describe("navigation-events main navigation", () => {
 
 describe("navigation-events footer", () => {
   beforeEach(() => {
-    vi.resetModules();
+    jest.resetModules();
     mockDataLayer.length = 0;
   });
   test("should add GA footer navigation events", async () => {
@@ -97,7 +97,7 @@ describe("navigation-events footer", () => {
 
 describe("navigation-events content", () => {
   beforeEach(() => {
-    vi.resetModules();
+    jest.resetModules();
     mockDataLayer.length = 0;
   });
   test("should add GA content events for content elements", async () => {

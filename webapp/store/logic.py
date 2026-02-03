@@ -29,16 +29,10 @@ ARCHITECTURES = ["amd64", "arm64", "ppc64el", "riscv64", "s390x"]
 @trace_function
 def get_summary(package):
     if package["type"] == "bundle":
-        summary = (
-            package.get("store_front", {})
-            .get("bundle", {})
-            .get("summary", None)
-        )
+        summary = package.get("store_front", {}).get("bundle", {}).get("summary", None)
     else:
         summary = (
-            package.get("store_front", {})
-            .get("metadata", {})
-            .get("summary", None)
+            package.get("store_front", {}).get("metadata", {}).get("summary", None)
         )
     return summary
 
@@ -47,15 +41,11 @@ def get_summary(package):
 def get_description(package, parse_to_html=False):
     if package["type"] == "bundle":
         description = (
-            package.get("store_front", {})
-            .get("bundle", {})
-            .get("description", None)
+            package.get("store_front", {}).get("bundle", {}).get("description", None)
         )
     else:
         description = (
-            package.get("store_front", {})
-            .get("metadata", {})
-            .get("description", None)
+            package.get("store_front", {}).get("metadata", {}).get("description", None)
         )
     return markdown_to_html(description) if parse_to_html else description
 
@@ -127,9 +117,9 @@ def convert_channel_maps(channel_map):
                     "architectures"
                 ].update(ARCHITECTURES)
             else:
-                result[track][risk]["releases"][revision_number][
-                    "architectures"
-                ].add(arch)
+                result[track][risk]["releases"][revision_number]["architectures"].add(
+                    arch
+                )
             continue
 
         info = {
@@ -156,9 +146,7 @@ def convert_channel_maps(channel_map):
 
     # Order tracks (latest track first)
     result = OrderedDict(
-        sorted(
-            result.items(), key=lambda x: track_order.get(x[0], sys.maxsize)
-        )
+        sorted(result.items(), key=lambda x: track_order.get(x[0], sys.maxsize))
     )
 
     # Order risks (stable, candidate, beta, edge)
@@ -200,9 +188,7 @@ def convert_channel_maps(channel_map):
                         list(
                             set(
                                 arch
-                                for release in result[track][risk][
-                                    "releases"
-                                ].values()
+                                for release in result[track][risk]["releases"].values()
                                 if base in release["bases"]
                                 for arch in release["architectures"]
                             )
@@ -214,9 +200,7 @@ def convert_channel_maps(channel_map):
 
             latest_revision_key = max(
                 result[track][risk]["releases"].keys(),
-                key=lambda k: result[track][risk]["releases"][k][
-                    "released_at"
-                ],
+                key=lambda k: result[track][risk]["releases"][k]["released_at"],
             )
             result[track][risk]["latest"] = result[track][risk]["releases"][
                 latest_revision_key
@@ -251,9 +235,7 @@ def extract_resources(channel):
     channel_resources = channel["resources"]
 
     for resource in channel_resources:
-        resources.append(
-            {"name": resource["name"], "revision": resource["revision"]}
-        )
+        resources.append({"name": resource["name"], "revision": resource["revision"]})
 
     return resources
 
@@ -323,9 +305,7 @@ def extract_series(channel, long_name=False):
         if not base or base["channel"] in series:
             continue
         platform = PLATFORMS.get(base["name"], base["name"])
-        series.add(
-            f"{platform} {base['channel']}" if long_name else base["channel"]
-        )
+        series.add(f"{platform} {base['channel']}" if long_name else base["channel"])
 
     return sorted(series, reverse=True)
 
@@ -469,9 +449,7 @@ def add_store_front_data(package, details=False):
 
             # List charms
             extra["bundle"]["charms"] = get_bundle_charms(
-                extra["bundle"].get(
-                    "applications", extra["bundle"].get("services")
-                )
+                extra["bundle"].get("applications", extra["bundle"].get("services"))
             )
         else:
             # Get charm docs
@@ -491,9 +469,7 @@ def add_store_front_data(package, details=False):
         extra["channel_bases"] = extract_bases(package["default-release"])
 
         # Some needed fields
-        extra["publisher_name"] = package["result"]["publisher"][
-            "display-name"
-        ]
+        extra["publisher_name"] = package["result"]["publisher"]["display-name"]
         extra["username"] = package["result"]["publisher"]["username"]
 
         if "summary" in package["result"]:
@@ -522,9 +498,7 @@ def get_bundle_charms(charm_apps):
             # Like: cs:~charmed-osm/mariadb-k8s-35
             name = data["charm"]
             if name.startswith("cs:") or name.startswith("ch:"):
-                name = re.match(r"(?:cs:|ch:)(?:.+/)?(\S*?)(?:-\d+)?$", name)[
-                    1
-                ]
+                name = re.match(r"(?:cs:|ch:)(?:.+/)?(\S*?)(?:-\d+)?$", name)[1]
 
             charm = {"title": format_slug(name), "name": name}
 
@@ -630,7 +604,5 @@ def get_revisions(channel_maps: list) -> list:
 
     :returns: A sorted list of unique revisions
     """
-    revisions = {
-        channel_map["revision"]["revision"] for channel_map in channel_maps
-    }
+    revisions = {channel_map["revision"]["revision"] for channel_map in channel_maps}
     return list(reversed(sorted(revisions)))

@@ -62,7 +62,7 @@
 {% endblock %}
 
 {% block page_scripts %}
-  {{ vite_import('static/js/src/public/topics/index.js') }}
+  <script src="{{ versioned_static('js/dist/topics.js') }}" defer></script>
   <script>
     window.addEventListener("DOMContentLoaded", () => {
       new charmhub.topics.initTopicFilters();

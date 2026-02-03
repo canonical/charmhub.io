@@ -4,9 +4,8 @@ import { MemoryRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Packages from "../Packages";
 import "@testing-library/jest-dom";
-import { Mock } from "vitest";
 
-vi.mock("@canonical/store-components", () => ({
+jest.mock("@canonical/store-components", () => ({
   CharmCard: ({ data }: { data: { name: string } }) => <div>{data.name}</div>,
   BundleCard: ({ data }: { data: { name: string } }) => <div>{data.name}</div>,
   Filters: ({
@@ -33,12 +32,8 @@ vi.mock("@canonical/store-components", () => ({
   LoadingCard: () => <div>Loading...</div>,
 }));
 
-vi.mock("../../../components/Banner", () => ({
-  default: () => <div>Banner</div>,
-}));
-vi.mock("../../../components/Topics", () => ({
-  default: () => <div>Topics</div>,
-}));
+jest.mock("../../../components/Banner", () => () => <div>Banner</div>);
+jest.mock("../../../components/Topics", () => () => <div>Topics</div>);
 
 const renderPackages = () => {
   const queryClient = new QueryClient();
@@ -53,7 +48,7 @@ const renderPackages = () => {
 
 describe("Packages component", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   test("renders Banner and Topics components", async () => {
@@ -72,7 +67,7 @@ describe("Packages component", () => {
   });
 
   test("renders no packages message when there are no results", async () => {
-    (globalThis.fetch as Mock) = vi.fn(() =>
+    (global.fetch as jest.Mock) = jest.fn(() =>
       Promise.resolve({
         json: () =>
           Promise.resolve({

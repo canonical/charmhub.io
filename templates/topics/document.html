@@ -102,6 +102,6 @@
   </div>
 </section>
 
-{{ vite_import('static/js/src/base/docs-side-nav.ts') }}
-{{ vite_import('static/js/src/base/redirect-docs-url.ts') }}
+<script src="{{ versioned_static('js/dist/docs-side-nav.js') }}"></script>
+<script src="{{ versioned_static('js/dist/redirect-docs-url.js') }}"></script>
 {% endblock %}

@@ -89,9 +89,7 @@ def get_publisher_details(publisher):
         "items": items,
         "items_count": len(items),
         "publisher": (
-            items[0]["publisher"]
-            if len(items) > 0
-            else {"display-name": publisher}
+            items[0]["publisher"] if len(items) > 0 else {"display-name": publisher}
         ),
         "error_info": error_info,
     }
@@ -118,9 +116,9 @@ def get_packages():
     context = {"packages": [], "size": 0}
 
     if query:
-        results = publisher_gateway.find(
-            query=query, fields=SEARCH_FIELDS
-        ).get("results")
+        results = publisher_gateway.find(query=query, fields=SEARCH_FIELDS).get(
+            "results"
+        )
         context["q"] = query
     elif provides or requires:
         if provides:
@@ -135,9 +133,7 @@ def get_packages():
         context["provides"] = provides
         context["requires"] = requires
     else:
-        results = publisher_gateway.find(fields=SEARCH_FIELDS).get(
-            "results", []
-        )
+        results = publisher_gateway.find(fields=SEARCH_FIELDS).get("results", [])
 
     packages = []
     total_packages = 0
@@ -278,11 +274,7 @@ def details_overview(entity_name):
 
     docs_topic = package["store_front"].get("docs_topic")
     if is_rtd:
-        readme = (
-            package.get("default-release", {})
-            .get("revision", {})
-            .get("readme-md")
-        )
+        readme = package.get("default-release", {}).get("revision", {}).get("readme-md")
         summary = logic.get_summary(package)
         description = sanitize_html(
             markdown_to_html(readme)
@@ -324,9 +316,7 @@ def details_overview(entity_name):
                 # prefix with "Docs - "
                 if (
                     len(navigation["nav_items"][0]["children"]) > 1
-                    and navigation["nav_items"][0]["children"][1][
-                        "navlink_text"
-                    ]
+                    and navigation["nav_items"][0]["children"][1]["navlink_text"]
                     == "Overview"
                 ):
                     del navigation["nav_items"][0]["children"][1]
@@ -365,17 +355,13 @@ def details_overview(entity_name):
     context["package_type"] = package["type"]
     context["doc_url"] = doc
     context["is_rtd"] = is_rtd
-    context["has_sboms"] = package_has_sboms(
-        revisions, context["package"]["id"]
-    )
+    context["has_sboms"] = package_has_sboms(revisions, context["package"]["id"])
     redis_cache.set(key, context, ttl=3600)
     return render_template("details/overview.html", **context)
 
 
 @trace_function
-@store.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs/<path:path>'
-)
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/docs/<path:path>')
 @store_maintenance
 @redirect_uppercase_to_lowercase
 def details_docs(entity_name, path=None):
@@ -442,8 +428,7 @@ def details_docs(entity_name, path=None):
         # prefix with "Docs - "
         if (
             len(navigation["nav_items"][0]["children"]) > 1
-            and navigation["nav_items"][0]["children"][1]["navlink_text"]
-            == "Overview"
+            and navigation["nav_items"][0]["children"][1]["navlink_text"] == "Overview"
         ):
             del navigation["nav_items"][0]["children"][1]
     else:
@@ -472,13 +457,9 @@ def details_docs(entity_name, path=None):
 
 
 @trace_function
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configurations')
 @store.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configurations'
-)
-@store.route(
-    '/<regex("'
-    + DETAILS_VIEW_REGEX
-    + '"):entity_name>/configurations/<path:path>'
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/configurations/<path:path>'
 )
 @store_maintenance
 @redirect_uppercase_to_lowercase
@@ -535,9 +516,7 @@ def details_actions(entity_name):
         "default-release.revision.actions-yaml",
     ]
 
-    package = get_package(
-        entity_name, channel_request, FIELDS.copy() + extra_fields
-    )
+    package = get_package(entity_name, channel_request, FIELDS.copy() + extra_fields)
     return render_template(
         "details/actions.html",
         package=package,
@@ -576,9 +555,7 @@ def details_libraries(entity_name):
 
 @trace_function
 @store.route(
-    '/<regex("'
-    + DETAILS_VIEW_REGEX
-    + '"):entity_name>/libraries/<string:library_name>'
+    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/libraries/<string:library_name>'
 )
 @store_maintenance
 @redirect_uppercase_to_lowercase
@@ -680,8 +657,7 @@ def download_library(entity_name, library_name):
         library["content"],
         mimetype="text/x-python",
         headers={
-            "Content-disposition": "attachment; "
-            f"filename={library['library-name']}.py"
+            "Content-disposition": f"attachment; filename={library['library-name']}.py"
         },
     )
 
@@ -705,9 +681,7 @@ def details_integrations(entity_name):
 
 
 @trace_function
-@store.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/integrations.json'
-)
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/integrations.json')
 @store_maintenance
 @redirect_uppercase_to_lowercase
 def details_integrations_data(entity_name):
@@ -718,9 +692,7 @@ def details_integrations_data(entity_name):
     package = get_package(entity_name, channel_request, FIELDS + extra_fields)
 
     relations = (
-        package.get("default-release", {})
-        .get("revision", {})
-        .get("relations", {})
+        package.get("default-release", {}).get("revision", {}).get("relations", {})
     )
 
     provides = add_required_fields(
@@ -795,9 +767,7 @@ def details_resource(entity_name, resource_name):
     if not resources:
         return redirect(url_for(".details_resources", entity_name=entity_name))
 
-    resource = next(
-        (item for item in resources if item["name"] == resource_name), None
-    )
+    resource = next((item for item in resources if item["name"] == resource_name), None)
 
     if not resource:
         return redirect(url_for(".details_resources", entity_name=entity_name))
@@ -807,24 +777,18 @@ def details_resource(entity_name, resource_name):
         oci_details = publisher_gateway.process_response(
             publisher_gateway.session.get(resource["download"]["url"])
         )
-        resource["image_name"], resource["digest"] = oci_details[
-            "ImageName"
-        ].split("@")
+        resource["image_name"], resource["digest"] = oci_details["ImageName"].split("@")
         resource["short_digest"] = resource["digest"].split(":")[1][:12]
 
     # Get upstream-source (if available)
-    metadata_resources = package["store_front"]["metadata"].get(
-        "resources", {}
-    )
+    metadata_resources = package["store_front"]["metadata"].get("resources", {})
     if resource_name in metadata_resources:
         upstream = metadata_resources[resource_name].get("upstream-source")
         resource["upstream_source"] = upstream
     else:
         resource["upstream_source"] = None
 
-    revisions = device_gateway.get_resource_revisions(
-        entity_name, resource_name
-    )
+    revisions = device_gateway.get_resource_revisions(entity_name, resource_name)
     revisions = sorted(revisions, key=lambda k: k["revision"], reverse=True)
 
     # Humanize sizes
@@ -933,10 +897,8 @@ def entity_embedded_card(entity_name):
     try:
         package = get_package(entity_name, channel_request, FIELDS)
 
-        package["default-release"]["channel"]["released-at"] = (
-            logic.convert_date(
-                package["default-release"]["channel"]["released-at"]
-            )
+        package["default-release"]["channel"]["released-at"] = logic.convert_date(
+            package["default-release"]["channel"]["released-at"]
         )
 
         button = request.args.get("button")
@@ -968,19 +930,15 @@ def entity_embedded_card(entity_name):
 
 
 @trace_function
-@store.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/embedded/interface'
-)
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/embedded/interface')
 @exclude_xframe_options_header
 def entity_embedded_interface_card(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     try:
         package = get_package(entity_name, channel_request, FIELDS)
 
-        package["default-release"]["channel"]["released-at"] = (
-            logic.convert_date(
-                package["default-release"]["channel"]["released-at"]
-            )
+        package["default-release"]["channel"]["released-at"] = logic.convert_date(
+            package["default-release"]["channel"]["released-at"]
         )
 
         libraries = get_libraries(entity_name)
@@ -1007,9 +965,7 @@ def entity_embedded_interface_card(entity_name):
 @trace_function
 @store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/icon')
 def entity_icon(entity_name):
-    icon_url = (
-        "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg"
-    )
+    icon_url = "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg"
     package = None
 
     try:
@@ -1027,9 +983,7 @@ def entity_icon(entity_name):
 
 
 @trace_function
-@store.route(
-    '/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/icon-no-default'
-)
+@store.route('/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/icon-no-default')
 def entity_icon_missing(entity_name):
     package = None
 

@@ -2,23 +2,19 @@ import React from "react";
 import { render, waitFor } from "@testing-library/react";
 import MermaidDiagram from "../MermaidDiagram";
 import mermaid from "mermaid";
-import { Mock } from "vitest";
 
-vi.mock("mermaid", async (importOriginal) => ({
-  default: {
-    ...(await importOriginal<typeof mermaid>()),
-    render: vi.fn(),
-  },
+jest.mock("mermaid", () => ({
+  render: jest.fn(),
 }));
 
 describe("MermaidDiagram", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   test("renders the mermaid diagram", async () => {
     const mockSvg = "<svg>mock diagram</svg>";
-    (mermaid.render as Mock).mockResolvedValueOnce({ svg: mockSvg });
+    (mermaid.render as jest.Mock).mockResolvedValueOnce({ svg: mockSvg });
 
     const { container } = render(<MermaidDiagram code="graph TD; A-->B;" />);
 
@@ -36,9 +32,9 @@ describe("MermaidDiagram", () => {
 
   test("handles rendering error", async () => {
     const mockError = new Error("Mock render error");
-    (mermaid.render as Mock).mockRejectedValueOnce(mockError);
+    (mermaid.render as jest.Mock).mockRejectedValueOnce(mockError);
 
-    const consoleErrorSpy = vi
+    const consoleErrorSpy = jest
       .spyOn(console, "error")
       .mockImplementation(() => {});
 

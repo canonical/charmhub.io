@@ -4,8 +4,9 @@ import "@testing-library/jest-dom";
 import DeveloperDocumentation from "../DeveloperDocumentation";
 import { InterfaceData } from "../../../types";
 
-vi.mock("../../DocumentationSection/DocumentationSection", () => ({
-  default: vi.fn(() => <div>DocumentationSection</div>),
+jest.mock("../../DocumentationSection/DocumentationSection", () => ({
+  __esModule: true,
+  default: jest.fn(() => <div>DocumentationSection</div>),
 }));
 
 const mockInterfaceData: InterfaceData = {

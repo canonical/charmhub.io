@@ -67,12 +67,12 @@ const createWrapper = () => {
 
 describe("useSendMutation", () => {
   beforeEach(() => {
-    vi.resetAllMocks();
-    vi.spyOn(global, "scrollTo").mockImplementation(() => {});
+    jest.resetAllMocks();
+    jest.spyOn(global, "scrollTo").mockImplementation(() => {});
   });
 
   const mockFetchSuccess = () => {
-    vi.spyOn(global, "fetch").mockResolvedValueOnce({
+    jest.spyOn(global, "fetch").mockResolvedValueOnce({
       ok: true,
       json: async () => ({
         success: true,
@@ -82,17 +82,17 @@ describe("useSendMutation", () => {
   };
 
   const mockFetchError = () => {
-    vi.spyOn(global, "fetch").mockResolvedValueOnce({
+    jest.spyOn(global, "fetch").mockResolvedValueOnce({
       ok: false,
       statusText: "Failed to send invite",
     } as Response);
   };
 
-  const setInviteLink = vi.fn();
-  const setInviteEmailLink = vi.fn();
-  const setShowInviteSuccess = vi.fn();
-  const setShowInviteError = vi.fn();
-  const setShowSidePanel = vi.fn();
+  const setInviteLink = jest.fn();
+  const setInviteEmailLink = jest.fn();
+  const setShowInviteSuccess = jest.fn();
+  const setShowInviteError = jest.fn();
+  const setShowSidePanel = jest.fn();
 
   const csrfToken = "test-csrf-token";
   const packageName = "test-package";

@@ -1,6 +1,6 @@
 module.exports = {
   parser: "@typescript-eslint/parser",
-  plugins: ["vitest", "react", "@typescript-eslint", "jsx-a11y"],
+  plugins: ["jest", "react", "@typescript-eslint", "jsx-a11y"],
   globals: {
     ga: "readonly",
   },
@@ -8,8 +8,8 @@ module.exports = {
     browser: true,
     es6: true,
     node: true,
-    "vitest/globals": true,
-    vitest: true,
+    "jest/globals": true,
+    jest: true,
   },
   extends: [
     "eslint:recommended",

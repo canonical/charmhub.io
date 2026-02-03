@@ -9,24 +9,36 @@ describe("InterfacesIndex", () => {
   const interfacesList: InterfaceItem[] = [
     {
       name: "interface1",
-      description: "Description 1",
       version: "1.0",
+      lib: "",
+      lib_url: "",
+      docs_url:
+        "https://documentation.ubuntu.com/charmlibs/reference/interfaces/interface1/",
+      summary: "",
+      description: "Description 1",
       status: "test",
-      category: "Category 1",
     },
     {
       name: "interface2",
-      description: "Description 2",
       version: "1.1",
+      lib: "",
+      lib_url: "",
+      docs_url:
+        "https://documentation.ubuntu.com/charmlibs/reference/interfaces/interface2/",
+      summary: "",
+      description: "Description 2",
       status: "beta",
-      category: "Category 2",
     },
     {
       name: "interface3",
-      description: "Description 3",
       version: "1.2",
+      lib: "",
+      lib_url: "",
+      docs_url:
+        "https://documentation.ubuntu.com/charmlibs/reference/interfaces/interface3/",
+      summary: "",
+      description: "Description 3",
       status: "beta",
-      category: "Category 3",
     },
   ];
 

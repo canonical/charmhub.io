@@ -14,5 +14,5 @@
 
 {{ super() }}
 
-{{ vite_import('static/js/src/base/highlight.js') }}
+<script src="{{ versioned_static('js/dist/highlight-js.js') }}" defer></script>
 {% endblock %}

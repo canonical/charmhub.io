@@ -4,7 +4,7 @@ import { render, screen } from "@testing-library/react";
 import RequestTrackPanel from "../RequestTrackPanel";
 import userEvent from "@testing-library/user-event";
 
-const onClose = vi.fn();
+const onClose = jest.fn();
 
 const renderComponent = () =>
   render(<RequestTrackPanel charmName="test" onClose={onClose} />);
@@ -18,7 +18,7 @@ describe("RequestTrackPanel", () => {
 
   test("redirects to charmhub forum when request is issued", async () => {
     renderComponent();
-    window.open = vi.fn();
+    window.open = jest.fn();
 
     await userEvent.click(screen.getByText("Request on Forum"));
 

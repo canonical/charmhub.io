@@ -6,8 +6,8 @@ import "@testing-library/jest-dom";
 
 import Publicise from "../Publicise";
 
-vi.mock("react-router-dom", async (importOriginal) => ({
-  ...(await importOriginal()),
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
   useParams: () => ({
     packageName: "test-charm-name",
   }),

@@ -4,13 +4,13 @@ import { TableOfContents } from "../tableOfContents";
 import { channelMap } from "../channelMap";
 import { act, waitFor } from "@testing-library/react";
 
-vi.mock("../historyState");
-vi.mock("../tableOfContents");
-vi.mock("../channelMap");
+jest.mock("../historyState");
+jest.mock("../tableOfContents");
+jest.mock("../channelMap");
 
 describe("index.ts", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
     document.body.innerHTML = `
       <div data-js="configuration"></div>
       <div data-js="actions">
@@ -78,15 +78,17 @@ describe("index.ts", () => {
       "[data-js='actions']"
     ) as HTMLElement;
 
-    vi.spyOn(mockActionsElement, "addEventListener").mockImplementation(
-      (event: string, listener: EventListenerOrEventListenerObject) => {
-        if (event === "click" && typeof listener === "function") {
-          listener({
-            target: actionButton,
-          } as unknown as Event);
+    jest
+      .spyOn(mockActionsElement, "addEventListener")
+      .mockImplementation(
+        (event: string, listener: EventListenerOrEventListenerObject) => {
+          if (event === "click" && typeof listener === "function") {
+            listener({
+              target: actionButton,
+            } as unknown as Event);
+          }
         }
-      }
-    );
+      );
 
     init("test-package");
 

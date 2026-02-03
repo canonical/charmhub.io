@@ -11,9 +11,9 @@
   <link rel="preconnect" href="https://assets.ubuntu.com">
 
   {% if store_design %}
-  {{ vite_import('static/sass/styles.scss') }}
+  <link rel="stylesheet" type="text/css" media="screen" href="{{url_for('static', filename='css/styles.css')}}" />
   {% else %}
-  {{ vite_import('static/sass/styles-embedded.scss') }}
+  <link rel="stylesheet" type="text/css" media="screen" href="{{ versioned_static('css/styles-embedded.css') }}" />
   {% endif %}
 
   <meta name="description" content="{% block meta_description %}Universal operators for application lifecycle management on Linux, Windows and Kubernetes.{% endblock %}">

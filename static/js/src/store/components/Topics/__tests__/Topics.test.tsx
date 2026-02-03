@@ -4,7 +4,7 @@ import Topics from "../Topics";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "@testing-library/jest-dom";
 
-global.fetch = vi.fn(() =>
+(global.fetch as jest.Mock) = jest.fn(() =>
   Promise.resolve({
     json: () => Promise.resolve({ topics: [] }),
   })
@@ -20,11 +20,11 @@ const renderWithQueryClient = (ui: React.ReactElement) => {
 
 describe("Topics Component", () => {
   afterEach(() => {
-    vi.resetAllMocks();
+    jest.resetAllMocks();
   });
 
   test("renders loading cards", async () => {
-    global.fetch.mockResolvedValueOnce({
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
       json: () => Promise.resolve({ topics: [] }),
     });
 
@@ -64,7 +64,7 @@ describe("Topics Component", () => {
       },
     ];
 
-    global.fetch = vi.fn(() =>
+    (global.fetch as unknown as jest.Mock) = jest.fn(() =>
       Promise.resolve({
         json: () => Promise.resolve({ topics: mockTopics }),
       })
@@ -80,7 +80,7 @@ describe("Topics Component", () => {
   });
 
   test("renders empty state when no topics are available", async () => {
-    global.fetch = vi.fn(() =>
+    (global.fetch as jest.Mock) = jest.fn(() =>
       Promise.resolve({
         json: () => Promise.resolve({ topics: [] }),
       })
@@ -95,7 +95,7 @@ describe("Topics Component", () => {
   });
 
   test("handles fetch errors", async () => {
-    global.fetch = vi.fn(() => Promise.reject(new Error("Fetch error")));
+    global.fetch = jest.fn(() => Promise.reject(new Error("Fetch error")));
 
     renderWithQueryClient(<Topics topicsQuery="test" />);
 

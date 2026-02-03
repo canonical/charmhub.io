@@ -5,21 +5,20 @@ import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { usePackage } from "../../../hooks";
 import { mockPackage } from "../../../mocks";
-import { Mock } from "vitest";
 
-globalThis.fetch = vi.fn();
+global.fetch = jest.fn();
 
 const queryClient = new QueryClient();
 
-vi.mock("../../../hooks/usePackage");
-const mockUsePackage = usePackage as Mock;
+jest.mock("../../../hooks/usePackage");
+const mockUsePackage = usePackage as jest.Mock;
 
-mockUsePackage.mockReturnValue({ data: mockPackage, refetch: vi.fn() });
+mockUsePackage.mockReturnValue({ data: mockPackage, refetch: jest.fn() });
 
 const renderComponent = ({
   charmName = "my-charm",
-  onClose = vi.fn(),
-  setSelectedTrack = vi.fn(),
+  onClose = jest.fn(),
+  setSelectedTrack = jest.fn(),
 }) => {
   return render(
     <RecoilRoot>
@@ -36,7 +35,7 @@ const renderComponent = ({
 
 describe("AddTrackPanel", () => {
   beforeEach(() => {
-    (global.fetch as Mock).mockClear();
+    (global.fetch as jest.Mock).mockClear();
   });
 
   test("renders correctly", () => {
@@ -49,7 +48,7 @@ describe("AddTrackPanel", () => {
   });
 
   test("calls onClose when Cancel button is clicked", () => {
-    const onClose = vi.fn();
+    const onClose = jest.fn();
 
     renderComponent({ onClose });
 
@@ -59,7 +58,7 @@ describe("AddTrackPanel", () => {
   });
 
   test("selects newly created track when add button is clicked, happy flow", async () => {
-    const setSelectedTrack = vi.fn();
+    const setSelectedTrack = jest.fn();
 
     renderComponent({ setSelectedTrack });
 
@@ -69,7 +68,7 @@ describe("AddTrackPanel", () => {
       target: { value: trackName },
     });
 
-    (global.fetch as Mock).mockReturnValue(
+    (global.fetch as jest.Mock).mockReturnValue(
       Promise.resolve({
         json: () => Promise.resolve({}),
         ok: true,
@@ -91,7 +90,7 @@ describe("AddTrackPanel", () => {
       target: { value: trackName },
     });
 
-    (global.fetch as Mock).mockReturnValue(
+    (global.fetch as jest.Mock).mockReturnValue(
       Promise.resolve({
         json: () => Promise.resolve({ error: "track already exists" }),
         ok: false,

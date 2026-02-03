@@ -38,7 +38,7 @@ describe("Create Typer", () => {
     const element = document.getElementById("testTyper") as HTMLElement;
     const typer = createTyper(element);
 
-    vi.spyOn(typer, "doTyping").mockImplementation(() => {
+    jest.spyOn(typer, "doTyping").mockImplementation(() => {
       typer.element.innerHTML = "hello";
     });
 
@@ -50,7 +50,7 @@ describe("Create Typer", () => {
     const element = document.getElementById("testTyper") as HTMLElement;
     const typer = createTyper(element);
 
-    vi.spyOn(typer, "doTyping").mockImplementation(() => {});
+    jest.spyOn(typer, "doTyping").mockImplementation(() => {});
 
     typer.start();
     expect(typer.typing).toBe(true);
@@ -60,7 +60,7 @@ describe("Create Typer", () => {
     const element = document.getElementById("testTyper") as HTMLElement;
     const typer = createTyper(element);
 
-    vi.spyOn(typer, "doTyping").mockImplementation(() => {});
+    jest.spyOn(typer, "doTyping").mockImplementation(() => {});
 
     typer.start();
     expect(typer.typing).toBe(true);
@@ -74,11 +74,11 @@ describe("Typer setup", () => {
     const element = document.getElementById("testTyper") as HTMLElement;
     const typer = createTyper(element);
 
-    vi.spyOn(typer, "start").mockImplementation(() => {});
-    vi.spyOn(typer, "stop").mockImplementation(() => {});
+    jest.spyOn(typer, "start").mockImplementation(() => {});
+    jest.spyOn(typer, "stop").mockImplementation(() => {});
 
-    const startHandler = vi.fn();
-    const stopHandler = vi.fn();
+    const startHandler = jest.fn();
+    const stopHandler = jest.fn();
 
     const startButton = document.querySelector(
       ".typer-start"
@@ -102,7 +102,7 @@ describe("Typer setup", () => {
 
 describe("Cursor functionality", () => {
   test("should toggle cursor visibility", () => {
-    vi.useFakeTimers();
+    jest.useFakeTimers();
 
     const element = document.getElementById("testTyper") as HTMLElement;
     const typer = createTyper(element);
@@ -111,13 +111,13 @@ describe("Cursor functionality", () => {
       typer.cursor.updateBlinkState();
       expect(typer.cursor.element.style.opacity).toBe("0");
 
-      vi.advanceTimersByTime(400);
+      jest.advanceTimersByTime(400);
       expect(typer.cursor.element.style.opacity).toBe("1");
 
-      vi.advanceTimersByTime(400);
+      jest.advanceTimersByTime(400);
       expect(typer.cursor.element.style.opacity).toBe("0");
     }
 
-    vi.useRealTimers();
+    jest.useRealTimers();
   });
 });

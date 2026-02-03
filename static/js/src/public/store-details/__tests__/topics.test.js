@@ -1,10 +1,9 @@
 import { initTopics } from "../topics";
 import buildTopicCard from "../buildTopicCard";
-import userEvent from "@testing-library/user-event";
 
-vi.mock("../buildTopicCard");
+jest.mock("../buildTopicCard");
 
-global.fetch = vi.fn();
+global.fetch = jest.fn();
 
 describe("initTopics Class", () => {
   let instance;
@@ -105,10 +104,10 @@ describe("initTopics Class", () => {
     });
   });
 
-  test("should handle filter click event", async () => {
-    const user = userEvent.setup();
-    const checkbox = document.querySelector(`.category-filter[value="tech"]`);
-    await user.click(checkbox);
+  test("should handle filter click event", () => {
+    const checkboxes = document.querySelectorAll(".category-filter");
+    checkboxes[0].checked = true;
+    checkboxes[0].dispatchEvent(new Event("click"));
 
     expect(instance._filters.filter).toContain("tech");
   });

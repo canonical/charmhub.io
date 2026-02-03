@@ -24,7 +24,7 @@
 {% endblock%}
 
 {% block details_scripts %}
-  {{ vite_import('static/js/src/public/details/docs/index.js') }}
+  <script src="{{ versioned_static('js/dist/details_docs.js') }}" defer></script>
   <script>
     window.addEventListener("DOMContentLoaded", function () {
       charmhub.details.docs.initSideNav();

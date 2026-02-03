@@ -240,16 +240,13 @@ def accept_post_invite():
         else:
             res["success"] = False
             errors = response.json().get("error-list", [])
-            res["message"] = (
-                errors[0].get("message") if errors else "Unknown error"
-            )
+            res["message"] = errors[0].get("message") if errors else "Unknown error"
             return make_response(res, 500)
 
     except StoreApiResponseErrorList as error_list:
         res["success"] = False
         error_messages = [
-            f"{error.get('message', 'An error occured')}"
-            for error in error_list.errors
+            f"{error.get('message', 'An error occured')}" for error in error_list.errors
         ]
         res["message"] = " ".join(error_messages)
     except Exception:
@@ -283,8 +280,7 @@ def reject_post_invite():
     except StoreApiResponseErrorList as error_list:
         res["success"] = False
         error_messages = [
-            f"{error.get('message', 'An error occured')}"
-            for error in error_list.errors
+            f"{error.get('message', 'An error occured')}" for error in error_list.errors
         ]
         res["message"] = " ".join(error_messages)
         response = make_response(res, 500)
@@ -297,9 +293,7 @@ def reject_post_invite():
 
 @trace_function
 @publisher.route(
-    '/api/packages/<regex("'
-    + DETAILS_VIEW_REGEX
-    + '"):entity_name>/collaborators',
+    '/api/packages/<regex("' + DETAILS_VIEW_REGEX + '"):entity_name>/collaborators',
 )
 @login_required
 def get_collaborators(entity_name):
@@ -314,8 +308,7 @@ def get_collaborators(entity_name):
         response = make_response(res, 200)
     except StoreApiResponseErrorList as error_list:
         error_messages = [
-            f"{error.get('message', 'An error occured')}"
-            for error in error_list.errors
+            f"{error.get('message', 'An error occured')}" for error in error_list.errors
         ]
         res["message"] = " ".join(error_messages)
         res["success"] = False
@@ -341,8 +334,7 @@ def get_pending_invites(entity_name):
         response = make_response(res, 200)
     except StoreApiResponseErrorList as error_list:
         error_messages = [
-            f"{error.get('message', 'An error occured')}"
-            for error in error_list.errors
+            f"{error.get('message', 'An error occured')}" for error in error_list.errors
         ]
         res["message"] = " ".join(error_messages)
         res["success"] = False
@@ -374,8 +366,7 @@ def invite_collaborators(entity_name):
         token = result["tokens"][0]["token"]
 
         invite_link = (
-            f"https://charmhub.io/accept-invite?package={entity_name}"
-            f"&token={token}"
+            f"https://charmhub.io/accept-invite?package={entity_name}&token={token}"
         )
         emailer = get_emailer()
         emailer.send_email_template(
@@ -449,14 +440,10 @@ def revoke_invite(entity_name):
 def register_name():
     entity_name = request.args.get("entity_name", default="", type=str)
 
-    invalid_name_str = request.args.get(
-        "invalid_name", default="False", type=str
-    )
+    invalid_name_str = request.args.get("invalid_name", default="False", type=str)
     invalid_name = invalid_name_str == "True"
 
-    reserved_name_str = request.args.get(
-        "reserved_name", default="False", type=str
-    )
+    reserved_name_str = request.args.get("reserved_name", default="False", type=str)
     reserved_name = reserved_name_str == "True"
 
     already_registered_str = request.args.get(
@@ -464,9 +451,7 @@ def register_name():
     )
     already_registered = already_registered_str == "True"
 
-    already_owned_str = request.args.get(
-        "already_owned", default="False", type=str
-    )
+    already_owned_str = request.args.get("already_owned", default="False", type=str)
     already_owned = already_owned_str == "True"
 
     context = {
@@ -490,9 +475,7 @@ def post_register_name():
     }
 
     try:
-        result = publisher_gateway.register_package_name(
-            session["account-auth"], data
-        )
+        result = publisher_gateway.register_package_name(session["account-auth"], data)
         if result:
             flash(
                 f"Your {data['type']} name has been successfully registered.",
@@ -662,8 +645,7 @@ def get_releases(entity_name: str):
 
     except StoreApiResponseErrorList as error_list:
         error_messages = [
-            f"{error.get('message', 'An error occured')}"
-            for error in error_list.errors
+            f"{error.get('message', 'An error occured')}" for error in error_list.errors
         ]
         res["message"] = " ".join(error_messages)
         res["success"] = False
@@ -806,9 +788,7 @@ def edit_solution_form(hash):
         "published",
         "pending_metadata_review",
     ]:
-        flash(
-            "This solution cannot be edited in its current status.", "negative"
-        )
+        flash("This solution cannot be edited in its current status.", "negative")
         return redirect("/solutions")
 
     username = session["account"]["username"]
@@ -849,9 +829,7 @@ def submit_edit_solution(hash):
         "published",
         "pending_metadata_review",
     ]:
-        flash(
-            "This solution cannot be edited in its current status.", "negative"
-        )
+        flash("This solution cannot be edited in its current status.", "negative")
         return redirect("/solutions")
 
     username = session["account"]["username"]
@@ -886,9 +864,7 @@ def submit_edit_solution(hash):
         )
 
     if "error-list" in result and result["error-list"]:
-        flash(
-            "Failed to update solution due to validation errors.", "negative"
-        )
+        flash("Failed to update solution due to validation errors.", "negative")
         return render_solution_form_with_errors(
             "solutions/edit-solution.html",
             result["error-list"],
@@ -904,8 +880,7 @@ def submit_edit_solution(hash):
         )
     elif action == "update":
         flash(
-            f"Your solution '{form_data['title']}' "
-            "has been successfully updated.",
+            f"Your solution '{form_data['title']}' has been successfully updated.",
             "positive",
         )
 

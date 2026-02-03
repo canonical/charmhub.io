@@ -32,7 +32,7 @@ const renderComponent = ({
 
 describe("Collaboration", () => {
   test("sets collaborators data", async () => {
-    const onload = vi.fn();
+    const onload = jest.fn();
     renderComponent({ event: onload, state: filteredCollaboratorsListState });
     const component = await waitFor(() => screen.getByRole("grid"));
     expect(component).toBeInTheDocument();
@@ -40,7 +40,7 @@ describe("Collaboration", () => {
   });
 
   test("sets invites data", async () => {
-    const onload = vi.fn();
+    const onload = jest.fn();
     renderComponent({ event: onload, state: filteredInvitesListState });
     const component = await waitFor(() => screen.getByRole("grid"));
     expect(component).toBeInTheDocument();
@@ -49,7 +49,7 @@ describe("Collaboration", () => {
 
   test("renders side panel when Add new collaborator is clicked", () => {
     renderComponent({
-      event: vi.fn(),
+      event: jest.fn(),
       state: filteredCollaboratorsListState,
     });
     const user = userEvent.setup();
@@ -64,7 +64,7 @@ describe("Collaboration", () => {
 
   test("closes side panel when overlay is clicked", () => {
     renderComponent({
-      event: vi.fn(),
+      event: jest.fn(),
       state: filteredCollaboratorsListState,
     });
     const user = userEvent.setup();
@@ -82,7 +82,7 @@ describe("Collaboration", () => {
 
   test("closes side panel when Escape key is pressed", async () => {
     renderComponent({
-      event: vi.fn(),
+      event: jest.fn(),
       state: filteredCollaboratorsListState,
     });
     const user = userEvent.setup();

@@ -12,11 +12,11 @@ describe("highlight-nav", () => {
       </nav>
     `;
     container = document.querySelector("nav");
-    vi.spyOn(window, "addEventListener");
+    jest.spyOn(window, "addEventListener");
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   describe("getActiveNavItem", () => {

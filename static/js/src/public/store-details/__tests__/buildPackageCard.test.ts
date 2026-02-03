@@ -199,7 +199,7 @@ describe("buildPackageCard", () => {
         bundleIcons.querySelector<HTMLElement>(".p-bundle-icon")?.style
           .backgroundImage
       ).toBe(
-        `url("https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg")`
+        "url(https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg)"
       );
     }
   });

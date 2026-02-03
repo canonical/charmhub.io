@@ -4,51 +4,49 @@ import { useQuery } from "react-query";
 import InterfaceDetails from "../InterfaceDetails";
 import { InterfaceData } from "../../../types";
 import "@testing-library/jest-dom";
-import { Mock } from "vitest";
 
-vi.mock("react-router-dom", () => ({
-  useParams: vi.fn(),
-}));
-
-vi.mock("react-query", () => ({
-  useQuery: vi.fn(),
+jest.mock("react-router-dom", () => ({
+  useParams: jest.fn(),
 }));
 
-vi.mock("../../InterfaceDetailsNav", () => ({
-  default: () => <div>InterfaceDetailsNav</div>,
+jest.mock("react-query", () => ({
+  useQuery: jest.fn(),
 }));
-vi.mock("../../InterfaceDiscussion", () => ({
-  default: () => <div>InterfaceDiscussion</div>,
-}));
-vi.mock("../../CanonicalRelationsMeta", () => ({
-  default: () => <div>CanonicalRelationsMeta</div>,
-}));
-vi.mock("../../CommunityRelationsMeta", () => ({
-  default: () => <div>CommunityRelationsMeta</div>,
-}));
-vi.mock("../../InterfaceDetailsLinks", () => ({
-  default: () => <div>InterfaceDetailsLinks</div>,
-}));
-vi.mock("../../DeveloperDocumentation", () => ({
-  default: () => <div>DeveloperDocumentation</div>,
-}));
-vi.mock("../../ProvidingCharms", () => ({
-  default: () => <div>ProvidingCharms</div>,
-}));
-vi.mock("../../RequiringCharms", () => ({
-  default: () => <div>RequiringCharms</div>,
-}));
+
+jest.mock("../../InterfaceDetailsNav", () => () => (
+  <div>InterfaceDetailsNav</div>
+));
+jest.mock("../../InterfaceDiscussion", () => () => (
+  <div>InterfaceDiscussion</div>
+));
+jest.mock("../../CanonicalRelationsMeta", () => () => (
+  <div>CanonicalRelationsMeta</div>
+));
+jest.mock("../../CommunityRelationsMeta", () => () => (
+  <div>CommunityRelationsMeta</div>
+));
+jest.mock("../../InterfaceDetailsLinks", () => () => (
+  <div>InterfaceDetailsLinks</div>
+));
+jest.mock("../../DeveloperDocumentation", () => () => (
+  <div>DeveloperDocumentation</div>
+));
+jest.mock("../../ProvidingCharms", () => () => <div>ProvidingCharms</div>);
+jest.mock("../../RequiringCharms", () => () => <div>RequiringCharms</div>);
+
+const mockUseParams = useParams as jest.Mock;
+const mockUseQuery = useQuery as jest.Mock;
 
 describe("InterfaceDetails", () => {
   beforeEach(() => {
-    (useParams as Mock).mockReturnValue({
+    mockUseParams.mockReturnValue({
       interfaceName: "test-interface",
       interfaceStatus: undefined,
     });
   });
 
   test("renders loading state when data is being fetched", () => {
-    (useQuery as Mock).mockReturnValue({
+    mockUseQuery.mockReturnValue({
       data: undefined,
       error: null,
       isLoading: true,
@@ -60,7 +58,7 @@ describe("InterfaceDetails", () => {
   });
 
   test("renders error state when there is an error fetching data", () => {
-    (useQuery as Mock).mockReturnValue({
+    mockUseQuery.mockReturnValue({
       data: undefined,
       error: new Error("Failed to fetch"),
       isLoading: false,
@@ -103,7 +101,7 @@ describe("InterfaceDetails", () => {
       last_modified: "2024-08-14T12:00:00Z",
     };
 
-    (useQuery as Mock).mockReturnValue({
+    mockUseQuery.mockReturnValue({
       data: mockInterfaceData,
       error: null,
       isLoading: false,

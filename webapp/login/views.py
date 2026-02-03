@@ -15,9 +15,7 @@ login = flask.Blueprint(
 )
 
 LOGIN_URL = os.getenv("FLASK_LOGIN_URL", "https://login.ubuntu.com")
-LOGIN_LAUNCHPAD_TEAM = os.getenv(
-    "LOGIN_LAUNCHPAD_TEAM", "canonical-webmonkeys"
-)
+LOGIN_LAUNCHPAD_TEAM = os.getenv("LOGIN_LAUNCHPAD_TEAM", "canonical-webmonkeys")
 
 
 request_session = requests.Session()
@@ -89,9 +87,7 @@ def login_callback():
     )
 
     # Set "account", "permissions" and other properties from the API response
-    flask.session.update(
-        publisher_gateway.macaroon_info(flask.session["account-auth"])
-    )
+    flask.session.update(publisher_gateway.macaroon_info(flask.session["account-auth"]))
 
     return flask.redirect(
         flask.session.pop(

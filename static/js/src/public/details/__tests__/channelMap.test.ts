@@ -76,7 +76,7 @@ describe("channelMap", () => {
 
   afterEach(() => {
     document.body.innerHTML = "";
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   test("should initialise the channelMap function correctly", () => {

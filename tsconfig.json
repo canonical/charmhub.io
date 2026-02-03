@@ -18,11 +18,12 @@
     "isolatedModules": true,
     "noEmit": false,
     "sourceMap": true,
-    "strictPropertyInitialization": false,
-    "types": ["vitest/globals"],
-    "paths": {
-      "*": ["types/*.d.ts"]
-    }
+    "strictPropertyInitialization": false
   },
   "include": ["./static/js/"],
+  "paths": [
+    {
+      "*": ["types/*.d.ts"]
+    }
+  ]
 }

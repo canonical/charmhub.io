@@ -12,22 +12,29 @@ RUN --mount=type=cache,target=/root/.cache/pip pip3 install --requirement /tmp/r
 
 # Build stage: Install yarn dependencies
 # ===
-FROM node:24 AS yarn-dependencies
+FROM node:23 AS yarn-dependencies
 WORKDIR /srv
 ADD package.json .
 ADD yarn.lock .
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn yarn install --production
 
-# Build stage: Run "yarn run build"
+# Build stage: Run "yarn run build-js"
 # ===
-FROM yarn-dependencies AS build
-ADD static static
-ADD vite.config.js .
+FROM yarn-dependencies AS build-js
+ADD static/js static/js
+ADD webpack.config.js .
+ADD webpack.config.entry.js .
+ADD webpack.config.rules.js .
 ADD tsconfig.json .
-ADD templates templates
-ADD vitePluginDetectInput.js .
+ADD babel.config.json .
 RUN yarn install
-RUN yarn run build
+RUN yarn run build-js
+
+# Build stage: Run "yarn run build-css"
+# ===
+FROM yarn-dependencies AS build-css
+ADD . .
+RUN yarn run build-css
 
 # Set up environment
 ENV LANG C.UTF-8
@@ -44,8 +51,9 @@ ENV PATH="/venv/bin:${PATH}"
 
 # Import code, build assets
 ADD . .
-RUN rm -rf package.json yarn.lock babel.config.json requirements.txt
-COPY --from=build /srv/static/js static/js
+RUN rm -rf package.json yarn.lock babel.config.json webpack.config.js requirements.txt
+COPY --from=build-js /srv/static/js static/js
+COPY --from=build-css /srv/static/css static/css
 
 
 # Setup commands to run server

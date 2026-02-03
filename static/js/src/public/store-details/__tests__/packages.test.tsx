@@ -3,12 +3,12 @@ import "@testing-library/jest-dom";
 
 describe("initPackages", () => {
   beforeEach(() => {
-    global.fetch = vi.fn();
+    global.fetch = jest.fn();
   });
 
   test("should initialise and fetch package list", async () => {
     const mockPackages = { packages: [] };
-    global.fetch.mockResolvedValueOnce({
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
       json: () => mockPackages,
     });
 
@@ -30,12 +30,12 @@ describe("initPackages", () => {
   });
 
   test("should fetch package list with query", async () => {
-    global.fetch.mockResolvedValueOnce({
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
       json: () => ({ packages: [] }),
     });
 
     const filters = { q: ["search"] };
-    const spy = vi
+    const spy = jest
       .spyOn(initPackages, "getUrlFilters")
       .mockReturnValue(filters);
 
@@ -46,7 +46,7 @@ describe("initPackages", () => {
   });
 
   test("should handle bundle apps fetching and error", async () => {
-    global.fetch.mockResolvedValueOnce({
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
       json: () => ({ charms: [] }),
       ok: true,
     });
@@ -54,7 +54,7 @@ describe("initPackages", () => {
     const result = await initPackages.getBundleApps("bundle-name");
     expect(result).toEqual({ charms: [] });
 
-    global.fetch.mockResolvedValueOnce({ ok: false });
+    (global.fetch as jest.Mock).mockResolvedValueOnce({ ok: false });
     await expect(initPackages.getBundleApps("bundle-name")).rejects.toThrow(
       "There was a problem communicating with the server."
     );

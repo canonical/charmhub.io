@@ -10,11 +10,11 @@ import { RecoilObserver, QueryProvider } from "../../../utils";
 
 let mockSearchParams = { filter: "" };
 
-vi.mock("react-router-dom", async (importOriginal) => ({
-  ...(await importOriginal()),
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
   useSearchParams: () => [
     new URLSearchParams(mockSearchParams),
-    vi.fn((params) => {
+    jest.fn((params) => {
       mockSearchParams = { ...params };
     }),
   ],
@@ -33,7 +33,7 @@ const renderComponent = ({
     <RecoilRoot>
       <BrowserRouter>
         <QueryProvider>
-          <RecoilObserver node={filterQueryState} event={event || vi.fn()} />
+          <RecoilObserver node={filterQueryState} event={event || jest.fn()} />
           <CollaboratorFilter />
         </QueryProvider>
       </BrowserRouter>

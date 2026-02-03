@@ -45,7 +45,7 @@ describe("HistoryState", () => {
   });
 
   test("should call registered listeners on popstate", () => {
-    const mockListener = vi.fn();
+    const mockListener = jest.fn();
     testHistoryState.addPopListener(mockListener);
 
     testHistoryState.updatePath(0, "new-path");
@@ -57,8 +57,8 @@ describe("HistoryState", () => {
   });
 
   test("should handle multiple listeners", () => {
-    const mockListener1 = vi.fn();
-    const mockListener2 = vi.fn();
+    const mockListener1 = jest.fn();
+    const mockListener2 = jest.fn();
     testHistoryState.addPopListener(mockListener1);
     testHistoryState.addPopListener(mockListener2);
 

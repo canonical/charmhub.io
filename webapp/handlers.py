@@ -1,5 +1,5 @@
 from flask import render_template, session
-from webapp.config import SENTRY_DSN, IS_DEVELOPMENT, VITE_CONFIG
+from webapp.config import SENTRY_DSN
 
 from canonicalwebteam.exceptions import (
     StoreApiError,
@@ -62,13 +62,6 @@ CSP = {
     ],
 }
 
-if IS_DEVELOPMENT:
-    VITE_PORT = VITE_CONFIG["VITE_PORT"]
-    CSP["script-src-elem"].append(f"localhost:{VITE_PORT}")
-    CSP["connect-src"].append(f"localhost:{VITE_PORT}")
-    CSP["connect-src"].append(f"ws://localhost:{VITE_PORT}")
-    CSP["style-src"].append(f"localhost:{VITE_PORT}")
-
 
 def charmhub_utility_processor():
     """
@@ -99,9 +92,7 @@ def set_handlers(app):
     def handle_store_api_timeout(e):
         status_code = 504
         return (
-            render_template(
-                "500.html", error_message=str(e), status_code=status_code
-            ),
+            render_template("500.html", error_message=str(e), status_code=status_code),
             status_code,
         )
 
@@ -136,9 +127,7 @@ def set_handlers(app):
     def handle_store_api_error(e):
         status_code = 502
         return (
-            render_template(
-                "500.html", error_message=str(e), status_code=status_code
-            ),
+            render_template("500.html", error_message=str(e), status_code=status_code),
             status_code,
         )
 
@@ -159,14 +148,10 @@ def set_handlers(app):
         - X-Permitted-Cross-Domain-Policies: disallows cross-domain access to
         resources
         """
-        response.headers["Content-Security-Policy"] = helpers.get_csp_as_str(
-            CSP
-        )
+        response.headers["Content-Security-Policy"] = helpers.get_csp_as_str(CSP)
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         response.headers["Cross-Origin-Embedder-Policy"] = "credentialless"
-        response.headers["Cross-Origin-Opener-Policy"] = (
-            "same-origin-allow-popups"
-        )
+        response.headers["Cross-Origin-Opener-Policy"] = "same-origin-allow-popups"
         response.headers["Cross-Origin-Resource-Policy"] = "cross-origin"
         response.headers["X-Permitted-Cross-Domain-Policies"] = "none"
         return response
