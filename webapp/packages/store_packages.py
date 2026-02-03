@@ -58,12 +58,14 @@ def package(package_type):
             "published_packages": [
                 package
                 for package in publisher_packages
-                if package["status"] == "published" and package["type"] == page_type
+                if package["status"] == "published"
+                and package["type"] == page_type
             ],
             "registered_packages": [
                 package
                 for package in publisher_packages
-                if package["status"] == "registered" and package["type"] == page_type
+                if package["status"] == "registered"
+                and package["type"] == page_type
             ],
             "page_type": page_type,
         }

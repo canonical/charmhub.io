@@ -79,14 +79,18 @@ class TestIntegrationviews(TestCase):
         self.assertIn(b"Mocked body", response.data)
 
     @patch("webapp.integrations.views.fetch_interface_details")
-    def test_get_single_interface_not_found(self, mock_fetch_interface_details):
+    def test_get_single_interface_not_found(
+        self, mock_fetch_interface_details
+    ):
         mock_fetch_interface_details.return_value = None
 
         response = self.client.get("/integrations/nonexistent-interface")
         self.assertEqual(response.status_code, 404)
 
     @patch("webapp.integrations.views.fetch_interface_details")
-    def test_get_single_interface_json_found(self, mock_fetch_interface_details):
+    def test_get_single_interface_json_found(
+        self, mock_fetch_interface_details
+    ):
         mock_data = {
             "name": "test-interface",
             "body": "<p>Mocked body</p>",
@@ -110,7 +114,9 @@ class TestIntegrationviews(TestCase):
         self.assertEqual(response.get_json(), mock_data)
 
     @patch("webapp.integrations.views.fetch_interface_details")
-    def test_get_single_interface_json_not_found(self, mock_fetch_interface_details):
+    def test_get_single_interface_json_not_found(
+        self, mock_fetch_interface_details
+    ):
         mock_fetch_interface_details.return_value = None
 
         response = self.client.get("/integrations/unknown.json")

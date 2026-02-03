@@ -87,7 +87,9 @@ class TestGetPublisherDetails(TestCase):
 
     def _assert_heading_section(self, content, expected_publisher):
         # back to all charms is present and linked
-        all_charms_elem = content.css.select(".p-strip--dark > .u-fixed-width a")[0]
+        all_charms_elem = content.css.select(
+            ".p-strip--dark > .u-fixed-width a"
+        )[0]
         self.assertEqual(all_charms_elem.text, "< All charms")
         self.assertEqual(all_charms_elem.get("href"), "/")
         # publisher name title is present and equal
@@ -110,6 +112,8 @@ class TestGetPublisherDetails(TestCase):
         title_elem = content.css.select("h2")[0]
         self.assertEqual(title_elem.text.strip(), expected_values["title"])
         publisher_elem = content.css.select(".u-text--muted em")[0]
-        self.assertEqual(publisher_elem.text.strip(), expected_values["publisher"])
+        self.assertEqual(
+            publisher_elem.text.strip(), expected_values["publisher"]
+        )
         summary_elem = content.css.select("p.u-line-clamp")[0]
         self.assertEqual(summary_elem.text.strip(), expected_values["summary"])

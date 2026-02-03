@@ -5,8 +5,8 @@ from canonicalwebteam.candid import CandidClient
 from canonicalwebteam.flask_base.app import FlaskBase
 
 from webapp.store_api import publisher_gateway
-from webapp.extensions import csrf
-from webapp.config import APP_NAME
+from webapp.extensions import csrf, vite
+from webapp.config import APP_NAME, VITE_CONFIG
 from webapp.handlers import set_handlers
 from webapp.login.views import login
 from webapp.topics.views import topics
@@ -42,12 +42,14 @@ app = FlaskBase(
 
 app.name = APP_NAME
 app.config["LOGIN_REQUIRED"] = login_required
+app.config.update(VITE_CONFIG)
 
 set_handlers(app)
 
 request_session = requests.Session()
 candid = CandidClient(request_session)
 csrf.init_app(app)
+vite.init_app(app)
 
 app.register_blueprint(store_packages)
 app.register_blueprint(publisher)
@@ -143,9 +145,9 @@ def site_map_links():
 
 @app.route("/sitemap-operators.xml")
 def site_map_operators():
-    charms = publisher_gateway.find(fields=["default-release.channel.released-at"]).get(
-        "results", []
-    )
+    charms = publisher_gateway.find(
+        fields=["default-release.channel.released-at"]
+    ).get("results", [])
 
     for charm in charms:
         charm["date"] = (

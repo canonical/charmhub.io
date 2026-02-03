@@ -61,7 +61,8 @@ mock_interface = {
         },
         {
             "name": "alertmanager-k8s",
-            "url": "https://www.github.com/canonical/alertmanager-k8s-operator",
+            "url": "https://www.github.com/canonical"
+            "/alertmanager-k8s-operator",
         },
         {
             "name": "zinc-k8s",
@@ -75,7 +76,8 @@ mock_interface = {
         },
         {
             "name": "grafana-agent-k8s",
-            "url": "https://www.github.com/canonical/grafana-agent-k8s-operator",
+            "url": "https://www.github.com/canonical"
+            "/grafana-agent-k8s-operator",
         },
     ],
 }
@@ -92,7 +94,9 @@ class TestInterfaces(unittest.TestCase):
 
     def test_get_h_content(self):
         self.assertEqual(self.interfaces.get_h_content("abcd", "abc"), [0, 3])
-        self.assertRaises(ValueError, self.interfaces.get_h_content, "abcd", "xyz")
+        self.assertRaises(
+            ValueError, self.interfaces.get_h_content, "abcd", "xyz"
+        )
 
     @patch("requests.get")
     def test_get_interface_from_path(self, requests_get):
@@ -159,7 +163,9 @@ class TestInterfaces(unittest.TestCase):
             "interfaces/test_interface/v3/interface.yaml"
         )
 
-        self.assertEqual(result, {**mock_interface, "providers": [], "requirers": []})
+        self.assertEqual(
+            result, {**mock_interface, "providers": [], "requirers": []}
+        )
 
     def test_get_interface_name_from_readme(self):
         readme = "# test_interface\n\n## some more content"

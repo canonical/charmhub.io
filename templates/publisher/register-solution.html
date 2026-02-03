@@ -216,5 +216,5 @@
 </section>
 
 {% include 'solutions/partials/_confirmation_modal.html' %}
-<script src="{{ url_for('static', filename='js/dist/register-solution.js') }}"></script>
+  {{ vite_import('static/js/src/solutions/register-solution.js') }}
 {% endblock %}

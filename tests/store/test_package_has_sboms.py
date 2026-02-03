@@ -18,7 +18,9 @@ class TestPackageHasSboms(unittest.TestCase):
 
     @patch("webapp.store.views.requests.head")
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
-    def test_package_has_sboms_success_200(self, mock_get_endpoint_url, mock_head):
+    def test_package_has_sboms_success_200(
+        self, mock_get_endpoint_url, mock_head
+    ):
         """Test that function returns True when HEAD request returns 200."""
         # Setup mocks
         mock_get_endpoint_url.return_value = "https://example.com/sbom/path"
@@ -41,7 +43,9 @@ class TestPackageHasSboms(unittest.TestCase):
 
     @patch("webapp.store.views.requests.head")
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
-    def test_package_has_sboms_success_302(self, mock_get_endpoint_url, mock_head):
+    def test_package_has_sboms_success_302(
+        self, mock_get_endpoint_url, mock_head
+    ):
         """Test that function returns True when HEAD request returns 302."""
         # Setup mocks
         mock_get_endpoint_url.return_value = "https://example.com/sbom/path"
@@ -64,7 +68,9 @@ class TestPackageHasSboms(unittest.TestCase):
 
     @patch("webapp.store.views.requests.head")
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
-    def test_package_has_sboms_failure_404(self, mock_get_endpoint_url, mock_head):
+    def test_package_has_sboms_failure_404(
+        self, mock_get_endpoint_url, mock_head
+    ):
         """Test that function returns False when HEAD request returns 404."""
         # Setup mocks
         mock_get_endpoint_url.return_value = "https://example.com/sbom/path"
@@ -87,7 +93,9 @@ class TestPackageHasSboms(unittest.TestCase):
 
     @patch("webapp.store.views.requests.head")
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
-    def test_package_has_sboms_failure_500(self, mock_get_endpoint_url, mock_head):
+    def test_package_has_sboms_failure_500(
+        self, mock_get_endpoint_url, mock_head
+    ):
         """Test that function returns False when HEAD request returns 500."""
         # Setup mocks
         mock_get_endpoint_url.return_value = "https://example.com/sbom/path"
@@ -153,7 +161,9 @@ class TestPackageHasSboms(unittest.TestCase):
 
     @patch("webapp.store.views.requests.head")
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
-    def test_package_has_sboms_edge_cases(self, mock_get_endpoint_url, mock_head):
+    def test_package_has_sboms_edge_cases(
+        self, mock_get_endpoint_url, mock_head
+    ):
         """Test edge cases with various status codes."""
         test_cases = [
             (100, False),  # Continue
@@ -172,7 +182,9 @@ class TestPackageHasSboms(unittest.TestCase):
                 mock_head.reset_mock()
 
                 # Setup mocks
-                mock_get_endpoint_url.return_value = "https://example.com/sbom/path"
+                mock_get_endpoint_url.return_value = (
+                    "https://example.com/sbom/path"
+                )
                 mock_response = Mock()
                 mock_response.status_code = status_code
                 mock_head.return_value = mock_response

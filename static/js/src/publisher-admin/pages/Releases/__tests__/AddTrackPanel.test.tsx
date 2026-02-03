@@ -5,20 +5,21 @@ import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { usePackage } from "../../../hooks";
 import { mockPackage } from "../../../mocks";
+import { Mock } from "vitest";
 
-global.fetch = jest.fn();
+globalThis.fetch = vi.fn();
 
 const queryClient = new QueryClient();
 
-jest.mock("../../../hooks/usePackage");
-const mockUsePackage = usePackage as jest.Mock;
+vi.mock("../../../hooks/usePackage");
+const mockUsePackage = usePackage as Mock;
 
-mockUsePackage.mockReturnValue({ data: mockPackage, refetch: jest.fn() });
+mockUsePackage.mockReturnValue({ data: mockPackage, refetch: vi.fn() });
 
 const renderComponent = ({
   charmName = "my-charm",
-  onClose = jest.fn(),
-  setSelectedTrack = jest.fn(),
+  onClose = vi.fn(),
+  setSelectedTrack = vi.fn(),
 }) => {
   return render(
     <RecoilRoot>
@@ -35,7 +36,7 @@ const renderComponent = ({
 
 describe("AddTrackPanel", () => {
   beforeEach(() => {
-    (global.fetch as jest.Mock).mockClear();
+    (global.fetch as Mock).mockClear();
   });
 
   test("renders correctly", () => {
@@ -48,7 +49,7 @@ describe("AddTrackPanel", () => {
   });
 
   test("calls onClose when Cancel button is clicked", () => {
-    const onClose = jest.fn();
+    const onClose = vi.fn();
 
     renderComponent({ onClose });
 
@@ -58,7 +59,7 @@ describe("AddTrackPanel", () => {
   });
 
   test("selects newly created track when add button is clicked, happy flow", async () => {
-    const setSelectedTrack = jest.fn();
+    const setSelectedTrack = vi.fn();
 
     renderComponent({ setSelectedTrack });
 
@@ -68,7 +69,7 @@ describe("AddTrackPanel", () => {
       target: { value: trackName },
     });
 
-    (global.fetch as jest.Mock).mockReturnValue(
+    (global.fetch as Mock).mockReturnValue(
       Promise.resolve({
         json: () => Promise.resolve({}),
         ok: true,
@@ -90,7 +91,7 @@ describe("AddTrackPanel", () => {
       target: { value: trackName },
     });
 
-    (global.fetch as jest.Mock).mockReturnValue(
+    (global.fetch as Mock).mockReturnValue(
       Promise.resolve({
         json: () => Promise.resolve({ error: "track already exists" }),
         ok: false,

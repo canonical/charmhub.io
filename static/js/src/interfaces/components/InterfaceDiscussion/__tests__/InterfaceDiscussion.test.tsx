@@ -3,8 +3,8 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import InterfaceDiscussion from "../InterfaceDiscussion";
 
-jest.mock("@canonical/react-components", () => ({
-  Button: jest.fn(({ children, href }) => (
+vi.mock("@canonical/react-components", () => ({
+  Button: vi.fn(({ children, href }) => (
     <a href={href} className="mock-button">
       {children}
     </a>

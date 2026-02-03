@@ -50,7 +50,7 @@ const createWrapper = () => {
 
 describe("useReleases", () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test("should display loading state initially", async () => {
@@ -74,7 +74,7 @@ describe("useReleases", () => {
         all_architectures: ["x86", "arm64"],
       },
     };
-    jest.spyOn(global, "fetch").mockResolvedValueOnce({
+    vi.spyOn(global, "fetch").mockResolvedValueOnce({
       ok: true,
       json: async () => mockData,
     } as Response);
@@ -96,7 +96,7 @@ describe("useReleases", () => {
       success: true,
       data: { releases: {}, all_architectures: [] },
     };
-    jest.spyOn(global, "fetch").mockResolvedValueOnce({
+    vi.spyOn(global, "fetch").mockResolvedValueOnce({
       ok: true,
       json: async () => mockData,
     } as Response);

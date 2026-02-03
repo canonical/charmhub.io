@@ -24,7 +24,7 @@ describe("Panel Toggling Tests", () => {
 
   afterEach(() => {
     document.body.innerHTML = originalBodyHTML;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe("handleTogglePanels function", () => {

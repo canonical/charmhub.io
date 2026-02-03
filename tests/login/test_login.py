@@ -101,7 +101,9 @@ class TestLoginViews(unittest.TestCase):
 
     @responses.activate
     def test_login_api_500(self):
-        responses.add(responses.Response(method="POST", url=self.api_url, status=500))
+        responses.add(
+            responses.Response(method="POST", url=self.api_url, status=500)
+        )
 
         response = self.client.get("/login")
 

@@ -3,20 +3,21 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { useSearchParams } from "react-router-dom";
 import Banner from "../Banner";
+import { Mock } from "vitest";
 
-jest.mock("react-router-dom", () => ({
-  useSearchParams: jest.fn(),
+vi.mock("react-router-dom", () => ({
+  useSearchParams: vi.fn(),
 }));
 
-window.HTMLElement.prototype.scrollIntoView = jest.fn();
+window.HTMLElement.prototype.scrollIntoView = vi.fn();
 
 describe("Banner Component", () => {
-  let mockSetSearchParams: jest.Mock;
+  let mockSetSearchParams: Mock;
   let mockSearchRef: React.RefObject<HTMLInputElement>;
 
   beforeEach(() => {
-    mockSetSearchParams = jest.fn();
-    (useSearchParams as jest.Mock).mockReturnValue([
+    mockSetSearchParams = vi.fn();
+    (useSearchParams as Mock).mockReturnValue([
       new URLSearchParams(),
       mockSetSearchParams,
     ]);
@@ -75,7 +76,7 @@ describe("Banner Component", () => {
 
   test("should preserve query parameter in input field", () => {
     const searchParams = new URLSearchParams({ q: "test" });
-    (useSearchParams as jest.Mock).mockReturnValue([
+    (useSearchParams as Mock).mockReturnValue([
       searchParams,
       mockSetSearchParams,
     ]);

@@ -156,7 +156,9 @@ class TestParamRedirect(unittest.TestCase):
         )
         make_response = MagicMock()
         redirect = MagicMock()
-        param_redirect_exec(req=req, make_response=make_response, redirect=redirect)
+        param_redirect_exec(
+            req=req, make_response=make_response, redirect=redirect
+        )
 
         redirect.assert_called_with("/accept-invite?package=test&token=test")
 

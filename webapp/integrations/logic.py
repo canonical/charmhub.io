@@ -8,9 +8,6 @@ from webapp.observability.utils import trace_function
 from webapp.packages.logic import (
     get_package,
 )
-import logging
-
-logger = logging.getLogger(__name__)
 
 GITHUB_TOKEN = getenv("GITHUB_TOKEN")
 
@@ -25,7 +22,9 @@ class Interfaces:
     @property
     def repo(self):
         if self._repo is None:
-            self._repo = github_client.get_repo("canonical/charmlibs")
+            self._repo = github_client.get_repo(
+                "canonical/charm-relation-interfaces"
+            )
         return self._repo
 
     @trace_function
@@ -35,7 +34,7 @@ class Interfaces:
         if interfaces:
             return interfaces
         try:
-            index = self.repo.get_contents("interfaces/index.json")
+            index = self.repo.get_contents("index.json")
             if isinstance(index, list):
                 index = index[0]
             index_content = index.decoded_content.decode("utf-8")
@@ -53,13 +52,10 @@ class Interfaces:
             return interface
         try:
             interface_versions = self.repo.get_contents(
-                "interfaces/{}/interface".format(interface_name)
+                "interfaces/{}".format(interface_name)
             )
-
-        except Exception as e:
-            logger.warning(f"Interface {interface_name} not found: {e}")
+        except Exception:
             return None
-
         versions = []
         if not isinstance(interface_versions, list):
             interface_versions = [interface_versions]
@@ -72,7 +68,7 @@ class Interfaces:
         latest_version = versions.pop()
 
         latest_version_interface = self.repo.get_contents(
-            "interfaces/{}/interface/{}/interface.yaml".format(
+            "interfaces/{}/{}/interface.yaml".format(
                 interface_name, latest_version
             )
         ).decoded_content.decode("utf-8")
@@ -110,9 +106,13 @@ class Interfaces:
 
     @trace_function
     def extract_headings_and_content(self, text, level):
-        headings = re.findall(r"^#{" + str(level) + r"}\s.*", text, flags=re.MULTILINE)
+        headings = re.findall(
+            r"^#{" + str(level) + r"}\s.*", text, flags=re.MULTILINE
+        )
 
-        start_end = {heading: self.get_h_content(text, heading) for heading in headings}
+        start_end = {
+            heading: self.get_h_content(text, heading) for heading in headings
+        }
         result = []
         for i in range(len(headings)):
             current_heading = headings[i]
@@ -167,7 +167,9 @@ class Interfaces:
 
             children = []
 
-            result = self.convert_readme(interface, version, content, level + 1)
+            result = self.convert_readme(
+                interface, version, content, level + 1
+            )
 
             if len(content) > 0:
                 body = content.split("#")[0].strip()

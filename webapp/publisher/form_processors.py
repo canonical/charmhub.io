@@ -60,7 +60,9 @@ def extract_maintainers_data():
 def extract_platform_data():
     def clean_list(field_name):
         return [
-            item.strip() for item in request.form.getlist(field_name) if item.strip()
+            item.strip()
+            for item in request.form.getlist(field_name)
+            if item.strip()
         ]
 
     return {
@@ -74,7 +76,9 @@ def extract_platform_data():
 def process_solution_form_data():
     form_data = extract_basic_form_fields()
 
-    if not form_data.get("get_started_url") and form_data.get("documentation_main"):
+    if not form_data.get("get_started_url") and form_data.get(
+        "documentation_main"
+    ):
         form_data["get_started_url"] = form_data["documentation_main"]
 
     form_data["charms"] = extract_charms_data()

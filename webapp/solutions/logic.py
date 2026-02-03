@@ -52,7 +52,9 @@ def make_authenticated_request(method, url, username, **kwargs):
 def get_solution_from_backend(uuid):
     try:
         # public preview endpoint for published solutions
-        resp = session.get(f"{SOLUTIONS_API_BASE}/solutions/preview/{uuid}", timeout=5)
+        resp = session.get(
+            f"{SOLUTIONS_API_BASE}/solutions/preview/{uuid}", timeout=5
+        )
         if resp.status_code == 200:
             return resp.json()
 

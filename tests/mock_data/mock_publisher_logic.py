@@ -56,7 +56,9 @@ channels_basic = [
 ]
 revisions_basic: List[Revision] = [
     {
-        "bases": [{"architecture": "all", "channel": "14.04", "name": "ubuntu"}],
+        "bases": [
+            {"architecture": "all", "channel": "14.04", "name": "ubuntu"}
+        ],
         "created-at": "2015-09-22T12:31:29Z",
         "errors": None,
         "revision": 5,

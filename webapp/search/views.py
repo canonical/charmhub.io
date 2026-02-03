@@ -67,7 +67,9 @@ def all_charms() -> dict:
     packages = publisher_gateway.find(query, fields=SEARCH_FIELDS)
     package_type = request.path[1:-1].split("-")[1]
     result = [
-        package for package in packages["results"] if package["type"] == package_type
+        package
+        for package in packages["results"]
+        if package["type"] == package_type
     ]
     start = (page - 1) * limit
     end = start + limit

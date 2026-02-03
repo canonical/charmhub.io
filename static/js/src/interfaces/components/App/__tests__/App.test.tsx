@@ -1,14 +1,13 @@
-import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import App from "../App";
 import "@testing-library/jest-dom";
 
-jest.mock("../../InterfacesIndex", () => () => (
-  <div>InterfacesIndex Component</div>
-));
-jest.mock("../../InterfaceDetails", () => () => (
-  <div>InterfaceDetails Component</div>
-));
+vi.mock("../../InterfacesIndex", () => ({
+  default: () => <div>InterfacesIndex Component</div>,
+}));
+vi.mock("../../InterfaceDetails", () => ({
+  default: () => <div>InterfaceDetails Component</div>,
+}));
 
 describe("App component", () => {
   const renderAppAtPath = (path: string) => {

@@ -2,27 +2,28 @@ import "@testing-library/jest-dom";
 
 import "./navigationTemplate";
 import setUpNavigation from "./navigationTemplate";
+import { Mock } from "vitest";
 
 const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 describe("Navigation login (login.ts)", () => {
   beforeEach(() => {
-    jest.resetModules();
+    vi.resetModules();
     setUpNavigation();
 
     // Mock fetch for each test
-    global.fetch = jest.fn(() =>
+    global.fetch = vi.fn(() =>
       Promise.resolve({
         json: () =>
           Promise.resolve({ account: { "display-name": "John Doe" } }),
       })
-    ) as jest.Mock;
+    );
   });
 
   afterEach(() => {
     // Clean up fetch mock
-    if ((global.fetch as jest.Mock)?.mockRestore) {
-      (global.fetch as jest.Mock).mockRestore();
+    if ((global.fetch as Mock)?.mockRestore) {
+      (global.fetch as Mock).mockRestore();
     }
   });
 

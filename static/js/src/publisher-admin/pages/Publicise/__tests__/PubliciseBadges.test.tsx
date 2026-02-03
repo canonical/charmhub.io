@@ -8,8 +8,8 @@ import PubliciseBadges from "../PubliciseBadges";
 import { packageDataState } from "../../../state/atoms";
 import { mockPackage } from "../../../mocks";
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+vi.mock("react-router-dom", async (importOriginal) => ({
+  ...(await importOriginal()),
   useParams: () => ({
     packageName: "test-charm-name",
   }),

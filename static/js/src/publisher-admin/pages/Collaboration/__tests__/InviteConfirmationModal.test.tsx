@@ -7,24 +7,25 @@ import InviteConfirmationModal from "../InviteConfirmationModal";
 import { useSendMutation, useRevokeMutation } from "../../../hooks";
 import { useParams } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
+import { Mock } from "vitest";
 
-jest.mock("../../../hooks");
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useParams: jest.fn(),
+vi.mock("../../../hooks");
+vi.mock("react-router-dom", async (importOriginal) => ({
+  ...(await importOriginal()),
+  useParams: vi.fn(),
 }));
 
-const mockUseParams = useParams as jest.Mock;
-const mockUseSendMutation = useSendMutation as jest.Mock;
-const mockUseRevokeMutation = useRevokeMutation as jest.Mock;
+const mockUseParams = useParams as Mock;
+const mockUseSendMutation = useSendMutation as Mock;
+const mockUseRevokeMutation = useRevokeMutation as Mock;
 
 const queryClient = new QueryClient();
 
-const sendMutation = jest.fn();
-const revokeMutation = jest.fn();
-const mockSetShowModal = jest.fn();
-const mockSetShowSuccess = jest.fn();
-const mockSetShowError = jest.fn();
+const sendMutation = vi.fn();
+const revokeMutation = vi.fn();
+const mockSetShowModal = vi.fn();
+const mockSetShowSuccess = vi.fn();
+const mockSetShowError = vi.fn();
 
 const renderComponent = (props = {}) => {
   return render(
@@ -54,7 +55,7 @@ beforeEach(() => {
     mutate: revokeMutation,
   });
 
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 test("renders the modal with correct title and content for invites", () => {

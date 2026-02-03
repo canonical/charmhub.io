@@ -6,17 +6,17 @@ describe("generateInviteToken", () => {
   const csrfToken = "test-csrf-token";
 
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test("returns token and invite link on success", async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({
+    global.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
       json: async () => ({
         success: true,
         data: [{ token: "test-token" }],
       }),
-    }) as jest.Mock;
+    });
 
     const result = await generateInviteToken(email, packageName, csrfToken);
 
@@ -32,10 +32,10 @@ describe("generateInviteToken", () => {
   });
 
   test("throws an error if response is not ok", async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({
+    global.fetch = vi.fn().mockResolvedValueOnce({
       ok: false,
       statusText: "Internal Server Error",
-    }) as jest.Mock;
+    });
 
     await expect(
       generateInviteToken(email, packageName, csrfToken)
@@ -43,13 +43,13 @@ describe("generateInviteToken", () => {
   });
 
   test("throws an error if success is false in JSON", async () => {
-    global.fetch = jest.fn().mockResolvedValueOnce({
+    global.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
       json: async () => ({
         success: false,
         message: "Something went wrong",
       }),
-    }) as jest.Mock;
+    });
 
     await expect(
       generateInviteToken(email, packageName, csrfToken)

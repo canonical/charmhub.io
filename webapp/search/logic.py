@@ -41,7 +41,9 @@ def search_topics(
         if cached_page:
             return cached_page
         else:
-            resp = requests.get(f"{DISCOURSE_URL}/search.json?q={query}&page={page}")
+            resp = requests.get(
+                f"{DISCOURSE_URL}/search.json?q={query}&page={page}"
+            )
             topics = resp.json().get("topics", [])
             for topic in topics:
                 post = next(
@@ -77,14 +79,20 @@ def search_topics(
             page += 1
             continue
 
-        resp = requests.get(f"{DISCOURSE_URL}/search.json?q={query}&page={page}")
+        resp = requests.get(
+            f"{DISCOURSE_URL}/search.json?q={query}&page={page}"
+        )
         data = resp.json()
         topics = data.get("topics", [])
 
         if topics:
             for topic in topics:
                 post = next(
-                    (post for post in data["posts"] if post["topic_id"] == topic["id"]),
+                    (
+                        post
+                        for post in data["posts"]
+                        if post["topic_id"] == topic["id"]
+                    ),
                     None,
                 )
                 topic["post"] = post
@@ -134,7 +142,9 @@ def search_docs(term: str) -> dict:
     results = redis_cache.get(key, expected_type=list)
     if results:
         return results
-    search_url = f"{DOCS_URL}/_/api/v3/search/?q=project%3Acanonical-juju+{term}"
+    search_url = (
+        f"{DOCS_URL}/_/api/v3/search/?q=project%3Acanonical-juju+{term}"
+    )
 
     resp = requests.get(search_url)
     data = resp.json()
@@ -153,9 +163,9 @@ def search_charms(term: str):
         return charms
     charms = [
         parse_package_for_card(package)
-        for package in publisher_gateway.find(term, type="charm", fields=SEARCH_FIELDS)[
-            "results"
-        ]
+        for package in publisher_gateway.find(
+            term, type="charm", fields=SEARCH_FIELDS
+        )["results"]
     ]
     redis_cache.set(key, charms, ttl=3600)
     return charms

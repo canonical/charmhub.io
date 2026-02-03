@@ -1,5 +1,4 @@
 from gevent import monkey
-
 monkey.patch_all()
 
 from opentelemetry import trace

@@ -58,18 +58,18 @@ const createWrapper = () => {
 
 describe("useRevokeMutation", () => {
   beforeEach(() => {
-    jest.resetAllMocks();
-    jest.spyOn(global, "scrollTo").mockImplementation(() => {});
+    vi.resetAllMocks();
+    vi.spyOn(global, "scrollTo").mockImplementation(() => {});
   });
 
   test("should call setShowRevokeSuccess on successful revoke", async () => {
-    jest.spyOn(global, "fetch").mockResolvedValueOnce({
+    vi.spyOn(global, "fetch").mockResolvedValueOnce({
       ok: true,
       json: async () => ({ success: true }),
     } as Response);
 
-    const setShowRevokeSuccess = jest.fn();
-    const setShowRevokeError = jest.fn();
+    const setShowRevokeSuccess = vi.fn();
+    const setShowRevokeError = vi.fn();
     const csrfToken = "test-csrf-token";
 
     render(
@@ -92,14 +92,14 @@ describe("useRevokeMutation", () => {
   });
 
   test("should call setShowRevokeError on failed revoke", async () => {
-    jest.spyOn(global, "fetch").mockResolvedValueOnce({
+    vi.spyOn(global, "fetch").mockResolvedValueOnce({
       ok: false,
       statusText: "Failed to revoke invite",
       json: async () => ({ success: false, message: "Revoke failed" }),
     } as Response);
 
-    const setShowRevokeSuccess = jest.fn();
-    const setShowRevokeError = jest.fn();
+    const setShowRevokeSuccess = vi.fn();
+    const setShowRevokeError = vi.fn();
     const csrfToken = "test-csrf-token";
 
     render(
@@ -128,8 +128,8 @@ describe("useRevokeMutation", () => {
   });
 
   test("should do nothing if activeInviteEmail is not provided", async () => {
-    const setShowRevokeSuccess = jest.fn();
-    const setShowRevokeError = jest.fn();
+    const setShowRevokeSuccess = vi.fn();
+    const setShowRevokeError = vi.fn();
     const csrfToken = "test-csrf-token";
 
     render(

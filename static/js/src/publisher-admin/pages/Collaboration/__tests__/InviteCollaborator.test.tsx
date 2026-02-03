@@ -3,19 +3,20 @@ import { RecoilRoot } from "recoil";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
+import { Mock } from "vitest";
 
 import InviteCollaborator from "../InviteCollaborator";
 import { RecoilObserver, QueryProvider } from "../../../utils";
 import { activeInviteEmailState } from "../../../state/atoms";
+import { generateInviteToken } from "../../../utils/generateInviteToken";
 
-global.window.CSRF_TOKEN = "test-csrf-token";
+globalThis.window.CSRF_TOKEN = "test-csrf-token";
 
-jest.mock("../../../utils/generateInviteToken", () => ({
-  generateInviteToken: jest.fn(),
+vi.mock("../../../utils/generateInviteToken", () => ({
+  generateInviteToken: vi.fn(),
 }));
 
-import { generateInviteToken } from "../../../utils/generateInviteToken";
-const mockGenerateInviteToken = generateInviteToken as jest.Mock;
+const mockGenerateInviteToken = generateInviteToken as Mock;
 
 const renderComponent = ({ event }: { event?: () => void } = {}) => {
   return render(
@@ -24,12 +25,12 @@ const renderComponent = ({ event }: { event?: () => void } = {}) => {
         <QueryProvider>
           <RecoilObserver
             node={activeInviteEmailState}
-            event={event || jest.fn()}
+            event={event || vi.fn()}
           />
           <InviteCollaborator
-            setShowSidePanel={jest.fn()}
-            setShowInviteSuccess={jest.fn()}
-            setShowInviteError={jest.fn()}
+            setShowSidePanel={vi.fn()}
+            setShowInviteSuccess={vi.fn()}
+            setShowInviteError={vi.fn()}
           />
         </QueryProvider>
       </BrowserRouter>
@@ -39,7 +40,7 @@ const renderComponent = ({ event }: { event?: () => void } = {}) => {
 
 describe("InviteCollaborator", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test("disables 'Send invite' button if no email", () => {

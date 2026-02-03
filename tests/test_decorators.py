@@ -16,7 +16,9 @@ class TestDecorators(unittest.TestCase):
         """
         Test that the decorator redirects the path to lowercase
         """
-        self.mock_flask.request.url.lower.return_value = "http://example.com/test"
+        self.mock_flask.request.url.lower.return_value = (
+            "http://example.com/test"
+        )
         self.mock_flask.abort.return_value = Mock()
         self.mock_get_env.return_value = "devel"
 
@@ -33,7 +35,9 @@ class TestDecorators(unittest.TestCase):
         """
         Test that the decorator redirects the path to lowercase
         """
-        self.mock_flask.request.url.lower.return_value = "http://localhost:1234/test"
+        self.mock_flask.request.url.lower.return_value = (
+            "http://localhost:1234/test"
+        )
         self.mock_get_env.return_value = "devel"
 
         @redirect_uppercase_to_lowercase
@@ -41,7 +45,9 @@ class TestDecorators(unittest.TestCase):
             pass
 
         test_func(entity_name="Test")
-        self.mock_flask.redirect.assert_called_once_with("http://localhost:1234/test")
+        self.mock_flask.redirect.assert_called_once_with(
+            "http://localhost:1234/test"
+        )
 
     def test_redirect_uppercase_to_lowercase_staging(self):
         """
@@ -65,7 +71,9 @@ class TestDecorators(unittest.TestCase):
         """
         Test that the decorator redirects the path to lowercase
         """
-        self.mock_flask.request.url.lower.return_value = "https://charmhub.io/test"
+        self.mock_flask.request.url.lower.return_value = (
+            "https://charmhub.io/test"
+        )
         self.mock_get_env.return_value = "production"
 
         @redirect_uppercase_to_lowercase
@@ -73,4 +81,6 @@ class TestDecorators(unittest.TestCase):
             pass
 
         test_func(entity_name="Test")
-        self.mock_flask.redirect.assert_called_once_with("https://charmhub.io/test")
+        self.mock_flask.redirect.assert_called_once_with(
+            "https://charmhub.io/test"
+        )

@@ -72,7 +72,9 @@ class TestPublisherViews(unittest.TestCase):
     @patch("webapp.store_api.publisher_gateway.update_package_metadata")
     def test_update_package(self, mock_update_package_metadata):
         mock_update_package_metadata.return_value = {"name": "test-package"}
-        res = self.client.patch("/api/packages/test-entity", json={"key": "value"})
+        res = self.client.patch(
+            "/api/packages/test-entity", json={"key": "value"}
+        )
         self.assertEqual(res.status_code, 200)
 
     @patch("webapp.store_api.publisher_gateway.update_package_metadata")
@@ -80,7 +82,9 @@ class TestPublisherViews(unittest.TestCase):
         mock_update_package_metadata.side_effect = StoreApiResponseErrorList(
             "test-error", 500, []
         )
-        res = self.client.patch("/api/packages/test-entity", json={"key": "value"})
+        res = self.client.patch(
+            "/api/packages/test-entity", json={"key": "value"}
+        )
         self.assertEqual(res.status_code, 500)
         self.assertEqual(res.json["success"], False)
 
@@ -89,7 +93,9 @@ class TestPublisherViews(unittest.TestCase):
         mock_update_package_metadata.side_effect = StoreApiResponseErrorList(
             "test-error", 500, [{"message": "unauthorized"}]
         )
-        res = self.client.patch("/api/packages/test-entity", json={"key": "value"})
+        res = self.client.patch(
+            "/api/packages/test-entity", json={"key": "value"}
+        )
         self.assertEqual(res.status_code, 500)
         self.assertEqual(res.json["success"], False)
         self.assertEqual(res.json["message"], "Package not found")
@@ -183,7 +189,9 @@ class TestPublisherViews(unittest.TestCase):
 
     @patch("webapp.store_api.publisher_gateway.get_pending_invites")
     def test_get_pending_invites(self, mock_get_pending_invites):
-        mock_get_pending_invites.return_value = {"invites": [{"name": "invite"}]}
+        mock_get_pending_invites.return_value = {
+            "invites": [{"name": "invite"}]
+        }
         res = self.client.get("/api/packages/test-entity/invites")
         self.assertEqual(res.status_code, 200)
 
@@ -193,7 +201,9 @@ class TestPublisherViews(unittest.TestCase):
         self, mock_invite_collaborators, mock_send_email_template
     ):
         mock_send_email_template.return_value = None
-        mock_invite_collaborators.return_value = {"tokens": [{"token": "test-token"}]}
+        mock_invite_collaborators.return_value = {
+            "tokens": [{"token": "test-token"}]
+        }
         res = self.client.post(
             "/api/packages/test-entity/invites",
             data={"collaborators": "collaborator"},
@@ -228,7 +238,9 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 302)
 
     @patch("webapp.store_api.publisher_gateway.register_package_name")
-    def test_post_register_name_already_owned(self, mock_register_package_name):
+    def test_post_register_name_already_owned(
+        self, mock_register_package_name
+    ):
         mock_register_package_name.side_effect = StoreApiResponseErrorList(
             "test-error", 500, [{"code": "already-owned"}]
         )
@@ -257,7 +269,9 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 302)
 
     def test_register_name_dispute_thank_you(self):
-        res = self.client.get("/register-name-dispute/thank-you?entity-name=test-name")
+        res = self.client.get(
+            "/register-name-dispute/thank-you?entity-name=test-name"
+        )
         self.assertEqual(res.status_code, 200)
         self.assertIn(
             b"We will process the details provided with the name dispute.",

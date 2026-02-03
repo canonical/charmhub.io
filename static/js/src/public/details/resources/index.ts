@@ -1,3 +1,5 @@
+import declareGlobal from "../../../libs/declare";
+
 function handleTogglePanels() {
   const panelToggleButtons = document.querySelectorAll(".js-panel-toggle");
 
@@ -67,3 +69,5 @@ function init() {
 }
 
 export { init };
+
+declareGlobal("charmhub.resources", { init });

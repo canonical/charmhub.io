@@ -26,7 +26,9 @@ Resource = TypedDict(
     "Resource", {"name": str, "revision": Union[int, None], "type": str}
 )
 
-Release = TypedDict("Release", {"revision": Revision, "resources": List[Resource]})
+Release = TypedDict(
+    "Release", {"revision": Revision, "resources": List[Resource]}
+)
 
 ReleaseMap = TypedDict(
     "ReleaseMap",

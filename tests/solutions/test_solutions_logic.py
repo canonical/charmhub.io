@@ -7,7 +7,9 @@ from webapp.solutions.logic import (
 )
 
 
-@patch("webapp.solutions.logic.SOLUTIONS_API_BASE", "http://localhost:5000/api")
+@patch(
+    "webapp.solutions.logic.SOLUTIONS_API_BASE", "http://localhost:5000/api"
+)
 class TestSolutionsLogic(unittest.TestCase):
     @patch("webapp.solutions.logic.session")
     def test_get_solution_from_backend_success(self, mock_session):
@@ -49,7 +51,9 @@ class TestSolutionsLogic(unittest.TestCase):
         mock_login.return_value = "fake-token"
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.json.return_value = [{"uuid": "solution1", "name": "Solution 1"}]
+        mock_response.json.return_value = [
+            {"uuid": "solution1", "name": "Solution 1"}
+        ]
         mock_session.request.return_value = mock_response
 
         result = get_publisher_solutions("testuser")
