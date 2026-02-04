@@ -1,3 +1,7 @@
+# We import the config module before anything else to make sure env vars are
+# loaded properly and the FLASK_* prefix is stripped before they are parsed
+import webapp.config  # noqa: F401
+
 from flask import render_template, make_response, request, session
 from dateutil import parser
 

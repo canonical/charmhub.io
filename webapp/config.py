@@ -1,4 +1,12 @@
 import os
+from canonicalwebteam.flask_base.env import load_plain_env_variables
+
+
+# Load the prefixed FLASK_* env vars into env vars without the prefix. We have
+# to do this explicitly here because otherwise the config module is imported
+# by other files before the FlaskBase app gets initialized and does this by
+# itself, meaning that the variables below are not set correctly
+load_plain_env_variables()
 
 APP_NAME = "charmhub"
 DETAILS_VIEW_REGEX = "[A-Za-z0-9-]*[A-Za-z][A-Za-z0-9-]*"
