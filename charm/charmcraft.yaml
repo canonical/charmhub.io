@@ -33,6 +33,10 @@ requires:
 
 config:
   options:
+    environment:
+      description: "Environment in which the application is running, mostly useless for the charmed version of the app"
+      default: "production"
+      type: string
     github-token:
       description: Github token used to communicate with the GitHub API.
       type: string
