@@ -172,7 +172,7 @@ jobs:
 
   lint-js:
     needs: changes
-    if: ${{ needs.changes.outputs.py == 'true' }}
+    if: ${{ needs.changes.outputs.js == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -213,7 +213,7 @@ jobs:
 
   test-js:
     needs: changes
-    if: ${{ needs.changes.outputs.py == 'true' }}
+    if: ${{ needs.changes.outputs.js == 'true' }}
     runs-on: ubuntu-latest
 
     steps:
