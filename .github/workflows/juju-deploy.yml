@@ -9,6 +9,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     
+    env:
+      JUJU_CLIENT_ID: ${{ secrets.DEMOS_JUJU_CLIENT_ID }}
+      JUJU_CLIENT_SECRET: ${{ secrets.DEMOS_JUJU_CLIENT_SECRET }}
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -18,9 +22,6 @@ jobs:
           sudo snap install juju
 
       - name: Authenticate with JAAS
-        env:
-          JUJU_CLIENT_ID: ${{ secrets.DEMOS_JUJU_CLIENT_ID }}
-          JUJU_CLIENT_SECRET: ${{ secrets.DEMOS_JUJU_CLIENT_SECRET }}
         run: |
           juju login jaas.ps7.canonical.com:443/k8s-jaas-ps7-jimm-jimm -c jaas-ps7
 
