@@ -22,7 +22,7 @@ jobs:
           JUJU_CLIENT_ID: ${{ secrets.DEMOS_JUJU_CLIENT_ID }}
           JUJU_CLIENT_SECRET: ${{ secrets.DEMOS_JUJU_CLIENT_SECRET }}
         run: |
-          juju login jaas.ps7.canonical.com:443/k8s-jaas-ps7-jimm-jimm -c jaas-ps7 --client-id="${JUJU_CLIENT_ID}" --client-secret="${JUJU_CLIENT_SECRET}"
+          juju login jaas.ps7.canonical.com:443/k8s-jaas-ps7-jimm-jimm -c jaas-ps7
 
       - name: Deploy charm
         run: |
