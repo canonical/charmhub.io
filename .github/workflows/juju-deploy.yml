@@ -1,0 +1,29 @@
+name: Juju Deploy Demo Test
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Juju
+        run: |
+          sudo snap install juju
+
+      - name: Authenticate with JAAS
+        env:
+          JUJU_CLIENT_ID: ${{ secrets.DEMOS_JUJU_CLIENT_ID }}
+          JUJU_CLIENT_SECRET: ${{ secrets.DEMOS_JUJU_CLIENT_SECRET }}
+        run: |
+          juju login jaas.ps7.canonical.com:443/k8s-jaas-ps7-jimm-jimm -c jaas-ps7 --client-id="${JUJU_CLIENT_ID}" --client-secret="${JUJU_CLIENT_SECRET}"
+
+      - name: Deploy charm
+        run: |
+          juju deploy charmhub-io charmhub-test -m 795798e4-922f-49c7-9169-004ffc17df90@serviceaccount/k8s-webteam-demos-default
