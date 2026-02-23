@@ -48,7 +48,10 @@ class TestPublisherViews(unittest.TestCase):
 
     @patch("webapp.store_api.publisher_gateway.get_package_metadata")
     def test_get_publisher(self, mock_get_package_metadata):
-        mock_get_package_metadata.return_value = sample_charm
+        mock_get_package_metadata.return_value = {
+            **sample_charm,
+            "unlisted": False,
+        }
         for endpoint in [
             "listing",
             "releases",
@@ -61,7 +64,10 @@ class TestPublisherViews(unittest.TestCase):
 
     @patch("webapp.store_api.publisher_gateway.get_package_metadata")
     def test_get_package(self, mock_get_package_metadata):
-        mock_get_package_metadata.return_value = {"name": "test-package"}
+        mock_get_package_metadata.return_value = {
+            "name": "test-package",
+            "unlisted": False,
+        }
         res = self.client.get("/api/packages/test-entity")
         self.assertEqual(res.status_code, 200)
         self.assertEqual(
@@ -102,7 +108,11 @@ class TestPublisherViews(unittest.TestCase):
 
     @patch("webapp.solutions.logic.publisher_has_solutions_access")
     @patch("webapp.store_api.publisher_gateway.get_account_packages")
-    def test_list_page(self, mock_get_account_packages, mock_has_solutions):
+    def test_list_page(
+        self,
+        mock_get_account_packages,
+        mock_has_solutions,
+    ):
         mock_has_solutions.return_value = False
         mock_get_account_packages.return_value = [
             {
@@ -116,6 +126,7 @@ class TestPublisherViews(unittest.TestCase):
                 ],
                 "name": "postgresql",
                 "private": False,
+                "unlisted": False,
                 "publisher": {
                     "id": "test-id",
                     "display-name": "Canonical Data Platform",
@@ -136,6 +147,7 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertIn(b"postgresql", res.data)
         self.assertIn(b"Published charms", res.data)
+        self.assertIn(b"Listed", res.data)
         res = self.client.get("/bundles")
         self.assertEqual(res.status_code, 200)
         self.assertNotIn(b"postgresql", res.data)

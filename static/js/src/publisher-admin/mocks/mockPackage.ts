@@ -17,6 +17,7 @@ const mockPackage = {
   ],
   name: "test-charm-name",
   private: false,
+  unlisted: false,
   publisher: {
     "display-name": "John Doe",
     id: "prFvmvasQbXLNaVaQV4EAJ8zh0Ej",

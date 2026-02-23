@@ -19,6 +19,6 @@ describe("Settings", () => {
       </RecoilRoot>
     );
 
-    expect(screen.getByText("Published")).toBeInTheDocument();
+    expect(screen.getByText("Published (Listed)")).toBeInTheDocument();
   });
 });
