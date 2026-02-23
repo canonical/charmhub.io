@@ -8,6 +8,9 @@ import type { Package } from "../../types";
 
 function Settings() {
   const packageData = useRecoilValue<Package | undefined>(packageDataState);
+  const status = packageData ? capitalize(packageData.status) : "";
+  const listingStatus = packageData?.unlisted ? "Unlisted" : "Listed";
+  const statusLabel = packageData ? `${status} (${listingStatus})` : "";
 
   return (
     <section className="p-strip u-no-padding--top">
@@ -16,7 +19,7 @@ function Settings() {
           <p>Status:</p>
         </Col>
         <Col size={8}>
-          <p>{packageData && capitalize(packageData?.status)}</p>
+          <p>{statusLabel}</p>
         </Col>
       </Row>
     </section>

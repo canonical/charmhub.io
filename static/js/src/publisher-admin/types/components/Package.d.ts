@@ -29,6 +29,7 @@ type Package = {
     "version-pattern": string | null;
   }>;
   type: string;
+  unlisted?: boolean;
   website: string | null;
 };
 

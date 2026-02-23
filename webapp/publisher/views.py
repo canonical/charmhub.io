@@ -16,7 +16,7 @@ from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import login_required, cached_redirect
 from webapp.publisher.logic import get_all_architectures, process_releases
 from webapp.observability.utils import trace_function
-from webapp.store_api import publisher_gateway
+from webapp.store_api import device_gateway, publisher_gateway
 from webapp.utils.emailer import get_emailer
 from webapp.solutions.logic import (
     get_publisher_solutions,
@@ -36,6 +36,41 @@ from datetime import datetime
 import uuid
 
 preview_cache = {}
+
+
+def paginate_pages(current_page, total_pages):
+    truncate_threshold = 10
+    page_numbers = list(range(1, total_pages + 1))
+    truncated = total_pages > truncate_threshold
+
+    if not truncated:
+        return page_numbers
+
+    start = current_page - 2
+    end = current_page + 1
+
+    if current_page in (1, 2):
+        start = 1
+        end = min(total_pages - 1, current_page + 3)
+
+    if current_page in (total_pages, total_pages - 1):
+        start = max(1, total_pages - 4)
+        end = total_pages - 1
+
+    visible_pages = page_numbers[start:end]
+    pages: list[int | None] = [1]
+
+    if 2 not in visible_pages:
+        pages.append(None)
+
+    pages.extend(visible_pages)
+
+    if total_pages - 1 not in visible_pages:
+        pages.append(None)
+
+    pages.append(total_pages)
+
+    return pages
 
 
 def requires_solutions_access(func):
@@ -85,13 +120,31 @@ def get_account_details():
     return render_template("publisher/account-details.html")
 
 
+def get_package_unlisted(entity_name):
+    key = f"package_unlisted:{entity_name}"
+    unlisted = redis_cache.get(key, expected_type=bool)
+    if unlisted is not None:
+        return unlisted
+    try:
+        details = device_gateway.get_item_details(
+            entity_name, fields=["result.unlisted"]
+        )
+        unlisted = details.get("result", {}).get("unlisted", False)
+    except StoreApiResponseErrorList:
+        unlisted = False
+    redis_cache.set(key, unlisted, ttl=300)
+    return unlisted
+
+
 @trace_function
 def get_package_metadata(entity_name):
     key = f"package_metadata:{session['account']['id']}:{entity_name}"
     package = redis_cache.get(key, expected_type=dict)
     if not package:
         package = publisher_gateway.get_package_metadata(session, entity_name)
-        redis_cache.set(key, package, ttl=300)
+    if "unlisted" not in package:
+        package["unlisted"] = get_package_unlisted(entity_name)
+    redis_cache.set(key, package, ttl=300)
     return package
 
 
@@ -162,14 +215,18 @@ def update_package(entity_name):
 @publisher.route("/bundles")
 @login_required
 def list_page():
-    key = f"account_packages:{session['account']['id']}:{request.path[1:-1]}"
+    items_per_page = 10
+    page_type = request.path[1:-1]
+    page = request.args.get("page", default=1, type=int)
+    if not page or page < 1:
+        page = 1
+    key = f"account_packages:{session['account']['id']}:{page_type}"
     context = redis_cache.get(key, expected_type=dict)
     if not context:
         publisher_charms = publisher_gateway.get_account_packages(
             session["account-auth"], "charm", include_collaborations=True
         )
 
-        page_type = request.path[1:-1]
         acc_id = session["account"]["id"]
         context = {
             "published": [
@@ -185,6 +242,30 @@ def list_page():
             "page_type": page_type,
         }
         redis_cache.set(key, context, ttl=600)
+
+    total_items = len(context["published"])
+    total_pages = max(1, (total_items + items_per_page - 1) // items_per_page)
+    if page > total_pages:
+        page = total_pages
+
+    start = (page - 1) * items_per_page
+    end = start + items_per_page
+    context["published"] = [
+        {
+            **package,
+            "unlisted": package["unlisted"]
+            if "unlisted" in package
+            else get_package_unlisted(package["name"]),
+        }
+        for package in context["published"][start:end]
+    ]
+    context["pagination"] = {
+        "current_page": page,
+        "total_pages": total_pages,
+        "has_prev": page > 1,
+        "has_next": page < total_pages,
+        "pages": paginate_pages(page, total_pages),
+    }
 
     # Add solutions access check (from staging)
     username = session["account"]["username"]

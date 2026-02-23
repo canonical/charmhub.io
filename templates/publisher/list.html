@@ -80,6 +80,7 @@
               <tr role="row">
                 <th style="width: 30%;">Name</th>
                 <th>Visibility</th>
+                <th>Listing</th>
                 <th>Owner</th>
               </tr>
             </thead>
@@ -127,6 +128,13 @@
                     Public
                   {% endif %}
                 </td>
+                <td role="gridcell" aria-label="listing">
+                  {% if published_charm.get("unlisted") %}
+                    Unlisted
+                  {% else %}
+                    Listed
+                  {% endif %}
+                </td>
                 <td role="gridcell" aria-label="owner">
                   {{ published_charm['publisher']['display-name'] }}
                 </td>
@@ -134,6 +142,47 @@
               {% endfor %}
             </tbody>
           </table>
+          {% if pagination.total_pages > 1 %}
+            <nav class="p-pagination" aria-label="Pagination">
+              <ol class="p-pagination__items u-align--center">
+                <li class="p-pagination__item">
+                  {% if pagination.has_prev %}
+                    <a class="p-pagination__link--previous" href="?page={{ pagination.current_page - 1 }}" aria-label="Previous page">
+                      <i class="p-icon--chevron-down">Previous page</i>
+                    </a>
+                  {% else %}
+                    <button class="p-pagination__link--previous" type="button" disabled>
+                      <i class="p-icon--chevron-down">Previous page</i>
+                    </button>
+                  {% endif %}
+                </li>
+                {% for page_number in pagination.pages %}
+                  {% if page_number is not none %}
+                    <li class="p-pagination__item">
+                      {% if page_number == pagination.current_page %}
+                        <span class="p-pagination__link is-active" aria-current="page">{{ page_number }}</span>
+                      {% else %}
+                        <a class="p-pagination__link" href="?page={{ page_number }}">{{ page_number }}</a>
+                      {% endif %}
+                    </li>
+                  {% else %}
+                    <li class="p-pagination__item p-pagination__item--truncation">...</li>
+                  {% endif %}
+                {% endfor %}
+                <li class="p-pagination__item">
+                  {% if pagination.has_next %}
+                    <a class="p-pagination__link--next" href="?page={{ pagination.current_page + 1 }}" aria-label="Next page">
+                      <i class="p-icon--chevron-down">Next page</i>
+                    </a>
+                  {% else %}
+                    <button class="p-pagination__link--next" type="button" disabled>
+                      <i class="p-icon--chevron-down">Next page</i>
+                    </button>
+                  {% endif %}
+                </li>
+              </ol>
+            </nav>
+          {% endif %}
         </div>
       </div>
     {% endif %}
