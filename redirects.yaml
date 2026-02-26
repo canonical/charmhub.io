@@ -36,6 +36,10 @@ postgresql/docs: https://canonical-charmed-postgresql.readthedocs-hosted.com/14
 postgresql/docs/(?P<path>.*)/?: https://canonical-charmed-postgresql.readthedocs-hosted.com/14/{path}/
 postgresql-k8s/docs: https://canonical-charmed-postgresql-k8s.readthedocs-hosted.com/14
 postgresql-k8s/docs/(?P<path>.*)/?: https://canonical-charmed-postgresql-k8s.readthedocs-hosted.com/14/{path}/
+mongodb/docs: https://canonical-charmed-mongodb.readthedocs-hosted.com/6
+mongodb/docs/(?P<path>.*)/?: https://canonical-charmed-mongodb.readthedocs-hosted.com/6/{path}/
+mongodb-k8s/docs: https://canonical-charmed-mongodb.readthedocs-hosted.com/6
+mongodb-k8s/docs/(?P<path>.*)/?: https://canonical-charmed-mongodb.readthedocs-hosted.com/6/{path}/
 mysql/docs: https://canonical-charmed-mysql.readthedocs-hosted.com/
 mysql/docs/(?P<path>.*)/?: https://canonical-charmed-mysql.readthedocs-hosted.com/{path}/
 mysql-k8s/docs: https://canonical-charmed-mysql-k8s.readthedocs-hosted.com/
