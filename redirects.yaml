@@ -52,3 +52,21 @@ opensearch/docs: https://canonical-charmed-opensearch.readthedocs-hosted.com/2
 opensearch/docs/(?P<path>.*)/?: https://canonical-charmed-opensearch.readthedocs-hosted.com/2/{path}/
 spark-k8s-bundle/docs: https://canonical-charmed-spark.readthedocs-hosted.com/main
 spark-k8s-bundle/docs/(?P<path>.*)/?: https://canonical-charmed-spark.readthedocs-hosted.com/main/{path}/
+
+# Identity RTD
+identity-platform/docs: https://canonical-identity.readthedocs-hosted.com
+identity-platform/docs/(?P<path>.*)/?: https://canonical-identity.readthedocs-hosted.com/{path}/
+kratos/docs: https://canonical-identity.readthedocs-hosted.com/reference/charms/kratos
+kratos/docs/(?P<path>.*)/?: https://canonical-identity.readthedocs-hosted.com/reference/charms/kratos
+hydra/docs: https://canonical-identity.readthedocs-hosted.com/reference/charms/hydra
+hydra/docs/(?P<path>.*)/?: https://canonical-identity.readthedocs-hosted.com/reference/charms/hydra
+identity-platform-login-ui-operator/docs: https://canonical-identity.readthedocs-hosted.com/reference/charms/identity-platform-login-ui
+identity-platform-login-ui-operator/docs/(?P<path>.*)/?: https://canonical-identity.readthedocs-hosted.com/reference/charms/identity-platform-login-ui
+kratos-external-idp-integrator/docs: https://canonical-identity.readthedocs-hosted.com/reference/charms/kratos-external-idp-integrator
+kratos-external-idp-integrator/docs/(?P<path>.*)/?: https://canonical-identity.readthedocs-hosted.com/reference/charms/kratos-external-idp-integrator
+openfga-k8s/docs: https://canonical-identity.readthedocs-hosted.com/reference/charms/openfga
+openfga-k8s/docs/(?P<path>.*)/?: https://canonical-identity.readthedocs-hosted.com/reference/charms/openfga
+glauth-k8s/docs: https://canonical-identity.readthedocs-hosted.com/reference/charms/glauth
+glauth-k8s/docs/(?P<path>.*)/?: https://canonical-identity.readthedocs-hosted.com/reference/charms/glauth
+glauth-utils/docs: https://canonical-identity.readthedocs-hosted.com/reference/charms/glauth-utils
+glauth-utils/docs/(?P<path>.*)/?: https://canonical-identity.readthedocs-hosted.com/reference/charms/glauth-utils
