@@ -11,8 +11,6 @@ jobs:
   cleanup:
     name: Cleanup Demo
     uses: canonical/webteam-devops/.github/workflows/cleanup-demo.yaml@demos
-    with:
-      demo-id: ${{ github.event.repository.name }}-pr${{ github.event.pull_request.number }}
     secrets:
       demos_juju_client_id: ${{ secrets.DEMOS_JUJU_CLIENT_ID }}
       demos_juju_client_secret: ${{ secrets.DEMOS_JUJU_CLIENT_SECRET }}
