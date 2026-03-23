@@ -17,7 +17,7 @@ concurrency:
 jobs:
   deploy:
     name: Deploy Demo
-    uses: canonical/webteam-devops/demos/start-demo.yaml@demos
+    uses: canonical/webteam-devops/.github/workflows/start-demo.yaml@demos
     with:
       juju-model-uuid: "40cad239-1fe9-497f-89a2-ce70ab3e33af"
     secrets:

@@ -10,7 +10,7 @@ permissions:
 jobs:
   cleanup:
     name: Cleanup Demo
-    uses: canonical/webteam-devops/demos/cleanup-demo.yaml@demos
+    uses: canonical/webteam-devops/.github/workflows/cleanup-demo.yaml@demos
     with:
       demo-id: ${{ github.event.repository.name }}-pr${{ github.event.pull_request.number }}
     secrets:
