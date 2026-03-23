@@ -1,3 +1,4 @@
+
 resource "juju_application" "demo" {
   name       = var.demo_id
   model_uuid = data.juju_model.demos.uuid
@@ -5,6 +6,25 @@ resource "juju_application" "demo" {
   charm {
     name = "charmhub-io"
   }
+
+  config {
+      secret = juju_secret.hmac-secret.secret_id
+  }
+}
+
+data "juju_secret" "hmac-secret" {
+  name       = "hmac-secret"
+  model_uuid = data.juju_model.demos.uuid
+}
+
+resource "juju_access_secret" "charmhub-secret-access" {
+  model_uuid = data.juju_model.demos.uuid
+
+  secret_id = juju_secret.charmhub_secret.secret_id
+
+  applications = [
+    juju_application.demo.name
+  ]
 }
 
 resource "juju_integration" "demo_ingress" {
