@@ -7,8 +7,8 @@ resource "juju_application" "demo" {
     name = "charmhub-io"
   }
 
-  config {
-      secret = juju_secret.hmac-secret.secret_id
+  config = {
+    hmac-secret = "secret:${data.juju_secret.hmac-secret.secret_id}"
   }
 }
 
@@ -20,7 +20,7 @@ data "juju_secret" "hmac-secret" {
 resource "juju_access_secret" "charmhub-secret-access" {
   model_uuid = data.juju_model.demos.uuid
 
-  secret_id = juju_secret.charmhub_secret.secret_id
+  secret_id = data.juju_secret.hmac-secret.secret_id
 
   applications = [
     juju_application.demo.name
