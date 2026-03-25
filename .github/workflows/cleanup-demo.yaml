@@ -11,6 +11,8 @@ jobs:
   cleanup:
     name: Cleanup Demo
     uses: canonical/webteam-devops/.github/workflows/cleanup-demo.yaml@demos
+    with:
+      juju-model-name: "795798e4-922f-49c7-9169-004ffc17df90@serviceaccount/k8s-webteam-demos-default"
     secrets:
       demos_juju_client_id: ${{ secrets.DEMOS_JUJU_CLIENT_ID }}
       demos_juju_client_secret: ${{ secrets.DEMOS_JUJU_CLIENT_SECRET }}
