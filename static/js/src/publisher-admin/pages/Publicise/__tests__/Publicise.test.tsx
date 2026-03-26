@@ -35,17 +35,6 @@ describe("Publicise", () => {
     );
   });
 
-  test("shows badges page", async () => {
-    const user = userEvent.setup();
-    renderComponent();
-
-    await user.click(screen.getByText("GitHub badges"));
-
-    expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
-      "Promote your charm using an embeddable GitHub badge"
-    );
-  });
-
   test("shows embeddable cards page", async () => {
     const user = userEvent.setup();
     renderComponent();

@@ -1,7 +1,6 @@
 import { NavLink, useParams, useLocation } from "react-router-dom";
 import { Row, Col } from "@canonical/react-components";
 
-import PubliciseBadges from "./PubliciseBadges";
 import PubliciseButtons from "./PubliciseButtons";
 import PubliciseCards from "./PubliciseCards";
 
@@ -9,7 +8,6 @@ function Publicise() {
   const { packageName } = useParams();
   const location = useLocation();
   const showButtons = location.pathname === `/${packageName}/publicise`;
-  const showBadges = location.pathname === `/${packageName}/publicise/badges`;
   const showCards = location.pathname === `/${packageName}/publicise/cards`;
 
   return (
@@ -50,15 +48,6 @@ function Publicise() {
               <li className="p-side-navigation__item">
                 <NavLink
                   end
-                  to={`/${packageName}/publicise/badges`}
-                  className="p-side-navigation__link"
-                >
-                  GitHub badges
-                </NavLink>
-              </li>
-              <li className="p-side-navigation__item">
-                <NavLink
-                  end
                   to={`/${packageName}/publicise/cards`}
                   className="p-side-navigation__link"
                 >
@@ -71,7 +60,6 @@ function Publicise() {
       </Col>
       <Col size={9}>
         {showButtons && <PubliciseButtons />}
-        {showBadges && <PubliciseBadges />}
         {showCards && <PubliciseCards />}
       </Col>
     </Row>

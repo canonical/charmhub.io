@@ -42,7 +42,6 @@ function SectionNav() {
             className="p-tabs__link"
             aria-selected={
               isSelected(`/${packageName}/publicise`) ||
-              isSelected(`/${packageName}/publicise/badges`) ||
               isSelected(`/${packageName}/publicise/cards`)
             }
           >
