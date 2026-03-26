@@ -4,13 +4,19 @@ import { MainTableRow } from "@canonical/react-components/dist/components/MainTa
 
 const SHOW_MORE_THRESHOLD = 5;
 
+export type ShareBadgeDetails = {
+  releaseChannel: string;
+  revision: number;
+};
+
 export function generateReleaseChannelRows(
   releaseChannel: ReleaseChannel,
   arch: string,
   openChannel: string | null,
   setOpenChannel: (channel: string | null) => void,
   showAll: boolean,
-  setShowAll: (showMore: boolean) => void
+  setShowAll: (showMore: boolean) => void,
+  onShare: (details: ShareBadgeDetails) => void
 ) {
   const channelName = `${releaseChannel.track}/${releaseChannel.risk}`;
 
@@ -73,6 +79,23 @@ export function generateReleaseChannelRows(
         {
           content: <BasesCell bases={release.revision.bases} />,
         },
+        {
+          content: (
+            <Button
+              hasIcon
+              className="u-no-margin--bottom"
+              onClick={() =>
+                onShare({
+                  releaseChannel: channelName,
+                  revision: release.revision.revision,
+                })
+              }
+            >
+              <i className="p-icon--share" aria-hidden="true"></i>
+              <span>Share</span>
+            </Button>
+          ),
+        },
       ]
     );
 
@@ -94,7 +117,7 @@ export function generateReleaseChannelRows(
               </Button>
             </>
           ),
-          colSpan: 4,
+          colSpan: 5,
           className: "u-align--right",
         },
       ],

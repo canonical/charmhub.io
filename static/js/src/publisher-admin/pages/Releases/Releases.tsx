@@ -178,7 +178,12 @@ export default function Releases() {
           No Releases have been added for this track
         </Notification>
       ) : (
-        <ReleasesTable releaseMap={channels} arch={selectedArch} />
+        <ReleasesTable
+          releaseMap={channels}
+          arch={selectedArch}
+          packageName={packageName || ""}
+          packageTitle={packageData?.title}
+        />
       )}
       {showSidePanel && (
         <div

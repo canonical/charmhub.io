@@ -865,6 +865,7 @@ def entity_badge(entity_name):
     package = get_package_details(entity_name, fields=FIELDS)
 
     channel_request = request.args.get("channel")
+    revision_request = request.args.get("revision")
 
     if not package["default-release"]:
         abort(404)
@@ -885,7 +886,7 @@ def entity_badge(entity_name):
             "/",
             release["channel"]["risk"],
             " ",
-            release["revision"]["version"],
+            revision_request or release["revision"]["version"],
         ]
     )
 

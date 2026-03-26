@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import ReleasesTable from "../ReleasesTable";
 import { mockReleaseChannel } from "../../../mocks/mockReleaseChannel";
 
@@ -46,7 +46,14 @@ describe("ReleasesTable", () => {
   test("renders release channel rows correctly", () => {
     const releases = [latestStable, latestBeta];
 
-    render(<ReleasesTable releaseMap={releases} arch="amd64" />);
+    render(
+      <ReleasesTable
+        releaseMap={releases}
+        arch="amd64"
+        packageName="test-charm-name"
+        packageTitle="Test charm name"
+      />
+    );
 
     expect(screen.getByText("latest/stable")).toBeInTheDocument();
 
@@ -61,7 +68,14 @@ describe("ReleasesTable", () => {
 
     const user = userEvent.setup();
 
-    render(<ReleasesTable releaseMap={releases} arch="amd64" />);
+    render(
+      <ReleasesTable
+        releaseMap={releases}
+        arch="amd64"
+        packageName="test-charm-name"
+        packageTitle="Test charm name"
+      />
+    );
 
     await user.click(screen.getByText("latest/stable"));
 
@@ -79,7 +93,14 @@ describe("ReleasesTable", () => {
 
     const user = userEvent.setup();
 
-    render(<ReleasesTable releaseMap={releaseChannel} arch="amd64" />);
+    render(
+      <ReleasesTable
+        releaseMap={releaseChannel}
+        arch="amd64"
+        packageName="test-charm-name"
+        packageTitle="Test charm name"
+      />
+    );
 
     await user.click(screen.getByText("latest/stable"));
 
@@ -90,9 +111,82 @@ describe("ReleasesTable", () => {
   });
   test("renders release channel rows correctly for different architectures", () => {
     const releases = [latestStable, latestBeta];
-    render(<ReleasesTable releaseMap={releases} arch="arm64" />);
+    render(
+      <ReleasesTable
+        releaseMap={releases}
+        arch="arm64"
+        packageName="test-charm-name"
+        packageTitle="Test charm name"
+      />
+    );
     expect(screen.queryByText("latest/stable")).not.toBeInTheDocument();
     expect(screen.getByText("latest/beta")).toBeInTheDocument();
     expect(screen.getAllByRole("row")).toHaveLength(2);
+  });
+
+  test("opens the share modal for a release row", async () => {
+    const user = userEvent.setup();
+
+    render(
+      <ReleasesTable
+        releaseMap={[latestStable]}
+        arch="amd64"
+        packageName="test-charm-name"
+        packageTitle="Test charm name"
+      />
+    );
+
+    await user.click(screen.getByRole("button", { name: "Share" }));
+
+    expect(
+      screen.getByText("Share test-charm-name latest/stable")
+    ).toBeInTheDocument();
+    expect(screen.getByText("Loading badge...")).toBeInTheDocument();
+
+    fireEvent.load(
+      screen.getByAltText(
+        "test-charm-name latest/stable revision 1 GitHub badge"
+      )
+    );
+
+    expect(screen.queryByText("Loading badge...")).not.toBeInTheDocument();
+    expect(
+      screen.getByAltText(
+        "test-charm-name latest/stable revision 1 GitHub badge"
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        `[![Test charm name latest/stable revision 1](https://charmhub.io/test-charm-name/badge.svg?channel=latest%2Fstable&revision=1)](https://charmhub.io/test-charm-name?channel=latest%2Fstable)`
+      )
+    ).toBeInTheDocument();
+  });
+
+  test("uses the selected row revision in the share badge URL", async () => {
+    const user = userEvent.setup();
+
+    render(
+      <ReleasesTable
+        releaseMap={[latestBeta]}
+        arch="arm64"
+        packageName="test-charm-name"
+        packageTitle="Test charm name"
+      />
+    );
+
+    await user.click(screen.getByText("latest/beta"));
+    await user.click(screen.getAllByRole("button", { name: "Share" })[1]);
+
+    expect(
+      screen.getByText("Share test-charm-name latest/beta")
+    ).toBeInTheDocument();
+    expect(
+      screen.getByAltText("test-charm-name latest/beta revision 4 GitHub badge")
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        `[![Test charm name latest/beta revision 4](https://charmhub.io/test-charm-name/badge.svg?channel=latest%2Fbeta&revision=4)](https://charmhub.io/test-charm-name?channel=latest%2Fbeta)`
+      )
+    ).toBeInTheDocument();
   });
 });
