@@ -74,3 +74,10 @@ dist/
 *.rock
 cypress/screenshots/
 coverage/
+
+# [terraform] Terraform state and local config
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfvars
+terraform/*.tfstate
+terraform/*.tfstate.backup
