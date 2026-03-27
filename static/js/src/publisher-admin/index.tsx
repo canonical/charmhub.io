@@ -58,10 +58,6 @@ const router = createBrowserRouter([
         element: <Publicise />,
         children: [
           {
-            path: "/:packageName/publicise/badges",
-            element: <Publicise />,
-          },
-          {
             path: "/:packageName/publicise/cards",
             element: <Publicise />,
           },

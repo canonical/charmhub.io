@@ -865,11 +865,13 @@ def entity_badge(entity_name):
     package = get_package_details(entity_name, fields=FIELDS)
 
     channel_request = request.args.get("channel")
+    revision_request = request.args.get("revision")
 
     if not package["default-release"]:
         abort(404)
 
     release = package["default-release"]
+    valid_revision_request = None
 
     if channel_request:
         for release_channel in package["channel-map"]:
@@ -878,6 +880,20 @@ def entity_badge(entity_name):
                 release = release_channel
                 break
 
+    if revision_request:
+        if str(release["revision"]["revision"]) == revision_request:
+            valid_revision_request = revision_request
+        elif channel_request:
+            for release_channel in package["channel-map"]:
+                channel = release_channel["channel"]
+                if (
+                    f"{channel['track']}/{channel['risk']}" == channel_request
+                    and str(release_channel["revision"]["revision"])
+                    == revision_request
+                ):
+                    valid_revision_request = revision_request
+                    break
+
     entity_link = request.url_root + entity_name
     right_text = "".join(
         [
@@ -885,7 +901,7 @@ def entity_badge(entity_name):
             "/",
             release["channel"]["risk"],
             " ",
-            release["revision"]["version"],
+            valid_revision_request or release["revision"]["version"],
         ]
     )
 
