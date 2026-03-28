@@ -32,7 +32,7 @@
     "babel-loader": "9.2.1",
     "css-loader": "7.1.3",
     "date-fns": "4.1.0",
-    "dompurify": "^3.2.4",
+    "dompurify": "^3.3.2",
     "expose-loader": "5.0.1",
     "identity-obj-proxy": "3.0.0",
     "mermaid": "11.12.2",
