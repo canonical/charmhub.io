@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import {
   Button,
+  Col,
+  Row,
   Modal as CanonicalModal,
   Spinner,
 } from "@canonical/react-components";
@@ -52,22 +54,28 @@ function getBadgeData(
   };
 }
 
-function CodeSnippet({ code, label }: CodeSnippetProps) {
-  const [isCopied, setIsCopied] = useState(false);
+function resetCopyFlag(duration = 2000) {
+  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    if (!isCopied) {
+    if (!isActive) {
       return;
     }
 
     const timeoutId = window.setTimeout(() => {
-      setIsCopied(false);
-    }, 2000);
+      setIsActive(false);
+    }, duration);
 
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [isCopied]);
+  }, [duration, isActive]);
+
+  return [isActive, setIsActive] as const;
+}
+
+function CodeSnippet({ code, label }: CodeSnippetProps) {
+  const [isCopied, setIsCopied] = resetCopyFlag();
 
   return (
     <div className="p-code-snippet">
@@ -106,7 +114,7 @@ function CodeSnippet({ code, label }: CodeSnippetProps) {
   );
 }
 
-export default function ShareBadgeModal({
+function ShareBadgeModal({
   close,
   packageName,
   packageTitle,
@@ -120,6 +128,8 @@ export default function ShareBadgeModal({
     revision
   );
   const [isBadgeLoading, setIsBadgeLoading] = useState(true);
+  const [isLinkCopied, setIsLinkCopied] = resetCopyFlag();
+  const charmhubLink = `https://charmhub.io${badgeData.packageUrl}`;
 
   useEffect(() => {
     setIsBadgeLoading(true);
@@ -135,8 +145,45 @@ export default function ShareBadgeModal({
         </Button>
       }
     >
-      <p>
-        {isBadgeLoading && <Spinner text="Loading badge..." />}
+      <h5>Charmhub link</h5>
+      <Row className="u-no-margin--bottom">
+        <Col size={6}>
+          <div className="p-form__control">
+            <input
+              className="u-no-padding--top"
+              type="text"
+              id="charmhub-link-disabled-input"
+              name="charmhub-link-disabled-input"
+              value={charmhubLink}
+              disabled
+            />
+          </div>
+        </Col>
+        <Col size={2}>
+          <button
+            type="button"
+            className="p-button--base has-icon is-small u-no-margin--bottom"
+            aria-label="Copy Charmhub link"
+            disabled={isLinkCopied}
+            onClick={async () => {
+              await navigator.clipboard.writeText(charmhubLink);
+              setIsLinkCopied(true);
+            }}
+          >
+            {isLinkCopied ? (
+              <span>Copied</span>
+            ) : (
+              <i className="p-icon--copy" aria-hidden="true">
+                Copy to clipboard
+              </i>
+            )}
+          </button>
+        </Col>
+      </Row>
+      <hr />
+      <h5>Github badge</h5>
+      <p>{isBadgeLoading && <Spinner text="Loading badge..." />}</p>
+      <div className="u-sv2">
         <a href={badgeData.packageUrl}>
           <img
             src={badgeData.badgeSrc}
@@ -145,9 +192,11 @@ export default function ShareBadgeModal({
             onLoad={() => setIsBadgeLoading(false)}
           />
         </a>
-      </p>
+      </div>
       <CodeSnippet code={badgeData.htmlSnippet} label="HTML" />
       <CodeSnippet code={badgeData.markdownSnippet} label="Markdown" />
     </Modal>
   );
 }
+
+export default ShareBadgeModal;
