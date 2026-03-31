@@ -152,10 +152,10 @@ function ShareBadgeModal({
             <input
               className="u-no-padding--top"
               type="text"
-              id="charmhub-link-disabled-input"
-              name="charmhub-link-disabled-input"
+              id="charmhub-link-read-only"
+              name="charmhub-link-read-only"
               value={charmhubLink}
-              disabled
+              readOnly
             />
           </div>
         </Col>
