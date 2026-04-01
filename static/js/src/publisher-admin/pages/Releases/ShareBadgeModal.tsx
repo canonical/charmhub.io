@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import {
   Button,
-  Col,
-  Row,
   Modal as CanonicalModal,
   Spinner,
 } from "@canonical/react-components";
 import type { Props as ModalProps } from "@canonical/react-components/dist/components/Modal/Modal";
+import { truncateString } from "../../../libs/truncate-string";
 
 type ShareBadgeModalProps = {
   close: () => void;
@@ -128,7 +127,6 @@ function ShareBadgeModal({
     revision
   );
   const [isBadgeLoading, setIsBadgeLoading] = useState(true);
-  const [isLinkCopied, setIsLinkCopied] = resetCopyFlag();
   const charmhubLink = `https://charmhub.io${badgeData.packageUrl}`;
 
   useEffect(() => {
@@ -137,6 +135,7 @@ function ShareBadgeModal({
 
   return (
     <Modal
+      className="p-modal--share-badge"
       close={close}
       title={`Share ${packageName} ${releaseChannel}`}
       buttonRow={
@@ -146,40 +145,26 @@ function ShareBadgeModal({
       }
     >
       <h5>Charmhub link</h5>
-      <Row className="u-no-margin--bottom">
-        <Col size={6}>
-          <div className="p-form__control">
-            <input
-              className="u-no-padding--top"
-              type="text"
-              id="charmhub-link-read-only"
-              name="charmhub-link-read-only"
-              value={charmhubLink}
-              readOnly
-            />
-          </div>
-        </Col>
-        <Col size={2}>
-          <button
-            type="button"
-            className="p-button--base has-icon is-small u-no-margin--bottom"
-            aria-label="Copy Charmhub link"
-            disabled={isLinkCopied}
-            onClick={async () => {
-              await navigator.clipboard.writeText(charmhubLink);
-              setIsLinkCopied(true);
-            }}
-          >
-            {isLinkCopied ? (
-              <span>Copied</span>
-            ) : (
-              <i className="p-icon--copy" aria-hidden="true">
-                Copy to clipboard
-              </i>
-            )}
-          </button>
-        </Col>
-      </Row>
+      <div className="u-sv3" style={{ display: "flex", maxWidth: "35rem" }}>
+        <label className="u-off-screen" htmlFor="charmhub-link-read-only">
+          Charmhub link
+        </label>
+        <input
+          type="text"
+          readOnly
+          value={truncateString(charmhubLink, 60)}
+          name="charmhub-link-read-only"
+          id="charmhub-link-read-only"
+        />
+        <button
+          type="button"
+          onClick={() => {
+            navigator.clipboard.writeText(charmhubLink);
+          }}
+        >
+          <i className="p-icon--copy">Copy link</i>
+        </button>
+      </div>
       <hr />
       <h5>Github badge</h5>
       <p>{isBadgeLoading && <Spinner text="Loading badge..." />}</p>
