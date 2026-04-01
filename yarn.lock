@@ -109,10 +109,10 @@
   resolved "https://registry.yarnpkg.com/@bufbuild/protobuf/-/protobuf-2.11.0.tgz#3ec3985c9074b23aea337957225fe15a0e845f8e"
   integrity sha512-sBXGT13cpmPR5BMgHE6UEEfEaShh5Ror6rfN3yEK5si7QVrtZg8LEPQb0VVhiLRUslD2yLnXtnRzG035J/mZXQ==
 
-"@canonical/cookie-policy@3.8.4":
-  version "3.8.4"
-  resolved "https://registry.yarnpkg.com/@canonical/cookie-policy/-/cookie-policy-3.8.4.tgz#38fd82f35d98ab0476bc106b0d813a2719bae26c"
-  integrity sha512-mCPcaqscSt/6gbT9Pmf/VDhTmyGC192xz7N+xLs18hpJuFSrNK44vT9jGwnOS5WsdDW2B7tRc78KioTtATPk2g==
+"@canonical/cookie-policy@3.10.0":
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/@canonical/cookie-policy/-/cookie-policy-3.10.0.tgz#bc17a6900b3014c2f262948d5a8b3a52acba9926"
+  integrity sha512-sAVw8fdD2RgwSI2YImvlOfn79FRFbbqd0TaD3UHYXfL58qVRAXFxqqymbp4qISN4agi8UuZ2+kqq9zOcW7ZbTA==
 
 "@canonical/global-nav@3.8.0":
   version "3.8.0"
@@ -121,13 +121,13 @@
   dependencies:
     vanilla-framework "4.35.0"
 
-"@canonical/react-components@3.6.0":
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/@canonical/react-components/-/react-components-3.6.0.tgz#59a1c48ad6c0d4425e1a7a0f96b7d3e5d592b1bd"
-  integrity sha512-yEj3RIQJgMSJUF3Anxz3JmxGFCZ80hL1qCWL1BaBiIPwvltIEp55NvFd6k79Rbwts9dJJMP+7xSs7f40fbtj9w==
+"@canonical/react-components@3.11.1":
+  version "3.11.1"
+  resolved "https://registry.yarnpkg.com/@canonical/react-components/-/react-components-3.11.1.tgz#4d23d2236059fddc472a942abaa0673c1ad9f74d"
+  integrity sha512-zollzp0LFwPk4opGA7bnp5vn1Sc8ZAXfRRQPuNU6du26Hu4fw4CHdAT/qrjzW+YAr+P9Qrxj2oi/84VFwuUOfw==
   dependencies:
     "@types/jest" "29.5.14"
-    "@types/node" "20.17.19"
+    "@types/node" "20.19.30"
     "@types/react" "19.0.10"
     "@types/react-dom" "19.0.4"
     "@types/react-table" "7.7.20"
@@ -137,10 +137,10 @@
     prop-types "15.8.1"
     react-table "7.8.0"
 
-"@canonical/react-components@3.9.0":
-  version "3.9.0"
-  resolved "https://registry.yarnpkg.com/@canonical/react-components/-/react-components-3.9.0.tgz#90be4574d6f3a8e8240d90ac16a869fe4bb32e4b"
-  integrity sha512-F9Tk/hBhkIYwJ1ePbjX8mTigfeTtHPF+1reAnu6dOSPHOwN3ehIJZDzAtXFQbXB41D0fSwujJ+JZA/gKrPUJZQ==
+"@canonical/react-components@3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@canonical/react-components/-/react-components-3.6.0.tgz#59a1c48ad6c0d4425e1a7a0f96b7d3e5d592b1bd"
+  integrity sha512-yEj3RIQJgMSJUF3Anxz3JmxGFCZ80hL1qCWL1BaBiIPwvltIEp55NvFd6k79Rbwts9dJJMP+7xSs7f40fbtj9w==
   dependencies:
     "@types/jest" "29.5.14"
     "@types/node" "20.17.19"
@@ -1487,6 +1487,13 @@
   integrity sha512-LEwC7o1ifqg/6r2gn9Dns0f1rhK+fPFDoMiceTJ6kWmVk6bgXBI/9IOWfVan4WiAavK9pIVWdX0/e3J+eEUh5A==
   dependencies:
     undici-types "~6.19.2"
+
+"@types/node@20.19.30":
+  version "20.19.30"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.19.30.tgz#84fa87498ade5cd2b6ba8f8eec01d3b138ca60d0"
+  integrity sha512-WJtwWJu7UdlvzEAUm484QNg5eAoq5QR08KDNx7g45Usrs2NtOPiX8ugDqmKdXkyL03rBqU5dYNYVQetEpBHq2g==
+  dependencies:
+    undici-types "~6.21.0"
 
 "@types/prop-types@*":
   version "15.7.15"
@@ -7749,6 +7756,11 @@ undici-types@~6.19.2:
   resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-6.19.8.tgz#35111c9d1437ab83a7cdc0abae2f26d88eda0a02"
   integrity sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==
 
+undici-types@~6.21.0:
+  version "6.21.0"
+  resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-6.21.0.tgz#691d00af3909be93a7faa13be61b3a5b50ef12cb"
+  integrity sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==
+
 undici-types@~7.18.0:
   version "7.18.2"
   resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-7.18.2.tgz#29357a89e7b7ca4aef3bf0fd3fd0cd73884229e9"
@@ -7889,10 +7901,10 @@ vanilla-framework@4.35.0:
   resolved "https://registry.yarnpkg.com/vanilla-framework/-/vanilla-framework-4.35.0.tgz#b01bbb525ad3211690c9f10580ca2e00a37a8ab1"
   integrity sha512-vF8M9vsXiOpJEonFXiTVhY0rXOzNtoWpkhBcCVpyPb4+oHBx0/FaNcX5GAiQpfdT6Q/AAeRYyWwRUDObq6R8uw==
 
-vanilla-framework@4.41.0:
-  version "4.41.0"
-  resolved "https://registry.yarnpkg.com/vanilla-framework/-/vanilla-framework-4.41.0.tgz#bc981035c536bd6cca5b6f3ded2abad679231499"
-  integrity sha512-UMCb+1+kfSoMFmXwwfjR/oyliojQ6pjOsBYwSRN6HgNtL14KhQc0VECYnv4YlkNTAJqQLR7VFwq95aXJrSrJSw==
+vanilla-framework@4.46.0:
+  version "4.46.0"
+  resolved "https://registry.yarnpkg.com/vanilla-framework/-/vanilla-framework-4.46.0.tgz#0d255c1f57c621ceea1d3a9309832ade383c98ff"
+  integrity sha512-CaDd8QOeCmz6KhawYe3mPpNDP7KS/BxaYUq5/DwPmBU/pLQAvAkvUwizsW4b0+ua0eCgiVx0ILamfcd/V3/dyw==
 
 varint@^6.0.0:
   version "6.0.0"
