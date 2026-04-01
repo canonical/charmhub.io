@@ -47,8 +47,8 @@ function getBadgeData(
   return {
     badgeAlt: `${packageName} ${releaseChannel} revision ${revision} GitHub badge`,
     badgeSrc: `/${packageName}/badge.svg?channel=${encodedChannel}&revision=${encodedRevision}`,
-    htmlSnippet: `<a href="${packageUrl}"><img alt="" src="${badgeUrl}" /></a>`,
-    markdownSnippet: `[![${badgeTitle} ${releaseChannel} revision ${revision}](${badgeUrl})](${packageUrl})`,
+    htmlSnippet: `<a href="${packageUrl}">\n  <img\n    alt=""\n    src="${badgeUrl}"\n  />\n</a>`,
+    markdownSnippet: `[![${badgeTitle} ${releaseChannel} revision ${revision}](\n  ${badgeUrl}\n)](${packageUrl})`,
     packageUrl: `/${packageName}?channel=${encodedChannel}`,
   };
 }
@@ -135,7 +135,6 @@ function ShareBadgeModal({
 
   return (
     <Modal
-      className="p-modal--share-badge"
       close={close}
       title={`Share ${packageName} ${releaseChannel}`}
       buttonRow={
