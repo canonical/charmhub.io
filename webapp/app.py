@@ -105,6 +105,7 @@ def get_account_json():
 
 @app.route("/contact-us")
 def contact_us():
+    # test
     return render_template("contact-us.html")
 
 
@@ -149,9 +150,9 @@ def site_map_links():
 
 @app.route("/sitemap-operators.xml")
 def site_map_operators():
-    charms = publisher_gateway.find(
-        fields=["default-release.channel.released-at"]
-    ).get("results", [])
+    charms = publisher_gateway.find(fields=["default-release.channel.released-at"]).get(
+        "results", []
+    )
 
     for charm in charms:
         charm["date"] = (
