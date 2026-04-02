@@ -5,7 +5,6 @@ import {
   Spinner,
 } from "@canonical/react-components";
 import type { Props as ModalProps } from "@canonical/react-components/dist/components/Modal/Modal";
-import { truncateString } from "../../../libs/truncate-string";
 
 type ShareBadgeModalProps = {
   close: () => void;
@@ -151,7 +150,7 @@ function ShareBadgeModal({
         <input
           type="text"
           readOnly
-          value={truncateString(charmhubLink, 60)}
+          value={charmhubLink}
           name="charmhub-link-read-only"
           id="charmhub-link-read-only"
         />
