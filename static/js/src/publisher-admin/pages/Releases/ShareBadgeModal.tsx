@@ -47,7 +47,7 @@ function getBadgeData(
   return {
     badgeAlt: `${packageName} ${releaseChannel} revision ${revision} GitHub badge`,
     badgeSrc: `/${packageName}/badge.svg?channel=${encodedChannel}&revision=${encodedRevision}`,
-    htmlSnippet: `<a href="${packageUrl}">\n  <img\n    alt=""\n    src="${badgeUrl}"\n  />\n</a>`,
+    htmlSnippet: `<a href="${packageUrl}">\n  <img alt="" src="${badgeUrl}" />\n</a>`,
     markdownSnippet: `[![${badgeTitle} ${releaseChannel} revision ${revision}](\n  ${badgeUrl}\n)](${packageUrl})`,
     packageUrl: `/${packageName}?channel=${encodedChannel}`,
   };
@@ -144,7 +144,7 @@ function ShareBadgeModal({
       }
     >
       <h5>Charmhub link</h5>
-      <div className="u-sv3" style={{ display: "flex", maxWidth: "35rem" }}>
+      <div className="u-sv3" style={{ display: "flex" }}>
         <label className="u-off-screen" htmlFor="charmhub-link-read-only">
           Charmhub link
         </label>
