@@ -19,7 +19,7 @@
   "dependencies": {
     "@canonical/cookie-policy": "3.10.0",
     "@canonical/global-nav": "3.8.0",
-    "@canonical/react-components": "3.11.1",
+    "@canonical/react-components": "3.12.4",
     "@canonical/store-components": "0.55.0",
     "@sentry/react": "8.55.0",
     "@testing-library/dom": "10.4.1",
