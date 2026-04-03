@@ -46,28 +46,34 @@ function getBadgeData(
   return {
     badgeAlt: `${packageName} ${releaseChannel} revision ${revision} GitHub badge`,
     badgeSrc: `/${packageName}/badge.svg?channel=${encodedChannel}&revision=${encodedRevision}`,
-    htmlSnippet: `<a href="${packageUrl}"><img alt="" src="${badgeUrl}" /></a>`,
-    markdownSnippet: `[![${badgeTitle} ${releaseChannel} revision ${revision}](${badgeUrl})](${packageUrl})`,
+    htmlSnippet: `<a href="${packageUrl}">\n  <img alt="" src="${badgeUrl}" />\n</a>`,
+    markdownSnippet: `[![${badgeTitle} ${releaseChannel} revision ${revision}](\n  ${badgeUrl}\n)](${packageUrl})`,
     packageUrl: `/${packageName}?channel=${encodedChannel}`,
   };
 }
 
-function CodeSnippet({ code, label }: CodeSnippetProps) {
-  const [isCopied, setIsCopied] = useState(false);
+function resetCopyFlag(duration = 2000) {
+  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    if (!isCopied) {
+    if (!isActive) {
       return;
     }
 
     const timeoutId = window.setTimeout(() => {
-      setIsCopied(false);
-    }, 2000);
+      setIsActive(false);
+    }, duration);
 
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [isCopied]);
+  }, [duration, isActive]);
+
+  return [isActive, setIsActive] as const;
+}
+
+function CodeSnippet({ code, label }: CodeSnippetProps) {
+  const [isCopied, setIsCopied] = resetCopyFlag();
 
   return (
     <div className="p-code-snippet">
@@ -106,7 +112,7 @@ function CodeSnippet({ code, label }: CodeSnippetProps) {
   );
 }
 
-export default function ShareBadgeModal({
+function ShareBadgeModal({
   close,
   packageName,
   packageTitle,
@@ -120,6 +126,7 @@ export default function ShareBadgeModal({
     revision
   );
   const [isBadgeLoading, setIsBadgeLoading] = useState(true);
+  const charmhubLink = `https://charmhub.io${badgeData.packageUrl}`;
 
   useEffect(() => {
     setIsBadgeLoading(true);
@@ -135,8 +142,31 @@ export default function ShareBadgeModal({
         </Button>
       }
     >
-      <p>
-        {isBadgeLoading && <Spinner text="Loading badge..." />}
+      <h5>Charmhub link</h5>
+      <div className="u-sv3" style={{ display: "flex" }}>
+        <label className="u-off-screen" htmlFor="charmhub-link-read-only">
+          Charmhub link
+        </label>
+        <input
+          type="text"
+          readOnly
+          value={charmhubLink}
+          name="charmhub-link-read-only"
+          id="charmhub-link-read-only"
+        />
+        <button
+          type="button"
+          onClick={() => {
+            navigator.clipboard.writeText(charmhubLink);
+          }}
+        >
+          <i className="p-icon--copy">Copy link</i>
+        </button>
+      </div>
+      <hr />
+      <h5>Github badge</h5>
+      <p>{isBadgeLoading && <Spinner text="Loading badge..." />}</p>
+      <div className="u-sv2">
         <a href={badgeData.packageUrl}>
           <img
             src={badgeData.badgeSrc}
@@ -145,9 +175,11 @@ export default function ShareBadgeModal({
             onLoad={() => setIsBadgeLoading(false)}
           />
         </a>
-      </p>
+      </div>
       <CodeSnippet code={badgeData.htmlSnippet} label="HTML" />
       <CodeSnippet code={badgeData.markdownSnippet} label="Markdown" />
     </Modal>
   );
 }
+
+export default ShareBadgeModal;
