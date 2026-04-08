@@ -59,13 +59,14 @@ const mockCharms: ICharm[] = [
   },
 ];
 
+vi.mock("recoil", async (importOriginal) => ({
+  ...(await importOriginal()),
+  useRecoilValue: vi.fn(() => []),
+  useSetRecoilState: vi.fn(() => vi.fn()),
+}));
+
 beforeEach(() => {
   vi.resetAllMocks();
-  vi.mock("recoil", async (importOriginal) => ({
-    ...(await importOriginal()),
-    useRecoilValue: vi.fn(() => []),
-    useSetRecoilState: vi.fn(() => vi.fn()),
-  }));
 });
 
 describe("InterfaceItem Component", () => {
