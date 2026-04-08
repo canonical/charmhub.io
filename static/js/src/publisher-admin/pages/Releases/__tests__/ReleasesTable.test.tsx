@@ -157,7 +157,7 @@ describe("ReleasesTable", () => {
     ).toBeInTheDocument();
     expect(
       screen.getByText(
-        `[![Test charm name latest/stable revision 1](https://charmhub.io/test-charm-name/badge.svg?channel=latest%2Fstable&revision=1)](https://charmhub.io/test-charm-name?channel=latest%2Fstable)`
+        /\[!\[Test charm name latest\/stable revision 1\]\(\s*https:\/\/charmhub\.io\/test-charm-name\/badge\.svg\?channel=latest%2Fstable&revision=1\s*\)\]\(https:\/\/charmhub\.io\/test-charm-name\?channel=latest%2Fstable\)/
       )
     ).toBeInTheDocument();
   });
@@ -185,7 +185,7 @@ describe("ReleasesTable", () => {
     ).toBeInTheDocument();
     expect(
       screen.getByText(
-        `[![Test charm name latest/beta revision 4](https://charmhub.io/test-charm-name/badge.svg?channel=latest%2Fbeta&revision=4)](https://charmhub.io/test-charm-name?channel=latest%2Fbeta)`
+        /\[!\[Test charm name latest\/beta revision 4\]\(\s*https:\/\/charmhub\.io\/test-charm-name\/badge\.svg\?channel=latest%2Fbeta&revision=4\s*\)\]\(https:\/\/charmhub\.io\/test-charm-name\?channel=latest%2Fbeta\)/
       )
     ).toBeInTheDocument();
   });
