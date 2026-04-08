@@ -2,11 +2,11 @@ import { TableOfContents } from "../tableOfContents";
 import { HistoryState } from "../historyState";
 
 vi.mock("../historyState", () => ({
-  HistoryState: vi.fn(() => ({
-    path: [],
-    addPopListener: vi.fn(),
-    updatePath: vi.fn(),
-  })),
+  HistoryState: vi.fn(function (this: HistoryState) {
+    this.path = [];
+    this.addPopListener = vi.fn();
+    this.updatePath = vi.fn();
+  }),
 }));
 
 describe("TableOfContents", () => {
