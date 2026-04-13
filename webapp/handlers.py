@@ -48,6 +48,7 @@ CSP = {
         "sentry.is.canonical.com",
         "*.crazyegg.com",
         "analytics.google.com",
+        "*.analytics.google.com",
         "www.google-analytics.com",
         "stats.g.doubleclick.net",
         "*.snapcraftcontent.com",
