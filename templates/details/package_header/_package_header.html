@@ -1,0 +1,31 @@
+{#
+Context variables needed for `package_header`:
+  package: package object with store_front data
+  developer_validation: validation status (e.g. "verified")
+  image: template image helper
+#}
+
+{%- from 'details/package_header/_package_header_data.html' import package_header_data -%}
+
+{%- macro package_header(package, developer_validation, image) -%}
+  {%- set channel_map_content = caller("channel_map") -%}
+  {%- set has_channel_map_content = channel_map_content|trim|length > 0 -%}
+  {%- set platforms_content = caller("platforms") -%}
+  {%- set has_platforms_content = platforms_content|trim|length > 0 -%}
+
+  <div class="row">
+    <div class="col-9">
+      <div class="p-charm-header">
+        {{ package_header_data(package, developer_validation, image) }}
+        {% if has_channel_map_content %}
+          {{ channel_map_content }}
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-3">
+      {% if has_platforms_content %}
+        {{ platforms_content }}
+      {% endif %}
+    </div>
+  </div>
+{%- endmacro -%}

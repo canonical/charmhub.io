@@ -1,0 +1,30 @@
+{%- macro publisher_info(package, developer_validation, image) -%}
+  {% if package.store_front.publisher_name != None %}
+    {% if package.store_front.username != None %}
+      <a href="/publisher/{{ package.store_front.username | safe }}">{{ package.store_front.publisher_name }}</a>
+    {% else %}
+      {{ package.store_front.publisher_name }}
+    {% endif %}
+  {% endif %}
+
+  {% if package.type == "bundle" %}
+    <span class="p-muted-heading u-no-padding" style="font-size: .9rem;">| bundle</span>
+  {% endif %}
+
+  {% if developer_validation == "verified" %}
+    <span class="p-tooltip--top-center" aria-describedby="verified-tooltip">
+      {# forcing format to "svg" to avoid scaling issues with Cloudinary #}
+      {{ image(
+          url="https://assets.ubuntu.com/v1/75654c90-rosette.svg",
+          alt="",
+          width="12",
+          height="12",
+          hi_def=True,
+          loading="auto",
+          fmt="svg",
+        ) | safe
+      }}
+      <span class="p-tooltip__message" role="tooltip" id="verified-tooltip">Verified account</span>
+    </span>
+  {% endif %}
+{%- endmacro -%}
