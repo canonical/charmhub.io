@@ -38,10 +38,12 @@
 {% endblock %}
 
 {% block content %}
-  {% include "details/_details-header.html" %}
-  {% include "details/_details-tab-navigation.html" %}
+  <div class="p-strip--light u-no-padding--top u-no-padding--bottom">
+    {% include "details/_details-header.html" %}
+    {% include "details/_details-tab-navigation.html" %}
 
-  {% block details_content %} {% endblock %}
+    {% block details_content %} {% endblock %}
+  </div>
 {% endblock %}
 
 {% block page_scripts %}
