@@ -10,7 +10,7 @@ from canonicalwebteam.flask_base.app import FlaskBase
 
 from webapp.store_api import publisher_gateway
 from webapp.extensions import csrf, vite
-from webapp.config import APP_NAME, VITE_CONFIG
+from webapp.config import APP_NAME, VITE_CONFIG, IS_DEVELOPMENT
 from webapp.handlers import set_handlers
 from webapp.login.views import login
 from webapp.topics.views import topics
@@ -47,6 +47,10 @@ app = FlaskBase(
 app.name = APP_NAME
 app.config["LOGIN_REQUIRED"] = login_required
 app.config.update(VITE_CONFIG)
+
+if IS_DEVELOPMENT:
+    app.config["TEMPLATES_AUTO_RELOAD"] = True
+    app.jinja_options = {**app.jinja_options, "cache_size": 0}
 
 set_handlers(app)
 
