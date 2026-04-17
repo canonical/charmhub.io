@@ -1,0 +1,70 @@
+{#
+Context variables needed for `package_header`:
+  package: package object with store_front data
+  developer_validation: validation status (e.g. "verified")
+  image: template image helper
+#}
+
+{%- from 'details/package_header/_package_header_data.html' import package_header_data -%}
+
+{%- macro package_header(package, developer_validation, image) -%}
+  {%- set channel_map_content = caller("channel_map") -%}
+  {%- set has_channel_map_content = channel_map_content|trim|length > 0 -%}
+  {%- set platforms_content = caller("platforms") -%}
+  {%- set has_platforms_content = platforms_content|trim|length > 0 -%}
+  {%- set has_icon = package.type == "charm" -%}
+
+  <div class="grid-row">
+    <div class="grid-col-2 grid-col-medium-1 grid-col-small-1">
+      {% if has_icon %}
+        <div class="p-charm-header">
+          <div class="p-media-object--large">
+            {% if package["store_front"]["icons"] %}
+              {{ image(url=package.store_front.icons[0],
+                      alt=package.name,
+                      width="100",
+                      height="100",
+                      hi_def=True,
+                      fill=True,
+                      attrs={"class": "p-media-object__image"},) | safe
+              }}
+            {% else %}
+              {{ image(url="https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg",
+                      alt=package.name,
+                      width="100",
+                      height="100",
+                      hi_def=True,
+                      fill=True,
+                      attrs={"class": "p-media-object__image"},) | safe
+              }}
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="grid-col-4 grid-col-medium-1 grid-col-small-3">
+      <div class="p-charm-header">
+        {{ package_header_data(package, developer_validation, image) }}
+      </div>
+    </div>
+
+    <div class="grid-col-2 grid-col-medium-2 grid-col-small-4">
+      {% if has_platforms_content %}
+        {{ platforms_content }}
+      {% endif %}
+    </div>
+  </div>
+
+  {% if has_channel_map_content %}
+    <div class="grid-row">
+      <div class="grid-col-2"></div>
+      <div class="grid-col-6 p-section--shallow">
+        <hr class="p-rule--muted" />
+        <div class="p-charm-header">
+          {{ channel_map_content }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{%- endmacro -%}

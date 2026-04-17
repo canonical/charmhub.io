@@ -1,4 +1,4 @@
-{% from "details/_package_header.html" import package_header %}
+{% from "details/package_header/_package_header.html" import package_header with context %}
 
 <div class="p-strip--light is-shallow">
   {% if request.path.startswith("/kubeflow") and schedule_banner("2023-03-08", "2023-03-22") %}
@@ -58,9 +58,13 @@
             <div>
               {% for base in bases | sort(reverse=True) %}
                 {% if loop.index <= 9 %}
-                  <span class="series-tag">{{ base }}</span>
+                  <span class="p-chip--information is-dense is-readonly u-no-margin--bottom u-no-margin--right">
+                    <span class="p-chip__value">{{ base }}</span>
+                  </span>
                 {% elif loop.index == 10 %}
-                  <span class="series-tag">+{{ loop.revindex }}</span>
+                  <span class="p-chip--information is-dense is-readonly u-no-margin--bottom u-no-margin--right">
+                    <span class="p-chip__value">+{{ loop.revindex }}</span>
+                  </span>
                 {% endif %}
               {% endfor %}
             </div>
