@@ -15,8 +15,8 @@ Context variables needed for `package_header`:
   {%- set has_icon = package.type == "charm" -%}
 
   <div class="grid-row">
-    {% if has_icon %}
-      <div class="grid-col-2 grid-col-medium-1 grid-col-small-1">
+    <div class="grid-col-2 grid-col-medium-1 grid-col-small-1">
+      {% if has_icon %}
         <div class="p-charm-header">
           <div class="p-media-object--large">
             {% if package["store_front"]["icons"] %}
@@ -40,10 +40,10 @@ Context variables needed for `package_header`:
             {% endif %}
           </div>
         </div>
-      </div>
-    {% endif %}
+      {% endif %}
+    </div>
 
-    <div class="grid-col-{% if has_icon %}4{% else %}6{% endif %}">
+    <div class="grid-col-4">
       <div class="p-charm-header">
         {{ package_header_data(package, developer_validation, image) }}
       </div>
@@ -58,9 +58,7 @@ Context variables needed for `package_header`:
 
   {% if has_channel_map_content %}
     <div class="grid-row">
-      {% if has_icon %}
-        <div class="grid-col-2"></div>
-      {% endif %}
+      <div class="grid-col-2"></div>
       <div class="grid-col-6 p-section--shallow">
         <hr class="p-rule--muted" />
         <div class="p-charm-header">

@@ -1,8 +1,6 @@
 <div class="grid-row">
-  {% if package.type == "charm" %}
-    <div class="grid-col-2 grid-col-medium-1 grid-col-small-1"></div>
-  {% endif %}
-  <div class="grid-col-{% if package.type == "charm" %}6{% else %}8{% endif %}">
+  <div class="grid-col-2 grid-col-medium-1 grid-col-small-1"></div>
+  <div class="grid-col-6">
     <nav class="p-tabs" data-js="tabs" aria-label="Details pages navigation">
       <ul class="p-tabs__list" role="tablist">
       <li class="p-tabs__item" role="presentation">
