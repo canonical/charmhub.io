@@ -1,22 +1,54 @@
-{%- from 'details/package_header/_publisher_info.html' import publisher_info -%}
+{%- from 'details/package_header/_publisher_info.html' import publisher_info with context -%}
 
-{%- macro package_header_data(package, developer_validation, image) -%}
-  <div class="p-media-object--large">
-    <div class="p-media-object__details">
-      <h1 class="u-sv-2">{{ package.store_front["display-name"] }}</h1>
-      <div class="p-media-object__content u-no-margin--bottom">
-        <ul class="p-inline-list--middot">
-          <li class="p-inline-list__item">
-            {{ publisher_info(package, developer_validation, image) }}
-          </li>
-          {% if package.store_front.categories %}
-            <li class="p-inline-list__item">
-              <a href="/?filter={{ package.store_front.categories[0].slug }}">{{
-                package.store_front.categories[0].name }}</a>
-            </li>
-          {% endif %}
-        </ul>
-      </div>
+{%- macro package_icon(
+    icon_url,
+    image) -%}
+  {% if not icon_url %}
+    {% set icon_url = "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" %}
+  {% endif %}
+
+  {{ image(url=icon_url,
+        alt="",
+        width=120,
+        height=120,
+        hi_def=True,
+        loading="eager",
+        attrs={"data-live": "icon"}) | safe
+  }}
+{%- endmacro -%}
+
+{%- macro package_header_data(
+    package_title,
+    icon_url,
+    developer,
+    categories,
+    image,
+    publisher_name,
+    username,
+    developer_validation,
+    package_type) -%}
+  <div class="p-section--shallow">
+    <h1 class="u-sv-1" data-live="title">{{ package_title }}</h1>
+    <div class="u-hide--medium u-hide--large">
+      {% if developer %}
+        {{ developer }}
+      {% endif %}
+      {% if publisher_name != None %}
+        {{ publisher_info(publisher_name, username, developer_validation, package_type, image) }}
+      {% endif %}
     </div>
+    <ul class="p-inline-list--vertical-divider">
+      {% if developer %}
+        <li class="p-inline-list__item u-hide--small">{{ developer }}</li>
+      {% endif %}
+      {% if publisher_name != None %}
+        <li class="p-inline-list__item u-hide--small">{{ publisher_info(publisher_name, username, developer_validation, package_type, image) }}</li>
+      {% endif %}
+      {% for category in categories %}
+        <li class="p-inline-list__item">
+          <a href="/?filter={{ category.slug }}">{{ category.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
   </div>
 {%- endmacro -%}

@@ -6,11 +6,11 @@
   {% endif %}
 
   {% call(slot) package_header(package, developer_validation, image) %}
-    {% if slot == "channel_map" %}
+    {% if slot == "additional_info" %}
       {% include "partial/_channel-map.html" %}
     {% endif %}
 
-    {% if slot == "platforms" %}
+    {% if slot == "aside" %}
       <p style="margin-bottom: 0.5rem;">
         <small class="u-no-padding--top u-text--muted">Platform:</small>
       </p>
