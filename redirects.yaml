@@ -20,6 +20,10 @@ topics/canonical-observability-stack/juju-topology/?: https://documentation.ubun
 topics/canonical-observability-stack/reference/security/?: https://documentation.ubuntu.com/observability/latest/reference/security-hardening-guide/
 topics/canonical-observability-stack/(?P<path>.*)/?: https://documentation.ubuntu.com/observability/
 
+topics/canonical-identity-platform/?: https://canonical-identity.readthedocs-hosted.com/
+topics/security-with-x-509-certificates/?: https://canonical-certificate-management.readthedocs-hosted.com/
+topics/kubeflow/?: https://documentation.ubuntu.com/charmed-kubeflow/latest/
+
 containers-etcd: etcd
 search\??(?P<search>.*)?/?: /?{search}
 /(?P<charm>[A-Za-z0-9-]*[A-Za-z][A-Za-z0-9-]*)/configure: /{charm}/configurations
