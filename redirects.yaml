@@ -13,7 +13,7 @@ topics/operators-corner: https://juju.is/docs
 topics/charm-maturity: https://juju.is/docs
 
 # Observability topic redirects
-topics/canonical-observability-stack/?: https://documentation.ubuntu.com/observability/latest/
+topics/canonical-observability-stack/?: https://documentation.ubuntu.com/observability/
 topics/canonical-observability-stack/tutorials/?: https://documentation.ubuntu.com/observability/latest/tutorial/
 topics/canonical-observability-stack/design-goals/?: https://documentation.ubuntu.com/observability/latest/explanation/architecture/design-goals/
 topics/canonical-observability-stack/juju-topology/?: https://documentation.ubuntu.com/observability/latest/explanation/architecture/juju-topology/
