@@ -33,6 +33,9 @@ describe("Banner Component", () => {
     expect(
       screen.getByRole("heading", { name: /The Charm Collection/i })
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /Developer Resources/i })
+    ).toBeInTheDocument();
 
     expect(screen.getByPlaceholderText("Search Charmhub")).toBeInTheDocument();
 
