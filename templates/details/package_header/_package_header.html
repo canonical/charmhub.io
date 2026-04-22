@@ -22,7 +22,6 @@ Context variables needed for `package_header`:
       {{ package_header_data(
           package_title=package.store_front['display-name'],
           icon_url=icon_url,
-          developer=None,
           categories=package.store_front.categories or [],
           image=image,
           publisher_name=package.store_front.publisher_name,

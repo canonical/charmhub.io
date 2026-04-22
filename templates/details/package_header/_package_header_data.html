@@ -20,7 +20,6 @@
 {%- macro package_header_data(
     package_title,
     icon_url,
-    developer,
     categories,
     image,
     publisher_name,
@@ -30,17 +29,11 @@
   <div class="p-section--shallow">
     <h1 class="u-sv-1" data-live="title">{{ package_title }}</h1>
     <div class="u-hide--medium u-hide--large">
-      {% if developer %}
-        {{ developer }}
-      {% endif %}
       {% if publisher_name != None %}
         {{ publisher_info(publisher_name, username, developer_validation, package_type, image) }}
       {% endif %}
     </div>
-    <ul class="p-inline-list--vertical-divider">
-      {% if developer %}
-        <li class="p-inline-list__item u-hide--small">{{ developer }}</li>
-      {% endif %}
+    <ul class="p-inline-list--middot">
       {% if publisher_name != None %}
         <li class="p-inline-list__item u-hide--small">{{ publisher_info(publisher_name, username, developer_validation, package_type, image) }}</li>
       {% endif %}
