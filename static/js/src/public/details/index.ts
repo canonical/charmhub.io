@@ -1,6 +1,7 @@
 import { HistoryState } from "./historyState";
 import { TableOfContents } from "./tableOfContents";
 import { channelMap } from "./channelMap";
+import { copyCommand } from "./copyCommand";
 import declareGlobal from "../../libs/declare";
 
 const init = (packageName: string) => {
@@ -53,6 +54,8 @@ const init = (packageName: string) => {
   if (channelMapButton) {
     channelMap(packageName, channelMapButton);
   }
+
+  copyCommand();
 };
 
 export { init };
