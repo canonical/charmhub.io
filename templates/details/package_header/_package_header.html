@@ -13,7 +13,7 @@ Context variables needed for `package_header`:
   {%- set aside_content = caller('aside') -%}
   {%- set has_aside_content = aside_content|trim|length > 0 -%}
   {%- set icon_url = package.store_front.icons[0] if package.type == 'charm' and package.store_front.icons else none -%}
-  {%- set content_column_classes = 'grid-col-4 grid-col-medium-2 grid-col-small-2' if has_aside_content else 'grid-col-6 grid-col-medium-3 grid-col-small-3' -%}
+  {%- set content_column_classes = 'grid-col-4 grid-col-medium-2 grid-col-small-3' if has_aside_content else 'grid-col-6 grid-col-medium-3 grid-col-small-3' -%}
   <div class="grid-row">
     <div class="grid-col-2 grid-col-medium-1 grid-col-small-1">
       {{ package_icon(icon_url, image) }}
@@ -31,15 +31,14 @@ Context variables needed for `package_header`:
       ) }}
     </div>
     {%- if has_aside_content -%}
-    <div class="grid-col-2 grid-col-medium-1 grid-col-small-1">
+    <div class="grid-col-2 grid-col-medium-1 grid-col-small-4">
       {{ aside_content }}
     </div>
     {%- endif -%}
   </div>
   {%- if has_additional_info_content -%}
-  <div class="grid-row">
-    <div class="grid-col-2 grid-col-medium-1 grid-col-small-1"></div>
-    <div class="grid-col-6 grid-col-medium-3 grid-col-small-3">
+  <div class="grid-row--25-75">
+    <div class="grid-col">
       <div class="p-section--shallow">{{ additional_info_content }}</div>
     </div>
   </div>
