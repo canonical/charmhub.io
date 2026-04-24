@@ -104,12 +104,6 @@ $breakpoint-navigation-threshold: 1220px; // keep it in sync with juju.is and br
   }
 }
 
-.p-channel-map__button {
-  @media screen and (min-width: $breakpoint-small) {
-    margin-bottom: 0 !important;
-  }
-}
-
 .p-channel-map {
   margin-inline-end: 1rem;
   position: absolute;

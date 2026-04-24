@@ -5,9 +5,6 @@
     flex-wrap: wrap;
     margin-bottom: $spv--x-large;
 
-    @media only screen and (min-width: $breakpoint-small) {
-      margin-bottom: $spv--small;
-    }
 
     @media only screen and (min-width: $breakpoint-large) {
       flex-wrap: nowrap;
