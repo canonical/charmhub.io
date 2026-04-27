@@ -15,10 +15,14 @@ const init = () => {
       return;
     }
 
-    await navigator.clipboard.writeText(text);
-
     const icon = button.querySelector("i");
     if (!icon) {
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
       return;
     }
 

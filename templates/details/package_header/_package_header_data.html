@@ -32,13 +32,13 @@
   <div class="p-section--shallow">
     <h1 class="u-sv-1" data-live="title">{{ package_title }}</h1>
     <div class="u-hide--medium u-hide--large">
-      {% if publisher_name != None %}
-        {{ publisher_info(publisher_name, username, developer_validation, package_type, image) }}
+      {% if publisher_name is not none %}
+        {{ publisher_info(publisher_name, username, developer_validation, package_type, image, 'mobile') }}
       {% endif %}
     </div>
     <ul class="p-inline-list--middot u-no-margin--bottom">
-      {% if publisher_name != None %}
-        <li class="p-inline-list__item u-hide--small">{{ publisher_info(publisher_name, username, developer_validation, package_type, image) }}</li>
+      {% if publisher_name is not none %}
+        <li class="p-inline-list__item u-hide--small">{{ publisher_info(publisher_name, username, developer_validation, package_type, image, 'desktop') }}</li>
       {% endif %}
       {% for category in categories %}
         <li class="p-inline-list__item">
