@@ -1,6 +1,6 @@
 {%- macro publisher_info(publisher_name, username, developer_validation, package_type, image) -%}
 <span class="p-tooltip--btm-center">
-  {% if username != None %}
+  {% if username is not none %}
     <a href="/publisher/{{ username | safe }}" title="View all packages from {{ publisher_name }}">
       {{ publisher_name }}
     </a>
