@@ -1,0 +1,51 @@
+{#
+Context variables needed for `package_header`:
+  package: package object with store_front data
+  developer_validation: validation status (e.g. "verified")
+  image: template image helper
+#}
+
+{%- from 'details/package_header/_package_header_data.html' import package_header_data, package_icon with context -%}
+
+{%- macro package_header(package, developer_validation, image) -%}
+  {%- set additional_info_content = caller('additional_info') -%}
+  {%- set has_additional_info_content = additional_info_content|trim|length > 0 -%}
+  {%- set aside_content = caller('aside') -%}
+  {%- set has_aside_content = aside_content|trim|length > 0 -%}
+  {%- set is_bundle = package.type == 'bundle' -%}
+  {%- set icon_url = package.store_front.icons[0] if package.type == 'charm' and package.store_front.icons else none -%}
+  {%- if has_aside_content -%}
+    {%- set content_column_classes = 'grid-col-4 grid-col-medium-3 grid-col-small-4' if is_bundle else 'grid-col-4 grid-col-medium-2 grid-col-small-3' -%}
+  {%- else -%}
+    {%- set content_column_classes = 'grid-col-6 grid-col-medium-4 grid-col-small-4' if is_bundle else 'grid-col-6 grid-col-medium-3 grid-col-small-3' -%}
+  {%- endif -%}
+  <div class="grid-row">
+    <div class="{{ 'grid-col-2 u-hide--medium u-hide--small' if is_bundle else 'grid-col-2 grid-col-medium-1 grid-col-small-1' }}">
+      {{ package_icon(icon_url, image, package.type) }}
+    </div>
+    <div class="{{ content_column_classes }}">
+      {{ package_header_data(
+          package_title=package.store_front['display-name'],
+          icon_url=icon_url,
+          categories=package.store_front.categories or [],
+          image=image,
+          publisher_name=package.store_front.publisher_name,
+          username=package.store_front.username,
+          developer_validation=developer_validation,
+          package_type=package.type
+      ) }}
+    </div>
+    {%- if has_aside_content -%}
+    <div class="grid-col-2 grid-col-medium-1 grid-col-small-4">
+      {{ aside_content }}
+    </div>
+    {%- endif -%}
+  </div>
+  {%- if has_additional_info_content -%}
+  <div class="grid-row--25-75">
+    <div class="grid-col">
+      <div class="p-section--shallow">{{ additional_info_content }}</div>
+    </div>
+  </div>
+  {%- endif -%}
+{%- endmacro -%}

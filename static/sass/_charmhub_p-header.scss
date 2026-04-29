@@ -1,7 +1,8 @@
 @mixin charmhub-p-header {
   .p-charm-header__container {
-    align-items: center;
+    align-items: baseline;
     display: flex;
+    flex-wrap: wrap;
 
     @media screen and (max-width: $breakpoint-small - 1) {
       align-items: flex-start;
@@ -13,11 +14,7 @@
     &__code {
       display: inline-block;
       margin-block-end: 1rem;
-
-      @media screen and (min-width: $breakpoint-small) {
-        margin-block-end: 0;
-        padding-inline-start: $spv--small;
-      }
+      margin-inline-end: 1rem;
 
       code {
         background-color: transparent;
@@ -28,11 +25,6 @@
           margin-inline-start: 0;
         }
       }
-    }
-
-    &__action {
-      margin-block-start: $spv--small;
-      padding-inline-start: $spv--small;
     }
 
     .p-button--base {

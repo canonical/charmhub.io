@@ -1,6 +1,8 @@
-<div class="u-fixed-width">
-  <nav class="p-tabs" data-js="tabs" aria-label="Details pages navigation">
-    <ul class="p-tabs__list" role="tablist">
+<div class="grid-row">
+  <div class="grid-col-2 grid-col-medium-1 grid-col-small-1"></div>
+  <div class="grid-col-6">
+    <nav class="p-tabs" data-js="tabs" aria-label="Details pages navigation">
+      <ul class="p-tabs__list" role="tablist">
       <li class="p-tabs__item" role="presentation">
         <a href="/{{ package.name }}{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'overview' or current_tab == 'docs' %}aria-selected="true" {% endif %}>Description</a>
       </li>
@@ -23,7 +25,8 @@
         <a href="/{{ package.name }}/actions{% if channel_requested %}?channel={{ channel_requested }}{% endif %}" class="p-tabs__link" tabindex="0" role="tab" {% if current_tab == 'actions' %}aria-selected="true" {% endif %}>Actions</a>
       </li>
       {% endif %}
-    </ul>
-  </nav>
+      </ul>
+    </nav>
+  </div>
 </div>
 

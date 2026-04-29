@@ -2,10 +2,12 @@
   .series-base {
     align-items: center;
     display: flex;
-    margin-bottom: $spv--medium;
+    flex-wrap: wrap;
+    margin-bottom: $spv--x-large;
 
-    @media only screen and (min-width: $breakpoint-x-small) {
-      margin-bottom: $spv--small;
+
+    @media only screen and (min-width: $breakpoint-large) {
+      flex-wrap: nowrap;
     }
   }
 

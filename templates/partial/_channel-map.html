@@ -1,11 +1,11 @@
 <div class="p-charm-header__container">
   <div style="position: relative;">
-    <button class="p-button p-channel-map__button" data-controls="channel-map-versions" aria-controls="channel-map-versions" data-js="channel-map">
+    <button class="p-button has-icon p-channel-map__button" data-controls="channel-map-versions" aria-controls="channel-map-versions" data-js="channel-map">
       <span data-js="channel-map-selected">
         {% set default_channel = package["default-release"].channel %}
         {{ default_channel.name }} {{ package.store_front.channel_map[default_channel.get("track", "latest")][default_channel.risk].latest.version }}
       </span>
-      &nbsp;&nbsp;<i class="p-icon--chevron-down"></i>
+      <i class="p-icon--chevron-down"></i>
     </button>
     <div class="p-channel-map u-hide">
       <div class="p-channel-map__mask">
@@ -92,44 +92,34 @@
   </div>
 
   <div class="p-charm-header__code">
-    <div class="p-tooltip--information">
-      <div>
-        {% block juju_cmd %}
-          {% set channel_part = "" %}
-          {% set extra_flags_part = "" %}
-          {% if package["default-release"]["channel"]["name"] and package["default-release"]["channel"]["name"] != "stable" %}
-            {% set channel_cmd_part = "--channel " + package["default-release"]["channel"]["name"] %}
-          {% endif %}
-          {% if package["overlay_data"] and package["overlay_data"]["juju_cmd_extra_flags"] %}
-            {% set extra_flags_part = package["overlay_data"]["juju_cmd_extra_flags"] %}
-          {% endif %}
-          <code>juju deploy {{ package["name"] }} {{ channel_cmd_part }} {{ extra_flags_part }}</code>
-        {% endblock %}
+    {% block juju_cmd %}
+      {% set channel_cmd_part = "" %}
+      {% set extra_flags_part = "" %}
+      {% if package["default-release"]["channel"]["name"] and package["default-release"]["channel"]["name"] != "stable" %}
+        {% set channel_cmd_part = " --channel " + package["default-release"]["channel"]["name"] %}
+      {% endif %}
+      {% if package["overlay_data"] and package["overlay_data"]["juju_cmd_extra_flags"] %}
+        {% set extra_flags_part = " " + package["overlay_data"]["juju_cmd_extra_flags"] %}
+      {% endif %}
+      {% set deploy_command = "juju deploy " + package["name"] + channel_cmd_part + extra_flags_part %}
+      <div class="p-code-snippet u-no-margin--bottom" style="position: relative;">
+        <pre class="p-code-snippet__block is-wrapped" style="padding-right: 3.5rem;"><code id="deploy-command">{{ deploy_command }}</code></pre>
+        <button
+          type="button"
+          class="p-button--base is-dense has-icon u-no-margin--bottom"
+          aria-label="Copy deploy command"
+          title="Copy deploy command"
+          data-js="copy-deploy-command"
+          style="position: absolute; top: 0.5rem; right: 0.5rem;"
+        >
+          <i class="p-icon--copy" aria-hidden="true"></i>
+        </button>
       </div>
-      <div class="instruction-tooltip">
-        <div class="p-tooltip__button" role="button" aria-controls="icon-tooltip-modal" tabindex="0">
-          Show information
-        </div>
-        <div class="p-tooltip__modal" id="icon-tooltip-modal">
-          <div class="p-tooltip__dialog" role="dialog" aria-labelledby="modal-content">
-            <button class="p-tooltip__close" aria-controls="icon-tooltip-modal" aria-label="Close tooltip modal">Close</button>
-            <span id="modal-content" class="u-no-margin--bottom u-no-padding--top">
-              {% if package.store_front["deployable-on"]|length == 1 and package.store_front["deployable-on"][0] == "kubernetes" %}
-              <p>Deploy Kubernetes operators easily with Juju, the <a href="https://juju.is/overview">Universal Operator Lifecycle Manager</a>. Need a Kubernetes cluster? Install <a href="https://microk8s.io/">MicroK8s</a> to create a full <a href="https://www.cncf.io/certification/software-conformance/">CNCF-certified</a> Kubernetes system in under 60 seconds.</p>
-              <p class="u-no-margin--bottom"><a href="https://canonical-juju.readthedocs-hosted.com/en/3.6/user/reference/cloud/list-of-supported-clouds/the-microk8s-cloud-and-juju/">Deploy using our Quickstart Guide</a></p>
-              {% else %}
-              <p>Deploy universal operators easily with Juju, the <a href="https://juju.is/overview">Universal Operator Lifecycle Manager</a>.</p>
-              <p class="u-no-margin--bottom"><a href="https://canonical-juju.readthedocs-hosted.com/en/3.6/user/howto/manage-applications/#deploy-an-application">Learn how with our Quickstart Guide</a></p>
-              {% endif %}
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
+    {% endblock %}
   </div>
 
-  <div class="p-charm-header__action" style="padding-left: 1rem;">
-    <p style="padding-top: 0.5rem">
+  <div class="p-charm-header__action">
+    <p>
       <a href="https://juju.is/docs/juju/manage-applications" class="" target="_blank" rel="noopener noreferrer">
         Learn to deploy on juju&nbsp;&gt;
       </a>
