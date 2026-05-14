@@ -47,6 +47,11 @@ export default defineConfig({
         find: /^@canonical\/react-components$/,
         replacement: "@canonical/react-components/dist/esm",
       },
+      // mermaid uses lots of lazy imports which generate many chunks, we currently want to avoid that
+      {
+        find: "mermaid",
+        replacement: "mermaid/dist/mermaid.esm.min.mjs",
+      },
     ],
   },
   base: "./", // use the script's URL path as base when loading assets in dynamic imports
@@ -61,6 +66,17 @@ export default defineConfig({
         entryFileNames: `[name]--[hash].js`,
         chunkFileNames: `chunks/[name]--[hash].js`,
         assetFileNames: `assets/[name]--[hash][extname]`,
+        // try to produce the minimal amount of bundles, even if this is not good for first load performance
+        experimentalMinChunkSize: 5_000_000,
+        manualChunks(id) {
+          if (id.includes("mermaid")) {
+            return "mermaid";
+          }
+          if (id.includes("node_modules/")) {
+            return "vendor";
+          }
+          return null;
+        },
       },
     },
   },
