@@ -1,10 +1,8 @@
 /// <reference types="cypress" />
 
-describe("Test docs-side-nav.js bundle on /nginx-ingress-integrator/docs/getting-started page", () => {
+describe("Test docs-side-nav.js bundle on /pgbouncer/docs/tutorial page", () => {
   beforeEach(() => {
-    cy.visit(
-      "http://localhost:8045/nginx-ingress-integrator/docs/getting-started"
-    );
+    cy.visit("http://localhost:8045/pgbouncer/docs/tutorial");
     cy.get("#cookie-policy-button-accept-all").click();
   });
 
