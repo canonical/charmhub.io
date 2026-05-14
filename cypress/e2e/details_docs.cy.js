@@ -1,10 +1,8 @@
 /// <reference types="cypress" />
 
-describe("Test details_docs.js bundle on /nginx-ingress-integrator/docs/getting-started page", () => {
+describe("Test details_docs.js bundle on /pgbouncer/docs/tutorial page", () => {
   beforeEach(() => {
-    cy.visit(
-      "http://localhost:8045/nginx-ingress-integrator/docs/getting-started"
-    );
+    cy.visit("http://localhost:8045/pgbouncer/docs/tutorial");
   });
 
   it("sets 'window.charmhub'", () => {
