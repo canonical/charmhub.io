@@ -9,7 +9,7 @@ from canonicalwebteam.candid import CandidClient
 from canonicalwebteam.flask_base.app import FlaskBase
 
 from webapp.store_api import publisher_gateway
-from webapp.extensions import csrf, vite
+from webapp.extensions import csrf, vite, vite_import
 from webapp.config import APP_NAME, VITE_CONFIG
 from webapp.handlers import set_handlers
 from webapp.login.views import login
@@ -54,6 +54,7 @@ request_session = requests.Session()
 candid = CandidClient(request_session)
 csrf.init_app(app)
 vite.init_app(app)
+app.template_global("vite_import")(vite_import)
 
 app.register_blueprint(store_packages)
 app.register_blueprint(publisher)
