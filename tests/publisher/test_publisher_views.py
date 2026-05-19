@@ -3,7 +3,10 @@ from webapp.app import app
 from tests.mock_data.mock_store_logic import sample_charm
 from unittest.mock import patch
 
-from canonicalwebteam.exceptions import StoreApiResponseErrorList
+from canonicalwebteam.exceptions import (
+    PublisherMacaroonRefreshRequired,
+    StoreApiResponseErrorList,
+)
 
 
 class TestPublisherViews(unittest.TestCase):
@@ -151,6 +154,23 @@ class TestPublisherViews(unittest.TestCase):
         res = self.client.get("/bundles")
         self.assertEqual(res.status_code, 200)
         self.assertNotIn(b"postgresql", res.data)
+
+    @patch("webapp.publisher.views.redis_cache.get", return_value=None)
+    @patch("webapp.store_api.publisher_gateway.get_account_packages")
+    def test_list_page_expired_session_redirects_login(
+        self, mock_get_account_packages, _
+    ):
+        mock_get_account_packages.side_effect = (
+            PublisherMacaroonRefreshRequired()
+        )
+
+        response = self.client.get("/charms")
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.location, "/login?next=/charms")
+        with self.client.session_transaction() as session:
+            self.assertNotIn("account-auth", session)
+            self.assertNotIn("account", session)
 
     def test_accept_invite(self):
         res = self.client.get("/accept-invite")

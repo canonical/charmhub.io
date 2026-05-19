@@ -6,8 +6,8 @@ To use staging APIs locally you can add the following lines to an `.env.local` f
 
 ```bash
 DEVICEGW_URL=https://api.staging.snapcraft.io/
-PUBLISHER_GATEWAY_API_URL=https://api.staging.charmhub.io/
-CANDID_API_URL=https://api.staging.jujucharms.com/identity/
+PUBLISHERGW_URL=https://api.staging.charmhub.io/
+FLASK_LOGIN_URL=https://login.staging.ubuntu.com
 ```
 
 ## Using Sentry error tracker

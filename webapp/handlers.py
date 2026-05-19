@@ -1,7 +1,8 @@
-from flask import render_template, session
+from flask import redirect, render_template, request, session
 from webapp.config import SENTRY_DSN, IS_DEVELOPMENT, VITE_CONFIG
 
 from canonicalwebteam.exceptions import (
+    PublisherMacaroonRefreshRequired,
     StoreApiError,
     StoreApiResourceNotFound,
     StoreApiResponseDecodeError,
@@ -112,6 +113,10 @@ def set_handlers(app):
 
     @app.errorhandler(StoreApiResponseErrorList)
     def handle_store_api_error_list(e):
+        if e.status_code == 401:
+            authentication.empty_session(session)
+            return redirect(f"/login?next={request.path}")
+
         if e.status_code == 404:
             return render_template("404.html", message="Entity not found"), 404
 
@@ -130,11 +135,23 @@ def set_handlers(app):
             status_code,
         )
 
+    @app.errorhandler(PublisherMacaroonRefreshRequired)
+    def handle_macaroon_refresh_required(_):
+        authentication.empty_session(session)
+        return redirect(f"/login?next={request.path}")
+
     @app.errorhandler(StoreApiResponseDecodeError)
     @app.errorhandler(StoreApiResponseError)
     @app.errorhandler(StoreApiConnectionError)
     @app.errorhandler(StoreApiError)
     def handle_store_api_error(e):
+        if (
+            isinstance(e, StoreApiResponseError)
+            and getattr(e, "status_code", None) == 401
+        ):
+            authentication.empty_session(session)
+            return redirect(f"/login?next={request.path}")
+
         status_code = 502
         return (
             render_template(

@@ -1,108 +1,71 @@
 import unittest
-from flask import session
+from types import SimpleNamespace
+from unittest.mock import patch
+from urllib.parse import urlparse
 
-from canonicalwebteam.candid import CandidClient
-from webapp.app import app
 import responses
-import requests
+from flask import session
+from pymacaroons import Macaroon
 
-request_session = requests.Session()
-candid = CandidClient(request_session)
+from webapp.app import app
+from webapp.login import views as login_views
 
-CANDID_RESPONSE = {
-    "Info": {
-        "InteractionMethods": {
-            "browser-redirect": {
-                "LoginURL": "https://snapcraft.io/",
-            }
-        }
-    }
-}
 
-MACAROON_RESPONSE = {
-    "macaroon": (
-        '{"i64": "AwoQv6LOwltudUSL__FvssuZfRIBMBoOCgVsb2dpbhIFbG9naW4", '
-        '"s64": "eZlOdzfzQkd9By83AyksW8Rt_cZSbdJWssyZhPRORlg", '
-        '"l": "api.snapcraft.io", '
-        '"c": [{"i": "time-before 2026-09-08T13:27:59.418876Z"}, '
-        '{"i": "time-since 2025-09-08T13:27:59.418876Z"}, '
-        '{"i": "session-id ea67eff4-1dcb-442f-a31e-68412b6fa0cb"}, '
-        '{"i64": "AoZh2j5-nfvsJYAztgZ-Mm8Ehcpi5i4qyEj3HU_MWsRvbfkAIg198sss'
-        "UwTbp6HI3ok250inzlaYddeFx4E3LY5DyTjmYo0Fz5KXZhSrcI1g1Iki-BVAvO3E_"
-        "luKko0KUNkxYYGKn0komrJK1DsMcjBJfBL6hCklJxtCMWGmmgt0DDQspAjjFnBfE"
-        'JbTVaAjk4vY", '
-        '"v64": "r57IO0tZoWHO9XXmYGze0RIIipCQW1RRSYZIRj01VQQld413guTUELM'
-        'pMgGOoXPyGGFdgydIBDDEzUy1ogykimmCvtxa8VuK", '
-        '"l": "https://api.jujucharms.com/identity/"}, '
-        '{"i": "extra {\\"permissions\\": '
-        '[\\"account-register-package\\", \\"account-view-packages\\", '
-        '\\"package-manage\\", \\"package-view\\"]}"}]}'
-    )
-}
+def make_root_macaroon():
+    root = Macaroon(location="api.staging.snapcraft.io", identifier="store-usso")
+    login_host = urlparse(login_views.LOGIN_URL).hostname or login_views.LOGIN_URL
+    root.add_third_party_caveat(login_host, "secret-key", "caveat-id")
+    return root.serialize()
 
 
 class TestLoginViews(unittest.TestCase):
     def setUp(self):
         self.app = app
         app.config["TESTING"] = True
-        self.app.config["WTF_CSRF_ENABLED"] = []
-
         self.client = self.app.test_client()
-        self.api_url = "https://api.charmhub.io/v1/tokens"
-        self.candid_url = "https://api.jujucharms.com/identity/discharge"
+        self.issue_url = login_views.publisher_gateway.get_endpoint_url(
+            "tokens/usso"
+        )
+        self.root_macaroon = make_root_macaroon()
 
     @responses.activate
-    def test_login(self):
+    @patch("webapp.login.views.open_id.try_login")
+    def test_login(self, mock_try_login):
+        mock_try_login.return_value = "ok"
         responses.add(
             responses.POST,
-            self.candid_url,
-            json=CANDID_RESPONSE,
-            status=200,
-        )
-        responses.add(
-            responses.POST,
-            self.api_url,
-            json=MACAROON_RESPONSE,
-            headers={"User-Agent": "Google Chrome"},
+            self.issue_url,
+            json={"macaroon": self.root_macaroon},
             status=200,
         )
 
         with self.client as client:
-            res = client.get(
-                "/login",
-                headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64)"},
-            )
-            self.assertEqual(res.status_code, 302)
+            res = client.get("/login")
+            self.assertEqual(res.data, b"ok")
             self.assertIn("account-macaroon", session)
 
     @responses.activate
-    def test_login_next(self):
+    @patch("webapp.login.views.open_id.try_login")
+    def test_login_next(self, mock_try_login):
+        mock_try_login.return_value = "ok"
         responses.add(
             responses.POST,
-            self.candid_url,
-            json=CANDID_RESPONSE,
-            status=200,
-        )
-        responses.add(
-            responses.POST,
-            self.api_url,
-            json=MACAROON_RESPONSE,
-            headers={"User-Agent": "Google Chrome"},
+            self.issue_url,
+            json={"macaroon": self.root_macaroon},
             status=200,
         )
 
         with self.client as client:
-            client.get(
-                "/login?next=/test-page",
-                headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64)"},
-            )
+            client.get("/login?next=/test-page")
             self.assertIn("next_url", session)
             self.assertEqual(session["next_url"], "/test-page")
 
     @responses.activate
-    def test_login_api_500(self):
+    @patch("webapp.login.views.open_id.try_login")
+    def test_login_api_500(self, mock_try_login):
+        mock_try_login.return_value = "ok"
         responses.add(
-            responses.Response(method="POST", url=self.api_url, status=500)
+            responses.Response(method="POST", url=self.issue_url, status=500)
         )
 
         response = self.client.get("/login")
@@ -117,3 +80,25 @@ class TestLoginViews(unittest.TestCase):
             self.assertEqual(response.location, "/")
             self.assertEqual(s.get("account-auth"), None)
             self.assertEqual(s.get("account-macaroon"), None)
+
+    @patch("webapp.login.views.publisher_gateway.exchange_usso_macaroons")
+    @patch("webapp.login.views.publisher_gateway.macaroon_info")
+    def test_login_callback(self, mock_macaroon_info, mock_exchange):
+        discharge = Macaroon(
+            location=urlparse(login_views.LOGIN_URL).hostname, identifier="discharge"
+        ).serialize()
+        mock_exchange.return_value = "account-auth-token"
+        mock_macaroon_info.return_value = {"account": {"id": "test-account"}}
+
+        with self.app.test_request_context("/login", headers={"User-Agent": "UA"}):
+            session["account-macaroon"] = self.root_macaroon
+            response = login_views.login_callback(
+                SimpleNamespace(
+                    extensions={"macaroon": SimpleNamespace(discharge=discharge)}
+                )
+            )
+
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(response.location, "/charms")
+            self.assertEqual(session["account-auth"], "account-auth-token")
+            self.assertIn("account", session)

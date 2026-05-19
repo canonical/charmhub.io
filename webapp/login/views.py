@@ -1,12 +1,14 @@
 import os
-import requests
+from urllib.parse import urlparse
+
 import flask
+from flask_openid import OpenID
+from pymacaroons import Macaroon
 
-from flask_wtf.csrf import generate_csrf, validate_csrf
-
-from canonicalwebteam.candid import CandidClient
-from webapp.helpers import is_safe_url
 from webapp import authentication
+from webapp.extensions import csrf
+from webapp.helpers import is_safe_url
+from webapp.login.macaroon import MacaroonRequest, MacaroonResponse
 from webapp.observability.utils import trace_function
 from webapp.store_api import publisher_gateway
 
@@ -14,14 +16,52 @@ login = flask.Blueprint(
     "login", __name__, template_folder="/templates", static_folder="/static"
 )
 
-LOGIN_URL = os.getenv("FLASK_LOGIN_URL", "https://login.ubuntu.com")
-LOGIN_LAUNCHPAD_TEAM = os.getenv(
-    "LOGIN_LAUNCHPAD_TEAM", "canonical-webmonkeys"
+PUBLISHER_API_URL = os.getenv("PUBLISHER_GATEWAY_API_URL", "")
+DEFAULT_LOGIN_URL = (
+    "https://login.staging.ubuntu.com"
+    if "staging" in PUBLISHER_API_URL
+    else "https://login.ubuntu.com"
+)
+LOGIN_URL = os.getenv("FLASK_LOGIN_URL", DEFAULT_LOGIN_URL)
+LOGIN_USSO_TTL = int(os.getenv("FLASK_LOGIN_USSO_TTL", "300"))
+
+# Keep staging caveat host and login host aligned, same outcome expected by the
+# snapcraft.io flow where discharge comes back in the macaroon OpenID extension.
+if (
+    "staging" in PUBLISHER_API_URL
+    and urlparse(LOGIN_URL).hostname == "login.ubuntu.com"
+):
+    LOGIN_URL = "https://login.staging.ubuntu.com"
+
+open_id = OpenID(
+    store_factory=lambda: None,
+    safe_roots=[],
+    extension_responses=[MacaroonResponse],
 )
 
 
-request_session = requests.Session()
-candid = CandidClient(request_session)
+def get_caveat_id(root: str):
+    location = urlparse(LOGIN_URL).hostname
+    caveat = next(
+        (
+            c
+            for c in Macaroon.deserialize(root).third_party_caveats()
+            if c.location == location
+        ),
+        None,
+    )
+    if caveat is None:
+        caveat = next(
+            (
+                c
+                for c in Macaroon.deserialize(root).third_party_caveats()
+                if urlparse(f"https://{c.location}").hostname == location
+            ),
+            None,
+        )
+    if caveat is None:
+        raise ValueError("No third-party caveat found on root macaroon")
+    return caveat.caveat_id
 
 
 @trace_function
@@ -32,71 +72,64 @@ def logout():
 
 
 @trace_function
-@login.route("/login")
+@login.route("/login", methods=["GET", "POST"])
+@csrf.exempt
+@open_id.loginhandler
 def publisher_login():
-    user_agent = flask.request.headers.get("User-Agent")
+    if authentication.is_authenticated(flask.session):
+        return flask.redirect("/")
 
-    # Get a bakery v2 macaroon from the publisher API to be discharged
-    # and save it in the session
-    flask.session["account-macaroon"] = publisher_gateway.issue_macaroon(
-        [
+    flask.session["account-macaroon"] = publisher_gateway.issue_usso_macaroon(
+        ttl=LOGIN_USSO_TTL,
+        permissions=[
             "account-register-package",
             "account-view-packages",
             "package-manage",
             "package-view",
         ],
-        description=f"charmhub.io - {user_agent}",
     )
 
-    login_url = candid.get_login_url(
-        macaroon=flask.session["account-macaroon"],
-        callback_url=flask.url_for("login.login_callback", _external=True),
-        state=generate_csrf(),
+    openid_macaroon = MacaroonRequest(
+        caveat_id=get_caveat_id(flask.session["account-macaroon"])
     )
 
-    # Next URL to redirect the user after the login
     next_url = flask.request.args.get("next")
-
     if next_url:
         if not is_safe_url(next_url):
             return flask.abort(400)
         flask.session["next_url"] = next_url
 
-    return flask.redirect(login_url, 302)
-
-
-@trace_function
-@login.route("/login/callback")
-def login_callback():
-    code = flask.request.args["code"]
-    state = flask.request.args["state"]
-
-    # Avoid CSRF attacks
-    validate_csrf(state)
-
-    discharged_token = candid.discharge_token(code)
-    candid_macaroon = candid.discharge_macaroon(
-        flask.session["account-macaroon"], discharged_token
+    return open_id.try_login(
+        LOGIN_URL,
+        ask_for=["email", "nickname", "image"],
+        ask_for_optional=["fullname"],
+        extensions=[openid_macaroon],
     )
 
-    # Store bakery authentication
-    issued_macaroon = candid.get_serialized_bakery_macaroon(
-        flask.session["account-macaroon"], candid_macaroon
+
+@open_id.after_login
+def login_callback(resp):
+    discharge = resp.extensions.get("macaroon")
+    discharge_macaroon = getattr(discharge, "discharge", None)
+    if not discharge_macaroon:
+        return flask.abort(502, "Ubuntu SSO login did not return macaroon discharge")
+
+    root_macaroon = flask.session["account-macaroon"]
+    bound_discharge = Macaroon.deserialize(root_macaroon).prepare_for_request(
+        Macaroon.deserialize(discharge_macaroon)
     )
 
-    flask.session["account-auth"] = publisher_gateway.exchange_macaroons(
-        issued_macaroon
+    user_agent = flask.request.headers.get("User-Agent")
+    client_description = f"charmhub.io - {user_agent}" if user_agent else None
+
+    flask.session["account-auth"] = publisher_gateway.exchange_usso_macaroons(
+        root_macaroon=root_macaroon,
+        discharge_macaroon=bound_discharge.serialize(),
+        client_description=client_description,
     )
 
-    # Set "account", "permissions" and other properties from the API response
     flask.session.update(
         publisher_gateway.macaroon_info(flask.session["account-auth"])
     )
 
-    return flask.redirect(
-        flask.session.pop(
-            "next_url",
-            "/charms",
-        ),
-        302,
-    )
+    return flask.redirect(flask.session.pop("next_url", "/charms"), 302)
