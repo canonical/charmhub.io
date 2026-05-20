@@ -100,7 +100,9 @@ def login_callback(resp):
     discharge = resp.extensions.get("macaroon")
     discharge_macaroon = getattr(discharge, "discharge", None)
     if not discharge_macaroon:
-        return flask.abort(502, "Ubuntu SSO login did not return macaroon discharge")
+        return flask.abort(
+            502, "Ubuntu SSO login did not return macaroon discharge"
+        )
 
     root_macaroon = flask.session["account-macaroon"]
     bound_discharge = Macaroon.deserialize(root_macaroon).prepare_for_request(

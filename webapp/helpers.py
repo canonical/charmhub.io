@@ -1,9 +1,8 @@
 import re
 import json
-from urllib.parse import urlparse, urljoin
+from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
-from flask import request
 from ruamel.yaml import YAML
 from slugify import slugify
 from datetime import datetime, timedelta
