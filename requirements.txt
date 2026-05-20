@@ -3,7 +3,9 @@ beautifulsoup4==4.14.3
 bleach==6.2.0
 canonicalwebteam.discourse==7.2.0
 canonicalwebteam.image-template==1.9.0
-canonicalwebteam.store-api==7.9.0
+# TODO: Uncomment before merging and remove git path
+# canonicalwebteam.store-api==7.9.0
+git+https://github.com/canonical/canonicalwebteam.store-api@candid-deprication
 canonicalwebteam.docstring-extractor==1.2.0
 canonicalwebteam.flask-vite==0.4.0
 
