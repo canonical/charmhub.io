@@ -1,6 +1,6 @@
 {
   "extends": [
-    "github>canonical-web-and-design/renovate-websites"
+    "github>canonical/renovate-websites"
   ],
 
   "prConcurrentLimit": 3,
