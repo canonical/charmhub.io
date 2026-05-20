@@ -29,7 +29,6 @@ from webapp.packages.store_packages import store_packages
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.trace import Span
-import requests
 
 
 app = FlaskBase(
@@ -49,7 +48,6 @@ app.config.update(VITE_CONFIG)
 
 set_handlers(app)
 
-request_session = requests.Session()
 csrf.init_app(app)
 vite.init_app(app)
 

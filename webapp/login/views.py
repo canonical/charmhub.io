@@ -16,22 +16,10 @@ login = flask.Blueprint(
     "login", __name__, template_folder="/templates", static_folder="/static"
 )
 
-PUBLISHER_API_URL = os.getenv("PUBLISHER_GATEWAY_API_URL", "")
-DEFAULT_LOGIN_URL = (
-    "https://login.staging.ubuntu.com"
-    if "staging" in PUBLISHER_API_URL
-    else "https://login.ubuntu.com"
-)
-LOGIN_URL = os.getenv("FLASK_LOGIN_URL", DEFAULT_LOGIN_URL)
-LOGIN_USSO_TTL = int(os.getenv("FLASK_LOGIN_USSO_TTL", "300"))
+PUBLISHER_API_URL = os.getenv("PUBLISHERGW_URL", "https://api.charmhub.io")
 
-# Keep staging caveat host and login host aligned, same outcome expected by the
-# snapcraft.io flow where discharge comes back in the macaroon OpenID extension.
-if (
-    "staging" in PUBLISHER_API_URL
-    and urlparse(LOGIN_URL).hostname == "login.ubuntu.com"
-):
-    LOGIN_URL = "https://login.staging.ubuntu.com"
+LOGIN_URL = os.getenv("FLASK_LOGIN_URL", "https://login.ubuntu.com")
+LOGIN_USSO_TTL = int(os.getenv("FLASK_LOGIN_USSO_TTL", "300"))
 
 open_id = OpenID(
     store_factory=lambda: None,
