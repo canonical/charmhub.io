@@ -102,3 +102,19 @@ class TestLoginViews(unittest.TestCase):
             self.assertEqual(response.location, "/charms")
             self.assertEqual(session["account-auth"], "account-auth-token")
             self.assertIn("account", session)
+
+    def test_login_callback_missing_root_macaroon(self):
+        discharge = Macaroon(
+            location=urlparse(login_views.LOGIN_URL).hostname, identifier="discharge"
+        ).serialize()
+
+        with self.app.test_request_context("/login", headers={"User-Agent": "UA"}):
+            session["next_url"] = "/integrations"
+            response = login_views.login_callback(
+                SimpleNamespace(
+                    extensions={"macaroon": SimpleNamespace(discharge=discharge)}
+                )
+            )
+
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(response.location, "/login?next=/integrations")

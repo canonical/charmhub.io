@@ -1,4 +1,5 @@
 import unittest
+from urllib.parse import parse_qs, urlparse
 from webapp.app import app
 from tests.mock_data.mock_store_logic import sample_charm
 from unittest.mock import patch
@@ -164,10 +165,14 @@ class TestPublisherViews(unittest.TestCase):
             PublisherMacaroonRefreshRequired()
         )
 
-        response = self.client.get("/charms")
+        response = self.client.get("/charms?page=1")
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.location, "/login?next=/charms")
+        redirect = urlparse(response.location)
+        self.assertEqual(redirect.path, "/login")
+        self.assertEqual(
+            parse_qs(redirect.query).get("next"), ["/charms?page=1"]
+        )
         with self.client.session_transaction() as session:
             self.assertNotIn("account-auth", session)
             self.assertNotIn("account", session)

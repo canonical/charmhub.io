@@ -1,4 +1,4 @@
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, url_for
 from webapp.config import SENTRY_DSN, IS_DEVELOPMENT, VITE_CONFIG
 
 from canonicalwebteam.exceptions import (
@@ -95,6 +95,10 @@ def set_handlers(app):
     def utility_processor():
         return charmhub_utility_processor()
 
+    def redirect_to_login():
+        next_url = request.full_path if request.query_string else request.path
+        return redirect(url_for("login.publisher_login", next=next_url))
+
     # Error handlers
     # ===
     @app.errorhandler(StoreApiTimeoutError)
@@ -115,7 +119,7 @@ def set_handlers(app):
     def handle_store_api_error_list(e):
         if e.status_code == 401:
             authentication.empty_session(session)
-            return redirect(f"/login?next={request.path}")
+            return redirect_to_login()
 
         if e.status_code == 404:
             return render_template("404.html", message="Entity not found"), 404
@@ -138,7 +142,7 @@ def set_handlers(app):
     @app.errorhandler(PublisherMacaroonRefreshRequired)
     def handle_macaroon_refresh_required(_):
         authentication.empty_session(session)
-        return redirect(f"/login?next={request.path}")
+        return redirect_to_login()
 
     @app.errorhandler(StoreApiResponseDecodeError)
     @app.errorhandler(StoreApiResponseError)
@@ -150,7 +154,7 @@ def set_handlers(app):
             and getattr(e, "status_code", None) == 401
         ):
             authentication.empty_session(session)
-            return redirect(f"/login?next={request.path}")
+            return redirect_to_login()
 
         status_code = 502
         return (

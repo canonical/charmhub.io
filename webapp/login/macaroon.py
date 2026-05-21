@@ -19,10 +19,15 @@ class MacaroonResponse(OpenIDExtension):
     ns_uri = "http://ns.login.ubuntu.com/2016/openid-macaroon"
     ns_alias = "macaroon"
 
+    def __init__(self):
+        self.discharge = None
+
     def getExtensionArgs(self):
         """
         Return the arguments to add to the OpenID request query.
         """
+        if self.discharge is None:
+            return {}
         return {"discharge": self.discharge}
 
     def fromSuccessResponse(cls, success_response, signed_only=True):
@@ -35,7 +40,11 @@ class MacaroonResponse(OpenIDExtension):
         if not args:
             return None
 
-        self.discharge = args["discharge"]
+        discharge = args.get("discharge")
+        if discharge is None:
+            return None
+
+        self.discharge = discharge
         return self
 
     fromSuccessResponse = classmethod(fromSuccessResponse)

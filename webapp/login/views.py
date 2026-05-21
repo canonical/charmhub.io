@@ -16,8 +16,6 @@ login = flask.Blueprint(
     "login", __name__, template_folder="/templates", static_folder="/static"
 )
 
-PUBLISHER_API_URL = os.getenv("PUBLISHERGW_URL", "https://api.charmhub.io")
-
 LOGIN_URL = os.getenv("FLASK_LOGIN_URL", "https://login.ubuntu.com")
 LOGIN_USSO_TTL = int(os.getenv("FLASK_LOGIN_USSO_TTL", "300"))
 
@@ -104,7 +102,14 @@ def login_callback(resp):
             502, "Ubuntu SSO login did not return macaroon discharge"
         )
 
-    root_macaroon = flask.session["account-macaroon"]
+    root_macaroon = flask.session.get("account-macaroon")
+    if not root_macaroon:
+        next_url = flask.session.get("next_url", "/charms")
+        authentication.empty_session(flask.session)
+        return flask.redirect(
+            flask.url_for(".publisher_login", next=next_url), 302
+        )
+
     bound_discharge = Macaroon.deserialize(root_macaroon).prepare_for_request(
         Macaroon.deserialize(discharge_macaroon)
     )
