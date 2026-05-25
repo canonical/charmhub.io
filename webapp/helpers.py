@@ -1,8 +1,8 @@
 import re
 import json
+from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
-from flask import request
 from ruamel.yaml import YAML
 from slugify import slugify
 from datetime import datetime, timedelta
@@ -32,7 +32,18 @@ def is_safe_url(url):
     """
     Return True if the URL is inside the same app
     """
-    return url.startswith(request.url_root) or url.startswith("/")
+    if not url:
+        return False
+
+    cleaned_url = url.strip()
+
+    if cleaned_url.startswith(("/", "\\")) and not cleaned_url.startswith(
+        ("//", "\\\\", "/\\", "\\/")
+    ):
+        parsed = urlparse(cleaned_url)
+        return not parsed.scheme and not parsed.netloc
+
+    return False
 
 
 def get_soup(html_content):
@@ -198,7 +209,7 @@ def param_redirect_exec(req, make_response, redirect):
             for key, value in redirect_data["params"].items():
                 params.append(f"{key}={value}")
             response = make_response(
-                redirect(f'{redirect_data["endpoint"]}?{"&".join(params)}')
+                redirect(f"{redirect_data['endpoint']}?{'&'.join(params)}")
             )
             response.set_cookie(
                 "param_redirect", "", expires=0, secure=True, httponly=True

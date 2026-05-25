@@ -5,7 +5,6 @@ import webapp.config  # noqa: F401
 from flask import render_template, make_response, request, session
 from dateutil import parser
 
-from canonicalwebteam.candid import CandidClient
 from canonicalwebteam.flask_base.app import FlaskBase
 
 from webapp.store_api import publisher_gateway
@@ -30,7 +29,6 @@ from webapp.packages.store_packages import store_packages
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.trace import Span
-import requests
 
 
 app = FlaskBase(
@@ -50,8 +48,6 @@ app.config.update(VITE_CONFIG)
 
 set_handlers(app)
 
-request_session = requests.Session()
-candid = CandidClient(request_session)
 csrf.init_app(app)
 vite.init_app(app)
 app.template_global("vite_import")(vite_import)
