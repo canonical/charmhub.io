@@ -1,10 +1,10 @@
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import { packageDataState } from "../../state/atoms";
 
 import type { Package } from "../../types";
 
 function SectionHeader() {
-  const packageData = useRecoilValue<Package | undefined>(packageDataState);
+  const packageData = useAtomValue<Package | undefined>(packageDataState);
 
   return (
     <section className="p-strip--grey is-shallow">

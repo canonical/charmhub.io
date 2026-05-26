@@ -1,7 +1,7 @@
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { SyntheticEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   Notification,
   Input,
@@ -32,14 +32,14 @@ type Props = {
 function InviteCollaborator({ setShowSidePanel }: Props): JSX.Element {
   const { packageName } = useParams();
   const queryClient = useQueryClient();
-  const [activeInviteEmail, setActiveInviteEmail] = useRecoilState(
+  const [activeInviteEmail, setActiveInviteEmail] = useAtom(
     activeInviteEmailState
   );
-  const setInviteLink = useSetRecoilState(inviteLinkState);
-  const invitesList = useRecoilValue(invitesListState);
-  const inviteLink = useRecoilValue(inviteLinkState);
-  const publisher = useRecoilValue(publisherState);
-  const collaboratorsList = useRecoilValue(filteredCollaboratorsListState);
+  const setInviteLink = useSetAtom(inviteLinkState);
+  const invitesList = useAtomValue(invitesListState);
+  const inviteLink = useAtomValue(inviteLinkState);
+  const publisher = useAtomValue(publisherState);
+  const collaboratorsList = useAtomValue(filteredCollaboratorsListState);
 
   const [copied, setCopied] = useState(false);
   const [loadingInviteLink, setLoadingInviteLink] = useState(false);

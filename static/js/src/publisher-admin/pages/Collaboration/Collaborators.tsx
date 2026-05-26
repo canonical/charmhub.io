@@ -1,4 +1,4 @@
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useAtomValue, useSetAtom } from "jotai";
 import { format } from "date-fns";
 import { MainTable, Button } from "@canonical/react-components";
 
@@ -16,10 +16,10 @@ type Props = {
 };
 
 function Collaborators({ setShowRevokeModal }: Props) {
-  const setActiveInviteEmail = useSetRecoilState(activeInviteEmailState);
-  const collaboratorsList = useRecoilValue(filteredCollaboratorsListState);
-  const filterQuery = useRecoilValue(filterQueryState);
-  const publisher = useRecoilValue(publisherState);
+  const setActiveInviteEmail = useSetAtom(activeInviteEmailState);
+  const collaboratorsList = useAtomValue(filteredCollaboratorsListState);
+  const filterQuery = useAtomValue(filterQueryState);
+  const publisher = useAtomValue(publisherState);
 
   const publisherTableRow = {
     columns: [

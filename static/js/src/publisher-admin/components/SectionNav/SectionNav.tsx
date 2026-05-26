@@ -1,7 +1,7 @@
+import { useAtomValue } from "jotai";
 import { useParams, useLocation, NavLink } from "react-router-dom";
 import { packageDataState } from "../../state/atoms";
 import { Package } from "../../types";
-import { useRecoilValue } from "recoil";
 
 function SectionNav() {
   const { packageName } = useParams();
@@ -11,7 +11,7 @@ function SectionNav() {
     return location.pathname === sectionPath;
   };
 
-  const packageData = useRecoilValue<Package | undefined>(packageDataState);
+  const packageData = useAtomValue<Package | undefined>(packageDataState);
 
   return (
     <nav className="p-tabs">

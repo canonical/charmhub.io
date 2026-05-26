@@ -1,4 +1,5 @@
 import React from "react";
+import { Provider as JotaiProvider } from "jotai";
 import { createRoot } from "react-dom/client";
 import {
   createBrowserRouter,
@@ -9,7 +10,6 @@ import {
   useNavigationType,
 } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { RecoilRoot } from "recoil";
 import * as Sentry from "@sentry/react";
 
 import Root from "./routes/root";
@@ -86,9 +86,9 @@ const router = createBrowserRouter([
 const container = document.getElementById("root");
 const root = createRoot(container!);
 root.render(
-  <RecoilRoot>
+  <JotaiProvider>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
     </QueryClientProvider>
-  </RecoilRoot>
+  </JotaiProvider>
 );

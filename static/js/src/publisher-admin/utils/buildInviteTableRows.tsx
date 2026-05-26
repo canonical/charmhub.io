@@ -1,12 +1,9 @@
-import { useSetRecoilState } from "recoil";
 import { format } from "date-fns";
 import { Button, MainTable } from "@canonical/react-components";
 
-import { activeInviteEmailState } from "../state/atoms";
-
+import type { Dispatch, SetStateAction } from "react";
 import type { Invite } from "../types";
 import { generateInviteToken } from "./generateInviteToken";
-import { useState } from "react";
 
 type MainTableProps = Parameters<typeof MainTable>[0];
 type MainTableRow = NonNullable<MainTableProps["rows"]>[number];
@@ -17,12 +14,13 @@ function buildInviteTableRows(
   status: "Pending" | "Expired" | "Revoked",
   packageName: string,
   setShowRevokeModal: (showRevokeModal: boolean) => void,
-  setShowReopenModal: (showReopenModal: boolean) => void
+  setShowReopenModal: (showReopenModal: boolean) => void,
+  setActiveInviteEmail: (email: string) => void,
+  loadingInviteUrl: string | null,
+  setLoadingInviteUrl: Dispatch<SetStateAction<string | null>>,
+  copiedInviteUrl: string | null,
+  setCopiedInviteUrl: Dispatch<SetStateAction<string | null>>
 ) {
-  const setActiveInviteEmail = useSetRecoilState(activeInviteEmailState);
-  const [loadingInviteUrl, setLoadingInviteUrl] = useState<string | null>(null);
-  const [copiedInviteUrl, setCopiedInviteUrl] = useState<string | null>(null);
-
   return invites.map((invite: Invite, index) => {
     let columns: MainTableCell[] = [];
     let statusColumn: MainTableCell | undefined;

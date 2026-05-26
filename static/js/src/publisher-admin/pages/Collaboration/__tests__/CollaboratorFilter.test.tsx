@@ -1,12 +1,13 @@
 import React from "react";
-import { RecoilRoot } from "recoil";
 import { BrowserRouter } from "react-router-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 import CollaboratorFilter from "../CollaboratorFilter";
 import { filterQueryState } from "../../../state/atoms";
-import { RecoilObserver, QueryProvider } from "../../../utils";
+import { QueryProvider } from "../../../utils";
+import JotaiObserver from "../../../../test-utils/JotaiObserver";
+import JotaiTestProvider from "../../../../test-utils/JotaiTestProvider";
 
 let mockSearchParams = { filter: "" };
 
@@ -30,14 +31,14 @@ const renderComponent = ({
   mockSearchParams.filter = filterQuery || "";
 
   return render(
-    <RecoilRoot>
+    <JotaiTestProvider>
       <BrowserRouter>
         <QueryProvider>
-          <RecoilObserver node={filterQueryState} event={event || vi.fn()} />
+          <JotaiObserver atom={filterQueryState} event={event || vi.fn()} />
           <CollaboratorFilter />
         </QueryProvider>
       </BrowserRouter>
-    </RecoilRoot>
+    </JotaiTestProvider>
   );
 };
 

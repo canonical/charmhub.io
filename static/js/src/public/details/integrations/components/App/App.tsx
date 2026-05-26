@@ -1,3 +1,4 @@
+import { useAtom, useAtomValue } from "jotai";
 import type { IFilterChip, IInterfaceData } from "../../types";
 import { useQuery } from "react-query";
 import { useMemo, useState } from "react";
@@ -9,7 +10,6 @@ import {
   Chip,
 } from "@canonical/react-components";
 import { InterfaceItem } from "../InterfaceItem";
-import { useRecoilState, useRecoilValue } from "recoil";
 import { filterChipsSelector, filterState } from "../../state";
 import { SearchAndFilterChip } from "@canonical/react-components/dist/components/SearchAndFilter/types";
 
@@ -48,8 +48,8 @@ export const getIntegrations = async (
 
 export const App = () => {
   const charm = window.location.pathname.split("/")[1];
-  const [filterData, setFilterData] = useRecoilState(filterState);
-  const availableFilters = useRecoilValue(filterChipsSelector);
+  const [filterData, setFilterData] = useAtom(filterState);
+  const availableFilters = useAtomValue(filterChipsSelector);
   const [fragment, setFragment] = useState(window.location.hash || "");
 
   const { data, status } = useQuery(

@@ -1,4 +1,4 @@
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import { Row, Col } from "@canonical/react-components";
 
 import { packageDataState } from "../../state/atoms";
@@ -7,7 +7,7 @@ import { capitalize } from "../../utils";
 import type { Package } from "../../types";
 
 function Settings() {
-  const packageData = useRecoilValue<Package | undefined>(packageDataState);
+  const packageData = useAtomValue<Package | undefined>(packageDataState);
   const status = packageData ? capitalize(packageData.status) : "";
   const listingStatus = packageData?.unlisted ? "Unlisted" : "Listed";
   const statusLabel = packageData ? `${status} (${listingStatus})` : "";

@@ -1,9 +1,11 @@
-import { useRecoilValue } from "recoil";
+import { useAtomValue, useSetAtom } from "jotai";
 import { MainTable } from "@canonical/react-components";
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 import { getInvitesByStatus, buildInviteTableRows } from "../../utils";
 
+import { activeInviteEmailState } from "../../state/atoms";
 import { filteredInvitesListState } from "../../state/selectors";
 
 type Props = {
@@ -12,7 +14,10 @@ type Props = {
 };
 
 function Invites({ setShowRevokeModal, setShowReopenModal }: Props) {
-  const invitesList = useRecoilValue(filteredInvitesListState);
+  const invitesList = useAtomValue(filteredInvitesListState);
+  const setActiveInviteEmail = useSetAtom(activeInviteEmailState);
+  const [loadingInviteUrl, setLoadingInviteUrl] = useState<string | null>(null);
+  const [copiedInviteUrl, setCopiedInviteUrl] = useState<string | null>(null);
 
   const pendingInvites = getInvitesByStatus(invitesList, "pending");
   const expiredInvites = getInvitesByStatus(invitesList, "expired");
@@ -28,21 +33,36 @@ function Invites({ setShowRevokeModal, setShowReopenModal }: Props) {
     "Pending",
     packageName!,
     setShowRevokeModal,
-    setShowReopenModal
+    setShowReopenModal,
+    setActiveInviteEmail,
+    loadingInviteUrl,
+    setLoadingInviteUrl,
+    copiedInviteUrl,
+    setCopiedInviteUrl
   );
   const expiredInvitesTableRows = buildInviteTableRows(
     expiredInvites,
     "Expired",
     packageName!,
     setShowRevokeModal,
-    setShowReopenModal
+    setShowReopenModal,
+    setActiveInviteEmail,
+    loadingInviteUrl,
+    setLoadingInviteUrl,
+    copiedInviteUrl,
+    setCopiedInviteUrl
   );
   const revokedInvitesTableRows = buildInviteTableRows(
     uniqueRevokedInvites,
     "Revoked",
     packageName!,
     setShowRevokeModal,
-    setShowReopenModal
+    setShowReopenModal,
+    setActiveInviteEmail,
+    loadingInviteUrl,
+    setLoadingInviteUrl,
+    copiedInviteUrl,
+    setCopiedInviteUrl
   );
 
   return (

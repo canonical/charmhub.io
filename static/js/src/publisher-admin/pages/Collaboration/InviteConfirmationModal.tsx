@@ -1,6 +1,6 @@
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
-import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil";
 import { Button, Modal as CanonicalModal } from "@canonical/react-components";
 import type { Props as ModalProps } from "@canonical/react-components/dist/components/Modal/Modal";
 
@@ -39,14 +39,14 @@ function InviteConfirmationModal({
 }: Props) {
   const { packageName } = useParams();
   const queryClient = useQueryClient();
-  const setInvitesList = useSetRecoilState(invitesListState);
-  const invitesList = useRecoilValue(filteredInvitesListState);
-  const setCollaboratorsList = useSetRecoilState(collaboratorsListState);
-  const collaboratorsList = useRecoilValue(filteredCollaboratorsListState);
-  const publisher = useRecoilValue(publisherState);
-  const setInviteLink = useSetRecoilState(inviteLinkState);
-  const setInviteEmailLink = useSetRecoilState(inviteEmailLinkState);
-  const [activeInviteEmail, setActiveInviteEmail] = useRecoilState(
+  const setInvitesList = useSetAtom(invitesListState);
+  const invitesList = useAtomValue(filteredInvitesListState);
+  const setCollaboratorsList = useSetAtom(collaboratorsListState);
+  const collaboratorsList = useAtomValue(filteredCollaboratorsListState);
+  const publisher = useAtomValue(publisherState);
+  const setInviteLink = useSetAtom(inviteLinkState);
+  const setInviteEmailLink = useSetAtom(inviteEmailLinkState);
+  const [activeInviteEmail, setActiveInviteEmail] = useAtom(
     activeInviteEmailState
   );
 

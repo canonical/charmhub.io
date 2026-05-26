@@ -1,6 +1,6 @@
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   Strip,
   Row,
@@ -49,15 +49,15 @@ function Collaboration() {
     useState<boolean>(false);
   const [showReopenInviteModal, setShowReopenInviteModal] =
     useState<boolean>(false);
-  const setCollaboratorsList = useSetRecoilState(collaboratorsListState);
-  const collaboratorsList = useRecoilValue(filteredCollaboratorsListState);
-  const [publisher, setPublisher] = useRecoilState(publisherState);
+  const setCollaboratorsList = useSetAtom(collaboratorsListState);
+  const collaboratorsList = useAtomValue(filteredCollaboratorsListState);
+  const [publisher, setPublisher] = useAtom(publisherState);
   const [copied, setCopied] = useState(false);
-  const setInvitesList = useSetRecoilState(invitesListState);
-  const invitesList = useRecoilValue(filteredInvitesListState);
-  const activeInviteEmail = useRecoilValue(activeInviteEmailState);
-  const inviteLink = useRecoilValue(inviteLinkState);
-  const filterQuery = useRecoilValue(filterQueryState);
+  const setInvitesList = useSetAtom(invitesListState);
+  const invitesList = useAtomValue(filteredInvitesListState);
+  const activeInviteEmail = useAtomValue(activeInviteEmailState);
+  const inviteLink = useAtomValue(inviteLinkState);
+  const filterQuery = useAtomValue(filterQueryState);
   const { data: collaboratorsData } = useCollaboratorsQuery(packageName);
   const { data: invitesData } = useInvitesQuery(packageName);
 
@@ -79,13 +79,13 @@ function Collaboration() {
     if (collaboratorsData && collaboratorsData.publisher) {
       setPublisher(collaboratorsData.publisher);
     }
-  }, [collaboratorsData]);
+  }, [collaboratorsData, setCollaboratorsList, setPublisher]);
 
   useEffect(() => {
-    if (invitesData && invitesData.length) {
+    if (invitesData) {
       setInvitesList(invitesData);
     }
-  }, [invitesData]);
+  }, [invitesData, setInvitesList]);
 
   return (
     <>

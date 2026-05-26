@@ -1,31 +1,21 @@
-import { atom, selector } from "recoil";
+import { atom } from "jotai";
 
 import type { IFilterChip, ISearchAndFilter } from "./types";
 
-export const filterState = atom<IFilterChip[]>({
-  key: "filterState",
-  default: [],
-});
+export const filterState = atom<IFilterChip[]>([]);
 
-export const filterChipsAtom = atom<ISearchAndFilter[]>({
-  key: "filterChips",
-  default: [],
-});
+export const filterChipsAtom = atom<ISearchAndFilter[]>([]);
 
-export const filterChipsSelector = selector({
-  key: "filterChipsSelector",
-  get: ({ get }) => get(filterChipsAtom),
-  set: ({ set, get }, newValue) => {
+export const filterChipsSelector = atom(
+  (get) => get(filterChipsAtom),
+  (get, set, newValue: ISearchAndFilter[]) => {
     const current = get(filterChipsAtom);
-    // reduce newValue by id
-    const newValues = (newValue as ISearchAndFilter[]).reduce(
+    const newValues = newValue.reduce(
       (acc, value) => {
-        // Reduce on ID
         const match = acc.find((accItem) => accItem.id === value.id);
         if (!match) {
           acc.push(value);
         } else {
-          // Reduce chips by value
           match.chips = [...match.chips, ...value.chips].reduce(
             (chipAcc, chipValue) => {
               const chipMatch = chipAcc.find(
@@ -41,9 +31,12 @@ export const filterChipsSelector = selector({
         }
         return acc;
       },
-      current.map((item: ISearchAndFilter) => ({ ...item }))
+      current.map((item: ISearchAndFilter) => ({
+        ...item,
+        chips: [...item.chips],
+      }))
     );
 
     set(filterChipsAtom, newValues);
-  },
-});
+  }
+);

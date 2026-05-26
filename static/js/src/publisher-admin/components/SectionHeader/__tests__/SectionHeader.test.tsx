@@ -1,4 +1,3 @@
-import { MutableSnapshot, RecoilRoot } from "recoil";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
@@ -6,16 +5,13 @@ import SectionHeader from "../SectionHeader";
 
 import { packageDataState } from "../../../state/atoms";
 import { mockPackage } from "../../../mocks";
+import JotaiTestProvider from "../../../../test-utils/JotaiTestProvider";
 
 const renderComponent = () =>
   render(
-    <RecoilRoot
-      initializeState={(snapshot: MutableSnapshot) => {
-        return snapshot.set(packageDataState, mockPackage);
-      }}
-    >
+    <JotaiTestProvider initialValues={[[packageDataState, mockPackage]]}>
       <SectionHeader />
-    </RecoilRoot>
+    </JotaiTestProvider>
   );
 
 describe("SectionHeader", () => {

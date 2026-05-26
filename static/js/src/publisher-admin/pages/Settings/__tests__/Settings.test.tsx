@@ -1,4 +1,3 @@
-import { MutableSnapshot, RecoilRoot } from "recoil";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
@@ -6,17 +5,14 @@ import Settings from "../Settings";
 
 import { packageDataState } from "../../../state/atoms";
 import { mockPackage } from "../../../mocks";
+import JotaiTestProvider from "../../../../test-utils/JotaiTestProvider";
 
 describe("Settings", () => {
   test("displays package status", () => {
     render(
-      <RecoilRoot
-        initializeState={(snapshot: MutableSnapshot) => {
-          return snapshot.set(packageDataState, mockPackage);
-        }}
-      >
+      <JotaiTestProvider initialValues={[[packageDataState, mockPackage]]}>
         <Settings />
-      </RecoilRoot>
+      </JotaiTestProvider>
     );
 
     expect(screen.getByText("Published (Listed)")).toBeInTheDocument();

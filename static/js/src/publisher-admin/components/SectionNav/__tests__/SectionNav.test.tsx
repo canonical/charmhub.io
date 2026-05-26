@@ -4,10 +4,10 @@ import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
 import SectionNav from "../SectionNav";
-import { MutableSnapshot, RecoilRoot } from "recoil";
 import { packageDataState } from "../../../state/atoms";
 import { Package } from "../../../types";
 import { mockPackage } from "../../../mocks";
+import JotaiTestProvider from "../../../../test-utils/JotaiTestProvider";
 
 vi.mock("react-router-dom", async (importOriginal) => ({
   ...(await importOriginal()),
@@ -19,13 +19,9 @@ vi.mock("react-router-dom", async (importOriginal) => ({
 const renderComponent = (mockPackageData?: Package) => {
   render(
     <BrowserRouter>
-      <RecoilRoot
-        initializeState={(snapshot: MutableSnapshot) => {
-          return snapshot.set(packageDataState, mockPackageData);
-        }}
-      >
+      <JotaiTestProvider initialValues={[[packageDataState, mockPackageData]]}>
         <SectionNav />
-      </RecoilRoot>
+      </JotaiTestProvider>
     </BrowserRouter>
   );
 };

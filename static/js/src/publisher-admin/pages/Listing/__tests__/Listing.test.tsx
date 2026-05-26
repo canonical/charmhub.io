@@ -1,5 +1,4 @@
 import React from "react";
-import { MutableSnapshot, RecoilRoot } from "recoil";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
@@ -8,18 +7,15 @@ import Listing from "../Listing";
 
 import { packageDataState } from "../../../state/atoms";
 import { mockPackage } from "../../../mocks";
+import JotaiTestProvider from "../../../../test-utils/JotaiTestProvider";
 
 import type { Package } from "../../../types";
 
 const renderComponent = (mockPackageData: Package) => {
   render(
-    <RecoilRoot
-      initializeState={(snapshot: MutableSnapshot) => {
-        return snapshot.set(packageDataState, mockPackageData);
-      }}
-    >
+    <JotaiTestProvider initialValues={[[packageDataState, mockPackageData]]}>
       <Listing />
-    </RecoilRoot>
+    </JotaiTestProvider>
   );
 };
 

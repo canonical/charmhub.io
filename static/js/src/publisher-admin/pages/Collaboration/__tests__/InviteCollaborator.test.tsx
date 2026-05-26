@@ -1,14 +1,15 @@
 import { BrowserRouter } from "react-router-dom";
-import { RecoilRoot } from "recoil";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import { Mock } from "vitest";
 
 import InviteCollaborator from "../InviteCollaborator";
-import { RecoilObserver, QueryProvider } from "../../../utils";
+import { QueryProvider } from "../../../utils";
 import { activeInviteEmailState } from "../../../state/atoms";
 import { generateInviteToken } from "../../../utils/generateInviteToken";
+import JotaiObserver from "../../../../test-utils/JotaiObserver";
+import JotaiTestProvider from "../../../../test-utils/JotaiTestProvider";
 
 globalThis.window.CSRF_TOKEN = "test-csrf-token";
 
@@ -20,11 +21,11 @@ const mockGenerateInviteToken = generateInviteToken as Mock;
 
 const renderComponent = ({ event }: { event?: () => void } = {}) => {
   return render(
-    <RecoilRoot>
+    <JotaiTestProvider>
       <BrowserRouter>
         <QueryProvider>
-          <RecoilObserver
-            node={activeInviteEmailState}
+          <JotaiObserver
+            atom={activeInviteEmailState}
             event={event || vi.fn()}
           />
           <InviteCollaborator
@@ -34,7 +35,7 @@ const renderComponent = ({ event }: { event?: () => void } = {}) => {
           />
         </QueryProvider>
       </BrowserRouter>
-    </RecoilRoot>
+    </JotaiTestProvider>
   );
 };
 

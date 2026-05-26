@@ -1,9 +1,8 @@
 import type { IInterfaceData, ISearchAndFilter, IFilterChip } from "../types";
 import type { ICharm } from "../../../../shared/types";
 
+import { useAtomValue, useSetAtom } from "jotai";
 import React, { useEffect, useMemo } from "react";
-
-import { useSetRecoilState, useRecoilValue } from "recoil";
 import { useQuery } from "react-query";
 
 import { Row, Col, Spinner, Chip } from "@canonical/react-components";
@@ -53,8 +52,8 @@ export const InterfaceItem = ({
   interfaceData,
   charmName,
 }: InterfaceItemProps) => {
-  const setAvailableFilters = useSetRecoilState(filterChipsSelector);
-  const filterData = useRecoilValue(filterState);
+  const setAvailableFilters = useSetAtom(filterChipsSelector);
+  const filterData = useAtomValue(filterState);
 
   const { data } = useQuery(
     ["charms", interfaceType, interfaceData.interface],
