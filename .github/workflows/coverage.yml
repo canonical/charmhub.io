@@ -2,6 +2,8 @@ name: Test coverage
 on:
   schedule:
     - cron: "0 22 * * 5"
+  workflow_dispatch: # Allows manual triggering
+
 permissions:
   contents: read
 jobs:
@@ -11,6 +13,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+          cache: "pip"
 
       - uses: actions/setup-node@v4
         with:
@@ -26,10 +34,9 @@ jobs:
 
       - name: Install Python requirements
         run: |
-          sudo pip3 install -r requirements.txt
-
-      - name: Install Python dependencies
-        run: sudo pip3 install coverage
+          python -m pip install --upgrade pip
+          pip3 install -r requirements.txt
+          pip3 install coverage
 
       - name: Run Python tests with coverage
         run: |
