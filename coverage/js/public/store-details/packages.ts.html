@@ -1748,7 +1748,7 @@ class initPackages {
 &nbsp;
   static async addBundleApps(packages: Entity[]) {
     return Promise.all(
-      packages.map(<span class="fstat-no" title="function not covered" >as</span>ync (entity: Entity) =&gt; {
+      packages.map(<span class="fstat-no" title="function not covered" >async (e</span>ntity: Entity) =&gt; {
 <span class="cstat-no" title="statement not covered" >        if (entity.type === "bundle") {</span>
           const charms = <span class="cstat-no" title="statement not covered" >await initPackages.getBundleApps(entity.name);</span>
 <span class="cstat-no" title="statement not covered" >          entity.apps = charms.charms;</span>
@@ -1758,7 +1758,7 @@ class initPackages {
     );
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  co</span>nstructor(packages: Entity[]) {
+<span class="fstat-no" title="function not covered" >  constructor(p</span>ackages: Entity[]) {
 <span class="cstat-no" title="statement not covered" >    this.allPackages = packages;</span>
 <span class="cstat-no" title="statement not covered" >    this.selectElements();</span>
 <span class="cstat-no" title="statement not covered" >    this.togglePlaceholderContainer(true);</span>
@@ -1780,11 +1780,11 @@ class initPackages {
 <span class="cstat-no" title="statement not covered" >    if (this._filters.q.length &gt; 0) {</span>
       const queryString = <span class="cstat-no" title="statement not covered" >this._filters.q.join(",");</span>
 <span class="cstat-no" title="statement not covered" >      if (this.domEl.searchInputDesktop.el) {</span>
-<span class="cstat-no" title="statement not covered" >        (this.domEl.searchInputDesktop.el as HTMLInputElement).value =</span>
+        (<span class="cstat-no" title="statement not covered" >this.domEl.searchInputDesktop.el as HTMLInputElement).value =</span>
           queryString;
       }
 <span class="cstat-no" title="statement not covered" >      if (this.domEl.searchInputMobile.el) {</span>
-<span class="cstat-no" title="statement not covered" >        (this.domEl.searchInputMobile.el as HTMLInputElement).value =</span>
+        (<span class="cstat-no" title="statement not covered" >this.domEl.searchInputMobile.el as HTMLInputElement).value =</span>
           queryString;
       }
     }
@@ -1818,7 +1818,7 @@ class initPackages {
 <span class="cstat-no" title="statement not covered" >    this.captureTooltipButtonClick();</span>
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  se</span>lectElements() {
+<span class="fstat-no" title="function not covered" >  selectElements() {</span>
 <span class="cstat-no" title="statement not covered" >    this.domEl = {</span>
       baseSwitcher: { el: null, selector: "" },
       categoryFilters: { el: document.querySelectorAll(""), selector: "" },
@@ -1884,7 +1884,7 @@ class initPackages {
     };
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  ha</span>ndleShowAllPackagesButton() {
+<span class="fstat-no" title="function not covered" >  handleShowAllPackagesButton() {</span>
 <span class="cstat-no" title="statement not covered" >    if (this.domEl.showAllPackagesButton.el) {</span>
 <span class="cstat-no" title="statement not covered" >      this.domEl.showAllPackagesButton.el.addEventListener(</span>
         "click",
@@ -1909,7 +1909,7 @@ class initPackages {
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  re</span>nderResultsCount(featured: boolean = <span class="branch-0 cbranch-no" title="branch not covered" >false)</span> {
+<span class="fstat-no" title="function not covered" >  renderResultsCount(f</span>eatured: boolean = <span class="branch-0 cbranch-no" title="branch not covered" >false) {</span>
 <span class="cstat-no" title="statement not covered" >    if (!("content" in document.createElement("template"))) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
@@ -1917,7 +1917,7 @@ class initPackages {
 <span class="cstat-no" title="statement not covered" >    if (this.domEl.resultsCountContainer.el) {</span>
 <span class="cstat-no" title="statement not covered" >      if (featured) {</span>
 <span class="cstat-no" title="statement not covered" >        this.domEl.resultsCountContainer.el.innerHTML = `${this.domEl.featuredContainer.el?.children.length} Featured`;</span>
-      } else <span class="cstat-no" title="statement not covered" >if (this._filters.q.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >      } else if (this._filters.q.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >        this.domEl.resultsCountContainer.el.textContent = `${</span>
           this.packages.length
         } of ${
@@ -1933,7 +1933,7 @@ class initPackages {
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  up</span>dateHistory() {
+<span class="fstat-no" title="function not covered" >  updateHistory() {</span>
     const searchParams = <span class="cstat-no" title="statement not covered" >new URLSearchParams();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    Object.keys(this._filters).forEach(<span class="fstat-no" title="function not covered" >(f</span>ilterType) =&gt; {</span>
@@ -1961,7 +1961,7 @@ class initPackages {
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  ha</span>ndlePlatformChange() {
+<span class="fstat-no" title="function not covered" >  handlePlatformChange() {</span>
 <span class="cstat-no" title="statement not covered" >    if (this.domEl.baseSwitcher.el) {</span>
 <span class="cstat-no" title="statement not covered" >      this.domEl.baseSwitcher.el.addEventListener("change", <span class="fstat-no" title="function not covered" >(e</span>: Event) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        this._filters.base[0] = (e.target as HTMLInputElement).value;</span>
@@ -1986,7 +1986,7 @@ class initPackages {
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  ha</span>ndlePackageTypeChange() {
+<span class="fstat-no" title="function not covered" >  handlePackageTypeChange() {</span>
 <span class="cstat-no" title="statement not covered" >    if (this.domEl.packageTypeSwitcher.el) {</span>
 <span class="cstat-no" title="statement not covered" >      this.domEl.packageTypeSwitcher.el.addEventListener(</span>
         "change",
@@ -2014,7 +2014,7 @@ class initPackages {
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  ha</span>ndleFilterClick() {
+<span class="fstat-no" title="function not covered" >  handleFilterClick() {</span>
 <span class="cstat-no" title="statement not covered" >    if (this.domEl.categoryFilters.el) {</span>
 <span class="cstat-no" title="statement not covered" >      this.domEl.categoryFilters.el.forEach(<span class="fstat-no" title="function not covered" >(c</span>ategoryFilter) =&gt; {</span>
         const inputElement = <span class="cstat-no" title="statement not covered" >categoryFilter as HTMLInputElement;</span>
@@ -2027,7 +2027,7 @@ class initPackages {
 <span class="cstat-no" title="statement not covered" >          inputElement.checked = false;</span>
         }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        inputElement.addEventListener("click", <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        inputElement.addEventListener("click", <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >          if (inputElement.checked) {</span>
 <span class="cstat-no" title="statement not covered" >            this._filters.filter.push(inputElement.value);</span>
           } else {
@@ -2058,10 +2058,10 @@ class initPackages {
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  up</span>dateEnabledCategories() {
+<span class="fstat-no" title="function not covered" >  updateEnabledCategories() {</span>
     // Enable all categories by default
 <span class="cstat-no" title="statement not covered" >    this.domEl.categoryFilters.el.forEach(<span class="fstat-no" title="function not covered" >(f</span>ilter) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      (filter as HTMLInputElement).disabled = false;</span>
+      (<span class="cstat-no" title="statement not covered" >filter as HTMLInputElement).disabled = false;</span>
     });
 &nbsp;
     // If the user is searching or using filters
@@ -2095,7 +2095,7 @@ class initPackages {
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  to</span>gglePlaceholderContainer(visibility: boolean = <span class="branch-0 cbranch-no" title="branch not covered" >false)</span> {
+<span class="fstat-no" title="function not covered" >  togglePlaceholderContainer(v</span>isibility: boolean = <span class="branch-0 cbranch-no" title="branch not covered" >false) {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
 <span class="cstat-no" title="statement not covered" >      if (this.domEl.placeholderContainer.el) {</span>
 <span class="cstat-no" title="statement not covered" >        if (visibility) {</span>
@@ -2109,7 +2109,7 @@ class initPackages {
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  to</span>gglePackageContainer(visibility: boolean = <span class="branch-0 cbranch-no" title="branch not covered" >false)</span> {
+<span class="fstat-no" title="function not covered" >  togglePackageContainer(v</span>isibility: boolean = <span class="branch-0 cbranch-no" title="branch not covered" >false) {</span>
 <span class="cstat-no" title="statement not covered" >    if (this.domEl.packageContainer.el) {</span>
 <span class="cstat-no" title="statement not covered" >      if (visibility) {</span>
 <span class="cstat-no" title="statement not covered" >        this.domEl.packageContainer.el.classList.remove("u-hide");</span>
@@ -2123,7 +2123,7 @@ class initPackages {
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  to</span>ggleFeaturedContainer(visibility: boolean = <span class="branch-0 cbranch-no" title="branch not covered" >false)</span> {
+<span class="fstat-no" title="function not covered" >  toggleFeaturedContainer(v</span>isibility: boolean = <span class="branch-0 cbranch-no" title="branch not covered" >false) {</span>
 <span class="cstat-no" title="statement not covered" >    if (this.domEl.featuredContainer.el) {</span>
 <span class="cstat-no" title="statement not covered" >      if (visibility) {</span>
 <span class="cstat-no" title="statement not covered" >        this.domEl.featuredContainer.el.classList.remove("u-hide");</span>
@@ -2137,7 +2137,7 @@ class initPackages {
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  fi</span>lterPackages() {
+<span class="fstat-no" title="function not covered" >  filterPackages() {</span>
 <span class="cstat-no" title="statement not covered" >    this.packages = this.allPackages;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (this._filters.base[0] !== "all") {</span>
@@ -2161,7 +2161,7 @@ class initPackages {
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  fi</span>lterByCategory(entity: Entity) {
+<span class="fstat-no" title="function not covered" >  filterByCategory(e</span>ntity: Entity) {
     let packageCategories: string[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (entity.store_front.categories) {</span>
@@ -2187,7 +2187,7 @@ class initPackages {
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  re</span>nderPackages() {
+<span class="fstat-no" title="function not covered" >  renderPackages() {</span>
 <span class="cstat-no" title="statement not covered" >    if (!("content" in document.createElement("template"))) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
@@ -2207,20 +2207,20 @@ class initPackages {
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  en</span>ableAllActions() {
+<span class="fstat-no" title="function not covered" >  enableAllActions() {</span>
 <span class="cstat-no" title="statement not covered" >    if (</span>
       this.domEl.baseSwitcher.el &amp;&amp;
       this.domEl.showAllPackagesButton.el &amp;&amp;
       this.domEl.packageTypeSwitcher.el
     ) {
-<span class="cstat-no" title="statement not covered" >      (this.domEl.baseSwitcher.el as HTMLInputElement).disabled = false;</span>
-<span class="cstat-no" title="statement not covered" >      (this.domEl.packageTypeSwitcher.el as HTMLInputElement).disabled = false;</span>
-<span class="cstat-no" title="statement not covered" >      (this.domEl.showAllPackagesButton.el as HTMLInputElement).disabled =</span>
+      (<span class="cstat-no" title="statement not covered" >this.domEl.baseSwitcher.el as HTMLInputElement).disabled = false;</span>
+      (<span class="cstat-no" title="statement not covered" >this.domEl.packageTypeSwitcher.el as HTMLInputElement).disabled = false;</span>
+      (<span class="cstat-no" title="statement not covered" >this.domEl.showAllPackagesButton.el as HTMLInputElement).disabled =</span>
         false;
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  to</span>ggleShowAllPackagesButton(visibility: boolean = <span class="branch-0 cbranch-no" title="branch not covered" >false)</span> {
+<span class="fstat-no" title="function not covered" >  toggleShowAllPackagesButton(v</span>isibility: boolean = <span class="branch-0 cbranch-no" title="branch not covered" >false) {</span>
 <span class="cstat-no" title="statement not covered" >    if (this.domEl.showAllPackagesButton.el) {</span>
 <span class="cstat-no" title="statement not covered" >      if (visibility) {</span>
 <span class="cstat-no" title="statement not covered" >        this.domEl.showAllPackagesButton.el.classList.remove("u-hide");</span>
@@ -2234,9 +2234,9 @@ class initPackages {
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  ha</span>ndleFilterButtonMobileOpenClick() {
+<span class="fstat-no" title="function not covered" >  handleFilterButtonMobileOpenClick() {</span>
 <span class="cstat-no" title="statement not covered" >    if (this.domEl.filterButtonMobileOpen.el) {</span>
-<span class="cstat-no" title="statement not covered" >      this.domEl.filterButtonMobileOpen.el.addEventListener("click", <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      this.domEl.filterButtonMobileOpen.el.addEventListener("click", <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >        this.renderButtonMobileClose();</span>
       });
     } else {
@@ -2246,7 +2246,7 @@ class initPackages {
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  re</span>nderButtonMobileClose() {
+<span class="fstat-no" title="function not covered" >  renderButtonMobileClose() {</span>
 <span class="cstat-no" title="statement not covered" >    if (this.domEl.filterButtonMobileClose.el) {</span>
 <span class="cstat-no" title="statement not covered" >      if (this._filters.filter.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >        this.domEl.filterButtonMobileClose.el.innerHTML = "Apply filters";</span>
@@ -2260,7 +2260,7 @@ class initPackages {
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  re</span>nderButtonMobileOpen() {
+<span class="fstat-no" title="function not covered" >  renderButtonMobileOpen() {</span>
 <span class="cstat-no" title="statement not covered" >    if (this.domEl.filterButtonMobileOpen.el) {</span>
       const filterSpanEl =
 <span class="cstat-no" title="statement not covered" >        this.domEl.filterButtonMobileOpen.el.querySelector("span");</span>
@@ -2278,7 +2278,7 @@ class initPackages {
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  ca</span>ptureTooltipButtonClick() {
+<span class="fstat-no" title="function not covered" >  captureTooltipButtonClick() {</span>
     const charmCardButtons = <span class="cstat-no" title="statement not covered" >document.querySelectorAll(</span>
       "[data-js-functionality-button]"
     );
@@ -2297,10 +2297,10 @@ class initPackages {
  * in the container. This function hides icons that don't fit and
  * adds a count of "missing" icons.
  */
-function <span class="fstat-no" title="function not covered" >handleBundleIcons(</span>container: HTMLElement) {
+function <span class="fstat-no" title="function not covered" >handleBundleIcons(c</span>ontainer: HTMLElement) {
   const contents = <span class="cstat-no" title="statement not covered" >container.querySelectorAll(".p-card__content");</span>
 &nbsp;
-  const ensureBundleCharmsFit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const ensureBundleCharmsFit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
     // For each contents
 <span class="cstat-no" title="statement not covered" >    contents.forEach(<span class="fstat-no" title="function not covered" >(c</span>ontent) =&gt; {</span>
       // Get the height of the visible area
@@ -2382,7 +2382,7 @@ function <span class="fstat-no" title="function not covered" >handleBundleIcons(
 <span class="cstat-no" title="statement not covered" >    ensureBundleCharmsFit();</span>
 &nbsp;
     // We don't need to do this on every single window resize event, just every so often.
-    const debounced = <span class="cstat-no" title="statement not covered" >debounce(ensureBundleCharmsFit, 50, false);</span>
+    const <span class="cstat-no" title="statement not covered" >debounced = debounce(ensureBundleCharmsFit, 50, false);</span>
 &nbsp;
     // Remove the resize listener (to avoid duplicate events on subsequent runs)
 <span class="cstat-no" title="statement not covered" >    window.removeEventListener("resize", debounced);</span>
@@ -2392,7 +2392,7 @@ function <span class="fstat-no" title="function not covered" >handleBundleIcons(
   }
 }
 &nbsp;
-function <span class="fstat-no" title="function not covered" >loadBundleIcons(</span>) {
+function <span class="fstat-no" title="function not covered" >loadBundleIcons() {</span>
   const bundleIcons = <span class="cstat-no" title="statement not covered" >document.querySelectorAll(</span>
     ".p-bundle-icon"
   ) as NodeListOf&lt;HTMLElement&gt;;
@@ -2406,7 +2406,7 @@ function <span class="fstat-no" title="function not covered" >loadBundleIcons(</
 <span class="cstat-no" title="statement not covered" >      icon.alt = name;</span>
 <span class="cstat-no" title="statement not covered" >      icon.title = title;</span>
 <span class="cstat-no" title="statement not covered" >      icon.setAttribute("loading", "lazy");</span>
-<span class="cstat-no" title="statement not covered" >      icon.addEventListener("error", <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      icon.addEventListener("error", <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >        bundleIcon.removeChild(icon);</span>
 <span class="cstat-no" title="statement not covered" >        bundleIcon.innerText = initials;</span>
 <span class="cstat-no" title="statement not covered" >        bundleIcon.style.backgroundImage = `url("https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_24,h_24/https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg")`;</span>
@@ -2428,7 +2428,7 @@ export { initPackages, handleBundleIcons, loadBundleIcons };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-15T22:05:52.605Z
+                at 2026-05-26T09:41:09.113Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

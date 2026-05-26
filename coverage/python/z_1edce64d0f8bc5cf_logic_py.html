@@ -3,21 +3,21 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Coverage for webapp/publisher/logic.py: 98%</title>
-    <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
-    <link rel="stylesheet" href="style_cb_6b508a39.css" type="text/css">
-    <script src="coverage_html_cb_6fb7b396.js" defer></script>
+    <link rel="icon" sizes="32x32" href="favicon_32_cb_c827f16f.png">
+    <link rel="stylesheet" href="style_cb_9ff733b0.css" type="text/css">
+    <script src="coverage_html_cb_dd2e7eb5.js" defer></script>
 </head>
 <body class="pyfile">
 <header>
     <div class="content">
         <h1>
-            <span class="text">Coverage for </span><b>webapp/publisher/logic.py</b>:
+            <span class="text">Coverage for </span><b>webapp&#8201;/&#8201;publisher&#8201;/&#8201;logic.py</b>:
             <span class="pc_cov">98%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
             <label for="help_panel_state">
-                <img id="keyboard_icon" src="keybd_closed_cb_ce680311.png" alt="Show/hide keyboard shortcuts">
+                <img id="keyboard_icon" src="keybd_closed_cb_900cfef5.png" alt="Show/hide keyboard shortcuts">
             </label>
             <div id="help_panel">
                 <p class="legend">Shortcuts on this page</p>
@@ -54,18 +54,18 @@
             </div>
         </aside>
         <h2>
-            <span class="text">41 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">40<span class="text"> run</span></button>
+            <span class="text">42 statements &nbsp;</span>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">41<span class="text"> run</span></button>
             <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">1<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
-            <a id="prevFileLink" class="nav" href="z_1edce64d0f8bc5cf___init___py.html">&#xab; prev</a> &nbsp; &nbsp;
+            <a id="prevFileLink" class="nav" href="z_1edce64d0f8bc5cf_form_processors_py.html">&#xab; prev</a> &nbsp; &nbsp;
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_1edce64d0f8bc5cf_views_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.10.3">coverage.py v7.10.3</a>,
-            created at 2025-08-15 22:06 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.14.0">coverage.py v7.14.0</a>,
+            created at 2026-05-26 09:41 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -194,19 +194,20 @@
     <p class="run"><span class="n"><a id="t112" href="#t112">112</a></span><span class="t">    <span class="key">for</span> <span class="nam">channel</span> <span class="key">in</span> <span class="nam">releases</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t113" href="#t113">113</a></span><span class="t">        <span class="key">for</span> <span class="nam">release</span> <span class="key">in</span> <span class="nam">releases</span><span class="op">[</span><span class="nam">channel</span><span class="op">]</span><span class="op">[</span><span class="str">"releases"</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t114" href="#t114">114</a></span><span class="t">            <span class="key">for</span> <span class="nam">base</span> <span class="key">in</span> <span class="nam">release</span><span class="op">[</span><span class="str">"revision"</span><span class="op">]</span><span class="op">[</span><span class="str">"bases"</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t115" href="#t115">115</a></span><span class="t">                <span class="nam">architectures</span><span class="op">.</span><span class="nam">update</span><span class="op">(</span><span class="op">[</span><span class="nam">base</span><span class="op">[</span><span class="str">"architecture"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t116" href="#t116">116</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t117" href="#t117">117</a></span><span class="t">    <span class="key">return</span> <span class="op">[</span><span class="nam">arch</span> <span class="key">for</span> <span class="nam">arch</span><span class="op">,</span> <span class="nam">_</span> <span class="key">in</span> <span class="nam">architectures</span><span class="op">.</span><span class="nam">most_common</span><span class="op">(</span><span class="op">)</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t115" href="#t115">115</a></span><span class="t">                <span class="key">if</span> <span class="nam">base</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t116" href="#t116">116</a></span><span class="t">                    <span class="nam">architectures</span><span class="op">.</span><span class="nam">update</span><span class="op">(</span><span class="op">[</span><span class="nam">base</span><span class="op">[</span><span class="str">"architecture"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t117" href="#t117">117</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t118" href="#t118">118</a></span><span class="t">    <span class="key">return</span> <span class="op">[</span><span class="nam">arch</span> <span class="key">for</span> <span class="nam">arch</span><span class="op">,</span> <span class="nam">_</span> <span class="key">in</span> <span class="nam">architectures</span><span class="op">.</span><span class="nam">most_common</span><span class="op">(</span><span class="op">)</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
         <p>
-            <a class="nav" href="z_1edce64d0f8bc5cf___init___py.html">&#xab; prev</a> &nbsp; &nbsp;
+            <a class="nav" href="z_1edce64d0f8bc5cf_form_processors_py.html">&#xab; prev</a> &nbsp; &nbsp;
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_1edce64d0f8bc5cf_views_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.10.3">coverage.py v7.10.3</a>,
-            created at 2025-08-15 22:06 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.14.0">coverage.py v7.14.0</a>,
+            created at 2026-05-26 09:41 +0000
         </p>
     </div>
 </footer>

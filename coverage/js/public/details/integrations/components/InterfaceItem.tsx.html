@@ -298,13 +298,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -327,39 +327,39 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">47x</span>
-<span class="cline-any cline-yes">47x</span>
+<span class="cline-any cline-yes">50x</span>
+<span class="cline-any cline-yes">50x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">47x</span>
+<span class="cline-any cline-yes">50x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">47x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">47x</span>
-<span class="cline-any cline-yes">31x</span>
-<span class="cline-any cline-yes">31x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">50x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">50x</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">35x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">47x</span>
-<span class="cline-any cline-yes">19x</span>
-<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">50x</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -400,7 +400,7 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">47x</span>
+<span class="cline-any cline-yes">50x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -552,7 +552,7 @@ export const InterfaceItem = ({
   const title = `${interfaceData.key} | ${interfaceData.interface}`;
 &nbsp;
   const charms = useMemo(() =&gt; {
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (filterData.length === 0 || <span class="branch-1 cbranch-no" title="branch not covered" >data?.length === 0)</span> {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (filterData.length === 0 || <span class="branch-1 cbranch-no" title="branch not covered" >data?.length === 0) {</span>
       return data;
     }
 <span class="cstat-no" title="statement not covered" >    return data?.filter(<span class="fstat-no" title="function not covered" >(c</span>harm: ICharm) =&gt; {</span>
@@ -640,7 +640,7 @@ export const InterfaceItem = ({
             &lt;p className="u-fixed-width u-no-margin--bottom"&gt;
               The &lt;b&gt;{interfaceData.key}&lt;/b&gt; endpoint
               &lt;b&gt;
-                {interfaceType === "requires" ? <span class="branch-0 cbranch-no" title="branch not covered" >" requires " </span>: " provides "}
+                {interfaceType === "requires" ? <span class="branch-0 cbranch-no" title="branch not covered" >" requires " : "</span> provides "}
               &lt;/b&gt;
               an integration over the{" "}
               &lt;a href={`/integrations/${interfaceData.interface}`}&gt;
@@ -674,7 +674,7 @@ export const InterfaceItem = ({
         &lt;div className="u-fixed-width"&gt;
           &lt;p&gt;
             No charms found that{" "}
-            &lt;b&gt;{interfaceType === "requires" ? <span class="branch-0 cbranch-no" title="branch not covered" >"require" </span>: "provide"}&lt;/b&gt;{" "}
+            &lt;b&gt;{interfaceType === "requires" ? <span class="branch-0 cbranch-no" title="branch not covered" >"require" : "</span>provide"}&lt;/b&gt;{" "}
             {interfaceData.interface}
           &lt;/p&gt;
         &lt;/div&gt;
@@ -697,7 +697,7 @@ export const InterfaceItem = ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-15T22:05:52.605Z
+                at 2026-05-26T09:41:09.113Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

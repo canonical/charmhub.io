@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
@@ -132,43 +132,19 @@
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -228,7 +204,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { NavLink, useParams, useLocation } from "react-router-dom";
 import { Row, Col } from "@canonical/react-components";
 &nbsp;
-import PubliciseBadges from "./PubliciseBadges";
 import PubliciseButtons from "./PubliciseButtons";
 import PubliciseCards from "./PubliciseCards";
 &nbsp;
@@ -236,7 +211,6 @@ function Publicise() {
   const { packageName } = useParams();
   const location = useLocation();
   const showButtons = location.pathname === `/${packageName}/publicise`;
-  const showBadges = location.pathname === `/${packageName}/publicise/badges`;
   const showCards = location.pathname === `/${packageName}/publicise/cards`;
 &nbsp;
   return (
@@ -277,15 +251,6 @@ function Publicise() {
               &lt;li className="p-side-navigation__item"&gt;
                 &lt;NavLink
                   end
-                  to={`/${packageName}/publicise/badges`}
-                  className="p-side-navigation__link"
-                &gt;
-                  GitHub badges
-                &lt;/NavLink&gt;
-              &lt;/li&gt;
-              &lt;li className="p-side-navigation__item"&gt;
-                &lt;NavLink
-                  end
                   to={`/${packageName}/publicise/cards`}
                   className="p-side-navigation__link"
                 &gt;
@@ -298,7 +263,6 @@ function Publicise() {
       &lt;/Col&gt;
       &lt;Col size={9}&gt;
         {showButtons &amp;&amp; &lt;PubliciseButtons /&gt;}
-        {showBadges &amp;&amp; &lt;PubliciseBadges /&gt;}
         {showCards &amp;&amp; &lt;PubliciseCards /&gt;}
       &lt;/Col&gt;
     &lt;/Row&gt;
@@ -313,7 +277,7 @@ export default Publicise;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-15T22:05:52.605Z
+                at 2026-05-26T09:41:09.113Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
