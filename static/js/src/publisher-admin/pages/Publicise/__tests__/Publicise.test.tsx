@@ -1,10 +1,10 @@
 import { BrowserRouter } from "react-router-dom";
-import { RecoilRoot } from "recoil";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
 import Publicise from "../Publicise";
+import JotaiTestProvider from "../../../../test-utils/JotaiTestProvider";
 
 vi.mock("react-router-dom", async (importOriginal) => ({
   ...(await importOriginal()),
@@ -15,11 +15,11 @@ vi.mock("react-router-dom", async (importOriginal) => ({
 
 const renderComponent = () => {
   render(
-    <RecoilRoot>
+    <JotaiTestProvider>
       <BrowserRouter>
         <Publicise />
       </BrowserRouter>
-    </RecoilRoot>
+    </JotaiTestProvider>
   );
 };
 

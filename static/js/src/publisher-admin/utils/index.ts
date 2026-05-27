@@ -9,7 +9,6 @@ import isAccepted from "./isAccepted";
 import isExpired from "./isExpired";
 import isPending from "./isPending";
 import isRevoked from "./isRevoked";
-import RecoilObserver from "./RecoilObserver";
 import QueryProvider from "./QueryProvider";
 
 export {
@@ -24,6 +23,5 @@ export {
   isExpired,
   isPending,
   isRevoked,
-  RecoilObserver,
   QueryProvider,
 };

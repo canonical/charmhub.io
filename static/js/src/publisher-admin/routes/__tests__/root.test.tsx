@@ -1,17 +1,17 @@
 import React from "react";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
-import { RecoilRoot } from "recoil";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { usePackage } from "../../hooks";
 import Root from "../root";
 import { Mock } from "vitest";
+import JotaiTestProvider from "../../../test-utils/JotaiTestProvider";
 
 const mockSetPackageData = vi.fn();
 
-vi.mock("recoil", async (importOriginal) => ({
+vi.mock("jotai", async (importOriginal) => ({
   ...(await importOriginal()),
-  useSetRecoilState: () => mockSetPackageData,
+  useSetAtom: () => mockSetPackageData,
 }));
 
 vi.mock("../../hooks", () => ({
@@ -33,13 +33,13 @@ describe("Root component", () => {
     { route = "/" } = {}
   ) {
     return render(
-      <RecoilRoot>
+      <JotaiTestProvider>
         <MemoryRouter initialEntries={[route]}>
           <Routes>
             <Route path="/:packageName" element={ui} />
           </Routes>
         </MemoryRouter>
-      </RecoilRoot>
+      </JotaiTestProvider>
     );
   }
 

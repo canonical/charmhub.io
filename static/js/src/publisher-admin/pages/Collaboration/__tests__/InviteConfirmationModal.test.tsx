@@ -1,13 +1,13 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "react-query";
 import InviteConfirmationModal from "../InviteConfirmationModal";
 import { useSendMutation, useRevokeMutation } from "../../../hooks";
 import { useParams } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 import { Mock } from "vitest";
+import JotaiTestProvider from "../../../../test-utils/JotaiTestProvider";
 
 vi.mock("../../../hooks");
 vi.mock("react-router-dom", async (importOriginal) => ({
@@ -29,7 +29,7 @@ const mockSetShowError = vi.fn();
 
 const renderComponent = (props = {}) => {
   return render(
-    <RecoilRoot>
+    <JotaiTestProvider>
       <QueryClientProvider client={queryClient}>
         <InviteConfirmationModal
           action="Resend"
@@ -40,7 +40,7 @@ const renderComponent = (props = {}) => {
           {...props}
         />
       </QueryClientProvider>
-    </RecoilRoot>
+    </JotaiTestProvider>
   );
 };
 

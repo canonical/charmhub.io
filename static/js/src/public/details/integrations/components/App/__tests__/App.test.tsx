@@ -3,8 +3,8 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { App, getIntegrations } from "../App";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { RecoilRoot } from "recoil";
 import { Mock } from "vitest";
+import JotaiTestProvider from "../../../../../../test-utils/JotaiTestProvider";
 
 const mockData = {
   grouped_relations: {
@@ -45,9 +45,9 @@ const queryClient = new QueryClient();
 
 const renderWithProviders = (ui: React.ReactElement) => {
   return render(
-    <RecoilRoot>
+    <JotaiTestProvider>
       <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>
-    </RecoilRoot>
+    </JotaiTestProvider>
   );
 };
 
@@ -181,11 +181,11 @@ describe("Empty App component", () => {
 
   test("should display message when no integrations are found", async () => {
     render(
-      <RecoilRoot>
+      <JotaiTestProvider>
         <QueryClientProvider client={queryClient}>
           <App />
         </QueryClientProvider>
-      </RecoilRoot>
+      </JotaiTestProvider>
     );
 
     await waitFor(() => {

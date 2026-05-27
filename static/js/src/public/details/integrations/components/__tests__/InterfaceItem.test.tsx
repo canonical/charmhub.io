@@ -1,12 +1,12 @@
 import React from "react";
 import { render, screen, act, waitFor } from "@testing-library/react";
-import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "@testing-library/jest-dom";
 import { InterfaceItem } from "../InterfaceItem";
 import { IInterfaceData } from "../../types";
 import { ICharm } from "../../../../../shared/types";
 import { Mock } from "vitest";
+import JotaiTestProvider from "../../../../../test-utils/JotaiTestProvider";
 
 const queryClient = new QueryClient();
 
@@ -59,12 +59,6 @@ const mockCharms: ICharm[] = [
   },
 ];
 
-vi.mock("recoil", async (importOriginal) => ({
-  ...(await importOriginal()),
-  useRecoilValue: vi.fn(() => []),
-  useSetRecoilState: vi.fn(() => vi.fn()),
-}));
-
 beforeEach(() => {
   vi.resetAllMocks();
 });
@@ -73,7 +67,7 @@ describe("InterfaceItem Component", () => {
   test("renders with the 'Required' chip when required is set to true", async () => {
     await act(async () => {
       render(
-        <RecoilRoot>
+        <JotaiTestProvider>
           <QueryClientProvider client={queryClient}>
             <InterfaceItem
               interfaceType="provides"
@@ -81,7 +75,7 @@ describe("InterfaceItem Component", () => {
               charmName={mockCharmName}
             />
           </QueryClientProvider>
-        </RecoilRoot>
+        </JotaiTestProvider>
       );
     });
 
@@ -97,7 +91,7 @@ describe("InterfaceItem Component", () => {
 
     await act(async () => {
       render(
-        <RecoilRoot>
+        <JotaiTestProvider>
           <QueryClientProvider client={queryClient}>
             <InterfaceItem
               interfaceType="provides"
@@ -105,7 +99,7 @@ describe("InterfaceItem Component", () => {
               charmName={mockCharmName}
             />
           </QueryClientProvider>
-        </RecoilRoot>
+        </JotaiTestProvider>
       );
     });
 
@@ -119,7 +113,7 @@ describe("InterfaceItem Component", () => {
 
     await act(async () => {
       render(
-        <RecoilRoot>
+        <JotaiTestProvider>
           <QueryClientProvider client={queryClient}>
             <InterfaceItem
               interfaceType="provides"
@@ -127,7 +121,7 @@ describe("InterfaceItem Component", () => {
               charmName={mockCharmName}
             />
           </QueryClientProvider>
-        </RecoilRoot>
+        </JotaiTestProvider>
       );
     });
 
@@ -149,7 +143,7 @@ describe("InterfaceItem Component", () => {
 
     await act(async () => {
       render(
-        <RecoilRoot>
+        <JotaiTestProvider>
           <QueryClientProvider client={queryClient}>
             <InterfaceItem
               interfaceType="provides"
@@ -157,7 +151,7 @@ describe("InterfaceItem Component", () => {
               charmName={mockCharmName}
             />
           </QueryClientProvider>
-        </RecoilRoot>
+        </JotaiTestProvider>
       );
     });
 
@@ -175,7 +169,7 @@ describe("InterfaceItem Component", () => {
 
     await act(async () => {
       render(
-        <RecoilRoot>
+        <JotaiTestProvider>
           <QueryClientProvider client={queryClient}>
             <InterfaceItem
               interfaceType="provides"
@@ -183,7 +177,7 @@ describe("InterfaceItem Component", () => {
               charmName={mockCharmName}
             />
           </QueryClientProvider>
-        </RecoilRoot>
+        </JotaiTestProvider>
       );
     });
 

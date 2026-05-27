@@ -1,11 +1,11 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import AddTrackPanel from "../AddTrackPanel";
 import "@testing-library/jest-dom";
-import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { usePackage } from "../../../hooks";
 import { mockPackage } from "../../../mocks";
 import { Mock } from "vitest";
+import JotaiTestProvider from "../../../../test-utils/JotaiTestProvider";
 
 globalThis.fetch = vi.fn();
 
@@ -22,7 +22,7 @@ const renderComponent = ({
   setSelectedTrack = vi.fn(),
 }) => {
   return render(
-    <RecoilRoot>
+    <JotaiTestProvider>
       <QueryClientProvider client={queryClient}>
         <AddTrackPanel
           charmName={charmName}
@@ -30,7 +30,7 @@ const renderComponent = ({
           setSelectedTrack={setSelectedTrack}
         />
       </QueryClientProvider>
-    </RecoilRoot>
+    </JotaiTestProvider>
   );
 };
 

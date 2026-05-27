@@ -1,4 +1,4 @@
-import { RecoilRoot, RecoilValue } from "recoil";
+import type { Atom } from "jotai";
 import { BrowserRouter } from "react-router-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -9,24 +9,26 @@ import {
   filteredCollaboratorsListState,
   filteredInvitesListState,
 } from "../../../state/selectors";
-import { RecoilObserver, QueryProvider } from "../../../utils";
+import { QueryProvider } from "../../../utils";
+import JotaiObserver from "../../../../test-utils/JotaiObserver";
+import JotaiTestProvider from "../../../../test-utils/JotaiTestProvider";
 
 const renderComponent = ({
   event,
   state,
 }: {
   event: () => void;
-  state: RecoilValue<unknown>;
+  state: Atom<unknown>;
 }) => {
   return render(
-    <RecoilRoot>
+    <JotaiTestProvider>
       <BrowserRouter>
         <QueryProvider>
-          <RecoilObserver node={state} event={event} />
+          <JotaiObserver atom={state} event={event} />
           <Collaboration />
         </QueryProvider>
       </BrowserRouter>
-    </RecoilRoot>
+    </JotaiTestProvider>
   );
 };
 

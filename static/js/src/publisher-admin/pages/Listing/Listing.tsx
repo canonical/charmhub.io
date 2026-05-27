@@ -1,6 +1,6 @@
+import { useAtom } from "jotai";
 import { useState, useEffect, SyntheticEvent, FormEvent } from "react";
 import { useParams } from "react-router-dom";
-import { useRecoilState } from "recoil";
 import {
   Notification,
   Row,
@@ -16,7 +16,7 @@ import { capitalize } from "../../utils";
 
 function Listing() {
   const { packageName } = useParams();
-  const [packageData, setPackageData] = useRecoilState(packageDataState);
+  const [packageData, setPackageData] = useAtom(packageDataState);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [showSuccessNotification, setShowSuccessNotification] =

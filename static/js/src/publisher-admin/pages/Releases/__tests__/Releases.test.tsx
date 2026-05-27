@@ -1,7 +1,6 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import Releases from "../Releases";
-import { MutableSnapshot, RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "@testing-library/jest-dom";
 import { mockPackage } from "../../../mocks";
@@ -11,6 +10,7 @@ import useReleases, { ReleaseMap } from "../../../hooks/useReleases";
 import { mockReleaseChannel } from "../../../mocks/mockReleaseChannel";
 import { usePackage } from "../../../hooks";
 import { Mock } from "vitest";
+import JotaiTestProvider from "../../../../test-utils/JotaiTestProvider";
 
 vi.mock("react-router-dom", async (importOriginal) => ({
   ...(await importOriginal()),
@@ -31,15 +31,11 @@ const queryClient = new QueryClient();
 
 const renderComponent = (packageData: Package = mockPackage) => {
   return render(
-    <RecoilRoot
-      initializeState={(snapshot: MutableSnapshot) => {
-        return snapshot.set(packageDataState, packageData);
-      }}
-    >
+    <JotaiTestProvider initialValues={[[packageDataState, packageData]]}>
       <QueryClientProvider client={queryClient}>
         <Releases />
       </QueryClientProvider>
-    </RecoilRoot>
+    </JotaiTestProvider>
   );
 };
 

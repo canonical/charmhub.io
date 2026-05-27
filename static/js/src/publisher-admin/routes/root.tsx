@@ -1,6 +1,6 @@
 import { useEffect } from "react";
+import { useSetAtom } from "jotai";
 import { Outlet, useParams } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
 
 import { SectionHeader, SectionNav } from "../components";
 
@@ -9,7 +9,7 @@ import { packageDataState } from "../state/atoms";
 
 function Root() {
   const { packageName } = useParams();
-  const setPackageData = useSetRecoilState(packageDataState);
+  const setPackageData = useSetAtom(packageDataState);
   const { data: packageData, status: packageDataStatus } =
     usePackage(packageName);
 
@@ -17,7 +17,7 @@ function Root() {
     if (packageDataStatus === "success") {
       setPackageData(packageData);
     }
-  }, [packageData]);
+  }, [packageData, packageDataStatus, setPackageData]);
 
   return (
     <>
