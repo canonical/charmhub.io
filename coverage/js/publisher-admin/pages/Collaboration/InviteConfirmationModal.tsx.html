@@ -240,32 +240,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -275,7 +263,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -339,9 +339,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useParams } from "react-router-dom";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
-import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil";
 import { Button, Modal as CanonicalModal } from "@canonical/react-components";
 import type { Props as ModalProps } from "@canonical/react-components/dist/components/Modal/Modal";
 &nbsp;
@@ -380,14 +380,14 @@ function InviteConfirmationModal({
 }: Props) {
   const { packageName } = useParams();
   const queryClient = useQueryClient();
-  const setInvitesList = useSetRecoilState(invitesListState);
-  const invitesList = useRecoilValue(filteredInvitesListState);
-  const setCollaboratorsList = useSetRecoilState(collaboratorsListState);
-  const collaboratorsList = useRecoilValue(filteredCollaboratorsListState);
-  const publisher = useRecoilValue(publisherState);
-  const setInviteLink = useSetRecoilState(inviteLinkState);
-  const setInviteEmailLink = useSetRecoilState(inviteEmailLinkState);
-  const [activeInviteEmail, setActiveInviteEmail] = useRecoilState(
+  const setInvitesList = useSetAtom(invitesListState);
+  const invitesList = useAtomValue(filteredInvitesListState);
+  const setCollaboratorsList = useSetAtom(collaboratorsListState);
+  const collaboratorsList = useAtomValue(filteredCollaboratorsListState);
+  const publisher = useAtomValue(publisherState);
+  const setInviteLink = useSetAtom(inviteLinkState);
+  const setInviteEmailLink = useSetAtom(inviteEmailLinkState);
+  const [activeInviteEmail, setActiveInviteEmail] = useAtom(
     activeInviteEmailState
   );
 &nbsp;
@@ -484,7 +484,7 @@ export default InviteConfirmationModal;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-05-26T09:41:09.113Z
+                at 2026-05-29T22:34:29.874Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
