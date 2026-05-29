@@ -1,5 +1,5 @@
 from redis_cache.cache_utility import redis_cache
-from canonicalwebteam.exceptions import StoreApiResponseErrorList
+from canonicalwebteam.exceptions import StoreApiError, StoreApiResponseErrorList
 from flask import (
     Blueprint,
     flash,
@@ -148,6 +148,36 @@ def get_package_metadata(entity_name):
     return package
 
 
+def clear_listing_caches(entity_name):
+    public_fields = [
+        "result.media",
+        "default-release",
+        "result.categories",
+        "result.publisher.display-name",
+        "result.title",
+        "result.unlisted",
+        "channel-map",
+        "result.deployable-on",
+        "result.bugs-url",
+        "result.website",
+        "result.summary",
+        "default-release.revision.metadata-yaml",
+        "default-release.revision.readme-md",
+        "result.links",
+    ]
+    public_cache_parts = {
+        "channel": None,
+        "fields": ",".join(sorted(public_fields)),
+    }
+
+    redis_cache.delete(
+        f"package_metadata:{session['account']['id']}:{entity_name}"
+    )
+    redis_cache.delete((f"package_details:{entity_name}", public_cache_parts))
+    redis_cache.delete((f"package:{entity_name}", public_cache_parts))
+    redis_cache.delete((f"{entity_name}:details-overview", public_cache_parts))
+
+
 @trace_function
 @publisher.route(
     '/<regex("'
@@ -191,6 +221,7 @@ def update_package(entity_name):
         package = publisher_gateway.update_package_metadata(
             session["account-auth"], "charm", entity_name, payload
         )
+        clear_listing_caches(entity_name)
         res["data"] = package
         res["success"] = True
         res["message"] = ""
@@ -203,7 +234,11 @@ def update_package(entity_name):
         if "unauthorized" in error_messages:
             res["message"] = "Package not found"
         else:
-            res["message"] = " ".join(error_messages)
+            res["message"] = " ".join(error_messages) or str(error_list)
+        res["success"] = False
+        response = make_response(res, error_list.status_code)
+    except StoreApiError as error:
+        res["message"] = str(error) or "Unable to update this charm or bundle"
         res["success"] = False
         response = make_response(res, 500)
 

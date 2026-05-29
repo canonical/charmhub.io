@@ -8,6 +8,7 @@ export type ListingInputFieldProps = {
   helpText?: string;
   maxLength?: number;
   placeholder?: string;
+  required?: boolean;
   handleInputChange: (
     e: SyntheticEvent<HTMLInputElement> & {
       target: HTMLInputElement;
@@ -22,6 +23,7 @@ function ListingInputField({
   helpText,
   maxLength,
   placeholder,
+  required = true,
   handleInputChange,
 }: ListingInputFieldProps) {
   return (
@@ -36,7 +38,7 @@ function ListingInputField({
             className="p-form-validation__input"
             id={name}
             name={name}
-            required
+            required={required}
             maxLength={maxLength}
             placeholder={placeholder}
             value={value || ""}

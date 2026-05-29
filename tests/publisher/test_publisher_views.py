@@ -79,13 +79,17 @@ class TestPublisherViews(unittest.TestCase):
             {"success": True, "data": mock_get_package_metadata.return_value},
         )
 
+    @patch("webapp.publisher.views.redis_cache.delete")
     @patch("webapp.store_api.publisher_gateway.update_package_metadata")
-    def test_update_package(self, mock_update_package_metadata):
+    def test_update_package(
+        self, mock_update_package_metadata, mock_cache_delete
+    ):
         mock_update_package_metadata.return_value = {"name": "test-package"}
         res = self.client.patch(
             "/api/packages/test-entity", json={"key": "value"}
         )
         self.assertEqual(res.status_code, 200)
+        self.assertEqual(mock_cache_delete.call_count, 4)
 
     @patch("webapp.store_api.publisher_gateway.update_package_metadata")
     def test_update_package_failure(self, mock_update_package_metadata):
