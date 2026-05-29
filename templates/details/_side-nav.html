@@ -78,13 +78,22 @@
   <p><span class="u-text--muted">License</span><br />{{ package.result.license }}</p>
 {% endif %}
 
-{% if package.result.website or package.result.repository or package.result.contact %}
+{% set links = package.result.get("links", {}) %}
+{% set homepage = package.result.get("website") %}
+{% if links.get("website") %}
+  {% set homepage = links.website[0] %}
+{% endif %}
+{% set contact = package.result.get("contact") %}
+{% if links.get("contact") %}
+  {% set contact = links.contact[0] %}
+{% endif %}
+{% if homepage or package.result.repository or contact %}
   {% if _context.has_rendered_content %}<hr class="p-separator--shallow">{% endif %}{% set _context.has_rendered_content = true %}
   <h4 class="p-heading--5 u-no-margin--bottom">Relevant links</h4>
   <ul class="p-list">
-    {% if package.result.website %}
+    {% if homepage %}
       <li class="p-list__item u-no-margin--bottom">
-        <a href="{{ package.result.website }}"><i class="p-icon--home"></i>&nbsp;&nbsp;Homepage</a>
+        <a href="{{ homepage }}"><i class="p-icon--home"></i>&nbsp;&nbsp;Homepage</a>
       </li>
     {% endif %}
     {% if package.result.repository %}
@@ -92,9 +101,9 @@
         <a href="{{ package.result.repository }}"><i class="p-icon--repository"></i>&nbsp;&nbsp;Repository</a>
       </li>
     {% endif %}
-    {% if package.result.contact %}
+    {% if contact %}
       <li class="p-list__item">
-        <a href="{{ package.result.contact }}"><i class="p-icon--contact"></i>&nbsp;&nbsp;Contact</a>
+        <a href="{{ contact }}"><i class="p-icon--contact"></i>&nbsp;&nbsp;Contact</a>
       </li>
     {% endif %}
   </ul>
@@ -145,7 +154,7 @@
   {% if package["result"]["links"]["website"] %}
   <h2 class="p-heading--5 u-no-margin--bottom">Websites</h2>
     <ul class="p-list">
-      {% for contact in package["result"]["links"]["website"] %}
+      {% for website in package["result"]["links"]["website"] %}
       <li><a href="{{ website }}">{{ website }}</a></li>
       {% endfor %}
     </ul>
