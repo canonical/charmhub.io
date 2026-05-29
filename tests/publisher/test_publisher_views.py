@@ -2,7 +2,7 @@ import unittest
 from urllib.parse import parse_qs, urlparse
 from webapp.app import app
 from tests.mock_data.mock_store_logic import sample_charm
-from unittest.mock import patch
+from unittest.mock import call, patch
 
 from canonicalwebteam.exceptions import (
     PublisherMacaroonRefreshRequired,
@@ -89,6 +89,35 @@ class TestPublisherViews(unittest.TestCase):
             "/api/packages/test-entity", json={"key": "value"}
         )
         self.assertEqual(res.status_code, 200)
+        public_fields = [
+            "result.media",
+            "default-release",
+            "result.categories",
+            "result.publisher.display-name",
+            "result.title",
+            "result.unlisted",
+            "channel-map",
+            "result.deployable-on",
+            "result.bugs-url",
+            "result.website",
+            "result.summary",
+            "default-release.revision.metadata-yaml",
+            "default-release.revision.readme-md",
+            "result.links",
+        ]
+        public_cache_parts = {
+            "channel": None,
+            "fields": ",".join(sorted(public_fields)),
+        }
+
+        mock_cache_delete.assert_has_calls(
+            [
+                call("package_metadata:test-id:test-entity"),
+                call(("package_details:test-entity", public_cache_parts)),
+                call(("package:test-entity", public_cache_parts)),
+                call(("test-entity:details-overview", public_cache_parts)),
+            ]
+        )
         self.assertEqual(mock_cache_delete.call_count, 4)
 
     @patch("webapp.store_api.publisher_gateway.update_package_metadata")
