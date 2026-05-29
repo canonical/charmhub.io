@@ -102,9 +102,7 @@ function Listing() {
       formData.contact?.trim() &&
       !/^(https?:\/\/|mailto:)/i.test(formData.contact.trim())
     ) {
-      setErrorMessage(
-        "Contact must start with http://, https://, or mailto:"
-      );
+      setErrorMessage("Contact must start with http://, https://, or mailto:");
       setShowErrorNotification(true);
       setIsSaving(false);
       return;
