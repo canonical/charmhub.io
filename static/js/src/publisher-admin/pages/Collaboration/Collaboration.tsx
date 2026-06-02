@@ -153,6 +153,7 @@ function Collaboration() {
                   <button
                     type="button"
                     className="p-notification__close"
+                    aria-label="Close notification"
                     onClick={() => {
                       setShowInviteSuccess(false);
                     }}
