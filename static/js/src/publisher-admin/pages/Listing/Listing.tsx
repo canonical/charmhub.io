@@ -92,29 +92,69 @@ function Listing() {
     setErrorMessage("");
     setIsSaving(true);
 
-    const response = await fetch(`/api/packages/${packageName}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-Token": window.CSRF_TOKEN,
-      },
-      body: JSON.stringify(formData),
-    });
+    const getLinks = (value: string | undefined) => {
+      const trimmedValue = value?.trim();
 
-    if (!response.ok) {
-      setErrorMessage(response.statusText);
+      return trimmedValue ? [trimmedValue] : [];
+    };
+
+    if (
+      formData.contact?.trim() &&
+      !/^(https?:\/\/|mailto:)/i.test(formData.contact.trim())
+    ) {
+      setErrorMessage("Contact must start with http://, https://, or mailto:");
       setShowErrorNotification(true);
       setIsSaving(false);
-      throw new Error(response.statusText);
+      return;
     }
 
-    const data = await response.json();
-
-    if (!data.success) {
-      setErrorMessage(data.message);
+    if (
+      formData.website?.trim() &&
+      !/^https?:\/\//i.test(formData.website.trim())
+    ) {
+      setErrorMessage("Project homepage must start with http:// or https://");
       setShowErrorNotification(true);
       setIsSaving(false);
-      throw new Error(data.message);
+      return;
+    }
+
+    const payload = {
+      title: formData.title || "",
+      summary: formData.summary || "",
+      links: {
+        ...packageData?.links,
+        website: getLinks(formData.website),
+        contact: getLinks(formData.contact),
+      },
+    };
+
+    let response;
+    let data;
+
+    try {
+      response = await fetch(`/api/packages/${packageName}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": window.CSRF_TOKEN,
+        },
+        body: JSON.stringify(payload),
+      });
+      data = await response.json();
+    } catch {
+      setErrorMessage("Unable to save listing data. Please try again.");
+      setShowErrorNotification(true);
+      setIsSaving(false);
+      return;
+    }
+
+    if (!response.ok || !data?.success) {
+      setErrorMessage(
+        data?.message || response.statusText || "Unable to save listing data."
+      );
+      setShowErrorNotification(true);
+      setIsSaving(false);
+      return;
     }
 
     setPackageData(data.data);
@@ -260,6 +300,7 @@ function Listing() {
           maxLength={256}
           value={formData.website}
           placeholder="https://charmhub.io"
+          required={false}
           handleInputChange={handleInputChange}
         />
 
@@ -268,6 +309,7 @@ function Listing() {
           name="contact"
           maxLength={256}
           value={formData.contact}
+          required={false}
           handleInputChange={handleInputChange}
         />
       </section>

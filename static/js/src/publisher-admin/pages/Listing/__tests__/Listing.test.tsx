@@ -1,7 +1,8 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
+import type { Mock } from "vitest";
 
 import Listing from "../Listing";
 
@@ -21,6 +22,7 @@ const renderComponent = (mockPackageData: Package) => {
 
 beforeEach(() => {
   global.fetch = vi.fn();
+  globalThis.window.CSRF_TOKEN = "test-csrf-token";
 });
 
 afterEach(() => {
@@ -135,5 +137,61 @@ describe("Listing", () => {
 
     expect(saveButton).not.toBeDisabled();
     expect(revertButton).not.toBeDisabled();
+  });
+
+  test("sends optional website and contact as link arrays", async () => {
+    const user = userEvent.setup();
+    (global.fetch as Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        success: true,
+        data: { ...mockPackage, links: { contact: [], website: [] } },
+      }),
+    });
+    renderComponent(mockPackage);
+
+    await user.clear(screen.getByLabelText("Contact:"));
+    await user.click(screen.getByRole("button", { name: "Save" }));
+
+    await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+    expect(JSON.parse((global.fetch as Mock).mock.calls[0][1].body)).toEqual({
+      title: mockPackage.title,
+      summary: mockPackage.summary,
+      links: {
+        contact: [],
+        website: [],
+      },
+    });
+  });
+
+  test("shows a readable contact validation error", async () => {
+    const user = userEvent.setup();
+    renderComponent(mockPackage);
+
+    await user.clear(screen.getByLabelText("Contact:"));
+    await user.type(screen.getByLabelText("Contact:"), "plain text");
+    await user.click(screen.getByRole("button", { name: "Save" }));
+
+    expect(
+      await screen.findByText(
+        "Contact must start with http://, https://, or mailto:"
+      )
+    ).toBeInTheDocument();
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  test("shows a readable homepage validation error", async () => {
+    const user = userEvent.setup();
+    renderComponent(mockPackage);
+
+    await user.type(screen.getByLabelText("Project homepage:"), "example.com");
+    await user.click(screen.getByRole("button", { name: "Save" }));
+
+    expect(
+      await screen.findByText(
+        "Project homepage must start with http:// or https://"
+      )
+    ).toBeInTheDocument();
+    expect(global.fetch).not.toHaveBeenCalled();
   });
 });
