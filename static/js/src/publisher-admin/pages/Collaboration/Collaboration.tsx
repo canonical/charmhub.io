@@ -117,40 +117,50 @@ function Collaboration() {
             )}
 
             {showInviteSuccess && (
-              <Notification
-                severity="positive"
-                title={`Invite for "${activeInviteEmail}" re-opened`}
-                onDismiss={() => {
-                  setShowInviteSuccess(false);
-                }}
-              >
-                <p>
-                  An email has been sent to {activeInviteEmail} with a link to
-                  accept the invite. Alternatively, you can share the invite
-                  link below:
-                </p>
-                <div className="grid-row">
-                  <div className="grid-col-7">
-                    <pre className="p-code-snippet__block">
-                      <code>{inviteLink}</code>
-                    </pre>
+              <div className="p-notification--positive">
+                <div className="p-notification__content">
+                  <h5 className="p-notification__title">
+                    Invite for "{activeInviteEmail}" re-opened
+                  </h5>
+                  <div className="p-notification__message">
+                    <p>
+                      An email has been sent to {activeInviteEmail} with a link
+                      to accept the invite. Alternatively, you can share the
+                      invite link below:
+                    </p>
+                    <div className="grid-row">
+                      <div className="grid-col-7">
+                        <pre className="p-code-snippet__block">
+                          <code>{inviteLink}</code>
+                        </pre>
+                      </div>
+                      <div className="grid-col-1">
+                        <Button
+                          type="button"
+                          appearance="base"
+                          className="p-button"
+                          onClick={() => {
+                            navigator.clipboard.writeText(inviteLink as string);
+                            setCopied(true);
+                            setTimeout(() => setCopied(false), 2000);
+                          }}
+                        >
+                          {copied ? "Copied!" : "Copy"}
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="grid-col-1">
-                    <Button
-                      type="button"
-                      appearance="base"
-                      className="p-button"
-                      onClick={() => {
-                        navigator.clipboard.writeText(inviteLink as string);
-                        setCopied(true);
-                        setTimeout(() => setCopied(false), 2000);
-                      }}
-                    >
-                      {copied ? "Copied!" : "Copy"}
-                    </Button>
-                  </div>
+                  <button
+                    type="button"
+                    className="p-notification__close"
+                    onClick={() => {
+                      setShowInviteSuccess(false);
+                    }}
+                  >
+                    Close notification
+                  </button>
                 </div>
-              </Notification>
+              </div>
             )}
 
             {showInviteError && (

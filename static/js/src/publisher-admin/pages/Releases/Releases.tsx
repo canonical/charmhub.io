@@ -1,3 +1,4 @@
+import type { ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import ReleasesTable from "./ReleasesTable";
 import useReleases from "../../hooks/useReleases";
@@ -24,8 +25,8 @@ enum SidePanelType {
   AddTrack = "AddTrack",
 }
 
-const EmptyState = (props: EmptyStateProps): JSX.Element => {
-  return CanonicalEmptyState(props) as unknown as JSX.Element;
+const EmptyState = (props: EmptyStateProps): ReactElement => {
+  return CanonicalEmptyState(props) as unknown as ReactElement;
 };
 
 export default function Releases() {
