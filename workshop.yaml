@@ -1,0 +1,73 @@
+name: dev
+base: ubuntu@24.04
+sdks:
+  - name: system
+    plugs:
+      app:
+        interface: tunnel
+        endpoint: localhost:8045
+      vite:
+        interface: tunnel
+        endpoint: localhost:5045
+  - name: vscode-remote
+  - name: uv
+    channel: latest/stable
+    slots:
+      app:
+        interface: tunnel
+        endpoint: localhost:8045
+  - name: node
+    channel: latest/stable
+    slots:
+      vite:
+        interface: tunnel
+        endpoint: localhost:5045
+
+actions:
+  install: |
+    uv venv /project/.venv --python 3.10
+    VIRTUAL_ENV=/project/.venv uv pip install -r requirements.txt
+    yarn install --frozen-lockfile
+
+  serve: |
+    export VIRTUAL_ENV=/project/.venv
+    export PATH="$VIRTUAL_ENV/bin:$PATH"
+    set -a; . /project/.env; set +a
+    export FLASK_DEBUG=1
+    exec ./entrypoint 0.0.0.0:${PORT:-8045}
+
+  start: |
+    export VIRTUAL_ENV=/project/.venv
+    export PATH="$VIRTUAL_ENV/bin:$PATH"
+    set -a; . /project/.env; set +a
+    exec yarn run start
+
+  build: yarn run build
+
+  test: |
+    export VIRTUAL_ENV=/project/.venv
+    export PATH="$VIRTUAL_ENV/bin:$PATH"
+    set -a; . /project/.env; set +a
+    yarn run test
+
+  test-python: |
+    export VIRTUAL_ENV=/project/.venv
+    export PATH="$VIRTUAL_ENV/bin:$PATH"
+    set -a; . /project/.env; set +a
+    python3 -m unittest discover tests
+
+  test-js: yarn run test-js
+
+  test-e2e: yarn run test-e2e
+
+  lint: |
+    export VIRTUAL_ENV=/project/.venv
+    export PATH="$VIRTUAL_ENV/bin:$PATH"
+    yarn run lint-scss
+    yarn run lint-js
+    ruff check webapp tests
+
+  format: |
+    export VIRTUAL_ENV=/project/.venv
+    export PATH="$VIRTUAL_ENV/bin:$PATH"
+    ruff format webapp tests

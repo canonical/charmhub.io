@@ -16,4 +16,4 @@ if [ -n "${OTEL_SERVICE_NAME}" ]; then
     RUN_COMMAND="${RUN_COMMAND} --config observability/observability.gunicorn.conf.py"
 fi
 
-${RUN_COMMAND}
+exec ${RUN_COMMAND}
