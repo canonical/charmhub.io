@@ -12,6 +12,7 @@ from webapp.packages.logic import (
     get_package,
 )
 from webapp.config import SEARCH_FIELDS as FIELDS
+from webapp.config import HOMEPAGE_SEARCH_FIELDS
 from webapp.observability.utils import trace_function
 from webapp.store_api import publisher_gateway
 
@@ -28,7 +29,7 @@ def get_store_packages():
     args = dict(request.args)
     res = jsonify(
         get_packages(
-            FIELDS,
+            HOMEPAGE_SEARCH_FIELDS,
             args,
             12,
         )
