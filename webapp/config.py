@@ -30,8 +30,6 @@ SEARCH_FIELDS = [
     "result.media",
     "result.title",
     "result.publisher.display-name",
-    "default-release.revision.revision",
-    "default-release.channel",
     "result.deployable-on",
 ]
 
