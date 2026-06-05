@@ -59,17 +59,22 @@ def get_solution_from_backend(uuid):
             username = None
 
         if username:
-            auth_resp = make_authenticated_request(
-                "GET",
-                f"{SOLUTIONS_API_BASE}/publisher/solutions",
-                username,
-                timeout=5,
-            )
-            if auth_resp.status_code == 200:
-                solutions = auth_resp.json()
-                for solution in solutions:
-                    if solution.get("hash") == uuid:
-                        return solution
+            try:
+                auth_resp = make_authenticated_request(
+                    "GET",
+                    f"{SOLUTIONS_API_BASE}/publisher/solutions",
+                    username,
+                    timeout=5,
+                )
+                if auth_resp.status_code == 200:
+                    solutions = auth_resp.json()
+                    for solution in solutions:
+                        if solution.get("hash") == uuid:
+                            return solution
+            except Exception as e:
+                logger.exception(
+                    f"Failed to fetch authenticated solution data: {e}"
+                )
 
         # Then try public preview endpoint for published/bearer-link previews
         resp = session.get(
