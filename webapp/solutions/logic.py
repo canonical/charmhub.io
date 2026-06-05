@@ -51,15 +51,13 @@ def make_authenticated_request(method, url, username, **kwargs):
 
 def get_solution_from_backend(uuid):
     try:
-        # public preview endpoint for published solutions
-        resp = session.get(
-            f"{SOLUTIONS_API_BASE}/solutions/preview/{uuid}", timeout=5
-        )
-        if resp.status_code == 200:
-            return resp.json()
+        # First try the authenticated publisher response when available
+        # so edit forms receive publisher-only fields such as creator contact details
+        try:
+            username = flask_session.get("account", {}).get("username")
+        except RuntimeError:
+            username = None
 
-        # fallback for publishers to preview their own draft solutions
-        username = flask_session.get("account", {}).get("username")
         if username:
             auth_resp = make_authenticated_request(
                 "GET",
@@ -72,6 +70,13 @@ def get_solution_from_backend(uuid):
                 for solution in solutions:
                     if solution.get("hash") == uuid:
                         return solution
+
+        # Then try public preview endpoint for published/bearer-link previews
+        resp = session.get(
+            f"{SOLUTIONS_API_BASE}/solutions/preview/{uuid}", timeout=5
+        )
+        if resp.status_code == 200:
+            return resp.json()
     except Exception as e:
         logger.exception(f"Failed to fetch solution from backend: {e}")
     return None
