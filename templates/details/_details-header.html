@@ -5,6 +5,22 @@
     {% include "partial/_kubeflow-beta-banner.html" %}
   {% endif %}
 
+  {% if package.type == "bundle" %}
+    <div class="grid-row">
+      <div class="p-notification--information">
+        <div class="p-notification__content">
+          <h5 class="p-notification__title">We've discontinued the registration of new Bundles</h5>
+          <p class="p-notification__message">New Bundle registrations are no longer accepted. Existing bundles remain functional. We recommend using the Juju Terraform Provider for new deployments.</p>
+        </div>
+        <div class="p-notification__meta">
+          <div class="p-notification__actions">
+            <a class="p-notification__action" href="https://discourse.charmhub.io/t/discontinuing-new-charmhub-bundle-registrations/15344">Learn more</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
   {% call(slot) package_header(package, developer_validation, image) %}
     {% if slot == "additional_info" %}
       {% include "partial/_channel-map.html" %}
