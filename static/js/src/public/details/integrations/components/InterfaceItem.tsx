@@ -8,9 +8,7 @@ import { useQuery } from "react-query";
 import { Row, Col, Spinner, Chip } from "@canonical/react-components";
 
 import { filterChipsSelector, filterState } from "../state";
-
-import { IntegrationCard } from "@canonical/store-components";
-import { Package } from "../../../../publisher-admin/types";
+import { InerfaceRow } from "./InerfaceRow";
 
 interface InterfaceItemProps {
   interfaceType: string;
@@ -29,7 +27,9 @@ const getCharms = async (
     }=${interfaceName}`
   );
   const json = await resp.json();
-  return json.packages.filter((pkg: Package) => pkg.name !== charmName);
+  return (json.packages as ICharm[]).filter(
+    (pkg: ICharm) => pkg.package.name !== charmName
+  );
 };
 
 const filterMap = (charm: ICharm, heading: string) => {
@@ -128,59 +128,61 @@ export const InterfaceItem = ({
   return (
     <>
       <hr />
-      <h3 className="p-heading--4 u-no-margin--bottom" id={interfaceData.key}>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          {interfaceData.key}
-          <span className="u-text--muted">&nbsp;endpoint</span>
-          {interfaceData.required === true && (
-            <Chip
-              value="Required"
-              appearance="negative"
-              className="u-no-margin--bottom"
-              style={{ marginLeft: "10px" }}
-            />
-          )}
-        </div>
-        <div>
-          <a href={`/integrations/${interfaceData.interface}`}>
-            {interfaceData.interface}
-          </a>
-          <span className="u-text--muted">&nbsp;interface</span>
-        </div>
-      </h3>
-      {interfaceData.description && <p>{interfaceData.description}</p>}
-
-      {charms && charms?.length > 0 && (
-        <>
-          <div style={{ paddingTop: "0.5rem" }}>
-            <p className="u-fixed-width u-no-margin--bottom">
-              The <b>{interfaceData.key}</b> endpoint
-              <b>
-                {interfaceType === "requires" ? " requires " : " provides "}
-              </b>
-              an integration over the{" "}
+      <Row>
+        <Col size={5}>
+          <h3
+            className="p-heading--4 u-no-margin--bottom"
+            id={interfaceData.key}
+          >
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {interfaceData.key}
+              <span className="u-text--muted">&nbsp;endpoint</span>
+              {interfaceData.required === true && (
+                <Chip
+                  isReadOnly
+                  value="Required"
+                  appearance="negative"
+                  className="u-no-margin--bottom"
+                  style={{ marginLeft: "10px" }}
+                />
+              )}
+            </div>
+            <div>
               <a href={`/integrations/${interfaceData.interface}`}>
                 {interfaceData.interface}
-              </a>{" "}
-              interface
-            </p>
-            <p>This means it can integrate with:</p>
-          </div>
-          <Row>
-            {charms.map((charm: ICharm) => (
-              <React.Fragment key={charm.package.name}>
-                <Col
-                  size={3}
-                  style={{ marginBottom: "1.5rem" }}
-                  key={charm.package["display_name"]}
-                >
-                  <IntegrationCard data={charm} />
-                </Col>
-              </React.Fragment>
-            ))}
-          </Row>
-        </>
-      )}
+              </a>
+              <span className="u-text--muted">&nbsp;interface</span>
+            </div>
+          </h3>
+        </Col>
+        <Col size={4}>
+          <p className="u-fixed-width u-no-margin--bottom">
+            The <b>{interfaceData.key}</b> endpoint
+            <b>{interfaceType === "requires" ? " requires " : " provides "}</b>
+            an integration over the{" "}
+            <a href={`/integrations/${interfaceData.interface}`}>
+              {interfaceData.interface}
+            </a>{" "}
+            interface
+          </p>
+          <p>This means it can integrate with:</p>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col emptyLarge={2} size={9}>
+          {charms && charms?.length > 0 && (
+            <ul className="p-list--divided">
+              {charms.map((charm: ICharm, idx) => (
+                <li key={charm.package.name} className="p-list__item">
+                  {idx === 0 && <hr />}
+                  <InerfaceRow charm={charm} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </Col>
+      </Row>
       {!charms && (
         <div className="u-fixed-width">
           <Spinner text={`Loading charms for ${interfaceData.interface}`} />
