@@ -49,7 +49,7 @@ def make_authenticated_request(method, url, username, **kwargs):
     return response
 
 
-def get_solution_from_backend(uuid):
+def get_solution_from_backend(uuid, prefer_authenticated=False):
     try:
         # First try the authenticated publisher response when available
         # so edit forms receive publisher-only fields such as creator contact details
@@ -58,7 +58,7 @@ def get_solution_from_backend(uuid):
         except RuntimeError:
             username = None
 
-        if username:
+        if prefer_authenticated and username:
             try:
                 auth_resp = make_authenticated_request(
                     "GET",
