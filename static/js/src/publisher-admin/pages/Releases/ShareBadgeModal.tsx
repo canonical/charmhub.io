@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { type ReactElement, useEffect, useState } from "react";
 import {
   Button,
   Modal as CanonicalModal,
@@ -27,8 +27,8 @@ type CodeSnippetProps = {
   label: string;
 };
 
-const Modal = (props: ModalProps): JSX.Element => {
-  return CanonicalModal(props) as unknown as JSX.Element;
+const Modal = (props: ModalProps): ReactElement => {
+  return CanonicalModal(props) as unknown as ReactElement;
 };
 
 function getBadgeData(

@@ -1,3 +1,4 @@
+import type { ReactElement } from "react";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
@@ -26,8 +27,8 @@ type Props = {
   queryKey?: string;
 };
 
-const Modal = (props: ModalProps): JSX.Element => {
-  return CanonicalModal(props) as unknown as JSX.Element;
+const Modal = (props: ModalProps): ReactElement => {
+  return CanonicalModal(props) as unknown as ReactElement;
 };
 
 function InviteConfirmationModal({

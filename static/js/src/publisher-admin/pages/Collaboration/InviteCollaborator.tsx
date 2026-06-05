@@ -1,9 +1,8 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { SyntheticEvent, useState } from "react";
+import { type ReactElement, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import {
-  Notification,
   Input,
   Button,
   Icon,
@@ -29,7 +28,7 @@ type Props = {
   setShowInviteError: (showInviteError: boolean) => void;
 };
 
-function InviteCollaborator({ setShowSidePanel }: Props): JSX.Element {
+function InviteCollaborator({ setShowSidePanel }: Props): ReactElement {
   const { packageName } = useParams();
   const queryClient = useQueryClient();
   const [activeInviteEmail, setActiveInviteEmail] = useAtom(
@@ -50,9 +49,11 @@ function InviteCollaborator({ setShowSidePanel }: Props): JSX.Element {
     );
 
   const isCollaborator = (email: string | undefined) =>
-    collaboratorsList.some(
+    !!email &&
+    (collaboratorsList.some(
       (collaborator) => collaborator?.account?.email === email
-    ) || publisher?.email === email;
+    ) ||
+      publisher?.email === email);
 
   const isEligibleForInvite = (email: string | undefined) => {
     if (!email) {
@@ -85,13 +86,18 @@ function InviteCollaborator({ setShowSidePanel }: Props): JSX.Element {
       }
     >
       <div>
-        <Notification severity="caution" title="A collaborator can:">
-          <ul>
-            <li>Access and modify this charm</li>
-            <li>Publish new versions and manage releases</li>
-            <li>Represent the charm alongside you as a publisher</li>
-          </ul>
-        </Notification>
+        <div className="p-notification--caution">
+          <div className="p-notification__content">
+            <h5 className="p-notification__title">A collaborator can:</h5>
+            <div className="p-notification__message">
+              <ul>
+                <li>Access and modify this charm</li>
+                <li>Publish new versions and manage releases</li>
+                <li>Represent the charm alongside you as a publisher</li>
+              </ul>
+            </div>
+          </div>
+        </div>
         <Input
           type="email"
           id="collaborator-email"
@@ -99,19 +105,15 @@ function InviteCollaborator({ setShowSidePanel }: Props): JSX.Element {
           placeholder="colleague@company.com"
           help="Collaborator email linked to the Ubuntu One account"
           value={activeInviteEmail}
-          onInput={(
-            e: SyntheticEvent<HTMLInputElement> & {
-              target: HTMLInputElement;
-            }
-          ) => {
-            setActiveInviteEmail(e.target.value);
+          onInput={(e) => {
+            setActiveInviteEmail(e.currentTarget.value);
             setInviteLink("");
           }}
           success={inviteLink ? "Invite sent successfully" : undefined}
           error={
-            isCollaborator(activeInviteEmail)
+            activeInviteEmail && isCollaborator(activeInviteEmail)
               ? "This email address is already a collaborator"
-              : hasPendingInvite(activeInviteEmail)
+              : activeInviteEmail && hasPendingInvite(activeInviteEmail)
                 ? "There is already a pending invite for this email address"
                 : ""
           }

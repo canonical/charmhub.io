@@ -1,3 +1,4 @@
+import type { ReactElement } from "react";
 import { Button, List } from "@canonical/react-components";
 import { formatDate } from "./formatDate";
 import { MainTableRow } from "@canonical/react-components/dist/components/MainTable/MainTable";
@@ -149,7 +150,7 @@ export function ResourcesCell({ resources }: { resources: Resource[] }) {
   return <List items={items} />;
 }
 
-const PLATFORM_ICONS: { [key: string]: JSX.Element } = {
+const PLATFORM_ICONS: { [key: string]: ReactElement } = {
   ubuntu: (
     <img
       src="https://assets.ubuntu.com/v1/b4ba06f2-Ubuntu%20logo.svg"
