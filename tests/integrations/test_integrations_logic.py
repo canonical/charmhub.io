@@ -118,7 +118,7 @@ class TestInterfaces(unittest.TestCase):
         result = self.interfaces.get_interface_from_path(interface_name)
 
         self.repo.get_contents.assert_called_with(
-            "interfaces/test_interface/v3/interface.yaml"
+            "interfaces/test_interface/interface/v3/interface.yaml"
         )
 
         self.assertEqual(result, mock_interface)
@@ -160,7 +160,7 @@ class TestInterfaces(unittest.TestCase):
         result = self.interfaces.get_interface_from_path(interface_name)
 
         self.repo.get_contents.assert_called_with(
-            "interfaces/test_interface/v3/interface.yaml"
+            "interfaces/test_interface/interface/v3/interface.yaml"
         )
 
         self.assertEqual(
@@ -173,3 +173,58 @@ class TestInterfaces(unittest.TestCase):
             self.interfaces.get_interface_name_from_readme(readme),
             "test_interface",
         )
+
+    @patch("webapp.integrations.logic.redis_cache")
+    def test_get_interfaces_normalizes_charmlibs_index(
+        self, mock_redis_cache
+    ):
+        mock_redis_cache.get.return_value = None
+        mock_index = MagicMock()
+        index_content = """
+[
+  {
+    "name": "cos_agent",
+    "version": "2",
+    "lib": "charms.grafana_agent.cos_agent",
+    "lib_url": "https://example.com/library",
+    "docs_url": "https://example.com/docs",
+    "summary": "summary text",
+    "description": "description text",
+    "tags": ["observability"],
+    "status": "published"
+  },
+  {
+    "name": "ingress",
+    "version": "1",
+    "summary": "",
+    "status": "draft"
+  }
+]
+"""
+        mock_index.decoded_content = index_content.encode("utf-8")
+        self.repo.get_contents.return_value = mock_index
+
+        interfaces = self.interfaces.get_interfaces()
+
+        self.assertEqual(len(interfaces), 2)
+        self.assertEqual(interfaces[0]["name"], "cos_agent")
+        self.assertEqual(interfaces[0]["status"], "published")
+        self.assertEqual(interfaces[0]["summary"], "summary text")
+        self.assertEqual(interfaces[0]["tags"], ["observability"])
+        self.assertEqual(
+            interfaces[0]["charm"], "charms.grafana_agent.cos_agent"
+        )
+        self.assertEqual(
+            interfaces[0]["links"]["library"],
+            "https://example.com/library",
+        )
+        self.assertEqual(
+            interfaces[0]["links"]["documentation"],
+            "https://example.com/docs",
+        )
+
+        self.assertEqual(interfaces[1]["tags"], [])
+        self.assertEqual(interfaces[1]["charm"], "")
+        self.assertEqual(interfaces[1]["links"]["library"], "")
+        self.assertEqual(interfaces[1]["links"]["documentation"], "")
+

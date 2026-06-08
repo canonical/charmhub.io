@@ -23,7 +23,7 @@ class Interfaces:
     def repo(self):
         if self._repo is None:
             self._repo = github_client.get_repo(
-                "canonical/charm-relation-interfaces"
+                "canonical/charmlibs"
             )
         return self._repo
 
@@ -34,13 +34,32 @@ class Interfaces:
         if interfaces:
             return interfaces
         try:
-            index = self.repo.get_contents("index.json")
-            if isinstance(index, list):
-                index = index[0]
-            index_content = index.decoded_content.decode("utf-8")
-            interfaces = yaml.load(index_content)
-            redis_cache.set(key, interfaces, ttl=86400)
-            return interfaces
+            index = self.repo.get_contents("interfaces/index.json")
+            interfaces = yaml.load(index.decoded_content.decode("utf-8"))
+
+            normalized_interfaces = []
+            for interface in interfaces or []:
+                normalized_interfaces.append(
+                    {
+                        "name": interface.get("name", ""),
+                        "status": interface.get("status", ""),
+                        "summary": interface.get("summary", ""),
+                        "description": interface.get("description", ""),
+                        "version": interface.get("version", ""),
+                        "tags": interface.get("tags", []),
+                        "charm": interface.get("charm")
+                        or interface.get("lib", ""),
+                        "links": {
+                            "library": interface.get("library")
+                            or interface.get("lib_url", ""),
+                            "documentation": interface.get("documentation")
+                            or interface.get("docs_url", ""),
+                        },
+                    }
+                )
+
+            redis_cache.set(key, normalized_interfaces, ttl=86400)
+            return normalized_interfaces
         except Exception:
             return []
 
@@ -52,7 +71,7 @@ class Interfaces:
             return interface
         try:
             interface_versions = self.repo.get_contents(
-                "interfaces/{}".format(interface_name)
+                "interfaces/{}/interface".format(interface_name)
             )
         except Exception:
             return None
@@ -68,7 +87,7 @@ class Interfaces:
         latest_version = versions.pop()
 
         latest_version_interface = self.repo.get_contents(
-            "interfaces/{}/{}/interface.yaml".format(
+            "interfaces/{}/interface/{}/interface.yaml".format(
                 interface_name, latest_version
             )
         ).decoded_content.decode("utf-8")
@@ -132,7 +151,7 @@ class Interfaces:
     def parse_text(self, interface, version, text):
         base_link = (
             "https://github.com/canonical/"
-            "charm-relation-interfaces/blob/main/interfaces/{}/v{}"
+            "charmlibs/blob/main/interfaces/{}/interface/v{}"
         ).format(interface, version)
         pattern = r"\[.*?\]\(.*?\)"
         matches = re.findall(pattern, text)
