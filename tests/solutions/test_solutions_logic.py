@@ -26,6 +26,82 @@ class TestSolutionsLogic(unittest.TestCase):
         self.assertEqual(result, {"uuid": "123", "name": "Test Solution"})
         mock_session.get.assert_called_once()
 
+    @patch(
+        "webapp.solutions.logic.flask_session",
+        {"account": {"username": "testuser"}},
+    )
+    @patch("webapp.solutions.logic.make_authenticated_request")
+    @patch("webapp.solutions.logic.session")
+    def test_get_solution_from_backend_prefers_authenticated_solution(
+        self, mock_session, mock_auth_request
+    ):
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = [
+            {
+                "hash": "123",
+                "name": "Test Solution",
+                "creator": {"email": "creator@example.com"},
+            }
+        ]
+        mock_auth_request.return_value = mock_response
+
+        result = get_solution_from_backend("123", prefer_authenticated=True)
+
+        self.assertEqual(result["creator"]["email"], "creator@example.com")
+        mock_auth_request.assert_called_once()
+        mock_session.get.assert_not_called()
+
+    @patch(
+        "webapp.solutions.logic.flask_session",
+        {"account": {"username": "testuser"}},
+    )
+    @patch("webapp.solutions.logic.make_authenticated_request")
+    @patch("webapp.solutions.logic.session")
+    def test_get_solution_from_backend_falls_back_to_public_preview(
+        self, mock_session, mock_auth_request
+    ):
+        mock_auth_request.side_effect = Exception("Auth failed")
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "uuid": "123",
+            "name": "Test Solution",
+        }
+        mock_session.get.return_value = mock_response
+
+        result = get_solution_from_backend("123", prefer_authenticated=True)
+
+        self.assertEqual(result, {"uuid": "123", "name": "Test Solution"})
+        mock_session.get.assert_called_once()
+
+    @patch(
+        "webapp.solutions.logic.flask_session",
+        {"account": {"username": "testuser"}},
+    )
+    @patch("webapp.solutions.logic.make_authenticated_request")
+    @patch("webapp.solutions.logic.session")
+    def test_get_solution_from_backend_falls_back_when_auth_hash_not_found(
+        self, mock_session, mock_auth_request
+    ):
+        mock_auth_response = MagicMock()
+        mock_auth_response.status_code = 200
+        mock_auth_response.json.return_value = [{"hash": "other"}]
+        mock_auth_request.return_value = mock_auth_response
+
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "uuid": "123",
+            "name": "Test Solution",
+        }
+        mock_session.get.return_value = mock_response
+
+        result = get_solution_from_backend("123", prefer_authenticated=True)
+
+        self.assertEqual(result, {"uuid": "123", "name": "Test Solution"})
+        mock_session.get.assert_called_once()
+
     @patch("webapp.solutions.logic.session")
     def test_get_solution_from_backend_not_found(self, mock_session):
         mock_response = MagicMock()

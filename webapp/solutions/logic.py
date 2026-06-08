@@ -49,29 +49,39 @@ def make_authenticated_request(method, url, username, **kwargs):
     return response
 
 
-def get_solution_from_backend(uuid):
+def get_solution_from_backend(uuid, prefer_authenticated=False):
     try:
-        # public preview endpoint for published solutions
+        # First try the authenticated publisher response when available
+        # so edit forms receive publisher-only fields such as creator contact details
+        try:
+            username = flask_session.get("account", {}).get("username")
+        except RuntimeError:
+            username = None
+
+        if prefer_authenticated and username:
+            try:
+                auth_resp = make_authenticated_request(
+                    "GET",
+                    f"{SOLUTIONS_API_BASE}/publisher/solutions",
+                    username,
+                    timeout=5,
+                )
+                if auth_resp.status_code == 200:
+                    solutions = auth_resp.json()
+                    for solution in solutions:
+                        if solution.get("hash") == uuid:
+                            return solution
+            except Exception as e:
+                logger.exception(
+                    f"Failed to fetch authenticated solution data: {e}"
+                )
+
+        # Then try public preview endpoint for published/bearer-link previews
         resp = session.get(
             f"{SOLUTIONS_API_BASE}/solutions/preview/{uuid}", timeout=5
         )
         if resp.status_code == 200:
             return resp.json()
-
-        # fallback for publishers to preview their own draft solutions
-        username = flask_session.get("account", {}).get("username")
-        if username:
-            auth_resp = make_authenticated_request(
-                "GET",
-                f"{SOLUTIONS_API_BASE}/publisher/solutions",
-                username,
-                timeout=5,
-            )
-            if auth_resp.status_code == 200:
-                solutions = auth_resp.json()
-                for solution in solutions:
-                    if solution.get("hash") == uuid:
-                        return solution
     except Exception as e:
         logger.exception(f"Failed to fetch solution from backend: {e}")
     return None

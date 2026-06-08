@@ -912,7 +912,7 @@ def submit_register_solution():
 @login_required
 @requires_solutions_access
 def edit_solution_form(hash):
-    solution = get_solution_from_backend(hash)
+    solution = get_solution_from_backend(hash, prefer_authenticated=True)
     if not solution:
         flash("Solution not found.", "negative")
         return redirect("/solutions")
@@ -953,7 +953,7 @@ def cleanup_old_previews():
 @requires_solutions_access
 def submit_edit_solution(hash):
     # Get solution data from backend first
-    solution = get_solution_from_backend(hash)
+    solution = get_solution_from_backend(hash, prefer_authenticated=True)
     if not solution:
         flash("Solution not found.", "negative")
         return redirect("/solutions")
