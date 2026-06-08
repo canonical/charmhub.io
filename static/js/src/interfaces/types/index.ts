@@ -45,8 +45,13 @@ export type InterfaceData = {
 
 export type InterfaceItem = {
   name: string;
-  description: string;
-  version: string;
-  status: string;
-  category: string;
+  description?: string;
+  summary?: string;
+  version?: string | number;
+  status?: string;
+  tags?: string[];
+  links?: {
+    library?: string;
+    documentation?: string;
+  };
 };

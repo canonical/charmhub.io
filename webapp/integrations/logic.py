@@ -47,13 +47,9 @@ class Interfaces:
                         "description": interface.get("description", ""),
                         "version": interface.get("version", ""),
                         "tags": interface.get("tags", []),
-                        "charm": interface.get("charm")
-                        or interface.get("lib", ""),
                         "links": {
-                            "library": interface.get("library")
-                            or interface.get("lib_url", ""),
-                            "documentation": interface.get("documentation")
-                            or interface.get("docs_url", ""),
+                            "library": interface.get("lib_url"),
+                            "documentation": interface.get("docs_url")
                         },
                     }
                 )
