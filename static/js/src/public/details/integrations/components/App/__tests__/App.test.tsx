@@ -117,7 +117,7 @@ describe("App component", () => {
 
     await waitFor(() => {
       const filteredInterfaces = screen.queryAllByText("interface-1");
-      expect(filteredInterfaces).toHaveLength(3);
+      expect(filteredInterfaces).toHaveLength(4);
     });
   });
 

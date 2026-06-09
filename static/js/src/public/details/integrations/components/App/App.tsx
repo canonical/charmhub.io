@@ -7,7 +7,6 @@ import {
   Col,
   Spinner,
   SearchAndFilter,
-  Chip,
 } from "@canonical/react-components";
 import { InterfaceItem } from "../InterfaceItem";
 import { filterChipsSelector, filterState } from "../../state";
