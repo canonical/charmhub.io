@@ -14,6 +14,16 @@ function initConfirmationModal(config) {
   let formSubmitted = false;
   let submitter = null;
 
+  const submitForm = () => {
+    formSubmitted = true;
+
+    if (form.requestSubmit) {
+      form.requestSubmit(submitter || undefined);
+    } else {
+      form.submit();
+    }
+  };
+
   form.addEventListener("submit", (event) => {
     if (formSubmitted) {
       return;
@@ -37,6 +47,11 @@ function initConfirmationModal(config) {
     const formObject = Object.fromEntries(formData.entries());
     const message = config.getMessage(formObject, form);
 
+    if (!message) {
+      submitForm();
+      return;
+    }
+
     modalMessage.textContent = message;
     modal.classList.remove("u-hide");
     confirmButton.focus();
@@ -52,12 +67,7 @@ function initConfirmationModal(config) {
     confirmButton.appendChild(spinner);
     confirmButton.disabled = true;
 
-    formSubmitted = true;
-    if (submitter && form.requestSubmit) {
-      form.requestSubmit(submitter);
-    } else {
-      form.submit();
-    }
+    submitForm();
   });
 
   const closeModal = () => {

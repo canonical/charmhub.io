@@ -13,7 +13,6 @@ def extract_basic_form_fields():
         "documentation_main",
         "documentation_source",
         "get_started_url",
-        "how_to_operate_url",
         "submit_bug_url",
         "community_discussion_url",
         "architecture_diagram_url",
