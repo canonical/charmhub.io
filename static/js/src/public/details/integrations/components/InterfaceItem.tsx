@@ -22,7 +22,7 @@ const getCharms = async (
   charmName: string
 ): Promise<ICharm[]> => {
   const resp = await fetch(
-    `/store.json?${
+    `/store.json?extra_fields=default-release.channel.track,default-release.channel.risk&${
       interfaceType === "provides" ? "requires" : "provides"
     }=${interfaceName}`
   );

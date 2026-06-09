@@ -15,10 +15,24 @@ const getDisplayName = (charm: ICharm) => {
   return charm.package.name.replace(/-/g, " ");
 };
 
+const getChannel = (charm: ICharm) => {
+  const { track, risk, name } = charm.package.channel;
+
+  if (track && risk) {
+    return `${track}/${risk}`;
+  }
+
+  if (name && name !== "/") {
+    return name;
+  }
+
+  return "";
+};
+
 export const InerfaceRow = ({ charm }: InerfaceRowProps) => {
   const charmName = getDisplayName(charm);
   const packageLink = `/${charm.package.name}`;
-  const channel = `${charm.package.channel.track}/${charm.package.channel.risk}`;
+  const channel = getChannel(charm);
   const supportsVm = charm.package.platforms.includes("vm");
   const supportsKubernetes =
     charm.package.platforms.includes("kubernetes") ||

@@ -82,7 +82,9 @@ describe("InterfaceItem Component", () => {
     expect(
       screen.getByRole("heading", { name: /test-key/ })
     ).toBeInTheDocument();
-    expect(screen.getByText("This is a test description.")).toBeInTheDocument();
+    expect(
+      screen.getByText("This means it can integrate with:")
+    ).toBeInTheDocument();
     expect(screen.getByText("Required")).toBeInTheDocument();
   });
 
@@ -103,8 +105,12 @@ describe("InterfaceItem Component", () => {
       );
     });
 
-    expect(screen.getByText("test-key")).toBeInTheDocument();
-    expect(screen.getByText("This is a test description.")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /test-key/ })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("This means it can integrate with:")
+    ).toBeInTheDocument();
     expect(screen.queryByText("Required")).not.toBeInTheDocument();
   });
 
