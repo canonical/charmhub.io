@@ -54,16 +54,33 @@
 
 <div class="p-form__group row">
   <div class="col-2">
-    <label for="get_started_url">Get Started URL:</label>
+    <label for="get_started_url" class="is-required">Get Started URL:</label>
   </div>
   <div class="col-8 col-x-large-6">
     <input class="is-dense"
       id="get_started_url"
       name="get_started_url"
       type="url"
+      required
       value="{{ form_value(form_data, solution, 'get_started_url', 'documentation.get_started') | e }}"
     >
     <p class="p-form-help-text">URL to a Getting Started or Implementation Guide</p>
+  </div>
+</div>
+
+<div class="p-form__group row">
+  <div class="col-2">
+    <label for="how_to_operate_url" class="is-required">How to Operate URL:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <input class="is-dense"
+      id="how_to_operate_url"
+      name="how_to_operate_url"
+      type="url"
+      required
+      value="{{ form_value(form_data, solution, 'how_to_operate_url', 'documentation.how_to_operate') | e }}"
+    >
+    <p class="p-form-help-text">URL to documentation explaining how to operate this solution</p>
   </div>
 </div>
 

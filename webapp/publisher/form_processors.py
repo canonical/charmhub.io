@@ -13,6 +13,7 @@ def extract_basic_form_fields():
         "documentation_main",
         "documentation_source",
         "get_started_url",
+        "how_to_operate_url",
         "submit_bug_url",
         "community_discussion_url",
         "architecture_diagram_url",
@@ -75,11 +76,6 @@ def extract_platform_data():
 
 def process_solution_form_data():
     form_data = extract_basic_form_fields()
-
-    if not form_data.get("get_started_url") and form_data.get(
-        "documentation_main"
-    ):
-        form_data["get_started_url"] = form_data["documentation_main"]
 
     form_data["charms"] = extract_charms_data()
     form_data["useful_links"] = extract_useful_links_data()

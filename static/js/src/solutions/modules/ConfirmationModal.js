@@ -12,14 +12,22 @@ function initConfirmationModal(config) {
   }
 
   let formSubmitted = false;
+  let submitter = null;
 
   form.addEventListener("submit", (event) => {
     if (formSubmitted) {
       return;
     }
 
+    submitter = event.submitter;
+
     event.preventDefault();
     event.stopPropagation();
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
 
     if (window.validateSolutionForm && !window.validateSolutionForm()) {
       return;
@@ -45,7 +53,11 @@ function initConfirmationModal(config) {
     confirmButton.disabled = true;
 
     formSubmitted = true;
-    form.submit();
+    if (submitter && form.requestSubmit) {
+      form.requestSubmit(submitter);
+    } else {
+      form.submit();
+    }
   });
 
   const closeModal = () => {
