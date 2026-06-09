@@ -9,7 +9,6 @@ from flask import (
     session,
     url_for,
     make_response,
-    g,
 )
 from flask.json import jsonify
 from webapp.config import DETAILS_VIEW_REGEX
@@ -20,7 +19,6 @@ from webapp.store_api import device_gateway, publisher_gateway
 from webapp.utils.emailer import get_emailer
 from webapp.solutions.logic import (
     get_publisher_solutions,
-    publisher_has_solutions_access,
     register_solution,
     get_user_teams_for_solutions,
     get_solution_from_backend,
@@ -31,7 +29,6 @@ from webapp.publisher.form_processors import (
     process_solution_form_data,
     create_error_context,
 )
-import functools
 from datetime import datetime
 import uuid
 
@@ -71,27 +68,6 @@ def paginate_pages(current_page, total_pages):
     pages.append(total_pages)
 
     return pages
-
-
-def requires_solutions_access(func):
-    @functools.wraps(func)
-    def has_solutions_access(*args, **kwargs):
-        username = session["account"]["username"]
-        has_solutions = publisher_has_solutions_access(username)
-        if not has_solutions:
-            flash(
-                "You don't have access to solutions. "
-                "Solutions access is granted based on "
-                "Launchpad team membership.",
-                "negative",
-            )
-            return redirect("/charms")
-
-        g.has_solutions = True
-        response = make_response(func(*args, **kwargs))
-        return response
-
-    return has_solutions_access
 
 
 def render_solution_form_with_errors(
@@ -302,19 +278,12 @@ def list_page():
         "pages": paginate_pages(page, total_pages),
     }
 
-    # Add solutions access check (from staging)
-    username = session["account"]["username"]
-    has_solutions = publisher_has_solutions_access(username)
-    g.has_solutions = has_solutions
-    context["has_solutions"] = has_solutions
-
     return render_template("publisher/list.html", **context)
 
 
 @trace_function
 @publisher.route("/solutions")
 @login_required
-@requires_solutions_access
 def solutions_page():
     username = session["account"]["username"]
 
@@ -790,7 +759,6 @@ def get_releases(entity_name: str):
 
 @publisher.route("/validate-solution-name")
 @login_required
-@requires_solutions_access
 def validate_solution_name():
     name = request.args.get("name", "").strip()
 
@@ -803,7 +771,6 @@ def validate_solution_name():
 
 @publisher.route("/register-solution")
 @login_required
-@requires_solutions_access
 def show_register_solution_form():
     username = session["account"]["username"]
 
@@ -817,7 +784,6 @@ def show_register_solution_form():
 
 @publisher.route("/register-solution", methods=["POST"])
 @login_required
-@requires_solutions_access
 def submit_register_solution():
     username = session["account"]["username"]
 
@@ -910,7 +876,6 @@ def submit_register_solution():
 
 @publisher.route("/solutions/edit/<hash>")
 @login_required
-@requires_solutions_access
 def edit_solution_form(hash):
     solution = get_solution_from_backend(hash, prefer_authenticated=True)
     if not solution:
@@ -950,7 +915,6 @@ def cleanup_old_previews():
 
 @publisher.route("/solutions/edit/<hash>", methods=["POST"])
 @login_required
-@requires_solutions_access
 def submit_edit_solution(hash):
     # Get solution data from backend first
     solution = get_solution_from_backend(hash, prefer_authenticated=True)
