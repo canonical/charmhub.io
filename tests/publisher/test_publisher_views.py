@@ -232,7 +232,7 @@ class TestPublisherViews(unittest.TestCase):
             data={"token": "test-token", "package": "test-package"},
         )
         self.assertEqual(res.status_code, 500)
-        self.assertEqual(res.json["message"], "An error occured")
+        self.assertEqual(res.json["message"], "An error occurred")
 
     @patch("webapp.store_api.publisher_gateway.reject_invite")
     def test_reject_post_invite(self, mock_reject_invite):

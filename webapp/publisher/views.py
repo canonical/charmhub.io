@@ -364,13 +364,13 @@ def accept_post_invite():
     except StoreApiResponseErrorList as error_list:
         res["success"] = False
         error_messages = [
-            f"{error.get('message', 'An error occured')}"
+            f"{error.get('message', 'An error occurred')}"
             for error in error_list.errors
         ]
         res["message"] = " ".join(error_messages)
     except Exception:
         res["success"] = False
-        res["message"] = "An error occured"
+        res["message"] = "An error occurred"
 
     return make_response(res, 500)
 
@@ -393,19 +393,19 @@ def reject_post_invite():
             return make_response(res, 200)
         else:
             res["success"] = False
-            res["message"] = "An error occured"
+            res["message"] = "An error occurred"
             return make_response(res, 200)
 
     except StoreApiResponseErrorList as error_list:
         res["success"] = False
         error_messages = [
-            f"{error.get('message', 'An error occured')}"
+            f"{error.get('message', 'An error occurred')}"
             for error in error_list.errors
         ]
         res["message"] = " ".join(error_messages)
     except Exception:
         res["success"] = False
-        res["message"] = "An error occured"
+        res["message"] = "An error occurred"
 
     return make_response(res, 500)
 
@@ -429,7 +429,7 @@ def get_collaborators(entity_name):
         response = make_response(res, 200)
     except StoreApiResponseErrorList as error_list:
         error_messages = [
-            f"{error.get('message', 'An error occured')}"
+            f"{error.get('message', 'An error occurred')}"
             for error in error_list.errors
         ]
         res["message"] = " ".join(error_messages)
@@ -456,7 +456,7 @@ def get_pending_invites(entity_name):
         response = make_response(res, 200)
     except StoreApiResponseErrorList as error_list:
         error_messages = [
-            f"{error.get('message', 'An error occured')}"
+            f"{error.get('message', 'An error occurred')}"
             for error in error_list.errors
         ]
         res["message"] = " ".join(error_messages)
@@ -501,7 +501,7 @@ def invite_collaborators(entity_name):
                 "invite_link": invite_link,
             },
             subject=(
-                f"You have been invited to as a collaborator on "
+                f"You have been invited to be a collaborator on "
                 f"{entity_name} in Charmhub"
             ),
         )
@@ -785,7 +785,7 @@ def get_releases(entity_name: str):
 
     except StoreApiResponseErrorList as error_list:
         error_messages = [
-            f"{error.get('message', 'An error occured')}"
+            f"{error.get('message', 'An error occurred')}"
             for error in error_list.errors
         ]
         res["message"] = " ".join(error_messages)
