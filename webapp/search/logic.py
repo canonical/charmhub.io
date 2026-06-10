@@ -9,6 +9,22 @@ from webapp.store_api import publisher_gateway
 DISCOURSE_URL = "https://discourse.charmhub.io"
 DOCS_URL = "https://canonical-juju.readthedocs-hosted.com/"
 
+# Discourse category excluded from search results
+EXCLUDED_DISCOURSE_CATEGORY_ID = 22
+
+
+def attach_posts(data, topics):
+    """
+    Attach the first matching post from a Discourse search
+    response to each topic.
+    """
+    posts_by_topic_id = {}
+    for post in data.get("posts", []):
+        posts_by_topic_id.setdefault(post["topic_id"], post)
+
+    for topic in topics:
+        topic["post"] = posts_by_topic_id.get(topic["id"])
+
 
 @trace_function
 def search_topics(
@@ -46,18 +62,14 @@ def search_topics(
                 params={"q": query, "page": page},
                 timeout=10,
             )
-            topics = resp.json().get("topics", [])
-            for topic in topics:
-                post = next(
-                    (
-                        post
-                        for post in resp.json()["posts"]
-                        if post["topic_id"] == topic["id"]
-                    ),
-                    None,
-                )
-                topic["post"] = post
-            topics = [topic for topic in topics if topic["category_id"] != 22]
+            data = resp.json()
+            topics = data.get("topics", [])
+            attach_posts(data, topics)
+            topics = [
+                topic
+                for topic in topics
+                if topic["category_id"] != EXCLUDED_DISCOURSE_CATEGORY_ID
+            ]
             redis_cache.set(key, topics, ttl=3600)
             return topics
 
@@ -90,16 +102,7 @@ def search_topics(
         topics = data.get("topics", [])
 
         if topics:
-            for topic in topics:
-                post = next(
-                    (
-                        post
-                        for post in data["posts"]
-                        if post["topic_id"] == topic["id"]
-                    ),
-                    None,
-                )
-                topic["post"] = post
+            attach_posts(data, topics)
             redis_cache.set(key, topics, ttl=3600)
             result.extend(topics)
             page += 1
@@ -117,7 +120,7 @@ def search_topics(
                 next_topics = [
                     topic
                     for topic in next_resp.json().get("topics", [])
-                    if topic["category_id"] != 22
+                    if topic["category_id"] != EXCLUDED_DISCOURSE_CATEGORY_ID
                 ]
                 redis_cache.set(key, next_topics, ttl=3600)
             if not next_topics or next_topics[0]["id"] == topics[0]["id"]:

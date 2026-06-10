@@ -36,6 +36,7 @@ from datetime import datetime
 import uuid
 
 preview_cache = {}
+PREVIEW_TTL_SECONDS = 300
 
 
 def paginate_pages(current_page, total_pages):
@@ -942,7 +943,7 @@ def cleanup_old_previews():
     expired_keys = [
         key
         for key, (_, timestamp) in preview_cache.items()
-        if (now - timestamp).total_seconds() > 300
+        if (now - timestamp).total_seconds() > PREVIEW_TTL_SECONDS
     ]
     for key in expired_keys:
         del preview_cache[key]
