@@ -7,7 +7,6 @@ import {
   Col,
   Spinner,
   SearchAndFilter,
-  Chip,
 } from "@canonical/react-components";
 import { InterfaceItem } from "../InterfaceItem";
 import { filterChipsSelector, filterState } from "../../state";
@@ -149,14 +148,6 @@ export const App = () => {
                     }}
                   >
                     {`${interfaceItem.key}`}
-                    {interfaceItem.required === true && (
-                      <Chip
-                        value="Required"
-                        appearance="negative"
-                        className="u-no-margin--bottom"
-                        style={{ marginLeft: "10px" }}
-                      />
-                    )}
                   </a>
                 </li>
               );
@@ -197,40 +188,39 @@ export const App = () => {
             </div>
           </Col>
           <Col size={9} className="p-details-tab__content__body">
-            <Row>
+            <Row className="p-details-tab__integrations-header">
               <Col size={5}>
-                <h2 className="p-heading--3 p-details-tab__content__body__title">
-                  {integrationCount} integration
-                  {integrationCount > 1 ? "s" : ""}
-                </h2>
-                <p className="p-heading--4 p-details-tab__content__body__link">
-                  <a href="https://juju.is/docs/juju/relation">
-                    Learn about integrations&nbsp;&gt;
-                  </a>
-                </p>
+                <Row className="p-divider p-details-tab__integrations-header-title">
+                  <div className="u-flex">
+                    <div className="p-divider__block">
+                      <span>
+                        {integrationCount} integration
+                        {integrationCount > 1 ? "s" : ""}
+                      </span>
+                    </div>
+                    <div className="p-divider__block">
+                      <a href="/interfaces">
+                        All integration interfaces &rsaquo;
+                      </a>
+                    </div>
+                  </div>
+                </Row>
               </Col>
               <Col size={4}>
-                <div
-                  style={{
-                    position: "relative",
-                    zIndex: 1,
-                    width: "100%",
-                    minHeight: "3rem",
-                  }}
-                >
-                  <div style={{ position: "absolute", width: "100%" }}>
-                    <SearchAndFilter
-                      // @ts-expect-error: id mismatch (number instead of string) but doesn't matter in reality
-                      filterPanelData={availableFilters}
-                      returnSearchData={(searchData: SearchAndFilterChip[]) => {
-                        setFilterData((prev) =>
-                          prev !== searchData
-                            ? (searchData as IFilterChip[])
-                            : prev
-                        );
-                      }}
-                    />
-                  </div>
+                <div className="p-details-tab__integrations-search">
+                  <SearchAndFilter
+                    filterPanelData={availableFilters.map((filter, index) => ({
+                      ...filter,
+                      id: index,
+                    }))}
+                    returnSearchData={(searchData: SearchAndFilterChip[]) => {
+                      setFilterData((prev) =>
+                        prev !== searchData
+                          ? (searchData as IFilterChip[])
+                          : prev
+                      );
+                    }}
+                  />
                 </div>
               </Col>
             </Row>
