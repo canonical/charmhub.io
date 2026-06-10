@@ -1,5 +1,8 @@
 import unittest
 from unittest.mock import patch, Mock
+
+import requests
+
 from webapp.store.views import package_has_sboms
 
 
@@ -160,14 +163,14 @@ class TestPackageHasSboms(unittest.TestCase):
         """Test function returns False when requests.head raises exception."""
         # Setup mocks
         mock_get_endpoint_url.return_value = "https://example.com/sbom/path"
-        mock_head.side_effect = Exception("Network error")
+        mock_head.side_effect = requests.RequestException("Network error")
 
         revisions = ["revision-error"]
         package_id = "error-package"
 
         # Function should handle exceptions gracefully and return False
-        with self.assertRaises(Exception):
-            package_has_sboms(revisions, package_id)
+        result = package_has_sboms(revisions, package_id)
+        self.assertFalse(result)
 
     @patch("webapp.store.views.requests.head")
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")

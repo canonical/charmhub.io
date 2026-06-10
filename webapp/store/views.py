@@ -213,7 +213,15 @@ def package_has_sboms(revisions, package_id):
     sbom_path = f"download/sbom_charm_{package_id}_{revisions[0]}.spdx2.3.json"
     endpoint = device_gateway_sbom.get_endpoint_url(sbom_path)
 
-    res = requests.head(endpoint, timeout=5)
+    try:
+        res = requests.head(endpoint, timeout=5)
+    except requests.RequestException:
+        # SBOM availability is an optional enhancement; don't let a
+        # slow or unreachable SBOM backend break the details page.
+        logger.exception(
+            "Failed to check SBOM availability for %s", package_id
+        )
+        return False
 
     # backend returns 302 instead of 200 for a successful request
     # adding the check for 200 in case this is changed without us knowing
