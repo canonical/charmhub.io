@@ -403,12 +403,11 @@ def reject_post_invite():
             for error in error_list.errors
         ]
         res["message"] = " ".join(error_messages)
-        response = make_response(res, 500)
     except Exception:
         res["success"] = False
         res["message"] = "An error occured"
 
-    return response
+    return make_response(res, 500)
 
 
 @trace_function
