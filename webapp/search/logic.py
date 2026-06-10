@@ -42,7 +42,8 @@ def search_topics(
             return cached_page
         else:
             resp = requests.get(
-                f"{DISCOURSE_URL}/search.json?q={query}&page={page}"
+                f"{DISCOURSE_URL}/search.json?q={query}&page={page}",
+                timeout=10,
             )
             topics = resp.json().get("topics", [])
             for topic in topics:
@@ -80,7 +81,8 @@ def search_topics(
             continue
 
         resp = requests.get(
-            f"{DISCOURSE_URL}/search.json?q={query}&page={page}"
+            f"{DISCOURSE_URL}/search.json?q={query}&page={page}",
+            timeout=10,
         )
         data = resp.json()
         topics = data.get("topics", [])
@@ -106,7 +108,8 @@ def search_topics(
                 next_topics = cached_next_topics
             else:
                 next_resp = requests.get(
-                    f"{DISCOURSE_URL}/search.json?q={query}&page={page}"
+                    f"{DISCOURSE_URL}/search.json?q={query}&page={page}",
+                    timeout=10,
                 )
                 next_topics = [
                     topic
@@ -146,7 +149,7 @@ def search_docs(term: str) -> dict:
         f"{DOCS_URL}/_/api/v3/search/?q=project%3Acanonical-juju+{term}"
     )
 
-    resp = requests.get(search_url)
+    resp = requests.get(search_url, timeout=10)
     data = resp.json()
 
     results = data.get("results", [])

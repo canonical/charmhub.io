@@ -21,6 +21,7 @@ def login(username: str) -> str:
     r = requests.post(
         f"{BASE_URL}/login",
         json={"username": username, "timestamp": timestamp, "signature": sig},
+        timeout=10,
     )
 
     r.raise_for_status()
