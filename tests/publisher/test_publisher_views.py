@@ -143,14 +143,11 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.json["success"], False)
         self.assertEqual(res.json["message"], "Package not found")
 
-    @patch("webapp.solutions.logic.publisher_has_solutions_access")
     @patch("webapp.store_api.publisher_gateway.get_account_packages")
     def test_list_page(
         self,
         mock_get_account_packages,
-        mock_has_solutions,
     ):
-        mock_has_solutions.return_value = False
         mock_get_account_packages.return_value = [
             {
                 "contact": "email",
@@ -185,9 +182,19 @@ class TestPublisherViews(unittest.TestCase):
         self.assertIn(b"postgresql", res.data)
         self.assertIn(b"Published charms", res.data)
         self.assertIn(b"Listed", res.data)
+        self.assertIn(b"Solutions", res.data)
         res = self.client.get("/bundles")
         self.assertEqual(res.status_code, 200)
         self.assertNotIn(b"postgresql", res.data)
+
+    @patch("webapp.publisher.views.get_publisher_solutions", return_value=[])
+    def test_solutions_page_empty_state(self, mock_get_publisher_solutions):
+        res = self.client.get("/solutions")
+
+        self.assertEqual(res.status_code, 200)
+        mock_get_publisher_solutions.assert_called_once_with("test-username")
+        self.assertIn(b"Solutions", res.data)
+        self.assertIn(b"No published solutions available", res.data)
 
     @patch("webapp.publisher.views.redis_cache.get", return_value=None)
     @patch("webapp.store_api.publisher_gateway.get_account_packages")

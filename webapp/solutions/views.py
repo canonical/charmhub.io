@@ -150,7 +150,6 @@ def solution_preview_draft(preview_key):
         "main": form_data.get("documentation_main"),
         "source": form_data.get("documentation_source"),
         "get_started": form_data.get("get_started_url"),
-        "how_to_operate": form_data.get("how_to_operate_url"),
         "architecture_explanation": form_data.get("architecture_explanation"),
         "submit_a_bug": form_data.get("submit_bug_url"),
         "community_discussion": form_data.get("community_discussion_url"),

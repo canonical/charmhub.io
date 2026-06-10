@@ -25,13 +25,14 @@
 
 <div class="p-form__group row">
   <div class="col-2">
-    <label for="architecture_explanation">Architecture Description:</label>
+    <label for="architecture_explanation" class="is-required">Architecture Explanation:</label>
   </div>
   <div class="col-8 col-x-large-6">
     <textarea class="is-dense"
       id="architecture_explanation"
       name="architecture_explanation"
       rows="6"
+      required
     >{{ form_value(form_data, solution, 'architecture_explanation', 'documentation.architecture_explanation') | e }}</textarea>
     <p class="p-form-help-text">Explanation of the solution architecture (Markdown supported)</p>
   </div>

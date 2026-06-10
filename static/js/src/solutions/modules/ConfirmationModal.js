@@ -12,14 +12,32 @@ function initConfirmationModal(config) {
   }
 
   let formSubmitted = false;
+  let submitter = null;
+
+  const submitForm = () => {
+    formSubmitted = true;
+
+    if (form.requestSubmit) {
+      form.requestSubmit(submitter || undefined);
+    } else {
+      form.submit();
+    }
+  };
 
   form.addEventListener("submit", (event) => {
     if (formSubmitted) {
       return;
     }
 
+    submitter = event.submitter;
+
     event.preventDefault();
     event.stopPropagation();
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
 
     if (window.validateSolutionForm && !window.validateSolutionForm()) {
       return;
@@ -28,6 +46,11 @@ function initConfirmationModal(config) {
     const formData = new FormData(form);
     const formObject = Object.fromEntries(formData.entries());
     const message = config.getMessage(formObject, form);
+
+    if (!message) {
+      submitForm();
+      return;
+    }
 
     modalMessage.textContent = message;
     modal.classList.remove("u-hide");
@@ -44,8 +67,7 @@ function initConfirmationModal(config) {
     confirmButton.appendChild(spinner);
     confirmButton.disabled = true;
 
-    formSubmitted = true;
-    form.submit();
+    submitForm();
   });
 
   const closeModal = () => {
