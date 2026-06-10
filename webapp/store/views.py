@@ -47,7 +47,9 @@ def get_libraries(entity_name):
 
 
 @trace_function
-def get_package_details(entity_name, channel_request=None, fields=[]):
+def get_package_details(entity_name, channel_request=None, fields=None):
+    if fields is None:
+        fields = []
     key = (
         f"package_details:{entity_name}",
         {"channel": channel_request, "fields": ",".join(sorted(fields))},
@@ -170,7 +172,9 @@ FIELDS = [
 
 
 @trace_function
-def get_package(entity_name, channel_request=None, fields=FIELDS, path=None):
+def get_package(entity_name, channel_request=None, fields=None, path=None):
+    if fields is None:
+        fields = FIELDS
     # Get entity info from API
     key = (
         f"package:{entity_name}{':' + path if path else ''}",
