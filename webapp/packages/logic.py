@@ -2,7 +2,6 @@ import re
 
 import yaml
 
-from flask import make_response
 from typing import List, Dict, TypedDict, Any, Union
 
 from canonicalwebteam.exceptions import StoreApiError
@@ -121,9 +120,7 @@ def fetch_package(package_name: str, fields: List[str]) -> Package:
         fields=fields,
         api_version=2,
     )
-    response = make_response({"package": package})
-    response.cache_control.max_age = 3600
-    return response.json
+    return {"package": package}
 
 
 @trace_function
