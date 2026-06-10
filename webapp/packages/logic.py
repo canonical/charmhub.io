@@ -318,7 +318,7 @@ def get_store_categories() -> List[Dict[str, str]]:
         try:
             all_categories = publisher_gateway.get_categories()
         except StoreApiError:
-            all_categories = []
+            all_categories = {"categories": []}
 
         category_map = {cat["slug"]: cat["name"] for cat in CATEGORIES}
 
