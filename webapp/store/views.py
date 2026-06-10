@@ -1,3 +1,5 @@
+import logging
+
 import humanize
 from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.discourse.exceptions import PathNotFoundError
@@ -23,6 +25,8 @@ from webapp.config import SEARCH_FIELDS
 from webapp.observability.utils import trace_function
 from webapp.store_api import device_gateway, device_gateway_sbom
 
+
+logger = logging.getLogger(__name__)
 
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
@@ -347,12 +351,21 @@ def details_overview(entity_name):
             context["last_update"] = docs_content["updated"]
             context["topic_path"] = docs_content["topic_path"]
         except Exception as e:
-            if e.response.status_code == 404:
-                navigation = None
-                description = sanitize_html(
-                    logic.get_description(package, parse_to_html=True)
+            # Fall back to the package description whenever the docs
+            # topic cannot be fetched or parsed. A missing topic (404)
+            # is expected; anything else is worth logging.
+            status_code = getattr(
+                getattr(e, "response", None), "status_code", None
+            )
+            if status_code != 404:
+                logger.exception(
+                    "Failed to load docs topic for %s", entity_name
                 )
-                summary = logic.get_summary(package)
+            navigation = None
+            description = sanitize_html(
+                logic.get_description(package, parse_to_html=True)
+            )
+            summary = logic.get_summary(package)
     else:
         navigation = None
         description = sanitize_html(logic.get_description(package, parse_to_html=True))
