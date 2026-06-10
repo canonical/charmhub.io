@@ -237,9 +237,14 @@ def get_sbom(package_id, revision):
     sbom_path = f"download/sbom_charm_{package_id}_{revision}.spdx2.3.json"
     endpoint = device_gateway_sbom.get_endpoint_url(sbom_path)
 
-    res = requests.get(endpoint, timeout=30)
-
-    return jsonify(res.json())
+    try:
+        res = requests.get(endpoint, timeout=30)
+        return jsonify(res.json())
+    except (requests.RequestException, ValueError):
+        logger.exception(
+            "Failed to fetch SBOM for %s revision %s", package_id, revision
+        )
+        return jsonify({"error": "Unable to fetch SBOM"}), 502
 
 
 @trace_function
