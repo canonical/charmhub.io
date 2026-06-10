@@ -190,25 +190,29 @@ export const App = () => {
           <Col size={9} className="p-details-tab__content__body">
             <Row className="p-details-tab__integrations-header">
               <Col size={5}>
-                <Row className="u-flex p-divider p-details-tab__integrations-header-title">
-                  <div className="p-divider__block">
-                    <span>
-                      {integrationCount} integration
-                      {integrationCount > 1 ? "s" : ""}
-                    </span>
-                  </div>
-                  <div className="p-divider__block">
-                    <a href="/interfaces">
-                      All integration interfaces &rsaquo;
-                    </a>
+                <Row className="p-divider p-details-tab__integrations-header-title">
+                  <div className="u-flex">
+                    <div className="p-divider__block">
+                      <span>
+                        {integrationCount} integration
+                        {integrationCount > 1 ? "s" : ""}
+                      </span>
+                    </div>
+                    <div className="p-divider__block">
+                      <a href="/interfaces">
+                        All integration interfaces &rsaquo;
+                      </a>
+                    </div>
                   </div>
                 </Row>
               </Col>
               <Col size={4}>
                 <div className="p-details-tab__integrations-search">
                   <SearchAndFilter
-                    // @ts-expect-error: id mismatch (number instead of string) but doesn't matter in reality
-                    filterPanelData={availableFilters}
+                    filterPanelData={availableFilters.map((filter, index) => ({
+                      ...filter,
+                      id: index,
+                    }))}
                     returnSearchData={(searchData: SearchAndFilterChip[]) => {
                       setFilterData((prev) =>
                         prev !== searchData

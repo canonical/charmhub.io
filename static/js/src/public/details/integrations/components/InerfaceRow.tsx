@@ -40,25 +40,27 @@ export const InerfaceRow = ({ charm }: InerfaceRowProps) => {
 
   return (
     <Row>
-      <Col size={3} className="u-flex">
-        <a href={packageLink}>
-          <img
-            src={
-              charm.package.icon_url ||
-              "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg"
-            }
-            alt=""
-            width={48}
-            height={48}
-          />
-        </a>
-        <div className="p-integration-row__meta">
-          <a className="p-integration-row__name" href={packageLink}>
-            {charmName}
+      <Col size={3}>
+        <div className="u-flex">
+          <a href={packageLink}>
+            <img
+              src={
+                charm.package.icon_url ||
+                "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg"
+              }
+              alt=""
+              width={48}
+              height={48}
+            />
           </a>
-          <p className="u-text--muted u-no-margin--bottom">
-            {charm.publisher.display_name}
-          </p>
+          <div className="p-integration-row__meta">
+            <a className="p-integration-row__name" href={packageLink}>
+              {charmName}
+            </a>
+            <p className="u-text--muted u-no-margin--bottom">
+              {charm.publisher.display_name}
+            </p>
+          </div>
         </div>
       </Col>
 
