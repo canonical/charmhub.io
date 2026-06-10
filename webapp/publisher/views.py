@@ -516,10 +516,6 @@ def invite_collaborators(entity_name):
             for error in error_list.errors
         ]
         res["message"] = (" ").join(messages)
-    except Exception:
-        res["success"] = False
-        res["message"] = "An error occurred"
-        raise
 
     return make_response(res, 500)
 
@@ -663,10 +659,7 @@ def post_register_name():
                         )
                     )
 
-    if data["type"] == "charm":
-        return redirect("/charms")
-    elif data["type"] == "bundle":
-        return redirect("/bundles")
+    return redirect("/charms")
 
 
 @trace_function
