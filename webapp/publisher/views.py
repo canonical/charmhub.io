@@ -722,7 +722,15 @@ def post_create_track(charm_name):
     auto_phasing_percentage = request.form.get("auto-phasing-percentage")
 
     if auto_phasing_percentage is not None:
-        auto_phasing_percentage = float(auto_phasing_percentage)
+        try:
+            auto_phasing_percentage = float(auto_phasing_percentage)
+        except ValueError:
+            return (
+                jsonify(
+                    {"error": "auto-phasing-percentage must be a number."}
+                ),
+                400,
+            )
 
     response = publisher_gateway.create_track(
         session,

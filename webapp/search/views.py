@@ -35,7 +35,7 @@ def all_search():
 def all_search_json():
     params = request.args
     term = params.get("q")
-    limit = int(params.get("limit", 5))
+    limit = params.get("limit", default=5, type=int)
 
     if not term:
         return {"error": "No search term provided"}
@@ -58,8 +58,8 @@ def all_search_json():
 @search.route("/all-bundles")
 def all_charms() -> dict:
     query = request.args.get("q", "")
-    page = int(request.args.get("page", 1))
-    limit = int(request.args.get("limit", 50))
+    page = request.args.get("page", default=1, type=int)
+    limit = request.args.get("limit", default=50, type=int)
     key = (f"{request.path}", {"q": query, "pg": page})
     cached_page = redis_cache.get(key, expected_type=dict)
     if cached_page:
@@ -82,7 +82,7 @@ def all_charms() -> dict:
 @search.route("/all-docs")
 def all_docs():
     search_term = request.args.get("q")
-    limit = int(request.args.get("limit", 50))
+    limit = request.args.get("limit", default=50, type=int)
 
     docs = search_docs(search_term)[:limit]
 
@@ -93,8 +93,8 @@ def all_docs():
 @search.route("/all-topics")
 def all_topics():
     search_term = request.args.get("q")
-    page = int(request.args.get("page", 1))
-    limit = int(request.args.get("limit", 50))
+    page = request.args.get("page", default=1, type=int)
+    limit = request.args.get("limit", default=50, type=int)
 
     key = ("all-topics", {"q": search_term, "pg": page})
     topics = redis_cache.get(key, expected_type=dict)

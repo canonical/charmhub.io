@@ -289,7 +289,10 @@ def get_packages(
 
     total_pages = -(len(packages) // -size)
     total_items = len(packages)
-    page = int(query_params.get("page", 1))
+    try:
+        page = int(query_params.get("page", 1))
+    except (TypeError, ValueError):
+        page = 1
 
     res = paginate(packages, page, size, total_pages)
 
