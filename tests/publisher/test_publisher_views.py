@@ -180,7 +180,7 @@ class TestPublisherViews(unittest.TestCase):
         res = self.client.get("/charms")
         self.assertEqual(res.status_code, 200)
         self.assertIn(b"postgresql", res.data)
-        self.assertIn(b"Published charms", res.data)
+        self.assertIn(b"Published Charms", res.data)
         self.assertIn(b"Listed", res.data)
         self.assertIn(b"Solutions", res.data)
         res = self.client.get("/bundles")
@@ -194,7 +194,7 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         mock_get_publisher_solutions.assert_called_once_with("test-username")
         self.assertIn(b"Solutions", res.data)
-        self.assertIn(b"No published solutions available", res.data)
+        self.assertIn(b"No published Solutions available", res.data)
 
     @patch("webapp.publisher.views.redis_cache.get", return_value=None)
     @patch("webapp.store_api.publisher_gateway.get_account_packages")

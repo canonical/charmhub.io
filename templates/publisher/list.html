@@ -8,11 +8,11 @@
   <div class="u-fixed-width">
     {% if not published and not registered %}
       <h1 class="p-heading--2">Getting started</h1>
-      <h2 class="p-heading--4">Start with a charm or a bundle</h2>
-      <p>To upload your first charm to the store, you must first register its name.</p>
+      <h2 class="p-heading--4">Start with a Charm or a Bundle</h2>
+      <p>To upload your first Charm to the store, you must first register its name.</p>
       <ul class="p-inline-list u-no-margin--bottom">
         <li class="p-inline-list__item">
-          <a href="/register-name" class="p-button--base">Register a new charm</a>
+          <a href="/register-name" class="p-button--base">Register a new Charm</a>
         </li>
         <li class="p-inline-list__item">
           <a href="https://juju.is/docs/sdk/publishing">
@@ -21,7 +21,7 @@
         </li>
       </ul>
     {% else %}
-      <h1 class="p-heading--2">My charms, bundles and solutions</h1>
+      <h1 class="p-heading--2">My Charms, Bundles and Solutions</h1>
     {% endif %}
   </div>
 </section>
@@ -62,15 +62,36 @@
           </nav>
         </li>
         <li class="p-inline-list__item u-align--right">
-          <a href="/register-name" class="p-button--base">Register a new charm</a>
+          {% if page_type == "bundle" %}
+            <a href="/register-solution" class="p-button--base">Register a new Solution</a>
+          {% else %}
+            <a href="/register-name" class="p-button--base">Register a new Charm</a>
+          {% endif %}
         </li>
       </ul>
     </div>
 
+    {% if page_type == "bundle" %}
+      <div class="u-fixed-width u-sv3">
+        <div class="p-notification--information">
+          <div class="p-notification__content">
+            <h5 class="p-notification__title">We've discontinued the registration of new Bundles</h5>
+            <p class="p-notification__message">New Bundle registrations are no longer accepted. Existing Bundles remain functional. We recommend registering your Bundles as Solutions. You may also use the Juju Terraform Provider for new deployments of your Bundles.</p>
+          </div>
+          <div class="p-notification__meta">
+            <div class="p-notification__actions">
+              <a class="p-notification__action" href="https://discourse.charmhub.io/t/discontinuing-new-charmhub-bundle-registrations/15344">Learn more</a>
+              <a class="p-notification__action" href="/register-solution">Register a new Solution</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
     {% if published %}
       <div class="p-strip is-shallow u-no-padding--top">
         <div class="u-fixed-width">
-          <h2 class="p-heading--4">Published {{ page_type }}s</h2>
+          <h2 class="p-heading--4">Published {{ page_type|capitalize }}s</h2>
         </div>
         <div class="u-fixed-width">
           <table class="p-table--mobile-card" role="grid">
@@ -189,7 +210,7 @@
       <div class="p-strip is-shallow u-no-padding--top">
         <div class="u-fixed-width u-flex">
           <div class="p-tooltip--information" style="margin-block-end: 0.95rem;">
-            <h2 class="p-heading--4 u-no-margin--bottom" style="padding-inline-end: 0.5rem;">Registered {{ page_type }} names</h2>
+            <h2 class="p-heading--4 u-no-margin--bottom" style="padding-inline-end: 0.5rem;">Registered {{ page_type|capitalize }} names</h2>
             <div class="instruction-tooltip">
               <div class="p-tooltip__button" style="transform: translateY(0.65rem);" role="button" aria-controls="icon-tooltip-modal" tabindex="0">
                 Show information
@@ -214,7 +235,7 @@
           </div>
         </div>
         <div class="u-fixed-width">
-          <table class="registered-charms-table" aria-label="Registered charm names">
+          <table class="registered-charms-table" aria-label="Registered {{ page_type }} names">
             <thead>
               <tr role="row">
                 <th style="width: 30%;">
@@ -299,7 +320,7 @@
           ) | safe
         }}
         <h4 class="p-heading--5 u-no-margin--bottom">Understand the basics</h4>
-        <p>Learn everything about charms and all the best practices of how to use them and write them.</p>
+        <p>Learn everything about Charms and all the best practices of how to use them and write them.</p>
         <p class="u-sv3">
           <a href="https://juju.is/docs">Read the docs&nbsp;&rsaquo;</a>
         </p>
@@ -315,8 +336,8 @@
           attrs={"style": "margin-block-end: 0.75rem;"}
           ) | safe
         }}
-        <h4 class="p-heading--5 u-no-margin--bottom">Your first charm</h4>
-        <p>Create a minimal charm with the <code>ops</code> library.</p>
+        <h4 class="p-heading--5 u-no-margin--bottom">Your first Charm</h4>
+        <p>Create a minimal Charm with the <code>ops</code> library.</p>
         <p class="u-sv3">
           <a href="https://ops.readthedocs.io/en/latest/tutorial/write-your-first-machine-charm.html">Complete this tutorial&nbsp;&rsaquo;</a>
         </p>
@@ -333,7 +354,7 @@
           ) | safe
         }}
         <h4 class="p-heading--5 u-no-margin--bottom">Join the community</h4>
-        <p>Request features, troubleshoot and generally find all the latest talk about the world of charms.</p>
+        <p>Request features, troubleshoot and generally find all the latest talk about the world of Charms.</p>
         <p class="u-sv3">
           <a href="https://discourse.charmhub.io/">Join the discussion&nbsp;&rsaquo;</a>
         </p>
