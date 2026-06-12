@@ -60,7 +60,7 @@
     <form class="p-form" method="POST" action="{{ url_for('publisher.submit_edit_solution', hash=solution.hash) }}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <div class="u-align--right">
-        <a class="p-button--base" href="/solutions">Cancel</a>
+        <a class="p-button--base" id="cancel-edit-solution" href="/solutions">Cancel</a>
         <button type="button" id="preview-button" class="p-button">
           Preview
         </button>
@@ -82,6 +82,9 @@
           </button>
         {% endif %}
       </div>
+      <p id="local-autosave-status" class="p-form-help-text u-no-margin--bottom u-no-max-width" aria-live="polite">
+        Local autosave is on. Edits are saved in this browser only.
+      </p>
 
       <hr>
 
@@ -115,5 +118,20 @@
 </section>
 
 {% include 'solutions/partials/_confirmation_modal.html' %}
+<div class="p-modal u-hide" id="local-autosave-cancel-modal">
+  <section class="p-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="local-autosave-cancel-title" aria-describedby="local-autosave-cancel-description">
+    <header class="p-modal__header">
+      <h2 class="p-modal__title" id="local-autosave-cancel-title">Discard local changes?</h2>
+      <button type="button" class="p-modal__close" aria-label="Close modal" aria-controls="local-autosave-cancel-modal">Close</button>
+    </header>
+    <div class="p-modal__body" id="local-autosave-cancel-description">
+      <p>Your browser has autosaved edits for this solution. If you cancel, these local edits will be removed. Changes already submitted to Charmhub will not be affected.</p>
+    </div>
+    <footer class="p-modal__footer">
+      <button type="button" class="p-button--neutral u-no-margin--bottom" id="local-autosave-cancel-keep">Keep editing</button>
+      <button type="button" class="p-button--negative u-no-margin--bottom" id="local-autosave-cancel-discard">Discard and leave</button>
+    </footer>
+  </section>
+</div>
   {{ vite_import('static/js/src/solutions/edit-solution.js') }}
 {% endblock %}

@@ -91,10 +91,13 @@ publisher = Blueprint(
 )
 
 
-@publisher.route("/solutions/csrf-token")
+@publisher.route("/api/solutions/csrf-token")
 @login_required
 def solutions_csrf_token():
-    return jsonify({"csrf_token": generate_csrf()})
+    response = jsonify({"csrf_token": generate_csrf()})
+    response.headers["Cache-Control"] = "no-store"
+    response.headers.add("Vary", "Cookie")
+    return response
 
 
 @trace_function

@@ -1,13 +1,20 @@
 import DynamicFormManager from "./modules/DynamicFormManager.js";
 import CharmSearchBox from "./modules/CharmSearchBox.js";
 import initConfirmationModal from "./modules/ConfirmationModal.js";
+import initLocalAutosave from "./modules/LocalAutosave.js";
 
-const CSRF_TOKEN_ENDPOINT = "/solutions/csrf-token";
-const CSRF_REFRESH_ACTIONS = ["submit_for_review", "update"];
+const CSRF_TOKEN_ENDPOINT = "/api/solutions/csrf-token";
+const CSRF_REFRESH_ACTIONS = [
+  "preview",
+  "save_draft",
+  "submit_for_review",
+  "update",
+];
 
 async function refreshCsrfToken(form) {
   const response = await fetch(CSRF_TOKEN_ENDPOINT, {
     method: "GET",
+    cache: "no-store",
     credentials: "same-origin",
     headers: {
       Accept: "application/json",
@@ -29,7 +36,10 @@ async function refreshCsrfToken(form) {
 }
 
 function refreshCsrfTokenBeforeSubmit(form, submitter) {
-  if (CSRF_REFRESH_ACTIONS.includes(submitter?.value)) {
+  const action =
+    submitter?.value || new FormData(form).get("action") || "save_draft";
+
+  if (CSRF_REFRESH_ACTIONS.includes(action)) {
     return refreshCsrfToken(form);
   }
 }
@@ -52,6 +62,12 @@ function getEditMessage(formData, form) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+  const form = document.querySelector("form.p-form");
+
+  if (!form) {
+    return;
+  }
+
   initConfirmationModal({
     formSelector: ".p-form",
     getMessage: getEditMessage,
@@ -61,16 +77,15 @@ document.addEventListener("DOMContentLoaded", function () {
   const previewButton = document.getElementById("preview-button");
 
   if (previewButton) {
-    const form = document.querySelector("form.p-form");
-    if (!form) {
-      return;
-    }
-
     const submitPreviewForm = async () => {
       const formData = new FormData(form);
       formData.set("action", "preview");
 
       try {
+        await refreshCsrfToken(form);
+        const csrfInput = form.querySelector('input[name="csrf_token"]');
+        formData.set("csrf_token", csrfInput.value);
+
         const formAction = form.getAttribute("action");
         const response = await fetch(formAction, {
           method: "POST",
@@ -298,4 +313,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     },
   });
+
+  initLocalAutosave(form);
 });
