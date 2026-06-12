@@ -11,6 +11,7 @@ from flask import (
     make_response,
 )
 from flask.json import jsonify
+from flask_wtf.csrf import generate_csrf
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.extensions import csrf
 from webapp.decorators import login_required, cached_redirect
@@ -88,6 +89,12 @@ publisher = Blueprint(
     template_folder="/templates",
     static_folder="/static",
 )
+
+
+@publisher.route("/solutions/csrf-token")
+@login_required
+def solutions_csrf_token():
+    return jsonify({"csrf_token": generate_csrf()})
 
 
 @trace_function

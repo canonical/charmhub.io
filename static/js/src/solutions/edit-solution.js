@@ -2,6 +2,38 @@ import DynamicFormManager from "./modules/DynamicFormManager.js";
 import CharmSearchBox from "./modules/CharmSearchBox.js";
 import initConfirmationModal from "./modules/ConfirmationModal.js";
 
+const CSRF_TOKEN_ENDPOINT = "/solutions/csrf-token";
+const CSRF_REFRESH_ACTIONS = ["submit_for_review", "update"];
+
+async function refreshCsrfToken(form) {
+  const response = await fetch(CSRF_TOKEN_ENDPOINT, {
+    method: "GET",
+    credentials: "same-origin",
+    headers: {
+      Accept: "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to refresh your session token. Please try again.");
+  }
+
+  const data = await response.json();
+  const csrfInput = form.querySelector('input[name="csrf_token"]');
+
+  if (!data.csrf_token || !csrfInput) {
+    throw new Error("Unable to refresh your session token. Please try again.");
+  }
+
+  csrfInput.value = data.csrf_token;
+}
+
+function refreshCsrfTokenBeforeSubmit(form, submitter) {
+  if (CSRF_REFRESH_ACTIONS.includes(submitter?.value)) {
+    return refreshCsrfToken(form);
+  }
+}
+
 function getEditMessage(formData, form) {
   const solutionTitle =
     document.querySelector('input[name="title"]')?.value ||
@@ -23,6 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initConfirmationModal({
     formSelector: ".p-form",
     getMessage: getEditMessage,
+    beforeSubmit: refreshCsrfTokenBeforeSubmit,
   });
 
   const previewButton = document.getElementById("preview-button");
