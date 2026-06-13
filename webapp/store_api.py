@@ -20,11 +20,11 @@ def decorate_all_methods(decorator, cls):
     return WrappedClass
 
 
-TracedPubilsherGW = decorate_all_methods(trace_function, PublisherGW)
+TracedPublisherGW = decorate_all_methods(trace_function, PublisherGW)
 TracedDeviceGW = decorate_all_methods(trace_function, DeviceGW)
 
 
 request_session = requests.Session()
-publisher_gateway = TracedPubilsherGW("charm", request_session)
+publisher_gateway = TracedPublisherGW("charm", request_session)
 device_gateway = TracedDeviceGW("charm", request_session)
 device_gateway_sbom = TracedDeviceGW("sbom", request_session)

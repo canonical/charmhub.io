@@ -218,7 +218,8 @@ def param_redirect_exec(req, make_response, redirect):
     return None
 
 
-def get_csp_as_str(csp={}):
+def get_csp_as_str(csp=None):
+    csp = csp or {}
     csp_str = ""
     for key, values in csp.items():
         csp_value = " ".join(values)

@@ -34,6 +34,7 @@ from datetime import datetime
 import uuid
 
 preview_cache = {}
+PREVIEW_TTL_SECONDS = 300
 
 
 def paginate_pages(current_page, total_pages):
@@ -334,13 +335,13 @@ def accept_post_invite():
     except StoreApiResponseErrorList as error_list:
         res["success"] = False
         error_messages = [
-            f"{error.get('message', 'An error occured')}"
+            f"{error.get('message', 'An error occurred')}"
             for error in error_list.errors
         ]
         res["message"] = " ".join(error_messages)
     except Exception:
         res["success"] = False
-        res["message"] = "An error occured"
+        res["message"] = "An error occurred"
 
     return make_response(res, 500)
 
@@ -363,22 +364,21 @@ def reject_post_invite():
             return make_response(res, 200)
         else:
             res["success"] = False
-            res["message"] = "An error occured"
+            res["message"] = "An error occurred"
             return make_response(res, 200)
 
     except StoreApiResponseErrorList as error_list:
         res["success"] = False
         error_messages = [
-            f"{error.get('message', 'An error occured')}"
+            f"{error.get('message', 'An error occurred')}"
             for error in error_list.errors
         ]
         res["message"] = " ".join(error_messages)
-        response = make_response(res, 500)
     except Exception:
         res["success"] = False
-        res["message"] = "An error occured"
+        res["message"] = "An error occurred"
 
-    return response
+    return make_response(res, 500)
 
 
 @trace_function
@@ -400,7 +400,7 @@ def get_collaborators(entity_name):
         response = make_response(res, 200)
     except StoreApiResponseErrorList as error_list:
         error_messages = [
-            f"{error.get('message', 'An error occured')}"
+            f"{error.get('message', 'An error occurred')}"
             for error in error_list.errors
         ]
         res["message"] = " ".join(error_messages)
@@ -427,7 +427,7 @@ def get_pending_invites(entity_name):
         response = make_response(res, 200)
     except StoreApiResponseErrorList as error_list:
         error_messages = [
-            f"{error.get('message', 'An error occured')}"
+            f"{error.get('message', 'An error occurred')}"
             for error in error_list.errors
         ]
         res["message"] = " ".join(error_messages)
@@ -472,7 +472,7 @@ def invite_collaborators(entity_name):
                 "invite_link": invite_link,
             },
             subject=(
-                f"You have been invited to as a collaborator on "
+                f"You have been invited to be a collaborator on "
                 f"{entity_name} in Charmhub"
             ),
         )
@@ -487,10 +487,6 @@ def invite_collaborators(entity_name):
             for error in error_list.errors
         ]
         res["message"] = (" ").join(messages)
-    except Exception:
-        res["success"] = False
-        res["message"] = "An error occurred"
-        raise
 
     return make_response(res, 500)
 
@@ -634,10 +630,7 @@ def post_register_name():
                         )
                     )
 
-    if data["type"] == "charm":
-        return redirect("/charms")
-    elif data["type"] == "bundle":
-        return redirect("/bundles")
+    return redirect("/charms")
 
 
 @trace_function
@@ -693,7 +686,15 @@ def post_create_track(charm_name):
     auto_phasing_percentage = request.form.get("auto-phasing-percentage")
 
     if auto_phasing_percentage is not None:
-        auto_phasing_percentage = float(auto_phasing_percentage)
+        try:
+            auto_phasing_percentage = float(auto_phasing_percentage)
+        except ValueError:
+            return (
+                jsonify(
+                    {"error": "auto-phasing-percentage must be a number."}
+                ),
+                400,
+            )
 
     response = publisher_gateway.create_track(
         session,
@@ -748,7 +749,7 @@ def get_releases(entity_name: str):
 
     except StoreApiResponseErrorList as error_list:
         error_messages = [
-            f"{error.get('message', 'An error occured')}"
+            f"{error.get('message', 'An error occurred')}"
             for error in error_list.errors
         ]
         res["message"] = " ".join(error_messages)
@@ -908,7 +909,7 @@ def cleanup_old_previews():
     expired_keys = [
         key
         for key, (_, timestamp) in preview_cache.items()
-        if (now - timestamp).total_seconds() > 300
+        if (now - timestamp).total_seconds() > PREVIEW_TTL_SECONDS
     ]
     for key in expired_keys:
         del preview_cache[key]

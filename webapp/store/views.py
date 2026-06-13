@@ -1,3 +1,5 @@
+import logging
+
 import humanize
 from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.discourse.exceptions import PathNotFoundError
@@ -24,6 +26,8 @@ from webapp.observability.utils import trace_function
 from webapp.store_api import device_gateway, device_gateway_sbom
 
 
+logger = logging.getLogger(__name__)
+
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
 )
@@ -43,7 +47,9 @@ def get_libraries(entity_name):
 
 
 @trace_function
-def get_package_details(entity_name, channel_request=None, fields=[]):
+def get_package_details(entity_name, channel_request=None, fields=None):
+    if fields is None:
+        fields = []
     key = (
         f"package_details:{entity_name}",
         {"channel": channel_request, "fields": ",".join(sorted(fields))},
@@ -166,7 +172,9 @@ FIELDS = [
 
 
 @trace_function
-def get_package(entity_name, channel_request=None, fields=FIELDS, path=None):
+def get_package(entity_name, channel_request=None, fields=None, path=None):
+    if fields is None:
+        fields = FIELDS
     # Get entity info from API
     key = (
         f"package:{entity_name}{':' + path if path else ''}",
@@ -205,7 +213,15 @@ def package_has_sboms(revisions, package_id):
     sbom_path = f"download/sbom_charm_{package_id}_{revisions[0]}.spdx2.3.json"
     endpoint = device_gateway_sbom.get_endpoint_url(sbom_path)
 
-    res = requests.head(endpoint)
+    try:
+        res = requests.head(endpoint, timeout=5)
+    except requests.RequestException:
+        # SBOM availability is an optional enhancement; don't let a
+        # slow or unreachable SBOM backend break the details page.
+        logger.exception(
+            "Failed to check SBOM availability for %s", package_id
+        )
+        return False
 
     # backend returns 302 instead of 200 for a successful request
     # adding the check for 200 in case this is changed without us knowing
@@ -221,9 +237,14 @@ def get_sbom(package_id, revision):
     sbom_path = f"download/sbom_charm_{package_id}_{revision}.spdx2.3.json"
     endpoint = device_gateway_sbom.get_endpoint_url(sbom_path)
 
-    res = requests.get(endpoint)
-
-    return jsonify(res.json())
+    try:
+        res = requests.get(endpoint, timeout=30)
+        return jsonify(res.json())
+    except (requests.RequestException, ValueError):
+        logger.exception(
+            "Failed to fetch SBOM for %s revision %s", package_id, revision
+        )
+        return jsonify({"error": "Unable to fetch SBOM"}), 502
 
 
 @trace_function
@@ -347,12 +368,21 @@ def details_overview(entity_name):
             context["last_update"] = docs_content["updated"]
             context["topic_path"] = docs_content["topic_path"]
         except Exception as e:
-            if e.response.status_code == 404:
-                navigation = None
-                description = sanitize_html(
-                    logic.get_description(package, parse_to_html=True)
+            # Fall back to the package description whenever the docs
+            # topic cannot be fetched or parsed. A missing topic (404)
+            # is expected; anything else is worth logging.
+            status_code = getattr(
+                getattr(e, "response", None), "status_code", None
+            )
+            if status_code != 404:
+                logger.exception(
+                    "Failed to load docs topic for %s", entity_name
                 )
-                summary = logic.get_summary(package)
+            navigation = None
+            description = sanitize_html(
+                logic.get_description(package, parse_to_html=True)
+            )
+            summary = logic.get_summary(package)
     else:
         navigation = None
         description = sanitize_html(logic.get_description(package, parse_to_html=True))

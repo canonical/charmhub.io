@@ -1,5 +1,8 @@
 import unittest
 from unittest.mock import patch, Mock
+
+import requests
+
 from webapp.store.views import package_has_sboms
 
 
@@ -39,7 +42,9 @@ class TestPackageHasSboms(unittest.TestCase):
             f"download/sbom_charm_{package_id}_{revisions[0]}.spdx2.3.json"
         )
         mock_get_endpoint_url.assert_called_once_with(expected_sbom_path)
-        mock_head.assert_called_once_with("https://example.com/sbom/path")
+        mock_head.assert_called_once_with(
+            "https://example.com/sbom/path", timeout=5
+        )
 
     @patch("webapp.store.views.requests.head")
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
@@ -64,7 +69,9 @@ class TestPackageHasSboms(unittest.TestCase):
             f"download/sbom_charm_{package_id}_{revisions[0]}.spdx2.3.json"
         )
         mock_get_endpoint_url.assert_called_once_with(expected_sbom_path)
-        mock_head.assert_called_once_with("https://example.com/sbom/path")
+        mock_head.assert_called_once_with(
+            "https://example.com/sbom/path", timeout=5
+        )
 
     @patch("webapp.store.views.requests.head")
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
@@ -89,7 +96,9 @@ class TestPackageHasSboms(unittest.TestCase):
             f"download/sbom_charm_{package_id}_{revisions[0]}.spdx2.3.json"
         )
         mock_get_endpoint_url.assert_called_once_with(expected_sbom_path)
-        mock_head.assert_called_once_with("https://example.com/sbom/path")
+        mock_head.assert_called_once_with(
+            "https://example.com/sbom/path", timeout=5
+        )
 
     @patch("webapp.store.views.requests.head")
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
@@ -114,7 +123,9 @@ class TestPackageHasSboms(unittest.TestCase):
             f"download/sbom_charm_{package_id}_{revisions[0]}.spdx2.3.json"
         )
         mock_get_endpoint_url.assert_called_once_with(expected_sbom_path)
-        mock_head.assert_called_once_with("https://example.com/sbom/path")
+        mock_head.assert_called_once_with(
+            "https://example.com/sbom/path", timeout=5
+        )
 
     @patch("webapp.store.views.requests.head")
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
@@ -140,7 +151,9 @@ class TestPackageHasSboms(unittest.TestCase):
             f"download/sbom_charm_{package_id}_first-revision.spdx2.3.json"
         )
         mock_get_endpoint_url.assert_called_once_with(expected_sbom_path)
-        mock_head.assert_called_once_with("https://example.com/sbom/path")
+        mock_head.assert_called_once_with(
+            "https://example.com/sbom/path", timeout=5
+        )
 
     @patch("webapp.store.views.requests.head")
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")
@@ -150,14 +163,14 @@ class TestPackageHasSboms(unittest.TestCase):
         """Test function returns False when requests.head raises exception."""
         # Setup mocks
         mock_get_endpoint_url.return_value = "https://example.com/sbom/path"
-        mock_head.side_effect = Exception("Network error")
+        mock_head.side_effect = requests.RequestException("Network error")
 
         revisions = ["revision-error"]
         package_id = "error-package"
 
         # Function should handle exceptions gracefully and return False
-        with self.assertRaises(Exception):
-            package_has_sboms(revisions, package_id)
+        result = package_has_sboms(revisions, package_id)
+        self.assertFalse(result)
 
     @patch("webapp.store.views.requests.head")
     @patch("webapp.store.views.device_gateway_sbom.get_endpoint_url")

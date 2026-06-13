@@ -106,27 +106,29 @@ class Emailer:
             logger.error(f"Unexpected error sending email: {e}")
             raise EmailerError(f"Failed to send email: {e}")
 
+    def _send_in_background(self, *args):
+        try:
+            self._send(*args)
+        except EmailerError:
+            # _send has already logged the failure; nothing can
+            # observe an exception raised in a detached thread.
+            pass
+
     def send_email(
         self, subject: str, body: str, to_email: Union[str, List[str]]
     ):
-        Thread(target=self._send, args=(subject, body, to_email)).start()
+        Thread(
+            target=self._send_in_background, args=(subject, body, to_email)
+        ).start()
 
     def send_email_template(
         self, to_email: str, subject: str, template_path: str, context: dict
     ):
         body = render_template(template_path, **context)
         Thread(
-            target=self._send, args=(subject, body, to_email, "html")
+            target=self._send_in_background,
+            args=(subject, body, to_email, "html"),
         ).start()
-
-
-smtp_config = SMTPConfig(
-    host=os.getenv("SMTP_HOST", None),
-    port=int(os.getenv("SMTP_PORT", 587)),
-    username=os.getenv("SMTP_USER", None),
-    password=os.getenv("SMTP_PASSWORD", None),
-    domain=os.getenv("SMTP_DOMAIN", "canonical.com"),
-)
 
 
 def get_emailer() -> Emailer:

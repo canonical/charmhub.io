@@ -1,3 +1,5 @@
+import logging
+
 import requests
 
 from redis_cache.cache_utility import redis_cache
@@ -6,8 +8,26 @@ from webapp.packages.logic import parse_package_for_card
 from webapp.observability.utils import trace_function
 from webapp.store_api import publisher_gateway
 
+logger = logging.getLogger(__name__)
+
 DISCOURSE_URL = "https://discourse.charmhub.io"
 DOCS_URL = "https://canonical-juju.readthedocs-hosted.com/"
+
+# Discourse category excluded from search results
+EXCLUDED_DISCOURSE_CATEGORY_ID = 22
+
+
+def attach_posts(data, topics):
+    """
+    Attach the first matching post from a Discourse search
+    response to each topic.
+    """
+    posts_by_topic_id = {}
+    for post in data.get("posts", []):
+        posts_by_topic_id.setdefault(post["topic_id"], post)
+
+    for topic in topics:
+        topic["post"] = posts_by_topic_id.get(topic["id"])
 
 
 @trace_function
@@ -41,21 +61,23 @@ def search_topics(
         if cached_page:
             return cached_page
         else:
-            resp = requests.get(
-                f"{DISCOURSE_URL}/search.json?q={query}&page={page}"
-            )
-            topics = resp.json().get("topics", [])
-            for topic in topics:
-                post = next(
-                    (
-                        post
-                        for post in resp.json()["posts"]
-                        if post["topic_id"] == topic["id"]
-                    ),
-                    None,
+            try:
+                resp = requests.get(
+                    f"{DISCOURSE_URL}/search.json",
+                    params={"q": query, "page": page},
+                    timeout=10,
                 )
-                topic["post"] = post
-            topics = [topic for topic in topics if topic["category_id"] != 22]
+                data = resp.json()
+            except (requests.RequestException, ValueError):
+                logger.exception("Discourse topic search failed")
+                return []
+            topics = data.get("topics", [])
+            attach_posts(data, topics)
+            topics = [
+                topic
+                for topic in topics
+                if topic["category_id"] != EXCLUDED_DISCOURSE_CATEGORY_ID
+            ]
             redis_cache.set(key, topics, ttl=3600)
             return topics
 
@@ -79,23 +101,21 @@ def search_topics(
             page += 1
             continue
 
-        resp = requests.get(
-            f"{DISCOURSE_URL}/search.json?q={query}&page={page}"
-        )
-        data = resp.json()
+        try:
+            resp = requests.get(
+                f"{DISCOURSE_URL}/search.json",
+                params={"q": query, "page": page},
+                timeout=10,
+            )
+            data = resp.json()
+        except (requests.RequestException, ValueError):
+            # Stop paging and return what we have so far.
+            logger.exception("Discourse topic search failed")
+            break
         topics = data.get("topics", [])
 
         if topics:
-            for topic in topics:
-                post = next(
-                    (
-                        post
-                        for post in data["posts"]
-                        if post["topic_id"] == topic["id"]
-                    ),
-                    None,
-                )
-                topic["post"] = post
+            attach_posts(data, topics)
             redis_cache.set(key, topics, ttl=3600)
             result.extend(topics)
             page += 1
@@ -105,15 +125,24 @@ def search_topics(
             if cached_next_topics:
                 next_topics = cached_next_topics
             else:
-                next_resp = requests.get(
-                    f"{DISCOURSE_URL}/search.json?q={query}&page={page}"
-                )
-                next_topics = [
-                    topic
-                    for topic in next_resp.json().get("topics", [])
-                    if topic["category_id"] != 22
-                ]
-                redis_cache.set(key, next_topics, ttl=3600)
+                try:
+                    next_resp = requests.get(
+                        f"{DISCOURSE_URL}/search.json",
+                        params={"q": query, "page": page},
+                        timeout=10,
+                    )
+                    next_topics = [
+                        topic
+                        for topic in next_resp.json().get("topics", [])
+                        if topic["category_id"]
+                        != EXCLUDED_DISCOURSE_CATEGORY_ID
+                    ]
+                    redis_cache.set(key, next_topics, ttl=3600)
+                except (requests.RequestException, ValueError):
+                    # Treat a failed look-ahead as "no next page";
+                    # don't cache the failure.
+                    logger.exception("Discourse topic search failed")
+                    next_topics = []
             if not next_topics or next_topics[0]["id"] == topics[0]["id"]:
                 more_pages = False
         else:
@@ -142,12 +171,16 @@ def search_docs(term: str) -> dict:
     results = redis_cache.get(key, expected_type=list)
     if results:
         return results
-    search_url = (
-        f"{DOCS_URL}/_/api/v3/search/?q=project%3Acanonical-juju+{term}"
-    )
-
-    resp = requests.get(search_url)
-    data = resp.json()
+    try:
+        resp = requests.get(
+            f"{DOCS_URL}/_/api/v3/search/",
+            params={"q": f"project:canonical-juju {term}"},
+            timeout=10,
+        )
+        data = resp.json()
+    except (requests.RequestException, ValueError):
+        logger.exception("ReadTheDocs search failed")
+        return []
 
     results = data.get("results", [])
     redis_cache.set(key, results, ttl=3600)
