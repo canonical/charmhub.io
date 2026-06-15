@@ -1,56 +1,30 @@
 const DRAFT_STORAGE_PREFIX = "solution-edit-draft";
 const DRAFT_SAVE_DELAY = 500;
 const DRAFT_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
-const REPEATED_FIELD_CONFIGS = [
-  [
-    "useful_links_title[]",
-    "add-useful-link",
-    ".useful-link-item",
-    ".remove-useful-link",
-    "useful-links-list",
-  ],
-  [
-    "use_cases_title[]",
-    "add-use-case",
-    ".use-case-item",
-    ".remove-use-case",
-    "use-cases-list",
-  ],
-  [
-    "maintainers_email[]",
-    "add-maintainer",
-    ".maintainer-item",
-    ".remove-maintainer",
-    "maintainers-list",
-  ],
-  [
-    "platform_version[]",
-    "add-platform-version",
-    ".platform-version-item",
-    ".remove-platform-version",
-    "platform-version-list",
-  ],
-  [
-    "platform_prerequisites[]",
-    "add-platform-prerequisite",
-    ".platform-prerequisite-item",
-    ".remove-platform-prerequisite",
-    "platform-prerequisites-list",
-  ],
-  [
-    "juju_versions[]",
-    "add-juju-version",
-    ".juju-version-item",
-    ".remove-juju-version",
-    "juju-versions-list",
-  ],
-];
-const DRAFT_ARRAY_FIELD_NAMES = [
-  ...REPEATED_FIELD_CONFIGS.map(([name]) => name),
+const EXTRA_ARRAY_FIELD_NAMES = [
   "useful_links_url[]",
   "use_cases_description[]",
   "charms[]",
 ];
+
+function getRepeatedFieldConfigs() {
+  return Array.from(
+    document.querySelectorAll("[data-autosave-repeated-field]")
+  ).map((container) => ({
+    addButton: document.getElementById(container.dataset.autosaveAddButton),
+    container,
+    itemSelector: container.dataset.autosaveItemSelector,
+    name: container.dataset.autosaveRepeatedField,
+    removeSelector: container.dataset.autosaveRemoveSelector,
+  }));
+}
+
+function getArrayFieldNames() {
+  return [
+    ...getRepeatedFieldConfigs().map(({ name }) => name),
+    ...EXTRA_ARRAY_FIELD_NAMES,
+  ];
+}
 
 function getDraftStorageKey(form) {
   return `${DRAFT_STORAGE_PREFIX}:${window.location.pathname}:${form.getAttribute(
@@ -74,7 +48,7 @@ function getFormValues(form) {
   }
 
   // keep empty repeated fields in the draft so removed items stay removed
-  DRAFT_ARRAY_FIELD_NAMES.forEach((name) => {
+  getArrayFieldNames().forEach((name) => {
     if (!values[name]) {
       values[name] = [];
     }
@@ -149,13 +123,11 @@ function getLocalDraft(form) {
 }
 
 function restoreRepeatedFields(draftValues) {
-  REPEATED_FIELD_CONFIGS.forEach(
-    ([name, addButtonId, itemSelector, removeSelector, containerId]) => {
+  getRepeatedFieldConfigs().forEach(
+    ({ addButton, container, itemSelector, name, removeSelector }) => {
       const values = draftValues[name];
-      const container = document.getElementById(containerId);
-      const addButton = document.getElementById(addButtonId);
 
-      if (!values || !container || !addButton) {
+      if (!values || !addButton || !itemSelector || !removeSelector) {
         return;
       }
 

@@ -98,7 +98,7 @@
   </div>
   <div class="col-8 col-x-large-6">
     <div class="p-form-validation" id="platform-version-section">
-      <div id="platform-version-list">
+      <div id="platform-version-list" data-autosave-repeated-field="platform_version[]" data-autosave-add-button="add-platform-version" data-autosave-item-selector=".platform-version-item" data-autosave-remove-selector=".remove-platform-version">
         {% if solution['deployable-on'] and solution['deployable-on'][0] and solution['deployable-on'][0].version %}
           {% for version in solution['deployable-on'][0].version %}
             <div class="platform-version-item p-form--inline">
@@ -131,7 +131,7 @@
   </div>
   <div class="col-8 col-x-large-6">
     <div id="platform-prerequisites-section">
-      <div id="platform-prerequisites-list">
+      <div id="platform-prerequisites-list" data-autosave-repeated-field="platform_prerequisites[]" data-autosave-add-button="add-platform-prerequisite" data-autosave-item-selector=".platform-prerequisite-item" data-autosave-remove-selector=".remove-platform-prerequisite">
         {% if solution['deployable-on'] and solution['deployable-on'][0] and solution['deployable-on'][0].prerequisites %}
           {% for prerequisite in solution['deployable-on'][0].prerequisites %}
             <div class="platform-prerequisite-item p-form--inline">
@@ -162,7 +162,7 @@
   </div>
   <div class="col-8 col-x-large-6">
     <div class="p-form-validation" id="juju-versions-section">
-      <div id="juju-versions-list">
+      <div id="juju-versions-list" data-autosave-repeated-field="juju_versions[]" data-autosave-add-button="add-juju-version" data-autosave-item-selector=".juju-version-item" data-autosave-remove-selector=".remove-juju-version">
         {% if solution.compatibility and solution.compatibility.juju_versions %}
           {% for version in solution.compatibility.juju_versions %}
             <div class="juju-version-item p-form--inline">

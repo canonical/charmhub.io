@@ -38,7 +38,7 @@
   </div>
   <div class="col-8 col-x-large-6">
     <div class="p-form-validation" id="use-cases-section">
-      <div id="use-cases-list" data-validation-required="true">
+      <div id="use-cases-list" data-validation-required="true" data-autosave-repeated-field="use_cases_title[]" data-autosave-add-button="add-use-case" data-autosave-item-selector=".use-case-item" data-autosave-remove-selector=".remove-use-case">
         {% if solution.use_cases %}
           {% for use_case in solution.use_cases %}
             <div class="use-case-item">
