@@ -57,6 +57,11 @@
 
 <section class="p-strip is-shallow">
   <div class="u-fixed-width">
+    <div id="solution-submit-error" class="p-notification p-notification--negative u-hide" role="alert">
+      <div class="p-notification__content">
+        <p class="p-notification__message"></p>
+      </div>
+    </div>
     <form class="p-form" method="POST" action="{{ url_for('publisher.submit_edit_solution', hash=solution.hash) }}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <div class="u-align--right">

@@ -15,6 +15,14 @@ function initConfirmationModal(config) {
   let submitter = null;
   const originalButtonText = confirmButton.textContent;
 
+  const showSubmitError = (message) => {
+    const notification = document.getElementById("solution-submit-error");
+    notification.querySelector(".p-notification__message").textContent =
+      message;
+    notification.classList.remove("u-hide");
+    notification.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
   const submitForm = async () => {
     formSubmitted = true;
 
@@ -25,7 +33,9 @@ function initConfirmationModal(config) {
         formSubmitted = false;
         confirmButton.textContent = originalButtonText;
         confirmButton.disabled = false;
-        alert(error.message || "Unable to submit the form. Please try again.");
+        showSubmitError(
+          error.message || "Unable to submit the form. Please try again."
+        );
         return;
       }
     }
