@@ -58,7 +58,7 @@
   </div>
   <div class="col-8 col-x-large-6">
     <div class="p-form-validation" id="maintainers-section">
-      <div id="maintainers-list" data-autosave-repeated-field="maintainers_email[]" data-autosave-add-button="add-maintainer" data-autosave-item-selector=".maintainer-item" data-autosave-remove-selector=".remove-maintainer">
+      <div id="maintainers-list" data-autosave-multivalue-field="maintainers_email[]" data-autosave-add-button="add-maintainer" data-autosave-item-selector=".maintainer-item" data-autosave-remove-selector=".remove-maintainer">
         {% if solution.maintainers %}
           {% for maintainer in solution.maintainers %}
             <div class="maintainer-item p-form--inline">

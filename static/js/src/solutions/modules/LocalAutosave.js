@@ -7,21 +7,21 @@ const EXTRA_ARRAY_FIELD_NAMES = [
   "charms[]",
 ];
 
-function getRepeatedFieldConfigs() {
+function getMultivalueFieldConfigs() {
   return Array.from(
-    document.querySelectorAll("[data-autosave-repeated-field]")
+    document.querySelectorAll("[data-autosave-multivalue-field]")
   ).map((container) => ({
     addButton: document.getElementById(container.dataset.autosaveAddButton),
     container,
     itemSelector: container.dataset.autosaveItemSelector,
-    name: container.dataset.autosaveRepeatedField,
+    name: container.dataset.autosaveMultivalueField,
     removeSelector: container.dataset.autosaveRemoveSelector,
   }));
 }
 
 function getArrayFieldNames() {
   return [
-    ...getRepeatedFieldConfigs().map(({ name }) => name),
+    ...getMultivalueFieldConfigs().map(({ name }) => name),
     ...EXTRA_ARRAY_FIELD_NAMES,
   ];
 }
@@ -47,7 +47,7 @@ function getFormValues(form) {
     values[name].push(value);
   }
 
-  // keep empty repeated fields in the draft so removed items stay removed
+  // keep empty multivalue fields in the draft so removed items stay removed
   getArrayFieldNames().forEach((name) => {
     if (!values[name]) {
       values[name] = [];
@@ -122,8 +122,8 @@ function getLocalDraft(form) {
   }
 }
 
-function restoreRepeatedFields(draftValues) {
-  getRepeatedFieldConfigs().forEach(
+function restoreMultivalueFields(draftValues) {
+  getMultivalueFieldConfigs().forEach(
     ({ addButton, container, itemSelector, name, removeSelector }) => {
       const values = draftValues[name];
 
@@ -187,7 +187,7 @@ function restoreLocalDraft(form) {
     return;
   }
 
-  restoreRepeatedFields(draft.values);
+  restoreMultivalueFields(draft.values);
   restoreCharms(draft.values);
 
   Object.entries(draft.values).forEach(([name, values]) => {
