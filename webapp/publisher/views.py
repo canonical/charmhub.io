@@ -925,7 +925,6 @@ def cleanup_old_previews():
 
 
 @publisher.route("/solutions/edit/<hash>", methods=["POST"])
-@csrf.exempt
 @login_required
 def submit_edit_solution(hash):
     # Get solution data from backend first
