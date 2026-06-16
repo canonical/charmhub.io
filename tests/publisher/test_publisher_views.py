@@ -249,7 +249,7 @@ class TestPublisherViews(unittest.TestCase):
             "/accept-invite",
             data={"token": "test-token", "package": "test-package"},
         )
-        self.assertEqual(res.status_code, 500)
+        self.assertEqual(res.status_code, 401)
         self.assertEqual(res.json["message"], "Invite token has expired")
 
     @patch("webapp.store_api.publisher_gateway.accept_invite")
@@ -261,7 +261,7 @@ class TestPublisherViews(unittest.TestCase):
             "/accept-invite",
             data={"token": "test-token", "package": "test-package"},
         )
-        self.assertEqual(res.status_code, 500)
+        self.assertEqual(res.status_code, 400)
         self.assertEqual(res.json["message"], "Invite token has expired")
 
     @patch("webapp.store_api.publisher_gateway.reject_invite")
