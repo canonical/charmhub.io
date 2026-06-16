@@ -15,6 +15,10 @@ function initConfirmationModal(config) {
   let submitter = null;
   const originalButtonText = confirmButton.textContent;
 
+  const hideSubmitError = () => {
+    document.getElementById("solution-submit-error")?.classList.add("u-hide");
+  };
+
   const showSubmitError = (message) => {
     const notification = document.getElementById("solution-submit-error");
     notification.querySelector(".p-notification__message").textContent =
@@ -33,6 +37,7 @@ function initConfirmationModal(config) {
         formSubmitted = false;
         confirmButton.textContent = originalButtonText;
         confirmButton.disabled = false;
+        modal.classList.add("u-hide");
         showSubmitError(
           error.message || "Unable to submit the form. Please try again."
         );
@@ -53,6 +58,7 @@ function initConfirmationModal(config) {
     }
 
     submitter = event.submitter;
+    hideSubmitError();
 
     event.preventDefault();
     event.stopPropagation();
