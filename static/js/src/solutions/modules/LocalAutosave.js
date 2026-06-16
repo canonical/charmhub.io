@@ -307,8 +307,10 @@ function initLocalAutosave(form) {
   };
 
   initCancelLink(form, discardDraft);
+  // input and change fire immediately when a field is edited
   form.addEventListener("input", scheduleSave);
   form.addEventListener("change", scheduleSave);
+  // use setTimeout to let clicks on add/remove buttons update multivalue fields before saving
   form.addEventListener("click", () => window.setTimeout(scheduleSave, 0));
   form.addEventListener("submit", (event) => {
     if (!event.defaultPrevented) {
