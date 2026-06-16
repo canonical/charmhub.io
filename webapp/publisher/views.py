@@ -13,7 +13,6 @@ from flask import (
 from flask.json import jsonify
 from flask_wtf.csrf import generate_csrf
 from webapp.config import DETAILS_VIEW_REGEX
-from webapp.extensions import csrf
 from webapp.decorators import login_required, cached_redirect
 from webapp.publisher.logic import get_all_architectures, process_releases
 from webapp.observability.utils import trace_function
