@@ -1,5 +1,9 @@
 from redis_cache.cache_utility import redis_cache
-from canonicalwebteam.exceptions import StoreApiError, StoreApiResponseErrorList
+from canonicalwebteam.exceptions import (
+    StoreApiError,
+    StoreApiResponseError,
+    StoreApiResponseErrorList,
+)
 from flask import (
     Blueprint,
     flash,
@@ -347,6 +351,9 @@ def accept_post_invite():
             for error in error_list.errors
         ]
         res["message"] = " ".join(error_messages)
+    except StoreApiResponseError as error:
+        res["success"] = False
+        res["message"] = str(error)
     except Exception:
         res["success"] = False
         res["message"] = "An error occured"
