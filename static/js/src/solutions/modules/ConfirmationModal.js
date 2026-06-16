@@ -13,9 +13,45 @@ function initConfirmationModal(config) {
 
   let formSubmitted = false;
   let submitter = null;
+  const originalButtonText = confirmButton.textContent;
 
-  const submitForm = () => {
+  const hideSubmitError = () => {
+    document.getElementById("solution-submit-error")?.classList.add("u-hide");
+  };
+
+  const showSubmitError = (message) => {
+    const notification = document.getElementById("solution-submit-error");
+    const notificationMessage = notification?.querySelector(
+      ".p-notification__message"
+    );
+
+    if (!notification || !notificationMessage) {
+      console.error("Submit error notification: element not found");
+      return;
+    }
+
+    notificationMessage.textContent = message;
+    notification.classList.remove("u-hide");
+    notification.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
+  const submitForm = async () => {
     formSubmitted = true;
+
+    if (typeof config.beforeSubmit === "function") {
+      try {
+        await config.beforeSubmit(form, submitter);
+      } catch (error) {
+        formSubmitted = false;
+        confirmButton.textContent = originalButtonText;
+        confirmButton.disabled = false;
+        modal.classList.add("u-hide");
+        showSubmitError(
+          error.message || "Unable to submit the form. Please try again."
+        );
+        return;
+      }
+    }
 
     if (form.requestSubmit) {
       form.requestSubmit(submitter || undefined);
@@ -30,6 +66,7 @@ function initConfirmationModal(config) {
     }
 
     submitter = event.submitter;
+    hideSubmitError();
 
     event.preventDefault();
     event.stopPropagation();
@@ -56,8 +93,6 @@ function initConfirmationModal(config) {
     modal.classList.remove("u-hide");
     confirmButton.focus();
   });
-
-  const originalButtonText = confirmButton.textContent;
 
   confirmButton.addEventListener("click", () => {
     const spinner = document.createElement("i");

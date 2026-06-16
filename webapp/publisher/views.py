@@ -11,8 +11,8 @@ from flask import (
     make_response,
 )
 from flask.json import jsonify
+from flask_wtf.csrf import generate_csrf
 from webapp.config import DETAILS_VIEW_REGEX
-from webapp.extensions import csrf
 from webapp.decorators import login_required, cached_redirect
 from webapp.publisher.logic import get_all_architectures, process_releases
 from webapp.observability.utils import trace_function
@@ -88,6 +88,15 @@ publisher = Blueprint(
     template_folder="/templates",
     static_folder="/static",
 )
+
+
+@publisher.route("/api/solutions/csrf-token")
+@login_required
+def solutions_csrf_token():
+    response = jsonify({"csrf_token": generate_csrf()})
+    response.headers["Cache-Control"] = "no-store"
+    response.headers.add("Vary", "Cookie")
+    return response
 
 
 @trace_function
@@ -915,7 +924,6 @@ def cleanup_old_previews():
 
 
 @publisher.route("/solutions/edit/<hash>", methods=["POST"])
-@csrf.exempt
 @login_required
 def submit_edit_solution(hash):
     # Get solution data from backend first

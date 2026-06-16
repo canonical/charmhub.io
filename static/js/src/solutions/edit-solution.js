@@ -1,6 +1,59 @@
 import DynamicFormManager from "./modules/DynamicFormManager.js";
 import CharmSearchBox from "./modules/CharmSearchBox.js";
 import initConfirmationModal from "./modules/ConfirmationModal.js";
+import initLocalAutosave from "./modules/LocalAutosave.js";
+
+const CSRF_TOKEN_ENDPOINT = "/api/solutions/csrf-token";
+const CSRF_REFRESH_ACTIONS = [
+  "preview",
+  "save_draft",
+  "submit_for_review",
+  "update",
+];
+const CSRF_REFRESH_ERROR =
+  "Unable to refresh your session token. Please try again.";
+
+async function refreshCsrfToken(form) {
+  const response = await fetch(CSRF_TOKEN_ENDPOINT, {
+    method: "GET",
+    cache: "no-store",
+    credentials: "same-origin",
+    headers: {
+      Accept: "application/json",
+    },
+  });
+
+  if (
+    !response.ok ||
+    !response.headers.get("content-type")?.includes("application/json")
+  ) {
+    throw new Error(CSRF_REFRESH_ERROR);
+  }
+
+  let data;
+  try {
+    data = await response.json();
+  } catch (_error) {
+    throw new Error(CSRF_REFRESH_ERROR);
+  }
+
+  const csrfInput = form.querySelector('input[name="csrf_token"]');
+
+  if (!data.csrf_token || !csrfInput) {
+    throw new Error(CSRF_REFRESH_ERROR);
+  }
+
+  csrfInput.value = data.csrf_token;
+}
+
+function refreshCsrfTokenBeforeSubmit(form, submitter) {
+  const action =
+    submitter?.value || new FormData(form).get("action") || "save_draft";
+
+  if (CSRF_REFRESH_ACTIONS.includes(action)) {
+    return refreshCsrfToken(form);
+  }
+}
 
 function getEditMessage(formData, form) {
   const solutionTitle =
@@ -20,24 +73,30 @@ function getEditMessage(formData, form) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+  const form = document.querySelector("form.p-form");
+
+  if (!form) {
+    return;
+  }
+
   initConfirmationModal({
     formSelector: ".p-form",
     getMessage: getEditMessage,
+    beforeSubmit: refreshCsrfTokenBeforeSubmit,
   });
 
   const previewButton = document.getElementById("preview-button");
 
   if (previewButton) {
-    const form = document.querySelector("form.p-form");
-    if (!form) {
-      return;
-    }
-
     const submitPreviewForm = async () => {
       const formData = new FormData(form);
       formData.set("action", "preview");
 
       try {
+        await refreshCsrfToken(form);
+        const csrfInput = form.querySelector('input[name="csrf_token"]');
+        formData.set("csrf_token", csrfInput.value);
+
         const formAction = form.getAttribute("action");
         const response = await fetch(formAction, {
           method: "POST",
@@ -265,4 +324,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     },
   });
+
+  initLocalAutosave(form);
 });

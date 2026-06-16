@@ -36,7 +36,7 @@
   </div>
   <div class="col-8 col-x-large-6">
     <div id="useful-links-section">
-      <div id="useful-links-list">
+      <div id="useful-links-list" data-autosave-multivalue-field="useful_links_title[]" data-autosave-add-button="add-useful-link" data-autosave-item-selector=".useful-link-item" data-autosave-remove-selector=".remove-useful-link">
         {% if solution.useful_links %}
           {% for link in solution.useful_links %}
             <div class="useful-link-item p-form--inline">
