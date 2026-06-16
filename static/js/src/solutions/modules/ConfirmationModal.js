@@ -21,8 +21,16 @@ function initConfirmationModal(config) {
 
   const showSubmitError = (message) => {
     const notification = document.getElementById("solution-submit-error");
-    notification.querySelector(".p-notification__message").textContent =
-      message;
+    const notificationMessage = notification?.querySelector(
+      ".p-notification__message"
+    );
+
+    if (!notification || !notificationMessage) {
+      console.error("Submit error notification: element not found");
+      return;
+    }
+
+    notificationMessage.textContent = message;
     notification.classList.remove("u-hide");
     notification.scrollIntoView({ behavior: "smooth", block: "center" });
   };

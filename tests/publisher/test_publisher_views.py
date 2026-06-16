@@ -50,6 +50,14 @@ class TestPublisherViews(unittest.TestCase):
         self.assertIn(b"test-email", res.data)
         self.assertIn(b"test-username", res.data)
 
+    def test_solutions_csrf_token(self):
+        res = self.client.get("/api/solutions/csrf-token")
+
+        self.assertEqual(res.status_code, 200)
+        self.assertIn("csrf_token", res.get_json())
+        self.assertEqual(res.headers["Cache-Control"], "no-store")
+        self.assertIn("Cookie", res.headers["Vary"])
+
     @patch("webapp.store_api.publisher_gateway.get_package_metadata")
     def test_get_publisher(self, mock_get_package_metadata):
         mock_get_package_metadata.return_value = {

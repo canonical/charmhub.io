@@ -10,6 +10,8 @@ const CSRF_REFRESH_ACTIONS = [
   "submit_for_review",
   "update",
 ];
+const CSRF_REFRESH_ERROR =
+  "Unable to refresh your session token. Please try again.";
 
 async function refreshCsrfToken(form) {
   const response = await fetch(CSRF_TOKEN_ENDPOINT, {
@@ -21,15 +23,24 @@ async function refreshCsrfToken(form) {
     },
   });
 
-  if (!response.ok) {
-    throw new Error("Unable to refresh your session token. Please try again.");
+  if (
+    !response.ok ||
+    !response.headers.get("content-type")?.includes("application/json")
+  ) {
+    throw new Error(CSRF_REFRESH_ERROR);
   }
 
-  const data = await response.json();
+  let data;
+  try {
+    data = await response.json();
+  } catch (_error) {
+    throw new Error(CSRF_REFRESH_ERROR);
+  }
+
   const csrfInput = form.querySelector('input[name="csrf_token"]');
 
   if (!data.csrf_token || !csrfInput) {
-    throw new Error("Unable to refresh your session token. Please try again.");
+    throw new Error(CSRF_REFRESH_ERROR);
   }
 
   csrfInput.value = data.csrf_token;

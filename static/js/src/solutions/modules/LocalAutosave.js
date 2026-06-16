@@ -279,9 +279,15 @@ function initLocalAutosave(form) {
 
   // compare against the restored state so untouched forms do not create drafts
   const initialValues = serializeForm(form);
+  let isDirty = false;
   let lastAutosavedValues = initialValues;
   const saveChanges = () => {
     const currentValues = serializeForm(form);
+
+    if (currentValues === lastAutosavedValues) {
+      isDirty = false;
+      return;
+    }
 
     // remove the draft if the user returns the form to its starting values
     if (currentValues === initialValues) {
@@ -290,18 +296,19 @@ function initLocalAutosave(form) {
       saveLocalDraft(form);
     }
 
+    isDirty = false;
     lastAutosavedValues = currentValues;
   };
-  const hasChanges = () => serializeForm(form) !== lastAutosavedValues;
   const discardDraft = () => {
     skipBeforeUnloadSave = true;
     window.clearTimeout(saveTimeout);
     removeLocalDraft(form);
   };
   const scheduleSave = () => {
+    isDirty = true;
     window.clearTimeout(saveTimeout);
 
-    if (!skipBeforeUnloadSave && hasChanges()) {
+    if (!skipBeforeUnloadSave) {
       saveTimeout = window.setTimeout(saveChanges, DRAFT_SAVE_DELAY);
     }
   };
@@ -319,7 +326,7 @@ function initLocalAutosave(form) {
   });
 
   window.addEventListener("beforeunload", () => {
-    if (!skipBeforeUnloadSave && hasChanges()) {
+    if (!skipBeforeUnloadSave && isDirty) {
       saveChanges();
     }
   });
