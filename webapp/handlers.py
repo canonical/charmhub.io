@@ -27,7 +27,6 @@ CSP = {
     ],
     "script-src-elem": [
         "'self'",
-        "data:",
         "assets.ubuntu.com",
         "www.googletagmanager.com",
         "*.crazyegg.com",
@@ -41,7 +40,6 @@ CSP = {
     ],
     "script-src": [
         "'self'",
-        "data:",
         "blob:",
         "'unsafe-eval'",
         "'unsafe-hashes'",
