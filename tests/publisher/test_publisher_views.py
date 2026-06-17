@@ -242,12 +242,27 @@ class TestPublisherViews(unittest.TestCase):
     @patch("webapp.store_api.publisher_gateway.accept_invite")
     def test_accept_post_invite_failed(self, mock_accept_invite):
         mock_accept_invite.return_value.status_code = 401
+        mock_accept_invite.return_value.json.return_value = {
+            "error-list": [{"message": "Invite token has expired"}]
+        }
         res = self.client.post(
             "/accept-invite",
             data={"token": "test-token", "package": "test-package"},
         )
-        self.assertEqual(res.status_code, 500)
-        self.assertEqual(res.json["message"], "An error occured")
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(res.json["message"], "Invite token has expired")
+
+    @patch("webapp.store_api.publisher_gateway.accept_invite")
+    def test_accept_post_invite_error_list(self, mock_accept_invite):
+        mock_accept_invite.side_effect = StoreApiResponseErrorList(
+            "test-error", 400, [{"message": "Invite token has expired"}]
+        )
+        res = self.client.post(
+            "/accept-invite",
+            data={"token": "test-token", "package": "test-package"},
+        )
+        self.assertEqual(res.status_code, 400)
+        self.assertEqual(res.json["message"], "Invite token has expired")
 
     @patch("webapp.store_api.publisher_gateway.reject_invite")
     def test_reject_post_invite(self, mock_reject_invite):

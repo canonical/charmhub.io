@@ -36,21 +36,26 @@ class TestEmailer(unittest.TestCase):
     @patch("smtplib.SMTP")
     def test_send_email_template_success(self, mock_smtp):
         with patch("webapp.utils.emailer.render_template") as mock_render:
-            mock_render.return_value = "<h1>Hello</h1>"
-            mock_server = MagicMock()
-            mock_smtp.return_value.__enter__.return_value = mock_server
+            with patch("webapp.utils.emailer.Thread") as mock_thread:
+                mock_render.return_value = "<h1>Hello</h1>"
+                mock_server = MagicMock()
+                mock_smtp.return_value.__enter__.return_value = mock_server
 
-            self.emailer.send_email_template(
-                to_email="recipient@test.com",
-                subject="Test Template",
-                template_path="template.html",
-                context={"name": "Test"},
-            )
+                self.emailer.send_email_template(
+                    to_email="recipient@test.com",
+                    subject="Test Template",
+                    template_path="template.html",
+                    context={"name": "Test"},
+                )
 
-            mock_render.assert_called_once_with(
-                "template.html", **{"name": "Test"}
-            )
-            mock_server.send_message.assert_called()
+                target = mock_thread.call_args.kwargs["target"]
+                args = mock_thread.call_args.kwargs["args"]
+                target(*args)
+
+                mock_render.assert_called_once_with(
+                    "template.html", **{"name": "Test"}
+                )
+                mock_server.send_message.assert_called()
 
     def test_validate_config_missing_fields(self):
         incomplete_config = SMTPConfig(
