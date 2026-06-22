@@ -19,6 +19,14 @@
           </p>
         </div>
       </div>
+    {% elif solution.status == 'draft' and solution.revision > 1 %}
+      <div class="p-notification--caution">
+        <div class="p-notification__content">
+          <p class="p-notification__message">
+            You are editing a draft update. The published version remains live until you click <strong>Update solution</strong>. Updates go live immediately and do not require review.
+          </p>
+        </div>
+      </div>
     {% elif solution.status == 'pending_metadata_review' %}
       <div class="p-notification--information">
         <div class="p-notification__content">
@@ -36,7 +44,7 @@
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}
-          <div class="p-notification p-notification--{{ 'negative' if category == 'negative' else 'positive' }}" role="alert">
+          <div class="p-notification p-notification--{{ category }}" role="alert">
             <p class="p-notification__response">{{ message }}</p>
           </div>
         {% endfor %}
@@ -69,6 +77,9 @@
         <button type="button" id="preview-button" class="p-button">
           Preview
         </button>
+        <button type="submit" name="action" value="save_draft" class="p-button" formnovalidate>
+          Save draft
+        </button>
         {% if solution.status == 'draft' and solution.revision == 1 %}
           <button type="submit" name="action" value="submit_for_review" class="p-button--positive">
             Submit metadata for review
@@ -77,13 +88,9 @@
           <button type="submit" name="action" value="submit_for_review" class="p-button--positive">
             Update and resubmit for review
           </button>
-        {% elif solution.status == 'published' %}
+        {% elif solution.status == 'published' or (solution.status == 'draft' and solution.revision > 1) %}
           <button type="submit" name="action" value="update" class="p-button--positive">
             Update solution
-          </button>
-        {% else %}
-          <button type="submit" name="action" value="save_draft" class="p-button--positive">
-            Save draft
           </button>
         {% endif %}
       </div>

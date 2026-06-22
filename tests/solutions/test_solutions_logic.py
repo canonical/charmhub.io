@@ -3,6 +3,7 @@ from unittest.mock import patch, MagicMock
 from webapp.solutions.logic import (
     get_solution_from_backend,
     get_publisher_solutions,
+    group_solution_drafts,
 )
 
 
@@ -36,13 +37,11 @@ class TestSolutionsLogic(unittest.TestCase):
     ):
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.json.return_value = [
-            {
-                "hash": "123",
-                "name": "Test Solution",
-                "creator": {"email": "creator@example.com"},
-            }
-        ]
+        mock_response.json.return_value = {
+            "hash": "123",
+            "name": "Test Solution",
+            "creator": {"email": "creator@example.com"},
+        }
         mock_auth_request.return_value = mock_response
 
         result = get_solution_from_backend("123", prefer_authenticated=True)
@@ -84,8 +83,8 @@ class TestSolutionsLogic(unittest.TestCase):
         self, mock_session, mock_auth_request
     ):
         mock_auth_response = MagicMock()
-        mock_auth_response.status_code = 200
-        mock_auth_response.json.return_value = [{"hash": "other"}]
+        mock_auth_response.status_code = 404
+        mock_auth_response.json.return_value = {"error": "Solution not found"}
         mock_auth_request.return_value = mock_auth_response
 
         mock_response = MagicMock()
@@ -145,4 +144,76 @@ class TestSolutionsLogic(unittest.TestCase):
         result = get_publisher_solutions("testuser")
 
         self.assertEqual(result, [])
+
+    def test_group_solution_drafts_attaches_draft_to_published(self):
+        published = {"name": "sol", "hash": "pub", "status": "published"}
+        draft = {
+            "name": "sol",
+            "hash": "draft",
+            "status": "draft",
+            "revision": 2,
+            "last_updated": "2026-01-01",
+        }
+
+        result = group_solution_drafts([published, draft])
+
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["hash"], "pub")
+        self.assertEqual(
+            result[0]["draft_update"],
+            {"hash": "draft", "revision": 2, "last_updated": "2026-01-01"},
+        )
+
+    def test_group_solution_drafts_standalone_draft_without_published(self):
+        draft = {
+            "name": "sol",
+            "hash": "draft",
+            "status": "draft",
+            "revision": 2,
+        }
+
+        result = group_solution_drafts([draft])
+
+        self.assertEqual(len(result), 1)
+        self.assertTrue(result[0]["is_draft_update"])
+
+    def test_group_solution_drafts_rev1_draft_is_untouched(self):
+        draft = {
+            "name": "sol",
+            "hash": "draft",
+            "status": "draft",
+            "revision": 1,
+        }
+
+        result = group_solution_drafts([draft])
+
+        self.assertEqual(len(result), 1)
+        self.assertNotIn("is_draft_update", result[0])
+        self.assertNotIn("draft_update", result[0])
+
+    def test_group_solution_drafts_published_without_draft(self):
+        published = {"name": "sol", "hash": "pub", "status": "published"}
+
+        result = group_solution_drafts([published])
+
+        self.assertEqual(len(result), 1)
+        self.assertNotIn("draft_update", result[0])
+
+    def test_group_solution_drafts_preserves_unrelated_solutions(self):
+        published = {"name": "a", "hash": "a-pub", "status": "published"}
+        draft = {
+            "name": "a",
+            "hash": "a-draft",
+            "status": "draft",
+            "revision": 2,
+        }
+        other = {"name": "b", "hash": "b-pub", "status": "published"}
+        pending = {"name": "c", "hash": "c", "status": "pending_metadata_review"}
+
+        result = group_solution_drafts([published, draft, other, pending])
+
+        result_hashes = {solution["hash"] for solution in result}
+        self.assertEqual(result_hashes, {"a-pub", "b-pub", "c"})
+        attached = next(s for s in result if s["hash"] == "a-pub")
+        self.assertEqual(attached["draft_update"]["hash"], "a-draft")
 

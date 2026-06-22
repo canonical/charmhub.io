@@ -25,6 +25,7 @@ from webapp.solutions.logic import (
     get_solution_from_backend,
     update_solution,
     solution_name_exists,
+    group_solution_drafts,
 )
 from webapp.publisher.form_processors import (
     process_solution_form_data,
@@ -298,7 +299,7 @@ def solutions_page():
     username = session["account"]["username"]
 
     # Get solutions data according to launchpad group
-    solutions = get_publisher_solutions(username)
+    solutions = group_solution_drafts(get_publisher_solutions(username))
 
     context = {
         "solutions": solutions,
@@ -903,6 +904,16 @@ def edit_solution_form(hash):
         return redirect("/solutions")
 
     username = session["account"]["username"]
+
+    if solution.get("status") == "published" and solution.get("draft_update"):
+        draft = solution["draft_update"]
+        flash(
+            "A draft update already exists for this solution. "
+            "We've opened that draft so you can continue where you left off.",
+            "information",
+        )
+        return redirect(f"/solutions/edit/{draft['hash']}")
+
     user_teams = get_user_teams_for_solutions(username)
 
     context = {
@@ -963,7 +974,11 @@ def submit_edit_solution(hash):
         return jsonify({"success": True, "preview_key": preview_key})
 
     result = update_solution(
-        username, solution["name"], solution["revision"], form_data
+        username,
+        solution["name"],
+        solution["revision"],
+        form_data,
+        submit=action != "save_draft",
     )
 
     if "error" in result:
@@ -986,7 +1001,12 @@ def submit_edit_solution(hash):
             solution,
         )
 
-    if action == "submit_for_review":
+    if action == "save_draft":
+        flash(
+            f"Your draft for '{form_data['title']}' has been saved.",
+            "positive",
+        )
+    elif action == "submit_for_review":
         flash(
             f"Your solution '{form_data['title']}' "
             "has been submitted for metadata review.",
