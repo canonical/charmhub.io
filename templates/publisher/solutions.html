@@ -66,17 +66,20 @@
     {% else %}
       <div class="u-fixed-width">
         <h2 class="p-heading--4">Published Solutions</h2>
+        <p class="p-form-help-text u-no-max-width">
+          If you save a draft update for an already published solution, use <strong>Edit draft</strong> from this page to continue editing it. The published version remains live until you click <strong>Update solution</strong> from the draft.
+        </p>
       </div>
       <div class="u-fixed-width">
         <table class="p-table--mobile-card" role="grid">
           <thead>
             <tr role="row">
-              <th>Name</th>
-              <th style="width: 15%;">Status</th>
-              <th style="width: 15%;">Visibility</th>
-              <th>Publisher</th>
-              <th>Last Updated</th>
-              <th>Actions</th>
+              <th style="width: 16%;">Name</th>
+              <th style="width: 12%;">Status</th>
+              <th style="width: 8%;">Visibility</th>
+              <th style="width: 15%;">Publisher</th>
+              <th style="width: 12%;">Last Updated</th>
+              <th style="width: 18%;">Actions</th>
             </tr>
           </thead>
           <tbody> 
@@ -96,7 +99,14 @@
                 </div>
               </td>
               <td role="gridcell" aria-label="status">
+                {% if solution.is_draft_update %}
+                  Draft update
+                {% elif solution.draft_update %}
+                  Published<br>
+                  <small class="u-text--muted">Draft update saved</small>
+                {% else %}
                   {{ solution.status | format_solution_status }}
+                {% endif %}
               </td>
               <td role="gridcell" aria-label="visibility">
                 {{ solution.visibility | capitalize }}
@@ -114,9 +124,11 @@
                 {{ solution.last_updated | humanize_date if solution.last_updated else '-' }}
               </td>
               <td role="gridcell" aria-label="actions">
-                <a href="/solutions/preview/{{ solution.hash }}" class="p-button--base is-dense">Preview</a>
-                {% if solution.status in ['draft', 'published', 'pending_metadata_review'] %}
-                  <a href="/solutions/edit/{{ solution.hash }}" class="p-button--base is-dense">Edit</a>
+                <a href="/solutions/preview/{{ solution.draft_update.hash if solution.draft_update else solution.hash }}" class="p-button--base is-dense">{{ 'Preview draft' if solution.draft_update else 'Preview' }}</a>
+                {% if solution.draft_update %}
+                  <a href="/solutions/edit/{{ solution.draft_update.hash }}" class="p-button--base is-dense">Edit draft</a>
+                {% elif solution.status in ['draft', 'published', 'pending_metadata_review'] %}
+                  <a href="/solutions/edit/{{ solution.hash }}" class="p-button--base is-dense">{{ 'Edit draft' if solution.is_draft_update else 'Edit' }}</a>
                 {% endif %}
               </td>
             </tr>

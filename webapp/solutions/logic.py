@@ -62,15 +62,12 @@ def get_solution_from_backend(uuid, prefer_authenticated=False):
             try:
                 auth_resp = make_authenticated_request(
                     "GET",
-                    f"{SOLUTIONS_API_BASE}/publisher/solutions",
+                    f"{SOLUTIONS_API_BASE}/publisher/solutions/by-hash/{uuid}",
                     username,
                     timeout=5,
                 )
                 if auth_resp.status_code == 200:
-                    solutions = auth_resp.json()
-                    for solution in solutions:
-                        if solution.get("hash") == uuid:
-                            return solution
+                    return auth_resp.json()
             except Exception as e:
                 logger.exception(
                     f"Failed to fetch authenticated solution data: {e}"
@@ -160,7 +157,10 @@ def register_solution(username, data):
     return {"error": f"API error ({resp.status_code}): {resp.text}"}
 
 
-def update_solution(username, name, revision, data):
+def update_solution(username, name, revision, data, submit=True):
+    if not submit:
+        data = {**data, "submit_for_review": False}
+
     try:
         resp = make_authenticated_request(
             "PATCH",
@@ -213,3 +213,36 @@ def get_user_teams_for_solutions(username):
         logger.exception(f"Failed to fetch user teams for solutions: {e}")
 
     return []
+
+
+def group_solution_drafts(solutions):
+    published_names = {
+        solution["name"]
+        for solution in solutions
+        if solution.get("status") == "published"
+    }
+    drafts_by_name = {
+        solution["name"]: solution
+        for solution in solutions
+        if solution.get("status") == "draft" and solution.get("revision", 1) > 1
+    }
+
+    for solution in solutions:
+        draft = drafts_by_name.get(solution["name"])
+        if solution.get("status") == "published" and draft:
+            solution["draft_update"] = {
+                "hash": draft["hash"],
+                "revision": draft["revision"],
+                "last_updated": draft.get("last_updated"),
+            }
+        elif solution.get("status") == "draft" and solution.get("revision", 1) > 1:
+            solution["is_draft_update"] = True
+
+    return [
+        solution
+        for solution in solutions
+        if not (
+            solution.get("is_draft_update")
+            and solution.get("name") in published_names
+        )
+    ]

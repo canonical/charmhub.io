@@ -66,17 +66,22 @@ function initConfirmationModal(config) {
     }
 
     submitter = event.submitter;
+    const shouldValidate = !submitter?.formNoValidate;
     hideSubmitError();
 
     event.preventDefault();
     event.stopPropagation();
 
-    if (!form.checkValidity()) {
+    if (shouldValidate && !form.checkValidity()) {
       form.reportValidity();
       return;
     }
 
-    if (window.validateSolutionForm && !window.validateSolutionForm()) {
+    if (
+      shouldValidate &&
+      window.validateSolutionForm &&
+      !window.validateSolutionForm()
+    ) {
       return;
     }
 
