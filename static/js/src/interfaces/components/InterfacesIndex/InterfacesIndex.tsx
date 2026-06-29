@@ -4,7 +4,6 @@ import {
   Strip,
   Row,
   Col,
-  Button,
   MainTable,
   Notification,
   Pagination,
@@ -186,8 +185,7 @@ function InterfacesIndex({ interfacesList }: Props) {
     Math.ceil(filteredInterfaces.length / ITEMS_PER_PAGE)
   );
   const currentPage = Math.min(currentPageNumber, totalPages);
-  const currentPageIndex = currentPage - 1;
-  const startIndex = currentPageIndex * ITEMS_PER_PAGE;
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentItems = filteredInterfaces.slice(
     startIndex,
     startIndex + ITEMS_PER_PAGE
@@ -196,9 +194,7 @@ function InterfacesIndex({ interfacesList }: Props) {
   useEffect(() => {
     if (currentPageNumber > totalPages) {
       updateSearchParams(
-        {
-          page: totalPages > 1 ? totalPages.toString() : "",
-        },
+        { page: totalPages > 1 ? totalPages.toString() : "" },
         false
       );
     }
@@ -219,22 +215,17 @@ function InterfacesIndex({ interfacesList }: Props) {
             <p>
               Interfaces describe the relation between two charms. This
               interface catalogue shows opinionated, standardized interface
-              specifications for charm relations. Each interface outlines the
-              behavior and requirements of charms relating to one another.
-            </p>
-            <p>
-              Most of the content of these pages can be collaboratively
-              discussed and changed. You can help us improve these pages by
-              clicking the button below.
+              specifications for charm relations, outlining the exact behavior
+              and requirements of how charms interact with one another.
             </p>
             <p className="u-no-margin--bottom">
-              <Button
-                element="a"
-                href="https://github.com/canonical/charm-relation-interfaces"
-                appearance="positive"
-              >
-                Contribute
-              </Button>
+              To maintain stability across the ecosystem, all interfaces adhere
+              to a strict standard of backwards compatibility. When designing an
+              interface, follow{" "}
+              <a href="https://documentation.ubuntu.com/charmlibs/how-to/design-relation-interfaces/">
+                these guidelines
+              </a>{" "}
+              to ensure backwards compatibility.
             </p>
           </Col>
         </Row>
@@ -284,15 +275,15 @@ function InterfacesIndex({ interfacesList }: Props) {
               onChange={(event) => {
                 updateSearchParams({ category: event.target.value });
               }}
-              aria-label="Category"
+              aria-label="Categories"
             />
           </Col>
         </Row>
         <MainTable
           headers={[
             {
-              content: "Interface name",
-              heading: "Interface name",
+              content: "Interface",
+              heading: "Interface",
             },
             {
               content: "Status",
@@ -306,26 +297,13 @@ function InterfacesIndex({ interfacesList }: Props) {
               heading: "Summary",
             },
             {
-              content: "Category",
-              heading: "Category",
-            },
-            {
-              content: "Version",
-              heading: "Version",
-              style: {
-                width: "80px",
-              },
-            },
-            {
-              content: "Links",
-              heading: "Links",
+              content: "Categories",
+              heading: "Categories",
             },
           ]}
           rows={currentItems.map((item: InterfaceItem) => {
             const interfaceName = item?.name || "";
             const interfaceStatus = item?.status || "";
-            const libraryLink = item?.links?.library || "";
-            const documentationLink = item?.links?.documentation || "";
             const normalizedInterfaceStatus = normalize(interfaceStatus);
             const interfaceStatusLabel = interfaceStatus
               ? interfaceStatus.charAt(0).toUpperCase() +
@@ -392,38 +370,6 @@ function InterfacesIndex({ interfacesList }: Props) {
                     </>
                   ),
                 },
-                {
-                  content: item?.version?.toString() || "",
-                },
-                {
-                  content: (
-                    <>
-                      {libraryLink && (
-                        <>
-                          <a
-                            className="p-link--external"
-                            href={libraryLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Library
-                          </a>
-                          {documentationLink && <br />}
-                        </>
-                      )}
-                      {documentationLink && (
-                        <a
-                          className="p-link--external"
-                          href={documentationLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Documentation
-                        </a>
-                      )}
-                    </>
-                  ),
-                },
               ],
             };
           })}
@@ -445,14 +391,6 @@ function InterfacesIndex({ interfacesList }: Props) {
             totalItems={filteredInterfaces.length}
           />
         </div>
-        <p>
-          {filteredInterfaces.length > ITEMS_PER_PAGE && (
-            <>
-              {startIndex + 1} &ndash; {startIndex + currentItems.length} of{" "}
-              {filteredInterfaces.length} interfaces
-            </>
-          )}
-        </p>
       </Strip>
     </>
   );

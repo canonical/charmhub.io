@@ -199,7 +199,7 @@ export const App = () => {
                       </span>
                     </div>
                     <div className="p-divider__block">
-                      <a href="/interfaces">
+                      <a href="/integrations">
                         All integration interfaces &rsaquo;
                       </a>
                     </div>
