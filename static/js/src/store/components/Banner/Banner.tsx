@@ -13,19 +13,6 @@ function Banner({ searchRef }: Props) {
         <Col size={6} className="col-start-large-4">
           <h1 className="p-heading--2">The Charm Collection</h1>
           <SearchInput searchRef={searchRef} />
-          <h2 className="p-text--small-caps u-text--muted u-no-margin--bottom">
-            developer resources
-          </h2>
-          <Row className="p-divider">
-            <Col size={1} className="p-divider__block">
-              <a href="/integrations">Interfaces</a>
-            </Col>
-            <Col size={3} className="p-divider__block">
-              <a href="https://documentation.ubuntu.com/charmlibs/">
-                Charm development libraries
-              </a>
-            </Col>
-          </Row>
         </Col>
       </Row>
     </Strip>

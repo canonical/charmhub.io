@@ -190,8 +190,8 @@ export const App = () => {
           <Col size={9} className="p-details-tab__content__body">
             <Row className="p-details-tab__integrations-header">
               <Col size={5}>
-                <Row className="p-divider p-details-tab__integrations-header-title">
-                  <div className="u-flex">
+                <Row className="p-details-tab__integrations-header-title">
+                  <div className="p-divider u-flex">
                     <div className="p-divider__block">
                       <span>
                         {integrationCount} integration
