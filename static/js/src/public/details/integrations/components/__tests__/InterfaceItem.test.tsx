@@ -155,9 +155,7 @@ describe("InterfaceItem Component", () => {
       );
     });
 
-    const noCharmsMessage = screen.getByText(
-      /No publicly listed charms/i
-    );
+    const noCharmsMessage = screen.getByText(/No publicly listed charms/i);
     expect(noCharmsMessage).toBeInTheDocument();
   });
 
