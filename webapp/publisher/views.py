@@ -1,5 +1,6 @@
 from redis_cache.cache_utility import redis_cache
 from canonicalwebteam.exceptions import (
+    PublisherMacaroonRefreshRequired,
     StoreApiError,
     StoreApiResponseError,
     StoreApiResponseErrorList,
@@ -346,6 +347,8 @@ def accept_post_invite():
             )
             return make_response(res, response.status_code)
 
+    except PublisherMacaroonRefreshRequired:
+        raise
     except StoreApiResponseErrorList as error_list:
         res["success"] = False
         error_messages = [
@@ -386,6 +389,8 @@ def reject_post_invite():
             res["message"] = "An error occured"
             return make_response(res, 200)
 
+    except PublisherMacaroonRefreshRequired:
+        raise
     except StoreApiResponseErrorList as error_list:
         res["success"] = False
         error_messages = [
