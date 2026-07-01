@@ -61,7 +61,7 @@
   const closeNotificationButtons = document.querySelectorAll(".p-notification__close");
   const searchParams = new URL(window.location).searchParams;
   const token = searchParams.get("token");
-  const package = searchParams.get("package");
+  const packageName = searchParams.get("package");
   const CSRF_TOKEN = "{{ csrf_token() }}";
 
   function closeAllNotifcations() {
@@ -83,7 +83,7 @@
   acceptInviteButton.addEventListener("click", () => {
     const formData = new FormData();
     formData.set("token", token);
-    formData.set("package", package);
+    formData.set("package", packageName);
     formData.set("csrf_token", CSRF_TOKEN);
 
     fetch("/accept-invite", {
@@ -112,7 +112,7 @@
       inviteSuccessPanel.classList.remove("u-hide");
 
       setTimeout(() => {
-        window.location = `/${encodeURIComponent(package)}/listing`;
+        window.location = `/${encodeURIComponent(packageName)}/listing`;
       }, 3000);
     })
     .catch((error) => {
@@ -123,7 +123,7 @@
   rejectInviteButton.addEventListener("click", () => {
     const formData = new FormData();
     formData.set("token", token);
-    formData.set("package", package);
+    formData.set("package", packageName);
     formData.set("csrf_token", CSRF_TOKEN);
 
     fetch("/reject-invite", {
