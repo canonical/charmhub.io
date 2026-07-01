@@ -37,6 +37,7 @@ from webapp.publisher.form_processors import (
 )
 from datetime import datetime
 import uuid
+from urllib.parse import quote
 
 preview_cache = {}
 
@@ -480,7 +481,7 @@ def invite_collaborators(entity_name):
 
         invite_link = (
             f"https://charmhub.io/accept-invite?package={entity_name}"
-            f"&token={token}"
+            f"&token={quote(token, safe='')}"
         )
         emailer = get_emailer()
         emailer.send_email_template(

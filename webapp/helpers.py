@@ -1,6 +1,6 @@
 import re
 import json
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlencode
 
 from bs4 import BeautifulSoup
 from ruamel.yaml import YAML
@@ -173,8 +173,10 @@ def param_redirect_capture(req, resp):
     params = req.args
 
     for item in param_signatures:
-        # If the endpoint and params match a param_signature
-        if item["endpoint"] == path and set(params).issubset(item["params"]):
+        # If the endpoint and all required params are present
+        if item["endpoint"] == path and set(item["params"]).issubset(
+            set(params)
+        ):
             param_values = {}
             for param in item["params"]:
                 param_values[param] = params[param]
@@ -205,11 +207,9 @@ def param_redirect_exec(req, make_response, redirect):
         redirect_data = json.loads(encoded_redirect_data)
         # Only redirect if the current path matches the redirect endpoint
         if req.path == redirect_data["endpoint"]:
-            params = []
-            for key, value in redirect_data["params"].items():
-                params.append(f"{key}={value}")
+            query_string = urlencode(redirect_data["params"])
             response = make_response(
-                redirect(f"{redirect_data['endpoint']}?{'&'.join(params)}")
+                redirect(f"{redirect_data['endpoint']}?{query_string}")
             )
             response.set_cookie(
                 "param_redirect", "", expires=0, secure=True, httponly=True
