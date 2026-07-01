@@ -1,6 +1,6 @@
 import re
 import json
-from urllib.parse import urlparse, quote, urlencode
+from urllib.parse import urlparse, urlencode
 
 from bs4 import BeautifulSoup
 from ruamel.yaml import YAML
