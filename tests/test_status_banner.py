@@ -30,7 +30,7 @@ class TestStatusBanner(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertNotIn('id="status-banner"', response.text)
 
-    def test_publisher_layout_uses_floating_banner(self):
+    def test_publisher_layout_uses_banner(self):
         message = "Publisher maintenance notice."
 
         with patch("webapp.handlers.STATUS_BANNER", message):
