@@ -67,6 +67,11 @@
 
     {% include "partial/_navigation.html" %}
 
+    {% block banner %}
+      {% from "partial/_status-banner.html" import status_banner %}
+      {{ status_banner(STATUS_BANNER) }}
+    {% endblock %}
+
     <main id="main-content">
       {% block content %}{% endblock content %}
     </main>

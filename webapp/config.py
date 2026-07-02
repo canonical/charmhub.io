@@ -34,6 +34,7 @@ SEARCH_FIELDS = [
 ]
 
 SENTRY_DSN = os.getenv("SENTRY_DSN", "").strip()
+STATUS_BANNER = os.getenv("STATUS_BANNER", "").strip()
 
 # Vite integration config values
 IS_DEVELOPMENT = os.getenv("ENVIRONMENT", "devel") == "devel"

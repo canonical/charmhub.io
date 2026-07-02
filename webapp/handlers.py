@@ -1,5 +1,10 @@
 from flask import redirect, render_template, request, session, url_for
-from webapp.config import SENTRY_DSN, IS_DEVELOPMENT, VITE_CONFIG
+from webapp.config import (
+    SENTRY_DSN,
+    STATUS_BANNER,
+    IS_DEVELOPMENT,
+    VITE_CONFIG,
+)
 
 from canonicalwebteam.exceptions import (
     PublisherMacaroonRefreshRequired,
@@ -87,6 +92,7 @@ def charmhub_utility_processor():
         "account": account,
         "image": image_template,
         "SENTRY_DSN": SENTRY_DSN,
+        "STATUS_BANNER": STATUS_BANNER,
     }
 
 
