@@ -1,7 +1,7 @@
 {% extends 'base_layout.html' %}
 {% block banner %}
   {% from "partial/_status-banner.html" import status_banner %}
-  {{ status_banner(STATUS_BANNER, floating=true) }}
+  {{ status_banner(STATUS_BANNER, dark=true) }}
 {% endblock %}
 {% block content %}
   <main id="root"></main>

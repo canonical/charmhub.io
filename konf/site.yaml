@@ -17,7 +17,7 @@ env:
     value: https://6cacb25de947478faeb57f3836da1cf3@sentry.is.canonical.com//24
 
   - name: STATUS_BANNER
-    value: "Charmhub and the Juju Store will undergo scheduled database maintenance on July 5, 2026 22:00 to July 6, 02:00 UTC. During this time, you may be unable to access charm and bundle metadata or publish updates. No user action is required and services will automatically resume once maintenance is complete."
+    value: "The Charm Store will undergo scheduled database maintenance on July 5, 2026 22:00 to July 6, 02:00 UTC. During this time, you may be unable to access charm and bundle metadata or publish updates. No user action is required and services will automatically resume once maintenance is complete."
 
   - name: SEARCH_API_KEY
     secretKeyRef:

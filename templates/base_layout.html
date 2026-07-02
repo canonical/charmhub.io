@@ -69,7 +69,7 @@
 
     {% block banner %}
       {% from "partial/_status-banner.html" import status_banner %}
-      {{ status_banner(STATUS_BANNER) }}
+      {{ status_banner(STATUS_BANNER, dark=true) }}
     {% endblock %}
 
     <main id="main-content">
