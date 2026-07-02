@@ -3,6 +3,9 @@ import logging
 import requests
 from flask import session as flask_session
 from webapp.solutions.auth import login
+from webapp.packages.logic import get_store_categories
+from webapp.store.logic import format_slug
+from webapp.config import CATEGORIES
 
 
 logger = logging.getLogger(__name__)
@@ -12,6 +15,52 @@ session = requests.Session()
 SOLUTIONS_API_BASE = os.getenv(
     "FLASK_SOLUTIONS_API_BASE", "https://solutions.staging.charmhub.io/api"
 )
+
+
+def get_solution_categories():
+    """
+    Return the categories a solution can belong to as
+    ``[{"slug": ..., "name": ...}]``. Categories mirror charm categories
+    and are sourced from the store API so the two always match.
+    """
+    try:
+        store_categories = get_store_categories()
+    except Exception as e:
+        logger.warning(f"Failed to load solution categories: {e}")
+        store_categories = []
+
+    categories = [
+        {
+            "slug": cat.get("slug") or cat["name"],
+            "name": cat.get("display_name") or cat["name"],
+        }
+        for cat in store_categories
+        if cat.get("slug") or cat.get("name")
+    ]
+
+    # fallback to shared category config when store API is unavailable
+    if not categories:
+        categories = [
+            {"slug": cat["slug"], "name": cat["name"]} for cat in CATEGORIES
+        ]
+
+    return categories
+
+
+def map_category_slugs_to_display(slugs):
+    """
+    Map stored category slugs to ``[{"slug": ..., "name": ...}]`` for
+    display. Unknown slugs fall back to a title-cased slug.
+    """
+    if not slugs:
+        return []
+
+    lookup = {cat["slug"]: cat["name"] for cat in get_solution_categories()}
+    return [
+        {"slug": slug, "name": lookup.get(slug) or format_slug(slug)}
+        for slug in slugs
+        if slug
+    ]
 
 
 def get_cached_token(username):

@@ -4,6 +4,8 @@ from webapp.solutions.logic import (
     get_solution_from_backend,
     get_publisher_solutions,
     group_solution_drafts,
+    get_solution_categories,
+    map_category_slugs_to_display,
 )
 
 
@@ -216,4 +218,78 @@ class TestSolutionsLogic(unittest.TestCase):
         self.assertEqual(result_hashes, {"a-pub", "b-pub", "c"})
         attached = next(s for s in result if s["hash"] == "a-pub")
         self.assertEqual(attached["draft_update"]["hash"], "a-draft")
+
+
+class TestSolutionCategories(unittest.TestCase):
+    CONFIG = [{"slug": "cloud", "name": "Cloud"}]
+
+    @patch("webapp.solutions.logic.get_store_categories")
+    def test_get_solution_categories_maps_store_shape(self, mock_store):
+        mock_store.return_value = [
+            {"name": "ai-ml", "display_name": "AI/ML"},
+            {"name": "monitoring", "display_name": "Monitoring"},
+        ]
+
+        result = get_solution_categories()
+
+        self.assertEqual(
+            result,
+            [
+                {"slug": "ai-ml", "name": "AI/ML"},
+                {"slug": "monitoring", "name": "Monitoring"},
+            ],
+        )
+
+    @patch("webapp.solutions.logic.CATEGORIES", CONFIG)
+    @patch("webapp.solutions.logic.get_store_categories")
+    def test_get_solution_categories_falls_back_to_config(self, mock_store):
+        mock_store.return_value = []
+
+        result = get_solution_categories()
+
+        self.assertEqual(result, [{"slug": "cloud", "name": "Cloud"}])
+
+    @patch("webapp.solutions.logic.CATEGORIES", CONFIG)
+    @patch("webapp.solutions.logic.get_store_categories")
+    def test_get_solution_categories_falls_back_on_store_error(
+        self, mock_store
+    ):
+        mock_store.side_effect = Exception("store down")
+
+        result = get_solution_categories()
+
+        self.assertEqual(result, [{"slug": "cloud", "name": "Cloud"}])
+
+    @patch("webapp.solutions.logic.get_store_categories")
+    def test_map_category_slugs_to_display_known_slugs(self, mock_store):
+        mock_store.return_value = [
+            {"name": "ai-ml", "display_name": "AI/ML"},
+            {"name": "monitoring", "display_name": "Monitoring"},
+        ]
+
+        result = map_category_slugs_to_display(["monitoring", "ai-ml"])
+
+        self.assertEqual(
+            result,
+            [
+                {"slug": "monitoring", "name": "Monitoring"},
+                {"slug": "ai-ml", "name": "AI/ML"},
+            ],
+        )
+
+    @patch("webapp.solutions.logic.get_store_categories")
+    def test_map_category_slugs_to_display_unknown_slug_fallback(
+        self, mock_store
+    ):
+        mock_store.return_value = [{"name": "ai-ml", "display_name": "AI/ML"}]
+
+        result = map_category_slugs_to_display(["made-up-slug"])
+
+        self.assertEqual(
+            result, [{"slug": "made-up-slug", "name": "Made Up Slug"}]
+        )
+
+    def test_map_category_slugs_to_display_empty(self):
+        self.assertEqual(map_category_slugs_to_display([]), [])
+        self.assertEqual(map_category_slugs_to_display(None), [])
 
