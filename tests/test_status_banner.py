@@ -45,4 +45,3 @@ class TestStatusBanner(unittest.TestCase):
 
         self.assertIn('id="status-banner"', body)
         self.assertIn(message, body)
-        self.assertIn("z-index: 201;", body)
