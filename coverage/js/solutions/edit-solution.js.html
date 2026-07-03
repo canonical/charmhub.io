@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/113</span>
+                <span class='fraction'>0/117</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/63</span>
+                <span class='fraction'>0/65</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/112</span>
+                <span class='fraction'>0/116</span>
             </div>
         
             
@@ -392,11 +392,20 @@
 <a name='L327'></a><a href='#L327'>327</a>
 <a name='L328'></a><a href='#L328'>328</a>
 <a name='L329'></a><a href='#L329'>329</a>
-<a name='L330'></a><a href='#L330'>330</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L330'></a><a href='#L330'>330</a>
+<a name='L331'></a><a href='#L331'>331</a>
+<a name='L332'></a><a href='#L332'>332</a>
+<a name='L333'></a><a href='#L333'>333</a>
+<a name='L334'></a><a href='#L334'>334</a>
+<a name='L335'></a><a href='#L335'>335</a>
+<a name='L336'></a><a href='#L336'>336</a>
+<a name='L337'></a><a href='#L337'>337</a>
+<a name='L338'></a><a href='#L338'>338</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -474,10 +483,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -577,10 +588,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -719,12 +734,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import DynamicFormManager from "./modules/DynamicFormManager.js";
 import CharmSearchBox from "./modules/CharmSearchBox.js";
 import initConfirmationModal from "./modules/ConfirmationModal.js";
 import initLocalAutosave from "./modules/LocalAutosave.js";
+import CategorySelector from "./modules/CategorySelector.js";
 &nbsp;
 const CSRF_TOKEN_ENDPOINT = <span class="cstat-no" title="statement not covered" >"/api/solutions/csrf-token";</span>
 const CSRF_REFRESH_ACTIONS = <span class="cstat-no" title="statement not covered" >[</span>
@@ -807,6 +824,8 @@ function <span class="fstat-no" title="function not covered" >getEditMessage(</s
     getMessage: getEditMessage,
     beforeSubmit: refreshCsrfTokenBeforeSubmit,
   });
+&nbsp;
+  const categorySelector = <span class="cstat-no" title="statement not covered" >new CategorySelector();</span>
 &nbsp;
   const previewButton = <span class="cstat-no" title="statement not covered" >document.getElementById("preview-button");</span>
 &nbsp;
@@ -911,6 +930,10 @@ function <span class="fstat-no" title="function not covered" >getEditMessage(</s
 <span class="cstat-no" title="statement not covered" >      el.classList.remove("is-error");</span>
 <span class="cstat-no" title="statement not covered" >      hideValidationMessage(el);</span>
     });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (!categorySelector.isValid()) {</span>
+<span class="cstat-no" title="statement not covered" >      return false;</span>
+    }
 &nbsp;
     const requiredValidationFields = <span class="cstat-no" title="statement not covered" >[</span>
       {
@@ -1049,6 +1072,7 @@ function <span class="fstat-no" title="function not covered" >getEditMessage(</s
   });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  initLocalAutosave(form);</span>
+<span class="cstat-no" title="statement not covered" >  categorySelector.enforce();</span>
 });
 &nbsp;</pre></td></tr></table></pre>
 
@@ -1057,7 +1081,7 @@ function <span class="fstat-no" title="function not covered" >getEditMessage(</s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-26T22:29:47.569Z
+                at 2026-07-03T22:24:17.548Z
             </div>
         <script src="../prettify.js"></script>
         <script>

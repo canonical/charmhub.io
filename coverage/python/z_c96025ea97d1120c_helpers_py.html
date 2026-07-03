@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for webapp/helpers.py: 60%</title>
+    <title>Coverage for webapp/helpers.py: 59%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_c827f16f.png">
     <link rel="stylesheet" href="style_cb_4667309f.css" type="text/css">
     <script src="coverage_html_cb_dd2e7eb5.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>webapp<span class="sep">/</span>helpers.py</b>:
-            <span class="pc_cov">60%</span>
+            <span class="pc_cov">59%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -54,8 +54,8 @@
             </div>
         </aside>
         <h2>
-            <span class="text">132 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">79<span class="text"> run</span></button>
+            <span class="text">130 statements &nbsp;</span>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">77<span class="text"> run</span></button>
             <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">53<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_8c93cdf4def537fd_logic_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.14.3">coverage.py v7.14.3</a>,
-            created at 2026-06-26 22:30 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.15.0">coverage.py v7.15.0</a>,
+            created at 2026-07-03 22:24 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -82,7 +82,7 @@
 <main id="source">
     <p class="run"><span class="n"><a id="t1" href="#t1">1</a></span><span class="t"><span class="key">import</span> <span class="nam">re</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t2" href="#t2">2</a></span><span class="t"><span class="key">import</span> <span class="nam">json</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t3" href="#t3">3</a></span><span class="t"><span class="key">from</span> <span class="nam">urllib</span><span class="op">.</span><span class="nam">parse</span> <span class="key">import</span> <span class="nam">urlparse</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t3" href="#t3">3</a></span><span class="t"><span class="key">from</span> <span class="nam">urllib</span><span class="op">.</span><span class="nam">parse</span> <span class="key">import</span> <span class="nam">urlparse</span><span class="op">,</span> <span class="nam">urlencode</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t4" href="#t4">4</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t5" href="#t5">5</a></span><span class="t"><span class="key">from</span> <span class="nam">bs4</span> <span class="key">import</span> <span class="nam">BeautifulSoup</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t6" href="#t6">6</a></span><span class="t"><span class="key">from</span> <span class="nam">ruamel</span><span class="op">.</span><span class="nam">yaml</span> <span class="key">import</span> <span class="nam">YAML</span>&nbsp;</span><span class="r"></span></p>
@@ -255,43 +255,43 @@
     <p class="run"><span class="n"><a id="t173" href="#t173">173</a></span><span class="t">    <span class="nam">params</span> <span class="op">=</span> <span class="nam">req</span><span class="op">.</span><span class="nam">args</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t174" href="#t174">174</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t175" href="#t175">175</a></span><span class="t">    <span class="key">for</span> <span class="nam">item</span> <span class="key">in</span> <span class="nam">param_signatures</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t176" href="#t176">176</a></span><span class="t">        <span class="com"># If the endpoint and params match a param_signature</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t177" href="#t177">177</a></span><span class="t">        <span class="key">if</span> <span class="nam">item</span><span class="op">[</span><span class="str">"endpoint"</span><span class="op">]</span> <span class="op">==</span> <span class="nam">path</span> <span class="key">and</span> <span class="nam">set</span><span class="op">(</span><span class="nam">params</span><span class="op">)</span><span class="op">.</span><span class="nam">issubset</span><span class="op">(</span><span class="nam">item</span><span class="op">[</span><span class="str">"params"</span><span class="op">]</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t178" href="#t178">178</a></span><span class="t">            <span class="nam">param_values</span> <span class="op">=</span> <span class="op">{</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t179" href="#t179">179</a></span><span class="t">            <span class="key">for</span> <span class="nam">param</span> <span class="key">in</span> <span class="nam">item</span><span class="op">[</span><span class="str">"params"</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t180" href="#t180">180</a></span><span class="t">                <span class="nam">param_values</span><span class="op">[</span><span class="nam">param</span><span class="op">]</span> <span class="op">=</span> <span class="nam">params</span><span class="op">[</span><span class="nam">param</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t181" href="#t181">181</a></span><span class="t">            <span class="com"># Set the cookie</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t182" href="#t182">182</a></span><span class="t">            <span class="nam">resp</span><span class="op">.</span><span class="nam">set_cookie</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t183" href="#t183">183</a></span><span class="t">                <span class="str">"param_redirect"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t184" href="#t184">184</a></span><span class="t">                <span class="nam">json</span><span class="op">.</span><span class="nam">dumps</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t185" href="#t185">185</a></span><span class="t">                    <span class="op">{</span><span class="str">"endpoint"</span><span class="op">:</span> <span class="nam">item</span><span class="op">[</span><span class="str">"endpoint"</span><span class="op">]</span><span class="op">,</span> <span class="str">"params"</span><span class="op">:</span> <span class="nam">param_values</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t186" href="#t186">186</a></span><span class="t">                <span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t187" href="#t187">187</a></span><span class="t">                <span class="com"># Set expiration for 10 days in the future</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t188" href="#t188">188</a></span><span class="t">                <span class="nam">expires</span><span class="op">=</span><span class="nam">datetime</span><span class="op">.</span><span class="nam">now</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="nam">timedelta</span><span class="op">(</span><span class="nam">days</span><span class="op">=</span><span class="num">10</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t189" href="#t189">189</a></span><span class="t">                <span class="nam">secure</span><span class="op">=</span><span class="key">True</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t190" href="#t190">190</a></span><span class="t">                <span class="nam">httponly</span><span class="op">=</span><span class="key">True</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t191" href="#t191">191</a></span><span class="t">            <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t192" href="#t192">192</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t193" href="#t193">193</a></span><span class="t">    <span class="key">return</span> <span class="nam">resp</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t176" href="#t176">176</a></span><span class="t">        <span class="com"># If the endpoint and all required params are present</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t177" href="#t177">177</a></span><span class="t">        <span class="key">if</span> <span class="nam">item</span><span class="op">[</span><span class="str">"endpoint"</span><span class="op">]</span> <span class="op">==</span> <span class="nam">path</span> <span class="key">and</span> <span class="nam">set</span><span class="op">(</span><span class="nam">item</span><span class="op">[</span><span class="str">"params"</span><span class="op">]</span><span class="op">)</span><span class="op">.</span><span class="nam">issubset</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t178" href="#t178">178</a></span><span class="t">            <span class="nam">set</span><span class="op">(</span><span class="nam">params</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t179" href="#t179">179</a></span><span class="t">        <span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t180" href="#t180">180</a></span><span class="t">            <span class="nam">param_values</span> <span class="op">=</span> <span class="op">{</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t181" href="#t181">181</a></span><span class="t">            <span class="key">for</span> <span class="nam">param</span> <span class="key">in</span> <span class="nam">item</span><span class="op">[</span><span class="str">"params"</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t182" href="#t182">182</a></span><span class="t">                <span class="nam">param_values</span><span class="op">[</span><span class="nam">param</span><span class="op">]</span> <span class="op">=</span> <span class="nam">params</span><span class="op">[</span><span class="nam">param</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t183" href="#t183">183</a></span><span class="t">            <span class="com"># Set the cookie</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t184" href="#t184">184</a></span><span class="t">            <span class="nam">resp</span><span class="op">.</span><span class="nam">set_cookie</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t185" href="#t185">185</a></span><span class="t">                <span class="str">"param_redirect"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t186" href="#t186">186</a></span><span class="t">                <span class="nam">json</span><span class="op">.</span><span class="nam">dumps</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t187" href="#t187">187</a></span><span class="t">                    <span class="op">{</span><span class="str">"endpoint"</span><span class="op">:</span> <span class="nam">item</span><span class="op">[</span><span class="str">"endpoint"</span><span class="op">]</span><span class="op">,</span> <span class="str">"params"</span><span class="op">:</span> <span class="nam">param_values</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t188" href="#t188">188</a></span><span class="t">                <span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t189" href="#t189">189</a></span><span class="t">                <span class="com"># Set expiration for 10 days in the future</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t190" href="#t190">190</a></span><span class="t">                <span class="nam">expires</span><span class="op">=</span><span class="nam">datetime</span><span class="op">.</span><span class="nam">now</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="nam">timedelta</span><span class="op">(</span><span class="nam">days</span><span class="op">=</span><span class="num">10</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t191" href="#t191">191</a></span><span class="t">                <span class="nam">secure</span><span class="op">=</span><span class="key">True</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t192" href="#t192">192</a></span><span class="t">                <span class="nam">httponly</span><span class="op">=</span><span class="key">True</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t193" href="#t193">193</a></span><span class="t">            <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t194" href="#t194">194</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t195" href="#t195">195</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t196" href="#t196">196</a></span><span class="t"><span class="key">def</span> <span class="nam">param_redirect_exec</span><span class="op">(</span><span class="nam">req</span><span class="op">,</span> <span class="nam">make_response</span><span class="op">,</span> <span class="nam">redirect</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t197" href="#t197">197</a></span><span class="t">    <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t198" href="#t198">198</a></span><span class="t"><span class="str">    Function that returns a response, redirecting based on</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t199" href="#t199">199</a></span><span class="t"><span class="str">    a matched cookie</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t200" href="#t200">200</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t201" href="#t201">201</a></span><span class="t">    <span class="com"># Get cookie data</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t202" href="#t202">202</a></span><span class="t">    <span class="nam">encoded_redirect_data</span> <span class="op">=</span> <span class="nam">req</span><span class="op">.</span><span class="nam">cookies</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">"param_redirect"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t203" href="#t203">203</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t204" href="#t204">204</a></span><span class="t">    <span class="key">if</span> <span class="nam">encoded_redirect_data</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t205" href="#t205">205</a></span><span class="t">        <span class="nam">redirect_data</span> <span class="op">=</span> <span class="nam">json</span><span class="op">.</span><span class="nam">loads</span><span class="op">(</span><span class="nam">encoded_redirect_data</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t206" href="#t206">206</a></span><span class="t">        <span class="com"># Only redirect if the current path matches the redirect endpoint</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t207" href="#t207">207</a></span><span class="t">        <span class="key">if</span> <span class="nam">req</span><span class="op">.</span><span class="nam">path</span> <span class="op">==</span> <span class="nam">redirect_data</span><span class="op">[</span><span class="str">"endpoint"</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t208" href="#t208">208</a></span><span class="t">            <span class="nam">params</span> <span class="op">=</span> <span class="op">[</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t209" href="#t209">209</a></span><span class="t">            <span class="key">for</span> <span class="nam">key</span><span class="op">,</span> <span class="nam">value</span> <span class="key">in</span> <span class="nam">redirect_data</span><span class="op">[</span><span class="str">"params"</span><span class="op">]</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t210" href="#t210">210</a></span><span class="t">                <span class="nam">params</span><span class="op">.</span><span class="nam">append</span><span class="op">(</span><span class="str">f"{key}={value}"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t195" href="#t195">195</a></span><span class="t">    <span class="key">return</span> <span class="nam">resp</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t196" href="#t196">196</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t197" href="#t197">197</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t198" href="#t198">198</a></span><span class="t"><span class="key">def</span> <span class="nam">param_redirect_exec</span><span class="op">(</span><span class="nam">req</span><span class="op">,</span> <span class="nam">make_response</span><span class="op">,</span> <span class="nam">redirect</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t199" href="#t199">199</a></span><span class="t">    <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t200" href="#t200">200</a></span><span class="t"><span class="str">    Function that returns a response, redirecting based on</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t201" href="#t201">201</a></span><span class="t"><span class="str">    a matched cookie</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t202" href="#t202">202</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t203" href="#t203">203</a></span><span class="t">    <span class="com"># Get cookie data</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t204" href="#t204">204</a></span><span class="t">    <span class="nam">encoded_redirect_data</span> <span class="op">=</span> <span class="nam">req</span><span class="op">.</span><span class="nam">cookies</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">"param_redirect"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t205" href="#t205">205</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t206" href="#t206">206</a></span><span class="t">    <span class="key">if</span> <span class="nam">encoded_redirect_data</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t207" href="#t207">207</a></span><span class="t">        <span class="nam">redirect_data</span> <span class="op">=</span> <span class="nam">json</span><span class="op">.</span><span class="nam">loads</span><span class="op">(</span><span class="nam">encoded_redirect_data</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t208" href="#t208">208</a></span><span class="t">        <span class="com"># Only redirect if the current path matches the redirect endpoint</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t209" href="#t209">209</a></span><span class="t">        <span class="key">if</span> <span class="nam">req</span><span class="op">.</span><span class="nam">path</span> <span class="op">==</span> <span class="nam">redirect_data</span><span class="op">[</span><span class="str">"endpoint"</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t210" href="#t210">210</a></span><span class="t">            <span class="nam">query_string</span> <span class="op">=</span> <span class="nam">urlencode</span><span class="op">(</span><span class="nam">redirect_data</span><span class="op">[</span><span class="str">"params"</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t211" href="#t211">211</a></span><span class="t">            <span class="nam">response</span> <span class="op">=</span> <span class="nam">make_response</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run run2"><span class="n"><a id="t212" href="#t212">212</a></span><span class="t">                <span class="nam">redirect</span><span class="op">(</span><span class="str">f"{redirect_data['endpoint']}?{'&amp;'.join(params)}"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t212" href="#t212">212</a></span><span class="t">                <span class="nam">redirect</span><span class="op">(</span><span class="str">f"{redirect_data['endpoint']}?{query_string}"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t213" href="#t213">213</a></span><span class="t">            <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t214" href="#t214">214</a></span><span class="t">            <span class="nam">response</span><span class="op">.</span><span class="nam">set_cookie</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="run run2"><span class="n"><a id="t215" href="#t215">215</a></span><span class="t">                <span class="str">"param_redirect"</span><span class="op">,</span> <span class="str">""</span><span class="op">,</span> <span class="nam">expires</span><span class="op">=</span><span class="num">0</span><span class="op">,</span> <span class="nam">secure</span><span class="op">=</span><span class="key">True</span><span class="op">,</span> <span class="nam">httponly</span><span class="op">=</span><span class="key">True</span>&nbsp;</span><span class="r"></span></p>
@@ -358,8 +358,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_8c93cdf4def537fd_logic_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.14.3">coverage.py v7.14.3</a>,
-            created at 2026-06-26 22:30 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.15.0">coverage.py v7.15.0</a>,
+            created at 2026-07-03 22:24 +0000
         </p>
     </div>
 </footer>
