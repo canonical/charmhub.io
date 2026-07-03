@@ -2,6 +2,7 @@ import DynamicFormManager from "./modules/DynamicFormManager.js";
 import CharmSearchBox from "./modules/CharmSearchBox.js";
 import initConfirmationModal from "./modules/ConfirmationModal.js";
 import initLocalAutosave from "./modules/LocalAutosave.js";
+import CategorySelector from "./modules/CategorySelector.js";
 
 const CSRF_TOKEN_ENDPOINT = "/api/solutions/csrf-token";
 const CSRF_REFRESH_ACTIONS = [
@@ -84,6 +85,8 @@ document.addEventListener("DOMContentLoaded", function () {
     getMessage: getEditMessage,
     beforeSubmit: refreshCsrfTokenBeforeSubmit,
   });
+
+  const categorySelector = new CategorySelector();
 
   const previewButton = document.getElementById("preview-button");
 
@@ -188,6 +191,10 @@ document.addEventListener("DOMContentLoaded", function () {
       el.classList.remove("is-error");
       hideValidationMessage(el);
     });
+
+    if (!categorySelector.isValid()) {
+      return false;
+    }
 
     const requiredValidationFields = [
       {
@@ -326,4 +333,5 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   initLocalAutosave(form);
+  categorySelector.enforce();
 });

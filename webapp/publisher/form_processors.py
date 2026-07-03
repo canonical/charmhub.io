@@ -57,6 +57,11 @@ def extract_maintainers_data():
     return [email.strip() for email in maintainers_emails if email.strip()]
 
 
+def extract_categories_data():
+    categories = request.form.getlist("categories")
+    return [slug.strip() for slug in categories if slug.strip()]
+
+
 def extract_platform_data():
     def clean_list(field_name):
         return [
@@ -80,6 +85,7 @@ def process_solution_form_data():
     form_data["useful_links"] = extract_useful_links_data()
     form_data["use_cases"] = extract_use_cases_data()
     form_data["maintainers"] = extract_maintainers_data()
+    form_data["categories"] = extract_categories_data()
 
     platform_data = extract_platform_data()
     form_data.update(platform_data)

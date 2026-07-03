@@ -30,6 +30,7 @@ from webapp.solutions.logic import (
     update_solution,
     solution_name_exists,
     group_solution_drafts,
+    get_solution_categories,
 )
 from webapp.publisher.form_processors import (
     process_solution_form_data,
@@ -84,6 +85,7 @@ def render_solution_form_with_errors(
     user_teams = get_user_teams_for_solutions(username)
 
     context = create_error_context(errors, solution, user_teams, form_data)
+    context["categories"] = get_solution_categories()
 
     return render_template(template_name, **context), status
 
@@ -929,6 +931,7 @@ def edit_solution_form(hash):
     context = {
         "user_teams": user_teams,
         "solution": solution,
+        "categories": get_solution_categories(),
     }
     return render_template("solutions/edit-solution.html", **context)
 

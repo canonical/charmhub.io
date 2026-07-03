@@ -5,6 +5,7 @@ from webapp.helpers import markdown_to_html
 from webapp.solutions.logic import get_solution_from_backend
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from webapp.solutions.logic import get_published_solution_by_name
+from webapp.solutions.logic import map_category_slugs_to_display
 from webapp.publisher.views import preview_cache
 
 
@@ -59,6 +60,10 @@ def get_charm_data(charm_name):
 def render_solution(solution):
     solution["description_html"] = markdown_to_html(
         solution.get("description", "")
+    )
+
+    solution["categories"] = map_category_slugs_to_display(
+        solution.get("categories")
     )
 
     architecture_explanation = ""
@@ -171,6 +176,8 @@ def solution_preview_draft(preview_key):
     preview_solution["compatibility"] = {
         "juju_versions": form_data.get("juju_versions", []),
     }
+
+    preview_solution["categories"] = form_data.get("categories", [])
 
     charms_list = form_data.get("charms", [])
     preview_solution["charms"] = [

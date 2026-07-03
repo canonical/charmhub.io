@@ -5,6 +5,7 @@ const EXTRA_ARRAY_FIELD_NAMES = [
   "useful_links_url[]",
   "use_cases_description[]",
   "charms[]",
+  "categories",
 ];
 
 function getMultivalueFieldConfigs() {

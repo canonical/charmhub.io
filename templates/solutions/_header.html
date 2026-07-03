@@ -31,17 +31,22 @@
     <div class="grid-col-4">
       <div>
         <a href="/solutions" class="u-text--muted p-text--small-caps">&lt; ALL SOLUTIONS</a>
-        <h3 class="u-no-margin--bottom">{{ solution.title }}</h3>
-        <p class="p-heading--6">
-          By
-            {% if solution.publisher.username %}
-              <a href="/publisher/{{ solution.publisher.username | safe }}">
-                {{ solution.publisher.display_name }}
-              </a>
-            {% else %}
-              {{ solution.publisher.name }}
-            {% endif %}
-        </p>
+        <h3 class="u-no-margin--bottom u-sv1">{{ solution.title }}</h3>
+        <ul class="p-inline-list--middot u-no-margin--bottom">
+          <li class="p-inline-list__item">
+            By
+              {% if solution.publisher.username %}
+                <a href="/publisher/{{ solution.publisher.username | safe }}">
+                  {{ solution.publisher.display_name }}
+                </a>
+              {% else %}
+                {{ solution.publisher.name }}
+              {% endif %}
+          </li>
+          {% for category in solution.categories %}
+            <li class="p-inline-list__item">{{ category.name }}</li>
+          {% endfor %}
+        </ul>
       </div>
     </div>
     <div class="grid-col-2">

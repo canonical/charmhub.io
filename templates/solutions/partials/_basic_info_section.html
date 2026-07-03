@@ -36,6 +36,34 @@
   </div>
 </div>
 
+{% set selected_categories = form_value(form_data, solution, 'categories') or [] %}
+<div class="p-form__group row">
+  <div class="col-2">
+    <label class="is-required">Categories:</label>
+  </div>
+  <div class="col-8 col-x-large-6">
+    <div class="p-form-validation" id="categories-section">
+      <div id="categories-list" role="group" aria-label="Categories">
+        {% for category in categories %}
+          <label class="p-checkbox">
+            <input
+              type="checkbox"
+              class="p-checkbox__input category-checkbox"
+              name="categories"
+              value="{{ category.slug }}"
+              aria-labelledby="category-{{ category.slug }}"
+              {% if category.slug in selected_categories %}checked{% endif %}
+            >
+            <span class="p-checkbox__label" id="category-{{ category.slug }}">{{ category.name }}</span>
+          </label>
+        {% endfor %}
+      </div>
+      <p class="p-form-validation__message" id="categories-error">Please select between one and two categories</p>
+      <p class="p-form-help-text">Choose a minimum of one and a maximum of two categories for your solution</p>
+    </div>
+  </div>
+</div>
+
 <div class="p-form__group row">
   <div class="col-2">
     <label for="description" class="is-required">Description:</label>
