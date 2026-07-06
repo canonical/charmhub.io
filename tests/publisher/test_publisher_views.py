@@ -264,6 +264,21 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 400)
         self.assertEqual(res.json["message"], "Invite token has expired")
 
+    @patch("webapp.store_api.publisher_gateway.accept_invite")
+    def test_accept_post_invite_macaroon_refresh_required(
+        self, mock_accept_invite
+    ):
+        mock_accept_invite.side_effect = PublisherMacaroonRefreshRequired()
+        res = self.client.post(
+            "/accept-invite",
+            data={"token": "test-token", "package": "test-package"},
+        )
+        self.assertEqual(res.status_code, 401)
+        self.assertTrue(res.json["reauth_required"])
+        self.assertFalse(res.json["success"])
+        with self.client.session_transaction() as sess:
+            self.assertNotIn("account-auth", sess)
+
     @patch("webapp.store_api.publisher_gateway.reject_invite")
     def test_reject_post_invite(self, mock_reject_invite):
         mock_reject_invite.return_value.status_code = 204

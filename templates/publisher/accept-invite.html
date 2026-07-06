@@ -98,6 +98,11 @@
     .then(({ status, body }) => {
       closeAllNotifcations();
 
+      if (body.reauth_required) {
+        window.location = `/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+        return;
+      }
+
       if (status !== 200) {
         const errorMessage = body.message || "We could not accept this invite. Check that you are signed in with the Ubuntu One account that received the invite, and that the invite link has not expired or already been used.";
         const errorParagraph = document.querySelector("#accept-invite-error-notification .p-notification__message");
@@ -130,7 +135,14 @@
       method: "POST",
       body: formData
     }).then((response) => {
-      if (response.status !== 200) {
+      return response.json().then(data => ({ status: response.status, body: data }));
+    }).then(({ status, body }) => {
+      if (body.reauth_required) {
+        window.location = `/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+        return;
+      }
+
+      if (status !== 200) {
         closeAllNotifcations();
         rejectInviteErrorNotification.classList.remove("u-hide");
         throw new Error("Unable to reject invite");
