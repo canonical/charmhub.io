@@ -273,9 +273,9 @@ class TestPublisherViews(unittest.TestCase):
             "/accept-invite",
             data={"token": "test-token", "package": "test-package"},
         )
-        self.assertEqual(res.status_code, 302)
-        redirect = urlparse(res.location)
-        self.assertEqual(redirect.path, "/login")
+        self.assertEqual(res.status_code, 401)
+        self.assertTrue(res.json["reauth_required"])
+        self.assertFalse(res.json["success"])
         with self.client.session_transaction() as sess:
             self.assertNotIn("account-auth", sess)
 

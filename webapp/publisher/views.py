@@ -17,6 +17,7 @@ from flask import (
 )
 from flask.json import jsonify
 from flask_wtf.csrf import generate_csrf
+from webapp import authentication
 from webapp.config import DETAILS_VIEW_REGEX
 from webapp.decorators import login_required, cached_redirect
 from webapp.publisher.logic import get_all_architectures, process_releases
@@ -348,7 +349,10 @@ def accept_post_invite():
             return make_response(res, response.status_code)
 
     except PublisherMacaroonRefreshRequired:
-        raise
+        authentication.empty_session(session)
+        res["success"] = False
+        res["reauth_required"] = True
+        return make_response(res, 401)
     except StoreApiResponseErrorList as error_list:
         res["success"] = False
         error_messages = [
@@ -390,7 +394,10 @@ def reject_post_invite():
             return make_response(res, 200)
 
     except PublisherMacaroonRefreshRequired:
-        raise
+        authentication.empty_session(session)
+        res["success"] = False
+        res["reauth_required"] = True
+        return make_response(res, 401)
     except StoreApiResponseErrorList as error_list:
         res["success"] = False
         error_messages = [
