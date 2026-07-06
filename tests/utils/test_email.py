@@ -14,8 +14,9 @@ class TestEmailer(unittest.TestCase):
         )
         self.emailer = Emailer(self.smtp_config)
 
+    @patch("webapp.utils.emailer.Thread")
     @patch("smtplib.SMTP")
-    def test_send_email_success(self, mock_smtp):
+    def test_send_email_success(self, mock_smtp, mock_thread):
         subject = "Test subject"
         body = "Test body"
         to_email = "recipient@test.com"
@@ -24,6 +25,10 @@ class TestEmailer(unittest.TestCase):
         mock_smtp.return_value.__enter__.return_value = mock_server
 
         self.emailer.send_email(subject, body, to_email)
+
+        target = mock_thread.call_args.kwargs["target"]
+        args = mock_thread.call_args.kwargs["args"]
+        target(*args)
 
         mock_smtp.assert_called_once_with(
             self.smtp_config.host, self.smtp_config.port
