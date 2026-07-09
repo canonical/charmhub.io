@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/176</span>
+                <span class='fraction'>0/177</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/99</span>
+                <span class='fraction'>0/101</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/166</span>
+                <span class='fraction'>0/167</span>
             </div>
         
             
@@ -446,8 +446,7 @@
 <a name='L381'></a><a href='#L381'>381</a>
 <a name='L382'></a><a href='#L382'>382</a>
 <a name='L383'></a><a href='#L383'>383</a>
-<a name='L384'></a><a href='#L384'>384</a>
-<a name='L385'></a><a href='#L385'>385</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L384'></a><a href='#L384'>384</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -537,9 +536,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -564,6 +560,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -587,7 +584,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -675,6 +671,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -730,6 +727,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -918,24 +916,21 @@ class CharmSearchBox {
   }
 &nbsp;
 <span class="fstat-no" title="function not covered" >  setupEventListeners(): void {</span>
-    const searchInput = <span class="cstat-no" title="statement not covered" >this.searchInput;</span>
-    const selectedContainer = <span class="cstat-no" title="statement not covered" >this.selectedContainer;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!searchInput || !selectedContainer) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!this.searchInput || !this.selectedContainer) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    searchInput.addEventListener("focus", <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    this.searchInput.addEventListener("focus", <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >      this.togglePanel(false);</span>
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    searchInput.addEventListener("blur", <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    this.searchInput.addEventListener("blur", <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >      setTimeout(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >        this.togglePanel(true);</span>
       }, 200);
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    searchInput.addEventListener("input", <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    this.searchInput.addEventListener("input", <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >      this.handleSearchInput();</span>
     });
 &nbsp;
@@ -946,13 +941,14 @@ class CharmSearchBox {
 <span class="cstat-no" title="statement not covered" >      searchButton.addEventListener("click", <span class="fstat-no" title="function not covered" >(e</span>) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        e.preventDefault();</span>
 <span class="cstat-no" title="statement not covered" >        e.stopPropagation();</span>
-<span class="cstat-no" title="statement not covered" >        if (searchInput.value.trim().length &gt;= 2) {</span>
-<span class="cstat-no" title="statement not covered" >          void this.searchCharms(searchInput.value.trim());</span>
+        const query = <span class="cstat-no" title="statement not covered" >this.searchInput?.value.trim() || "";</span>
+<span class="cstat-no" title="statement not covered" >        if (query.length &gt;= 2) {</span>
+<span class="cstat-no" title="statement not covered" >          this.searchCharms(query);</span>
         }
       });
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    selectedContainer.addEventListener("click", <span class="fstat-no" title="function not covered" >(e</span>) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    this.selectedContainer.addEventListener("click", <span class="fstat-no" title="function not covered" >(e</span>) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (!(e.target instanceof Element)) {</span>
 <span class="cstat-no" title="statement not covered" >        return;</span>
       }
@@ -971,7 +967,6 @@ class CharmSearchBox {
 &nbsp;
     const addManualButton = <span class="cstat-no" title="statement not covered" >this.addManualButton;</span>
     const manualCharmInput = <span class="cstat-no" title="statement not covered" >this.manualCharmInput;</span>
-&nbsp;
 <span class="cstat-no" title="statement not covered" >    if (addManualButton &amp;&amp; manualCharmInput) {</span>
 <span class="cstat-no" title="statement not covered" >      addManualButton.addEventListener("click", <span class="fstat-no" title="function not covered" >async () =&gt; {</span></span>
         const charmName = <span class="cstat-no" title="statement not covered" >manualCharmInput.value.trim();</span>
@@ -1030,7 +1025,7 @@ class CharmSearchBox {
     const query = <span class="cstat-no" title="statement not covered" >this.searchInput.value.trim();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (this.searchTimeout) {</span>
-<span class="cstat-no" title="statement not covered" >      clearTimeout(this.searchTimeout);</span>
+<span class="cstat-no" title="statement not covered" >      window.clearTimeout(this.searchTimeout);</span>
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (query.length &lt; 2) {</span>
@@ -1039,7 +1034,7 @@ class CharmSearchBox {
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    this.searchTimeout = setTimeout(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >      void this.searchCharms(query);</span>
+<span class="cstat-no" title="statement not covered" >      this.searchCharms(query);</span>
     }, 300);
   }
 &nbsp;
@@ -1058,9 +1053,10 @@ class CharmSearchBox {
   }
 &nbsp;
 <span class="fstat-no" title="function not covered" >  showResults(c</span>harms: Charm[]): void {
-<span class="cstat-no" title="statement not covered" >    if (!this.resultsContainer) <span class="cstat-no" title="statement not covered" >return;</span></span>
+    const resultsContainer = <span class="cstat-no" title="statement not covered" >this.resultsContainer;</span>
+<span class="cstat-no" title="statement not covered" >    if (!resultsContainer) <span class="cstat-no" title="statement not covered" >return;</span></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    this.resultsContainer.innerHTML = "";</span>
+<span class="cstat-no" title="statement not covered" >    resultsContainer.innerHTML = "";</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (charms.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >      charms.forEach(<span class="fstat-no" title="function not covered" >(c</span>harm) =&gt; {</span>
@@ -1072,7 +1068,7 @@ class CharmSearchBox {
 <span class="cstat-no" title="statement not covered" >          e.preventDefault();</span>
 <span class="cstat-no" title="statement not covered" >          this.addCharm(charm);</span>
         });
-<span class="cstat-no" title="statement not covered" >        this.resultsContainer?.appendChild(button);</span>
+<span class="cstat-no" title="statement not covered" >        resultsContainer.appendChild(button);</span>
       });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (this.resultsSection) <span class="cstat-no" title="statement not covered" >this.resultsSection.style.display = "block";</span></span>
@@ -1104,18 +1100,19 @@ class CharmSearchBox {
     }
 &nbsp;
     const template = <span class="cstat-no" title="statement not covered" >document.getElementById("charm-item-template");</span>
-<span class="cstat-no" title="statement not covered" >    if (!(template instanceof HTMLTemplateElement)) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!template) {</span>
 <span class="cstat-no" title="statement not covered" >      console.error("Charm item template not found");</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
-    const fragment = <span class="cstat-no" title="statement not covered" >template.content.cloneNode(true);</span>
-<span class="cstat-no" title="statement not covered" >    if (!(fragment instanceof DocumentFragment)) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!(template instanceof HTMLTemplateElement)) {</span>
+<span class="cstat-no" title="statement not covered" >      console.error("Charm item template is not a template element");</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
-    const charmDiv = <span class="cstat-no" title="statement not covered" >fragment.firstElementChild;</span>
-<span class="cstat-no" title="statement not covered" >    if (!(charmDiv instanceof HTMLElement)) {</span>
+    const fragment = <span class="cstat-no" title="statement not covered" >template.content.cloneNode(true) as DocumentFragment;</span>
+    const charmDiv = <span class="cstat-no" title="statement not covered" >fragment.firstElementChild as HTMLElement | null;</span>
+<span class="cstat-no" title="statement not covered" >    if (!charmDiv) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
@@ -1123,9 +1120,9 @@ class CharmSearchBox {
 &nbsp;
     const button = <span class="cstat-no" title="statement not covered" >charmDiv.querySelector(".charm-remove");</span>
     const span = <span class="cstat-no" title="statement not covered" >charmDiv.querySelector("span");</span>
-    const input = <span class="cstat-no" title="statement not covered" >charmDiv.querySelector&lt;HTMLInputElement&gt;(</span>
+    const input = <span class="cstat-no" title="statement not covered" >charmDiv.querySelector(</span>
       "input[name='charms[]']"
-    );
+    ) as HTMLInputElement | null;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (!button || !span || !input) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
@@ -1222,7 +1219,7 @@ export default CharmSearchBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-07-09T12:46:51.004Z
+                at 2026-07-09T14:44:17.216Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

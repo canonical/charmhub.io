@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/57</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>0/53</span>
             </div>
         
             
@@ -198,12 +198,7 @@
 <a name='L133'></a><a href='#L133'>133</a>
 <a name='L134'></a><a href='#L134'>134</a>
 <a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a>
-<a name='L141'></a><a href='#L141'>141</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L136'></a><a href='#L136'>136</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -236,14 +231,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -294,7 +285,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -346,23 +336,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">type DynamicFormManagerConfig = {
   listContainerId: string;
   addButtonId: string;
-  createItemFunction?: () =&gt; HTMLElement | null;
+  createItemFunction?: () =&gt; Element | null;
   templateId?: string;
   maxItems?: number;
   removeSelector: string;
   itemSelector: string;
-  onChange?: (count: number) =&gt; void;
+  onChange?: (currentCount: number) =&gt; void;
 };
 &nbsp;
 class DynamicFormManager {
   listContainer: HTMLElement | null;
   addButton: HTMLElement | null;
-  createItemFunction?: () =&gt; HTMLElement | null;
+  createItemFunction?: () =&gt; Element | null;
   templateId?: string;
   maxItems: number;
   removeSelector: string;
   itemSelector: string;
-  onChange?: (count: number) =&gt; void;
+  onChange?: (currentCount: number) =&gt; void;
 &nbsp;
 <span class="fstat-no" title="function not covered" >  constructor(c</span>onfig: DynamicFormManagerConfig) {
 <span class="cstat-no" title="statement not covered" >    this.listContainer = document.getElementById(config.listContainerId);</span>
@@ -375,17 +365,13 @@ class DynamicFormManager {
 <span class="cstat-no" title="statement not covered" >    this.onChange = config.onChange;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (this.templateId &amp;&amp; !this.createItemFunction) {</span>
-      const template = <span class="cstat-no" title="statement not covered" >document.getElementById(this.templateId);</span>
-<span class="cstat-no" title="statement not covered" >      if (template instanceof HTMLTemplateElement) {</span>
+      const template = <span class="cstat-no" title="statement not covered" >document.getElementById(</span>
+        this.templateId
+      ) as HTMLTemplateElement | null;
+<span class="cstat-no" title="statement not covered" >      if (template) {</span>
 <span class="cstat-no" title="statement not covered" >        this.createItemFunction = <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-          const fragment = <span class="cstat-no" title="statement not covered" >template.content.cloneNode(true);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >          if (!(fragment instanceof DocumentFragment)) {</span>
-<span class="cstat-no" title="statement not covered" >            return null;</span>
-          }
-&nbsp;
-          const item = <span class="cstat-no" title="statement not covered" >fragment.firstElementChild;</span>
-<span class="cstat-no" title="statement not covered" >          return item instanceof HTMLElement ? item : null;</span>
+          const fragment = <span class="cstat-no" title="statement not covered" >template.content.cloneNode(true) as DocumentFragment;</span>
+<span class="cstat-no" title="statement not covered" >          return fragment.firstElementChild;</span>
         };
       }
     }
@@ -434,7 +420,6 @@ class DynamicFormManager {
     }
 &nbsp;
     const newItem = <span class="cstat-no" title="statement not covered" >this.createItemFunction();</span>
-&nbsp;
 <span class="cstat-no" title="statement not covered" >    if (!newItem) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
@@ -444,7 +429,7 @@ class DynamicFormManager {
 <span class="cstat-no" title="statement not covered" >    this.handleChange();</span>
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  removeItem(e</span>vent: Event): void {
+<span class="fstat-no" title="function not covered" >  removeItem(e</span>vent: MouseEvent): void {
 <span class="cstat-no" title="statement not covered" >    if (!(event.target instanceof Element)) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
@@ -490,7 +475,7 @@ export default DynamicFormManager;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-07-09T12:46:51.004Z
+                at 2026-07-09T14:44:17.216Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
