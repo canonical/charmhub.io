@@ -30,7 +30,7 @@
 
     <div class="grid-col-4">
       <div>
-        <h3 class="u-no-margin--bottom u-sv1">{{ solution.title }}</h3>
+        <h1 class="u-sv-1">{{ solution.title }}</h1>
         <ul class="p-inline-list--middot u-no-margin--bottom">
           <li class="p-inline-list__item">
             By
@@ -88,7 +88,6 @@
   <div class="grid-row">
     <div class="grid-col-2"></div>
     <div class="grid-col-6 p-section--shallow u-no-padding--bottom">
-      <hr class="p-separator--shallow p-rule--muted u-no-margin--top">
       {% if solution.documentation.get_started %}
         <a class="p-button--positive" href="{{ solution.documentation.get_started }}">View implementation guide</a>
       {% endif %}

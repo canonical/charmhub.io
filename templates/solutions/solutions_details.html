@@ -1,7 +1,6 @@
 <div>
   {% if solution.description_html %}
     <div class="p-section--shallow u-no-padding--top">
-      <h4 style="font-weight: 500">{{ solution.title }}</h4>
       {{ solution.description_html | safe }}
     </div>
   {% endif %}
