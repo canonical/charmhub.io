@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./static/js/dist",
-    "baseUrl": "src",
+    "rootDir": "./static/js/src",
     "target": "ES2020",
     "module": "esnext",
     "jsx": "react-jsx",
@@ -13,16 +13,13 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": false,
     "sourceMap": true,
     "strictPropertyInitialization": false,
-    "types": ["vitest/globals"],
-    "paths": {
-      "*": ["types/*.d.ts"]
-    }
+    "types": ["node", "vitest/globals"]
   },
   "include": ["./static/js/"],
 }

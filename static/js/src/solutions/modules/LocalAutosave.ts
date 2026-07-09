@@ -8,11 +8,42 @@ const EXTRA_ARRAY_FIELD_NAMES = [
   "categories",
 ];
 
-function getMultivalueFieldConfigs() {
+type DraftValues = Record<string, FormDataEntryValue[]>;
+
+type LocalDraft = {
+  savedAt: string;
+  values: DraftValues;
+};
+
+type MultivalueFieldConfig = {
+  addButton: HTMLElement | null;
+  container: HTMLElement;
+  itemSelector?: string;
+  name?: string;
+  removeSelector?: string;
+};
+
+type FormValueElement =
+  | HTMLInputElement
+  | HTMLTextAreaElement
+  | HTMLSelectElement;
+
+function isFormValueElement(element: Element): element is FormValueElement {
+  return (
+    element instanceof HTMLInputElement ||
+    element instanceof HTMLTextAreaElement ||
+    element instanceof HTMLSelectElement
+  );
+}
+
+function getMultivalueFieldConfigs(): MultivalueFieldConfig[] {
   return Array.from(
-    document.querySelectorAll("[data-autosave-multivalue-field]")
+    document.querySelectorAll<HTMLElement>("[data-autosave-multivalue-field]")
   ).map((container) => ({
-    addButton: document.getElementById(container.dataset.autosaveAddButton),
+    addButton:
+      container instanceof HTMLElement && container.dataset.autosaveAddButton
+        ? document.getElementById(container.dataset.autosaveAddButton)
+        : null,
     container,
     itemSelector: container.dataset.autosaveItemSelector,
     name: container.dataset.autosaveMultivalueField,
@@ -20,21 +51,23 @@ function getMultivalueFieldConfigs() {
   }));
 }
 
-function getArrayFieldNames() {
+function getArrayFieldNames(): string[] {
   return [
-    ...getMultivalueFieldConfigs().map(({ name }) => name),
+    ...getMultivalueFieldConfigs()
+      .map(({ name }) => name)
+      .filter((name): name is string => Boolean(name)),
     ...EXTRA_ARRAY_FIELD_NAMES,
   ];
 }
 
-function getDraftStorageKey(form) {
+function getDraftStorageKey(form: HTMLFormElement): string {
   return `${DRAFT_STORAGE_PREFIX}:${window.location.pathname}:${form.getAttribute(
     "action"
   )}`;
 }
 
-function getFormValues(form) {
-  const values = {};
+function getFormValues(form: HTMLFormElement): DraftValues {
+  const values: DraftValues = {};
 
   for (const [name, value] of new FormData(form).entries()) {
     if (["csrf_token", "action", "charm-search"].includes(name)) {
@@ -58,9 +91,10 @@ function getFormValues(form) {
   return values;
 }
 
-const serializeForm = (form) => JSON.stringify(getFormValues(form));
+const serializeForm = (form: HTMLFormElement): string =>
+  JSON.stringify(getFormValues(form));
 
-function setAutosaveStatus(message) {
+function setAutosaveStatus(message: string): void {
   const status = document.getElementById("local-autosave-status");
 
   if (status) {
@@ -68,7 +102,7 @@ function setAutosaveStatus(message) {
   }
 }
 
-function getFormattedTime(date = new Date()) {
+function getFormattedTime(date = new Date()): string {
   return date.toLocaleTimeString([], {
     hour: "2-digit",
     hour12: false,
@@ -76,7 +110,7 @@ function getFormattedTime(date = new Date()) {
   });
 }
 
-function saveLocalDraft(form) {
+function saveLocalDraft(form: HTMLFormElement): void {
   try {
     window.localStorage.setItem(
       getDraftStorageKey(form),
@@ -94,7 +128,7 @@ function saveLocalDraft(form) {
   }
 }
 
-function removeLocalDraft(form) {
+function removeLocalDraft(form: HTMLFormElement): void {
   try {
     window.localStorage.removeItem(getDraftStorageKey(form));
   } catch (error) {
@@ -102,11 +136,16 @@ function removeLocalDraft(form) {
   }
 }
 
-function getLocalDraft(form) {
+function getLocalDraft(form: HTMLFormElement): LocalDraft | null {
   try {
     const draftJson = window.localStorage.getItem(getDraftStorageKey(form));
-    const draft = draftJson ? JSON.parse(draftJson) : null;
-    const savedAt = Date.parse(draft?.savedAt);
+    const draft = draftJson ? (JSON.parse(draftJson) as LocalDraft) : null;
+
+    if (!draft) {
+      return null;
+    }
+
+    const savedAt = Date.parse(draft.savedAt);
 
     if (
       draft &&
@@ -123,9 +162,13 @@ function getLocalDraft(form) {
   }
 }
 
-function restoreMultivalueFields(draftValues) {
+function restoreMultivalueFields(draftValues: DraftValues): void {
   getMultivalueFieldConfigs().forEach(
     ({ addButton, container, itemSelector, name, removeSelector }) => {
+      if (!name) {
+        return;
+      }
+
       const values = draftValues[name];
 
       if (!values || !addButton || !itemSelector || !removeSelector) {
@@ -144,44 +187,56 @@ function restoreMultivalueFields(draftValues) {
       while (container.querySelectorAll(itemSelector).length > values.length) {
         container
           .querySelector(itemSelector)
-          ?.querySelector(removeSelector)
+          ?.querySelector<HTMLElement>(removeSelector)
           ?.click();
       }
     }
   );
 }
 
-function restoreCharms(draftValues) {
+function restoreCharms(draftValues: DraftValues): void {
   const charms = draftValues["charms[]"];
   const selectedCharms = document.getElementById("selected-charms");
   const template = document.getElementById("charm-item-template");
 
-  if (!charms || !selectedCharms || !template) {
+  if (
+    !charms ||
+    !selectedCharms ||
+    !(template instanceof HTMLTemplateElement)
+  ) {
     return;
   }
 
   selectedCharms.innerHTML = "";
 
   charms.forEach((charmName) => {
-    const item = template.content
-      .cloneNode(true)
-      .querySelector("[data-charm-name]");
+    const fragment = template.content.cloneNode(true) as DocumentFragment;
+    const item = fragment.querySelector(
+      "[data-charm-name]"
+    ) as HTMLElement | null;
 
     if (!item) {
       return;
     }
 
-    item.dataset.charmName = charmName;
-    item.querySelector("span").textContent = charmName;
-    item.querySelector('input[name="charms[]"]').value = charmName;
+    const charmNameString = String(charmName);
+    const input = item.querySelector(
+      'input[name="charms[]"]'
+    ) as HTMLInputElement | null;
+
+    item.dataset.charmName = charmNameString;
+    item.querySelector("span")?.replaceChildren(charmNameString);
+    if (input) {
+      input.value = charmNameString;
+    }
     item
       .querySelector("button")
-      ?.setAttribute("aria-label", `Remove ${charmName}`);
+      ?.setAttribute("aria-label", `Remove ${charmNameString}`);
     selectedCharms.appendChild(item);
   });
 }
 
-function restoreLocalDraft(form) {
+function restoreLocalDraft(form: HTMLFormElement): void {
   const draft = getLocalDraft(form);
 
   if (!draft?.values) {
@@ -193,23 +248,30 @@ function restoreLocalDraft(form) {
 
   Object.entries(draft.values).forEach(([name, values]) => {
     const fields = Array.from(form.elements).filter(
-      (field) => field.name === name
+      (field): field is FormValueElement =>
+        field instanceof Element &&
+        isFormValueElement(field) &&
+        field.name === name
     );
 
     fields.forEach((field, index) => {
-      if (field.type === "checkbox" || field.type === "radio") {
+      if (
+        field instanceof HTMLInputElement &&
+        (field.type === "checkbox" || field.type === "radio")
+      ) {
         field.checked = values.includes(field.value);
         return;
       }
 
       if (values[index] !== undefined) {
-        field.value = values[index];
+        const value = String(values[index]);
+        field.value = value;
 
         if (name === "maintainers_email[]") {
           field
             .closest(".maintainer-item")
             ?.querySelector(".remove-maintainer")
-            ?.setAttribute("aria-label", `Remove ${values[index]}`);
+            ?.setAttribute("aria-label", `Remove ${value}`);
         }
       }
     });
@@ -222,30 +284,36 @@ function restoreLocalDraft(form) {
   );
 }
 
-function initCancelLink(form, discardDraft) {
-  const cancelLink = document.getElementById("cancel-edit-solution");
+function initCancelLink(form: HTMLFormElement, discardDraft: () => void): void {
+  const cancelLink = document.getElementById(
+    "cancel-edit-solution"
+  ) as HTMLAnchorElement | null;
   const modal = document.getElementById("local-autosave-cancel-modal");
-  const keepButton = document.getElementById("local-autosave-cancel-keep");
+  const keepButton = document.getElementById(
+    "local-autosave-cancel-keep"
+  ) as HTMLButtonElement | null;
   const discardButton = document.getElementById(
     "local-autosave-cancel-discard"
-  );
-  const closeButton = modal?.querySelector(".p-modal__close");
+  ) as HTMLButtonElement | null;
+  const closeButton = modal?.querySelector(
+    ".p-modal__close"
+  ) as HTMLElement | null;
 
   if (!cancelLink) {
     return;
   }
 
-  const leave = () => {
+  const leave = (): void => {
     discardDraft();
     window.location.href = cancelLink.href;
   };
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     modal?.classList.add("u-hide");
     cancelLink.focus();
   };
 
-  cancelLink.addEventListener("click", (event) => {
+  cancelLink.addEventListener("click", (event: MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -261,20 +329,20 @@ function initCancelLink(form, discardDraft) {
   discardButton?.addEventListener("click", leave);
   keepButton?.addEventListener("click", closeModal);
   closeButton?.addEventListener("click", closeModal);
-  modal?.addEventListener("click", (event) => {
+  modal?.addEventListener("click", (event: MouseEvent) => {
     if (event.target === modal) {
       closeModal();
     }
   });
-  document.addEventListener("keydown", (event) => {
+  document.addEventListener("keydown", (event: KeyboardEvent) => {
     if (event.key === "Escape" && !modal?.classList.contains("u-hide")) {
       closeModal();
     }
   });
 }
 
-function initLocalAutosave(form) {
-  let saveTimeout;
+function initLocalAutosave(form: HTMLFormElement): void {
+  let saveTimeout: number | undefined;
   let skipBeforeUnloadSave = false;
   restoreLocalDraft(form);
 

@@ -1,25 +1,55 @@
-function initConfirmationModal(config) {
-  const form = document.querySelector(config.formSelector);
+type ConfirmationFormData = Record<string, FormDataEntryValue>;
+
+type ConfirmationModalConfig = {
+  formSelector: string;
+  getMessage: (
+    formData: ConfirmationFormData,
+    form: HTMLFormElement
+  ) => string | undefined;
+  beforeSubmit?: (
+    form: HTMLFormElement,
+    submitter: SubmitterElement | null
+  ) => void | Promise<void>;
+};
+
+type SubmitterElement = HTMLButtonElement | HTMLInputElement;
+
+declare global {
+  interface Window {
+    validateSolutionForm?: () => boolean;
+  }
+}
+
+function initConfirmationModal(config: ConfirmationModalConfig): void {
+  const form = document.querySelector(
+    config.formSelector
+  ) as HTMLFormElement | null;
   const modal = document.getElementById("solution-confirmation-modal");
   const modalMessage = document.getElementById("modal-message");
-  const confirmButton = document.getElementById("modal-confirm");
-  const cancelButton = document.getElementById("modal-cancel");
-  const closeButton = modal?.querySelector(".p-modal__close");
+  const confirmButton = document.getElementById(
+    "modal-confirm"
+  ) as HTMLButtonElement | null;
+  const cancelButton = document.getElementById(
+    "modal-cancel"
+  ) as HTMLButtonElement | null;
+  const closeButton = modal?.querySelector(
+    ".p-modal__close"
+  ) as HTMLElement | null;
 
-  if (!form || !modal) {
+  if (!form || !modal || !modalMessage || !confirmButton || !cancelButton) {
     console.error("ConfirmationModal: Required elements not found");
     return;
   }
 
   let formSubmitted = false;
-  let submitter = null;
+  let submitter: SubmitterElement | null = null;
   const originalButtonText = confirmButton.textContent;
 
-  const hideSubmitError = () => {
+  const hideSubmitError = (): void => {
     document.getElementById("solution-submit-error")?.classList.add("u-hide");
   };
 
-  const showSubmitError = (message) => {
+  const showSubmitError = (message: string): void => {
     const notification = document.getElementById("solution-submit-error");
     const notificationMessage = notification?.querySelector(
       ".p-notification__message"
@@ -35,7 +65,7 @@ function initConfirmationModal(config) {
     notification.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
-  const submitForm = async () => {
+  const submitForm = async (): Promise<void> => {
     formSubmitted = true;
 
     if (typeof config.beforeSubmit === "function") {
@@ -47,7 +77,9 @@ function initConfirmationModal(config) {
         confirmButton.disabled = false;
         modal.classList.add("u-hide");
         showSubmitError(
-          error.message || "Unable to submit the form. Please try again."
+          error instanceof Error
+            ? error.message
+            : "Unable to submit the form. Please try again."
         );
         return;
       }
@@ -60,12 +92,16 @@ function initConfirmationModal(config) {
     }
   };
 
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", (event: SubmitEvent) => {
     if (formSubmitted) {
       return;
     }
 
-    submitter = event.submitter;
+    submitter =
+      event.submitter instanceof HTMLButtonElement ||
+      event.submitter instanceof HTMLInputElement
+        ? event.submitter
+        : null;
     const shouldValidate = !submitter?.formNoValidate;
     hideSubmitError();
 
@@ -86,7 +122,9 @@ function initConfirmationModal(config) {
     }
 
     const formData = new FormData(form);
-    const formObject = Object.fromEntries(formData.entries());
+    const formObject = Object.fromEntries(
+      formData.entries()
+    ) as ConfirmationFormData;
     const message = config.getMessage(formObject, form);
 
     if (!message) {
@@ -110,7 +148,7 @@ function initConfirmationModal(config) {
     submitForm();
   });
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     modal.classList.add("u-hide");
     confirmButton.textContent = originalButtonText;
     confirmButton.disabled = false;
@@ -119,13 +157,13 @@ function initConfirmationModal(config) {
   cancelButton.addEventListener("click", closeModal);
   closeButton?.addEventListener("click", closeModal);
 
-  modal.addEventListener("click", (e) => {
+  modal.addEventListener("click", (e: MouseEvent) => {
     if (e.target === modal) {
       closeModal();
     }
   });
 
-  document.addEventListener("keydown", (e) => {
+  document.addEventListener("keydown", (e: KeyboardEvent) => {
     if (e.key === "Escape" && !modal.classList.contains("u-hide")) {
       closeModal();
     }

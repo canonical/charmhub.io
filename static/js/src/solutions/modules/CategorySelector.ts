@@ -1,14 +1,29 @@
 const MIN_CATEGORIES = 1;
 const MAX_CATEGORIES = 2;
 
+type CategorySelectorConfig = {
+  containerId?: string;
+  sectionId?: string;
+  checkboxSelector?: string;
+  min?: number;
+  max?: number;
+};
+
 class CategorySelector {
+  container: HTMLElement | null;
+  section: HTMLElement | null;
+  checkboxSelector: string;
+  min: number;
+  max: number;
+  checkboxes: HTMLInputElement[] = [];
+
   constructor({
     containerId = "categories-list",
     sectionId = "categories-section",
     checkboxSelector = ".category-checkbox",
     min = MIN_CATEGORIES,
     max = MAX_CATEGORIES,
-  } = {}) {
+  }: CategorySelectorConfig = {}) {
     this.container = document.getElementById(containerId);
     this.section = document.getElementById(sectionId);
     this.checkboxSelector = checkboxSelector;
@@ -21,7 +36,7 @@ class CategorySelector {
 
     this.checkboxes = Array.from(
       this.container.querySelectorAll(checkboxSelector)
-    );
+    ) as HTMLInputElement[];
 
     this.checkboxes.forEach((checkbox) => {
       checkbox.addEventListener("change", () => this.handleChange());
@@ -30,11 +45,11 @@ class CategorySelector {
     this.enforce();
   }
 
-  getCheckedCount() {
+  getCheckedCount(): number {
     return this.checkboxes.filter((checkbox) => checkbox.checked).length;
   }
 
-  handleChange() {
+  handleChange(): void {
     this.enforce();
 
     if (this.getCheckedCount() > 0) {
@@ -42,7 +57,7 @@ class CategorySelector {
     }
   }
 
-  enforce() {
+  enforce(): void {
     if (!this.checkboxes) {
       return;
     }
@@ -54,7 +69,7 @@ class CategorySelector {
     });
   }
 
-  clearError() {
+  clearError(): void {
     if (!this.section) {
       return;
     }
@@ -67,7 +82,7 @@ class CategorySelector {
     }
   }
 
-  showError() {
+  showError(): void {
     if (!this.section) {
       return;
     }
@@ -82,7 +97,7 @@ class CategorySelector {
     this.section.scrollIntoView({ behavior: "smooth" });
   }
 
-  isValid() {
+  isValid(): boolean {
     if (!this.container || this.checkboxes.length === 0) {
       return true;
     }

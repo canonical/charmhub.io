@@ -14,7 +14,20 @@ const CSRF_REFRESH_ACTIONS = [
 const CSRF_REFRESH_ERROR =
   "Unable to refresh your session token. Please try again.";
 
-async function refreshCsrfToken(form) {
+type CsrfTokenResponse = {
+  csrf_token?: string;
+};
+
+type PreviewResponse = {
+  success?: boolean;
+  preview_key?: string;
+  error?: string;
+  errors?: { message: string }[];
+};
+
+type ConfirmationFormData = Record<string, FormDataEntryValue>;
+
+async function refreshCsrfToken(form: HTMLFormElement): Promise<void> {
   const response = await fetch(CSRF_TOKEN_ENDPOINT, {
     method: "GET",
     cache: "no-store",
@@ -31,14 +44,16 @@ async function refreshCsrfToken(form) {
     throw new Error(CSRF_REFRESH_ERROR);
   }
 
-  let data;
+  let data: CsrfTokenResponse;
   try {
-    data = await response.json();
+    data = (await response.json()) as CsrfTokenResponse;
   } catch (_error) {
     throw new Error(CSRF_REFRESH_ERROR);
   }
 
-  const csrfInput = form.querySelector('input[name="csrf_token"]');
+  const csrfInput = form.querySelector(
+    'input[name="csrf_token"]'
+  ) as HTMLInputElement | null;
 
   if (!data.csrf_token || !csrfInput) {
     throw new Error(CSRF_REFRESH_ERROR);
@@ -47,22 +62,31 @@ async function refreshCsrfToken(form) {
   csrfInput.value = data.csrf_token;
 }
 
-function refreshCsrfTokenBeforeSubmit(form, submitter) {
+function refreshCsrfTokenBeforeSubmit(
+  form: HTMLFormElement,
+  submitter: HTMLButtonElement | HTMLInputElement | null
+): void | Promise<void> {
   const action =
-    submitter?.value || new FormData(form).get("action") || "save_draft";
+    submitter?.value ||
+    String(new FormData(form).get("action") || "save_draft");
 
   if (CSRF_REFRESH_ACTIONS.includes(action)) {
     return refreshCsrfToken(form);
   }
 }
 
-function getEditMessage(formData, form) {
+function getEditMessage(
+  formData: ConfirmationFormData,
+  form: HTMLFormElement
+): string | undefined {
   const solutionTitle =
-    document.querySelector('input[name="title"]')?.value ||
-    "[title not provided]";
+    (document.querySelector('input[name="title"]') as HTMLInputElement | null)
+      ?.value || "[title not provided]";
 
-  const submitter = form.querySelector('button[type="submit"]:focus');
-  const action = submitter?.value || formData.action;
+  const submitter = form.querySelector(
+    'button[type="submit"]:focus'
+  ) as HTMLButtonElement | null;
+  const action = submitter?.value || String(formData.action || "");
 
   if (action === "submit_for_review") {
     return `Are you sure you want to submit the metadata for "${solutionTitle}" for review? 
@@ -71,10 +95,12 @@ function getEditMessage(formData, form) {
     return `Are you sure you want to update the metadata for "${solutionTitle}"? 
             These changes will be published immediately without review.`;
   }
+
+  return undefined;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  const form = document.querySelector("form.p-form");
+  const form = document.querySelector("form.p-form") as HTMLFormElement | null;
 
   if (!form) {
     return;
@@ -88,7 +114,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const categorySelector = new CategorySelector();
 
-  const previewButton = document.getElementById("preview-button");
+  const previewButton = document.getElementById(
+    "preview-button"
+  ) as HTMLButtonElement | null;
 
   if (previewButton) {
     const submitPreviewForm = async () => {
@@ -97,10 +125,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
       try {
         await refreshCsrfToken(form);
-        const csrfInput = form.querySelector('input[name="csrf_token"]');
+        const csrfInput = form.querySelector(
+          'input[name="csrf_token"]'
+        ) as HTMLInputElement | null;
+
+        if (!csrfInput) {
+          throw new Error(CSRF_REFRESH_ERROR);
+        }
+
         formData.set("csrf_token", csrfInput.value);
 
-        const formAction = form.getAttribute("action");
+        const formAction = form.getAttribute("action") || window.location.href;
         const response = await fetch(formAction, {
           method: "POST",
           body: formData,
@@ -109,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!response.ok) {
           const contentType = response.headers.get("content-type");
           if (contentType && contentType.includes("application/json")) {
-            const data = await response.json();
+            const data = (await response.json()) as PreviewResponse;
             let errorMessage =
               "Failed to save and preview. Please check the form for errors.";
 
@@ -128,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
           return;
         }
 
-        const data = await response.json();
+        const data = (await response.json()) as PreviewResponse;
 
         if (data.success && data.preview_key) {
           window.open(`/solutions/preview-draft/${data.preview_key}`, "_blank");
@@ -138,7 +173,11 @@ document.addEventListener("DOMContentLoaded", function () {
           );
         }
       } catch (error) {
-        alert(`Failed to generate preview: ${error.message}`);
+        alert(
+          `Failed to generate preview: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`
+        );
       }
     };
 
@@ -155,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  const hideValidationMessage = (container) => {
+  const hideValidationMessage = (container: Element): void => {
     const message = container.querySelector(".p-form-validation__message");
 
     if (message) {
@@ -163,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
-  const showValidationMessage = (container) => {
+  const showValidationMessage = (container: Element): void => {
     const message = container.querySelector(".p-form-validation__message");
 
     if (message) {
@@ -177,7 +216,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  const clearValidationState = (sectionId) => {
+  const clearValidationState = (sectionId: string): void => {
     const section = document.getElementById(sectionId);
 
     if (section) {
@@ -186,7 +225,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
-  const validateForm = () => {
+  const validateForm = (): boolean => {
     document.querySelectorAll(".p-form-validation.is-error").forEach((el) => {
       el.classList.remove("is-error");
       hideValidationMessage(el);

@@ -1,7 +1,50 @@
+type CharmSearchBoxConfig = {
+  searchFilterId: string;
+  searchInputId: string;
+  resultsPanelId: string;
+  resultsContainerId: string;
+  resultsSectionId: string;
+  noResultsSectionId: string;
+  selectedContainerId: string;
+  selectedSectionId: string;
+  manualCharmInputId: string;
+  addManualButtonId: string;
+  apiEndpoint?: string;
+};
+
+type Charm = {
+  name: string;
+};
+
+type CharmSearchResponse = {
+  charms?: Charm[];
+};
+
+type CharmValidationResponse = {
+  exists?: boolean;
+};
+
 class CharmSearchBox {
-  constructor(config) {
+  searchFilterElement: HTMLElement | null;
+  searchInput: HTMLInputElement | null;
+  resultsPanel: HTMLElement | null;
+  resultsContainer: HTMLElement | null;
+  resultsSection: HTMLElement | null;
+  noResultsSection: HTMLElement | null;
+  selectedContainer: HTMLElement | null;
+  selectedValidationSection: HTMLElement | null;
+  manualCharmInput: HTMLInputElement | null;
+  addManualButton: HTMLButtonElement | null;
+  validationContainer: HTMLElement | null;
+  validationMessage: HTMLElement | null;
+  searchTimeout: ReturnType<typeof setTimeout> | null;
+  apiEndpoint: string;
+
+  constructor(config: CharmSearchBoxConfig) {
     this.searchFilterElement = document.getElementById(config.searchFilterId);
-    this.searchInput = document.getElementById(config.searchInputId);
+    this.searchInput = document.getElementById(
+      config.searchInputId
+    ) as HTMLInputElement | null;
     this.resultsPanel = document.getElementById(config.resultsPanelId);
     this.resultsContainer = document.getElementById(config.resultsContainerId);
     this.resultsSection = document.getElementById(config.resultsSectionId);
@@ -12,8 +55,12 @@ class CharmSearchBox {
     this.selectedValidationSection = document.getElementById(
       config.selectedSectionId
     );
-    this.manualCharmInput = document.getElementById(config.manualCharmInputId);
-    this.addManualButton = document.getElementById(config.addManualButtonId);
+    this.manualCharmInput = document.getElementById(
+      config.manualCharmInputId
+    ) as HTMLInputElement | null;
+    this.addManualButton = document.getElementById(
+      config.addManualButtonId
+    ) as HTMLButtonElement | null;
     this.validationContainer = document.getElementById(
       "manual-charm-validation"
     );
@@ -27,7 +74,7 @@ class CharmSearchBox {
     this.init();
   }
 
-  init() {
+  init(): void {
     if (!this.searchInput || !this.selectedContainer) {
       console.warn("CharmSearchBox: Required elements not found");
       return;
@@ -37,7 +84,11 @@ class CharmSearchBox {
     this.handleSelectedChange();
   }
 
-  setupEventListeners() {
+  setupEventListeners(): void {
+    if (!this.searchInput || !this.selectedContainer) {
+      return;
+    }
+
     this.searchInput.addEventListener("focus", () => {
       this.togglePanel(false);
     });
@@ -59,13 +110,18 @@ class CharmSearchBox {
       searchButton.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
-        if (this.searchInput.value.trim().length >= 2) {
-          this.searchCharms(this.searchInput.value.trim());
+        const query = this.searchInput?.value.trim() || "";
+        if (query.length >= 2) {
+          this.searchCharms(query);
         }
       });
     }
 
     this.selectedContainer.addEventListener("click", (e) => {
+      if (!(e.target instanceof Element)) {
+        return;
+      }
+
       if (
         e.target.classList.contains("charm-remove") ||
         e.target.closest(".charm-remove")
@@ -78,25 +134,27 @@ class CharmSearchBox {
       }
     });
 
-    if (this.addManualButton && this.manualCharmInput) {
-      this.addManualButton.addEventListener("click", async () => {
-        const charmName = this.manualCharmInput.value.trim();
+    const addManualButton = this.addManualButton;
+    const manualCharmInput = this.manualCharmInput;
+    if (addManualButton && manualCharmInput) {
+      addManualButton.addEventListener("click", async () => {
+        const charmName = manualCharmInput.value.trim();
         if (charmName) {
           this.hideValidationError();
 
-          const originalContent = this.addManualButton.textContent;
-          this.addManualButton.disabled = true;
-          this.addManualButton.innerHTML =
+          const originalContent = addManualButton.textContent;
+          addManualButton.disabled = true;
+          addManualButton.innerHTML =
             '<i class="p-icon--spinner u-animation--spin"></i>';
 
           const exists = await this.validateCharm(charmName);
 
-          this.addManualButton.disabled = false;
-          this.addManualButton.textContent = originalContent;
+          addManualButton.disabled = false;
+          addManualButton.textContent = originalContent;
 
           if (exists) {
             this.addCharm({ name: charmName });
-            this.manualCharmInput.value = "";
+            manualCharmInput.value = "";
           } else {
             this.showValidationError(
               `"${charmName}" does not exist in Charmhub. Please check the name and try again.`
@@ -107,7 +165,7 @@ class CharmSearchBox {
     }
   }
 
-  togglePanel(collapse) {
+  togglePanel(collapse?: boolean): void {
     if (!this.resultsPanel || !this.searchFilterElement) return;
 
     const container = this.searchFilterElement.querySelector(
@@ -128,10 +186,16 @@ class CharmSearchBox {
     }
   }
 
-  handleSearchInput() {
+  handleSearchInput(): void {
+    if (!this.searchInput) {
+      return;
+    }
+
     const query = this.searchInput.value.trim();
 
-    clearTimeout(this.searchTimeout);
+    if (this.searchTimeout) {
+      window.clearTimeout(this.searchTimeout);
+    }
 
     if (query.length < 2) {
       this.hideResults();
@@ -143,12 +207,12 @@ class CharmSearchBox {
     }, 300);
   }
 
-  async searchCharms(query) {
+  async searchCharms(query: string): Promise<void> {
     try {
       const response = await fetch(
         `${this.apiEndpoint}?q=${encodeURIComponent(query)}&limit=10`
       );
-      const data = await response.json();
+      const data = (await response.json()) as CharmSearchResponse;
       const charms = data.charms || [];
       this.showResults(charms);
     } catch (error) {
@@ -157,10 +221,11 @@ class CharmSearchBox {
     }
   }
 
-  showResults(charms) {
-    if (!this.resultsContainer) return;
+  showResults(charms: Charm[]): void {
+    const resultsContainer = this.resultsContainer;
+    if (!resultsContainer) return;
 
-    this.resultsContainer.innerHTML = "";
+    resultsContainer.innerHTML = "";
 
     if (charms.length > 0) {
       charms.forEach((charm) => {
@@ -172,7 +237,7 @@ class CharmSearchBox {
           e.preventDefault();
           this.addCharm(charm);
         });
-        this.resultsContainer.appendChild(button);
+        resultsContainer.appendChild(button);
       });
 
       if (this.resultsSection) this.resultsSection.style.display = "block";
@@ -182,17 +247,21 @@ class CharmSearchBox {
     }
   }
 
-  showNoResults() {
+  showNoResults(): void {
     if (this.resultsSection) this.resultsSection.style.display = "none";
     if (this.noResultsSection) this.noResultsSection.style.display = "block";
   }
 
-  hideResults() {
+  hideResults(): void {
     if (this.resultsSection) this.resultsSection.style.display = "none";
     if (this.noResultsSection) this.noResultsSection.style.display = "none";
   }
 
-  addCharm(charm) {
+  addCharm(charm: Charm): void {
+    if (!this.selectedContainer || !this.searchInput) {
+      return;
+    }
+
     const existingCharms = this.getSelectedCharmNames();
 
     if (existingCharms.includes(charm.name)) {
@@ -205,12 +274,28 @@ class CharmSearchBox {
       return;
     }
 
-    const charmDiv = template.content.cloneNode(true).firstElementChild;
+    if (!(template instanceof HTMLTemplateElement)) {
+      console.error("Charm item template is not a template element");
+      return;
+    }
+
+    const fragment = template.content.cloneNode(true) as DocumentFragment;
+    const charmDiv = fragment.firstElementChild as HTMLElement | null;
+    if (!charmDiv) {
+      return;
+    }
+
     charmDiv.setAttribute("data-charm-name", charm.name);
 
     const button = charmDiv.querySelector(".charm-remove");
     const span = charmDiv.querySelector("span");
-    const input = charmDiv.querySelector("input[name='charms[]']");
+    const input = charmDiv.querySelector(
+      "input[name='charms[]']"
+    ) as HTMLInputElement | null;
+
+    if (!button || !span || !input) {
+      return;
+    }
 
     button.setAttribute("aria-label", `Remove ${charm.name}`);
     span.textContent = charm.name;
@@ -222,13 +307,19 @@ class CharmSearchBox {
     this.hideResults();
   }
 
-  getSelectedCharmNames() {
+  getSelectedCharmNames(): string[] {
+    if (!this.selectedContainer) {
+      return [];
+    }
+
     return Array.from(
       this.selectedContainer.querySelectorAll("[data-charm-name]")
-    ).map((div) => div.getAttribute("data-charm-name"));
+    )
+      .map((div) => div.getAttribute("data-charm-name"))
+      .filter((name): name is string => Boolean(name));
   }
 
-  handleSelectedChange() {
+  handleSelectedChange(): void {
     if (!this.selectedValidationSection) return;
 
     if (this.getSelectedCharmNames().length > 0) {
@@ -244,21 +335,25 @@ class CharmSearchBox {
     }
   }
 
-  async validateCharm(charmName) {
+  async validateCharm(charmName: string): Promise<boolean> {
     try {
       const response = await fetch(
         `/validate-charm?name=${encodeURIComponent(charmName)}`
       );
-      const data = await response.json();
-      return data.exists;
+      const data = (await response.json()) as CharmValidationResponse;
+      return Boolean(data.exists);
     } catch (error) {
       console.error("Error validating charm:", error);
       return false;
     }
   }
 
-  showValidationError(message) {
-    if (this.validationContainer && this.validationMessage) {
+  showValidationError(message: string): void {
+    if (
+      this.validationContainer &&
+      this.validationMessage &&
+      this.manualCharmInput
+    ) {
       this.validationMessage.textContent = message;
       this.validationMessage.removeAttribute("hidden");
       this.validationContainer.classList.add("is-error");
@@ -270,8 +365,12 @@ class CharmSearchBox {
     }
   }
 
-  hideValidationError() {
-    if (this.validationContainer && this.validationMessage) {
+  hideValidationError(): void {
+    if (
+      this.validationContainer &&
+      this.validationMessage &&
+      this.manualCharmInput
+    ) {
       this.validationMessage.textContent = "";
       this.validationMessage.setAttribute("hidden", "");
       this.validationContainer.classList.remove("is-error");
