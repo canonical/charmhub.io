@@ -8,6 +8,7 @@
             name="use_cases_title[]"
             placeholder="Title: e.g., Log aggregation"
             required
+            maxlength="30"
           >
         </div>
       </div>
@@ -22,6 +23,7 @@
           rows="2"
           placeholder="Description: Describe this use case..."
           required
+          maxlength="500"
         ></textarea>
       </div>
     </div>
@@ -52,6 +54,7 @@
                       value="{{ use_case.title | e }}"
                       placeholder="Title: e.g., Log aggregation"
                       required
+                      maxlength="30"
                     >
                   </div>
                 </div>
@@ -63,6 +66,7 @@
                     rows="2"
                     placeholder="Description: Describe this use case..."
                     required
+                    maxlength="500"
                   >{{ use_case.description | e }}</textarea>
                 </div>
               </div>
@@ -72,7 +76,7 @@
       </div>
       <button type="button" id="add-use-case" class="p-button--base">Add Use Case</button>
       <p class="p-form-validation__message" id="use-case-error">At least one use case is required</p>
-      <p class="p-form-help-text">At least one use case is required (maximum 3)</p>
+      <p class="p-form-help-text">At least one use case is required (maximum 3). Titles can be up to 30 characters and descriptions up to 500 characters.</p>
     </div>
   </div>
 </div>

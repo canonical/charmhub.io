@@ -304,6 +304,7 @@ document.addEventListener("DOMContentLoaded", function () {
     removeSelector: "remove-platform-version",
     itemSelector: ".platform-version-item",
     templateId: "platform-version-template",
+    maxItems: 3,
     onChange: (count) => {
       if (count > 0) {
         clearValidationState("platform-version-section");
@@ -325,6 +326,7 @@ document.addEventListener("DOMContentLoaded", function () {
     removeSelector: "remove-juju-version",
     itemSelector: ".juju-version-item",
     templateId: "juju-version-template",
+    maxItems: 3,
     onChange: (count) => {
       if (count > 0) {
         clearValidationState("juju-versions-section");

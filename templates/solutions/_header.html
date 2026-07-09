@@ -30,8 +30,7 @@
 
     <div class="grid-col-4">
       <div>
-        <a href="/solutions" class="u-text--muted p-text--small-caps">&lt; ALL SOLUTIONS</a>
-        <h3 class="u-no-margin--bottom u-sv1">{{ solution.title }}</h3>
+        <h1 class="u-sv-1">{{ solution.title }}</h1>
         <ul class="p-inline-list--middot u-no-margin--bottom">
           <li class="p-inline-list__item">
             By
@@ -71,9 +70,7 @@
             <span>{{ deployment }}</span>
           {% endif %}
           {% if deployment.get("version") and deployment["version"] | length > 0 %}
-            {% for version in deployment["version"] %}
-              <div class="u-text--muted">Version <strong>{{ version }}</strong></div>
-            {% endfor %}
+            <div class="u-text--muted">Version <strong>{{ deployment["version"] | join(", ") }}</strong></div>
           {% endif %}
           {% if deployment.get("prerequisites") and deployment["prerequisites"] | length > 0 %}
             <div class="u-text--muted">
@@ -91,7 +88,6 @@
   <div class="grid-row">
     <div class="grid-col-2"></div>
     <div class="grid-col-6 p-section--shallow u-no-padding--bottom">
-      <hr class="p-separator--shallow p-rule--muted u-no-margin--top">
       {% if solution.documentation.get_started %}
         <a class="p-button--positive" href="{{ solution.documentation.get_started }}">View implementation guide</a>
       {% endif %}

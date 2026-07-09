@@ -10,6 +10,7 @@
           name="useful_links_title[]"
           placeholder="Title: e.g., How to operate"
           required
+          maxlength="30"
         >
       </div>
     </div>
@@ -49,6 +50,7 @@
                     value="{{ link.title | e }}"
                     placeholder="Title: e.g., How to operate"
                     required
+                    maxlength="30"
                   >
                 </div>
               </div>
@@ -68,7 +70,7 @@
         {% endif %}
       </div>
       <button type="button" id="add-useful-link" class="p-button--base">Add Useful Link</button>
-      <p class="p-form-help-text">Add links to documentation, guides, bug reports, discussions, etc. (maximum 3)</p>
+      <p class="p-form-help-text">Add links to documentation, guides, bug reports, discussions, etc. (maximum 3). Link text can be up to 30 characters.</p>
     </div>
   </div>
 </div>
