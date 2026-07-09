@@ -71,9 +71,7 @@
             <span>{{ deployment }}</span>
           {% endif %}
           {% if deployment.get("version") and deployment["version"] | length > 0 %}
-            {% for version in deployment["version"] %}
-              <div class="u-text--muted">Version <strong>{{ version }}</strong></div>
-            {% endfor %}
+            <div class="u-text--muted">Version <strong>{{ deployment["version"] | join(", ") }}</strong></div>
           {% endif %}
           {% if deployment.get("prerequisites") and deployment["prerequisites"] | length > 0 %}
             <div class="u-text--muted">
