@@ -55,7 +55,9 @@
       <div class="p-notification--negative">
         <ul class="p-list p-notification__content u-no-padding--top" role="status">
           {% for e in errors %}
-            <li class="p-list__item p-notification__status">{{ e.message }}</li>
+            <li class="p-list__item p-notification__status">
+              {% if e.field %}<strong>{{ e.field }}:</strong> {% endif %}{{ e.message }}
+            </li>
           {% endfor %}
         </ul>
       </div>
