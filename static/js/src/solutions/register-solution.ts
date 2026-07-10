@@ -1,6 +1,12 @@
 import initConfirmationModal from "./modules/ConfirmationModal.js";
 
-function getRegistrationMessage(formData) {
+type ConfirmationFormData = Record<string, FormDataEntryValue>;
+
+interface SolutionNameValidationResponse {
+  exists: boolean;
+}
+
+function getRegistrationMessage(formData: ConfirmationFormData): string {
   const name = formData.name || "[name not provided]";
   const publisher = formData.publisher || "[publisher not selected]";
 
@@ -15,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     getMessage: getRegistrationMessage,
   });
 
-  const nameInput = document.getElementById("name");
+  const nameInput = document.getElementById("name") as HTMLInputElement | null;
   const validationContainer = document.getElementById(
     "solution-name-validation"
   );
@@ -23,19 +29,21 @@ document.addEventListener("DOMContentLoaded", function () {
     "solution-name-validation-message"
   );
 
-  const submitButton = document.querySelector('button[type="submit"]');
+  const submitButton = document.querySelector<HTMLButtonElement>(
+    'button[type="submit"]'
+  );
 
   if (!nameInput || !validationContainer || !validationMessage) {
     return;
   }
 
-  let validationTimeout = null;
+  let validationTimeout: ReturnType<typeof setTimeout> | null = null;
 
-  function showValidationError(message) {
-    validationMessage.textContent = message;
-    validationContainer.classList.add("is-error");
-    nameInput.setAttribute("aria-invalid", "true");
-    nameInput.setAttribute(
+  function showValidationError(message: string): void {
+    validationMessage!.textContent = message;
+    validationContainer!.classList.add("is-error");
+    nameInput!.setAttribute("aria-invalid", "true");
+    nameInput!.setAttribute(
       "aria-describedby",
       "solution-name-validation-message"
     );
@@ -45,23 +53,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function hideValidationError() {
-    validationMessage.textContent = "";
-    validationContainer.classList.remove("is-error");
-    nameInput.removeAttribute("aria-invalid");
-    nameInput.removeAttribute("aria-describedby");
+  function hideValidationError(): void {
+    validationMessage!.textContent = "";
+    validationContainer!.classList.remove("is-error");
+    nameInput!.removeAttribute("aria-invalid");
+    nameInput!.removeAttribute("aria-describedby");
 
     if (submitButton) {
       submitButton.disabled = false;
     }
   }
 
-  async function validateSolutionName(name) {
+  async function validateSolutionName(name: string): Promise<boolean> {
     try {
       const response = await fetch(
         `/validate-solution-name?name=${encodeURIComponent(name)}`
       );
-      const data = await response.json();
+      const data = (await response.json()) as SolutionNameValidationResponse;
       return data.exists;
     } catch (error) {
       console.error("Error validating solution name:", error);
@@ -72,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
   nameInput.addEventListener("input", () => {
     const name = nameInput.value.trim();
 
-    clearTimeout(validationTimeout);
+    clearTimeout(validationTimeout as ReturnType<typeof setTimeout>);
 
     if (name.length === 0) {
       hideValidationError();

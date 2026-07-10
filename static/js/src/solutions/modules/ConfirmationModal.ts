@@ -1,9 +1,31 @@
-function initConfirmationModal(config) {
-  const form = document.querySelector(config.formSelector);
+type ConfirmationFormData = Record<string, FormDataEntryValue>;
+
+interface ConfirmationModalConfig {
+  formSelector: string;
+  getMessage: (
+    formData: ConfirmationFormData,
+    form: HTMLFormElement
+  ) => string | void;
+  beforeSubmit?: (
+    form: HTMLFormElement,
+    submitter: HTMLElement | null
+  ) => void | Promise<void>;
+}
+
+declare global {
+  interface Window {
+    validateSolutionForm?: () => boolean;
+  }
+}
+
+function initConfirmationModal(config: ConfirmationModalConfig): void {
+  const form = document.querySelector<HTMLFormElement>(config.formSelector);
   const modal = document.getElementById("solution-confirmation-modal");
-  const modalMessage = document.getElementById("modal-message");
-  const confirmButton = document.getElementById("modal-confirm");
-  const cancelButton = document.getElementById("modal-cancel");
+  const modalMessage = document.getElementById("modal-message")!;
+  const confirmButton = document.getElementById(
+    "modal-confirm"
+  ) as HTMLButtonElement;
+  const cancelButton = document.getElementById("modal-cancel")!;
   const closeButton = modal?.querySelector(".p-modal__close");
 
   if (!form || !modal) {
@@ -12,14 +34,14 @@ function initConfirmationModal(config) {
   }
 
   let formSubmitted = false;
-  let submitter = null;
+  let submitter: HTMLElement | null = null;
   const originalButtonText = confirmButton.textContent;
 
   const hideSubmitError = () => {
     document.getElementById("solution-submit-error")?.classList.add("u-hide");
   };
 
-  const showSubmitError = (message) => {
+  const showSubmitError = (message: string) => {
     const notification = document.getElementById("solution-submit-error");
     const notificationMessage = notification?.querySelector(
       ".p-notification__message"
@@ -47,7 +69,8 @@ function initConfirmationModal(config) {
         confirmButton.disabled = false;
         modal.classList.add("u-hide");
         showSubmitError(
-          error.message || "Unable to submit the form. Please try again."
+          (error as Error).message ||
+            "Unable to submit the form. Please try again."
         );
         return;
       }
@@ -65,8 +88,9 @@ function initConfirmationModal(config) {
       return;
     }
 
-    submitter = event.submitter;
-    const shouldValidate = !submitter?.formNoValidate;
+    submitter = (event as SubmitEvent).submitter;
+    const shouldValidate = !(submitter as HTMLButtonElement | null)
+      ?.formNoValidate;
     hideSubmitError();
 
     event.preventDefault();
@@ -86,7 +110,9 @@ function initConfirmationModal(config) {
     }
 
     const formData = new FormData(form);
-    const formObject = Object.fromEntries(formData.entries());
+    const formObject = Object.fromEntries(
+      formData.entries()
+    ) as ConfirmationFormData;
     const message = config.getMessage(formObject, form);
 
     if (!message) {
