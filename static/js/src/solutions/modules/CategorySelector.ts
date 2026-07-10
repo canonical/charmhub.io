@@ -1,26 +1,42 @@
 const MIN_CATEGORIES = 1;
 const MAX_CATEGORIES = 2;
 
+interface CategorySelectorConfig {
+  containerId?: string;
+  sectionId?: string;
+  checkboxSelector?: string;
+  min?: number;
+  max?: number;
+}
+
 class CategorySelector {
+  container: HTMLElement | null;
+  section: HTMLElement | null;
+  checkboxSelector: string;
+  min: number;
+  max: number;
+  checkboxes: HTMLInputElement[];
+
   constructor({
     containerId = "categories-list",
     sectionId = "categories-section",
     checkboxSelector = ".category-checkbox",
     min = MIN_CATEGORIES,
     max = MAX_CATEGORIES,
-  } = {}) {
+  }: CategorySelectorConfig = {}) {
     this.container = document.getElementById(containerId);
     this.section = document.getElementById(sectionId);
     this.checkboxSelector = checkboxSelector;
     this.min = min;
     this.max = max;
+    this.checkboxes = [];
 
     if (!this.container) {
       return;
     }
 
     this.checkboxes = Array.from(
-      this.container.querySelectorAll(checkboxSelector)
+      this.container.querySelectorAll<HTMLInputElement>(checkboxSelector)
     );
 
     this.checkboxes.forEach((checkbox) => {
@@ -30,11 +46,11 @@ class CategorySelector {
     this.enforce();
   }
 
-  getCheckedCount() {
+  getCheckedCount(): number {
     return this.checkboxes.filter((checkbox) => checkbox.checked).length;
   }
 
-  handleChange() {
+  handleChange(): void {
     this.enforce();
 
     if (this.getCheckedCount() > 0) {
@@ -42,7 +58,7 @@ class CategorySelector {
     }
   }
 
-  enforce() {
+  enforce(): void {
     if (!this.checkboxes) {
       return;
     }
@@ -54,7 +70,7 @@ class CategorySelector {
     });
   }
 
-  clearError() {
+  clearError(): void {
     if (!this.section) {
       return;
     }
@@ -67,7 +83,7 @@ class CategorySelector {
     }
   }
 
-  showError() {
+  showError(): void {
     if (!this.section) {
       return;
     }
@@ -82,7 +98,7 @@ class CategorySelector {
     this.section.scrollIntoView({ behavior: "smooth" });
   }
 
-  isValid() {
+  isValid(): boolean {
     if (!this.container || this.checkboxes.length === 0) {
       return true;
     }

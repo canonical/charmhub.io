@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./static/js/dist",
+    "rootDir": "./static/js/src",
     "baseUrl": "src",
     "target": "ES2020",
     "module": "esnext",
@@ -19,7 +20,7 @@
     "noEmit": false,
     "sourceMap": true,
     "strictPropertyInitialization": false,
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "node"],
     "paths": {
       "*": ["types/*.d.ts"]
     }

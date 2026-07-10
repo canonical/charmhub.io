@@ -1,5 +1,25 @@
+interface DynamicFormManagerConfig {
+  listContainerId: string;
+  addButtonId: string;
+  createItemFunction?: () => Element | null;
+  templateId?: string;
+  maxItems?: number;
+  removeSelector: string;
+  itemSelector: string;
+  onChange?: (count: number) => void;
+}
+
 class DynamicFormManager {
-  constructor(config) {
+  listContainer: HTMLElement | null;
+  addButton: HTMLElement | null;
+  createItemFunction?: () => Element | null;
+  templateId?: string;
+  maxItems: number;
+  removeSelector: string;
+  itemSelector: string;
+  onChange?: (count: number) => void;
+
+  constructor(config: DynamicFormManagerConfig) {
     this.listContainer = document.getElementById(config.listContainerId);
     this.addButton = document.getElementById(config.addButtonId);
     this.createItemFunction = config.createItemFunction;
@@ -10,10 +30,13 @@ class DynamicFormManager {
     this.onChange = config.onChange;
 
     if (this.templateId && !this.createItemFunction) {
-      const template = document.getElementById(this.templateId);
+      const template = document.getElementById(
+        this.templateId
+      ) as HTMLTemplateElement | null;
       if (template) {
         this.createItemFunction = () => {
-          return template.content.cloneNode(true).firstElementChild;
+          return (template.content.cloneNode(true) as DocumentFragment)
+            .firstElementChild;
         };
       }
     }
@@ -21,7 +44,7 @@ class DynamicFormManager {
     this.init();
   }
 
-  init() {
+  init(): void {
     if (!this.listContainer || !this.addButton) {
       console.warn("DynamicFormManager: Required elements not found");
       return;
@@ -32,9 +55,10 @@ class DynamicFormManager {
     });
 
     this.listContainer.addEventListener("click", (e) => {
+      const target = e.target as Element;
       if (
-        e.target.classList.contains(this.removeSelector) ||
-        e.target.closest(`.${this.removeSelector}`)
+        target.classList.contains(this.removeSelector) ||
+        target.closest(`.${this.removeSelector}`)
       ) {
         this.removeItem(e);
       }
@@ -44,8 +68,8 @@ class DynamicFormManager {
     this.handleChange();
   }
 
-  addItem() {
-    const currentCount = this.listContainer.querySelectorAll(
+  addItem(): void {
+    const currentCount = this.listContainer!.querySelectorAll(
       this.itemSelector
     ).length;
 
@@ -53,14 +77,14 @@ class DynamicFormManager {
       return;
     }
 
-    const newItem = this.createItemFunction();
-    this.listContainer.appendChild(newItem);
+    const newItem = this.createItemFunction!();
+    this.listContainer!.appendChild(newItem!);
     this.updateAddButton();
     this.handleChange();
   }
 
-  removeItem(event) {
-    const item = event.target.closest(this.itemSelector);
+  removeItem(event: Event): void {
+    const item = (event.target as Element).closest(this.itemSelector);
     if (item) {
       item.remove();
       this.updateAddButton();
@@ -68,24 +92,24 @@ class DynamicFormManager {
     }
   }
 
-  updateAddButton() {
+  updateAddButton(): void {
     if (!this.addButton) return;
 
-    const currentCount = this.listContainer.querySelectorAll(
+    const currentCount = this.listContainer!.querySelectorAll(
       this.itemSelector
     ).length;
     this.addButton.style.display =
       currentCount >= this.maxItems ? "none" : "inline-block";
   }
 
-  handleChange() {
+  handleChange(): void {
     if (typeof this.onChange === "function") {
       this.onChange(this.getCurrentCount());
     }
   }
 
-  getCurrentCount() {
-    return this.listContainer.querySelectorAll(this.itemSelector).length;
+  getCurrentCount(): number {
+    return this.listContainer!.querySelectorAll(this.itemSelector).length;
   }
 }
 
