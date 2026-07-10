@@ -33,6 +33,15 @@ SEARCH_FIELDS = [
     "result.deployable-on",
 ]
 
+HOMEPAGE_SEARCH_FIELDS = [
+    "result.categories",
+    "result.summary",
+    "result.media",
+    "result.title",
+    "result.publisher.display-name",
+    "result.deployable-on",
+]
+
 SENTRY_DSN = os.getenv("SENTRY_DSN", "").strip()
 STATUS_BANNER = os.getenv("STATUS_BANNER", "").strip()
 
