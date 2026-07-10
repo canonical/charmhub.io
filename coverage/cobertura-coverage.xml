@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="3084" lines-covered="1471" line-rate="0.4769" branches-valid="1821" branches-covered="790" branch-rate="0.4338" timestamp="1783674167458" complexity="0" version="0.1">
+<coverage lines-valid="3084" lines-covered="1471" line-rate="0.4769" branches-valid="1821" branches-covered="790" branch-rate="0.4338" timestamp="1783679793333" complexity="0" version="0.1">
   <sources>
     <source>/home/runner/work/charmhub.io/charmhub.io</source>
   </sources>
@@ -4752,9 +4752,9 @@
             <line number="133" hits="3" branch="false"/>
             <line number="134" hits="3" branch="false"/>
             <line number="135" hits="3" branch="false"/>
-            <line number="140" hits="2" branch="false"/>
+            <line number="140" hits="3" branch="false"/>
             <line number="142" hits="0" branch="false"/>
-            <line number="144" hits="2" branch="false"/>
+            <line number="144" hits="3" branch="false"/>
             <line number="177" hits="0" branch="false"/>
             <line number="178" hits="0" branch="false"/>
             <line number="179" hits="0" branch="false"/>
@@ -7816,9 +7816,9 @@
       <classes>
         <class name="Topics.tsx" filename="static/js/src/store/components/Topics/Topics.tsx" line-rate="1" branch-rate="1">
           <methods>
-            <method name="Topics" hits="7" signature="()V">
+            <method name="Topics" hits="8" signature="()V">
               <lines>
-                <line number="18" hits="7"/>
+                <line number="18" hits="8"/>
               </lines>
             </method>
             <method name="(anonymous_1)" hits="4" signature="()V">
@@ -7831,9 +7831,9 @@
                 <line number="30" hits="4"/>
               </lines>
             </method>
-            <method name="(anonymous_3)" hits="12" signature="()V">
+            <method name="(anonymous_3)" hits="15" signature="()V">
               <lines>
-                <line number="40" hits="12"/>
+                <line number="40" hits="15"/>
               </lines>
             </method>
             <method name="(anonymous_4)" hits="3" signature="()V">
@@ -7843,15 +7843,15 @@
             </method>
           </methods>
           <lines>
-            <line number="19" hits="7" branch="false"/>
+            <line number="19" hits="8" branch="false"/>
             <line number="20" hits="4" branch="false"/>
             <line number="21" hits="3" branch="false"/>
             <line number="23" hits="3" branch="false"/>
-            <line number="28" hits="7" branch="false"/>
-            <line number="30" hits="7" branch="false"/>
+            <line number="28" hits="8" branch="false"/>
+            <line number="30" hits="8" branch="false"/>
             <line number="31" hits="4" branch="false"/>
-            <line number="34" hits="7" branch="false"/>
-            <line number="41" hits="12" branch="false"/>
+            <line number="34" hits="8" branch="false"/>
+            <line number="41" hits="15" branch="false"/>
             <line number="50" hits="3" branch="false"/>
           </lines>
         </class>
