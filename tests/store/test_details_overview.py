@@ -36,6 +36,37 @@ class TestDetailsOverview(TestCase):
         self.assertNotIn(b"Add docs to a charm", response.data)
         self.assertEqual(response.status_code, 200)
 
+    @patch("webapp.store.views.redis_cache.get")
+    @patch("webapp.store.views.get_package_details")
+    def test_details_show_source_link_from_metadata_links(
+        self, mock_find, mock_cache_get
+    ):
+        mock_find.return_value = sample_package_detail
+        mock_cache_get.return_value = None
+        response = self.client.get("/test")
+        self.assertIn(
+            b'href="https://github.com/canonical/xxx"><i class="p-icon--repository"></i>&nbsp;&nbsp;Source</a>',
+            response.data,
+        )
+        self.assertEqual(response.status_code, 200)
+
+    @patch("webapp.store.views.redis_cache.get")
+    @patch("webapp.store.views.get_package_details")
+    def test_details_show_source_link_from_repository_fallback(
+        self, mock_find, mock_cache_get
+    ):
+        data = copy.deepcopy(sample_package_detail)
+        data["result"]["links"].pop("source")
+        data["result"]["repository"] = "https://example.com/repo"
+        mock_find.return_value = data
+        mock_cache_get.return_value = None
+        response = self.client.get("/test")
+        self.assertIn(
+            b'href="https://example.com/repo"><i class="p-icon--repository"></i>&nbsp;&nbsp;Source</a>',
+            response.data,
+        )
+        self.assertEqual(response.status_code, 200)
+
     @patch("webapp.store.logic.process_libraries")
     @patch("webapp.store_api.publisher_gateway.get_charm_libraries")
     @patch("webapp.store.views.redis_cache.set")
