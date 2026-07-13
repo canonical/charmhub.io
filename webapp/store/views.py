@@ -746,7 +746,7 @@ def add_required_fields(metadata_relations, relations):
         {
             **relations[key],
             "key": key,
-            "required": metadata_relations[key].get("optional", False),
+            "required": not metadata_relations[key].get("optional", False),
         }
         for key in relations.keys()
     ]
