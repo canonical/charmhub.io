@@ -8,7 +8,7 @@ import { useQuery } from "react-query";
 import { Row, Col, Spinner, Chip } from "@canonical/react-components";
 
 import { filterChipsSelector, filterState } from "../state";
-import { InerfaceRow } from "./InerfaceRow";
+import { InterfaceRow } from "./InterfaceRow";
 
 interface InterfaceItemProps {
   interfaceType: string;
@@ -182,7 +182,7 @@ export const InterfaceItem = ({
               {charms.map((charm: ICharm, idx) => (
                 <li key={charm.package.name} className="p-list__item">
                   {idx === 0 && <hr />}
-                  <InerfaceRow charm={charm} />
+                  <InterfaceRow charm={charm} />
                 </li>
               ))}
             </ul>

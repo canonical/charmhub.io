@@ -3,7 +3,7 @@ import React from "react";
 import type { ICharm } from "../../../../shared/types";
 import { Col, Row } from "@canonical/react-components";
 
-interface InerfaceRowProps {
+interface InterfaceRowProps {
   charm: ICharm;
 }
 
@@ -29,7 +29,7 @@ const getChannel = (charm: ICharm) => {
   return "";
 };
 
-export const InerfaceRow = ({ charm }: InerfaceRowProps) => {
+export const InterfaceRow = ({ charm }: InterfaceRowProps) => {
   const charmName = getDisplayName(charm);
   const packageLink = `/${charm.package.name}`;
   const channel = getChannel(charm);
@@ -48,7 +48,7 @@ export const InerfaceRow = ({ charm }: InerfaceRowProps) => {
                 charm.package.icon_url ||
                 "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg"
               }
-              alt=""
+              alt={charmName}
               width={48}
               height={48}
             />
@@ -98,4 +98,4 @@ export const InerfaceRow = ({ charm }: InerfaceRowProps) => {
   );
 };
 
-export default InerfaceRow;
+export default InterfaceRow;
