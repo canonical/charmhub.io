@@ -105,6 +105,17 @@ export const PackageFilter = ({
             setSelectedPackageType={onPackageTypeChange}
             disabled={disabled}
           />
+          <hr />
+          <ul className="p-list u-no-margin--bottom">
+            <li className="p-list__item">
+              <a href="/integrations">Interfaces</a>
+            </li>
+            <li className="p-list__item">
+              <a href="https://documentation.ubuntu.com/charmlibs/">
+                Charm development libraries
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
     </>

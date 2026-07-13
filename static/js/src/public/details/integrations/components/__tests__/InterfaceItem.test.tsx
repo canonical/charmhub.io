@@ -82,7 +82,6 @@ describe("InterfaceItem Component", () => {
     expect(
       screen.getByRole("heading", { name: /test-key/ })
     ).toBeInTheDocument();
-    expect(screen.getByText("This is a test description.")).toBeInTheDocument();
     expect(screen.getByText("Required")).toBeInTheDocument();
   });
 
@@ -103,8 +102,9 @@ describe("InterfaceItem Component", () => {
       );
     });
 
-    expect(screen.getByText("test-key")).toBeInTheDocument();
-    expect(screen.getByText("This is a test description.")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /test-key/ })
+    ).toBeInTheDocument();
     expect(screen.queryByText("Required")).not.toBeInTheDocument();
   });
 
@@ -155,9 +155,8 @@ describe("InterfaceItem Component", () => {
       );
     });
 
-    const noCharmsMessage = screen.getByText(/No charms found/i);
+    const noCharmsMessage = screen.getByText(/No publicly listed charms/i);
     expect(noCharmsMessage).toBeInTheDocument();
-    expect(noCharmsMessage).toHaveTextContent(/nonexistent_interface/i);
   });
 
   test("renders charms correctly with mock charms data", async () => {

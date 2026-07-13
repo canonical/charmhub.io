@@ -1,78 +1,81 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import {
   Strip,
   Row,
   Col,
-  Button,
   MainTable,
   Notification,
   Pagination,
-  StatusLabel,
+  Chip,
+  Select,
+  SearchBox,
 } from "@canonical/react-components";
 
 import type { InterfaceItem } from "../../types";
 
-function pageArray<T>(items: T[], count: number) {
-  const result: T[][] = [];
-
-  for (let i = 0; i < Math.ceil(items.length / count); i++) {
-    const start = i * count;
-    const end = start + count;
-
-    result.push(items.slice(start, end));
-  }
-
-  return result;
-}
-
 function sortInterfaces(a: InterfaceItem, b: InterfaceItem) {
-  if (a.status === "published" && b.status !== "published") {
+  if (a?.status === "published" && b?.status !== "published") {
     return -1;
   }
 
-  if (a.status !== "published" && b.status === "published") {
+  if (a?.status !== "published" && b?.status === "published") {
     return 1;
   }
 
   return 0;
 }
 
+const normalize = (value?: string) => (value || "").trim().toLowerCase();
+
 type Props = {
   interfacesList: Array<InterfaceItem>;
 };
 
-function InterfacesIndex({ interfacesList }: Props) {
-  const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 10;
 
+function InterfacesIndex({ interfacesList }: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [interfaces, setInterfaces] = useState<Array<InterfaceItem>>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [currentItems, setCurrentItems] = useState<InterfaceItem[]>([]);
-  const [currentPageNumber, setCurrentPageNumber] = useState(
-    parseInt(searchParams.get("page") || "1")
-  );
-  const [currentPageIndex, setCurrentPageIndex] = useState(
-    currentPageNumber - 1
-  );
+  const searchQuery = searchParams.get("search") || "";
+  const statusFilter = searchParams.get("status") || "";
+  const categoryFilter = searchParams.get("category") || "";
 
-  const pageParam = searchParams.get("page");
+  const parsedPageNumber = Number.parseInt(searchParams.get("page") || "1", 10);
+  const currentPageNumber =
+    Number.isNaN(parsedPageNumber) || parsedPageNumber < 1
+      ? 1
+      : parsedPageNumber;
 
-  useEffect(() => {
-    if (pageParam !== null) {
-      setCurrentPageNumber(parseInt(pageParam));
-      setCurrentPageIndex(parseInt(pageParam) - 1);
-    } else {
-      setCurrentPageNumber(1);
-      setCurrentPageIndex(0);
+  const updateSearchParams = (
+    updates: Record<string, string>,
+    resetPage = true
+  ) => {
+    const params = new URLSearchParams(searchParams);
+
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value) {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
+    });
+
+    if (resetPage) {
+      params.delete("page");
     }
-  }, [pageParam]);
+
+    setSearchParams(params);
+  };
 
   useEffect(() => {
     if (interfacesList) {
-      setInterfaces(interfacesList.sort(sortInterfaces));
+      setInterfaces(interfacesList);
+      setError(false);
+      setLoading(false);
       return;
     }
 
@@ -87,7 +90,7 @@ function InterfacesIndex({ interfacesList }: Props) {
         throw response;
       })
       .then((data) => {
-        setInterfaces(data?.interfaces.sort(sortInterfaces));
+        setInterfaces(data?.interfaces || []);
       })
       .catch(() => {
         setError(true);
@@ -97,9 +100,105 @@ function InterfacesIndex({ interfacesList }: Props) {
       });
   }, [interfacesList]);
 
+  const sortedInterfaces = useMemo(
+    () => [...interfaces].sort(sortInterfaces),
+    [interfaces]
+  );
+
+  const statusOptions = useMemo(() => {
+    return Array.from(
+      new Set(
+        sortedInterfaces.map((item) => normalize(item.status)).filter(Boolean)
+      )
+    ).sort();
+  }, [sortedInterfaces]);
+
+  const categoryOptions = useMemo(() => {
+    return Array.from(
+      new Set(
+        sortedInterfaces
+          .flatMap((item) => item.tags || [])
+          .map((tag) => normalize(tag))
+          .filter(Boolean)
+      )
+    ).sort();
+  }, [sortedInterfaces]);
+
+  const statusSelectOptions = useMemo(
+    () => [
+      { value: "", label: "Status" },
+      ...statusOptions.map((status) => ({
+        value: status,
+        label: status.charAt(0).toUpperCase() + status.slice(1),
+      })),
+    ],
+    [statusOptions]
+  );
+
+  const categorySelectOptions = useMemo(
+    () => [
+      { value: "", label: "Category" },
+      ...categoryOptions.map((category) => ({
+        value: category,
+        label: category.charAt(0).toUpperCase() + category.slice(1),
+      })),
+    ],
+    [categoryOptions]
+  );
+
+  const filteredInterfaces = useMemo(() => {
+    const normalizedSearch = normalize(searchQuery);
+    const normalizedStatus = normalize(statusFilter);
+    const normalizedCategory = normalize(categoryFilter);
+
+    return sortedInterfaces.filter((item) => {
+      const itemStatus = normalize(item.status);
+      const itemTags = (item.tags || []).map((tag) => normalize(tag));
+      const searchableText = [
+        item.name,
+        item.summary,
+        item.description,
+        ...(item.tags || []),
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      if (normalizedSearch && !searchableText.includes(normalizedSearch)) {
+        return false;
+      }
+
+      if (normalizedStatus && itemStatus !== normalizedStatus) {
+        return false;
+      }
+
+      if (normalizedCategory && !itemTags.includes(normalizedCategory)) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [sortedInterfaces, searchQuery, statusFilter, categoryFilter]);
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredInterfaces.length / ITEMS_PER_PAGE)
+  );
+  const currentPage = Math.min(currentPageNumber, totalPages);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentItems = filteredInterfaces.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+  );
+
   useEffect(() => {
-    setCurrentItems(pageArray(interfaces, ITEMS_PER_PAGE)[currentPageIndex]);
-  }, [currentPageIndex, interfaces]);
+    if (currentPageNumber > totalPages) {
+      updateSearchParams(
+        { page: totalPages > 1 ? totalPages.toString() : "" },
+        false
+      );
+    }
+  }, [currentPageNumber, totalPages]);
 
   useEffect(() => {
     document.title = "Charmhub | Interface catalogue";
@@ -116,22 +215,17 @@ function InterfacesIndex({ interfacesList }: Props) {
             <p>
               Interfaces describe the relation between two charms. This
               interface catalogue shows opinionated, standardized interface
-              specifications for charm relations. Each interface outlines the
-              behavior and requirements of charms relating to one another.
-            </p>
-            <p>
-              Most of the content of these pages can be collaboratively
-              discussed and changed. You can help us improve these pages by
-              clicking the button below.
+              specifications for charm relations, outlining the exact behavior
+              and requirements of how charms interact with one another.
             </p>
             <p className="u-no-margin--bottom">
-              <Button
-                element="a"
-                href="https://github.com/canonical/charm-relation-interfaces"
-                appearance="positive"
-              >
-                Contribute
-              </Button>
+              To maintain stability across the ecosystem, all interfaces adhere
+              to a strict standard of backwards compatibility. When designing an
+              interface, follow{" "}
+              <a href="https://documentation.ubuntu.com/charmlibs/how-to/design-relation-interfaces/">
+                these guidelines
+              </a>{" "}
+              to ensure backwards compatibility.
             </p>
           </Col>
         </Row>
@@ -149,67 +243,136 @@ function InterfacesIndex({ interfacesList }: Props) {
             moments.
           </Notification>
         )}
-        <h2 className="p-heading--4">
-          {currentItems && interfaces.length > ITEMS_PER_PAGE && (
-            <>
-              {ITEMS_PER_PAGE * currentPageIndex + 1} &ndash;{" "}
-              {ITEMS_PER_PAGE * currentPageIndex + currentItems.length} of{" "}
-              {interfaces.length} interfaces
-            </>
-          )}
-        </h2>
+        <Row>
+          <Col size={5}>
+            <SearchBox
+              placeholder="Search interfaces"
+              externallyControlled
+              value={searchQuery}
+              onChange={(value) => {
+                updateSearchParams({ search: value });
+              }}
+              aria-label="Search interfaces"
+            />
+          </Col>
+          <Col
+            emptyLarge={9}
+            size={4}
+            className="p-form--inline"
+            style={{ justifyContent: "flex-end" }}
+          >
+            <Select
+              value={statusFilter}
+              options={statusSelectOptions}
+              onChange={(event) => {
+                updateSearchParams({ status: event.target.value });
+              }}
+              aria-label="Status"
+            />
+            <Select
+              value={categoryFilter}
+              options={categorySelectOptions}
+              onChange={(event) => {
+                updateSearchParams({ category: event.target.value });
+              }}
+              aria-label="Categories"
+            />
+          </Col>
+        </Row>
         <MainTable
           headers={[
             {
-              content: "Interface name",
-              heading: "Interface name",
+              content: "Interface",
+              heading: "Interface",
             },
             {
-              content: "Version",
-              heading: "Version",
+              content: "Status",
+              heading: "Status",
               style: {
-                width: "80px",
+                width: "120px",
               },
             },
+            {
+              content: "Summary",
+              heading: "Summary",
+            },
+            {
+              content: "Categories",
+              heading: "Categories",
+            },
           ]}
-          rows={
-            currentItems &&
-            currentItems.map((item: InterfaceItem) => {
-              return {
-                columns: [
-                  {
-                    content: (
-                      <div
-                        style={{
-                          display: "flex",
-                        }}
-                      >
-                        {item?.status === "published" && (
-                          <Link to={`/integrations/${item?.name}`}>
-                            {item?.name}
-                          </Link>
-                        )}
-                        {item?.status !== "published" && (
-                          <>
-                            <StatusLabel style={{ marginRight: "1rem" }}>
-                              {item?.status}
-                            </StatusLabel>
-                            <Link to={`/integrations/${item?.name}`}>
-                              {item?.name}
-                            </Link>
-                          </>
-                        )}
-                      </div>
-                    ),
-                  },
-                  {
-                    content: item?.version,
-                    className: "u-align--right",
-                  },
-                ],
-              };
-            })
-          }
+          rows={currentItems.map((item: InterfaceItem) => {
+            const interfaceName = item?.name || "";
+            const interfaceStatus = item?.status || "";
+            const normalizedInterfaceStatus = normalize(interfaceStatus);
+            const interfaceStatusLabel = interfaceStatus
+              ? interfaceStatus.charAt(0).toUpperCase() +
+                interfaceStatus.slice(1)
+              : "";
+            const statusAppearance =
+              normalizedInterfaceStatus === "published"
+                ? "positive"
+                : normalizedInterfaceStatus === "draft"
+                  ? "caution"
+                  : normalizedInterfaceStatus === "deprecated"
+                    ? "negative"
+                    : "information";
+
+            return {
+              columns: [
+                {
+                  content: (
+                    <>
+                      {interfaceName && (
+                        <Link to={`/integrations/${interfaceName}`}>
+                          {interfaceName}
+                        </Link>
+                      )}
+                    </>
+                  ),
+                },
+                {
+                  content: (
+                    <>
+                      {interfaceStatus && (
+                        <Chip
+                          value={interfaceStatusLabel}
+                          appearance={statusAppearance}
+                          className="u-no-margin--bottom"
+                          isReadOnly
+                        />
+                      )}
+                    </>
+                  ),
+                },
+                {
+                  content: item?.summary || item?.description || "-",
+                },
+                {
+                  content: (
+                    <>
+                      {item?.tags && item.tags.length > 0 && (
+                        <div style={{ display: "flex", flexWrap: "wrap" }}>
+                          {item.tags.map((tag) => (
+                            <Chip
+                              key={tag}
+                              value={
+                                tag
+                                  ? tag.charAt(0).toUpperCase() + tag.slice(1)
+                                  : ""
+                              }
+                              className="u-no-margin--bottom"
+                              isReadOnly
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  ),
+                },
+              ],
+            };
+          })}
           emptyStateMsg={`${
             loading ? "Fetching interfaces..." : "No interfaces available"
           }`}
@@ -217,20 +380,15 @@ function InterfacesIndex({ interfacesList }: Props) {
         />
         <div className="u-align--right">
           <Pagination
-            currentPage={currentPageNumber}
+            currentPage={currentPage}
             itemsPerPage={ITEMS_PER_PAGE}
             paginate={(pageNumber) => {
-              setCurrentPageNumber(pageNumber);
-              setCurrentPageIndex(pageNumber - 1);
-
-              if (pageNumber > 1) {
-                setSearchParams({ page: pageNumber.toString() });
-              } else {
-                setSearchParams({});
-              }
+              updateSearchParams(
+                { page: pageNumber > 1 ? pageNumber.toString() : "" },
+                false
+              );
             }}
-            totalItems={interfaces.length}
-            scrollToTop
+            totalItems={filteredInterfaces.length}
           />
         </div>
       </Strip>

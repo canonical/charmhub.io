@@ -228,6 +228,23 @@ $breakpoint-navigation-threshold: 1220px; // keep it in sync with juju.is and br
   }
 }
 
+.p-integration-row__meta{
+  margin-left: 1rem;
+}
+
+.p-integration-row__name {
+  font-weight: 500;
+}
+
+.p-integration-row__description {
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+
 // Override h3 font weight based on design feedback from MS
 .p-heading--3,
 h3 {

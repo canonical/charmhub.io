@@ -11,22 +11,26 @@ describe("InterfacesIndex", () => {
       name: "interface1",
       description: "Description 1",
       version: "1.0",
-      status: "test",
-      category: "Category 1",
+      status: "published",
+      tags: ["tag1"],
+      links: {
+        library: "https://example.com/library",
+        documentation: "https://example.com/docs",
+      },
     },
     {
       name: "interface2",
       description: "Description 2",
       version: "1.1",
-      status: "beta",
-      category: "Category 2",
+      status: "draft",
+      tags: ["tag2", "tag3"],
     },
     {
       name: "interface3",
       description: "Description 3",
       version: "1.2",
-      status: "beta",
-      category: "Category 3",
+      status: "deprecated",
+      tags: ["tag1", "tag2"],
     },
   ];
 
@@ -87,18 +91,57 @@ describe("InterfacesIndex", () => {
     });
   });
 
-  test("handles pagination correctly", async () => {
-    const longerInterfacesList: InterfaceItem[] = Array(5)
-      .fill(interfacesList)
-      .flat();
-
+  test("filters interfaces by search query", async () => {
     render(
       <Router>
-        <InterfacesIndex interfacesList={longerInterfacesList} />
+        <InterfacesIndex interfacesList={interfacesList} />
       </Router>
     );
 
-    expect(screen.getByText("Next page")).toBeInTheDocument();
-    expect(screen.getByText("Previous page")).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("Search interfaces"), {
+      target: { value: "interface2" },
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("interface2")).toBeInTheDocument();
+      expect(screen.queryByText("interface1")).not.toBeInTheDocument();
+      expect(screen.queryByText("interface3")).not.toBeInTheDocument();
+    });
+  });
+
+  test("filters interfaces by status", async () => {
+    render(
+      <Router>
+        <InterfacesIndex interfacesList={interfacesList} />
+      </Router>
+    );
+
+    fireEvent.change(screen.getByLabelText("Status"), {
+      target: { value: "draft" },
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("interface2")).toBeInTheDocument();
+      expect(screen.queryByText("interface1")).not.toBeInTheDocument();
+      expect(screen.queryByText("interface3")).not.toBeInTheDocument();
+    });
+  });
+
+  test("filters interfaces by category", async () => {
+    render(
+      <Router>
+        <InterfacesIndex interfacesList={interfacesList} />
+      </Router>
+    );
+
+    fireEvent.change(screen.getByLabelText("Categories"), {
+      target: { value: "tag3" },
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("interface2")).toBeInTheDocument();
+      expect(screen.queryByText("interface1")).not.toBeInTheDocument();
+      expect(screen.queryByText("interface3")).not.toBeInTheDocument();
+    });
   });
 });
