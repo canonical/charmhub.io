@@ -1,3 +1,5 @@
+from urllib.parse import urlparse
+
 import humanize
 from canonicalwebteam.discourse import DocParser
 from canonicalwebteam.discourse.exceptions import PathNotFoundError
@@ -22,7 +24,6 @@ from webapp.store import logic
 from webapp.config import SEARCH_FIELDS
 from webapp.observability.utils import trace_function
 from webapp.store_api import device_gateway, device_gateway_sbom
-
 
 store = Blueprint(
     "store", __name__, template_folder="/templates", static_folder="/static"
@@ -270,11 +271,11 @@ def details_overview(entity_name):
 
     doc = logic.get_doc_link(package)
 
-    # If the doc link does NOT include "discourse",
-    # it is accepted as a ReadTheDocs link.
-    # Update this logic when a better way to distinguish
-    # ReadTheDocs links becomes available.
-    is_rtd = doc and "discourse" not in doc.lower()
+    # If the doc link does NOT point at the Discourse instance,
+    # it is accepted as a ReadTheDocs (or other externally-hosted) link.
+    is_rtd = (
+        doc and urlparse(doc).netloc != urlparse(discourse_api.base_url).netloc
+    )
 
     docs_topic = package["store_front"].get("docs_topic")
     if is_rtd:
@@ -355,7 +356,9 @@ def details_overview(entity_name):
                 summary = logic.get_summary(package)
     else:
         navigation = None
-        description = sanitize_html(logic.get_description(package, parse_to_html=True))
+        description = sanitize_html(
+            logic.get_description(package, parse_to_html=True)
+        )
         summary = logic.get_summary(package)
 
     revisions = logic.get_revisions(package["channel-map"])
@@ -680,8 +683,7 @@ def download_library(entity_name, library_name):
         library["content"],
         mimetype="text/x-python",
         headers={
-            "Content-disposition": "attachment; "
-            f"filename={library['library-name']}.py"
+            "Content-disposition": f"attachment; filename={library['library-name']}.py"
         },
     )
 
