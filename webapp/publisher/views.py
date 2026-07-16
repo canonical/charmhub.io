@@ -625,6 +625,12 @@ def post_register_name():
                 f"Your {data['type']} name has been successfully registered.",
                 "positive",
             )
+            # Invalidate the cached /charms or /bundles list so the
+            # newly registered name shows up immediately on redirect,
+            # instead of waiting for the 10 minute cache TTL to expire.
+            redis_cache.delete(
+                f"account_packages:{session['account']['id']}:{data['type']}"
+            )
     except StoreApiResponseErrorList as api_response_error_list:
         for error in api_response_error_list.errors:
             if error["code"] == "reserved-name":
@@ -710,6 +716,14 @@ def delete_package(package_name):
         session["account-auth"], package_name
     )
     if resp.status_code == 200:
+        # Invalidate the cached /charms and /bundles lists so the
+        # unregistered name disappears immediately on reload, instead
+        # of waiting for the 10 minute cache TTL to expire. We don't
+        # know here whether the package was a charm or bundle, so
+        # clear both.
+        account_id = session["account"]["id"]
+        redis_cache.delete(f"account_packages:{account_id}:charm")
+        redis_cache.delete(f"account_packages:{account_id}:bundle")
         return ("", 200)
     return (
         jsonify({"error": resp.json()["error-list"][0]["message"]}),
