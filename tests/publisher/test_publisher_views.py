@@ -370,6 +370,45 @@ class TestPublisherViews(unittest.TestCase):
         self.assertEqual(res.status_code, 302)
         self.assertIn("already_owned=True", res.headers["Location"])
 
+    @patch("webapp.store_api.publisher_gateway.register_package_name")
+    def test_post_register_name_api_error_relays_message(
+        self, mock_register_package_name
+    ):
+        # Publisher Gateway sometimes wraps more specific failures (e.g.
+        # name already taken by another publisher) under a generic
+        # "api-error" code. Rather than guessing what happened, relay the
+        # API's own message verbatim instead of misreporting it as an
+        # invalid name format error.
+        mock_register_package_name.side_effect = StoreApiResponseErrorList(
+            "test-error",
+            500,
+            [
+                {
+                    "code": "api-error",
+                    "message": "Name 'openbau' is already taken.",
+                }
+            ],
+        )
+        res = self.client.post(
+            "/register-name",
+            data={
+                "name": "openbau",
+                "type": "charm",
+                "private": "private",
+            },
+        )
+        self.assertEqual(res.status_code, 302)
+        self.assertIn(
+            "api_error_message=Name+'openbau'+is+already+taken.",
+            res.headers["Location"],
+        )
+
+        # And the message is rendered on the page as-is.
+        follow_res = self.client.get(res.headers["Location"])
+        self.assertIn(
+            b"Name &#39;openbau&#39; is already taken.", follow_res.data
+        )
+
     def test_register_name_dispute(self):
         res = self.client.get("/register-name-dispute?entity-name=test-name")
         self.assertEqual(res.status_code, 200)
