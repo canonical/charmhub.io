@@ -1,7 +1,7 @@
 flask==2.3.3
 canonicalwebteam.flask-base==3.1.2
 beautifulsoup4==4.14.3
-bleach==6.2.0
+bleach==6.4.0
 canonicalwebteam.discourse==7.2.0
 canonicalwebteam.image-template==1.9.0
 canonicalwebteam.store-api==8.2.0
