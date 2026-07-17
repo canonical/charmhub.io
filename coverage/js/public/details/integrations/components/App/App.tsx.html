@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.76% </span>
+                <span class="strong">69.69% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>46/65</span>
+                <span class='fraction'>46/66</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">74% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>37/50</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">75% </span>
-                <span class="quiet">Branches</span>
-                <span class='fraction'>39/52</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">78.94% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>15/19</span>
+                <span class='fraction'>15/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.35% </span>
+                <span class="strong">68.25% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>43/62</span>
+                <span class='fraction'>43/63</span>
             </div>
         
             
@@ -334,18 +334,7 @@
 <a name='L269'></a><a href='#L269'>269</a>
 <a name='L270'></a><a href='#L270'>270</a>
 <a name='L271'></a><a href='#L271'>271</a>
-<a name='L272'></a><a href='#L272'>272</a>
-<a name='L273'></a><a href='#L273'>273</a>
-<a name='L274'></a><a href='#L274'>274</a>
-<a name='L275'></a><a href='#L275'>275</a>
-<a name='L276'></a><a href='#L276'>276</a>
-<a name='L277'></a><a href='#L277'>277</a>
-<a name='L278'></a><a href='#L278'>278</a>
-<a name='L279'></a><a href='#L279'>279</a>
-<a name='L280'></a><a href='#L280'>280</a>
-<a name='L281'></a><a href='#L281'>281</a>
-<a name='L282'></a><a href='#L282'>282</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L272'></a><a href='#L272'>272</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -499,14 +488,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">27x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -564,14 +545,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -634,7 +614,6 @@ import {
   Col,
   Spinner,
   SearchAndFilter,
-  Chip,
 } from "@canonical/react-components";
 import { InterfaceItem } from "../InterfaceItem";
 import { filterChipsSelector, filterState } from "../../state";
@@ -776,14 +755,6 @@ export const App = () =&gt; {
                     }}
                   &gt;
                     {`${interfaceItem.key}`}
-                    {interfaceItem.required === true &amp;&amp; (
-                      &lt;Chip
-                        value="Required"
-                        appearance="negative"
-                        className="u-no-margin--bottom"
-                        style={{ marginLeft: "10px" }}
-                      /&gt;
-                    )}
                   &lt;/a&gt;
                 &lt;/li&gt;
               );
@@ -824,40 +795,39 @@ export const App = () =&gt; {
             &lt;/div&gt;
           &lt;/Col&gt;
           &lt;Col size={9} className="p-details-tab__content__body"&gt;
-            &lt;Row&gt;
+            &lt;Row className="p-details-tab__integrations-header"&gt;
               &lt;Col size={5}&gt;
-                &lt;h2 className="p-heading--3 p-details-tab__content__body__title"&gt;
-                  {integrationCount} integration
-                  {integrationCount &gt; 1 ? "s" : <span class="branch-1 cbranch-no" title="branch not covered" >""}</span>
-                &lt;/h2&gt;
-                &lt;p className="p-heading--4 p-details-tab__content__body__link"&gt;
-                  &lt;a href="https://juju.is/docs/juju/relation"&gt;
-                    Learn about integrations&amp;nbsp;&amp;gt;
-                  &lt;/a&gt;
-                &lt;/p&gt;
+                &lt;Row className="p-details-tab__integrations-header-title"&gt;
+                  &lt;div className="p-divider u-flex"&gt;
+                    &lt;div className="p-divider__block"&gt;
+                      &lt;span&gt;
+                        {integrationCount} integration
+                        {integrationCount &gt; 1 ? "s" : <span class="branch-1 cbranch-no" title="branch not covered" >""}</span>
+                      &lt;/span&gt;
+                    &lt;/div&gt;
+                    &lt;div className="p-divider__block"&gt;
+                      &lt;a href="/integrations"&gt;
+                        All integration interfaces &amp;rsaquo;
+                      &lt;/a&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/Row&gt;
               &lt;/Col&gt;
               &lt;Col size={4}&gt;
-                &lt;div
-                  style={{
-                    position: "relative",
-                    zIndex: 1,
-                    width: "100%",
-                    minHeight: "3rem",
-                  }}
-                &gt;
-                  &lt;div style={{ position: "absolute", width: "100%" }}&gt;
-                    &lt;SearchAndFilter
-                      // @ts-expect-error: id mismatch (number instead of string) but doesn't matter in reality
-                      filterPanelData={availableFilters}
-                      returnSearchData={(searchData: SearchAndFilterChip[]) =&gt; {
-                        setFilterData((prev) =&gt;
-                          prev !== searchData
-                            ? (searchData as IFilterChip[])
-                            : prev
-                        );
-                      }}
-                    /&gt;
-                  &lt;/div&gt;
+                &lt;div className="p-details-tab__integrations-search"&gt;
+                  &lt;SearchAndFilter
+                    filterPanelData={availableFilters.map(<span class="fstat-no" title="function not covered" >(f</span>ilter, index) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+                      ...filter,
+                      id: index,
+                    }))}
+                    returnSearchData={(searchData: SearchAndFilterChip[]) =&gt; {
+                      setFilterData((prev) =&gt;
+                        prev !== searchData
+                          ? (searchData as IFilterChip[])
+                          : prev
+                      );
+                    }}
+                  /&gt;
                 &lt;/div&gt;
               &lt;/Col&gt;
             &lt;/Row&gt;
@@ -913,7 +883,7 @@ export default App;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-07-10T22:24:32.690Z
+                at 2026-07-17T22:18:39.430Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
