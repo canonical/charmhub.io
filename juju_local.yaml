@@ -1,0 +1,12 @@
+# Juju Environment Replication Schema
+# Purpose: Define production/staging Juju environments for local replication
+# Use case: Validate Terraform plans against a local mirror before deploying to real infrastructure
+
+# Copy this file to juju_local.yaml and customize for your project
+
+schema_version: "1.0"
+
+# Define controllers that exist in your actual infrastructure
+# The cloud-init script bootstraps controllers on localhost (LXD)
+controllers:
+  - name: "jaas-local"

@@ -74,3 +74,10 @@ dist/
 *.rock
 cypress/screenshots/
 coverage/
+
+# local juju envs
+.terraform*
+*.tfstate*
+*.tfvars
+*.auto.tfvars
+*.env
