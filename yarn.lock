@@ -7690,10 +7690,10 @@ vite-plugin-prismjs-plus@1.0.4:
   resolved "https://registry.yarnpkg.com/vite-plugin-prismjs-plus/-/vite-plugin-prismjs-plus-1.0.4.tgz#aa1112e7e2c68bf627a3b3086b9c2d063429df30"
   integrity sha512-Zce0abH8JWkMl6YRp1mC4P0xQrWPpbqrNHGjcpzgZVxxcpZPOP9QsRUGGAmxHchthuGLqji1+J+NBCAOWRMnRQ==
 
-vite@7.3.2, "vite@^6.0.0 || ^7.0.0 || ^8.0.0":
-  version "7.3.2"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-7.3.2.tgz#cb041794d4c1395e28baea98198fd6e8f4b96b5c"
-  integrity sha512-Bby3NOsna2jsjfLVOHKes8sGwgl4TT0E6vvpYgnAYDIF/tie7MRaFthmKuHx1NSXjiTueXH3do80FMQgvEktRg==
+vite@7.3.5, "vite@^6.0.0 || ^7.0.0 || ^8.0.0":
+  version "7.3.5"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-7.3.5.tgz#90c2d0b7b94a224e7e7dcf22d2912ff0b5291165"
+  integrity sha512-KuOaNhcnGFN2zIPGA7wRmzF+lJA1sea7rHq17aiJ++9lzY1WWG6Jpwqwe1KNbRVPIqHmr8GLYx7jbrQcN/7/ww==
   dependencies:
     esbuild "^0.27.0"
     fdir "^6.5.0"
