@@ -204,6 +204,46 @@ class TestPublisherViews(unittest.TestCase):
         self.assertIn(b"Solutions", res.data)
         self.assertIn(b"No published Solutions available", res.data)
 
+    @patch("webapp.publisher.views.get_solution_categories", return_value=[])
+    @patch("webapp.publisher.views.get_user_teams_for_solutions", return_value=[])
+    @patch("webapp.publisher.views.get_solution_from_backend")
+    def test_edit_solution_handles_empty_deployable_on(
+        self,
+        mock_get_solution_from_backend,
+        mock_get_user_teams_for_solutions,
+        mock_get_solution_categories,
+    ):
+        mock_get_solution_from_backend.return_value = {
+            "hash": "test-hash",
+            "name": "test-solution",
+            "title": "Test Solution",
+            "summary": "Test summary",
+            "status": "published",
+            "revision": 1,
+            "deployable-on": [],
+            "compatibility": {},
+            "documentation": {},
+            "media": {},
+            "charms": [],
+            "maintainers": [],
+            "use_cases": [],
+            "useful_links": [],
+            "categories": [],
+        }
+
+        res = self.client.get("/solutions/edit/test-hash")
+
+        self.assertEqual(res.status_code, 200)
+        self.assertIn(b"Edit solution: Test Solution", res.data)
+        self.assertIn(b'name="platform" value="kubernetes"', res.data)
+        mock_get_solution_from_backend.assert_called_once_with(
+            "test-hash", prefer_authenticated=True
+        )
+        mock_get_user_teams_for_solutions.assert_called_once_with(
+            "test-username"
+        )
+        mock_get_solution_categories.assert_called_once()
+
     @patch("webapp.publisher.views.redis_cache.get", return_value=None)
     @patch("webapp.store_api.publisher_gateway.get_account_packages")
     def test_list_page_expired_session_redirects_login(

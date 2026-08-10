@@ -55,13 +55,16 @@
   <h4 class="p-heading--4">Platform & Compatibility</h4>
 </div>
 
+{% set deployable_on = solution.get('deployable-on') or [{}] %}
+{% set primary_deployable = deployable_on[0] or {} %}
+
 <div class="p-form__group row">
   <div class="col-2">
     <label class="p-form__label">Platform:</label>
   </div>
   <div class="col-8 col-x-large-6">
     <div class="p-form__control">
-      {% set current_platform = solution.get('deployable-on', [{}])[0].get('platform', 'kubernetes') %}
+      {% set current_platform = primary_deployable.get('platform', 'kubernetes') %}
       <label class="p-radio">
         <input
           type="radio"
@@ -99,8 +102,8 @@
   <div class="col-8 col-x-large-6">
     <div class="p-form-validation" id="platform-version-section">
       <div id="platform-version-list" data-autosave-multivalue-field="platform_version[]" data-autosave-add-button="add-platform-version" data-autosave-item-selector=".platform-version-item" data-autosave-remove-selector=".remove-platform-version">
-        {% if solution['deployable-on'] and solution['deployable-on'][0] and solution['deployable-on'][0].version %}
-          {% for version in solution['deployable-on'][0].version %}
+        {% if primary_deployable.version %}
+          {% for version in primary_deployable.version %}
             <div class="platform-version-item p-form--inline">
               <button type="button" class="p-button--negative has-icon is-small remove-platform-version" aria-label="Remove version"><i class="p-icon--delete is-dark"></i></button>
               <div class="p-form__group">
@@ -132,8 +135,8 @@
   <div class="col-8 col-x-large-6">
     <div id="platform-prerequisites-section">
       <div id="platform-prerequisites-list" data-autosave-multivalue-field="platform_prerequisites[]" data-autosave-add-button="add-platform-prerequisite" data-autosave-item-selector=".platform-prerequisite-item" data-autosave-remove-selector=".remove-platform-prerequisite">
-        {% if solution['deployable-on'] and solution['deployable-on'][0] and solution['deployable-on'][0].prerequisites %}
-          {% for prerequisite in solution['deployable-on'][0].prerequisites %}
+        {% if primary_deployable.prerequisites %}
+          {% for prerequisite in primary_deployable.prerequisites %}
             <div class="platform-prerequisite-item p-form--inline">
               <button type="button" class="p-button--negative has-icon is-small remove-platform-prerequisite" aria-label="Remove prerequisite"><i class="p-icon--delete is-dark"></i></button>
               <div class="p-form__group">
