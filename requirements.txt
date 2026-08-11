@@ -18,7 +18,7 @@ python-slugify==8.0.4
 ruamel.yaml.clib==0.2.15
 ruamel.yaml==0.19.1
 PyGithub==2.9.1
-ruff==0.16.2
+ruff==0.14.14
 Flask-Caching==2.4.1
 responses==0.26.2
 
