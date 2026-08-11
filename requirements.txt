@@ -26,10 +26,10 @@ responses==0.26.2
 opentelemetry-api==1.44.0
 opentelemetry-exporter-otlp==1.44.0
 opentelemetry-exporter-otlp-proto-http==1.44.0
-opentelemetry-instrumentation==0.60b1
-opentelemetry-instrumentation-wsgi==0.60b1
-opentelemetry-instrumentation-flask==0.60b1
-opentelemetry-instrumentation-requests==0.60b1
+opentelemetry-instrumentation==0.65b0
+opentelemetry-instrumentation-wsgi==0.65b0
+opentelemetry-instrumentation-flask==0.65b0
+opentelemetry-instrumentation-requests==0.65b0
 opentelemetry-sdk==1.44.0
 
 # Cache
