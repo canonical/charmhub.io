@@ -24,9 +24,7 @@ interface MultivalueFieldConfig {
 }
 
 type EditableFormField =
-  | HTMLInputElement
-  | HTMLSelectElement
-  | HTMLTextAreaElement;
+  HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
 function getMultivalueFieldConfigs(): MultivalueFieldConfig[] {
   return Array.from(
