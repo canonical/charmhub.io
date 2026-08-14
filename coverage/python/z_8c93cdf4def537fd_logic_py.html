@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_8c93cdf4def537fd_views_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.15.4">coverage.py v7.15.4</a>,
-            created at 2026-08-07 22:14 +0000
+            created at 2026-08-14 22:07 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -143,7 +143,7 @@
     <p class="pln"><span class="n"><a id="t61" href="#t61">61</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t62" href="#t62">62</a></span><span class="t">    <span class="op">@</span><span class="nam">trace_function</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t63" href="#t63">63</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_interface_from_path</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">interface_name</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t64" href="#t64">64</a></span><span class="t">        <span class="nam">key</span> <span class="op">=</span> <span class="str">f&quot;get-interface-from-path:{interface_name}&quot;</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t64" href="#t64">64</a></span><span class="t">        <span class="nam">key</span> <span class="op">=</span> <span class="fst">f&quot;</span><span class="fst">get-interface-from-path:</span><span class="op">{</span><span class="nam">interface_name</span><span class="op">}</span><span class="fst">&quot;</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t65" href="#t65">65</a></span><span class="t">        <span class="nam">interface</span> <span class="op">=</span> <span class="nam">redis_cache</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="nam">key</span><span class="op">,</span> <span class="nam">expected_type</span><span class="op">=</span><span class="nam">dict</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t66" href="#t66">66</a></span><span class="t">        <span class="key">if</span> <span class="nam">interface</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t67" href="#t67">67</a></span><span class="t">            <span class="key">return</span> <span class="nam">interface</span>&nbsp;</span><span class="r"></span></p>
@@ -244,7 +244,7 @@
     <p class="mis show_mis"><span class="n"><a id="t162" href="#t162">162</a></span><span class="t">                <span class="key">if</span> <span class="nam">absolute_url</span><span class="op">.</span><span class="nam">startswith</span><span class="op">(</span><span class="str">&quot;./&quot;</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t163" href="#t163">163</a></span><span class="t">                    <span class="nam">absolute_url</span> <span class="op">=</span> <span class="nam">absolute_url</span><span class="op">.</span><span class="nam">replace</span><span class="op">(</span><span class="str">&quot;./&quot;</span><span class="op">,</span> <span class="nam">base_link</span> <span class="op">+</span> <span class="str">&quot;/&quot;</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t164" href="#t164">164</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t165" href="#t165">165</a></span><span class="t">                <span class="nam">text</span> <span class="op">=</span> <span class="nam">text</span><span class="op">.</span><span class="nam">replace</span><span class="op">(</span><span class="nam">match</span><span class="op">,</span> <span class="str">f&quot;[{title}]({absolute_url})&quot;</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t165" href="#t165">165</a></span><span class="t">                <span class="nam">text</span> <span class="op">=</span> <span class="nam">text</span><span class="op">.</span><span class="nam">replace</span><span class="op">(</span><span class="nam">match</span><span class="op">,</span> <span class="fst">f&quot;</span><span class="fst">[</span><span class="op">{</span><span class="nam">title</span><span class="op">}</span><span class="fst">](</span><span class="op">{</span><span class="nam">absolute_url</span><span class="op">}</span><span class="fst">)</span><span class="fst">&quot;</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t166" href="#t166">166</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t167" href="#t167">167</a></span><span class="t">        <span class="key">return</span> <span class="nam">text</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t168" href="#t168">168</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -309,7 +309,7 @@
             <a class="nav" href="z_8c93cdf4def537fd_views_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.15.4">coverage.py v7.15.4</a>,
-            created at 2026-08-07 22:14 +0000
+            created at 2026-08-14 22:07 +0000
         </p>
     </div>
 </footer>

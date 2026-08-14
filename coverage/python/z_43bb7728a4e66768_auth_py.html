@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_43bb7728a4e66768_logic_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.15.4">coverage.py v7.15.4</a>,
-            created at 2026-08-07 22:14 +0000
+            created at 2026-08-14 22:07 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -97,11 +97,11 @@
     <p class="mis show_mis"><span class="n"><a id="t15" href="#t15">15</a></span><span class="t">        <span class="key">raise</span> <span class="nam">ValueError</span><span class="op">(</span><span class="str">&quot;FLASK_HMAC_SECRET_KEY env variable not set&quot;</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t16" href="#t16">16</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t17" href="#t17">17</a></span><span class="t">    <span class="nam">timestamp</span> <span class="op">=</span> <span class="nam">str</span><span class="op">(</span><span class="nam">int</span><span class="op">(</span><span class="nam">time</span><span class="op">.</span><span class="nam">time</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t18" href="#t18">18</a></span><span class="t">    <span class="nam">msg</span> <span class="op">=</span> <span class="str">f&quot;{username}|{timestamp}&quot;</span><span class="op">.</span><span class="nam">encode</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t18" href="#t18">18</a></span><span class="t">    <span class="nam">msg</span> <span class="op">=</span> <span class="fst">f&quot;</span><span class="op">{</span><span class="nam">username</span><span class="op">}</span><span class="fst">|</span><span class="op">{</span><span class="nam">timestamp</span><span class="op">}</span><span class="fst">&quot;</span><span class="op">.</span><span class="nam">encode</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t19" href="#t19">19</a></span><span class="t">    <span class="nam">sig</span> <span class="op">=</span> <span class="nam">hmac</span><span class="op">.</span><span class="nam">new</span><span class="op">(</span><span class="nam">HMAC_SECRET</span><span class="op">.</span><span class="nam">encode</span><span class="op">(</span><span class="op">)</span><span class="op">,</span> <span class="nam">msg</span><span class="op">,</span> <span class="nam">hashlib</span><span class="op">.</span><span class="nam">blake2b</span><span class="op">)</span><span class="op">.</span><span class="nam">hexdigest</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t20" href="#t20">20</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t21" href="#t21">21</a></span><span class="t">    <span class="nam">r</span> <span class="op">=</span> <span class="nam">requests</span><span class="op">.</span><span class="nam">post</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis mis2 show_mis"><span class="n"><a id="t22" href="#t22">22</a></span><span class="t">        <span class="str">f&quot;{BASE_URL}/login&quot;</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t22" href="#t22">22</a></span><span class="t">        <span class="fst">f&quot;</span><span class="op">{</span><span class="nam">BASE_URL</span><span class="op">}</span><span class="fst">/login</span><span class="fst">&quot;</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis mis2 show_mis"><span class="n"><a id="t23" href="#t23">23</a></span><span class="t">        <span class="nam">json</span><span class="op">=</span><span class="op">{</span><span class="str">&quot;username&quot;</span><span class="op">:</span> <span class="nam">username</span><span class="op">,</span> <span class="str">&quot;timestamp&quot;</span><span class="op">:</span> <span class="nam">timestamp</span><span class="op">,</span> <span class="str">&quot;signature&quot;</span><span class="op">:</span> <span class="nam">sig</span><span class="op">}</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis mis2 show_mis"><span class="n"><a id="t24" href="#t24">24</a></span><span class="t">    <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t25" href="#t25">25</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -116,7 +116,7 @@
             <a class="nav" href="z_43bb7728a4e66768_logic_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.15.4">coverage.py v7.15.4</a>,
-            created at 2026-08-07 22:14 +0000
+            created at 2026-08-14 22:07 +0000
         </p>
     </div>
 </footer>
