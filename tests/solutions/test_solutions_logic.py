@@ -1,11 +1,14 @@
 import unittest
 from unittest.mock import patch, MagicMock
 from webapp.solutions.logic import (
+    _solution_listing_item,
     get_solution_from_backend,
     get_publisher_solutions,
     group_solution_drafts,
     get_solution_categories,
+    get_published_solutions,
     map_category_slugs_to_display,
+    SolutionsServiceError,
 )
 
 
@@ -13,6 +16,111 @@ from webapp.solutions.logic import (
     "webapp.solutions.logic.SOLUTIONS_API_BASE", "http://localhost:5000/api"
 )
 class TestSolutionsLogic(unittest.TestCase):
+    @patch("webapp.solutions.logic.redis_cache")
+    @patch("webapp.solutions.logic.session")
+    def test_get_published_solutions(self, mock_session, mock_cache):
+        mock_cache.get.return_value = None
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = [
+            {
+                "id": 1,
+                "name": "observability",
+                "title": "Canonical Observability Stack",
+                "summary": "Observe applications and infrastructure.",
+                "categories": ["monitoring"],
+                "media": {"icon": "https://example.com/icon.svg"},
+                "deployable-on": [
+                    {"platform": "kubernetes", "version": [">=1.29"]}
+                ],
+                "last_updated": "2026-08-17T10:48:16.021584",
+                "publisher": {"display_name": "Canonical"},
+                "charms": [
+                    {"id": 1, "charm_name": "grafana-k8s"},
+                    {"id": 2, "charm_name": "prometheus-k8s"},
+                ],
+                "maintainers": [{"email": "private@example.com"}],
+            }
+        ]
+        mock_session.get.return_value = mock_response
+
+        result = get_published_solutions()
+
+        self.assertEqual(
+            result,
+            [
+                {
+                    "name": "observability",
+                    "title": "Canonical Observability Stack",
+                    "summary": "Observe applications and infrastructure.",
+                    "icon": "https://example.com/icon.svg",
+                    "categories": ["monitoring"],
+                    "platform": "kubernetes",
+                    "platform_version": [">=1.29"],
+                    "last_updated": "2026-08-17T10:48:16.021584",
+                    "charms": ["grafana-k8s", "prometheus-k8s"],
+                    "publisher": "Canonical",
+                }
+            ],
+        )
+        mock_session.get.assert_called_once_with(
+            "http://localhost:5000/api/solutions", timeout=5
+        )
+        mock_cache.set.assert_called_once_with("published-solutions", result, ttl=60)
+
+    def test_solution_listing_uses_publisher_username_as_fallback(self):
+        result = _solution_listing_item(
+            {
+                "name": "observability",
+                "publisher": {"display_name": "", "username": "canonical"},
+            }
+        )
+
+        self.assertEqual(result["publisher"], "canonical")
+
+    @patch("webapp.solutions.logic.redis_cache")
+    @patch("webapp.solutions.logic.session")
+    def test_get_published_solutions_uses_empty_cached_list(
+        self, mock_session, mock_cache
+    ):
+        mock_cache.get.return_value = []
+
+        result = get_published_solutions()
+
+        self.assertEqual(result, [])
+        mock_session.get.assert_not_called()
+
+    @patch("webapp.solutions.logic.redis_cache")
+    @patch("webapp.solutions.logic.session")
+    def test_get_published_solutions_rejects_service_error(
+        self, mock_session, mock_cache
+    ):
+        mock_cache.get.return_value = None
+        mock_response = MagicMock()
+        mock_response.status_code = 503
+        mock_session.get.return_value = mock_response
+
+        with self.assertRaises(SolutionsServiceError):
+            get_published_solutions()
+
+        mock_cache.set.assert_not_called()
+
+    @patch("webapp.solutions.logic.redis_cache")
+    @patch("webapp.solutions.logic.session")
+    def test_get_published_solutions_rejects_invalid_response(
+        self, mock_session, mock_cache
+    ):
+        mock_cache.get.return_value = None
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {"solutions": []}
+        mock_session.get.return_value = mock_response
+
+        with self.assertRaises(SolutionsServiceError):
+            get_published_solutions()
+
+        mock_cache.set.assert_not_called()
+
     @patch("webapp.solutions.logic.session")
     def test_get_solution_from_backend_success(self, mock_session):
         mock_response = MagicMock()
@@ -292,4 +400,3 @@ class TestSolutionCategories(unittest.TestCase):
     def test_map_category_slugs_to_display_empty(self):
         self.assertEqual(map_category_slugs_to_display([]), [])
         self.assertEqual(map_category_slugs_to_display(None), [])
-
