@@ -1,11 +1,14 @@
-from flask import Blueprint, abort, render_template, request
+from flask import Blueprint, abort, jsonify, render_template, request
 from webapp.decorators import redirect_uppercase_to_lowercase
 from webapp.store_api import publisher_gateway
 from webapp.helpers import markdown_to_html
 from webapp.solutions.logic import get_solution_from_backend
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from webapp.solutions.logic import get_published_solution_by_name
+from webapp.solutions.logic import get_published_solutions
 from webapp.solutions.logic import map_category_slugs_to_display
+from webapp.solutions.logic import SolutionsServiceError
+from webapp.observability.utils import trace_function
 from webapp.publisher.views import preview_cache
 
 
@@ -200,6 +203,20 @@ def solution_preview_draft(preview_key):
         solution=preview_solution,
         is_preview=True,
     )
+
+
+@trace_function
+@solutions.route("/solutions.json")
+def solutions_json():
+    try:
+        published_solutions = get_published_solutions()
+    except SolutionsServiceError:
+        return jsonify({"error": "Failed to fetch solutions"}), 502
+
+    return {
+        "solutions": published_solutions,
+        "size": len(published_solutions),
+    }
 
 
 @solutions.route("/solutions/<name>")
