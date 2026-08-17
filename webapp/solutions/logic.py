@@ -2,6 +2,7 @@ import os
 import logging
 import requests
 from flask import session as flask_session
+from redis_cache.cache_utility import redis_cache
 from webapp.solutions.auth import login
 from webapp.packages.logic import get_store_categories
 from webapp.store.logic import format_slug
@@ -15,6 +16,67 @@ session = requests.Session()
 SOLUTIONS_API_BASE = os.getenv(
     "FLASK_SOLUTIONS_API_BASE", "https://solutions.staging.charmhub.io/api"
 )
+
+
+class SolutionsServiceError(Exception):
+    pass
+
+
+def _solution_listing_item(solution):
+    media = solution.get("media") or {}
+    publisher = solution.get("publisher") or {}
+    charms = solution.get("charms") or []
+    deployable_on = solution.get("deployable-on") or []
+    deployment = deployable_on[0] if deployable_on else {}
+
+    return {
+        "title": solution.get("title", ""),
+        "name": solution.get("name", ""),
+        "summary": solution.get("summary", ""),
+        "icon": media.get("icon"),
+        "categories": solution.get("categories") or [],
+        "platform": deployment.get("platform", ""),
+        "platform_version": deployment.get("version") or [],
+        "last_updated": solution.get("last_updated"),
+        "charms": [
+            charm.get("charm_name")
+            for charm in charms
+            if isinstance(charm, dict) and charm.get("charm_name")
+        ],
+        "publisher": publisher.get("display_name")
+        or publisher.get("username", ""),
+    }
+
+
+def get_published_solutions():
+    cache_key = "published-solutions"
+    cached_solutions = redis_cache.get(cache_key, expected_type=list)
+    if cached_solutions is not None:
+        return cached_solutions
+
+    try:
+        response = session.get(f"{SOLUTIONS_API_BASE}/solutions", timeout=5)
+        if response.status_code != 200:
+            raise SolutionsServiceError(
+                f"Solutions service returned {response.status_code}"
+            )
+
+        solutions = response.json()
+        if not isinstance(solutions, list):
+            raise SolutionsServiceError("Solutions service returned invalid data")
+
+        listing = [
+            _solution_listing_item(solution)
+            for solution in solutions
+            if isinstance(solution, dict) and solution.get("name")
+        ]
+        redis_cache.set(cache_key, listing, ttl=60)
+        return listing
+    except SolutionsServiceError:
+        raise
+    except (requests.RequestException, ValueError) as error:
+        logger.exception("Failed to fetch published solutions")
+        raise SolutionsServiceError("Failed to fetch published solutions") from error
 
 
 def get_solution_categories():
