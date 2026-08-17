@@ -14,6 +14,11 @@ $breakpoint-navigation-threshold: 1220px; // keep it in sync with juju.is and br
 @import "vanilla-framework";
 @include vanilla;
 
+:root {
+  --typography-font-family-default: #{$font-base-family};
+  --typography-font-family-code: #{$font-monospace};
+}
+
 // Custom styles
 @import "pattern_p-card";
 @include p-charmhub-card;
