@@ -4,6 +4,9 @@ $brand-color: #772953;
 $color-text-orange: #d54110;
 $breakpoint-navigation-threshold: 1220px; // keep it in sync with juju.is and breakpoint value in global-nav.ts
 
+// import Pragma tokens and base styles before Vanilla
+@import "@canonical/styles";
+
 // import cookie policy
 @import "@canonical/cookie-policy/build/css/cookie-policy";
 
