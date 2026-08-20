@@ -57,12 +57,21 @@ def get_published_solutions():
     try:
         response = session.get(f"{SOLUTIONS_API_BASE}/solutions", timeout=5)
         if response.status_code != 200:
+            logger.warning(
+                "Solutions service returned status %s: %s",
+                response.status_code,
+                response.text,
+            )
             raise SolutionsServiceError(
                 f"Solutions service returned {response.status_code}"
             )
 
         solutions = response.json()
         if not isinstance(solutions, list):
+            logger.warning(
+                "Solutions service returned %s instead of a list",
+                type(solutions).__name__,
+            )
             raise SolutionsServiceError("Solutions service returned invalid data")
 
         listing = [

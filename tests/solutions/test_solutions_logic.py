@@ -98,11 +98,17 @@ class TestSolutionsLogic(unittest.TestCase):
         mock_cache.get.return_value = None
         mock_response = MagicMock()
         mock_response.status_code = 503
+        mock_response.text = "Service unavailable"
         mock_session.get.return_value = mock_response
 
-        with self.assertRaises(SolutionsServiceError):
-            get_published_solutions()
+        with self.assertLogs("webapp.solutions.logic", level="WARNING") as logs:
+            with self.assertRaises(SolutionsServiceError):
+                get_published_solutions()
 
+        self.assertIn(
+            "Solutions service returned status 503: Service unavailable",
+            logs.output[0],
+        )
         mock_cache.set.assert_not_called()
 
     @patch("webapp.solutions.logic.redis_cache")
@@ -116,9 +122,14 @@ class TestSolutionsLogic(unittest.TestCase):
         mock_response.json.return_value = {"solutions": []}
         mock_session.get.return_value = mock_response
 
-        with self.assertRaises(SolutionsServiceError):
-            get_published_solutions()
+        with self.assertLogs("webapp.solutions.logic", level="WARNING") as logs:
+            with self.assertRaises(SolutionsServiceError):
+                get_published_solutions()
 
+        self.assertIn(
+            "Solutions service returned dict instead of a list",
+            logs.output[0],
+        )
         mock_cache.set.assert_not_called()
 
     @patch("webapp.solutions.logic.session")
