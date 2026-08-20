@@ -10,7 +10,7 @@ terraform {
 provider "juju" {}
 
 module "app_ps7" {
-  source = "github.com/canonical/webteam-devops//terraform/modules/app-ps7?ref=terraform"
+  source = "github.com/canonical/webteam-devops//terraform/local/modules/app-ps7?ref=terraform"
 }
 
 # Discovers the VM external IP and the HAProxy unit IP, and exposes them (plus
@@ -19,7 +19,7 @@ module "app_ps7" {
 # There should be a script in webteam-juju-dev-provisioning called
 # configure_ingress_forwarding.sh that consumes these to configure host access.
 module "host_access" {
-  source = "github.com/canonical/webteam-devops//terraform/modules/host-access?ref=terraform"
+  source = "github.com/canonical/webteam-devops//terraform/local/modules/host-access?ref=terraform"
 
   machine_model_name = module.app_ps7.machine_model_name
   app_name           = module.app_ps7.haproxy_app_name

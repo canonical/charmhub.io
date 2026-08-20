@@ -39,8 +39,7 @@ sudo configure-ingress-forwarding
 ```
 
 This reads the Terraform outputs and installs a static nftables DNAT rule
-(`VM_IP:80,443 -> HAPROXY_IP`), persisted across reboots via a systemd oneshot
-unit. Tear it down with `--remove`.
+(`VM_IP:80,443 -> HAPROXY_IP`).
 
 ### 2. On your host laptop — resolve the hostname
 
@@ -51,7 +50,7 @@ container_ca_trust <vm-name>            # set up certs to make SSO work
 
 This writes a managed block into your `/etc/hosts` mapping the ingress
 hostnames to the VM. Works on Linux and macOS; only needs `multipass`. Remove
-it with `--remove`.
+it with `--delete`.
 
 Then open `https://app.local` in your browser.
 
@@ -134,8 +133,6 @@ charmcraft fetch-libs
 charmcraft pack
 # Take note of the .charm file that is output by `charmcraft pack`
 ```
-
-Thi
 
 ### Deploy
 
