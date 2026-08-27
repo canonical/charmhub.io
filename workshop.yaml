@@ -56,12 +56,6 @@ actions:
     source /project/.workshop/charmhub-io/env.sh
     yarn test
 
-  # Cypress needs a display; CI gets one from a container, here xvfb provides it.
-  test-e2e: |
-    source /project/.workshop/charmhub-io/env.sh
-    cypress install
-    xvfb-run -a yarn test-e2e
-
   # One intent, three linters.
   lint: |
     source /project/.workshop/charmhub-io/env.sh
