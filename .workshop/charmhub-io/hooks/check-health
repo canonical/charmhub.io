@@ -1,0 +1,10 @@
+#!/bin/bash
+# check-health: runs as root after setup-project.
+
+set -euo pipefail
+
+if [ -x /project/.venv/bin/gunicorn ] && [ -d /project/node_modules ]; then
+  workshopctl set-health okay
+else
+  workshopctl set-health waiting "project dependencies are still installing"
+fi

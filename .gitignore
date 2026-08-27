@@ -63,6 +63,7 @@ venv/
 # dotrun snap files
 .dotrun.json
 .venv/
+.workshop.lock
 
 node_modules/
 bower_components/

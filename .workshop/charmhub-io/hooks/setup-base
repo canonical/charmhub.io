@@ -1,0 +1,30 @@
+#!/bin/bash
+# setup-base: runs as root, before the project is mounted.
+
+set -euo pipefail
+
+apt-get update
+
+# Native build deps for the Python/Node dependency trees.
+# Evidence: Dockerfile python-dependencies stage.
+apt-get install --no-install-recommends --yes \
+  build-essential \
+  ca-certificates \
+  git
+
+# Cypress runs headless here instead of in the cypress/base container used by
+# .github/workflows/pr.yml, so the browser's shared libraries and a virtual
+# display have to be present in the workshop.
+# UNVERIFIED: package list is Cypress' documented Ubuntu prerequisite set
+# (24.04 t64 names), not repo evidence — confirm on first `test-e2e` run.
+apt-get install --no-install-recommends --yes \
+  libasound2t64 \
+  libgbm1 \
+  libgtk-3-0t64 \
+  libgtk2.0-0t64 \
+  libnotify4 \
+  libnss3 \
+  libxss1 \
+  libxtst6 \
+  xauth \
+  xvfb
