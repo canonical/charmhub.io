@@ -12,6 +12,7 @@ function Banner({ searchRef }: Props) {
       <Row>
         <Col size={6} className="col-start-large-4">
           <h1 className="p-heading--2">CHARMED DEMOS?</h1>
+          ok?
           <SearchInput searchRef={searchRef} />
         </Col>
       </Row>
