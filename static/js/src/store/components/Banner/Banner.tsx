@@ -11,7 +11,8 @@ function Banner({ searchRef }: Props) {
     <Strip type="dark">
       <Row>
         <Col size={6} className="col-start-large-4">
-          <h1 className="p-heading--2">The Charm Collection</h1>
+          <h1 className="p-heading--2">CHARMED DEMOS?</h1>
+          ok?
           <SearchInput searchRef={searchRef} />
         </Col>
       </Row>
