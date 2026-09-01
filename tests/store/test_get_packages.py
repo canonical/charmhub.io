@@ -1,6 +1,8 @@
+from copy import deepcopy
 from unittest import TestCase
 from unittest.mock import patch
 from webapp.app import app
+from webapp.packages.logic import parse_package_for_card
 
 
 FIND_RESULTS = [
@@ -156,6 +158,33 @@ class TestGetPackages(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn("packages", response.json)
         self.assertEqual(len(response.json["packages"]), 3)
+
+    def test_parse_package_for_card_includes_new_charm_card_data(self):
+        api_package = deepcopy(FIND_RESULTS[0])
+        api_package["result"]["categories"] = [
+            {"featured": False, "name": "databases"}
+        ]
+        package = parse_package_for_card(api_package)
+
+        self.assertEqual(
+            package["categories"],
+            [
+                {
+                    "display_name": "Databases",
+                    "featured": False,
+                    "name": "databases",
+                }
+            ],
+        )
+        self.assertEqual(
+            package["package"]["last_updated"],
+            "2025-05-28T00:34:33.427207+00:00",
+        )
+        self.assertEqual(
+            package["package"]["summary"],
+            "Charmed Apache Kafka Operator",
+        )
+        self.assertEqual(package["package"]["channel"]["name"], "3/stable")
 
     @patch("webapp.store_api.publisher_gateway.find")
     def test_get_packages_with_query(self, mock_find):
