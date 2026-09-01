@@ -2,50 +2,41 @@ name: charmhub-io
 base: ubuntu@24.04
 
 sdks:
-  # Python toolchain. `.python-version` pins 3.14, which install.sh passes
-  # to `uv venv`.
   - name: uv
     channel: latest/stable
 
-  # Node for Vite/yarn. The Dockerfile build stage uses node:24.
   - name: node
     channel: 24/stable
 
-  # Repo-specific apt packages, dependency install, and the dev servers.
   - name: project-charmhub-io
     slots:
       app:
         interface: tunnel
-        endpoint: localhost:8045 # flask app
+        endpoint: localhost:8045
       vite:
         interface: tunnel
-        endpoint: localhost:5045 # vite dev server
+        endpoint: localhost:5045
 
-  # Host side of the tunnels, on the same ports the project already uses
-  # (.env: PORT=8045, VITE_PORT=5045).
   - name: system
     plugs:
       app:
         interface: tunnel
-        endpoint: localhost:8045 # flask app
+        endpoint: localhost:8045
       vite:
         interface: tunnel
-        endpoint: localhost:5045 # vite dev server
+        endpoint: localhost:5045
 
-# Only intents that add logic get an action; plain package.json scripts go
-# through the `yarn` escape hatch, so script names live in one place.
 actions:
-  # Equivalent of the old `dotrun`: Vite + gunicorn together on 8045/5045.
   start: |
-    source /project/.workshop/charmhub-io/env.sh
+    . /project/.workshop/charmhub-io/env.sh
     yarn start
 
   build: |
-    source /project/.workshop/charmhub-io/env.sh
+    . /project/.workshop/charmhub-io/env.sh
     yarn build
 
   prod: |
-    source /project/.workshop/charmhub-io/env.sh
+    . /project/.workshop/charmhub-io/env.sh
     yarn build
     ENVIRONMENT=prod yarn serve
 
@@ -53,18 +44,15 @@ actions:
     bash /project/.workshop/charmhub-io/install.sh
 
   test: |
-    source /project/.workshop/charmhub-io/env.sh
+    . /project/.workshop/charmhub-io/env.sh
     yarn test
 
-  # One intent, three linters.
   lint: |
-    source /project/.workshop/charmhub-io/env.sh
+    . /project/.workshop/charmhub-io/env.sh
     yarn lint-python
     yarn lint-js
     yarn lint-scss
 
-  # Escape hatch for any other package.json script:
-  #   workshop run yarn test-js / test-python / format-python / serve
   yarn: |
-    source /project/.workshop/charmhub-io/env.sh
+    . /project/.workshop/charmhub-io/env.sh
     yarn "$@"
