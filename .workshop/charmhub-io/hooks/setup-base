@@ -1,0 +1,12 @@
+#!/bin/bash
+# setup-base: runs as root, before the project is mounted.
+
+set -euo pipefail
+
+# Native build deps for the Python/Node dependency trees.
+# Evidence: Dockerfile python-dependencies stage.
+apt-get update
+apt-get install --no-install-recommends --yes \
+  build-essential \
+  ca-certificates \
+  git

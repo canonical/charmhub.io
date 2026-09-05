@@ -1,0 +1,58 @@
+name: charmhub-io
+base: ubuntu@24.04
+
+sdks:
+  - name: uv
+    channel: latest/stable
+
+  - name: node
+    channel: 24/stable
+
+  - name: project-charmhub-io
+    slots:
+      app:
+        interface: tunnel
+        endpoint: localhost:8045
+      vite:
+        interface: tunnel
+        endpoint: localhost:5045
+
+  - name: system
+    plugs:
+      app:
+        interface: tunnel
+        endpoint: localhost:8045
+      vite:
+        interface: tunnel
+        endpoint: localhost:5045
+
+actions:
+  start: |
+    . /project/.workshop/charmhub-io/env.sh
+    yarn start
+
+  build: |
+    . /project/.workshop/charmhub-io/env.sh
+    yarn build
+
+  prod: |
+    . /project/.workshop/charmhub-io/env.sh
+    yarn build
+    ENVIRONMENT=prod yarn serve
+
+  install: |
+    bash /project/.workshop/charmhub-io/install.sh
+
+  test: |
+    . /project/.workshop/charmhub-io/env.sh
+    yarn test
+
+  lint: |
+    . /project/.workshop/charmhub-io/env.sh
+    yarn lint-python
+    yarn lint-js
+    yarn lint-scss
+
+  yarn: |
+    . /project/.workshop/charmhub-io/env.sh
+    yarn "$@"

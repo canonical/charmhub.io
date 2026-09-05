@@ -1,0 +1,20 @@
+#!/bin/bash
+# setup-project: runs as the workshop user in /project, after the project is
+# mounted. Replaces `dotrun install`.
+
+set -euo pipefail
+
+bash /project/.workshop/charmhub-io/install.sh
+
+# Make the same environment available to interactive shells (`workshop shell`)
+# and to anything they spawn, not just to `workshop run` actions.
+# Guarded so repeated launches/refreshes don't append duplicate blocks.
+if ! grep -q "charmhub-io-workshop-env" ~/.profile 2>/dev/null; then
+  cat <<'EOF' >> ~/.profile
+
+# charmhub-io-workshop-env
+if [ -f /project/.workshop/charmhub-io/env.sh ]; then
+  . /project/.workshop/charmhub-io/env.sh
+fi
+EOF
+fi
