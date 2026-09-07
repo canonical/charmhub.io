@@ -1,10 +1,8 @@
 import type { CharmCard } from "@canonical/store-components";
 import type { ComponentProps } from "react";
+import type { Category } from "../../shared/types";
 
-export type Category = {
-  display_name: string;
-  name: string;
-};
+export type { Category } from "../../shared/types";
 
 export type Store = {
   total_items: number;
