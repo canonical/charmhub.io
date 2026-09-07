@@ -37,6 +37,9 @@ describe("Banner Component", () => {
     expect(
       screen.getByPlaceholderText("Search Solutions or Charms")
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("searchbox", { name: "Search Solutions or Charms" })
+    ).toBeInTheDocument();
 
     expect(screen.getByRole("button", { name: /Search/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Close/i })).toBeInTheDocument();
