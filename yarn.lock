@@ -354,10 +354,10 @@
     react "^19.2.4"
     react-dom "^19.2.4"
 
-"@canonical/store-components@0.56.0":
-  version "0.56.0"
-  resolved "https://registry.yarnpkg.com/@canonical/store-components/-/store-components-0.56.0.tgz#62e0716ccc0b17be39f970390b1c7f7f7dc9d262"
-  integrity sha512-D+x5tcMyjYW6Nt+rWaak0aI8oqYvPoHzZXMJoWJlYx86+KxcXmDscjH+EgDKTSjlcN7UIV8dPtqiDKcmbeYkIg==
+"@canonical/store-components@0.56.2":
+  version "0.56.2"
+  resolved "https://registry.yarnpkg.com/@canonical/store-components/-/store-components-0.56.2.tgz#8fbd329f9cfcf4fc607e35ecaedfe9b5ed3143b4"
+  integrity sha512-ctJWKp0nTWQAOYqQC0rxFVu+D71X2/Vu/pN7CHrfGE7THPQrQoGpmQZXAklaz2lAUeNCl5eqHRBEm5rnCR9jew==
   dependencies:
     "@canonical/react-components" "4.0.1"
     "@types/jest" "27.5.2"

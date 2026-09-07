@@ -1,4 +1,5 @@
-import { Package, Publisher } from "../../publisher-admin/types";
+import type { CharmCard } from "@canonical/store-components";
+import type { ComponentProps } from "react";
 
 export type Category = {
   display_name: string;
@@ -8,12 +9,6 @@ export type Category = {
 export type Store = {
   total_items: number;
   total_pages: number;
-  packages: {
-    categories: Category[];
-    package: Package;
-    publisher: Publisher;
-    ratings: { count: string; value: string };
-    id: string;
-  }[];
+  packages: (ComponentProps<typeof CharmCard>["data"] & { id: string })[];
   categories: Category[];
 };
