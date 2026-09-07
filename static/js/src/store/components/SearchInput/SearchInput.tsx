@@ -22,7 +22,7 @@ export const SearchInput = ({ searchRef }: Props) => {
   return (
     <form className="p-search-box" onSubmit={onSearch}>
       <label className="u-off-screen" htmlFor="search">
-        Search Charmhub
+        Search Solutions or Charms
       </label>
       <input
         type="search"
