@@ -1,3 +1,8 @@
+export type Category = {
+  display_name: string;
+  name: string;
+};
+
 export interface ICharm {
   package: {
     description: string;
@@ -18,8 +23,5 @@ export interface ICharm {
     name: string;
     validation?: string;
   };
-  categories?: Array<{
-    display_name: string;
-    name: string;
-  }>;
+  categories?: Array<Category>;
 }
