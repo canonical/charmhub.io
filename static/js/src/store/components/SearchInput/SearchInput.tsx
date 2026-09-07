@@ -29,7 +29,7 @@ export const SearchInput = ({ searchRef }: Props) => {
         id="search"
         className="p-search-box__input"
         name="q"
-        placeholder="Search Charmhub"
+        placeholder="Search Solutions or Charms"
         defaultValue={searchParams.get("q") || ""}
         ref={searchRef}
       />
