@@ -196,15 +196,26 @@ def parse_package_for_card(
     resp["package"]["type"] = package.get("type", "")
     resp["package"]["name"] = package.get("name", "")
     resp["package"]["description"] = result.get("summary", "")
+    resp["package"]["summary"] = result.get("summary", "")
     resp["package"]["display_name"] = result.get(
         "title", format_slug(package.get("name", ""))
     )
     resp["package"]["channel"]["risk"] = risk
     resp["package"]["channel"]["track"] = track
     resp["package"]["channel"]["name"] = f"{track}/{risk}"
+    resp["package"]["last_updated"] = channel.get("released-at", "")
     resp["publisher"]["display_name"] = publisher.get("display-name", "")
     resp["publisher"]["validation"] = publisher.get("validation", "")
-    resp["categories"] = result.get("categories", [])
+    category_map = {cat["slug"]: cat["name"] for cat in CATEGORIES}
+    resp["categories"] = [
+        {
+            **category,
+            "display_name": category_map.get(
+                category["name"], format_slug(category["name"])
+            ),
+        }
+        for category in result.get("categories", [])
+    ]
     resp["package"]["icon_url"] = get_icon(result.get("media", []))
 
     platforms = result.get("deployable-on", [])

@@ -39,12 +39,15 @@ vi.mock("../../../components/Banner", () => ({
 vi.mock("../../../components/Topics", () => ({
   default: () => <div>Topics</div>,
 }));
+vi.mock("../../../components/LandingPage", () => ({
+  LandingPage: () => <div>Explore Charms</div>,
+}));
 
-const renderPackages = () => {
+const renderPackages = (initialEntry = "/") => {
   const queryClient = new QueryClient();
   render(
     <QueryClientProvider client={queryClient}>
-      <MemoryRouter>
+      <MemoryRouter initialEntries={[initialEntry]}>
         <Packages />
       </MemoryRouter>
     </QueryClientProvider>
@@ -54,10 +57,18 @@ const renderPackages = () => {
 describe("Packages component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    globalThis.fetch = vi.fn(() => new Promise<Response>(() => {}));
   });
 
-  test("renders Banner and Topics components", async () => {
+  test("renders Explore Charms on the landing page", async () => {
     renderPackages();
+    await waitFor(() => {
+      expect(screen.getByText("Explore Charms")).toBeInTheDocument();
+    });
+  });
+
+  test("renders Banner and Topics for filtered results", async () => {
+    renderPackages("/?type=charm");
     await waitFor(() => {
       expect(screen.getByText("Banner")).toBeInTheDocument();
       expect(screen.getByText("Topics")).toBeInTheDocument();
@@ -65,7 +76,7 @@ describe("Packages component", () => {
   });
 
   test("shows loading state", async () => {
-    renderPackages();
+    renderPackages("/?type=charm");
     await waitFor(() => {
       expect(screen.getAllByText("Loading...")).toHaveLength(12);
     });
@@ -74,6 +85,7 @@ describe("Packages component", () => {
   test("renders no packages message when there are no results", async () => {
     (globalThis.fetch as Mock) = vi.fn(() =>
       Promise.resolve({
+        ok: true,
         json: () =>
           Promise.resolve({
             total_items: 0,
@@ -84,7 +96,7 @@ describe("Packages component", () => {
       })
     );
 
-    renderPackages();
+    renderPackages("/?q=missing");
 
     await waitFor(() => {
       expect(

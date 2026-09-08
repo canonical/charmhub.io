@@ -22,14 +22,14 @@ export const SearchInput = ({ searchRef }: Props) => {
   return (
     <form className="p-search-box" onSubmit={onSearch}>
       <label className="u-off-screen" htmlFor="search">
-        Search Charmhub
+        Search Solutions or Charms
       </label>
       <input
         type="search"
         id="search"
         className="p-search-box__input"
         name="q"
-        placeholder="Search Charmhub"
+        placeholder="Search Solutions or Charms"
         defaultValue={searchParams.get("q") || ""}
         ref={searchRef}
       />
