@@ -48,7 +48,7 @@ export const LandingPage = ({ data, isFetching, status }: Props) => {
           );
         }
       },
-      { rootMargin: "-49% 0px -50% 0px" }
+      { rootMargin: "-5% 0px -87% 0px", threshold: 0 }
     );
 
     sections.forEach((section) => observer.observe(section));
@@ -249,7 +249,7 @@ export const LandingPage = ({ data, isFetching, status }: Props) => {
                     Charms package a workload or application with the
                     operational knowledge required to deploy, configure, scale,
                     and maintain it consistently on any cloud. You can use
-                    charms with Juju, Canonical open source orchestration engine
+                    charms with Juju, Canonical's open source orchestration engine
                     for software operators.
                   </p>
                 </Col>

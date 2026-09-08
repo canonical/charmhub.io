@@ -6,14 +6,19 @@ import { MemoryRouter } from "react-router-dom";
 import { LandingPage } from "../LandingPage";
 
 let intersectionObserverCallback: IntersectionObserverCallback;
+let intersectionObserverOptions: IntersectionObserverInit | undefined;
 
 class IntersectionObserverMock {
   disconnect = vi.fn();
   observe = vi.fn();
   unobserve = vi.fn();
 
-  constructor(callback: IntersectionObserverCallback) {
+  constructor(
+    callback: IntersectionObserverCallback,
+    options?: IntersectionObserverInit
+  ) {
     intersectionObserverCallback = callback;
+    intersectionObserverOptions = options;
   }
 }
 
@@ -143,6 +148,10 @@ describe("LandingPage", () => {
 
     expect(solutionsLink).toHaveAttribute("aria-current", "location");
     expect(solutionsLink).toHaveClass("is-active");
+    expect(intersectionObserverOptions).toEqual({
+      rootMargin: "-5% 0px -87% 0px",
+      threshold: 0,
+    });
 
     act(() => {
       intersectionObserverCallback(
