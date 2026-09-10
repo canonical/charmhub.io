@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - staging
+      - test-deploy
   workflow_dispatch:
     inputs:
       environment:
@@ -39,7 +40,7 @@ jobs:
   deploy:
     needs: setup
     name: Deploy
-    uses: canonical/webteam-devops/.github/workflows/deploy.yaml@main
+    uses: canonical/webteam-devops/.github/workflows/deploy.yaml@ps7-deployment
     permissions:
       packages: write
       id-token: write
