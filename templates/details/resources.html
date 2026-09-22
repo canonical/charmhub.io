@@ -108,7 +108,7 @@
       </small>
 
       {% if total_revisions > revisions_limit %}
-        <button class="js-show-more-revisions">
+        <button class="js-show-more-revisions" data-md-strip>
           {% if total_revisions - revisions_limit < revisions_limit %}
             Show {{total_revisions - revisions_limit }} more
           {% else %}

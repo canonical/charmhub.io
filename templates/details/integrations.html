@@ -3,7 +3,23 @@
 {% extends '/details/details_layout.html' %}
 
 {% block details_content %}
-  <div id="tab-content"></div>
+  <div id="tab-content">
+    {# Server-rendered fallback: replaced by the React tab on load. It'sread by
+       crawlers and the Markdown version of the page. #}
+    {% for direction, label in [("provides", "Provides"), ("requires", "Requires")] %}
+      {% if grouped_relations[direction] %}
+        <h2>{{ label }}</h2>
+        <ul>
+          {% for relation in grouped_relations[direction] %}
+            <li>
+              <strong>{{ relation.key }}</strong>
+              (<a href="/integrations/{{ relation.interface }}">{{ relation.interface }}</a>){% if relation.required %}, required{% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endfor %}
+  </div>
 {% endblock %}
 
 {% block details_scripts %}

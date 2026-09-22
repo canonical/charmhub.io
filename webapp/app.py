@@ -11,6 +11,7 @@ from webapp.store_api import publisher_gateway
 from webapp.extensions import csrf, vite
 from webapp.config import APP_NAME, VITE_CONFIG
 from webapp.handlers import set_handlers
+from webapp.llms import store_llm
 from webapp.login.views import login
 from webapp.topics.views import topics
 from webapp.publisher.views import publisher
@@ -50,6 +51,9 @@ set_handlers(app)
 
 csrf.init_app(app)
 vite.init_app(app)
+
+# Serve any page as Markdown at /page.md and llms.txt
+store_llm.init_app(app)
 
 app.register_blueprint(store_packages)
 app.register_blueprint(publisher)
@@ -128,14 +132,10 @@ def site_map():
 
 @app.route("/sitemap-links.xml")
 def site_map_links():
-    links = [
-        "/contact-us",
-    ]
-
     xml_sitemap = render_template(
         "sitemap/sitemap-links.xml",
         base_url=f"{request.scheme}://{request.host}",
-        links=links,
+        links=store_llm.sitemap_paths(),
     )
     response = make_response(xml_sitemap)
     response.headers["Content-Type"] = "application/xml"
