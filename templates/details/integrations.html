@@ -4,7 +4,7 @@
 
 {% block details_content %}
   <div id="tab-content">
-    {# Server-rendered fallback: replaced by the React tab on load. It'sread by
+    {# Server-rendered fallback: replaced by the React tab on load. It's read by
        crawlers and the Markdown version of the page. #}
     {% for direction, label in [("provides", "Provides"), ("requires", "Requires")] %}
       {% if grouped_relations[direction] %}
