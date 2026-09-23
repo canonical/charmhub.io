@@ -1,12 +1,14 @@
 import os
 import logging
 import requests
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from flask import session as flask_session
 from redis_cache.cache_utility import redis_cache
 from webapp.solutions.auth import login
 from webapp.packages.logic import get_store_categories
 from webapp.store.logic import format_slug
 from webapp.config import CATEGORIES
+from webapp.store_api import publisher_gateway
 
 
 logger = logging.getLogger(__name__)
@@ -16,6 +18,68 @@ session = requests.Session()
 SOLUTIONS_API_BASE = os.getenv(
     "FLASK_SOLUTIONS_API_BASE", "https://solutions.staging.charmhub.io/api"
 )
+
+CHARM_FIELDS = [
+    "result.media",
+    "result.title",
+    "result.summary",
+    "result.publisher.display-name",
+    "result.categories",
+    "result.deployable-on",
+]
+
+
+def get_charm_data(charm_name):
+    cache_key = f"solution-charm:{charm_name}"
+    cached_charm = redis_cache.get(cache_key, expected_type=dict)
+    if cached_charm:
+        return cached_charm
+
+    try:
+        charm = publisher_gateway.get_item_details(
+            charm_name, fields=CHARM_FIELDS
+        )
+    except Exception:
+        return None
+
+    if not charm or "result" not in charm:
+        return None
+
+    media = charm["result"].get("media") or []
+    charm_data = {
+        "name": charm_name,
+        "title": charm["result"].get("title", charm_name),
+        "summary": charm["result"].get("summary", ""),
+        "publisher": charm["result"].get("publisher"),
+        "icon": media[0]["url"] if media else None,
+        "url": f"https://charmhub.io/{charm_name}",
+        "categories": charm["result"].get("categories"),
+        "deployable-on": charm["result"].get("deployable-on"),
+    }
+    redis_cache.set(cache_key, charm_data, ttl=600)
+    return charm_data
+
+
+def get_charms_data(charm_names):
+    unique_names = list(dict.fromkeys(charm_names))
+    charm_data_map = {}
+
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        futures = {
+            executor.submit(get_charm_data, charm_name): charm_name
+            for charm_name in unique_names
+        }
+        for future in as_completed(futures):
+            charm_name = futures[future]
+            charm_data = future.result()
+            if charm_data:
+                charm_data_map[charm_name] = charm_data
+
+    return [
+        charm_data_map[charm_name]
+        for charm_name in charm_names
+        if charm_name in charm_data_map
+    ]
 
 
 class SolutionsServiceError(Exception):
