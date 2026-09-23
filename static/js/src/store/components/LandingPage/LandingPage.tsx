@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Col, Row, Strip } from "@canonical/react-components";
-import { CharmCard, LoadingCard } from "@canonical/store-components";
+import {
+  CharmCard,
+  LoadingCard,
+  SolutionCard,
+  SolutionLoadingCard,
+} from "@canonical/store-components";
 import { useQuery } from "react-query";
 
 import { Store } from "../../types";
@@ -11,10 +16,13 @@ const FEATURED_SOLUTION_COUNT = 4;
 
 type Solution = {
   categories: Array<string | { display_name?: string; name?: string }>;
+  charm_icons?: Record<string, string>;
+  charms?: string[];
   icon: string | null;
   last_updated: string | null;
   name: string;
   platform: string;
+  platform_version?: string[];
   publisher: string;
   summary: string;
   title: string;
@@ -184,7 +192,7 @@ export const LandingPage = ({ data, isFetching, status }: Props) => {
                         key={index}
                         style={{ marginBottom: "1.5rem" }}
                       >
-                        <LoadingCard />
+                        <SolutionLoadingCard />
                       </Col>
                     ))}
                   {!areSolutionsFetching &&
@@ -194,41 +202,9 @@ export const LandingPage = ({ data, isFetching, status }: Props) => {
                         key={solution.name}
                         style={{ marginBottom: "1.5rem" }}
                       >
-                        {/* temporarily using CharmCard until a dedicated SolutionCard is implemented */}
-                        <CharmCard
-                          data={{
-                            categories: solution.categories.map((category) => {
-                              const name =
-                                typeof category === "string"
-                                  ? category
-                                  : category.name || "";
-                              return {
-                                display_name:
-                                  typeof category === "string"
-                                    ? category
-                                    : category.display_name || name,
-                                name,
-                              };
-                            }),
-                            package: {
-                              description: solution.summary,
-                              display_name: solution.title,
-                              icon_url: solution.icon || undefined,
-                              last_updated: solution.last_updated || undefined,
-                              name: `solutions/${solution.name}`,
-                              platforms: solution.platform
-                                ? [
-                                    solution.platform === "machine"
-                                      ? "vm"
-                                      : solution.platform,
-                                  ]
-                                : [],
-                            },
-                            publisher: {
-                              display_name: solution.publisher,
-                              name: solution.publisher,
-                            },
-                          }}
+                        <SolutionCard
+                          charmIcons={solution.charm_icons}
+                          data={solution}
                         />
                       </Col>
                     ))}

@@ -27,6 +27,19 @@ vi.mock("@canonical/store-components", () => ({
     <div>{data.package.display_name}</div>
   ),
   LoadingCard: () => <div>Loading charm</div>,
+  SolutionCard: ({
+    charmIcons,
+    data,
+  }: {
+    charmIcons?: Record<string, string>;
+    data: { title: string };
+  }) => (
+    <div>
+      <span>{data.title}</span>
+      <span>{charmIcons?.["identity-platform"]}</span>
+    </div>
+  ),
+  SolutionLoadingCard: () => <div>Loading solution</div>,
 }));
 vi.mock("../../Banner", () => ({
   default: () => <div>The Charm Collection</div>,
@@ -70,10 +83,15 @@ describe("LandingPage", () => {
           solutions: [
             {
               categories: ["security"],
+              charm_icons: {
+                "identity-platform": "https://example.com/identity.png",
+              },
+              charms: ["identity-platform", "postgresql-k8s"],
               icon: null,
               last_updated: null,
               name: "identity-platform",
               platform: "kubernetes",
+              platform_version: [">= 1.25"],
               publisher: "Identity Charmer",
               summary: "Composable identity platform",
               title: "Identity Platform Solution",
@@ -108,6 +126,7 @@ describe("LandingPage", () => {
     expect(
       await screen.findByText("Identity Platform Solution")
     ).toBeInTheDocument();
+    expect(screen.getByText(/identity\.png/)).toBeInTheDocument();
     expect(global.fetch).toHaveBeenCalledWith("/solutions.json");
     expect(screen.getByText("MongoDB")).toBeInTheDocument();
     expect(
@@ -132,7 +151,8 @@ describe("LandingPage", () => {
     });
 
     await waitFor(() => {
-      expect(screen.getAllByText("Loading charm")).toHaveLength(16);
+      expect(screen.getAllByText("Loading solution")).toHaveLength(4);
+      expect(screen.getAllByText("Loading charm")).toHaveLength(12);
     });
   });
 
