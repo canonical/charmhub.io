@@ -703,6 +703,7 @@ def details_integrations(entity_name):
         "details/integrations.html",
         package=package,
         channel_requested=channel_request,
+        grouped_relations=group_relations(package),
     )
 
 
@@ -719,6 +720,11 @@ def details_integrations_data(entity_name):
     ]
     package = get_package(entity_name, channel_request, FIELDS + extra_fields)
 
+    return jsonify({"grouped_relations": group_relations(package)})
+
+
+@trace_function
+def group_relations(package):
     relations = (
         package.get("default-release", {})
         .get("revision", {})
@@ -734,12 +740,7 @@ def details_integrations_data(entity_name):
         relations.get("requires", {}),
     )
 
-    grouped_relations = {
-        "provides": provides,
-        "requires": requires,
-    }
-
-    return jsonify({"grouped_relations": grouped_relations})
+    return {"provides": provides, "requires": requires}
 
 
 @trace_function

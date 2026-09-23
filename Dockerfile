@@ -47,6 +47,8 @@ ADD . .
 RUN rm -rf package.json yarn.lock babel.config.json requirements.txt
 COPY --from=build /srv/static/js static/js
 
+RUN python3 -m canonicalwebteam.store_llm generate webapp.app:app
+
 
 # Setup commands to run server
 ENTRYPOINT ["./entrypoint"]

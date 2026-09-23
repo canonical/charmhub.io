@@ -4,6 +4,7 @@
   "scripts": {
     "clean": "rm -rf node_modules yarn-error.log css static/css static/js/dist *.log *.sqlite _site/ build/ .jekyll-metadata .bundle",
     "build": "vite build",
+    "build-llms-txt": "python3 -m canonicalwebteam.store_llm generate webapp.app:app",
     "format-python": "ruff format webapp tests",
     "lint-python": "ruff check webapp tests",
     "lint-js": "eslint static/js/src",

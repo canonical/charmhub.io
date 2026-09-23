@@ -5,6 +5,23 @@
 {% block meta_copydoc %}https://docs.google.com/document/d/1mps4SOa8_DA25fccYor3wxwV3ulQiD-uaocDHmaGmhw{% endblock meta_copydoc %}
 
 {% block content %}
-<main id="root"></main>
+<main id="root">
+  {# Server-rendered fallback: replaced by the React app on load. It's read by
+     crawlers and the Markdown version of the page. #}
+  <div class="p-strip">
+    <div class="row">
+      <div class="col-12">
+        <h1>The Open Operator Collection</h1>
+        <p>Charmhub is the home of charms and bundles: software operators that Juju uses to deploy, integrate and manage applications on Kubernetes, cloud and VM environments.</p>
+        <ul>
+          <li><a href="/all-charms">All charms</a></li>
+          <li><a href="/topics">Topic pages</a></li>
+          <li><a href="/integrations">Interface catalogue</a></li>
+          <li><a href="https://documentation.ubuntu.com/juju/">Juju documentation</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
 {{ vite_import('static/js/src/store/index.tsx') }}
 {% endblock content %}

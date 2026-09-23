@@ -12,7 +12,7 @@
     <div class="col-9 p-details-tab__content__body">
       {{ body_html | safe }}
       <hr class="p-separator--medium" />
-      <div class="p-notification--information">
+      <div class="p-notification--information" data-md-strip>
         <div class="p-notification__content">
           <p class="p-notification__message">
             <a href="{{ forum_url }}{{ topic_path }}" class="p-link--external">Help improve this document in the forum</a> (<a href="https://discourse.charmhub.io/t/how-to-write-docs-our-documentation-guidelines-for-contributors/1245" class="p-link--external">guidelines</a>). Last updated {{ last_update }}. 
