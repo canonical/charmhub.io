@@ -1,0 +1,31 @@
+# SBOMber manifest file
+# https://github.com/canonical/sbomber
+
+clients:
+  sbom:
+    department: web_engineering
+    email: snapcraftweb+sbom@groups.canonical.com
+    team: store
+  secscan: {}
+
+artifacts:
+  - type: rock
+    name: charmhub-io
+    charm_resource: flask-app-image
+    charm: charmhub-io
+    channel: latest/stable
+    version: "" # autodetect
+    ssdlc_params:
+      name: charmhub-io
+      channel: stable
+      version: "" # autodetect
+
+  - type: charm
+    name: charmhub-io
+    charm: charmhub-io
+    channel: latest/stable
+    version: "" # autodetect
+    ssdlc_params:
+      name: charmhub-io
+      channel: stable
+      version: "" # autodetect
