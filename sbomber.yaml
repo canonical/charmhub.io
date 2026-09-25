@@ -13,7 +13,7 @@ artifacts:
     name: charmhub-io
     charm_resource: flask-app-image
     charm: charmhub-io
-    channel: stable
+    channel: latest/stable
     version: "" # autodetect
     ssdlc_params:
       name: charmhub-io
@@ -23,7 +23,7 @@ artifacts:
   - type: charm
     name: charmhub-io
     charm: charmhub-io
-    channel: stable
+    channel: latest/stable
     version: "" # autodetect
     ssdlc_params:
       name: charmhub-io
