@@ -102,7 +102,9 @@ def _solution_listing_item(solution):
         "name": solution.get("name", ""),
         "summary": solution.get("summary", ""),
         "icon": media.get("icon"),
-        "categories": solution.get("categories") or [],
+        "categories": map_category_slugs_to_display(
+            solution.get("categories")
+        ),
         "platform": deployment.get("platform", ""),
         "platform_version": deployment.get("version") or [],
         "last_updated": solution.get("last_updated"),
