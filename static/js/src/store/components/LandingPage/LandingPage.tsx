@@ -14,18 +14,8 @@ import Banner from "../Banner";
 const FEATURED_CHARM_COUNT = 12;
 const FEATURED_SOLUTION_COUNT = 4;
 
-type Solution = {
-  categories: Array<string | { display_name?: string; name?: string }>;
+type Solution = React.ComponentProps<typeof SolutionCard>["data"] & {
   charm_icons?: Record<string, string>;
-  charms?: string[];
-  icon: string | null;
-  last_updated: string | null;
-  name: string;
-  platform: string;
-  platform_version?: string[];
-  publisher: string;
-  summary: string;
-  title: string;
 };
 
 type Props = {

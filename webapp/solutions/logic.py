@@ -28,6 +28,10 @@ CHARM_FIELDS = [
     "result.deployable-on",
 ]
 
+FALLBACK_CHARM_ICON = (
+    "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg"
+)
+
 
 def get_charm_data(charm_name):
     cache_key = f"solution-charm:{charm_name}"
@@ -51,7 +55,7 @@ def get_charm_data(charm_name):
         "title": charm["result"].get("title", charm_name),
         "summary": charm["result"].get("summary", ""),
         "publisher": charm["result"].get("publisher"),
-        "icon": media[0]["url"] if media else None,
+        "icon": media[0]["url"] if media else FALLBACK_CHARM_ICON,
         "url": f"https://charmhub.io/{charm_name}",
         "categories": charm["result"].get("categories"),
         "deployable-on": charm["result"].get("deployable-on"),

@@ -18,6 +18,9 @@ solutions = Blueprint(
     static_folder="../static",
 )
 
+# SolutionCard only renders icons for the first 5 charms of a solution
+SOLUTION_LISTING_CHARM_COUNT = 5
+
 def render_solution(solution):
     solution["description_html"] = markdown_to_html(
         solution.get("description", "")
@@ -152,10 +155,14 @@ def solutions_json():
     except SolutionsServiceError:
         return jsonify({"error": "Failed to fetch solutions"}), 502
 
+    top_charms_by_solution = [
+        (solution, solution.get("charms", [])[:SOLUTION_LISTING_CHARM_COUNT])
+        for solution in published_solutions
+    ]
     charm_names = {
         charm_name
-        for solution in published_solutions
-        for charm_name in solution.get("charms", [])[:5]
+        for _, top_charms in top_charms_by_solution
+        for charm_name in top_charms
     }
     charm_icons = {
         charm["name"]: charm["icon"]
@@ -168,11 +175,11 @@ def solutions_json():
             **solution,
             "charm_icons": {
                 charm_name: charm_icons[charm_name]
-                for charm_name in solution.get("charms", [])[:5]
+                for charm_name in top_charms
                 if charm_name in charm_icons
             },
         }
-        for solution in published_solutions
+        for solution, top_charms in top_charms_by_solution
     ]
 
     return {
