@@ -34,7 +34,12 @@ describe("Banner Component", () => {
       screen.getByRole("heading", { name: /The Charm Collection/i })
     ).toBeInTheDocument();
 
-    expect(screen.getByPlaceholderText("Search Charmhub")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("Search Solutions or Charms")
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("searchbox", { name: "Search Solutions or Charms" })
+    ).toBeInTheDocument();
 
     expect(screen.getByRole("button", { name: /Search/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Close/i })).toBeInTheDocument();
@@ -84,7 +89,7 @@ describe("Banner Component", () => {
     render(<Banner searchRef={mockSearchRef} />);
 
     const searchInput = screen.getByPlaceholderText(
-      "Search Charmhub"
+      "Search Solutions or Charms"
     ) as HTMLInputElement;
     expect(searchInput.value).toBe("test");
   });

@@ -20,6 +20,11 @@ $breakpoint-navigation-threshold: 1220px; // keep it in sync with juju.is and br
   --typography-font-family-code: #{$font-monospace};
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 1rem;
+}
+
 // Custom styles
 @import "pattern_p-card";
 @include p-charmhub-card;
