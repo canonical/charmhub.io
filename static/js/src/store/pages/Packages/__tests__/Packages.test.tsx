@@ -1,47 +1,38 @@
-import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Packages from "../Packages";
 import "@testing-library/jest-dom";
-import { Mock } from "vitest";
+import type { Solution } from "../../../types";
 
-vi.mock("@canonical/store-components", () => ({
-  CharmCard: ({ data }: { data: { name: string } }) => <div>{data.name}</div>,
-  BundleCard: ({ data }: { data: { name: string } }) => <div>{data.name}</div>,
-  Filters: ({
-    setSelectedCategories,
-    setSelectedPlatform,
-    setSelectedPackageType,
-  }: {
-    setSelectedCategories: (categories: string[]) => void;
-    setSelectedPlatform: (platform: string) => void;
-    setSelectedPackageType: (packageType: string) => void;
-  }) => (
-    <div>
-      <button onClick={() => setSelectedCategories(["category1"])}>
-        Set Categories
-      </button>
-      <button onClick={() => setSelectedPlatform("platform1")}>
-        Set Platform
-      </button>
-      <button onClick={() => setSelectedPackageType("package1")}>
-        Set Package Type
-      </button>
-    </div>
-  ),
-  LoadingCard: () => <div>Loading...</div>,
-}));
-
-vi.mock("../../../components/Banner", () => ({
-  default: () => <div>Banner</div>,
-}));
-vi.mock("../../../components/Topics", () => ({
-  default: () => <div>Topics</div>,
-}));
 vi.mock("../../../components/LandingPage", () => ({
   LandingPage: () => <div>Explore Charms</div>,
 }));
+vi.mock("../../../components/PackageList", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../../components/PackageList")>()),
+  PackageList: ({
+    type,
+    solutions,
+    totalItems,
+  }: {
+    type: string;
+    solutions: Solution[];
+    totalItems: number;
+  }) => (
+    <div>
+      <div>Package list: {type}</div>
+      <div>Matching results: {totalItems}</div>
+      {solutions.map((solution) => (
+        <div key={solution.name}>{solution.title}</div>
+      ))}
+    </div>
+  ),
+}));
+
+const LocationDisplay = () => {
+  const location = useLocation();
+  return <div data-testid="location">{location.search}</div>;
+};
 
 const renderPackages = (initialEntry = "/") => {
   const queryClient = new QueryClient();
@@ -49,6 +40,7 @@ const renderPackages = (initialEntry = "/") => {
     <QueryClientProvider client={queryClient}>
       <MemoryRouter initialEntries={[initialEntry]}>
         <Packages />
+        <LocationDisplay />
       </MemoryRouter>
     </QueryClientProvider>
   );
@@ -65,43 +57,91 @@ describe("Packages component", () => {
     await waitFor(() => {
       expect(screen.getByText("Explore Charms")).toBeInTheDocument();
     });
+    expect(globalThis.fetch).not.toHaveBeenCalledWith("/solutions.json");
   });
 
-  test("renders Banner and Topics for filtered results", async () => {
-    renderPackages("/?type=charm");
+  test("renders the solutions package list page", async () => {
+    renderPackages("/?type=solutions");
+
+    expect(screen.getByText("Package list: solutions")).toBeInTheDocument();
     await waitFor(() => {
-      expect(screen.getByText("Banner")).toBeInTheDocument();
-      expect(screen.getByText("Topics")).toBeInTheDocument();
+      expect(globalThis.fetch).toHaveBeenCalledWith("/store.json?type=charm");
+      expect(globalThis.fetch).toHaveBeenCalledWith("/solutions.json");
     });
   });
 
-  test("shows loading state", async () => {
-    renderPackages("/?type=charm");
+  test("renders the charms package list page", async () => {
+    renderPackages("/?type=charms");
+
+    expect(screen.getByText("Package list: charms")).toBeInTheDocument();
     await waitFor(() => {
-      expect(screen.getAllByText("Loading...")).toHaveLength(12);
+      expect(globalThis.fetch).toHaveBeenCalledWith("/store.json?type=charm");
     });
   });
 
-  test("renders no packages message when there are no results", async () => {
-    (globalThis.fetch as Mock) = vi.fn(() =>
+  test("prepares filtered and paginated solutions for the listing", async () => {
+    const solutions = Array.from({ length: 13 }, (_, index) => ({
+      name: `identity-${index}`,
+      title: `Identity ${index}`,
+      publisher: "Canonical",
+      summary: "Identity platform",
+      categories: ["Security"],
+      platform: "machine",
+    }));
+    globalThis.fetch = vi.fn().mockImplementation((url: string) =>
       Promise.resolve({
         ok: true,
         json: () =>
-          Promise.resolve({
-            total_items: 0,
-            total_pages: 1,
-            packages: [],
-            categories: ["category1", "category2"],
-          }),
+          Promise.resolve(
+            url === "/solutions.json"
+              ? {
+                  solutions: [
+                    ...solutions,
+                    {
+                      ...solutions[0],
+                      name: "other",
+                      title: "Other solution",
+                      summary: "Unrelated",
+                      platform: "kubernetes",
+                    },
+                  ],
+                }
+              : {
+                  packages: [],
+                  categories: [],
+                  total_items: 42,
+                  total_pages: 4,
+                }
+          ),
       })
     );
 
-    renderPackages("/?q=missing");
+    renderPackages(
+      "/?type=solutions&q=identity&categories=security&platforms=vm&page=2"
+    );
 
+    expect(await screen.findByText("Identity 5")).toBeInTheDocument();
+    for (let index = 5; index < 10; index++) {
+      expect(screen.getByText(`Identity ${index}`)).toBeInTheDocument();
+    }
+    expect(screen.getByText("Matching results: 13")).toBeInTheDocument();
+    expect(screen.queryByText("Identity 0")).not.toBeInTheDocument();
+    expect(screen.queryByText("Identity 10")).not.toBeInTheDocument();
+    expect(screen.queryByText("Identity 12")).not.toBeInTheDocument();
+    expect(screen.queryByText("Other solution")).not.toBeInTheDocument();
+  });
+
+  test.each([
+    ["/?type=charm&q=kafka", "?type=charms&q=kafka"],
+    ["/?type=bundle&q=kafka", "?type=charms&q=kafka"],
+    ["/?type=all", "?type=charms"],
+    ["/?q=kafka", "?q=kafka&type=charms"],
+  ])("redirects %s to the charms tab", async (initialEntry, expected) => {
+    renderPackages(initialEntry);
+
+    expect(screen.getByText("Package list: charms")).toBeInTheDocument();
     await waitFor(() => {
-      expect(
-        screen.getByText("Why not trying widening your search?")
-      ).toBeInTheDocument();
+      expect(screen.getByTestId("location")).toHaveTextContent(expected);
     });
   });
 });

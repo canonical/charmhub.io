@@ -1,126 +1,173 @@
+import { useRef } from "react";
+import { Link, LinkProps, useSearchParams } from "react-router-dom";
 import {
+  Badge,
   Button,
   Col,
   Pagination,
   Row,
   Strip,
+  Tabs,
 } from "@canonical/react-components";
-import Banner from "../Banner";
-import { PackageFilter } from "../PackageFilter";
-import Topics from "../Topics";
 import {
-  BundleCard,
   CharmCard,
   LoadingCard,
+  SolutionCard,
+  SolutionLoadingCard,
 } from "@canonical/store-components";
-import { useSearchParams } from "react-router-dom";
-import { useRef } from "react";
 
-import { Store } from "../../types";
+import { Solution, Store } from "../../types";
+import { PackageFilter } from "../PackageFilter";
+import { SearchInput } from "../SearchInput";
 
-const ITEMS_PER_PAGE = 12;
+export const ITEMS_PER_PAGE = { charms: 12, solutions: 5 };
+
+type Props = {
+  type: "solutions" | "charms";
+  charms: Store["packages"];
+  solutions: Solution[];
+  counts: { charms: number; solutions: number };
+  totalItems: number;
+  resultCount: number;
+  isFetching: boolean;
+  showSkeletons: boolean;
+};
 
 export const PackageList = ({
+  type,
+  charms,
+  solutions,
+  counts,
+  totalItems,
+  resultCount,
   isFetching,
-  data,
-  status,
-}: {
-  isFetching: boolean;
-  status: "success" | "idle" | "error" | "loading";
-  data?: Store;
-}) => {
+  showSkeletons,
+}: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const topicsQuery = searchParams ? searchParams.get("categories") : null;
-
   const searchRef = useRef<HTMLInputElement | null>(null);
+  const currentPage = Number(searchParams.get("page") || 1);
+  const itemsPerPage = ITEMS_PER_PAGE[type];
 
-  const currentPage = searchParams.get("page") || "1";
-  const firstResultNumber = (parseInt(currentPage) - 1) * ITEMS_PER_PAGE + 1;
-  const lastResultNumber =
-    (parseInt(currentPage) - 1) * ITEMS_PER_PAGE +
-    (data ? data.packages.length : 0);
+  const getTabLink = (tabType: Props["type"]) => {
+    const params = new URLSearchParams({ type: tabType });
+    const platforms = searchParams.get("platforms");
+    if (platforms) params.set("platforms", platforms);
+    const categories = searchParams.get("categories");
+    if (categories) params.set("categories", categories);
+    return `/?${params}`;
+  };
 
-  const onClear = () => {
+  const clearSearch = () => {
     searchParams.delete("q");
     searchParams.delete("page");
     setSearchParams(searchParams);
-
-    if (searchRef.current) {
-      searchRef.current.value = "";
-    }
+    if (searchRef.current) searchRef.current.value = "";
   };
 
   return (
-    <>
-      <Banner searchRef={searchRef as React.RefObject<HTMLInputElement>} />
-      <Strip>
-        <Row>
-          <Col size={3}>
-            <PackageFilter disabled={isFetching} data={data} />
-          </Col>
-          <Col size={9}>
-            <Topics topicsQuery={topicsQuery} />
-            {data && (
-              <div className="u-fixed-width">
-                {searchParams.get("q") ? (
-                  <p>
-                    Showing {currentPage === "1" ? "1" : firstResultNumber} to{" "}
-                    {lastResultNumber} of {data.total_items} results for{" "}
-                    <strong>"{searchParams.get("q")}"</strong>.{" "}
-                    <Button appearance="link" onClick={onClear}>
-                      Clear search
-                    </Button>
-                  </p>
-                ) : (
-                  <p>
-                    Showing {currentPage === "1" ? "1" : firstResultNumber} to{" "}
-                    {lastResultNumber} of {data.total_items} items
-                  </p>
-                )}
-              </div>
-            )}
+    <Strip shallow className="u-no-padding--bottom">
+      <Row className="p-section--deep">
+        <Col size={3}>
+          <PackageFilter disabled={isFetching} />
+        </Col>
+        <Col size={9}>
+          <SearchInput
+            searchRef={searchRef as React.RefObject<HTMLInputElement>}
+          />
+          <Tabs<LinkProps>
+            links={[
+              {
+                active: type === "solutions",
+                component: Link,
+                to: getTabLink("solutions"),
+                label: (
+                  <>
+                    Solutions <Badge value={counts.solutions} />
+                  </>
+                ),
+              },
+              {
+                active: type === "charms",
+                component: Link,
+                to: getTabLink("charms"),
+                label: (
+                  <>
+                    Charms <Badge value={counts.charms} />
+                  </>
+                ),
+              },
+            ]}
+          />
+          {isFetching && <p>Loading results...</p>}
+          {!isFetching && (
+            <p>
+              Showing {resultCount} results of {counts[type]}
+              {searchParams.get("q") && (
+                <>
+                  {" "}
+                  <Button appearance="link" onClick={clearSearch}>
+                    Clear search
+                  </Button>
+                </>
+              )}
+            </p>
+          )}
+          {showSkeletons &&
+            type === "solutions" &&
+            [...Array(itemsPerPage)].map((_item, index) => (
+              <Row key={index}>
+                <Col size={9} style={{ marginBottom: "1.5rem" }}>
+                  <SolutionLoadingCard />
+                </Col>
+              </Row>
+            ))}
+          {showSkeletons && type === "charms" && (
             <Row>
-              {isFetching &&
-                [...Array(ITEMS_PER_PAGE)].map((_item, index) => (
-                  <Col size={3} key={index}>
-                    <LoadingCard />
-                  </Col>
-                ))}
-
-              {!isFetching &&
-                status === "success" &&
-                data &&
-                data.packages.map((packageData) => (
-                  <Col
-                    size={3}
-                    style={{ marginBottom: "1.5rem" }}
-                    key={packageData.id}
-                  >
-                    {packageData.package.type === "bundle" ? (
-                      <BundleCard data={packageData} />
-                    ) : (
-                      <CharmCard data={packageData} />
-                    )}
-                  </Col>
-                ))}
+              {[...Array(itemsPerPage)].map((_item, index) => (
+                <Col size={3} key={index} style={{ marginBottom: "1.5rem" }}>
+                  <LoadingCard />
+                </Col>
+              ))}
             </Row>
-
-            {status === "success" && data && (
-              <Pagination
-                itemsPerPage={ITEMS_PER_PAGE}
-                totalItems={data.total_items}
-                paginate={(pageNumber) => {
-                  searchParams.set("page", pageNumber.toString());
-                  setSearchParams(searchParams);
-                }}
-                currentPage={parseInt(currentPage)}
-                centered
-                scrollToTop
-              />
-            )}
-          </Col>
-        </Row>
-      </Strip>
-    </>
+          )}
+          {!showSkeletons &&
+            type === "solutions" &&
+            solutions.map((solution) => (
+              <Row key={solution.name}>
+                <Col size={9} style={{ marginBottom: "1.5rem" }}>
+                  <SolutionCard
+                    charmIcons={solution.charm_icons}
+                    data={solution}
+                  />
+                </Col>
+              </Row>
+            ))}
+          {!showSkeletons && type === "charms" && (
+            <Row>
+              {charms.map((charm) => (
+                <Col key={charm.id} size={3} style={{ marginBottom: "1.5rem" }}>
+                  <CharmCard data={charm} />
+                </Col>
+              ))}
+            </Row>
+          )}
+          {!isFetching && resultCount === 0 && <p>No results found.</p>}
+          {!showSkeletons && resultCount > 0 && (
+            <Pagination
+              centered={false}
+              className="p-pagination u-float-right"
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              paginate={(pageNumber) => {
+                searchParams.set("page", pageNumber.toString());
+                setSearchParams(searchParams);
+              }}
+              scrollToTop
+              totalItems={totalItems}
+            />
+          )}
+        </Col>
+      </Row>
+    </Strip>
   );
 };

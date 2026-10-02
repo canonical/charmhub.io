@@ -248,7 +248,7 @@ export const LandingPage = ({ data, isFetching, status }: Props) => {
                 </Row>
               </div>
               <p className="u-no-padding--top">
-                <a href="/?type=charm">View all Charms</a>
+                <a href="/?type=charms">View all Charms</a>
               </p>
             </section>
           </Col>
