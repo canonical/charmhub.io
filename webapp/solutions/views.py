@@ -1,9 +1,8 @@
 from flask import Blueprint, abort, jsonify, render_template, request
 from webapp.decorators import redirect_uppercase_to_lowercase
-from webapp.store_api import publisher_gateway
 from webapp.helpers import markdown_to_html
+from webapp.solutions.logic import get_charms_data
 from webapp.solutions.logic import get_solution_from_backend
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from webapp.solutions.logic import get_published_solution_by_name
 from webapp.solutions.logic import get_published_solutions
 from webapp.solutions.logic import map_category_slugs_to_display
@@ -19,46 +18,8 @@ solutions = Blueprint(
     static_folder="../static",
 )
 
-FIELDS = [
-    "result.media",
-    "result.title",
-    "result.summary",
-    "result.publisher.display-name",
-    "result.categories",
-    "result.deployable-on",
-]
-
-
-def get_charm_data(charm_name):
-    """Fetch charm details from Charmhub API."""
-    try:
-        charm = publisher_gateway.get_item_details(charm_name, fields=FIELDS)
-    except Exception:
-        return None
-
-    if not charm or "result" not in charm:
-        return None
-
-    icon = None
-    if charm["result"].get("media"):
-        icon = charm["result"]["media"][0]["url"]
-    else:
-        icon = (
-            "https://assets.ubuntu.com/v1/"
-            "be6eb412-snapcraft-missing-icon.svg"
-        )
-
-    return {
-        "name": charm_name,
-        "title": charm["result"].get("title", charm_name),
-        "summary": charm["result"].get("summary", ""),
-        "publisher": charm["result"].get("publisher"),
-        "icon": icon,
-        "url": f"https://charmhub.io/{charm_name}",
-        "categories": charm["result"].get("categories"),
-        "deployable-on": charm["result"].get("deployable-on"),
-    }
-
+# SolutionCard only renders icons for the first 5 charms of a solution
+SOLUTION_LISTING_CHARM_COUNT = 5
 
 def render_solution(solution):
     solution["description_html"] = markdown_to_html(
@@ -90,26 +51,7 @@ def render_solution(solution):
         elif isinstance(charm, str):
             charm_names.append(charm)
 
-    def fetch(name):
-        return name, get_charm_data(name)
-
-    charm_data_map = {}
-    if charm_names:
-        with ThreadPoolExecutor(max_workers=8) as executor:
-            futures = {
-                executor.submit(fetch, name): name for name in charm_names
-            }
-            for future in as_completed(futures):
-                name, data = future.result()
-                if data:
-                    charm_data_map[name] = data
-
-    # Preserve charm order
-    solution_charms = [
-        charm_data_map[name] for name in charm_names if name in charm_data_map
-    ]
-
-    solution["charms"] = solution_charms
+    solution["charms"] = get_charms_data(charm_names)
     return solution
 
 
@@ -212,6 +154,33 @@ def solutions_json():
         published_solutions = get_published_solutions()
     except SolutionsServiceError:
         return jsonify({"error": "Failed to fetch solutions"}), 502
+
+    top_charms_by_solution = [
+        (solution, solution.get("charms", [])[:SOLUTION_LISTING_CHARM_COUNT])
+        for solution in published_solutions
+    ]
+    charm_names = {
+        charm_name
+        for _, top_charms in top_charms_by_solution
+        for charm_name in top_charms
+    }
+    charm_icons = {
+        charm["name"]: charm["icon"]
+        for charm in get_charms_data(list(charm_names))
+        if charm.get("icon")
+    }
+
+    published_solutions = [
+        {
+            **solution,
+            "charm_icons": {
+                charm_name: charm_icons[charm_name]
+                for charm_name in top_charms
+                if charm_name in charm_icons
+            },
+        }
+        for solution, top_charms in top_charms_by_solution
+    ]
 
     return {
         "solutions": published_solutions,
