@@ -4,12 +4,21 @@ $brand-color: #772953;
 $color-text-orange: #d54110;
 $breakpoint-navigation-threshold: 1220px; // keep it in sync with juju.is and breakpoint value in global-nav.ts
 
+// import Pragma tokens and base styles before Vanilla
+@import "@canonical/styles";
+
 // import cookie policy
 @import "@canonical/cookie-policy/build/css/cookie-policy";
 
 // Import Vanilla framework
 @import "vanilla-framework";
 @include vanilla;
+
+// Needed so fonts are still applied after importing Pragma styles
+:root {
+  --typography-font-family-default: #{$font-base-family};
+  --typography-font-family-code: #{$font-monospace};
+}
 
 // Custom styles
 @import "pattern_p-card";
