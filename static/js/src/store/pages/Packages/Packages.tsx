@@ -5,6 +5,7 @@ import { ITEMS_PER_PAGE, PackageList } from "../../components/PackageList";
 import { v4 as uuidv4 } from "uuid";
 import { LandingPage } from "../../components/LandingPage";
 import { Solution } from "../../types";
+import platforms from "../../data/platforms";
 
 const getCategory = (category: Solution["categories"][number]) =>
   typeof category === "string"
@@ -27,6 +28,17 @@ function Packages() {
 
   const storeParams = new URLSearchParams(searchParams);
   storeParams.set("type", "charm");
+  const selectedPlatforms = platforms
+    .filter(({ name }) =>
+      searchParams.get("platforms")?.split(",").includes(name)
+    )
+    .map(({ name }) => name);
+  if (selectedPlatforms.length === 1) {
+    storeParams.set("platforms", selectedPlatforms[0]);
+  } else {
+    storeParams.delete("platforms");
+  }
+  if (listType === "solutions") storeParams.delete("page");
   const storeQuery = isLandingPage ? "?type=charm" : `?${storeParams}`;
 
   const getData = async () => {
@@ -81,7 +93,6 @@ function Packages() {
     .sort()
     .map((name) => ({ display_name: name, name }));
   const selectedCategories = searchParams.get("categories")?.split(",") || [];
-  const selectedPlatform = searchParams.get("platforms");
   const query = searchParams.get("q")?.toLowerCase();
   const filteredSolutions = solutions.filter((solution) => {
     const matchesSearch =
@@ -90,10 +101,10 @@ function Packages() {
         (value || "").toLowerCase().includes(query)
       );
     const matchesPlatform =
-      !selectedPlatform ||
-      selectedPlatform === "all" ||
-      solution.platform ===
-        (selectedPlatform === "vm" ? "machine" : selectedPlatform);
+      selectedPlatforms.length !== 1 ||
+      selectedPlatforms.includes(
+        solution.platform === "machine" ? "vm" : solution.platform
+      );
     const solutionCategories = solution.categories.map(getCategory);
     const matchesCategories =
       selectedCategories.length === 0 ||
@@ -119,7 +130,7 @@ function Packages() {
       categories={
         listType === "solutions" ? categories : data?.categories || []
       }
-      counts={{ charms: charmCount, solutions: solutions.length }}
+      counts={{ charms: charmCount, solutions: filteredSolutions.length }}
       totalItems={
         listType === "solutions" ? filteredSolutions.length : charmCount
       }

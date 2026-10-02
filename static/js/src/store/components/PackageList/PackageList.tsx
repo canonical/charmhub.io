@@ -50,6 +50,13 @@ export const PackageList = ({
   const currentPage = Number(searchParams.get("page") || 1);
   const itemsPerPage = ITEMS_PER_PAGE[type];
 
+  const getTabLink = (tabType: Props["type"]) => {
+    const params = new URLSearchParams({ type: tabType });
+    const platforms = searchParams.get("platforms");
+    if (platforms) params.set("platforms", platforms);
+    return `/?${params}`;
+  };
+
   const clearSearch = () => {
     searchParams.delete("q");
     searchParams.delete("page");
@@ -80,7 +87,7 @@ export const PackageList = ({
               {
                 active: type === "solutions",
                 component: Link,
-                to: "/?type=solutions",
+                to: getTabLink("solutions"),
                 label: (
                   <>
                     Solutions <Badge value={counts.solutions} />
@@ -90,7 +97,7 @@ export const PackageList = ({
               {
                 active: type === "charms",
                 component: Link,
-                to: "/?type=charms",
+                to: getTabLink("charms"),
                 label: (
                   <>
                     Charms <Badge value={counts.charms} />

@@ -1,4 +1,4 @@
-import { Button } from "@canonical/react-components";
+import { Button, CheckboxInput } from "@canonical/react-components";
 import { Filters } from "@canonical/store-components";
 import { Category } from "../../types";
 import { useState } from "react";
@@ -21,10 +21,21 @@ export const PackageFilter = ({
   const [hideFilters, setHideFilters] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const onPlatformChange = (item: string) => {
-    searchParams.set("platforms", item);
-    searchParams.delete("page");
-    setSearchParams(searchParams);
+  const selectedPlatforms = searchParams.get("platforms")?.split(",") || [];
+
+  const onPlatformChange = (platform: string, checked: boolean) => {
+    const selected = new Set(selectedPlatforms);
+    if (checked) selected.add(platform);
+    else selected.delete(platform);
+    const params = new URLSearchParams(searchParams);
+    const value = platforms
+      .filter(({ name }) => selected.has(name))
+      .map(({ name }) => name)
+      .join(",");
+    if (value) params.set("platforms", value);
+    else params.delete("platforms");
+    params.delete("page");
+    setSearchParams(params);
   };
 
   const onCategoriesChange = (items: string[]) => {
@@ -84,15 +95,26 @@ export const PackageFilter = ({
         </div>
 
         <div className="p-filter-panel__inner">
+          <div className="p-section--shallow">
+            <h2 className="p-muted-heading">Platforms</h2>
+            {platforms.map(({ name, display_name }) => (
+              <CheckboxInput
+                key={name}
+                label={display_name}
+                checked={selectedPlatforms.includes(name)}
+                disabled={disabled}
+                onChange={(event) =>
+                  onPlatformChange(name, event.target.checked)
+                }
+              />
+            ))}
+          </div>
           <Filters
             categories={data?.categories || []}
             selectedCategories={
               searchParams.get("categories")?.split(",") || []
             }
             setSelectedCategories={onCategoriesChange}
-            platforms={platforms}
-            selectedPlatform={searchParams.get("platforms") || "all"}
-            setSelectedPlatform={onPlatformChange}
             disabled={disabled}
           />
           <hr />

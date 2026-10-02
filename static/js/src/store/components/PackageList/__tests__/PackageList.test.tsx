@@ -84,18 +84,18 @@ describe("PackageList", () => {
     );
   });
 
-  test("tab links navigate directly to each listing", () => {
+  test("tab links preserve platforms but not other filters or pagination", () => {
     renderList(
       "/?type=solutions&q=identity&platforms=vm&categories=Security&page=2"
     );
 
     expect(screen.getByRole("link", { name: /Solutions/ })).toHaveAttribute(
       "href",
-      "/?type=solutions"
+      "/?type=solutions&platforms=vm"
     );
     expect(screen.getByRole("link", { name: /Charms/ })).toHaveAttribute(
       "href",
-      "/?type=charms"
+      "/?type=charms&platforms=vm"
     );
   });
 
