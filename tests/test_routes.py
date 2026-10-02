@@ -16,7 +16,9 @@ class TestRoutes(unittest.TestCase):
         we should return a 200 status code
         """
 
-        self.assertEqual(self.client.get("/").status_code, 200)
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("window.SENTRY_DSN", response.text)
 
 
 if __name__ == "__main__":

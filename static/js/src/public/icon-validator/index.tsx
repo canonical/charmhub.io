@@ -15,6 +15,7 @@ import {
 
 import { useDropzone } from "react-dropzone";
 import ReactDOM from "react-dom/client";
+import { sentryReactErrorHandlers } from "../../base/sentry";
 
 export default function App() {
   const [icon, setIcon] = useState<string | null>(null);
@@ -263,6 +264,6 @@ export default function App() {
 const rootElement = document.getElementById("main-content");
 
 if (rootElement) {
-  const root = ReactDOM.createRoot(rootElement);
+  const root = ReactDOM.createRoot(rootElement, sentryReactErrorHandlers);
   root.render(<App />);
 }

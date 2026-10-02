@@ -11,6 +11,7 @@ import {
 } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import * as Sentry from "@sentry/react";
+import { sentryReactErrorHandlers } from "../base/sentry";
 
 import Root from "./routes/root";
 import NotFound from "./pages/NotFound";
@@ -20,23 +21,16 @@ import Listing from "./pages/Listing";
 import Collaboration from "./pages/Collaboration";
 import Releases from "./pages/Releases";
 
-Sentry.init({
-  dsn: window.SENTRY_DSN,
-  integrations: [
-    Sentry.reactRouterV6BrowserTracingIntegration({
-      useEffect: React.useEffect,
-      useLocation,
-      useNavigationType,
-      createRoutesFromChildren,
-      matchRoutes,
-    }),
-    Sentry.replayIntegration(),
-  ],
-  tracesSampleRate: 1.0,
-  tracePropagationTargets: ["localhost", /^https:\/\/charmhub\.io/],
-  replaysSessionSampleRate: 0.1,
-  replaysOnErrorSampleRate: 1.0,
-});
+Sentry.addIntegration(
+  Sentry.reactRouterV7BrowserTracingIntegration({
+    useEffect: React.useEffect,
+    useLocation,
+    useNavigationType,
+    createRoutesFromChildren,
+    matchRoutes,
+  })
+);
+Sentry.addIntegration(Sentry.replayIntegration());
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -84,7 +78,7 @@ const router = createBrowserRouter([
 ]);
 
 const container = document.getElementById("root");
-const root = createRoot(container!);
+const root = createRoot(container!, sentryReactErrorHandlers);
 root.render(
   <JotaiProvider>
     <QueryClientProvider client={queryClient}>

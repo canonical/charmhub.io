@@ -116,5 +116,8 @@
     </script>
 
     {% block structure_data_markup %}{% endblock %}
+    <script>
+      window.SENTRY_DSN = {{ SENTRY_DSN | tojson }};
+    </script>
   </body>
 </html>

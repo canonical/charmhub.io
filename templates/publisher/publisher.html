@@ -7,7 +7,6 @@
   <main id="root"></main>
   <script>
     window.CSRF_TOKEN = "{{ csrf_token() }}";
-    window.SENTRY_DSN = "{{ SENTRY_DSN }}";
   </script>
   {{ vite_import('static/js/src/publisher-admin/index.tsx') }}
 {% endblock %}

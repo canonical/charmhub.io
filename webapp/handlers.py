@@ -1,4 +1,5 @@
 from flask import redirect, render_template, request, session, url_for
+import sentry_sdk
 from webapp.config import (
     SENTRY_DSN,
     STATUS_BANNER,
@@ -109,6 +110,7 @@ def set_handlers(app):
     # ===
     @app.errorhandler(StoreApiTimeoutError)
     def handle_store_api_timeout(e):
+        sentry_sdk.capture_exception(e)
         status_code = 504
         return (
             render_template(
@@ -131,6 +133,7 @@ def set_handlers(app):
             return render_template("404.html", message="Entity not found"), 404
 
         status_code = 502
+        sentry_sdk.capture_exception(e)
         if e.errors:
             errors = ", ".join([e.get("message") for e in e.errors])
             return (
@@ -162,6 +165,7 @@ def set_handlers(app):
             authentication.empty_session(session)
             return redirect_to_login()
 
+        sentry_sdk.capture_exception(e)
         status_code = 502
         return (
             render_template(

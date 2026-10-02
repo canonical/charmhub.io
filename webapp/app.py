@@ -2,14 +2,16 @@
 # loaded properly and the FLASK_* prefix is stripped before they are parsed
 import webapp.config  # noqa: F401
 
+import sentry_sdk
 from flask import render_template, make_response, request, session
 from dateutil import parser
 
 from canonicalwebteam.flask_base.app import FlaskBase
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 from webapp.store_api import publisher_gateway
 from webapp.extensions import csrf, vite
-from webapp.config import APP_NAME, VITE_CONFIG
+from webapp.config import APP_NAME, SENTRY_DSN, VITE_CONFIG
 from webapp.handlers import set_handlers
 from webapp.llms import store_llm
 from webapp.login.views import login
@@ -31,6 +33,12 @@ from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.trace import Span
 
+
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    integrations=[FlaskIntegration()],
+    send_default_pii=False,
+)
 
 app = FlaskBase(
     __name__,

@@ -22,6 +22,17 @@ class TestDetailsOverview(TestCase):
 
     @patch("webapp.store.views.redis_cache.get")
     @patch("webapp.store.views.get_package_details")
+    def test_details_include_source_link_from_metadata(self, mock_find, mock_cache_get):
+        mock_find.return_value = sample_package_detail
+        mock_cache_get.return_value = None
+        response = self.client.get("/test")
+        self.assertIn(b"Relevant links", response.data)
+        self.assertIn(b"Source", response.data)
+        self.assertIn(b"https://github.com/canonical/xxx", response.data)
+        self.assertEqual(response.status_code, 200)
+
+    @patch("webapp.store.views.redis_cache.get")
+    @patch("webapp.store.views.get_package_details")
     def test_details_with_readthedocs_link(self, mock_find, mock_cache_get):
         data = copy.deepcopy(sample_package_detail)
         data["default-release"]["revision"][

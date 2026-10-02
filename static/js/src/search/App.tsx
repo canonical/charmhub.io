@@ -6,6 +6,7 @@ import {
 } from "@canonical/store-components";
 import { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
+import { sentryReactErrorHandlers } from "../base/sentry";
 import { ICharm } from "../shared/types";
 
 type DiscourseTopic = {
@@ -209,5 +210,5 @@ function App() {
 }
 
 const container = document.getElementById("main-content");
-const root = createRoot(container as HTMLElement);
+const root = createRoot(container as HTMLElement, sentryReactErrorHandlers);
 root.render(<App />);
