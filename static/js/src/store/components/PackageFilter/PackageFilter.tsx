@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import platforms from "../../data/platforms";
-import packageTypes from "../../data/package-types";
 
 export const PackageFilter = ({
   data,
@@ -24,12 +23,6 @@ export const PackageFilter = ({
 
   const onPlatformChange = (item: string) => {
     searchParams.set("platforms", item);
-    searchParams.delete("page");
-    setSearchParams(searchParams);
-  };
-
-  const onPackageTypeChange = (item: string) => {
-    searchParams.set("type", item);
     searchParams.delete("page");
     setSearchParams(searchParams);
   };
@@ -100,9 +93,6 @@ export const PackageFilter = ({
             platforms={platforms}
             selectedPlatform={searchParams.get("platforms") || "all"}
             setSelectedPlatform={onPlatformChange}
-            packageTypes={packageTypes}
-            selectedPackageType={searchParams.get("type") || "all"}
-            setSelectedPackageType={onPackageTypeChange}
             disabled={disabled}
           />
           <hr />

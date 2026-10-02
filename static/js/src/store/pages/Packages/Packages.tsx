@@ -1,19 +1,36 @@
 import { useEffect } from "react";
 import { useQuery } from "react-query";
-import { useLocation, useSearchParams } from "react-router-dom";
-import { PackageList } from "../../components/PackageList/PackageList";
+import { useSearchParams } from "react-router-dom";
+import { ITEMS_PER_PAGE, PackageList } from "../../components/PackageList";
 import { v4 as uuidv4 } from "uuid";
-import { EmptyResultSection } from "../../components/EmptyResultSection";
 import { LandingPage } from "../../components/LandingPage";
+import { Solution } from "../../types";
+
+const getCategory = (category: Solution["categories"][number]) =>
+  typeof category === "string"
+    ? category
+    : category.display_name || category.name || category.slug || "";
 
 function Packages() {
-  const { search } = useLocation();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const isLandingPage = searchParams.size === 0;
+  const requestedType = searchParams.get("type");
+  const listType = requestedType === "solutions" ? "solutions" : "charms";
+
+  useEffect(() => {
+    if (!isLandingPage && requestedType !== listType) {
+      const params = new URLSearchParams(searchParams);
+      params.set("type", listType);
+      setSearchParams(params, { replace: true });
+    }
+  }, [isLandingPage, requestedType, listType, searchParams, setSearchParams]);
+
+  const storeParams = new URLSearchParams(searchParams);
+  storeParams.set("type", "charm");
+  const storeQuery = isLandingPage ? "?type=charm" : `?${storeParams}`;
 
   const getData = async () => {
-    const query = isLandingPage ? "?type=charm" : search;
-    const response = await fetch(`/store.json${query}`);
+    const response = await fetch(`/store.json${storeQuery}`);
     if (!response.ok) {
       throw new Error("Failed to fetch charms");
     }
@@ -34,31 +51,88 @@ function Packages() {
     };
   };
 
-  const { data, status, refetch, isFetching } = useQuery(
-    ["data", search],
-    getData
+  const { data, status, isFetching } = useQuery(["data", storeQuery], getData, {
+    keepPreviousData: true,
+  });
+
+  const {
+    data: solutions = [],
+    isFetching: areSolutionsFetching,
+    isLoading: isSolutionsLoading,
+  } = useQuery(
+    "solutions-list",
+    async () => {
+      const response = await fetch("/solutions.json");
+      if (!response.ok) {
+        throw new Error("Failed to fetch solutions");
+      }
+      const result = (await response.json()) as { solutions: Solution[] };
+      return result.solutions;
+    },
+    { enabled: !isLandingPage }
   );
 
-  useEffect(() => {
-    refetch();
-  }, [searchParams]);
+  const categories = [
+    ...new Set(
+      solutions.flatMap((solution) => solution.categories.map(getCategory))
+    ),
+  ]
+    .filter(Boolean)
+    .sort()
+    .map((name) => ({ display_name: name, name }));
+  const selectedCategories = searchParams.get("categories")?.split(",") || [];
+  const selectedPlatform = searchParams.get("platforms");
+  const query = searchParams.get("q")?.toLowerCase();
+  const filteredSolutions = solutions.filter((solution) => {
+    const matchesSearch =
+      !query ||
+      [solution.title, solution.publisher, solution.summary].some((value) =>
+        (value || "").toLowerCase().includes(query)
+      );
+    const matchesPlatform =
+      !selectedPlatform ||
+      selectedPlatform === "all" ||
+      solution.platform ===
+        (selectedPlatform === "vm" ? "machine" : selectedPlatform);
+    const solutionCategories = solution.categories.map(getCategory);
+    const matchesCategories =
+      selectedCategories.length === 0 ||
+      selectedCategories.every((category) =>
+        solutionCategories.includes(category)
+      );
+    return matchesSearch && matchesPlatform && matchesCategories;
+  });
+  const currentPage = Number(searchParams.get("page") || 1);
+  const pagedSolutions = filteredSolutions.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE.solutions,
+    currentPage * ITEMS_PER_PAGE.solutions
+  );
+  const charmCount = data?.total_items || 0;
 
-  const isResultEmpty = data && data.packages.length === 0;
-
-  return (
-    <>
-      {isLandingPage ? (
-        <LandingPage data={data} isFetching={isFetching} status={status} />
-      ) : isResultEmpty ? (
-        <EmptyResultSection
-          isFetching={isFetching}
-          searchTerm={searchParams.get("q")}
-          data={data}
-        />
-      ) : (
-        <PackageList isFetching={isFetching} status={status} data={data} />
-      )}
-    </>
+  return isLandingPage ? (
+    <LandingPage data={data} isFetching={isFetching} status={status} />
+  ) : (
+    <PackageList
+      type={listType}
+      charms={status === "success" ? data.packages : []}
+      solutions={pagedSolutions}
+      categories={
+        listType === "solutions" ? categories : data?.categories || []
+      }
+      counts={{ charms: charmCount, solutions: solutions.length }}
+      totalItems={
+        listType === "solutions" ? filteredSolutions.length : charmCount
+      }
+      resultCount={
+        listType === "solutions"
+          ? filteredSolutions.length
+          : data?.packages.length || 0
+      }
+      isFetching={listType === "solutions" ? areSolutionsFetching : isFetching}
+      showSkeletons={
+        listType === "solutions" ? isSolutionsLoading : isFetching && !data
+      }
+    />
   );
 }
 
