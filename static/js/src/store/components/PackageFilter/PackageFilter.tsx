@@ -1,23 +1,12 @@
 import { Button, CheckboxInput } from "@canonical/react-components";
 import { Filters } from "@canonical/store-components";
-import { Category } from "../../types";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import platforms from "../../data/platforms";
+import categories from "../../data/categories";
 
-export const PackageFilter = ({
-  data,
-  disabled,
-}: {
-  data?: {
-    total_items: number;
-    total_pages: number;
-    packages: unknown;
-    categories: Category[];
-  };
-  disabled: boolean;
-}) => {
+export const PackageFilter = ({ disabled }: { disabled: boolean }) => {
   const [hideFilters, setHideFilters] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -39,14 +28,15 @@ export const PackageFilter = ({
   };
 
   const onCategoriesChange = (items: string[]) => {
+    const params = new URLSearchParams(searchParams);
     if (items.length > 0) {
-      searchParams.set("categories", items.join(","));
+      params.set("categories", items.join(","));
     } else {
-      searchParams.delete("categories");
+      params.delete("categories");
     }
 
-    searchParams.delete("page");
-    setSearchParams(searchParams);
+    params.delete("page");
+    setSearchParams(params);
   };
 
   return (
@@ -110,7 +100,7 @@ export const PackageFilter = ({
             ))}
           </div>
           <Filters
-            categories={data?.categories || []}
+            categories={categories}
             selectedCategories={
               searchParams.get("categories")?.split(",") || []
             }

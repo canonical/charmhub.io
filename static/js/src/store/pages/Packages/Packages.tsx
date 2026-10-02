@@ -6,11 +6,17 @@ import { v4 as uuidv4 } from "uuid";
 import { LandingPage } from "../../components/LandingPage";
 import { Solution } from "../../types";
 import platforms from "../../data/platforms";
+import categories from "../../data/categories";
 
-const getCategory = (category: Solution["categories"][number]) =>
+const getCategory = (category: Solution["categories"][number]): string =>
   typeof category === "string"
-    ? category
-    : category.display_name || category.name || category.slug || "";
+    ? categories.find(
+        ({ name, display_name }) =>
+          name === category ||
+          display_name.toLowerCase() === category.toLowerCase()
+      )?.name || category
+    : category.slug ||
+      getCategory(category.name || category.display_name || "");
 
 function Packages() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -84,14 +90,6 @@ function Packages() {
     { enabled: !isLandingPage }
   );
 
-  const categories = [
-    ...new Set(
-      solutions.flatMap((solution) => solution.categories.map(getCategory))
-    ),
-  ]
-    .filter(Boolean)
-    .sort()
-    .map((name) => ({ display_name: name, name }));
   const selectedCategories = searchParams.get("categories")?.split(",") || [];
   const query = searchParams.get("q")?.toLowerCase();
   const filteredSolutions = solutions.filter((solution) => {
@@ -108,7 +106,7 @@ function Packages() {
     const solutionCategories = solution.categories.map(getCategory);
     const matchesCategories =
       selectedCategories.length === 0 ||
-      selectedCategories.every((category) =>
+      selectedCategories.some((category) =>
         solutionCategories.includes(category)
       );
     return matchesSearch && matchesPlatform && matchesCategories;
@@ -127,9 +125,6 @@ function Packages() {
       type={listType}
       charms={status === "success" ? data.packages : []}
       solutions={pagedSolutions}
-      categories={
-        listType === "solutions" ? categories : data?.categories || []
-      }
       counts={{ charms: charmCount, solutions: filteredSolutions.length }}
       totalItems={
         listType === "solutions" ? filteredSolutions.length : charmCount

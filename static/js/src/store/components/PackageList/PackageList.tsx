@@ -16,7 +16,7 @@ import {
   SolutionLoadingCard,
 } from "@canonical/store-components";
 
-import { Category, Solution, Store } from "../../types";
+import { Solution, Store } from "../../types";
 import { PackageFilter } from "../PackageFilter";
 import { SearchInput } from "../SearchInput";
 
@@ -26,7 +26,6 @@ type Props = {
   type: "solutions" | "charms";
   charms: Store["packages"];
   solutions: Solution[];
-  categories: Category[];
   counts: { charms: number; solutions: number };
   totalItems: number;
   resultCount: number;
@@ -38,7 +37,6 @@ export const PackageList = ({
   type,
   charms,
   solutions,
-  categories,
   counts,
   totalItems,
   resultCount,
@@ -54,6 +52,8 @@ export const PackageList = ({
     const params = new URLSearchParams({ type: tabType });
     const platforms = searchParams.get("platforms");
     if (platforms) params.set("platforms", platforms);
+    const categories = searchParams.get("categories");
+    if (categories) params.set("categories", categories);
     return `/?${params}`;
   };
 
@@ -68,15 +68,7 @@ export const PackageList = ({
     <Strip shallow className="u-no-padding--bottom">
       <Row className="p-section--deep">
         <Col size={3}>
-          <PackageFilter
-            data={{
-              categories,
-              packages: [],
-              total_items: resultCount,
-              total_pages: 1,
-            }}
-            disabled={isFetching}
-          />
+          <PackageFilter disabled={isFetching} />
         </Col>
         <Col size={9}>
           <SearchInput

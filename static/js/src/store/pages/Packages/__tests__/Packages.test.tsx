@@ -117,7 +117,7 @@ describe("Packages component", () => {
     );
 
     renderPackages(
-      "/?type=solutions&q=identity&categories=Security&platforms=vm&page=2"
+      "/?type=solutions&q=identity&categories=security&platforms=vm&page=2"
     );
 
     expect(await screen.findByText("Identity 5")).toBeInTheDocument();

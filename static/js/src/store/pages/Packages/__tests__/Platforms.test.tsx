@@ -5,8 +5,10 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter, useLocation } from "react-router-dom";
 import Packages from "../Packages";
 
-vi.mock("@canonical/store-components", () => ({
-  Filters: () => <div>Categories</div>,
+vi.mock("@canonical/store-components", async (importOriginal) => ({
+  Filters: (
+    await importOriginal<typeof import("@canonical/store-components")>()
+  ).Filters,
   SolutionCard: ({ data }: { data: { title: string } }) => (
     <div>{data.title}</div>
   ),
@@ -85,6 +87,116 @@ describe("shared platform filters", () => {
   });
 
   afterEach(() => vi.unstubAllGlobals());
+
+  test.each(["solutions", "charms"])(
+    "keeps all categories visible and updates both tabs from %s",
+    async (type) => {
+      const solutions = [
+        {
+          name: "database",
+          title: "Database solution",
+          categories: [{ slug: "databases", name: "Databases" }],
+          platform: "kubernetes",
+        },
+        {
+          name: "storage",
+          title: "Storage solution",
+          categories: ["storage"],
+          platform: "kubernetes",
+        },
+        {
+          name: "both",
+          title: "Multi-category solution",
+          categories: ["databases", "storage"],
+          platform: "kubernetes",
+        },
+        {
+          name: "machine",
+          title: "Machine solution",
+          categories: ["storage"],
+          platform: "machine",
+        },
+      ];
+      vi.stubGlobal(
+        "fetch",
+        vi.fn(async (url: string) => {
+          const params = new URL(url, "https://charmhub.io").searchParams;
+          const selected = params.get("categories")?.split(",") || [];
+          const matches = solutions.filter(
+            (solution) =>
+              (!params.get("platforms") ||
+                solution.platform === params.get("platforms")) &&
+              (!selected.length ||
+                solution.categories.some((category) =>
+                  selected.includes(
+                    typeof category === "string" ? category : category.slug
+                  )
+                ))
+          );
+          return {
+            ok: true,
+            json: async () =>
+              url === "/solutions.json"
+                ? { solutions }
+                : {
+                    packages: matches.map((solution) => ({
+                      package: { display_name: `${solution.name} charm` },
+                    })),
+                    total_items: matches.length,
+                    total_pages: 1,
+                    categories: [],
+                  },
+          };
+        })
+      );
+      const user = renderPackages(`/?type=${type}&platforms=kubernetes&page=2`);
+      const labels = [
+        "AI/ML",
+        "Big Data",
+        "Cloud",
+        "Containers",
+        "Databases",
+        "Logging & Tracing",
+        "Monitoring",
+        "Networking",
+        "Security",
+        "Storage",
+      ];
+      for (const name of labels)
+        expect(screen.getByRole("checkbox", { name })).toBeInTheDocument();
+      await screen.findByRole("link", { name: "Charms 3" });
+
+      await user.click(screen.getByRole("checkbox", { name: "Databases" }));
+      await screen.findByRole("link", { name: "Solutions 2" });
+      await screen.findByRole("link", { name: "Charms 2" });
+      expect(screen.getByTestId("location")).not.toHaveTextContent("page=");
+      await user.click(screen.getByRole("checkbox", { name: "Storage" }));
+      await screen.findByRole("link", { name: "Solutions 3" });
+      await screen.findByRole("link", { name: "Charms 3" });
+
+      await user.click(
+        screen.getByRole("link", {
+          name: type === "solutions" ? "Charms 3" : "Solutions 3",
+        })
+      );
+      expect(screen.getByRole("checkbox", { name: "Databases" })).toBeChecked();
+      expect(screen.getByRole("checkbox", { name: "Storage" })).toBeChecked();
+      expect(
+        screen.getByRole("checkbox", { name: "Kubernetes (K8s)" })
+      ).toBeChecked();
+
+      await user.click(screen.getByRole("checkbox", { name: "Databases" }));
+      await screen.findByRole("link", { name: "Charms 2" });
+      await user.click(screen.getByRole("checkbox", { name: "Storage" }));
+      await screen.findByRole("link", { name: "Charms 3" });
+      await user.click(screen.getByRole("checkbox", { name: "Security" }));
+      await screen.findByRole("link", { name: "Solutions 0" });
+      await screen.findByRole("link", { name: "Charms 0" });
+      expect(screen.getByText("No results found.")).toBeInTheDocument();
+      for (const name of labels)
+        expect(screen.getByRole("checkbox", { name })).toBeInTheDocument();
+    }
+  );
 
   test.each(["solutions", "charms"])(
     "updates both counts and preserves selection when starting on %s",

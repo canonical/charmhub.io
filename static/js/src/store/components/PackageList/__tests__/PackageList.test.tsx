@@ -39,7 +39,6 @@ const renderList = (
       <PackageList
         charms={[]}
         solutions={[solution]}
-        categories={[]}
         counts={{ charms: 42, solutions: 1 }}
         totalItems={totalItems}
         resultCount={1}
@@ -84,18 +83,18 @@ describe("PackageList", () => {
     );
   });
 
-  test("tab links preserve platforms but not other filters or pagination", () => {
+  test("tab links preserve platforms and categories but not search or pagination", () => {
     renderList(
-      "/?type=solutions&q=identity&platforms=vm&categories=Security&page=2"
+      "/?type=solutions&q=identity&platforms=vm&categories=security&page=2"
     );
 
     expect(screen.getByRole("link", { name: /Solutions/ })).toHaveAttribute(
       "href",
-      "/?type=solutions&platforms=vm"
+      "/?type=solutions&platforms=vm&categories=security"
     );
     expect(screen.getByRole("link", { name: /Charms/ })).toHaveAttribute(
       "href",
-      "/?type=charms&platforms=vm"
+      "/?type=charms&platforms=vm&categories=security"
     );
   });
 
@@ -105,7 +104,6 @@ describe("PackageList", () => {
         <PackageList
           charms={[]}
           solutions={[]}
-          categories={[]}
           counts={{ charms: 0, solutions: 0 }}
           totalItems={0}
           resultCount={0}
