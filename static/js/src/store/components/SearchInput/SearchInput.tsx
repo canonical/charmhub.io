@@ -1,5 +1,5 @@
 import { Button } from "@canonical/react-components";
-import { RefObject } from "react";
+import { RefObject, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
 type Props = {
@@ -8,15 +8,25 @@ type Props = {
 
 export const SearchInput = ({ searchRef }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get("q") || "";
+
+  useEffect(() => {
+    if (searchRef.current) searchRef.current.value = query;
+  }, [query, searchRef]);
+
+  const updateSearch = (value: string) => {
+    const params = new URLSearchParams(searchParams);
+    params.delete("page");
+    if (value) params.set("q", value);
+    else params.delete("q");
+    if (searchRef.current) searchRef.current.value = value;
+    setSearchParams(params);
+  };
 
   const onSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (searchRef?.current && searchRef.current.value) {
-      searchParams.delete("page");
-      searchParams.set("q", searchRef.current.value);
-      setSearchParams(searchParams);
-    }
+    updateSearch(searchRef.current?.value.trim() || "");
   };
 
   return (
@@ -30,16 +40,13 @@ export const SearchInput = ({ searchRef }: Props) => {
         className="p-search-box__input"
         name="q"
         placeholder="Search Solutions or Charms"
-        defaultValue={searchParams.get("q") || ""}
+        defaultValue={query}
         ref={searchRef}
       />
       <Button
-        type="reset"
+        type="button"
         className="p-search-box__reset"
-        onClick={() => {
-          searchParams.delete("q");
-          setSearchParams(searchParams);
-        }}
+        onClick={() => updateSearch("")}
       >
         <i className="p-icon--close">Close</i>
       </Button>

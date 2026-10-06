@@ -10,3 +10,25 @@ export type Store = {
   packages: (ComponentProps<typeof CharmCard>["data"] & { id: string })[];
   categories: Category[];
 };
+
+export type SolutionCategory =
+  | string
+  | {
+      display_name?: string;
+      name?: string;
+      slug?: string;
+    };
+
+export type Solution = {
+  categories: SolutionCategory[];
+  charm_icons?: Record<string, string>;
+  charms: string[];
+  icon: string | null;
+  last_updated: string | null;
+  name: string;
+  platform: string;
+  platform_version: string[];
+  publisher: string;
+  summary: string;
+  title: string;
+};
