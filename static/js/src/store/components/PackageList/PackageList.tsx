@@ -76,7 +76,11 @@ export const PackageList = ({
 
   const renderCount = (tabType: Props["type"]) =>
     countsFetching[tabType] ? (
-      <span role="status" aria-label={`Loading ${tabType} count`}>
+      <span
+        className="u-vertically-center"
+        role="status"
+        aria-label={`Loading ${tabType} count`}
+      >
         <Icon name="spinner" className="u-animation--spin" aria-hidden="true" />
       </span>
     ) : (
