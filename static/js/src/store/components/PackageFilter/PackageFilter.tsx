@@ -23,15 +23,13 @@ export const PackageFilter = ({
 
   const onPlatformChange = (platform: string, checked: boolean) => {
     const selected = new Set(selectedPlatforms);
-    if (checked) selected.add(platform);
-    else selected.delete(platform);
+    checked ? selected.add(platform) : selected.delete(platform);
     const params = new URLSearchParams(searchParams);
     const value = platforms
       .filter(({ name }) => selected.has(name))
       .map(({ name }) => name)
       .join(",");
-    if (value) params.set("platforms", value);
-    else params.delete("platforms");
+    value ? params.set("platforms", value) : params.delete("platforms");
     params.delete("page");
     setSearchParams(params);
   };
