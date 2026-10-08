@@ -111,7 +111,7 @@ describe("Packages component", () => {
                 }
               : {
                   packages: [],
-                  categories: [],
+                  categories: [{ name: "security", display_name: "Security" }],
                   total_items: 42,
                   total_pages: 4,
                 }

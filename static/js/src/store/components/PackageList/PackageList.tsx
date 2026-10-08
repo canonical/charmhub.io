@@ -27,6 +27,7 @@ type Props = {
   type: "solutions" | "charms";
   charms: Store["packages"];
   solutions: Solution[];
+  categories: Store["categories"];
   counts: { charms: number; solutions: number };
   countsFetching: { charms: boolean; solutions: boolean };
   totalItems: number;
@@ -39,6 +40,7 @@ export const PackageList = ({
   type,
   charms,
   solutions,
+  categories,
   counts,
   countsFetching,
   totalItems,
@@ -110,7 +112,7 @@ export const PackageList = ({
     <Strip shallow className="u-no-padding--bottom">
       <Row className="p-section--deep">
         <Col size={3}>
-          <PackageFilter disabled={isFetching} />
+          <PackageFilter categories={categories} disabled={isFetching} />
         </Col>
         <Col size={9}>
           <SearchInput

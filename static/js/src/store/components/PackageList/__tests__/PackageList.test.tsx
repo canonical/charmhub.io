@@ -6,7 +6,14 @@ import { PackageList } from "../PackageList";
 
 vi.mock("@canonical/store-components", () => ({
   CharmCard: () => <div>Charm</div>,
-  Filters: () => <div>Filters</div>,
+  Filters: ({ categories }: { categories: { display_name: string }[] }) => (
+    <div>
+      Filters
+      {categories.map(({ display_name }) => (
+        <span key={display_name}>{display_name}</span>
+      ))}
+    </div>
+  ),
   LoadingCard: () => <div>Loading</div>,
   SolutionCard: ({ data }: { data: { title: string } }) => (
     <div>{data.title}</div>
@@ -45,6 +52,10 @@ const renderList = (
         type={type}
         charms={[]}
         solutions={[solution]}
+        categories={[
+          { name: "logging-tracing", display_name: "Logging and Tracing" },
+          { name: "big-data", display_name: "Big Data" },
+        ]}
         counts={{ charms: 42, solutions: 1 }}
         countsFetching={{ charms: isFetching, solutions: isFetching }}
         totalItems={totalItems}
@@ -56,6 +67,13 @@ const renderList = (
   );
 
 describe("PackageList", () => {
+  test("passes API category labels to the filters unchanged", () => {
+    renderList();
+
+    expect(screen.getByText("Logging and Tracing")).toBeInTheDocument();
+    expect(screen.getByText("Big Data")).toBeInTheDocument();
+  });
+
   test.each([
     ["", ""],
     ["&platforms=vm", "1 platform"],

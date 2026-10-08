@@ -4,19 +4,8 @@ import { useSearchParams } from "react-router-dom";
 import { ITEMS_PER_PAGE, PackageList } from "../../components/PackageList";
 import { v4 as uuidv4 } from "uuid";
 import { LandingPage } from "../../components/LandingPage";
-import { Solution } from "../../types";
+import { Solution, Store } from "../../types";
 import platforms from "../../data/platforms";
-import categories from "../../data/categories";
-
-const getCategory = (category: Solution["categories"][number]): string =>
-  typeof category === "string"
-    ? categories.find(
-        ({ name, display_name }) =>
-          name === category ||
-          display_name.toLowerCase() === category.toLowerCase()
-      )?.name || category
-    : category.slug ||
-      getCategory(category.name || category.display_name || "");
 
 function Packages() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -53,8 +42,8 @@ function Packages() {
       throw new Error("Failed to fetch charms");
     }
 
-    const data = await response.json();
-    const packagesWithId = data.packages.map((item: string[]) => {
+    const data = (await response.json()) as Store;
+    const packagesWithId = data.packages.map((item) => {
       return {
         ...item,
         id: uuidv4(),
@@ -87,6 +76,16 @@ function Packages() {
   );
 
   const selectedCategories = searchParams.get("categories")?.split(",") || [];
+  const categories = data?.categories || [];
+  const getCategory = (category: Solution["categories"][number]): string =>
+    typeof category === "string"
+      ? categories.find(
+          ({ name, display_name }) =>
+            name === category ||
+            display_name.toLowerCase() === category.toLowerCase()
+        )?.name || category
+      : category.slug ||
+        getCategory(category.name || category.display_name || "");
   const query = searchParams.get("q")?.trim().toLowerCase();
   const filteredSolutions = solutions.filter((solution) => {
     const matchesSearch =
@@ -121,6 +120,7 @@ function Packages() {
       type={listType}
       charms={status === "success" ? data.packages : []}
       solutions={pagedSolutions}
+      categories={categories}
       counts={{ charms: charmCount, solutions: filteredSolutions.length }}
       countsFetching={{ charms: isFetching, solutions: areSolutionsFetching }}
       totalItems={

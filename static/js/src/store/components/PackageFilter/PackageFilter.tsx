@@ -4,9 +4,15 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import platforms from "../../data/platforms";
-import categories from "../../data/categories";
+import type { Category } from "../../types";
 
-export const PackageFilter = ({ disabled }: { disabled: boolean }) => {
+export const PackageFilter = ({
+  categories,
+  disabled,
+}: {
+  categories: Category[];
+  disabled: boolean;
+}) => {
   const [hideFilters, setHideFilters] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
 
