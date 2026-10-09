@@ -1,6 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, useLocation } from "react-router-dom";
+import userEvent from "@testing-library/user-event";
 
 import { PackageList } from "../PackageList";
 
@@ -34,16 +35,27 @@ const solution = {
   title: "Identity Platform",
 };
 
+const LocationDisplay = () => {
+  const location = useLocation();
+  return <div data-testid="location">{location.search}</div>;
+};
+
 const renderList = (
   search = "",
   {
     type = "solutions",
     totalItems = 1,
     isFetching = false,
+    counts = { charms: 42, solutions: 1 },
+    countsFetching = { charms: isFetching, solutions: isFetching },
+    countsReady = true,
   }: {
     type?: "solutions" | "charms";
     totalItems?: number;
     isFetching?: boolean;
+    counts?: { charms: number; solutions: number };
+    countsFetching?: { charms: boolean; solutions: boolean };
+    countsReady?: boolean;
   } = {}
 ) =>
   render(
@@ -51,18 +63,20 @@ const renderList = (
       <PackageList
         type={type}
         charms={[]}
-        solutions={[solution]}
+        solutions={totalItems === 0 ? [] : [solution]}
         categories={[
           { name: "logging-tracing", display_name: "Logging and Tracing" },
           { name: "big-data", display_name: "Big Data" },
         ]}
-        counts={{ charms: 42, solutions: 1 }}
-        countsFetching={{ charms: isFetching, solutions: isFetching }}
+        counts={counts}
+        countsFetching={countsFetching}
+        countsReady={countsReady}
         totalItems={totalItems}
-        resultCount={1}
+        resultCount={totalItems === 0 ? 0 : 1}
         isFetching={isFetching}
         showSkeletons={isFetching}
       />
+      <LocationDisplay />
     </MemoryRouter>
   );
 
@@ -140,5 +154,123 @@ describe("PackageList", () => {
     expect(screen.getAllByText("Loading")).toHaveLength(12);
     expect(screen.getByLabelText("Loading charms count")).toBeInTheDocument();
     expect(screen.queryByText(/results of/)).not.toBeInTheDocument();
+  });
+
+  describe("empty results", () => {
+    test("offers related charms when the solutions search is empty", () => {
+      renderList("&q=Identity&page=2", {
+        type: "solutions",
+        totalItems: 0,
+        counts: { charms: 3, solutions: 0 },
+      });
+
+      expect(
+        screen.getByRole("heading", { name: "No solutions found" })
+      ).toBeVisible();
+      expect(
+        screen.getByText("Identity", { selector: "strong" })
+      ).toBeVisible();
+      expect(
+        screen.getByText(/but we found charms matching your search/)
+      ).toBeVisible();
+      expect(
+        screen.getByRole("link", { name: "Explore 3 related charms" })
+      ).toHaveAttribute("href", "/?type=charms&q=Identity");
+      expect(
+        screen.queryByRole("button", { name: "Clear search & filters" })
+      ).not.toBeInTheDocument();
+      expect(screen.queryByText(/^Showing/)).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole("navigation", { name: "Pagination" })
+      ).not.toBeInTheDocument();
+    });
+
+    test("offers related solutions when the charms search is empty", () => {
+      renderList("&q=Identity&page=2", {
+        type: "charms",
+        totalItems: 0,
+        counts: { charms: 0, solutions: 3 },
+      });
+
+      expect(
+        screen.getByRole("heading", { name: "No charms found" })
+      ).toBeVisible();
+      expect(
+        screen.getByText(/but we found solutions matching your search/)
+      ).toBeVisible();
+      expect(
+        screen.getByRole("link", { name: "Explore 3 related solutions" })
+      ).toHaveAttribute("href", "/?type=solutions&q=Identity");
+    });
+
+    test("offers to clear filters when there is no search query", async () => {
+      const user = userEvent.setup();
+      renderList("&categories=security&platforms=vm&page=2", {
+        type: "solutions",
+        totalItems: 0,
+        counts: { charms: 3, solutions: 0 },
+      });
+
+      expect(
+        screen.getByRole("link", { name: "Explore 3 related charms" })
+      ).toHaveAttribute(
+        "href",
+        "/?type=charms&platforms=vm&categories=security"
+      );
+      const fallback = screen.getByRole("heading", {
+        name: "No solutions found",
+      }).parentElement!;
+      await user.click(
+        within(fallback).getByRole("button", { name: "Clear all filters" })
+      );
+
+      expect(screen.getByTestId("location")).toHaveTextContent(
+        "?type=solutions"
+      );
+    });
+
+    test("offers all solutions when neither tab matches the search", () => {
+      renderList("&q=Identity&page=2", {
+        type: "solutions",
+        totalItems: 0,
+        counts: { charms: 0, solutions: 0 },
+      });
+
+      expect(screen.getByText(/solutions or charms in Charmhub/)).toBeVisible();
+      expect(
+        screen.getByRole("link", { name: "Browse all solutions" })
+      ).toHaveAttribute("href", "/?type=solutions");
+      expect(
+        screen.queryByRole("link", { name: /Explore/ })
+      ).not.toBeInTheDocument();
+    });
+
+    test("offers all charms when neither tab matches the search and filters", () => {
+      renderList("&q=Identity&categories=security&platforms=vm&page=2", {
+        type: "charms",
+        totalItems: 0,
+        counts: { charms: 0, solutions: 0 },
+      });
+
+      expect(screen.getByText(/charms or solutions in Charmhub/)).toBeVisible();
+      expect(
+        screen.getByRole("link", { name: "Browse all charms" })
+      ).toHaveAttribute("href", "/?type=charms");
+    });
+
+    test("shows publishing resources in the charms fallback", () => {
+      renderList("&q=Identity", {
+        type: "charms",
+        totalItems: 0,
+        counts: { charms: 0, solutions: 0 },
+      });
+
+      expect(
+        screen.getByRole("link", { name: "Publish it to Charmhub" })
+      ).toBeVisible();
+      expect(screen.getByRole("link", { name: "Juju docs" })).toBeVisible();
+      expect(screen.getByRole("link", { name: "Ops" })).toBeVisible();
+      expect(screen.getByRole("link", { name: "Charmcraft" })).toBeVisible();
+    });
   });
 });

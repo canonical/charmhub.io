@@ -62,7 +62,11 @@ function Packages() {
     keepPreviousData: true,
   });
 
-  const { data: solutions = [], isFetching: areSolutionsFetching } = useQuery(
+  const {
+    data: solutions = [],
+    isFetching: areSolutionsFetching,
+    status: solutionsStatus,
+  } = useQuery(
     "solutions-list",
     async () => {
       const response = await fetch("/solutions.json");
@@ -123,6 +127,7 @@ function Packages() {
       categories={categories}
       counts={{ charms: charmCount, solutions: filteredSolutions.length }}
       countsFetching={{ charms: isFetching, solutions: areSolutionsFetching }}
+      countsReady={status === "success" && solutionsStatus === "success"}
       totalItems={
         listType === "solutions" ? filteredSolutions.length : charmCount
       }

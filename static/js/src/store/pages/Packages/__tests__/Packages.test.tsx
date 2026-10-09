@@ -15,16 +15,19 @@ vi.mock("../../../components/PackageList", async (importOriginal) => ({
     solutions,
     totalItems,
     resultCount,
+    countsReady,
   }: {
     type: string;
     solutions: Solution[];
     totalItems: number;
     resultCount: number;
+    countsReady: boolean;
   }) => (
     <div>
       <div>Package list: {type}</div>
       <div>Matching results: {totalItems}</div>
       <div>Displayed results: {resultCount}</div>
+      <div>Counts ready: {String(countsReady)}</div>
       {solutions.map((solution) => (
         <div key={solution.name}>{solution.title}</div>
       ))}
@@ -37,8 +40,10 @@ const LocationDisplay = () => {
   return <div data-testid="location">{location.search}</div>;
 };
 
-const renderPackages = (initialEntry = "/") => {
-  const queryClient = new QueryClient();
+const renderPackages = (
+  initialEntry = "/",
+  queryClient = new QueryClient()
+) => {
   render(
     <QueryClientProvider client={queryClient}>
       <MemoryRouter initialEntries={[initialEntry]}>
@@ -80,6 +85,24 @@ describe("Packages component", () => {
     await waitFor(() => {
       expect(globalThis.fetch).toHaveBeenCalledWith("/store.json?type=charm");
     });
+  });
+
+  test("counts become ready once both requests succeed", async () => {
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        solutions: [],
+        packages: [],
+        total_items: 0,
+        total_pages: 0,
+        categories: [],
+      }),
+    });
+
+    renderPackages("/?type=solutions");
+
+    expect(screen.getByText("Counts ready: false")).toBeInTheDocument();
+    expect(await screen.findByText("Counts ready: true")).toBeInTheDocument();
   });
 
   test("prepares filtered and paginated solutions for the listing", async () => {
