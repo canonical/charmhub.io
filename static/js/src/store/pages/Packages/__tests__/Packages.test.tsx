@@ -3,7 +3,7 @@ import { MemoryRouter, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Packages from "../Packages";
 import "@testing-library/jest-dom";
-import type { Solution } from "../../../types";
+import type { Category, Solution } from "../../../types";
 
 vi.mock("../../../components/LandingPage", () => ({
   LandingPage: () => <div>Explore Charms</div>,
@@ -16,18 +16,23 @@ vi.mock("../../../components/PackageList", async (importOriginal) => ({
     totalItems,
     resultCount,
     countsReady,
+    categories,
   }: {
     type: string;
     solutions: Solution[];
     totalItems: number;
     resultCount: number;
     countsReady: boolean;
+    categories: Category[];
   }) => (
     <div>
       <div>Package list: {type}</div>
       <div>Matching results: {totalItems}</div>
       <div>Displayed results: {resultCount}</div>
       <div>Counts ready: {String(countsReady)}</div>
+      {categories.map((category) => (
+        <div key={category.name}>Category: {category.display_name}</div>
+      ))}
       {solutions.map((solution) => (
         <div key={solution.name}>{solution.title}</div>
       ))}
@@ -105,58 +110,68 @@ describe("Packages component", () => {
     expect(await screen.findByText("Counts ready: true")).toBeInTheDocument();
   });
 
-  test("prepares filtered and paginated solutions for the listing", async () => {
-    const solutions = Array.from({ length: 13 }, (_, index) => ({
-      name: `identity-${index}`,
-      title: `Identity ${index}`,
-      publisher: "Canonical",
-      summary: "Identity platform",
-      categories: ["Security"],
-      platform: "machine",
-    }));
-    globalThis.fetch = vi.fn().mockImplementation((url: string) =>
-      Promise.resolve({
-        ok: true,
-        json: () =>
-          Promise.resolve(
-            url === "/solutions.json"
-              ? {
-                  solutions: [
-                    ...solutions,
-                    {
-                      ...solutions[0],
-                      name: "other",
-                      title: "Other solution",
-                      summary: "Unrelated",
-                      platform: "kubernetes",
-                    },
-                  ],
-                }
-              : {
-                  packages: [],
-                  categories: [{ name: "security", display_name: "Security" }],
-                  total_items: 42,
-                  total_pages: 4,
-                }
-          ),
-      })
-    );
+  test.each([true, false])(
+    "prepares categories and filtered solutions when the charms service is available",
+    async (storeAvailable) => {
+      const solutions = Array.from({ length: 13 }, (_, index) => ({
+        name: `identity-${index}`,
+        title: `Identity ${index}`,
+        publisher: "Canonical",
+        summary: "Identity platform",
+        categories: ["Security"],
+        platform: "machine",
+      }));
+      globalThis.fetch = vi.fn().mockImplementation((url: string) =>
+        Promise.resolve({
+          ok: url === "/solutions.json" || storeAvailable,
+          json: () =>
+            Promise.resolve(
+              url === "/solutions.json"
+                ? {
+                    categories: [
+                      { name: "security", display_name: "Security" },
+                    ],
+                    solutions: [
+                      ...solutions,
+                      {
+                        ...solutions[0],
+                        name: "other",
+                        title: "Other solution",
+                        summary: "Unrelated",
+                        platform: "kubernetes",
+                      },
+                    ],
+                  }
+                : {
+                    packages: [],
+                    categories: [
+                      { name: "security", display_name: "Security" },
+                    ],
+                    total_items: 42,
+                    total_pages: 4,
+                  }
+            ),
+        })
+      );
 
-    renderPackages(
-      "/?type=solutions&q=identity&categories=security&platforms=vm&page=2"
-    );
+      renderPackages(
+        "/?type=solutions&q=identity&categories=security&platforms=vm&page=2",
+        new QueryClient({ defaultOptions: { queries: { retry: false } } })
+      );
 
-    expect(await screen.findByText("Identity 5")).toBeInTheDocument();
-    for (let index = 5; index < 10; index++) {
-      expect(screen.getByText(`Identity ${index}`)).toBeInTheDocument();
+      expect(await screen.findByText("Identity 5")).toBeInTheDocument();
+      for (let index = 5; index < 10; index++) {
+        expect(screen.getByText(`Identity ${index}`)).toBeInTheDocument();
+      }
+      expect(screen.getByText("Matching results: 13")).toBeInTheDocument();
+      expect(screen.getByText("Displayed results: 5")).toBeInTheDocument();
+      expect(screen.getByText("Category: Security")).toBeInTheDocument();
+      expect(screen.queryByText("Identity 0")).not.toBeInTheDocument();
+      expect(screen.queryByText("Identity 10")).not.toBeInTheDocument();
+      expect(screen.queryByText("Identity 12")).not.toBeInTheDocument();
+      expect(screen.queryByText("Other solution")).not.toBeInTheDocument();
     }
-    expect(screen.getByText("Matching results: 13")).toBeInTheDocument();
-    expect(screen.getByText("Displayed results: 5")).toBeInTheDocument();
-    expect(screen.queryByText("Identity 0")).not.toBeInTheDocument();
-    expect(screen.queryByText("Identity 10")).not.toBeInTheDocument();
-    expect(screen.queryByText("Identity 12")).not.toBeInTheDocument();
-    expect(screen.queryByText("Other solution")).not.toBeInTheDocument();
-  });
+  );
 
   test.each([
     ["/?type=charm&q=kafka", "?type=charms&q=kafka"],

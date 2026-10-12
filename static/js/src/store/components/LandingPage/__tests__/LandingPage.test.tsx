@@ -223,8 +223,8 @@ describe("LandingPage", () => {
       expect(screen.queryByText("Loading solution")).not.toBeInTheDocument()
     );
     for (const [section, title] of [
-      ["Discover Solutions", "Solutions service down"],
-      ["Explore Charms", "Charms service down"],
+      ["Discover Solutions", "Solutions Service Unavailable"],
+      ["Explore Charms", "Charms Service Unavailable"],
     ]) {
       const content = within(screen.getByRole("region", { name: section }));
       expect(content.getByRole("alert").parentElement).toHaveClass("col-6");
@@ -240,6 +240,8 @@ describe("LandingPage", () => {
       ).getByRole("button", { name: "Close notification" })
     );
     expect(screen.getAllByRole("alert")).toHaveLength(1);
-    expect(screen.getByRole("alert")).toHaveTextContent("Charms service down");
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "Charms Service Unavailable"
+    );
   });
 });

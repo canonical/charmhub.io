@@ -63,7 +63,7 @@ function Packages() {
   });
 
   const {
-    data: solutions = [],
+    data: solutionsData,
     isFetching: areSolutionsFetching,
     status: solutionsStatus,
   } = useQuery(
@@ -73,14 +73,18 @@ function Packages() {
       if (!response.ok) {
         throw new Error("Failed to fetch solutions");
       }
-      const result = (await response.json()) as { solutions: Solution[] };
-      return result.solutions;
+      return (await response.json()) as {
+        solutions: Solution[];
+        categories: Store["categories"];
+      };
     },
     { enabled: !isLandingPage }
   );
 
   const selectedCategories = searchParams.get("categories")?.split(",") || [];
-  const categories = data?.categories || [];
+  const solutions = solutionsData?.solutions || [];
+  // Keep category filtering available from solutions if /store.json is down
+  const categories = data?.categories || solutionsData?.categories || [];
   const getCategory = (category: Solution["categories"][number]): string =>
     typeof category === "string"
       ? categories.find(
