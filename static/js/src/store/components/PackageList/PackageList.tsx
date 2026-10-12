@@ -31,6 +31,7 @@ type Props = {
   counts: { charms: number; solutions: number };
   countsFetching: { charms: boolean; solutions: boolean };
   countsReady: boolean;
+  errors: { charms: boolean; solutions: boolean };
   totalItems: number;
   resultCount: number;
   isFetching: boolean;
@@ -45,6 +46,7 @@ export const PackageList = ({
   counts,
   countsFetching,
   countsReady,
+  errors,
   totalItems,
   resultCount,
   isFetching,
@@ -61,11 +63,14 @@ export const PackageList = ({
     searchParams.get("platforms")?.split(",").filter(Boolean).length || 0;
   const hasFilters = categoryCount + platformCount > 0;
   const otherType = type === "solutions" ? "charms" : "solutions";
-  const otherCount = counts[otherType];
+  const otherCount = errors[otherType] ? 0 : counts[otherType];
+  const hasError = errors[type];
+  const otherUnavailable = errors[otherType];
   const loadingRelatedCharms =
     type === "solutions" && !countsFetching.solutions && countsFetching.charms;
   const showFallback =
-    (countsReady || loadingRelatedCharms) &&
+    (countsReady || loadingRelatedCharms || otherUnavailable) &&
+    !hasError &&
     !isFetching &&
     !showSkeletons &&
     !countsFetching[type] &&
@@ -151,7 +156,17 @@ export const PackageList = ({
             />
           </div>
           {isFetching && <p>Loading results...</p>}
-          {!isFetching && totalItems > 0 && (
+          {!isFetching && hasError && (
+            <div role="alert">
+              <h2 className="p-heading--4 u-no-padding u-no-margin u-sv1">
+                Service unavailable
+              </h2>
+              <p>
+                This service is temporarily unavailable. Please try again later.
+              </p>
+            </div>
+          )}
+          {!isFetching && !hasError && totalItems > 0 && (
             <div className="u-sv2">
               <div className="p-inline-list--stretch">
                 <p className="u-truncate u-no-margin--bottom">
@@ -198,6 +213,7 @@ export const PackageList = ({
             </Row>
           )}
           {!showSkeletons &&
+            !hasError &&
             type === "solutions" &&
             solutions.map((solution) => (
               <Row key={solution.name}>
@@ -209,7 +225,7 @@ export const PackageList = ({
                 </Col>
               </Row>
             ))}
-          {!showSkeletons && type === "charms" && (
+          {!showSkeletons && !hasError && type === "charms" && (
             <Row>
               {charms.map((charm) => (
                 <Col key={charm.id} size={3} style={{ marginBottom: "1.5rem" }}>
@@ -225,7 +241,12 @@ export const PackageList = ({
                   No {type} found
                 </h2>
                 <p className="u-no-padding u-no-margin u-sv3">
-                  {loadingRelatedCharms ? (
+                  {otherUnavailable ? (
+                    <>
+                      There are no available {type} in Charmhub related to your
+                      current search.
+                    </>
+                  ) : loadingRelatedCharms ? (
                     <>
                       There are no available solutions in Charmhub related to
                       your current search.
@@ -330,10 +351,10 @@ export const PackageList = ({
               </Col>
             </Row>
           )}
-          {!isFetching && totalItems > 0 && resultCount === 0 && (
+          {!isFetching && !hasError && totalItems > 0 && resultCount === 0 && (
             <p>No results found.</p>
           )}
-          {!showSkeletons && resultCount > 0 && (
+          {!showSkeletons && !hasError && resultCount > 0 && (
             <Pagination
               centered={false}
               className="p-pagination u-float-right"

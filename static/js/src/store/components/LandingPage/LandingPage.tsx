@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Col, Row, Strip } from "@canonical/react-components";
+import { Col, Notification, Row, Strip } from "@canonical/react-components";
 import {
   CharmCard,
   LoadingCard,
@@ -30,6 +30,7 @@ export const LandingPage = ({ data, isFetching, status }: Props) => {
     "solutions"
   );
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
+  const [isNotificationDismissed, setIsNotificationDismissed] = useState(false);
 
   useEffect(() => {
     const sections = [
@@ -54,18 +55,19 @@ export const LandingPage = ({ data, isFetching, status }: Props) => {
     return () => observer.disconnect();
   }, []);
 
-  const { data: solutionsData, isFetching: areSolutionsFetching } = useQuery(
-    "solutions",
-    async () => {
-      const response = await fetch("/solutions.json");
-      if (!response.ok) {
-        throw new Error("Failed to fetch solutions");
-      }
-
-      const result = (await response.json()) as { solutions: Solution[] };
-      return result.solutions.slice(0, FEATURED_SOLUTION_COUNT);
+  const {
+    data: solutionsData,
+    isFetching: areSolutionsFetching,
+    status: solutionsStatus,
+  } = useQuery("solutions", async () => {
+    const response = await fetch("/solutions.json");
+    if (!response.ok) {
+      throw new Error("Failed to fetch solutions");
     }
-  );
+
+    const result = (await response.json()) as { solutions: Solution[] };
+    return result.solutions.slice(0, FEATURED_SOLUTION_COUNT);
+  });
 
   return (
     <>
@@ -158,6 +160,20 @@ export const LandingPage = ({ data, isFetching, status }: Props) => {
             </div>
           </Col>
           <Col size={9}>
+            {(status === "error" || solutionsStatus === "error") &&
+              !isNotificationDismissed && (
+                <Notification
+                  severity="caution"
+                  title="Service Unavailable"
+                  titleElement="h2"
+                  role="alert"
+                  style={{ maxWidth: "640px" }}
+                  onDismiss={() => setIsNotificationDismissed(true)}
+                >
+                  This service is temporarily unavailable. Please try again
+                  later.
+                </Notification>
+              )}
             <section
               aria-labelledby="discover-solutions-heading"
               className="p-section--shallow"
@@ -186,6 +202,7 @@ export const LandingPage = ({ data, isFetching, status }: Props) => {
                       </Col>
                     ))}
                   {!areSolutionsFetching &&
+                    solutionsStatus === "success" &&
                     solutionsData?.map((solution) => (
                       <Col
                         size={9}

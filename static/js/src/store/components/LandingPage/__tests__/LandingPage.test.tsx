@@ -202,7 +202,7 @@ describe("LandingPage", () => {
     expect(charmsLink).not.toHaveClass("is-active");
   });
 
-  test("leaves card sections empty when requests fail", async () => {
+  test("shows a notification when requests fail", async () => {
     global.fetch = vi
       .fn()
       .mockResolvedValue({ ok: false } as Response) as unknown as typeof fetch;
@@ -212,13 +212,18 @@ describe("LandingPage", () => {
       status: "error",
     });
 
-    await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
+    await waitFor(() =>
+      expect(screen.queryByText("Loading solution")).not.toBeInTheDocument()
+    );
+    expect(screen.getByRole("alert")).toHaveStyle({ maxWidth: "640px" });
+    expect(
+      screen.getByRole("heading", { name: "Service Unavailable" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "This service is temporarily unavailable. Please try again later."
+      )
+    ).toBeInTheDocument();
     expect(screen.queryByText("Loading charm")).not.toBeInTheDocument();
-    expect(
-      screen.queryByText("Solutions could not be loaded")
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByText("Charms could not be loaded")
-    ).not.toBeInTheDocument();
   });
 });

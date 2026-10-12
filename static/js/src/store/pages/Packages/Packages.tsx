@@ -128,6 +128,10 @@ function Packages() {
       counts={{ charms: charmCount, solutions: filteredSolutions.length }}
       countsFetching={{ charms: isFetching, solutions: areSolutionsFetching }}
       countsReady={status === "success" && solutionsStatus === "success"}
+      errors={{
+        charms: status === "error",
+        solutions: solutionsStatus === "error",
+      }}
       totalItems={
         listType === "solutions" ? filteredSolutions.length : charmCount
       }

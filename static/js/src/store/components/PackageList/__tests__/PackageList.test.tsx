@@ -49,6 +49,7 @@ const renderList = (
     counts = { charms: 42, solutions: 1 },
     countsFetching = { charms: isFetching, solutions: isFetching },
     countsReady = true,
+    errors = { charms: false, solutions: false },
   }: {
     type?: "solutions" | "charms";
     totalItems?: number;
@@ -56,6 +57,7 @@ const renderList = (
     counts?: { charms: number; solutions: number };
     countsFetching?: { charms: boolean; solutions: boolean };
     countsReady?: boolean;
+    errors?: { charms: boolean; solutions: boolean };
   } = {}
 ) =>
   render(
@@ -71,6 +73,7 @@ const renderList = (
         counts={counts}
         countsFetching={countsFetching}
         countsReady={countsReady}
+        errors={errors}
         totalItems={totalItems}
         resultCount={totalItems === 0 ? 0 : 1}
         isFetching={isFetching}
@@ -229,8 +232,8 @@ describe("PackageList", () => {
       );
     });
 
-    test("offers all solutions when neither tab matches the search", () => {
-      renderList("&q=Identity&page=2", {
+    test("offers all solutions for empty results unless the service is unavailable", () => {
+      const { unmount } = renderList("&q=Identity&page=2", {
         type: "solutions",
         totalItems: 0,
         counts: { charms: 0, solutions: 0 },
@@ -243,6 +246,21 @@ describe("PackageList", () => {
       expect(
         screen.queryByRole("link", { name: /Explore/ })
       ).not.toBeInTheDocument();
+
+      unmount();
+      renderList("&q=Identity&page=2", {
+        totalItems: 0,
+        counts: { charms: 0, solutions: 0 },
+        errors: { charms: false, solutions: true },
+      });
+
+      expect(
+        screen.getByRole("heading", { name: "Service unavailable" })
+      ).toBeVisible();
+      expect(screen.getByRole("alert")).toHaveTextContent(
+        "This service is temporarily unavailable. Please try again later."
+      );
+      expect(screen.queryByText("No solutions found")).not.toBeInTheDocument();
     });
 
     test("offers all charms when neither tab matches the search and filters", () => {
