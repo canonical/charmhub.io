@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Col, Notification, Row, Strip } from "@canonical/react-components";
+import { Col, Row, Strip } from "@canonical/react-components";
 import {
   CharmCard,
   LoadingCard,
@@ -10,6 +10,7 @@ import { useQuery } from "react-query";
 
 import { Store } from "../../types";
 import Banner from "../Banner";
+import { ServiceUnavailableNotification } from "../ServiceUnavailableNotification";
 
 const FEATURED_CHARM_COUNT = 12;
 const FEATURED_SOLUTION_COUNT = 4;
@@ -30,7 +31,6 @@ export const LandingPage = ({ data, isFetching, status }: Props) => {
     "solutions"
   );
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
-  const [isNotificationDismissed, setIsNotificationDismissed] = useState(false);
 
   useEffect(() => {
     const sections = [
@@ -160,20 +160,6 @@ export const LandingPage = ({ data, isFetching, status }: Props) => {
             </div>
           </Col>
           <Col size={9}>
-            {(status === "error" || solutionsStatus === "error") &&
-              !isNotificationDismissed && (
-                <Notification
-                  severity="caution"
-                  title="Service Unavailable"
-                  titleElement="h2"
-                  role="alert"
-                  style={{ maxWidth: "640px" }}
-                  onDismiss={() => setIsNotificationDismissed(true)}
-                >
-                  This service is temporarily unavailable. Please try again
-                  later.
-                </Notification>
-              )}
             <section
               aria-labelledby="discover-solutions-heading"
               className="p-section--shallow"
@@ -189,6 +175,9 @@ export const LandingPage = ({ data, isFetching, status }: Props) => {
                   </p>
                 </Col>
               </Row>
+              {solutionsStatus === "error" && (
+                <ServiceUnavailableNotification service="Solutions" />
+              )}
               <div>
                 <Row>
                   {areSolutionsFetching &&
@@ -237,6 +226,9 @@ export const LandingPage = ({ data, isFetching, status }: Props) => {
                   </p>
                 </Col>
               </Row>
+              {status === "error" && (
+                <ServiceUnavailableNotification service="Charms" />
+              )}
               <div>
                 <Row>
                   {isFetching &&

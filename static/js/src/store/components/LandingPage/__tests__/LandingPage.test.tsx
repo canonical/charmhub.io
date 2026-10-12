@@ -1,4 +1,11 @@
-import { act, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
@@ -202,7 +209,7 @@ describe("LandingPage", () => {
     expect(charmsLink).not.toHaveClass("is-active");
   });
 
-  test("shows a notification when requests fail", async () => {
+  test("shows a notification in each section when requests fail", async () => {
     global.fetch = vi
       .fn()
       .mockResolvedValue({ ok: false } as Response) as unknown as typeof fetch;
@@ -215,15 +222,24 @@ describe("LandingPage", () => {
     await waitFor(() =>
       expect(screen.queryByText("Loading solution")).not.toBeInTheDocument()
     );
-    expect(screen.getByRole("alert")).toHaveStyle({ maxWidth: "640px" });
-    expect(
-      screen.getByRole("heading", { name: "Service Unavailable" })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(
+    for (const [section, title] of [
+      ["Discover Solutions", "Solutions service down"],
+      ["Explore Charms", "Charms service down"],
+    ]) {
+      const content = within(screen.getByRole("region", { name: section }));
+      expect(content.getByRole("alert").parentElement).toHaveClass("col-6");
+      expect(content.getByRole("heading", { name: title })).toBeInTheDocument();
+      expect(content.getByRole("alert")).toHaveTextContent(
         "This service is temporarily unavailable. Please try again later."
-      )
-    ).toBeInTheDocument();
+      );
+    }
     expect(screen.queryByText("Loading charm")).not.toBeInTheDocument();
+    fireEvent.click(
+      within(
+        screen.getByRole("region", { name: "Discover Solutions" })
+      ).getByRole("button", { name: "Close notification" })
+    );
+    expect(screen.getAllByRole("alert")).toHaveLength(1);
+    expect(screen.getByRole("alert")).toHaveTextContent("Charms service down");
   });
 });
