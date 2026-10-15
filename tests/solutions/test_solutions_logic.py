@@ -71,7 +71,7 @@ class TestSolutionsLogic(unittest.TestCase):
             "default-release.channel", mock_details.call_args.kwargs["fields"]
         )
         mock_cache.set.assert_called_once_with(
-            "solution-charm-card-v2:grafana-k8s", charm, ttl=600
+            "solution-charm-card:grafana-k8s", charm, ttl=600
         )
 
     @patch("webapp.solutions.logic.get_store_categories")
