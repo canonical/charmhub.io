@@ -5,7 +5,10 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from flask import session as flask_session
 from redis_cache.cache_utility import redis_cache
 from webapp.solutions.auth import login
-from webapp.packages.logic import get_store_categories
+from webapp.packages.logic import (
+    get_store_categories,
+    parse_package_for_card,
+)
 from webapp.store.logic import format_slug
 from webapp.config import CATEGORIES
 from webapp.store_api import publisher_gateway
@@ -20,6 +23,7 @@ SOLUTIONS_API_BASE = os.getenv(
 )
 
 CHARM_FIELDS = [
+    "default-release.channel",
     "result.media",
     "result.title",
     "result.summary",
@@ -34,7 +38,7 @@ FALLBACK_CHARM_ICON = (
 
 
 def get_charm_data(charm_name):
-    cache_key = f"solution-charm:{charm_name}"
+    cache_key = f"solution-charm-card:{charm_name}"
     cached_charm = redis_cache.get(cache_key, expected_type=dict)
     if cached_charm:
         return cached_charm
@@ -49,16 +53,17 @@ def get_charm_data(charm_name):
     if not charm or "result" not in charm:
         return None
 
-    media = charm["result"].get("media") or []
+    card = parse_package_for_card({**charm, "name": charm_name})
     charm_data = {
         "name": charm_name,
         "title": charm["result"].get("title", charm_name),
         "summary": charm["result"].get("summary", ""),
         "publisher": charm["result"].get("publisher"),
-        "icon": media[0]["url"] if media else FALLBACK_CHARM_ICON,
-        "url": f"https://charmhub.io/{charm_name}",
+        "icon": card["package"]["icon_url"] or FALLBACK_CHARM_ICON,
+        "url": f"/{charm_name}",
         "categories": charm["result"].get("categories"),
         "deployable-on": charm["result"].get("deployable-on"),
+        "card": card,
     }
     redis_cache.set(cache_key, charm_data, ttl=600)
     return charm_data

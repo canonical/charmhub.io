@@ -21,16 +21,16 @@
           </a>
         </h2>
         <p class="u-text--muted u-no-padding--top">
-          <em>{{ charm.publisher["display-name"] }}</em>
+          <em>{{ charm.card.publisher.display_name }}</em>
         </p>
         <p class="u-line-clamp">
-          {{ charm.summary | truncate(90)  }}
+          {{ charm.card.package.summary | truncate(90)  }}
         </p>
         <div class="sc-solution-charm-card__footer">
           <hr />
           <div class="sc-solution-charm-card__footer-content u-align--right">
             <div class="sc-platform">
-              {% set platforms = charm["deployable-on"] %}
+              {% set platforms = charm.card.package.platforms %}
               {% if "kubernetes" is in(platforms) %}
                 <img class="sc-platform-icon" src="https://assets.ubuntu.com/v1/f1852c07-Kubernetes.svg" width="24" height="24" alt="Kubernetes" />
               {% else %}
