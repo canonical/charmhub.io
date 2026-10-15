@@ -3,12 +3,29 @@ from unittest.mock import patch
 
 from webapp.app import app
 from webapp.solutions.logic import SolutionsServiceError
+from webapp.solutions.views import render_solution
 
 
 class TestSolutionsViews(unittest.TestCase):
     def setUp(self):
         app.config["SERVER_NAME"] = "localhost.localdomain"
         self.client = app.test_client()
+
+    @patch(
+        "webapp.solutions.views.map_category_slugs_to_display", return_value=[]
+    )
+    @patch("webapp.solutions.views.get_charms_data")
+    def test_solution_charm_card_data(self, mock_get_charms, mock_categories):
+        charm = {
+            "name": "grafana-k8s",
+            "card": {"package": {"name": "grafana-k8s"}},
+        }
+        mock_get_charms.return_value = [charm]
+
+        solution = render_solution({"charms": ["grafana-k8s"]})
+
+        mock_get_charms.assert_called_once_with(["grafana-k8s"])
+        self.assertIs(solution["charms"][0], charm)
 
     @patch("webapp.solutions.views.get_solution_categories")
     @patch("webapp.solutions.views.get_charms_data")
