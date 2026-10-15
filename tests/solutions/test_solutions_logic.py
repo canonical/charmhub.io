@@ -50,6 +50,7 @@ class TestSolutionsLogic(unittest.TestCase):
         charm = get_charm_data("grafana-k8s")
 
         self.assertEqual(charm["card"]["package"]["name"], "grafana-k8s")
+        self.assertEqual(charm["url"], "/grafana-k8s")
         self.assertEqual(charm["card"]["package"]["display_name"], "Grafana")
         self.assertEqual(charm["card"]["package"]["summary"], "Dashboards")
         self.assertEqual(charm["card"]["package"]["platforms"], ["kubernetes"])

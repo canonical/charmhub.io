@@ -60,7 +60,7 @@ def get_charm_data(charm_name):
         "summary": charm["result"].get("summary", ""),
         "publisher": charm["result"].get("publisher"),
         "icon": card["package"]["icon_url"] or FALLBACK_CHARM_ICON,
-        "url": f"https://charmhub.io/{charm_name}",
+        "url": f"/{charm_name}",
         "categories": charm["result"].get("categories"),
         "deployable-on": charm["result"].get("deployable-on"),
         "card": card,
