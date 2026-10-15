@@ -5,6 +5,7 @@ from webapp.solutions.logic import get_charms_data
 from webapp.solutions.logic import get_solution_from_backend
 from webapp.solutions.logic import get_published_solution_by_name
 from webapp.solutions.logic import get_published_solutions
+from webapp.solutions.logic import get_solution_categories
 from webapp.solutions.logic import map_category_slugs_to_display
 from webapp.solutions.logic import SolutionsServiceError
 from webapp.observability.utils import trace_function
@@ -185,6 +186,10 @@ def solutions_json():
     return {
         "solutions": published_solutions,
         "size": len(published_solutions),
+        "categories": [
+            {"name": category["slug"], "display_name": category["name"]}
+            for category in get_solution_categories()
+        ],
     }
 
 

@@ -10,9 +10,15 @@ class TestSolutionsViews(unittest.TestCase):
         app.config["SERVER_NAME"] = "localhost.localdomain"
         self.client = app.test_client()
 
+    @patch("webapp.solutions.views.get_solution_categories")
     @patch("webapp.solutions.views.get_charms_data")
     @patch("webapp.solutions.views.get_published_solutions")
-    def test_solutions_json(self, mock_get_solutions, mock_get_charms):
+    def test_solutions_json(
+        self, mock_get_solutions, mock_get_charms, mock_get_categories
+    ):
+        mock_get_categories.return_value = [
+            {"slug": "monitoring", "name": "Monitoring"}
+        ]
         mock_get_solutions.return_value = [
             {
                 "charms": ["grafana-k8s"],
@@ -44,17 +50,33 @@ class TestSolutionsViews(unittest.TestCase):
                     }
                 ],
                 "size": 1,
+                "categories": [
+                    {"name": "monitoring", "display_name": "Monitoring"}
+                ],
             },
         )
 
+    @patch("webapp.solutions.views.get_solution_categories")
     @patch("webapp.solutions.views.get_published_solutions")
-    def test_solutions_json_empty(self, mock_get_solutions):
+    def test_solutions_json_empty(self, mock_get_solutions, mock_get_categories):
         mock_get_solutions.return_value = []
+        mock_get_categories.return_value = [
+            {"slug": "monitoring", "name": "Monitoring"}
+        ]
 
         response = self.client.get("/solutions.json")
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.get_json(), {"solutions": [], "size": 0})
+        self.assertEqual(
+            response.get_json(),
+            {
+                "solutions": [],
+                "size": 0,
+                "categories": [
+                    {"name": "monitoring", "display_name": "Monitoring"}
+                ],
+            },
+        )
 
     @patch("webapp.solutions.views.get_published_solutions")
     def test_solutions_json_service_error(self, mock_get_solutions):

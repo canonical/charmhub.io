@@ -10,6 +10,7 @@ import { useQuery } from "react-query";
 
 import { Store } from "../../types";
 import Banner from "../Banner";
+import { ServiceUnavailableNotification } from "../ServiceUnavailableNotification";
 
 const FEATURED_CHARM_COUNT = 12;
 const FEATURED_SOLUTION_COUNT = 4;
@@ -54,18 +55,19 @@ export const LandingPage = ({ data, isFetching, status }: Props) => {
     return () => observer.disconnect();
   }, []);
 
-  const { data: solutionsData, isFetching: areSolutionsFetching } = useQuery(
-    "solutions",
-    async () => {
-      const response = await fetch("/solutions.json");
-      if (!response.ok) {
-        throw new Error("Failed to fetch solutions");
-      }
-
-      const result = (await response.json()) as { solutions: Solution[] };
-      return result.solutions.slice(0, FEATURED_SOLUTION_COUNT);
+  const {
+    data: solutionsData,
+    isFetching: areSolutionsFetching,
+    status: solutionsStatus,
+  } = useQuery("solutions", async () => {
+    const response = await fetch("/solutions.json");
+    if (!response.ok) {
+      throw new Error("Failed to fetch solutions");
     }
-  );
+
+    const result = (await response.json()) as { solutions: Solution[] };
+    return result.solutions.slice(0, FEATURED_SOLUTION_COUNT);
+  });
 
   return (
     <>
@@ -173,6 +175,9 @@ export const LandingPage = ({ data, isFetching, status }: Props) => {
                   </p>
                 </Col>
               </Row>
+              {solutionsStatus === "error" && (
+                <ServiceUnavailableNotification service="Solutions" />
+              )}
               <div>
                 <Row>
                   {areSolutionsFetching &&
@@ -186,6 +191,7 @@ export const LandingPage = ({ data, isFetching, status }: Props) => {
                       </Col>
                     ))}
                   {!areSolutionsFetching &&
+                    solutionsStatus === "success" &&
                     solutionsData?.map((solution) => (
                       <Col
                         size={9}
@@ -220,6 +226,9 @@ export const LandingPage = ({ data, isFetching, status }: Props) => {
                   </p>
                 </Col>
               </Row>
+              {status === "error" && (
+                <ServiceUnavailableNotification service="Charms" />
+              )}
               <div>
                 <Row>
                   {isFetching &&
