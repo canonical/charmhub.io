@@ -71,6 +71,7 @@ describe("Collaboration", () => {
       },
       revokedInvite,
       { ...revokedInvite },
+      { ...baseInvite, email: "other@example.com" },
     ];
     const queryClient = new QueryClient({
       defaultOptions: { queries: { enabled: false } },
@@ -87,10 +88,16 @@ describe("Collaboration", () => {
       </JotaiTestProvider>
     );
 
-    await user.click(screen.getByRole("button", { name: "Invites (3)" }));
+    await user.click(screen.getByRole("button", { name: "Invites (4)" }));
 
     const table = screen.getByRole("grid");
-    expect(within(table).getAllByRole("row")).toHaveLength(4);
+    expect(within(table).getAllByRole("row")).toHaveLength(5);
+    expect(within(table).getByText("Pending").closest("td")).toHaveAttribute(
+      "rowspan",
+      "2"
+    );
+    expect(within(table).getByText("Expired")).toBeInTheDocument();
+    expect(within(table).getByText("Revoked")).toBeInTheDocument();
     expect(
       within(table).queryByText("accepted@example.com")
     ).not.toBeInTheDocument();
@@ -103,6 +110,10 @@ describe("Collaboration", () => {
     ).toBeInTheDocument();
     expect(within(table).getAllByRole("row")).toHaveLength(2);
     expect(within(table).getByText("pending@example.com")).toBeInTheDocument();
+    expect(within(table).getByText("Pending").closest("td")).toHaveAttribute(
+      "rowspan",
+      "1"
+    );
   });
 
   test("sets collaborators data", async () => {

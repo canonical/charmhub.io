@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { Button, MainTable } from "@canonical/react-components";
 
 import type { Dispatch, SetStateAction } from "react";
-import type { Invite } from "../types";
+import type { DisplayedInvite } from "./getDisplayedInvites";
 import { generateInviteToken } from "./generateInviteToken";
 
 type MainTableProps = Parameters<typeof MainTable>[0];
@@ -10,8 +10,7 @@ type MainTableRow = NonNullable<MainTableProps["rows"]>[number];
 type MainTableCell = NonNullable<MainTableRow["columns"]>[number];
 
 function buildInviteTableRows(
-  invites: Array<Invite>,
-  status: "Pending" | "Expired" | "Revoked",
+  invites: DisplayedInvite[],
   packageName: string,
   setShowRevokeModal: (showRevokeModal: boolean) => void,
   setShowReopenModal: (showReopenModal: boolean) => void,
@@ -21,11 +20,12 @@ function buildInviteTableRows(
   copiedInviteUrl: string | null,
   setCopiedInviteUrl: Dispatch<SetStateAction<string | null>>
 ) {
-  return invites.map((invite: Invite, index) => {
+  return invites.map((invite, index) => {
+    const { status } = invite;
     let columns: MainTableCell[] = [];
     let statusColumn: MainTableCell | undefined;
 
-    if (invites.length > 0 && index === 0) {
+    if (index === 0 || invites[index - 1].status !== status) {
       statusColumn = {
         content: (
           <>
@@ -36,7 +36,7 @@ function buildInviteTableRows(
             {status}
           </>
         ),
-        rowSpan: invites.length,
+        rowSpan: invites.filter((item) => item.status === status).length,
       };
     }
 
