@@ -14,7 +14,11 @@ type Props = {
   setShowReopenModal: (showReopenModal: boolean) => void;
 };
 
-function Invites({ inviteGroups, setShowRevokeModal, setShowReopenModal }: Props) {
+function Invites({
+  inviteGroups,
+  setShowRevokeModal,
+  setShowReopenModal,
+}: Props) {
   const setActiveInviteEmail = useSetAtom(activeInviteEmailState);
   const [loadingInviteUrl, setLoadingInviteUrl] = useState<string | null>(null);
   const [copiedInviteUrl, setCopiedInviteUrl] = useState<string | null>(null);

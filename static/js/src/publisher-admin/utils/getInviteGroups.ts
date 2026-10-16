@@ -9,7 +9,10 @@ export type InviteGroup = {
 function getInviteGroups(invites: Invite[]): InviteGroup[] {
   const revokedInvites = Array.from(
     new Map(
-      getInvitesByStatus(invites, "revoked").map((invite) => [invite.email, invite])
+      getInvitesByStatus(invites, "revoked").map((invite) => [
+        invite.email,
+        invite,
+      ])
     ).values()
   );
 
