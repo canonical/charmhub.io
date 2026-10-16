@@ -32,7 +32,7 @@ import {
   filteredInvitesListState,
 } from "../../state/selectors";
 import { useCollaboratorsQuery, useInvitesQuery } from "../../hooks";
-import { getUniqueInvites } from "../../utils/getUniqueInvites";
+import getDisplayedInvitesCount from "../../utils/getDisplayedInvitesCount";
 import { useQueryClient } from "react-query";
 
 function Collaboration() {
@@ -209,7 +209,7 @@ function Collaboration() {
                     },
                     {
                       key: "invites",
-                      title: `Invites (${getUniqueInvites(invitesList).length})`,
+                      title: `Invites (${getDisplayedInvitesCount(invitesList)})`,
                       content: (
                         <Invites
                           setShowRevokeModal={setShowRevokeInviteModal}
