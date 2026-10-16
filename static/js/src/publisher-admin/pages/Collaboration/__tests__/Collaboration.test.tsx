@@ -87,7 +87,7 @@ describe("Collaboration", () => {
       </JotaiTestProvider>
     );
 
-    await user.click(screen.getByRole("button", { name: "Invites (3)" }));
+    await user.click(screen.getByRole("tab", { name: "Invites (3)" }));
 
     const table = screen.getByRole("grid");
     expect(within(table).getAllByRole("row")).toHaveLength(4);
@@ -99,7 +99,7 @@ describe("Collaboration", () => {
     await user.type(screen.getByRole("searchbox"), "pending@example.com");
 
     expect(
-      screen.getByRole("button", { name: "Invites (1)" })
+      screen.getByRole("tab", { name: "Invites (1)" })
     ).toBeInTheDocument();
     expect(within(table).getAllByRole("row")).toHaveLength(2);
     expect(within(table).getByText("pending@example.com")).toBeInTheDocument();
