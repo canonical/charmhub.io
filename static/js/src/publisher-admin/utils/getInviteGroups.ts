@@ -6,7 +6,11 @@ export type InviteGroup = {
   invites: Invite[];
 };
 
+// Share the displayed invite groups between the header count and the table so
+// status filtering and deduplication cannot drift apart.
 function getInviteGroups(invites: Invite[]): InviteGroup[] {
+  // Preserve the table's one revoked row per email, unlike pending/expired rows.
+  // The Map keeps the last revoked invite in input order, not necessarily the newest.
   const revokedInvites = Array.from(
     new Map(
       getInvitesByStatus(invites, "revoked").map((invite) => [

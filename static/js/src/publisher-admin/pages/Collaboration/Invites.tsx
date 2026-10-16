@@ -25,6 +25,7 @@ function Invites({
 
   const { packageName } = useParams();
 
+  // Build each status group separately so its Status cell spans only that group's rows.
   const rows = inviteGroups.flatMap(({ invites, status }) =>
     buildInviteTableRows(
       invites,
