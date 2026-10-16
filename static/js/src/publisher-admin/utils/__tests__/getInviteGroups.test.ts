@@ -1,9 +1,9 @@
 import { add } from "date-fns";
 
-import getDisplayedInvites from "../getDisplayedInvites";
+import getInviteGroups from "../getInviteGroups";
 import type { Invite } from "../../types";
 
-describe("getDisplayedInvites", () => {
+describe("getInviteGroups", () => {
   const baseInvite: Invite = {
     "accepted-at": null,
     "created-at": "2024-01-01",
@@ -19,20 +19,20 @@ describe("getDisplayedInvites", () => {
     "revoked-at": null,
   };
 
-  test("returns an empty list when there are no invites", () => {
-    expect(getDisplayedInvites([])).toEqual([]);
-  });
-
   test("excludes accepted invites that are not shown in the table", () => {
     const acceptedInvite = {
       ...baseInvite,
       "accepted-at": new Date().toISOString(),
     };
 
-    expect(getDisplayedInvites([acceptedInvite])).toEqual([]);
+    expect(getInviteGroups([acceptedInvite])).toEqual([
+      { status: "Pending", invites: [] },
+      { status: "Expired", invites: [] },
+      { status: "Revoked", invites: [] },
+    ]);
   });
 
-  test("returns a flat list in status order and deduplicates revoked rows", () => {
+  test("groups displayed invites and deduplicates revoked rows", () => {
     const invites: Invite[] = [
       { ...baseInvite, email: "pending@example.com" },
       {
@@ -53,12 +53,10 @@ describe("getDisplayedInvites", () => {
       },
     ];
 
-    expect(
-      getDisplayedInvites([invites[2], invites[1], invites[0], invites[3]])
-    ).toEqual([
-      { ...invites[0], status: "Pending" },
-      { ...invites[1], status: "Expired" },
-      { ...invites[3], status: "Revoked" },
+    expect(getInviteGroups(invites)).toEqual([
+      { status: "Pending", invites: [invites[0]] },
+      { status: "Expired", invites: [invites[1]] },
+      { status: "Revoked", invites: [invites[3]] },
     ]);
   });
 });

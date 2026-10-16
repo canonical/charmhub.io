@@ -32,7 +32,7 @@ import {
   filteredInvitesListState,
 } from "../../state/selectors";
 import { useCollaboratorsQuery, useInvitesQuery } from "../../hooks";
-import getDisplayedInvites from "../../utils/getDisplayedInvites";
+import getInviteGroups from "../../utils/getInviteGroups";
 import { useQueryClient } from "react-query";
 
 function Collaboration() {
@@ -55,7 +55,11 @@ function Collaboration() {
   const [copied, setCopied] = useState(false);
   const setInvitesList = useSetAtom(invitesListState);
   const invitesList = useAtomValue(filteredInvitesListState);
-  const displayedInvites = getDisplayedInvites(invitesList);
+  const inviteGroups = getInviteGroups(invitesList);
+  const invitesCount = inviteGroups.reduce(
+    (count, group) => count + group.invites.length,
+    0
+  );
   const activeInviteEmail = useAtomValue(activeInviteEmailState);
   const inviteLink = useAtomValue(inviteLinkState);
   const filterQuery = useAtomValue(filterQueryState);
@@ -210,10 +214,10 @@ function Collaboration() {
                     },
                     {
                       key: "invites",
-                      title: `Invites (${displayedInvites.length})`,
+                      title: `Invites (${invitesCount})`,
                       content: (
                         <Invites
-                          invites={displayedInvites}
+                          inviteGroups={inviteGroups}
                           setShowRevokeModal={setShowRevokeInviteModal}
                           setShowReopenModal={setShowReopenInviteModal}
                         />

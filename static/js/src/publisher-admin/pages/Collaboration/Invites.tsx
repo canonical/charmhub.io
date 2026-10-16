@@ -4,33 +4,36 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 
 import { buildInviteTableRows } from "../../utils";
-import type { DisplayedInvite } from "../../utils/getDisplayedInvites";
+import type { InviteGroup } from "../../utils/getInviteGroups";
 
 import { activeInviteEmailState } from "../../state/atoms";
 
 type Props = {
-  invites: DisplayedInvite[];
+  inviteGroups: InviteGroup[];
   setShowRevokeModal: (showRevokeModal: boolean) => void;
   setShowReopenModal: (showReopenModal: boolean) => void;
 };
 
-function Invites({ invites, setShowRevokeModal, setShowReopenModal }: Props) {
+function Invites({ inviteGroups, setShowRevokeModal, setShowReopenModal }: Props) {
   const setActiveInviteEmail = useSetAtom(activeInviteEmailState);
   const [loadingInviteUrl, setLoadingInviteUrl] = useState<string | null>(null);
   const [copiedInviteUrl, setCopiedInviteUrl] = useState<string | null>(null);
 
   const { packageName } = useParams();
 
-  const rows = buildInviteTableRows(
-    invites,
-    packageName!,
-    setShowRevokeModal,
-    setShowReopenModal,
-    setActiveInviteEmail,
-    loadingInviteUrl,
-    setLoadingInviteUrl,
-    copiedInviteUrl,
-    setCopiedInviteUrl
+  const rows = inviteGroups.flatMap(({ invites, status }) =>
+    buildInviteTableRows(
+      invites,
+      status,
+      packageName!,
+      setShowRevokeModal,
+      setShowReopenModal,
+      setActiveInviteEmail,
+      loadingInviteUrl,
+      setLoadingInviteUrl,
+      copiedInviteUrl,
+      setCopiedInviteUrl
+    )
   );
 
   return (
