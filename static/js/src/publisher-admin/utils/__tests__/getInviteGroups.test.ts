@@ -1,9 +1,9 @@
 import { add } from "date-fns";
 
-import getDisplayedInvitesCount from "../getDisplayedInvitesCount";
+import getInviteGroups from "../getInviteGroups";
 import type { Invite } from "../../types";
 
-describe("getDisplayedInvitesCount", () => {
+describe("getInviteGroups", () => {
   const baseInvite: Invite = {
     "accepted-at": null,
     "created-at": "2024-01-01",
@@ -25,10 +25,14 @@ describe("getDisplayedInvitesCount", () => {
       "accepted-at": new Date().toISOString(),
     };
 
-    expect(getDisplayedInvitesCount([acceptedInvite])).toBe(0);
+    expect(getInviteGroups([acceptedInvite])).toEqual([
+      { status: "Pending", invites: [] },
+      { status: "Expired", invites: [] },
+      { status: "Revoked", invites: [] },
+    ]);
   });
 
-  test("counts the invite rows shown in each status section", () => {
+  test("groups displayed invites and deduplicates revoked rows", () => {
     const invites: Invite[] = [
       { ...baseInvite, email: "pending@example.com" },
       {
@@ -39,6 +43,7 @@ describe("getDisplayedInvitesCount", () => {
       {
         ...baseInvite,
         email: "revoked@example.com",
+        "created-at": "2024-01-02",
         "revoked-at": new Date().toISOString(),
       },
       {
@@ -48,6 +53,10 @@ describe("getDisplayedInvitesCount", () => {
       },
     ];
 
-    expect(getDisplayedInvitesCount(invites)).toBe(3);
+    expect(getInviteGroups(invites)).toEqual([
+      { status: "Pending", invites: [invites[0]] },
+      { status: "Expired", invites: [invites[1]] },
+      { status: "Revoked", invites: [invites[3]] },
+    ]);
   });
 });

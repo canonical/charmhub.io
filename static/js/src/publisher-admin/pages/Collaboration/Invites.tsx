@@ -1,68 +1,39 @@
-import { useAtomValue, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { MainTable } from "@canonical/react-components";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 
-import { getInvitesByStatus, buildInviteTableRows } from "../../utils";
+import { buildInviteTableRows } from "../../utils";
+import type { InviteGroup } from "../../utils/getInviteGroups";
 
 import { activeInviteEmailState } from "../../state/atoms";
-import { filteredInvitesListState } from "../../state/selectors";
 
 type Props = {
+  inviteGroups: InviteGroup[];
   setShowRevokeModal: (showRevokeModal: boolean) => void;
   setShowReopenModal: (showReopenModal: boolean) => void;
 };
 
-function Invites({ setShowRevokeModal, setShowReopenModal }: Props) {
-  const invitesList = useAtomValue(filteredInvitesListState);
+function Invites({ inviteGroups, setShowRevokeModal, setShowReopenModal }: Props) {
   const setActiveInviteEmail = useSetAtom(activeInviteEmailState);
   const [loadingInviteUrl, setLoadingInviteUrl] = useState<string | null>(null);
   const [copiedInviteUrl, setCopiedInviteUrl] = useState<string | null>(null);
 
-  const pendingInvites = getInvitesByStatus(invitesList, "pending");
-  const expiredInvites = getInvitesByStatus(invitesList, "expired");
-  const revokedInvites = getInvitesByStatus(invitesList, "revoked");
-  const uniqueRevokedInvites = Array.from(
-    new Map(revokedInvites.map((invite) => [invite.email, invite])).values()
-  );
-
   const { packageName } = useParams();
 
-  const pendingInvitesTableRows = buildInviteTableRows(
-    pendingInvites,
-    "Pending",
-    packageName!,
-    setShowRevokeModal,
-    setShowReopenModal,
-    setActiveInviteEmail,
-    loadingInviteUrl,
-    setLoadingInviteUrl,
-    copiedInviteUrl,
-    setCopiedInviteUrl
-  );
-  const expiredInvitesTableRows = buildInviteTableRows(
-    expiredInvites,
-    "Expired",
-    packageName!,
-    setShowRevokeModal,
-    setShowReopenModal,
-    setActiveInviteEmail,
-    loadingInviteUrl,
-    setLoadingInviteUrl,
-    copiedInviteUrl,
-    setCopiedInviteUrl
-  );
-  const revokedInvitesTableRows = buildInviteTableRows(
-    uniqueRevokedInvites,
-    "Revoked",
-    packageName!,
-    setShowRevokeModal,
-    setShowReopenModal,
-    setActiveInviteEmail,
-    loadingInviteUrl,
-    setLoadingInviteUrl,
-    copiedInviteUrl,
-    setCopiedInviteUrl
+  const rows = inviteGroups.flatMap(({ invites, status }) =>
+    buildInviteTableRows(
+      invites,
+      status,
+      packageName!,
+      setShowRevokeModal,
+      setShowReopenModal,
+      setActiveInviteEmail,
+      loadingInviteUrl,
+      setLoadingInviteUrl,
+      copiedInviteUrl,
+      setCopiedInviteUrl
+    )
   );
 
   return (
@@ -93,10 +64,7 @@ function Invites({ setShowRevokeModal, setShowReopenModal }: Props) {
           heading: "Actions",
         },
       ]}
-      rows={pendingInvitesTableRows.concat(
-        expiredInvitesTableRows,
-        revokedInvitesTableRows
-      )}
+      rows={rows}
     />
   );
 }
