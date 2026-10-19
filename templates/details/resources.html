@@ -1,120 +1,157 @@
 {% set current_tab = "resources" %}
-{% set revisions_limit = 10 %}
 {% set total_revisions = revisions|length %}
+{% set resources_num = package['default-release']['resources']|length %}
 
 {% extends '/details/details_layout.html' %}
 
+{% macro copy_button(value, label, classes = '') %}
+<button type="button" 
+  class="p-button--base is-dense has-icon u-no-margin--bottom {{ classes }}"
+  data-js="copy"
+  data-copy="{{ value }}"
+  aria-label="Copy {{ label }}"
+  title="Copy {{ label }}"
+>
+  <i class="p-icon--copy" aria-hidden="true"></i>
+</button>
+{% endmacro %}
+
 {% block details_content %}
-<div class="row p-details-tab__content">
+<div class="p-section--shallow row p-details-tab__content">
   <div class="col-3">
     <div class="p-side-navigation">
       <ul class="p-side-navigation__list">
-        {% for resource in package['default-release']['resources'] %}
-        <li class="p-side-navigation__item">
-          <a href="/{{ package.name }}/resources/{{ resource.name }}" class="p-side-navigation__link" role="tab" aria-controls="{{ resource.name }}" {% if loop.index == 1 %}aria-current="page"{% endif %}>{{ resource.name }}</a>
-        </li>
-        {% endfor %}
+        {% if resources_num > 1 %}
+          {% for item in package['default-release']['resources'] %}
+          <li class="p-side-navigation__item">
+            <a href="/{{ package.name }}/resources/{{ item.name }}"
+              class="p-side-navigation__link"
+              {% if item.name == resource.name %}aria-current="page"{% endif %}>
+              {{ item.name }}
+            </a>
+          </li>
+          {% endfor %}
+        {% endif %}
       </ul>
     </div>
   </div>
-  <div class="col-9">
-    <h2 class="p-heading--4">
-      {{ resource.name }}
-      <span class="u-text--muted">
-        |
-        {% if resource.type == "oci-image" %}
-          OCI Image
-        {% else %}
-          File
-        {% endif %}
-      </span>
-    </h2>
 
-    {% if resource.upstream_source %}
-      <p><strong>Upstream source:</strong> {{ resource.upstream_source }}</p>
-    {% endif %}
+  <div class="p-section--deep col-9">
+    <div class="p-section--shallow">
+      <h2 class="p-heading--2">{{ resource.name }}</h2>
+      <hr>
+    </div>
 
-    <ul class="p-detail-inline-list">
-      <li class="p-inline-list__item">
-        <i class="p-icon--revisions" style="margin-right: 5px;"></i> Revision: {{ resource.revision }}
-      </li>
-      <li class="p-inline-list__item">
-        <i class="p-icon--change-version" style="margin-right: 5px;"></i> Updated: {{ resource.updated }}
-      </li>
-      {% if resource.type == "oci-image" %}
-      <li class="p-inline-list__item has-button">
-        <button class="p-button--link p-link--soft u-no-margin--bottom u-no-padding--top js-panel-toggle p-inline-list__panel-button" aria-label="Digest key" aria-controls="digest-key-panel">
-          <i class="p-icon--docstrings" style="margin-right: 5px;"></i>
-          Digest: {{ resource.short_digest }}
-        </button>
-        <div class="p-inline-list__panel" id="digest-key-panel">
-          <textarea class="u-no-margin--bottom" readonly>{{ resource.digest }}</textarea>
+    <div class="row">
+      <div class="col-3">
+        <h5>
+          <strong>default resource revision for {{ current_channel }}</strong>
+        </h5>
+      </div>
+      <div class="col-6">
+        <table aria-label="Resource details">
+          <tbody>
+            <tr>
+              <th scope="row">Revision</th>
+              <td>{{ resource.revision }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Updated</th>
+              <td>{{ resource.updated }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Checksum</th>
+              <td>{{ resource.checksum }} {{ copy_button(resource.checksum_full, "checksum") }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Type</th>
+              <td>{% if resource.type == "oci-image" %}OCI Image{% else %}File{% endif %}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        {{ resource.description | markdown | safe }}
+
+        <div class="p-cta-block">
+          {# TODO: replace with the resource credentials download #}
+          <a class="p-button" href="{{ resource.download.url }}" download>Download resource credentials</a>
+          {% if resource.upstream_source %}
+          <a href="{{ resource.upstream_source }}">Upstream source link&nbsp;&rsaquo;</a>
+          {% endif %}
         </div>
-      </li>
-      {% else %}
-      <li class="p-inline-list__item">
-        <i class="p-icon--docstrings" style="margin-right: 5px;"></i> Size: {{ resource.size }}
-      </li>
-      {% endif %}
-      <li class="p-inline-list__item has-button">
-        <a class="p-button--link p-link--soft u-no-margin--bottom u-no-padding--top p-inline-list__panel-button" href="{{ resource.download.url }}" download>
-          <i class="p-icon--download"></i> Download
-        </a>
-      </li>
-    </ul>
+      </div>
+    </div>
 
-    <p>{{ resource.description | markdown | safe }}</p>
+    <hr>
 
-    <h3 class="p-heading--5">Release history</h3>
+    <div class="p-section--shallow">
+      <div class="row">
+        <div class="col-3">
+          <h3 class="p-heading--5">Release history</h3>
+        </div>
+        <div class="col-6">
+          <p>
+            Developers set and validate a default resource revision for each charm revision.
+            To override the default resource revision ({{ resource.revision }}) for {{ current_channel }},
+            you may use the following command for new deployments (this may select a resource revision that
+            has not been tested with this charm revision):
+          </p>
+          <div class="p-code-snippet" style="position: relative">
+            <pre class="p-code-snippet__block is-wrapped"><code>{{ deploy_command }}</code></pre>
+            {{ copy_button(deploy_command, "deploy command", "p-code-snippet__button") }}
+          </div>
+          <p>
+            Already made a deployment?
+            <a href="https://canonical.com/juju/docs/juju-cli/latest/howto/manage-charm-resources/">
+              Learn how to manage charm resources&nbsp;
+              <i class="p-icon--external-link" aria-hidden="true"></i>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
 
-    <table class="u-no-margin--bottom js-revisions-table">
+    <table aria-label="Resource release history">
       <thead>
         <tr>
-          <th>Revision</th>
+          <th>Resource revision</th>
           <th>Date</th>
-          {% if resource.type == "file" %}
-            <th>Size</th>
-          {% else %}
-            <th>Digest</th>
-          {% endif %}
+          <th>Charm channel</th>
+          <th>Charm revision</th>
+          <th>Checksum</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
-        {% for revision in revisions[0:revisions_limit] %}
-          <tr>
-            <td>{{ revision.revision }}</td>
-            <td>{{ revision.updated }}</td>
-            {% if resource.type == "file" %}
-              <td>{{ revision.size }}</td>
-          {% else %}
-            <td>{{ revision.download["hash-sha-256"][:12] }}</td>
+        {% for revision in revisions %}
+        <tr class="js-revision-row{% if loop.index > show_revisions_limit %} u-hide{% endif %}">
+          <td>
+            {% if revision.is_default %}
+            <i class="p-icon--pin" title="Default revision" style="margin-right: 1rem;">Default revision</i>
+            {% else %}
+            <span style="display: inline-block; width: 2rem;"></span>
             {% endif %}
-          </tr>
+            {{ revision.revision }}
+          </td>
+          <td>{{ revision.updated }}</td>
+          <td>{{ revision.charm_channel }}</td>
+          <td>{{ revision.charm_revision }}</td>
+          <td>{{ revision.checksum }}</td>
+          <td>{{ copy_button(revision.checksum_full, "checksum for revision " ~ revision.revision, "u-float-right") }}</td>
+        </tr>
         {% endfor %}
       </tbody>
     </table>
 
-    <div class="u-align--right detail-resource-footer">
-      <small class="u-text--muted">
-        Showing
-        <span class="js-revisions-count">
-          {% if total_revisions < revisions_limit %}
-            {{ total_revisions }}
-          {% else %}
-            {{ revisions_limit }}
-          {% endif %}
-        </span>
+    <div class="u-align--right">
+      <small class="u-text--muted" style="margin-right: 1rem;">
+        Showing <span class="js-revisions-count">{{ [total_revisions, show_revisions_limit] | min }}</span>
         of {{ total_revisions }} revisions
       </small>
-
-      {% if total_revisions > revisions_limit %}
-        <button class="js-show-more-revisions" data-md-strip>
-          {% if total_revisions - revisions_limit < revisions_limit %}
-            Show {{total_revisions - revisions_limit }} more
-          {% else %}
-            Show {{ revisions_limit }} more
-          {% endif %}
-        </button>
+      {% if total_revisions > show_revisions_limit %}
+      <button type="button" class="p-button js-show-more-revisions" data-limit="{{ show_revisions_limit }}">
+        Show {{ [total_revisions - show_revisions_limit, show_revisions_limit] | min }} more
+      </button>
       {% endif %}
     </div>
   </div>
@@ -123,103 +160,9 @@
 {{ vite_import('static/js/src/public/details/resources/index.ts') }}
 
 <script>
-  function handleShowMoreRevisions(resourceType, revisions) {
-    var revisionsCountContainer = document.querySelector(
-      ".js-revisions-count"
-    );
-
-    var showMoreRevisionsButton = document.querySelector(
-      ".js-show-more-revisions"
-    );
-
-    if (showMoreRevisionsButton) {
-      var revisionsLimit = {{ revisions_limit }};
-      var currentRevisionsCount = revisionsLimit;
-      var totalRevisions = revisions.length;
-
-      showMoreRevisionsButton.addEventListener("click", function() {
-        if (revisions.length > currentRevisionsCount) {
-          addReleasesRows(
-            resourceType,
-            revisions.slice(
-              currentRevisionsCount,
-              currentRevisionsCount + revisionsLimit
-            )
-          );
-
-          if (totalRevisions - currentRevisionsCount >= revisionsLimit) {
-            currentRevisionsCount += revisionsLimit;
-          } else {
-            currentRevisionsCount += (totalRevisions - currentRevisionsCount);
-          }
-
-          if (totalRevisions - currentRevisionsCount > -1) {
-            revisionsCountContainer.innerText = currentRevisionsCount;
-          } else {
-            showMoreRevisionsButton.parentNode.removeChild(showMoreRevisionsButton);
-          }
-        }
-      });
-    }
-  }
-
-  function addReleasesRows(resourceType, revisions) {
-    var revisionsTableBody = document.querySelector(
-      ".js-revisions-table tbody"
-    );
-
-    revisions.forEach(function(release) {
-      var tableRow = document.createElement("tr");
-
-      var revisionCell = document.createElement("td");
-      revisionCell.innerText = release.revision;
-      tableRow.appendChild(revisionCell);
-
-      var dateCell = document.createElement("td");
-      dateCell.innerText = release.updated;
-      tableRow.appendChild(dateCell);
-
-      if (resourceType === "file") {
-        var fileCell = document.createElement("td");
-        fileCell.innerText = release.download.size * 1000 * 1000;
-        tableRow.appendChild(fileCell);
-      } else {
-        var digestCell = document.createElement("td");
-        digestCell.innerText = release.download["hash-sha-256"].slice(0, 12);
-        tableRow.appendChild(digestCell);
-      }
-
-      revisionsTableBody.appendChild(tableRow);
-    });
-  }
-
   window.addEventListener("DOMContentLoaded", function () {
     charmhub.resources.init();
-    handleShowMoreRevisions("{{ resource.type }}", {{ revisions | safe }});
   });
-
-  function getActiveNavItem(navigationLinks) {
-      return Array.from(navigationLinks).find((navigationLink) => {
-        const href = navigationLink.getAttribute("href");
-        return href && window.location.href.includes(href);
-      });
-    }
-
-  function setActiveNavItem() {
-    const navigationLinks = document.querySelectorAll(".p-side-navigation__link");
-    const activeNavItem = getActiveNavItem(navigationLinks);
-
-    Array.from(navigationLinks).forEach((navigationLink) => {
-      if (navigationLink === activeNavItem) {
-        navigationLink.setAttribute("aria-current", "page");
-      } else {
-        navigationLink.removeAttribute("aria-current");
-      }
-    });
-  }
-
-  setActiveNavItem();
-
-  window.addEventListener("popstate", setActiveNavItem);
 </script>
+
 {% endblock %}

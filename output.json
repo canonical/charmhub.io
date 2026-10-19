@@ -1,0 +1,587 @@
+{
+  "channel-map": [
+    {
+      "channel": {
+        "base": {
+          "architecture": "amd64",
+          "channel": "26.04",
+          "name": "ubuntu"
+        },
+        "name": "12.4/stable",
+        "released-at": "2026-09-02T12:50:10.144623+00:00",
+        "risk": "stable",
+        "track": "12.4"
+      },
+      "revision": {
+        "attributes": {
+          "framework": "unknown",
+          "language": "unknown"
+        },
+        "bases": [
+          {
+            "architecture": "amd64",
+            "channel": "26.04",
+            "name": "ubuntu"
+          }
+        ],
+        "created-at": "2026-09-01T16:07:19.323495+00:00",
+        "download": {
+          "hash-sha-256": "2c3d51eb199191d11573645a01ec701cc67d10fe7bfc295601944c53feb213b9",
+          "size": 25995774,
+          "url": "https://api.charmhub.io/api/v1/charms/download/nuH5FwARV8dmAkPiPcVCNtPKwsw0bkgL_200.charm"
+        },
+        "revision": 200,
+        "version": "tf-12.4.3-2-g8187475"
+      }
+    },
+    {
+      "channel": {
+        "base": {
+          "architecture": "amd64",
+          "channel": "26.04",
+          "name": "ubuntu"
+        },
+        "name": "12.4/candidate",
+        "released-at": "2026-10-14T07:22:06.853008+00:00",
+        "risk": "candidate",
+        "track": "12.4"
+      },
+      "revision": {
+        "attributes": {
+          "framework": "unknown",
+          "language": "unknown"
+        },
+        "bases": [
+          {
+            "architecture": "amd64",
+            "channel": "26.04",
+            "name": "ubuntu"
+          }
+        ],
+        "created-at": "2026-10-13T16:51:16.831000+00:00",
+        "download": {
+          "hash-sha-256": "333e33aa35f790f2ef6807f27fb2ce8ba16c19764c43a3f5a747f82dad1d0ad7",
+          "size": 25970736,
+          "url": "https://api.charmhub.io/api/v1/charms/download/nuH5FwARV8dmAkPiPcVCNtPKwsw0bkgL_206.charm"
+        },
+        "revision": 206,
+        "version": "rev205-1-g1962ce0"
+      }
+    },
+    {
+      "channel": {
+        "base": {
+          "architecture": "amd64",
+          "channel": "26.04",
+          "name": "ubuntu"
+        },
+        "name": "12.4/beta",
+        "released-at": "2026-10-14T07:22:03.886614+00:00",
+        "risk": "beta",
+        "track": "12.4"
+      },
+      "revision": {
+        "attributes": {
+          "framework": "unknown",
+          "language": "unknown"
+        },
+        "bases": [
+          {
+            "architecture": "amd64",
+            "channel": "26.04",
+            "name": "ubuntu"
+          }
+        ],
+        "created-at": "2026-10-13T16:51:16.831000+00:00",
+        "download": {
+          "hash-sha-256": "333e33aa35f790f2ef6807f27fb2ce8ba16c19764c43a3f5a747f82dad1d0ad7",
+          "size": 25970736,
+          "url": "https://api.charmhub.io/api/v1/charms/download/nuH5FwARV8dmAkPiPcVCNtPKwsw0bkgL_206.charm"
+        },
+        "revision": 206,
+        "version": "rev205-1-g1962ce0"
+      }
+    },
+    {
+      "channel": {
+        "base": {
+          "architecture": "amd64",
+          "channel": "26.04",
+          "name": "ubuntu"
+        },
+        "name": "12.4/edge",
+        "released-at": "2026-10-13T16:51:32.316118+00:00",
+        "risk": "edge",
+        "track": "12.4"
+      },
+      "revision": {
+        "attributes": {
+          "framework": "unknown",
+          "language": "unknown"
+        },
+        "bases": [
+          {
+            "architecture": "amd64",
+            "channel": "26.04",
+            "name": "ubuntu"
+          }
+        ],
+        "created-at": "2026-10-13T16:51:16.831000+00:00",
+        "download": {
+          "hash-sha-256": "333e33aa35f790f2ef6807f27fb2ce8ba16c19764c43a3f5a747f82dad1d0ad7",
+          "size": 25970736,
+          "url": "https://api.charmhub.io/api/v1/charms/download/nuH5FwARV8dmAkPiPcVCNtPKwsw0bkgL_206.charm"
+        },
+        "revision": 206,
+        "version": "rev205-1-g1962ce0"
+      }
+    },
+    {
+      "channel": {
+        "base": {
+          "architecture": "amd64",
+          "channel": "26.04",
+          "name": "ubuntu"
+        },
+        "name": "dev/edge",
+        "released-at": "2026-10-14T23:25:21.436721+00:00",
+        "risk": "edge",
+        "track": "dev"
+      },
+      "revision": {
+        "attributes": {
+          "framework": "unknown",
+          "language": "unknown"
+        },
+        "bases": [
+          {
+            "architecture": "amd64",
+            "channel": "26.04",
+            "name": "ubuntu"
+          }
+        ],
+        "created-at": "2026-10-14T23:25:06.569988+00:00",
+        "download": {
+          "hash-sha-256": "77db2c260bf33d3b2c44a08cffffa5a791a8395fd10e5e65190644495e0e5686",
+          "size": 26110659,
+          "url": "https://api.charmhub.io/api/v1/charms/download/nuH5FwARV8dmAkPiPcVCNtPKwsw0bkgL_208.charm"
+        },
+        "revision": 208,
+        "version": "rev207-1-g4a94c6d"
+      }
+    },
+    {
+      "channel": {
+        "base": {
+          "architecture": "amd64",
+          "channel": "24.04",
+          "name": "ubuntu"
+        },
+        "name": "2/stable",
+        "released-at": "2026-03-16T15:59:37.872465+00:00",
+        "risk": "stable",
+        "track": "2"
+      },
+      "revision": {
+        "attributes": {
+          "framework": "unknown",
+          "language": "unknown"
+        },
+        "bases": [
+          {
+            "architecture": "amd64",
+            "channel": "24.04",
+            "name": "ubuntu"
+          }
+        ],
+        "created-at": "2026-03-11T22:25:38.232274+00:00",
+        "download": {
+          "hash-sha-256": "91cb24e1ae3a1f68a8da8c9c82e554283962e04507a4bf0fe89c46031f641ad9",
+          "size": 19280769,
+          "url": "https://api.charmhub.io/api/v1/charms/download/nuH5FwARV8dmAkPiPcVCNtPKwsw0bkgL_180.charm"
+        },
+        "revision": 180,
+        "version": "bb3eed3"
+      }
+    },
+    {
+      "channel": {
+        "base": {
+          "architecture": "amd64",
+          "channel": "24.04",
+          "name": "ubuntu"
+        },
+        "name": "2/candidate",
+        "released-at": "2026-03-13T15:27:46.938072+00:00",
+        "risk": "candidate",
+        "track": "2"
+      },
+      "revision": {
+        "attributes": {
+          "framework": "unknown",
+          "language": "unknown"
+        },
+        "bases": [
+          {
+            "architecture": "amd64",
+            "channel": "24.04",
+            "name": "ubuntu"
+          }
+        ],
+        "created-at": "2026-03-11T22:25:38.232274+00:00",
+        "download": {
+          "hash-sha-256": "91cb24e1ae3a1f68a8da8c9c82e554283962e04507a4bf0fe89c46031f641ad9",
+          "size": 19280769,
+          "url": "https://api.charmhub.io/api/v1/charms/download/nuH5FwARV8dmAkPiPcVCNtPKwsw0bkgL_180.charm"
+        },
+        "revision": 180,
+        "version": "bb3eed3"
+      }
+    },
+    {
+      "channel": {
+        "base": {
+          "architecture": "amd64",
+          "channel": "24.04",
+          "name": "ubuntu"
+        },
+        "name": "2/beta",
+        "released-at": "2026-03-13T15:27:34.475290+00:00",
+        "risk": "beta",
+        "track": "2"
+      },
+      "revision": {
+        "attributes": {
+          "framework": "unknown",
+          "language": "unknown"
+        },
+        "bases": [
+          {
+            "architecture": "amd64",
+            "channel": "24.04",
+            "name": "ubuntu"
+          }
+        ],
+        "created-at": "2026-03-11T22:25:38.232274+00:00",
+        "download": {
+          "hash-sha-256": "91cb24e1ae3a1f68a8da8c9c82e554283962e04507a4bf0fe89c46031f641ad9",
+          "size": 19280769,
+          "url": "https://api.charmhub.io/api/v1/charms/download/nuH5FwARV8dmAkPiPcVCNtPKwsw0bkgL_180.charm"
+        },
+        "revision": 180,
+        "version": "bb3eed3"
+      }
+    },
+    {
+      "channel": {
+        "base": {
+          "architecture": "amd64",
+          "channel": "24.04",
+          "name": "ubuntu"
+        },
+        "name": "2/edge",
+        "released-at": "2026-03-11T22:26:06.836604+00:00",
+        "risk": "edge",
+        "track": "2"
+      },
+      "revision": {
+        "attributes": {
+          "framework": "unknown",
+          "language": "unknown"
+        },
+        "bases": [
+          {
+            "architecture": "amd64",
+            "channel": "24.04",
+            "name": "ubuntu"
+          }
+        ],
+        "created-at": "2026-03-11T22:25:38.232274+00:00",
+        "download": {
+          "hash-sha-256": "91cb24e1ae3a1f68a8da8c9c82e554283962e04507a4bf0fe89c46031f641ad9",
+          "size": 19280769,
+          "url": "https://api.charmhub.io/api/v1/charms/download/nuH5FwARV8dmAkPiPcVCNtPKwsw0bkgL_180.charm"
+        },
+        "revision": 180,
+        "version": "bb3eed3"
+      }
+    },
+    {
+      "channel": {
+        "base": {
+          "architecture": "amd64",
+          "channel": "20.04",
+          "name": "ubuntu"
+        },
+        "name": "1/stable",
+        "released-at": "2025-10-10T22:26:26.640874+00:00",
+        "risk": "stable",
+        "track": "1"
+      },
+      "revision": {
+        "attributes": {
+          "framework": "operator",
+          "language": "python"
+        },
+        "bases": [
+          {
+            "architecture": "amd64",
+            "channel": "20.04",
+            "name": "ubuntu"
+          }
+        ],
+        "created-at": "2025-08-21T04:00:34.530850+00:00",
+        "download": {
+          "hash-sha-256": "cf84e4d50f7a2b3de4e083c0c0c324a48e16d1a8701a16cf8a2495f23788c140",
+          "size": 27086797,
+          "url": "https://api.charmhub.io/api/v1/charms/download/nuH5FwARV8dmAkPiPcVCNtPKwsw0bkgL_160.charm"
+        },
+        "revision": 160,
+        "version": "rev151-8-g6624bd3"
+      }
+    },
+    {
+      "channel": {
+        "base": {
+          "architecture": "amd64",
+          "channel": "20.04",
+          "name": "ubuntu"
+        },
+        "name": "1/candidate",
+        "released-at": "2025-10-10T22:26:12.700091+00:00",
+        "risk": "candidate",
+        "track": "1"
+      },
+      "revision": {
+        "attributes": {
+          "framework": "operator",
+          "language": "python"
+        },
+        "bases": [
+          {
+            "architecture": "amd64",
+            "channel": "20.04",
+            "name": "ubuntu"
+          }
+        ],
+        "created-at": "2025-08-21T04:00:34.530850+00:00",
+        "download": {
+          "hash-sha-256": "cf84e4d50f7a2b3de4e083c0c0c324a48e16d1a8701a16cf8a2495f23788c140",
+          "size": 27086797,
+          "url": "https://api.charmhub.io/api/v1/charms/download/nuH5FwARV8dmAkPiPcVCNtPKwsw0bkgL_160.charm"
+        },
+        "revision": 160,
+        "version": "rev151-8-g6624bd3"
+      }
+    },
+    {
+      "channel": {
+        "base": {
+          "architecture": "amd64",
+          "channel": "20.04",
+          "name": "ubuntu"
+        },
+        "name": "1/beta",
+        "released-at": "2025-10-10T22:26:04.363319+00:00",
+        "risk": "beta",
+        "track": "1"
+      },
+      "revision": {
+        "attributes": {
+          "framework": "operator",
+          "language": "python"
+        },
+        "bases": [
+          {
+            "architecture": "amd64",
+            "channel": "20.04",
+            "name": "ubuntu"
+          }
+        ],
+        "created-at": "2025-08-21T04:00:34.530850+00:00",
+        "download": {
+          "hash-sha-256": "cf84e4d50f7a2b3de4e083c0c0c324a48e16d1a8701a16cf8a2495f23788c140",
+          "size": 27086797,
+          "url": "https://api.charmhub.io/api/v1/charms/download/nuH5FwARV8dmAkPiPcVCNtPKwsw0bkgL_160.charm"
+        },
+        "revision": 160,
+        "version": "rev151-8-g6624bd3"
+      }
+    },
+    {
+      "channel": {
+        "base": {
+          "architecture": "amd64",
+          "channel": "20.04",
+          "name": "ubuntu"
+        },
+        "name": "1/edge",
+        "released-at": "2025-10-10T21:35:32.959239+00:00",
+        "risk": "edge",
+        "track": "1"
+      },
+      "revision": {
+        "attributes": {
+          "framework": "operator",
+          "language": "python"
+        },
+        "bases": [
+          {
+            "architecture": "amd64",
+            "channel": "20.04",
+            "name": "ubuntu"
+          }
+        ],
+        "created-at": "2025-08-21T04:00:34.530850+00:00",
+        "download": {
+          "hash-sha-256": "cf84e4d50f7a2b3de4e083c0c0c324a48e16d1a8701a16cf8a2495f23788c140",
+          "size": 27086797,
+          "url": "https://api.charmhub.io/api/v1/charms/download/nuH5FwARV8dmAkPiPcVCNtPKwsw0bkgL_160.charm"
+        },
+        "revision": 160,
+        "version": "rev151-8-g6624bd3"
+      }
+    }
+  ],
+  "default-release": {
+    "channel": {
+      "base": {
+        "architecture": "amd64",
+        "channel": "26.04",
+        "name": "ubuntu"
+      },
+      "name": "12.4/stable",
+      "released-at": "2026-09-02T12:50:10.144623+00:00",
+      "risk": "stable",
+      "track": "12.4"
+    },
+    "resources": [
+      {
+        "created-at": "2026-06-25T15:54:54.920897",
+        "description": "upstream docker image for Grafana",
+        "download": {
+          "hash-sha-256": "9178cf0d521f0dd3d343f45adc5811cddfb5dfc00c738c31afb7a15191d9dfb1",
+          "hash-sha-384": "be787feb0b486ba96386a9423501e14b2e83d39a3f8dc7213a869d07a8fca6adc0efc6d88015440af695bf871a2ce9ef",
+          "hash-sha-512": "4dafce1ae557c2b52a5139c1eac735c267a9c93d374d44c94a3c8095719ffe13b315321d27be6dee13432dd73718b6d5602c70952a0b3ee7e8df445194c85ae9",
+          "hash-sha3-384": "c4b1247d525337426d71347f77b4f4cfb460d5fb29c629528ae0998fce1e623f09dcdcf270cdbc5c9ca3c3093abcc829",
+          "size": 505,
+          "url": "https://api.charmhub.io/api/v1/resources/download/charm_nuH5FwARV8dmAkPiPcVCNtPKwsw0bkgL.grafana-image_79"
+        },
+        "filename": "",
+        "name": "grafana-image",
+        "revision": 79,
+        "type": "oci-image"
+      }
+    ],
+    "revision": {
+      "actions-yaml": "get-admin-password:\n  description: 'Get the dashboard url and initial admin password for the Grafana web\n    interface. Initial\n\n    admin password is generated at charm deployment time. If the password has been\n    changed,\n\n    a notice of that fact will be returned by this action instead.\n\n    '\n",
+      "attributes": {
+        "framework": "unknown",
+        "language": "unknown"
+      },
+      "bases": [
+        {
+          "architecture": "amd64",
+          "channel": "26.04",
+          "name": "ubuntu"
+        }
+      ],
+      "bundle-yaml": "{}\n",
+      "config-yaml": "options:\n  admin_roles:\n    description: 'Unquoted, comma-separated list of groups oAuth2/OIDC that should\n      be granted admin\n\n      privileges in Grafana. Only applicable when using oAuth2/OIDC authentication.\n\n\n      Example:\n\n      juju config grafana admin_roles=\"admin,another-group\"\n\n      '\n    type: string\n  admin_user:\n    default: admin\n    description: The Grafana administrative user\n    type: string\n  allow_anonymous_access:\n    default: false\n    description: 'Whether Grafana should allow anonymous access to dashboards. Unless\n\n      you have some other authentication mechanism in front of your deployment,\n\n      you likely do not want to enable this.\n\n      '\n    type: boolean\n  allow_embedding:\n    default: false\n    description: 'Whether Grafana should allow embedding dashboards using iframes.\n      Unless\n\n      you have a clear reason for doing so, you likely do not want to enable this.\n\n      '\n    type: boolean\n  cpu:\n    description: 'K8s cpu resource limit, e.g. \"1\" or \"500m\". Default is unset (no\n      limit). This value is used\n\n      for the \"limits\" portion of the resource requirements (the \"requests\" portion\n      is\n\n      automatically deduced from it).\n\n      See https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/\n\n      '\n    type: string\n  custom_config:\n    description: \"Additional configuration options to be added to grafana.ini.\\nThese\\\n      \\ options will be appended to the grafana.ini file, allowing for custom configuration.\\n\\\n      Note that this config option accepts only a small subset of the grafana.ini\\\n      \\ file.\\nCurrently supported sections:\\n- [smtp], ref: https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#smtp\\n\\\n      \\nTo set this configuration, create a local INI file and pass it using the @file\\\n      \\ syntax:\\n\\n  juju config grafana-k8s custom_config=@smtp-config.ini\\n\\nSensitive\\\n      \\ values can be referenced from Juju secrets using a `secret://<secret-id>/<key>`\\n\\\n      URL in place of the plaintext value. The secret must exist in the same model\\\n      \\ and be\\ngranted to the charm with `juju grant-secret`. For example:\\n\\n  juju\\\n      \\ add-secret smtp-config password=\\\"my-smtp-password\\\"\\n  juju grant-secret\\\n      \\ smtp-config grafana-k8s\\n\\n  cat > smtp-config.ini <<EOF\\n  [smtp]\\n  enabled\\\n      \\ = true\\n  password = secret://<secret-id>/password\\n  EOF\\n  juju config grafana-k8s\\\n      \\ custom_config=@smtp-config.ini\\n\"\n    type: string\n  datasource_query_timeout:\n    default: 300\n    description: 'The default timeout for querying a Grafana datasource. Each datasource\n      can\n\n      also configure its own preferred timeout value through relation data. If the\n\n      value configured through relation data is larger than datasource_query_timeout\n\n      then that value is left unchanged. The value of this configuration option must\n\n      be a positive integer representing the maximum number of seconds Grafana will\n\n      wait for a datasource to respond to a query.\n\n      '\n    type: int\n  editor_roles:\n    description: 'Unquoted, comma-separated list of groups oAuth2/OIDC that should\n      be granted editor\n\n      privileges in Grafana. Only applicable when using oAuth2/OIDC authentication.\n\n\n      Example:\n\n      juju config grafana editor_roles=\"devs,another-group\"\n\n      '\n    type: string\n  enable_auto_assign_org:\n    default: true\n    description: 'Set to true to automatically add new users to the main organization\n      (id 1). When set to\n\n      false, new users automatically cause a new organization to be created for that\n      new user.\n\n      '\n    type: boolean\n  log_level:\n    default: info\n    description: \"Logging level for Grafana. Options are \\u201Cdebug\\u201D, \\u201C\\\n      info\\u201D,\\n\\u201Cwarn\\u201D, \\u201Cerror\\u201D, and \\u201Ccritical\\u201D.\\n\"\n    type: string\n  memory:\n    description: 'K8s memory resource limit, e.g. \"1Gi\". Default is unset (no limit).\n      This value is used\n\n      for the \"limits\" portion of the resource requirements (the \"requests\" portion\n      is\n\n      automatically deduced from it).\n\n      See https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/\n\n      '\n    type: string\n  reporting_enabled:\n    default: true\n    description: 'When disabled, Grafana will be configured to not send anonymous\n      usage statistics to stats.grafana.org, nor\n\n      periodically check for updates.\n\n      It is very helpful to the Grafana project, so please leave this enabled.\n\n\n      When enabled, Grafana will use its default values for analytics.\n\n\n      Ref: https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#analytics\n\n      '\n    type: boolean\n  web_external_url:\n    default: ''\n    description: 'DEPRECATED. This config option is no longer used, in favor of \"skipPrefix\".\n\n\n      The URL under which Grafana is externally reachable (for example,\n\n      if Grafana is served via a reverse proxy).\n\n\n      Used for generating relative and absolute links back to\n\n      Grafana itself. If the URL has a path portion, it will be used to\n\n      prefix all HTTP endpoints served by Grafana.\n\n\n      If omitted, relevant URL components will be derived automatically.\n\n\n      If provided, this should be a complete URI, including scheme, or a\n\n      fully qualified subpath starting with `/`.\n\n\n      If Grafana is being served directly from the root of a fully-qualified\n\n      host or a bare A record, this may be omitted.\n\n      '\n    type: string\n",
+      "created-at": "2026-09-01T16:07:19.323495+00:00",
+      "download": {
+        "hash-sha-256": "2c3d51eb199191d11573645a01ec701cc67d10fe7bfc295601944c53feb213b9",
+        "size": 25995774,
+        "url": "https://api.charmhub.io/api/v1/charms/download/nuH5FwARV8dmAkPiPcVCNtPKwsw0bkgL_200.charm"
+      },
+      "metadata-yaml": "assumes:\n- k8s-api\n- juju >= 3.6\ncontainers:\n  grafana:\n    mounts:\n    - location: /var/lib/grafana\n      storage: database\n    resource: grafana-image\ndescription: \"Grafana K8s is a Juju charm that deploys and manages Grafana on Kubernetes.\\\n  \\ It provides a\\nweb interface for visualizing and exploring observability data\\\n  \\ and is a core component\\nof the Canonical Observability Stack (COS):\\nhttps://documentation.ubuntu.com/observability\\n\\\n  \\nDatasources such as Prometheus and Loki, as well as dashboards bundled by other\\\n  \\ charms, are\\nautomatically registered through Juju relations \\u2014 no manual\\\n  \\ configuration required.\\n\\nKey features:\\n\\n- Automatic datasource and dashboard\\\n  \\ registration via Juju relations with charms such as\\n  Prometheus, Loki, and others\\\n  \\ in the COS ecosystem.\\n- High-availability support using a PostgreSQL database\\\n  \\ backend.\\n- OAuth2/OIDC authentication via the oauth relation, with configurable\\\n  \\ role mappings.\\n- TLS support via the certificates relation.\\n- Ingress support\\\n  \\ for external access through reverse proxies such as Traefik.\\n- Built-in Prometheus\\\n  \\ alert rules for self-monitoring.\\n- Distributed tracing support via integration\\\n  \\ with Tempo.\\n- Configurable Kubernetes resource limits for CPU and memory.\\n\"\ndocs: https://documentation.ubuntu.com/observability/latest/\nissues:\n- https://github.com/canonical/grafana-k8s-operator/issues\nname: grafana-k8s\npeers:\n  grafana:\n    interface: grafana_peers\n  replicas:\n    interface: grafana_replicas\nprovides:\n  grafana-metadata:\n    description: 'Provides metadata about the grafana instance, such as its URL and\n      ID.\n\n      '\n    interface: grafana_metadata\n    optional: true\n  metrics-endpoint:\n    description: Links to grafana's own `/metrics` endpoint.\n    interface: prometheus_scrape\n    optional: true\n  profiling-endpoint:\n    description: 'Links to grafana''s pprof endpoint. Can be used to integrate with\n      parca to\n\n      profile the grafana server process.\n\n      '\n    interface: parca_scrape\n    optional: true\n  provide-cmr-mesh:\n    description: 'Access a cross-model application from this charm via the service\n      mesh.\n\n      This relation provides additional data required by the service mesh to enforce\n      cross-model authorization policies.\n\n      '\n    interface: cross_model_mesh\nrequires:\n  catalogue:\n    interface: catalogue\n    optional: true\n  certificates:\n    description: Certificate and key files for Grafana to use with TLS.\n    interface: tls-certificates\n    limit: 1\n    optional: true\n  charm-tracing:\n    description: 'Enables sending charm traces to a distributed tracing backend such\n      as Tempo.\n\n      '\n    interface: tracing\n    limit: 1\n    optional: true\n  grafana-auth:\n    interface: grafana_auth\n    optional: true\n  grafana-dashboard:\n    interface: grafana_dashboard\n    optional: true\n  grafana-source:\n    interface: grafana_datasource\n    optional: true\n  ingress:\n    interface: ingress\n    limit: 1\n    optional: true\n  logging:\n    description: 'Receives Loki''s push api endpoint address to push logs to, and\n      forwards charm''s built-in alert rules to Loki.\n\n      '\n    interface: loki_push_api\n    optional: true\n  oauth:\n    description: 'Receive oauth server''s info and a set of client credentials.\n\n      This relation can be used to integrate grafana with an oAuth2/OIDC Provider.\n\n      '\n    interface: oauth\n    limit: 1\n    optional: true\n  pgsql:\n    description: 'This endpoint allows using a PostgreSQL database backend for data\n      storage.\n\n      Using this endpoint overrides Grafana''s usage of the embedded sqlite3 database\n\n      for data storage and is required for more than one Grafana unit.\n\n      '\n    interface: postgresql_client\n    limit: 1\n    optional: true\n  receive-ca-cert:\n    description: 'Receive a CA cert for grafana to trust.\n\n      This relation can be used with a local CA to obtain the CA cert that was used\n      to sign proxied\n\n      endpoints.\n\n      '\n    interface: certificate_transfer\n    optional: true\n  require-cmr-mesh:\n    description: 'Allow a cross-model application access to this charm via the service\n      mesh.\n\n      This relation provides additional data required by the service mesh to enforce\n      cross-model authorization policies.\n\n      '\n    interface: cross_model_mesh\n  service-mesh:\n    description: 'Subscribe this charm to a service mesh and create authorization\n      policies.\n\n      '\n    interface: service_mesh\n    limit: 1\n  workload-tracing:\n    description: 'Enables sending workload traces to a distributed tracing backend\n      such as Tempo.\n\n      '\n    interface: tracing\n    limit: 1\n    optional: true\nresources:\n  grafana-image:\n    description: upstream docker image for Grafana\n    type: oci-image\n    upstream-source: docker.io/ubuntu/grafana@sha256:1af2d3519cc3515708f855909a3a5329404079fd50d1cf6b69a7de40067447c4\nsource:\n- https://github.com/canonical/grafana-k8s-operator\nstorage:\n  database:\n    type: filesystem\nsummary: Data visualization and observability with Grafana\nwebsite:\n- https://charmhub.io/grafana-k8s\n",
+      "relations": {
+        "provides": {
+          "grafana-metadata": {
+            "interface": "grafana_metadata"
+          },
+          "metrics-endpoint": {
+            "interface": "prometheus_scrape"
+          },
+          "profiling-endpoint": {
+            "interface": "parca_scrape"
+          },
+          "provide-cmr-mesh": {
+            "interface": "cross_model_mesh"
+          }
+        },
+        "requires": {
+          "catalogue": {
+            "interface": "catalogue"
+          },
+          "certificates": {
+            "interface": "tls-certificates"
+          },
+          "charm-tracing": {
+            "interface": "tracing"
+          },
+          "grafana-auth": {
+            "interface": "grafana_auth"
+          },
+          "grafana-dashboard": {
+            "interface": "grafana_dashboard"
+          },
+          "grafana-source": {
+            "interface": "grafana_datasource"
+          },
+          "ingress": {
+            "interface": "ingress"
+          },
+          "logging": {
+            "interface": "loki_push_api"
+          },
+          "oauth": {
+            "interface": "oauth"
+          },
+          "pgsql": {
+            "interface": "postgresql_client"
+          },
+          "receive-ca-cert": {
+            "interface": "certificate_transfer"
+          },
+          "require-cmr-mesh": {
+            "interface": "cross_model_mesh"
+          },
+          "service-mesh": {
+            "interface": "service_mesh"
+          },
+          "workload-tracing": {
+            "interface": "tracing"
+          }
+        }
+      },
+      "revision": 200,
+      "version": "tf-12.4.3-2-g8187475"
+    }
+  },
+  "id": "nuH5FwARV8dmAkPiPcVCNtPKwsw0bkgL",
+  "name": "grafana-k8s",
+  "result": {
+    "categories": [],
+    "deployable-on": [
+      "kubernetes"
+    ],
+    "media": [
+      {
+        "height": null,
+        "type": "icon",
+        "url": "https://api.charmhub.io/api/v1/media/download/charm_nuH5FwARV8dmAkPiPcVCNtPKwsw0bkgL_icon_617129799faf7fbbe368793260a2f5590b52d1640dab5efc73e98cefcdec688e.png",
+        "width": null
+      }
+    ],
+    "publisher": {
+      "display-name": "Canonical Observability",
+      "id": "YxSUHAediGjeTqb4HzzVHr2zeUOjpG86",
+      "username": "observability",
+      "validation": "unproven"
+    },
+    "title": "Grafana",
+    "unlisted": false
+  },
+  "type": "charm"
+}

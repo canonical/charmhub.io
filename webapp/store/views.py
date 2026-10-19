@@ -834,16 +834,45 @@ def details_resource(entity_name, resource_name):
     resource["size"] = humanize.naturalsize(resource["download"]["size"])
     resource["updated"] = logic.convert_date(resource["created-at"])
 
+    checksum = resource["download"].get("hash-sha-256", "")
+    resource["checksum"] = checksum[:12]
+    resource["checksum_full"] = checksum
+
     for revision in revisions:
         revision["size"] = humanize.naturalsize(revision["download"]["size"])
         revision["updated"] = logic.convert_date(revision["created-at"])
+        revision_checksum = revision["download"].get("hash-sha-256", "")
+        revision["checksum"] = revision_checksum[:12]
+        revision["checksum_full"] = revision_checksum
+        revision["is_default"] = revision["revision"] == resource["revision"]
+        # TODO: charm channel/revision per resource revision is not
+        # available from the API yet
+        revision["charm_channel"] = "—"
+        revision["charm_revision"] = "—"
+
+    current_channel = channel_request
+    if not current_channel:
+        release_channel = package["default-release"]["channel"]
+        current_channel = (
+            f"{release_channel['track']}/{release_channel['risk']}"
+        )
+
+    deploy_command = (
+        f"juju deploy {package['name']} --channel {channel_request} "
+        f"--trust --resources {resource_name}=<resource revision>"
+    )
 
     return render_template(
         "details/resources.html",
         package=package,
+        # used for navigation
         channel_requested=channel_request,
+        # used for displaying the currently selected channel name
+        current_channel=current_channel,
         resource=resource,
         revisions=revisions,
+        show_revisions_limit=10,
+        deploy_command=deploy_command,
     )
 
 

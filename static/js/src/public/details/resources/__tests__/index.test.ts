@@ -1,140 +1,100 @@
 import { init } from "../index";
-import { fireEvent } from "@testing-library/dom";
+import { fireEvent, waitFor } from "@testing-library/dom";
 
-describe("Panel Toggling Tests", () => {
-  let originalBodyHTML: string;
+function renderRows(total: number, limit: number) {
+  return Array.from(
+    { length: total },
+    (_, i) =>
+      `<tr class="js-revision-row${i >= limit ? " u-hide" : ""}"><td>${i}</td></tr>`
+  ).join("");
+}
 
-  beforeEach(() => {
-    originalBodyHTML = document.body.innerHTML;
-
-    document.body.innerHTML = `
-      <button class="js-panel-toggle" aria-controls="panel1">Toggle Panel 1</button>
-      <div id="panel1" class="p-inline-list__panel" role="tabpanel">
-        <input type="text" readonly />
-      </div>
-
-      <button class="js-panel-toggle" aria-controls="panel2">Toggle Panel 2</button>
-      <div id="panel2" class="p-inline-list__panel" role="tabpanel">
-        <input type="text" readonly />
-      </div>
-    `;
-
-    init();
-  });
-
+describe("resources page", () => {
   afterEach(() => {
-    document.body.innerHTML = originalBodyHTML;
+    document.body.innerHTML = "";
     vi.clearAllMocks();
   });
 
-  describe("handleTogglePanels function", () => {
-    test("should open the panel and set role when button is clicked", () => {
-      const toggleButton = document.querySelector(
-        'button[aria-controls="panel1"]'
-      ) as HTMLElement;
-      const panel = document.getElementById("panel1") as HTMLElement;
-      const panelInput = panel.querySelector("input[readonly]") as HTMLElement;
+  describe("copy buttons", () => {
+    const COPIED = "Copied";
+    const COPY_DATA = "abc123";
+    const LABEL = "Copy checksum";
 
-      fireEvent.click(toggleButton);
+    function setup() {
+      document.body.innerHTML = `
+        <button data-js="copy" data-copy="abc123" aria-label="Copy checksum">
+          <i class="p-icon--copy"></i>
+        </button>`;
+      init();
+      return document.querySelector("button") as HTMLButtonElement;
+    }
 
-      expect(panel.classList.contains("is-open")).toBe(true);
-      expect(toggleButton.classList.contains("is-active")).toBe(true);
-      expect(panel.getAttribute("role")).toBe("dialog");
+    test("copies the data-copy value and shows feedback", async () => {
+      const writeText: ReturnType<typeof vi.fn> = vi
+        .fn()
+        .mockResolvedValue(undefined);
+      Object.assign(navigator, { clipboard: { writeText } });
 
-      expect(document.activeElement).toBe(panelInput);
+      const button = setup();
+      fireEvent.click(button.querySelector("i") as HTMLElement);
+
+      expect(writeText).toHaveBeenCalledWith(COPY_DATA);
+      await waitFor(() =>
+        expect(button.getAttribute("aria-label")).toBe(COPIED)
+      );
+      expect(button.querySelector("i")?.className).toBe("p-icon--success");
     });
 
-    test("should close the panel and remove role when button is clicked again", () => {
-      const toggleButton = document.querySelector(
-        'button[aria-controls="panel1"]'
-      ) as HTMLElement;
-      const panel = document.getElementById("panel1") as HTMLElement;
+    test("button goes back to original state after 2 secs", async () => {
+      vi.useFakeTimers();
 
-      fireEvent.click(toggleButton);
+      const button = setup();
+      fireEvent.click(button.querySelector("i") as HTMLElement);
 
-      fireEvent.click(toggleButton);
+      // just before timeout that sets button back to its original state
+      await vi.advanceTimersByTimeAsync(1999);
+      expect(button.getAttribute("aria-label")).toBe(COPIED);
 
-      expect(panel.classList.contains("is-open")).toBe(false);
-      expect(toggleButton.classList.contains("is-active")).toBe(false);
-      expect(panel.getAttribute("role")).toBe(null);
+      // timeout expires
+      await vi.advanceTimersByTimeAsync(1);
+      expect(button.getAttribute("aria-label")).toBe(LABEL);
+      expect(button.querySelector("i")?.className).toBe("p-icon--copy");
+    });
+  });
+
+  describe("show more revisions", () => {
+    function setup(total: number, limit = 10) {
+      document.body.innerHTML = `
+        <table><tbody>${renderRows(total, limit)}</tbody></table>
+        <span class="js-revisions-count">${Math.min(total, limit)}</span>
+        <button class="js-show-more-revisions" data-limit="${limit}">Show more</button>`;
+      init();
+      return document.querySelector(
+        ".js-show-more-revisions"
+      ) as HTMLButtonElement;
+    }
+
+    test("reveals the next batch and updates the count and label", () => {
+      const button = setup(25);
+      fireEvent.click(button);
+
+      expect(
+        document.querySelectorAll(".js-revision-row:not(.u-hide)")
+      ).toHaveLength(20);
+      expect(document.querySelector(".js-revisions-count")?.textContent).toBe(
+        "20"
+      );
+      expect(button.textContent).toBe("Show 5 more");
     });
 
-    test("should close the panel when Escape key is pressed", () => {
-      const toggleButton = document.querySelector(
-        'button[aria-controls="panel1"]'
-      ) as HTMLElement;
-      const panel = document.getElementById("panel1") as HTMLElement;
+    test("removes the button when all revisions are visible", () => {
+      const button = setup(15);
+      fireEvent.click(button);
 
-      fireEvent.click(toggleButton);
-
-      fireEvent.keyDown(document, { keyCode: 27 });
-
-      expect(panel.classList.contains("is-open")).toBe(false);
-      expect(toggleButton.classList.contains("is-active")).toBe(false);
-    });
-
-    test("should close the panel when Tab key is pressed", () => {
-      const toggleButton = document.querySelector(
-        'button[aria-controls="panel1"]'
-      ) as HTMLElement;
-      const panel = document.getElementById("panel1") as HTMLElement;
-
-      fireEvent.click(toggleButton);
-
-      fireEvent.keyDown(document, { keyCode: 9 });
-
-      expect(panel.classList.contains("is-open")).toBe(false);
-      expect(toggleButton.classList.contains("is-active")).toBe(false);
-    });
-
-    test("should close panel when clicking outside", () => {
-      const toggleButton = document.querySelector(
-        'button[aria-controls="panel1"]'
-      ) as HTMLElement;
-      const panel = document.getElementById("panel1") as HTMLElement;
-
-      fireEvent.click(toggleButton);
-
-      fireEvent.click(document.body);
-
-      expect(panel.classList.contains("is-open")).toBe(false);
-      expect(toggleButton.classList.contains("is-active")).toBe(false);
-    });
-
-    test("should not close panel when clicking inside", () => {
-      const toggleButton = document.querySelector(
-        'button[aria-controls="panel1"]'
-      ) as HTMLElement;
-      const panel = document.getElementById("panel1") as HTMLElement;
-      const panelInput = panel.querySelector("input[readonly]") as HTMLElement;
-
-      fireEvent.click(toggleButton);
-
-      fireEvent.click(panelInput);
-
-      expect(panel.classList.contains("is-open")).toBe(true);
-      expect(toggleButton.classList.contains("is-active")).toBe(true);
-    });
-
-    test("should open different panel and close the previous one", () => {
-      const toggleButton1 = document.querySelector(
-        'button[aria-controls="panel1"]'
-      ) as HTMLElement;
-      const panel1 = document.getElementById("panel1") as HTMLElement;
-
-      const toggleButton2 = document.querySelector(
-        'button[aria-controls="panel2"]'
-      ) as HTMLElement;
-      const panel2 = document.getElementById("panel2") as HTMLElement;
-
-      fireEvent.click(toggleButton1);
-      expect(panel1.classList.contains("is-open")).toBe(true);
-
-      fireEvent.click(toggleButton2);
-      expect(panel2.classList.contains("is-open")).toBe(true);
-
-      expect(panel1.classList.contains("is-open")).toBe(false);
-      expect(toggleButton1.classList.contains("is-active")).toBe(false);
+      expect(document.querySelectorAll(".js-revision-row.u-hide")).toHaveLength(
+        0
+      );
+      expect(document.querySelector(".js-show-more-revisions")).toBeNull();
     });
   });
 });

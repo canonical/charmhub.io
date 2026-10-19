@@ -105,8 +105,11 @@ html {
 @include vf-p-icon-repository;
 @include vf-p-icon-fork;
 @include vf-p-icon-begin-downloading;
+@include vf-p-icon-pin;
 @import "charmhub_p-navigation";
 @include charmhub-p-navigation;
+@import "charmhub_p-code-snippet";
+@include charmhub-p-code-snippet;
 
 
 // Remove table row borders
