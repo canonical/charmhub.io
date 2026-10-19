@@ -1,3 +1,5 @@
+import contextvars
+from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import urlparse
 
 import humanize
@@ -763,23 +765,48 @@ def add_required_fields(metadata_relations, relations):
 def details_resources(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request, FIELDS)
+    resources = package["default-release"]["resources"]
 
-    # /resources redirect to the first resource
-    if package["default-release"]["resources"]:
-        name = package["default-release"]["resources"][0]["name"]
-        return redirect(
-            url_for(
-                ".details_resource",
-                entity_name=entity_name,
-                resource_name=name,
-            )
-        )
-    else:
+    if not resources:
         return render_template(
             "details/no-resources.html",
             package=package,
             channel_requested=channel_request,
         )
+
+    current_channel = channel_request
+    if not current_channel:
+        release_channel = package["default-release"]["channel"]
+        current_channel = f"{release_channel['track']}/{release_channel['risk']}"
+
+    def fetch(resource):
+        return _get_resource_details(
+            entity_name, package, resource, current_channel
+        )
+
+    # Fetch each resource's details concurrently; map() preserves order.
+    # Each worker runs inside a copy of the request's context so
+    # OpenTelemetry spans for the outgoing calls stay under this request.
+    with ThreadPoolExecutor(max_workers=min(len(resources), 8)) as executor:
+        resources_details = list(
+            executor.map(
+                lambda resource: contextvars.copy_context().run(
+                    fetch, resource
+                ),
+                resources,
+            )
+        )
+
+    return render_template(
+        "details/resources.html",
+        package=package,
+        # used for navigation
+        channel_requested=channel_request,
+        # used for displaying the currently selected channel name
+        current_channel=current_channel,
+        resources=resources_details,
+        show_revisions_limit=10,
+    )
 
 
 @trace_function
@@ -791,43 +818,39 @@ def details_resources(entity_name):
 @store_maintenance
 @redirect_uppercase_to_lowercase
 def details_resource(entity_name, resource_name):
+    # All resources are now displayed on a single page; keep old links
+    # working by redirecting to the matching section.
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request, FIELDS)
-    resources = package["default-release"]["resources"]
-
-    if not resources:
-        return redirect(url_for(".details_resources", entity_name=entity_name))
-
-    resource = next(
-        (item for item in resources if item["name"] == resource_name), None
+    return redirect(
+        url_for(
+            ".details_resources",
+            entity_name=entity_name,
+            channel=channel_request,
+            _anchor=resource_name,
+        )
     )
 
-    if not resource:
-        return redirect(url_for(".details_resources", entity_name=entity_name))
+
+def _get_resource_details(entity_name, package, resource, current_channel):
+    resource_name = resource["name"]
 
     # Get OCI image details
     if resource["type"] == "oci-image":
         oci_details = publisher_gateway.process_response(
             publisher_gateway.session.get(resource["download"]["url"])
         )
-        resource["image_name"], resource["digest"] = oci_details[
-            "ImageName"
-        ].split("@")
+        resource["image_name"], resource["digest"] = oci_details["ImageName"].split("@")
         resource["short_digest"] = resource["digest"].split(":")[1][:12]
 
     # Get upstream-source (if available)
-    metadata_resources = package["store_front"]["metadata"].get(
-        "resources", {}
-    )
+    metadata_resources = package["store_front"]["metadata"].get("resources", {})
     if resource_name in metadata_resources:
         upstream = metadata_resources[resource_name].get("upstream-source")
         resource["upstream_source"] = upstream
     else:
         resource["upstream_source"] = None
 
-    revisions = device_gateway.get_resource_revisions(
-        entity_name, resource_name
-    )
+    revisions = device_gateway.get_resource_revisions(entity_name, resource_name)
     revisions = sorted(revisions, key=lambda k: k["revision"], reverse=True)
 
     # Humanize sizes
@@ -850,30 +873,16 @@ def details_resource(entity_name, resource_name):
         revision["charm_channel"] = "—"
         revision["charm_revision"] = "—"
 
-    current_channel = channel_request
-    if not current_channel:
-        release_channel = package["default-release"]["channel"]
-        current_channel = (
-            f"{release_channel['track']}/{release_channel['risk']}"
-        )
-
     deploy_command = (
-        f"juju deploy {package['name']} --channel {channel_request} "
+        f"juju deploy {package['name']} --channel {current_channel} "
         f"--trust --resources {resource_name}=<resource revision>"
     )
 
-    return render_template(
-        "details/resources.html",
-        package=package,
-        # used for navigation
-        channel_requested=channel_request,
-        # used for displaying the currently selected channel name
-        current_channel=current_channel,
-        resource=resource,
-        revisions=revisions,
-        show_revisions_limit=10,
-        deploy_command=deploy_command,
-    )
+    return {
+        "resource": resource,
+        "revisions": revisions,
+        "deploy_command": deploy_command,
+    }
 
 
 @trace_function

@@ -96,5 +96,30 @@ describe("resources page", () => {
       );
       expect(document.querySelector(".js-show-more-revisions")).toBeNull();
     });
+
+    test("only affects the revisions of its own resource", () => {
+      const section = (id: string) => `
+        <section class="js-resource" id="${id}">
+          <table><tbody>${renderRows(25, 10)}</tbody></table>
+          <span class="js-revisions-count">10</span>
+          <button class="js-show-more-revisions" data-limit="10">Show more</button>
+        </section>`;
+      document.body.innerHTML = section("a") + section("b");
+      init();
+
+      fireEvent.click(
+        document.querySelector("#a .js-show-more-revisions") as HTMLElement
+      );
+
+      expect(
+        document.querySelectorAll("#a .js-revision-row:not(.u-hide)")
+      ).toHaveLength(20);
+      expect(
+        document.querySelectorAll("#b .js-revision-row:not(.u-hide)")
+      ).toHaveLength(10);
+      expect(
+        document.querySelector("#b .js-revisions-count")?.textContent
+      ).toBe("10");
+    });
   });
 });

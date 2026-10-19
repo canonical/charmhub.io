@@ -33,7 +33,7 @@ class TestDetailsResource(TestCase):
         mock_details.return_value = copy.deepcopy(sample_package_detail)
         mock_revisions.return_value = [make_revision(83), make_revision(84)]
 
-        response = self.client.get("/test/resources/vault-image")
+        response = self.client.get("/test/resources")
         body = response.get_data(as_text=True)
 
         self.assertEqual(response.status_code, 200)
@@ -52,9 +52,7 @@ class TestDetailsResource(TestCase):
         mock_details.return_value = copy.deepcopy(sample_package_detail)
         mock_revisions.return_value = [make_revision(84)]
 
-        response = self.client.get(
-            "/test/resources/vault-image?channel=2/edge"
-        )
+        response = self.client.get("/test/resources?channel=2/edge")
 
         self.assertIn(
             "default resource revision for 2/edge",
@@ -67,9 +65,17 @@ class TestDetailsResource(TestCase):
         mock_details.return_value = copy.deepcopy(sample_package_detail)
         mock_revisions.return_value = [make_revision(r) for r in range(1, 26)]
 
-        body = self.client.get("/test/resources/vault-image").get_data(
-            as_text=True
-        )
+        body = self.client.get("/test/resources").get_data(as_text=True)
 
         self.assertEqual(body.count("js-revision-row u-hide"), 15)
         self.assertIn("Show 10 more", body)
+
+    def test_single_resource_url_redirects_to_anchor(
+        self, _mock_details, _cache, _mock_revisions, _process, _get
+    ):
+        response = self.client.get("/test/resources/vault-image?channel=2/edge")
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(
+            response.location.endswith("/test/resources?channel=2/edge#vault-image")
+        )

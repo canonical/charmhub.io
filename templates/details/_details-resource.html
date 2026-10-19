@@ -1,0 +1,143 @@
+{% macro copy_button(value, label, classes = '') %}
+<button type="button"
+  class="p-button--base is-dense has-icon u-no-margin--bottom {{ classes }}"
+  data-js="copy"
+  data-copy="{{ value }}"
+  aria-label="Copy {{ label }}"
+  title="Copy {{ label }}"
+>
+  <i class="p-icon--copy" aria-hidden="true"></i>
+</button>
+{% endmacro %}
+
+{#
+  Renders the details and release history of a single resource.
+
+  resource:             processed resource dict
+  revisions:            list of processed revisions for the resource
+  deploy_command:       juju deploy command overriding this resource
+  current_channel:      channel name being displayed
+  show_revisions_limit: number of revisions shown before "Show more"
+#}
+{% macro details_resource(resource, revisions, deploy_command, current_channel, show_revisions_limit) %}
+{% set total_revisions = revisions|length %}
+<section class="p-section js-resource" id="{{ resource.name }}">
+  <div class="p-section--shallow">
+    <h2 class="p-heading--2">{{ resource.name }}</h2>
+    <hr>
+  </div>
+
+  <div class="row">
+    <div class="col-3">
+      <h5>
+        <strong>default resource revision for {{ current_channel }}</strong>
+      </h5>
+    </div>
+    <div class="col-6">
+      <table aria-label="{{ resource.name }} details">
+        <tbody>
+          <tr>
+            <th scope="row">Revision</th>
+            <td>{{ resource.revision }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Updated</th>
+            <td>{{ resource.updated }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Checksum</th>
+            <td>{{ resource.checksum }} {{ copy_button(resource.checksum_full, "checksum") }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Type</th>
+            <td>{% if resource.type == "oci-image" %}OCI Image{% else %}File{% endif %}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      {{ resource.description | markdown | safe }}
+
+      <div class="p-cta-block">
+        {# TODO: replace with the resource credentials download #}
+        <a class="p-button" href="{{ resource.download.url }}" download>Download resource credentials</a>
+        {% if resource.upstream_source %}
+        <a href="{{ resource.upstream_source }}">Upstream source link&nbsp;&rsaquo;</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="p-section--shallow">
+    <div class="row">
+      <div class="col-3">
+        <h3 class="p-heading--5">Release history</h3>
+      </div>
+      <div class="col-6">
+        <p>
+          Developers set and validate a default resource revision for each charm revision.
+          To override the default resource revision ({{ resource.revision }}) for {{ current_channel }},
+          you may use the following command for new deployments (this may select a resource revision that
+          has not been tested with this charm revision):
+        </p>
+        <div class="p-code-snippet" style="position: relative">
+          <pre class="p-code-snippet__block is-wrapped"><code>{{ deploy_command }}</code></pre>
+          {{ copy_button(deploy_command, "deploy command", "p-code-snippet__button") }}
+        </div>
+        <p>
+          Already made a deployment?
+          <a href="https://canonical.com/juju/docs/juju-cli/latest/howto/manage-charm-resources/">
+            Learn how to manage charm resources&nbsp;
+            <i class="p-icon--external-link" aria-hidden="true"></i>
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <table aria-label="{{ resource.name }} release history">
+    <thead>
+      <tr>
+        <th>Resource revision</th>
+        <th>Date</th>
+        <th>Charm channel</th>
+        <th>Charm revision</th>
+        <th>Checksum</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for revision in revisions %}
+      <tr class="js-revision-row{% if loop.index > show_revisions_limit %} u-hide{% endif %}">
+        <td>
+          {% if revision.is_default %}
+          <i class="p-icon--pin" title="Default revision" style="margin-right: 1rem;">Default revision</i>
+          {% else %}
+          <span style="display: inline-block; width: 2rem;"></span>
+          {% endif %}
+          {{ revision.revision }}
+        </td>
+        <td>{{ revision.updated }}</td>
+        <td>{{ revision.charm_channel }}</td>
+        <td>{{ revision.charm_revision }}</td>
+        <td>{{ revision.checksum }}</td>
+        <td>{{ copy_button(revision.checksum_full, "checksum for revision " ~ revision.revision, "u-float-right") }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="u-align--right">
+    <small class="u-text--muted" style="margin-right: 1rem;">
+      Showing <span class="js-revisions-count">{{ [total_revisions, show_revisions_limit] | min }}</span>
+      of {{ total_revisions }} revisions
+    </small>
+    {% if total_revisions > show_revisions_limit %}
+    <button type="button" class="p-button js-show-more-revisions" data-limit="{{ show_revisions_limit }}">
+      Show {{ [total_revisions - show_revisions_limit, show_revisions_limit] | min }} more
+    </button>
+    {% endif %}
+  </div>
+</section>
+{% endmacro %}
