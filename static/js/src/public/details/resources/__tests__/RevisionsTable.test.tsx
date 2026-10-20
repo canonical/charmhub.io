@@ -10,6 +10,7 @@ function makeRevisions(total: number, defaultRevision = total): Revision[] {
     return {
       revision,
       updated: "7 Aug 2024",
+      size: "10 Kb",
       checksum: `checksum-${revision}`,
       checksum_full: `full-checksum-${revision}`,
       is_default: revision === defaultRevision,
@@ -21,6 +22,7 @@ function renderTable(total: number, limit = 10, defaultRevision = total) {
   return render(
     <RevisionsTable
       resourceName="vault-image"
+      resourceType="oci-image"
       revisions={makeRevisions(total, defaultRevision)}
       limit={limit}
     />

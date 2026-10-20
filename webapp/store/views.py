@@ -789,12 +789,11 @@ def details_resources(entity_name):
     # Each worker runs inside a copy of the request's context so
     # OpenTelemetry spans for the outgoing calls stay under this request.
     with ThreadPoolExecutor(max_workers=min(len(resources), 8)) as executor:
+        contexts = [contextvars.copy_context() for _ in resources]
         resources_details = list(
             executor.map(
-                lambda resource: contextvars.copy_context().run(
-                    fetch, resource
-                ),
-                resources,
+                lambda args: args[0].run(fetch, args[1]),
+                zip(contexts, resources),
             )
         )
 

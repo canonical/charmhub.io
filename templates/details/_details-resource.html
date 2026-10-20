@@ -119,6 +119,7 @@
   <script type="application/json" class="js-revisions-data">
     {{ {
       "resourceName": resource.name,
+      "resourceType": resource.type,
       "limit": displayed_revisions | default(10),
       "revisions": revisions_data | default([])
     } | tojson }}

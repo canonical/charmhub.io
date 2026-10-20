@@ -86,8 +86,7 @@ class TestDetailsResource(TestCase):
             {
                 "revision",
                 "updated",
-                "charm_channel",
-                "charm_revision",
+                "size",
                 "checksum",
                 "checksum_full",
                 "is_default",

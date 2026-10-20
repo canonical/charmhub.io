@@ -104,5 +104,17 @@ describe("resources page", () => {
       expect(second.getAttribute("aria-current")).toBe("true");
       expect(first.hasAttribute("aria-current")).toBe(false);
     });
+
+    test("falls back to the first link when the hash no longer matches", () => {
+      const [first, second] = setup();
+      window.location.hash = "#second";
+      setActiveNavItem();
+
+      window.location.hash = "#unknown";
+      setActiveNavItem();
+
+      expect(first.getAttribute("aria-current")).toBe("true");
+      expect(second.hasAttribute("aria-current")).toBe(false);
+    });
   });
 });

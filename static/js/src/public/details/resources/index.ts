@@ -46,13 +46,15 @@ function setActiveNavItem() {
   const links = Array.from(
     document.querySelectorAll<HTMLAnchorElement>(".p-in-page-navigation__link")
   );
-  const active = links.find(
-    (link) => link.getAttribute("href") === window.location.hash
-  );
-
-  if (!active) {
+  if (links.length === 0) {
     return;
   }
+
+  // Fall back to the first link (the server-rendered default) when the hash
+  // doesn't match any item, so a stale aria-current is never left behind.
+  const active =
+    links.find((link) => link.getAttribute("href") === window.location.hash) ??
+    links[0];
 
   links.forEach((link) => {
     if (link === active) {
