@@ -47,8 +47,13 @@
             <td>{{ resource.updated }}</td>
           </tr>
           <tr>
-            <th scope="row">Checksum</th>
-            <td>{{ resource.checksum }} {{ copy_button(resource.checksum_full, "checksum") }}</td>
+            {% if resource.type == "oci-image" %}
+              <th scope="row">Checksum</th>
+              <td>{{ resource.checksum }} {{ copy_button(resource.checksum_full, "checksum") }}</td>
+            {% else %}
+              <th scope="row">Size</th>
+              <td>{{ resource.readable_size }}</td>
+            {% endif %}
           </tr>
           <tr>
             <th scope="row">Type</th>
@@ -62,9 +67,13 @@
       </div>
 
       <div class="p-cta-block">
-        <a class="p-button" href="{{ resource.download.url }}" download>Download resource credentials</a>
-        {% if resource.upstream_source %}
-        <a href="{{ resource.upstream_source }}">Upstream source link&nbsp;&rsaquo;</a>
+        {% if resource.type == "oci-image" or resource.size > 0 %}
+        <a class="p-button" href="{{ resource.download.url }}" download>
+          Download resource{% if resource.type == "oci-image" %} credentials{% endif %}
+        </a>
+        {% endif %}
+        {% if resource.upstream_source and resource.type == "oci-image" %}
+          <a href="{{ resource.upstream_source }}">Upstream source link&nbsp;&rsaquo;</a>
         {% endif %}
       </div>
     </div>
@@ -84,12 +93,16 @@
           you may use the following command for new deployments (this may select a resource revision that
           has not been tested with this charm revision):
         </p>
-        <div class="p-code-snippet" style="position: relative">
-          <pre class="p-code-snippet__block is-wrapped"><code>{{ deploy_command }}</code></pre>
-          {{ copy_button(deploy_command, "deploy command", "p-code-snippet__button") }}
-        </div>
+        {% if total_revisions > 1 %}
+          <div class="p-code-snippet" style="position: relative">
+            <pre class="p-code-snippet__block is-wrapped"><code>{{ deploy_command }}</code></pre>
+            {{ copy_button(deploy_command, "deploy command", "p-code-snippet__button") }}
+          </div>
+        {% endif %}
         <p>
-          Already made a deployment?
+          {% if total_revisions > 1 %}
+            Already made a deployment?
+          {% endif %}
           <a href="https://canonical.com/juju/docs/juju-cli/latest/howto/manage-charm-resources/">
             Learn how to manage charm resources&nbsp;
             <i class="p-icon--external-link" aria-hidden="true"></i>

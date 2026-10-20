@@ -845,18 +845,19 @@ def _get_resource_details(entity_name, package, resource, current_channel):
         resource["short_digest"] = resource["digest"].split(":")[1][:12]
 
     # Get upstream-source (if available)
+    resource["upstream_source"] = None
     metadata_resources = package["store_front"]["metadata"].get("resources", {})
     if resource_name in metadata_resources:
         upstream = metadata_resources[resource_name].get("upstream-source")
-        resource["upstream_source"] = _ensure_scheme(upstream)
-    else:
-        resource["upstream_source"] = None
+        if upstream:
+            resource["upstream_source"] = _ensure_scheme(upstream)
 
     revisions = device_gateway.get_resource_revisions(entity_name, resource_name)
     revisions = sorted(revisions, key=lambda k: k["revision"], reverse=True)
 
+    resource["size"] = resource["download"]["size"]
     # Humanize sizes
-    resource["size"] = humanize.naturalsize(resource["download"]["size"])
+    resource["readable_size"] = humanize.naturalsize(resource["download"]["size"])
     resource["updated"] = logic.convert_date(resource["created-at"])
 
     checksum = resource["download"].get("hash-sha-256", "")
@@ -884,6 +885,7 @@ def _get_resource_details(entity_name, package, resource, current_channel):
             {
                 "revision": revision["revision"],
                 "updated": revision["updated"],
+                "size": revision["size"],
                 "checksum": revision["checksum"],
                 "checksum_full": revision["checksum_full"],
                 "is_default": revision["is_default"],

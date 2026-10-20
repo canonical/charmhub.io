@@ -3,7 +3,12 @@ import { useState } from "react";
 import type { RevisionsData } from "../types";
 import PaginationButton from "./PaginationButton";
 
-function RevisionsTable({ resourceName, revisions, limit }: RevisionsData) {
+function RevisionsTable({
+  resourceName,
+  resourceType,
+  revisions,
+  limit,
+}: RevisionsData) {
   const [page, setPage] = useState(0);
 
   const total = revisions.length;
@@ -35,7 +40,7 @@ function RevisionsTable({ resourceName, revisions, limit }: RevisionsData) {
           <tr>
             <th>Resource revision</th>
             <th>Date</th>
-            <th>Checksum</th>
+            <th>{resourceType == "oci-image" ? "Checksum" : "Size"}</th>
           </tr>
         </thead>
         <tbody>
@@ -59,17 +64,23 @@ function RevisionsTable({ resourceName, revisions, limit }: RevisionsData) {
                 </td>
                 <td>{revision.updated}</td>
                 <td>
-                  {revision.checksum}
-                  <button
-                    type="button"
-                    className="p-button--base is-dense has-icon u-no-margin--bottom u-float-right"
-                    data-js="copy"
-                    data-copy={revision.checksum_full}
-                    aria-label={label}
-                    title={label}
-                  >
-                    <i className="p-icon--copy" aria-hidden="true" />
-                  </button>
+                  {resourceType == "oci-image" ? (
+                    <>
+                      {revision.checksum}
+                      <button
+                        type="button"
+                        className="p-button--base is-dense has-icon u-no-margin--bottom u-float-right"
+                        data-js="copy"
+                        data-copy={revision.checksum_full}
+                        aria-label={label}
+                        title={label}
+                      >
+                        <i className="p-icon--copy" aria-hidden="true" />
+                      </button>
+                    </>
+                  ) : (
+                    <>{revision.size}</>
+                  )}
                 </td>
               </tr>
             );
