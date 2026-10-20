@@ -8,22 +8,27 @@
 <div class="p-section--shallow row p-details-tab__content">
   <div class="col-3">
     {% if resources|length > 1 %}
-    <div class="p-side-navigation">
-      <ul class="p-side-navigation__list">
-        {% for item in resources %}
-        <li class="p-side-navigation__item">
-          <a href="#{{ item.resource.name }}" class="p-side-navigation__link">
-            {{ item.resource.name }}
-          </a>
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
+    <nav class="p-in-page-navigation" aria-label="Resources">
+      <div class="p-in-page-navigation__container">
+        <ul class="p-in-page-navigation__list">
+          {% for item in resources %}
+          <li class="p-in-page-navigation__item">
+            <a href="#{{ item.resource.name }}" class="p-in-page-navigation__link"{% if loop.first %} aria-current="true"{% endif %}>
+              {{ item.resource.name }}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </nav>
     {% endif %}
   </div>
 
-  <div class="p-section--deep col-9">
+  <div class="col-9">
     {% for item in resources %}
+      {% if loop.index > 1 %}
+        <hr>
+      {% endif %}
       {{ details_resource(
         item.resource,
         item.revisions,

@@ -23,7 +23,7 @@
 #}
 {% macro details_resource(resource, revisions, revisions_data, deploy_command, current_channel, current_revision, displayed_revisions) %}
 {% set total_revisions = revisions|length %}
-<section class="js-resource" id="{{ resource.name }}">
+<section class="p-section--deep js-resource" id="{{ resource.name }}">
   <div class="p-section--shallow">
     <h2 class="p-heading--2">{{ resource.name }}</h2>
     <hr>

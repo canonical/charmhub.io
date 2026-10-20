@@ -1,4 +1,4 @@
-import { init } from "../index";
+import { init, setActiveNavItem } from "../index";
 import { fireEvent, waitFor } from "@testing-library/dom";
 
 describe("resources page", () => {
@@ -70,6 +70,39 @@ describe("resources page", () => {
       await vi.advanceTimersByTimeAsync(1);
       expect(button.getAttribute("aria-label")).toBe(LABEL);
       expect(button.querySelector("i")?.className).toBe("p-icon--copy");
+    });
+  });
+
+  describe("in-page navigation", () => {
+    function setup() {
+      document.body.innerHTML = `
+        <a href="#first" class="p-in-page-navigation__link" aria-current="true">first</a>
+        <a href="#second" class="p-in-page-navigation__link">second</a>`;
+      return Array.from(document.querySelectorAll<HTMLAnchorElement>("a")) as [
+        HTMLAnchorElement,
+        HTMLAnchorElement,
+      ];
+    }
+
+    afterEach(() => {
+      window.location.hash = "";
+    });
+
+    test("keeps the default active item when there is no matching hash", () => {
+      const [first, second] = setup();
+      setActiveNavItem();
+
+      expect(first.getAttribute("aria-current")).toBe("true");
+      expect(second.hasAttribute("aria-current")).toBe(false);
+    });
+
+    test("marks the link matching the hash as active", () => {
+      const [first, second] = setup();
+      window.location.hash = "#second";
+      setActiveNavItem();
+
+      expect(second.getAttribute("aria-current")).toBe("true");
+      expect(first.hasAttribute("aria-current")).toBe(false);
     });
   });
 });

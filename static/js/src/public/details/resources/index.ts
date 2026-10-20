@@ -42,11 +42,38 @@ function handleCopy() {
   });
 }
 
+function setActiveNavItem() {
+  const links = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>(".p-in-page-navigation__link")
+  );
+  const active = links.find(
+    (link) => link.getAttribute("href") === window.location.hash
+  );
+
+  if (!active) {
+    return;
+  }
+
+  links.forEach((link) => {
+    if (link === active) {
+      link.setAttribute("aria-current", "true");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+}
+
+function handleNavHighlight() {
+  setActiveNavItem();
+  window.addEventListener("hashchange", setActiveNavItem);
+}
+
 // Pagination of the release history is handled by React (see revisions.tsx).
 function init() {
   handleCopy();
+  handleNavHighlight();
 }
 
-export { init };
+export { init, setActiveNavItem };
 
 declareGlobal("charmhub.resources", { init });
