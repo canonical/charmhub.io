@@ -7,9 +7,18 @@ function RevisionsTable({ resourceName, revisions, limit }: RevisionsData) {
   const [page, setPage] = useState(0);
 
   const total = revisions.length;
-  const lastPage = Math.max(0, Math.ceil(total / limit) - 1);
-  const start = page * limit;
-  const pageRevisions = revisions.slice(start, start + limit);
+
+  // The default revision is pinned to the top of every page and counts
+  // toward the limit, so the remaining rows are paginated around it.
+  const pinned = revisions.find((r) => r.is_default);
+  const others = pinned ? revisions.filter((r) => r !== pinned) : revisions;
+  const pageSize = pinned ? Math.max(1, limit - 1) : limit;
+  const lastPage = Math.max(0, Math.ceil(others.length / pageSize) - 1);
+  const start = page * pageSize;
+  const pageRevisions = [
+    ...(pinned ? [pinned] : []),
+    ...others.slice(start, start + pageSize),
+  ];
 
   // All handlers clamp to [0, lastPage] so repeated clicks are no-ops
   const goFirst = () => setPage(0);

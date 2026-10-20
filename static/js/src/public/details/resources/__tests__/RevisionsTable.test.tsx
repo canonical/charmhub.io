@@ -17,11 +17,11 @@ function makeRevisions(total: number, defaultRevision = total): Revision[] {
   });
 }
 
-function renderTable(total: number, limit = 10) {
+function renderTable(total: number, limit = 10, defaultRevision = total) {
   return render(
     <RevisionsTable
       resourceName="vault-image"
-      revisions={makeRevisions(total)}
+      revisions={makeRevisions(total, defaultRevision)}
       limit={limit}
     />
   );
@@ -36,8 +36,11 @@ describe("RevisionsTable", () => {
   const click = (name: string) =>
     fireEvent.click(screen.getByRole("button", { name }));
 
-  // Revisions are rendered newest first, so the first cell holds the number
-  const firstRevision = () => bodyRows()[0].querySelector("td")?.textContent;
+  const revisionAt = (i: number) =>
+    bodyRows()[i].querySelector("td")?.textContent;
+  // The default revision is pinned at index 0, so the page starts at index 1
+  const firstRevision = () => revisionAt(1);
+  const pinnedCount = () => screen.queryAllByTitle("Default revision").length;
 
   test("shows all revisions and no pagination when within the limit", () => {
     renderTable(5);
@@ -52,7 +55,8 @@ describe("RevisionsTable", () => {
     renderTable(25);
 
     expect(bodyRows()).toHaveLength(10);
-    expect(firstRevision()).toContain("25");
+    expect(revisionAt(0)).toContain("25");
+    expect(firstRevision()).toBe("24");
   });
 
   test("next advances a page and shows the remainder on the last page", () => {
@@ -63,20 +67,20 @@ describe("RevisionsTable", () => {
     expect(firstRevision()).toBe("15");
 
     click("Next 10 rows");
-    expect(bodyRows()).toHaveLength(5);
-    expect(firstRevision()).toBe("5");
+    expect(bodyRows()).toHaveLength(7);
+    expect(firstRevision()).toBe("6");
 
     // Idempotent at the end
     click("Next 10 rows");
-    expect(bodyRows()).toHaveLength(5);
-    expect(firstRevision()).toBe("5");
+    expect(bodyRows()).toHaveLength(7);
+    expect(firstRevision()).toBe("6");
   });
 
   test("previous goes back a page and is idempotent at the start", () => {
     renderTable(25);
 
     click("Previous 10 rows");
-    expect(firstRevision()).toContain("25");
+    expect(firstRevision()).toBe("24");
 
     click("Next 10 rows");
     click("Next 10 rows");
@@ -89,13 +93,13 @@ describe("RevisionsTable", () => {
 
     click("Skip to end of table");
     click("Skip to end of table");
-    expect(bodyRows()).toHaveLength(5);
-    expect(firstRevision()).toBe("5");
+    expect(bodyRows()).toHaveLength(7);
+    expect(firstRevision()).toBe("6");
 
     click("Skip to start of table");
     click("Skip to start of table");
     expect(bodyRows()).toHaveLength(10);
-    expect(firstRevision()).toContain("25");
+    expect(firstRevision()).toBe("24");
   });
 
   test("uses the limit for page size", () => {
@@ -103,7 +107,40 @@ describe("RevisionsTable", () => {
 
     expect(bodyRows()).toHaveLength(3);
     click("Skip to end of table");
-    expect(bodyRows()).toHaveLength(1);
+    expect(bodyRows()).toHaveLength(3);
+    expect(revisionAt(0)).toContain("7");
+    expect(firstRevision()).toBe("2");
+  });
+
+  test("pins the default revision at the top of every page", () => {
+    renderTable(25, 10, 12);
+
+    expect(revisionAt(0)).toContain("12");
+    expect(firstRevision()).toBe("25");
+    expect(pinnedCount()).toBe(1);
+
+    click("Next 10 rows");
+    expect(revisionAt(0)).toContain("12");
+    expect(firstRevision()).toBe("16");
+    // 12 is not repeated in its natural position
+    expect(revisionAt(5)).toBe("11");
+    expect(pinnedCount()).toBe(1);
+
+    click("Skip to end of table");
+    expect(revisionAt(0)).toContain("12");
+    expect(firstRevision()).toBe("6");
+    expect(pinnedCount()).toBe(1);
+  });
+
+  test("paginates by the full limit when there is no default", () => {
+    renderTable(25, 10, 0);
+
+    expect(bodyRows()).toHaveLength(10);
+    expect(revisionAt(0)).toBe("25");
+    click("Skip to end of table");
+    expect(bodyRows()).toHaveLength(5);
+    expect(revisionAt(0)).toBe("5");
+    expect(pinnedCount()).toBe(0);
   });
 
   test("marks only the default revision", () => {
