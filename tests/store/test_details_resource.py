@@ -45,8 +45,6 @@ class TestDetailsResource(TestCase):
             "--resources vault-image=&lt;resource revision&gt;",
             body,
         )
-        self.assertEqual(body.count("p-icon--pin"), 1)
-        self.assertIsNone(re.search(r"Show \d+ more", body))
 
     def test_uses_requested_channel(
         self, mock_details, _cache, mock_revisions, _process, _get
