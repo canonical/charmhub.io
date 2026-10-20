@@ -3,16 +3,25 @@
 {% extends '/details/details_layout.html' %}
 
 {% block details_content %}
-  <div class="p-strip u-no-padding--top">
-    <div class="u-fixed-width u-equal-height">
-      <div class="charm-empty-docs-icon u-vertically-center">
-        <img src="https://assets.ubuntu.com/v1/3234f995-Generic_chamhub_NoDocs.svg" alt="" width="121" height="121">
-      </div>
-      <div class="col-9 charm-empty-docs-content">
-        <h4>No resources have been added for this charm</h4>
-        <p>A resource is additional content that a charm can make use of, or may require, to run.</p>
-        <p class="u-no-margin--bottom"><a class="p-button--positive u-no-margin--bottom" href="https://juju.is/docs/sdk/resources">Learn how to manage charm resources</a></p>
-      </div>
-    </div>
+
+<div class="p-section--deep row p-details-tab__content">
+  <div class="col-3"></div>
+
+  <div class="col-9">
+    <h4>No resources have been added for this charm</h4>
+    <p class="p-section--shallow">
+      Resources are additional assets (like OCI images or file packages) that a charm needs to operate.
+      This charm runs out of the box without any extra resource attachments.
+    </p>
+    <p class="u-no-margin--bottom">
+      <a class="p-button--positive u-no-margin--bottom"
+        href="https://canonical.com/juju/docs/juju-cli/latest/reference/resource-charm/#charm-resource">
+          Learn about resources
+      </a>
+    </p>
   </div>
+</div>
+
+
+  
 {% endblock%}
