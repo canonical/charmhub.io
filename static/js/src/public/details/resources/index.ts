@@ -42,44 +42,9 @@ function handleCopy() {
   });
 }
 
-function handleShowMoreRevisions() {
-  document
-    .querySelectorAll<HTMLButtonElement>(".js-show-more-revisions")
-    .forEach((button) => {
-      // Each resource section manages its own revisions
-      const scope: ParentNode = button.closest(".js-resource") || document;
-      const count = scope.querySelector<HTMLElement>(".js-revisions-count");
-
-      if (!count) {
-        return;
-      }
-
-      const limit = Number(button.dataset.limit) || 10;
-
-      button.addEventListener("click", () => {
-        const hiddenRows = scope.querySelectorAll(".js-revision-row.u-hide");
-        Array.from(hiddenRows)
-          .slice(0, limit)
-          .forEach((row) => row.classList.remove("u-hide"));
-
-        const visible = scope.querySelectorAll(
-          ".js-revision-row:not(.u-hide)"
-        ).length;
-        count.textContent = String(visible);
-
-        const remaining = hiddenRows.length - limit;
-        if (remaining > 0) {
-          button.textContent = `Show ${Math.min(remaining, limit)} more`;
-        } else {
-          button.remove();
-        }
-      });
-    });
-}
-
+// Pagination of the release history is handled by React (see revisions.tsx).
 function init() {
   handleCopy();
-  handleShowMoreRevisions();
 }
 
 export { init };

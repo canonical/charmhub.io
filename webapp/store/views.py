@@ -1,6 +1,6 @@
 import contextvars
 from concurrent.futures import ThreadPoolExecutor
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlsplit, urlunsplit
 
 import humanize
 from canonicalwebteam.discourse import DocParser
@@ -778,6 +778,7 @@ def details_resources(entity_name):
     if not current_channel:
         release_channel = package["default-release"]["channel"]
         current_channel = f"{release_channel['track']}/{release_channel['risk']}"
+    current_revision = package["default-release"]["revision"]["revision"]
 
     def fetch(resource):
         return _get_resource_details(
@@ -804,8 +805,9 @@ def details_resources(entity_name):
         channel_requested=channel_request,
         # used for displaying the currently selected channel name
         current_channel=current_channel,
+        current_revision=current_revision,
         resources=resources_details,
-        show_revisions_limit=10,
+        displayed_revisions=10,
     )
 
 
@@ -846,7 +848,7 @@ def _get_resource_details(entity_name, package, resource, current_channel):
     metadata_resources = package["store_front"]["metadata"].get("resources", {})
     if resource_name in metadata_resources:
         upstream = metadata_resources[resource_name].get("upstream-source")
-        resource["upstream_source"] = upstream
+        resource["upstream_source"] = _ensure_scheme(upstream)
     else:
         resource["upstream_source"] = None
 
@@ -868,10 +870,6 @@ def _get_resource_details(entity_name, package, resource, current_channel):
         revision["checksum"] = revision_checksum[:12]
         revision["checksum_full"] = revision_checksum
         revision["is_default"] = revision["revision"] == resource["revision"]
-        # TODO: charm channel/revision per resource revision is not
-        # available from the API yet
-        revision["charm_channel"] = "—"
-        revision["charm_revision"] = "—"
 
     deploy_command = (
         f"juju deploy {package['name']} --channel {current_channel} "
@@ -881,8 +879,30 @@ def _get_resource_details(entity_name, package, resource, current_channel):
     return {
         "resource": resource,
         "revisions": revisions,
+        # Minimal, serialisable data for the React revisions table
+        "revisions_data": [
+            {
+                "revision": revision["revision"],
+                "updated": revision["updated"],
+                "checksum": revision["checksum"],
+                "checksum_full": revision["checksum_full"],
+                "is_default": revision["is_default"],
+            }
+            for revision in revisions
+        ],
         "deploy_command": deploy_command,
     }
+
+
+def _ensure_scheme(link: str) -> str | None:
+    link = link.strip()
+    parts = urlsplit(link)
+    if parts.scheme not in ("http", "https"):
+        parts = urlsplit(f"https://{link}")
+    if parts.scheme and parts.netloc:
+        return urlunsplit(parts)
+    # Not usable as URL
+    return None
 
 
 @trace_function

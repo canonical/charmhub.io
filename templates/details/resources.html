@@ -27,15 +27,18 @@
       {{ details_resource(
         item.resource,
         item.revisions,
+        item.revisions_data,
         item.deploy_command,
         current_channel,
-        show_revisions_limit
+        current_revision,
+        displayed_revisions
       ) }}
     {% endfor %}
   </div>
 </div>
 
 {{ vite_import('static/js/src/public/details/resources/index.ts') }}
+{{ vite_import('static/js/src/public/details/resources/revisions.tsx') }}
 
 <script>
   window.addEventListener("DOMContentLoaded", function () {

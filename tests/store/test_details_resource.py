@@ -1,4 +1,6 @@
 import copy
+import json
+import re
 from unittest import TestCase
 from unittest.mock import patch
 
@@ -44,7 +46,7 @@ class TestDetailsResource(TestCase):
             body,
         )
         self.assertEqual(body.count("p-icon--pin"), 1)
-        self.assertNotIn("js-show-more-revisions", body)
+        self.assertIsNone(re.search(r"Show \d+ more", body))
 
     def test_uses_requested_channel(
         self, mock_details, _cache, mock_revisions, _process, _get
@@ -59,16 +61,38 @@ class TestDetailsResource(TestCase):
             response.get_data(as_text=True),
         )
 
-    def test_hides_revisions_beyond_limit(
+    def test_embeds_revisions_data_for_react(
         self, mock_details, _cache, mock_revisions, _process, _get
     ):
         mock_details.return_value = copy.deepcopy(sample_package_detail)
         mock_revisions.return_value = [make_revision(r) for r in range(1, 26)]
 
         body = self.client.get("/test/resources").get_data(as_text=True)
+        match = re.search(
+            r'<script type="application/json" class="js-revisions-data">'
+            r"(.*?)</script>",
+            body,
+            re.S,
+        )
 
-        self.assertEqual(body.count("js-revision-row u-hide"), 15)
-        self.assertIn("Show 10 more", body)
+        assert match is not None
+        data = json.loads(match.group(1))
+        self.assertEqual(data["resourceName"], "vault-image")
+        self.assertEqual(data["limit"], 10)
+        self.assertEqual(len(data["revisions"]), 25)
+        self.assertEqual(data["revisions"][0]["revision"], 25)
+        self.assertEqual(
+            set(data["revisions"][0]),
+            {
+                "revision",
+                "updated",
+                "charm_channel",
+                "charm_revision",
+                "checksum",
+                "checksum_full",
+                "is_default",
+            },
+        )
 
     def test_single_resource_url_redirects_to_anchor(
         self, _mock_details, _cache, _mock_revisions, _process, _get

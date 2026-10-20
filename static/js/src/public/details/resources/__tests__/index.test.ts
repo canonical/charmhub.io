@@ -1,14 +1,6 @@
 import { init } from "../index";
 import { fireEvent, waitFor } from "@testing-library/dom";
 
-function renderRows(total: number, limit: number) {
-  return Array.from(
-    { length: total },
-    (_, i) =>
-      `<tr class="js-revision-row${i >= limit ? " u-hide" : ""}"><td>${i}</td></tr>`
-  ).join("");
-}
-
 describe("resources page", () => {
   afterEach(() => {
     document.body.innerHTML = "";
@@ -59,67 +51,6 @@ describe("resources page", () => {
       await vi.advanceTimersByTimeAsync(1);
       expect(button.getAttribute("aria-label")).toBe(LABEL);
       expect(button.querySelector("i")?.className).toBe("p-icon--copy");
-    });
-  });
-
-  describe("show more revisions", () => {
-    function setup(total: number, limit = 10) {
-      document.body.innerHTML = `
-        <table><tbody>${renderRows(total, limit)}</tbody></table>
-        <span class="js-revisions-count">${Math.min(total, limit)}</span>
-        <button class="js-show-more-revisions" data-limit="${limit}">Show more</button>`;
-      init();
-      return document.querySelector(
-        ".js-show-more-revisions"
-      ) as HTMLButtonElement;
-    }
-
-    test("reveals the next batch and updates the count and label", () => {
-      const button = setup(25);
-      fireEvent.click(button);
-
-      expect(
-        document.querySelectorAll(".js-revision-row:not(.u-hide)")
-      ).toHaveLength(20);
-      expect(document.querySelector(".js-revisions-count")?.textContent).toBe(
-        "20"
-      );
-      expect(button.textContent).toBe("Show 5 more");
-    });
-
-    test("removes the button when all revisions are visible", () => {
-      const button = setup(15);
-      fireEvent.click(button);
-
-      expect(document.querySelectorAll(".js-revision-row.u-hide")).toHaveLength(
-        0
-      );
-      expect(document.querySelector(".js-show-more-revisions")).toBeNull();
-    });
-
-    test("only affects the revisions of its own resource", () => {
-      const section = (id: string) => `
-        <section class="js-resource" id="${id}">
-          <table><tbody>${renderRows(25, 10)}</tbody></table>
-          <span class="js-revisions-count">10</span>
-          <button class="js-show-more-revisions" data-limit="10">Show more</button>
-        </section>`;
-      document.body.innerHTML = section("a") + section("b");
-      init();
-
-      fireEvent.click(
-        document.querySelector("#a .js-show-more-revisions") as HTMLElement
-      );
-
-      expect(
-        document.querySelectorAll("#a .js-revision-row:not(.u-hide)")
-      ).toHaveLength(20);
-      expect(
-        document.querySelectorAll("#b .js-revision-row:not(.u-hide)")
-      ).toHaveLength(10);
-      expect(
-        document.querySelector("#b .js-revisions-count")?.textContent
-      ).toBe("10");
     });
   });
 });
