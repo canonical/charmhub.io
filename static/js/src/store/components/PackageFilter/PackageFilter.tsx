@@ -1,48 +1,49 @@
-import { Button } from "@canonical/react-components";
+import { Button, CheckboxInput, Icon } from "@canonical/react-components";
 import { Filters } from "@canonical/store-components";
-import { Category } from "../../types";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import platforms from "../../data/platforms";
-import packageTypes from "../../data/package-types";
+import type { Category } from "../../types";
 
 export const PackageFilter = ({
-  data,
+  categories,
   disabled,
 }: {
-  data?: {
-    total_items: number;
-    total_pages: number;
-    packages: unknown;
-    categories: Category[];
-  };
+  categories: Category[];
   disabled: boolean;
 }) => {
   const [hideFilters, setHideFilters] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const onPlatformChange = (item: string) => {
-    searchParams.set("platforms", item);
-    searchParams.delete("page");
-    setSearchParams(searchParams);
-  };
+  const selectedPlatforms = searchParams.get("platforms")?.split(",") || [];
+  const hasFilters = Boolean(
+    searchParams.get("platforms") || searchParams.get("categories")
+  );
 
-  const onPackageTypeChange = (item: string) => {
-    searchParams.set("type", item);
-    searchParams.delete("page");
-    setSearchParams(searchParams);
+  const onPlatformChange = (platform: string, checked: boolean) => {
+    const selected = new Set(selectedPlatforms);
+    checked ? selected.add(platform) : selected.delete(platform);
+    const params = new URLSearchParams(searchParams);
+    const value = platforms
+      .filter(({ name }) => selected.has(name))
+      .map(({ name }) => name)
+      .join(",");
+    value ? params.set("platforms", value) : params.delete("platforms");
+    params.delete("page");
+    setSearchParams(params);
   };
 
   const onCategoriesChange = (items: string[]) => {
+    const params = new URLSearchParams(searchParams);
     if (items.length > 0) {
-      searchParams.set("categories", items.join(","));
+      params.set("categories", items.join(","));
     } else {
-      searchParams.delete("categories");
+      params.delete("categories");
     }
 
-    searchParams.delete("page");
-    setSearchParams(searchParams);
+    params.delete("page");
+    setSearchParams(params);
   };
 
   return (
@@ -91,28 +92,54 @@ export const PackageFilter = ({
         </div>
 
         <div className="p-filter-panel__inner">
-          <Filters
-            categories={data?.categories || []}
-            selectedCategories={
-              searchParams.get("categories")?.split(",") || []
-            }
-            setSelectedCategories={onCategoriesChange}
-            platforms={platforms}
-            selectedPlatform={searchParams.get("platforms") || "all"}
-            setSelectedPlatform={onPlatformChange}
-            packageTypes={packageTypes}
-            selectedPackageType={searchParams.get("type") || "all"}
-            setSelectedPackageType={onPackageTypeChange}
-            disabled={disabled}
-          />
+          <div className="u-sv3">
+            <h2 className="p-muted-heading">Platforms</h2>
+            {platforms.map(({ name, display_name }) => (
+              <CheckboxInput
+                key={name}
+                label={display_name}
+                checked={selectedPlatforms.includes(name)}
+                disabled={disabled}
+                onChange={(event) =>
+                  onPlatformChange(name, event.target.checked)
+                }
+              />
+            ))}
+          </div>
+          <div className="u-sv3">
+            <Filters
+              categories={categories}
+              selectedCategories={
+                searchParams.get("categories")?.split(",") || []
+              }
+              setSelectedCategories={onCategoriesChange}
+              disabled={disabled}
+            />
+          </div>
+          <div className="u-sv3">
+            <Button
+              className="u-no-margin--bottom"
+              disabled={!hasFilters}
+              onClick={() => {
+                const params = new URLSearchParams(searchParams);
+                for (const key of ["platforms", "categories", "page"]) {
+                  params.delete(key);
+                }
+                setSearchParams(params);
+              }}
+            >
+              Clear all filters
+            </Button>
+          </div>
           <hr />
+          <h2 className="p-muted-heading">Developer resources</h2>
           <ul className="p-list u-no-margin--bottom">
             <li className="p-list__item">
               <a href="/integrations">Interfaces</a>
             </li>
             <li className="p-list__item">
               <a href="https://documentation.ubuntu.com/charmlibs/">
-                Charm development libraries
+                Charm development libraries <Icon name="external-link" />
               </a>
             </li>
           </ul>

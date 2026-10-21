@@ -131,7 +131,7 @@ describe("LandingPage", () => {
     expect(screen.getByText("MongoDB")).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /View all Charms/ })
-    ).toHaveAttribute("href", "/?type=charm");
+    ).toHaveAttribute("href", "/?type=charms");
     expect(
       screen.getByRole("link", { name: /View all Solutions/ })
     ).toHaveAttribute("href", "/?type=solutions");

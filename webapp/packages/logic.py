@@ -58,6 +58,7 @@ def fetch_packages(
     """
 
     category = query_params.get("categories", "")
+    selected_categories = set(filter(None, category.split(",")))
     query = query_params.get("q", "")
     package_type = query_params.get("type", None)
     platform = query_params.get("platforms", "")
@@ -65,7 +66,7 @@ def fetch_packages(
     requires = query_params.get("requires", None)
 
     args = {
-        "category": category,
+        "category": category if len(selected_categories) <= 1 else "",
         "fields": fields,
         "query": query,
     }
@@ -90,6 +91,15 @@ def fetch_packages(
     if result:
         return result
     packages = publisher_gateway.find(**args).get("results", [])
+    if len(selected_categories) > 1:
+        packages = [
+            package
+            for package in packages
+            if selected_categories.intersection(
+                category["name"]
+                for category in package.get("result", {}).get("categories", [])
+            )
+        ]
     if platform and platform != "all":
         filtered_packages = []
         for p in packages:

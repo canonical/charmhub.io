@@ -1,126 +1,227 @@
+import { useRef } from "react";
+import { Link, LinkProps, useSearchParams } from "react-router-dom";
 import {
+  Badge,
   Button,
   Col,
+  Icon,
   Pagination,
   Row,
   Strip,
+  Tabs,
 } from "@canonical/react-components";
-import Banner from "../Banner";
-import { PackageFilter } from "../PackageFilter";
-import Topics from "../Topics";
 import {
-  BundleCard,
   CharmCard,
   LoadingCard,
+  SolutionCard,
+  SolutionLoadingCard,
 } from "@canonical/store-components";
-import { useSearchParams } from "react-router-dom";
-import { useRef } from "react";
 
-import { Store } from "../../types";
+import { Solution, Store } from "../../types";
+import { PackageFilter } from "../PackageFilter";
+import { SearchInput } from "../SearchInput";
 
-const ITEMS_PER_PAGE = 12;
+export const ITEMS_PER_PAGE = { charms: 12, solutions: 5 };
+
+type Props = {
+  type: "solutions" | "charms";
+  charms: Store["packages"];
+  solutions: Solution[];
+  categories: Store["categories"];
+  counts: { charms: number; solutions: number };
+  countsFetching: { charms: boolean; solutions: boolean };
+  totalItems: number;
+  resultCount: number;
+  isFetching: boolean;
+  showSkeletons: boolean;
+};
 
 export const PackageList = ({
+  type,
+  charms,
+  solutions,
+  categories,
+  counts,
+  countsFetching,
+  totalItems,
+  resultCount,
   isFetching,
-  data,
-  status,
-}: {
-  isFetching: boolean;
-  status: "success" | "idle" | "error" | "loading";
-  data?: Store;
-}) => {
+  showSkeletons,
+}: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const topicsQuery = searchParams ? searchParams.get("categories") : null;
-
   const searchRef = useRef<HTMLInputElement | null>(null);
+  const currentPage = Number(searchParams.get("page") || 1);
+  const itemsPerPage = ITEMS_PER_PAGE[type];
+  const query = searchParams.get("q")?.trim();
+  const categoryCount =
+    searchParams.get("categories")?.split(",").filter(Boolean).length || 0;
+  const platformCount =
+    searchParams.get("platforms")?.split(",").filter(Boolean).length || 0;
+  const hasFilters = categoryCount + platformCount > 0;
+  const filterCount = categoryCount + platformCount;
+  const filterLabel =
+    categoryCount && platformCount
+      ? "filters"
+      : categoryCount
+        ? categoryCount === 1
+          ? "category"
+          : "categories"
+        : platformCount === 1
+          ? "platform"
+          : "platforms";
+  const summaryContext =
+    query && !hasFilters
+      ? query
+      : !query && hasFilters
+        ? `${filterCount} ${filterLabel}`
+        : "";
 
-  const currentPage = searchParams.get("page") || "1";
-  const firstResultNumber = (parseInt(currentPage) - 1) * ITEMS_PER_PAGE + 1;
-  const lastResultNumber =
-    (parseInt(currentPage) - 1) * ITEMS_PER_PAGE +
-    (data ? data.packages.length : 0);
+  const renderCount = (tabType: Props["type"]) =>
+    countsFetching[tabType] ? (
+      <span
+        className="u-vertically-center"
+        role="status"
+        aria-label={`Loading ${tabType} count`}
+      >
+        <Icon name="spinner" className="u-animation--spin" aria-hidden="true" />
+      </span>
+    ) : (
+      <Badge value={counts[tabType]} />
+    );
 
-  const onClear = () => {
-    searchParams.delete("q");
-    searchParams.delete("page");
-    setSearchParams(searchParams);
+  const getTabLink = (tabType: Props["type"]) => {
+    const params = new URLSearchParams({ type: tabType });
+    const platforms = searchParams.get("platforms");
+    if (platforms) params.set("platforms", platforms);
+    const categories = searchParams.get("categories");
+    if (categories) params.set("categories", categories);
+    const query = searchParams.get("q");
+    if (query) params.set("q", query);
+    return `/?${params}`;
+  };
 
-    if (searchRef.current) {
-      searchRef.current.value = "";
+  const clearSearch = () => {
+    const params = new URLSearchParams(searchParams);
+    for (const key of ["q", "page", "platforms", "categories"]) {
+      params.delete(key);
     }
+    setSearchParams(params);
   };
 
   return (
-    <>
-      <Banner searchRef={searchRef as React.RefObject<HTMLInputElement>} />
-      <Strip>
-        <Row>
-          <Col size={3}>
-            <PackageFilter disabled={isFetching} data={data} />
-          </Col>
-          <Col size={9}>
-            <Topics topicsQuery={topicsQuery} />
-            {data && (
-              <div className="u-fixed-width">
-                {searchParams.get("q") ? (
-                  <p>
-                    Showing {currentPage === "1" ? "1" : firstResultNumber} to{" "}
-                    {lastResultNumber} of {data.total_items} results for{" "}
-                    <strong>"{searchParams.get("q")}"</strong>.{" "}
-                    <Button appearance="link" onClick={onClear}>
-                      Clear search
+    <Strip shallow className="u-no-padding--bottom">
+      <Row className="p-section--deep">
+        <Col size={3}>
+          <PackageFilter categories={categories} disabled={isFetching} />
+        </Col>
+        <Col size={9}>
+          <SearchInput
+            searchRef={searchRef as React.RefObject<HTMLInputElement>}
+          />
+          <div className="u-sv2">
+            <Tabs<LinkProps>
+              listClassName="u-no-margin--bottom"
+              links={[
+                {
+                  active: type === "solutions",
+                  component: Link,
+                  to: getTabLink("solutions"),
+                  label: <>Solutions {renderCount("solutions")}</>,
+                },
+                {
+                  active: type === "charms",
+                  component: Link,
+                  to: getTabLink("charms"),
+                  label: <>Charms {renderCount("charms")}</>,
+                },
+              ]}
+            />
+          </div>
+          {isFetching && <p>Loading results...</p>}
+          {!isFetching && (
+            <div className="u-sv2">
+              <div className="p-inline-list--stretch">
+                <p className="u-truncate u-no-margin--bottom">
+                  Showing {resultCount}{" "}
+                  {resultCount === 1 ? "result" : "results"} of {counts[type]}
+                  {summaryContext && (
+                    <>
+                      {" "}
+                      for <strong>{summaryContext}</strong>
+                    </>
+                  )}
+                </p>
+                {query && (
+                  <>
+                    &nbsp;
+                    <Button
+                      appearance="link"
+                      className="u-no-margin--bottom"
+                      onClick={clearSearch}
+                    >
+                      {hasFilters ? "Clear search & filter" : "Clear search"}
                     </Button>
-                  </p>
-                ) : (
-                  <p>
-                    Showing {currentPage === "1" ? "1" : firstResultNumber} to{" "}
-                    {lastResultNumber} of {data.total_items} items
-                  </p>
+                  </>
                 )}
               </div>
-            )}
+            </div>
+          )}
+          {showSkeletons &&
+            type === "solutions" &&
+            [...Array(itemsPerPage)].map((_item, index) => (
+              <Row key={index}>
+                <Col size={9} style={{ marginBottom: "1.5rem" }}>
+                  <SolutionLoadingCard />
+                </Col>
+              </Row>
+            ))}
+          {showSkeletons && type === "charms" && (
             <Row>
-              {isFetching &&
-                [...Array(ITEMS_PER_PAGE)].map((_item, index) => (
-                  <Col size={3} key={index}>
-                    <LoadingCard />
-                  </Col>
-                ))}
-
-              {!isFetching &&
-                status === "success" &&
-                data &&
-                data.packages.map((packageData) => (
-                  <Col
-                    size={3}
-                    style={{ marginBottom: "1.5rem" }}
-                    key={packageData.id}
-                  >
-                    {packageData.package.type === "bundle" ? (
-                      <BundleCard data={packageData} />
-                    ) : (
-                      <CharmCard data={packageData} />
-                    )}
-                  </Col>
-                ))}
+              {[...Array(itemsPerPage)].map((_item, index) => (
+                <Col size={3} key={index} style={{ marginBottom: "1.5rem" }}>
+                  <LoadingCard />
+                </Col>
+              ))}
             </Row>
-
-            {status === "success" && data && (
-              <Pagination
-                itemsPerPage={ITEMS_PER_PAGE}
-                totalItems={data.total_items}
-                paginate={(pageNumber) => {
-                  searchParams.set("page", pageNumber.toString());
-                  setSearchParams(searchParams);
-                }}
-                currentPage={parseInt(currentPage)}
-                centered
-                scrollToTop
-              />
-            )}
-          </Col>
-        </Row>
-      </Strip>
-    </>
+          )}
+          {!showSkeletons &&
+            type === "solutions" &&
+            solutions.map((solution) => (
+              <Row key={solution.name}>
+                <Col size={9} style={{ marginBottom: "1.5rem" }}>
+                  <SolutionCard
+                    charmIcons={solution.charm_icons}
+                    data={solution}
+                  />
+                </Col>
+              </Row>
+            ))}
+          {!showSkeletons && type === "charms" && (
+            <Row>
+              {charms.map((charm) => (
+                <Col key={charm.id} size={3} style={{ marginBottom: "1.5rem" }}>
+                  <CharmCard data={charm} />
+                </Col>
+              ))}
+            </Row>
+          )}
+          {!isFetching && resultCount === 0 && <p>No results found.</p>}
+          {!showSkeletons && resultCount > 0 && (
+            <Pagination
+              centered={false}
+              className="p-pagination u-float-right"
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              paginate={(pageNumber) => {
+                searchParams.set("page", pageNumber.toString());
+                setSearchParams(searchParams);
+              }}
+              scrollToTop
+              totalItems={totalItems}
+            />
+          )}
+        </Col>
+      </Row>
+    </Strip>
   );
 };

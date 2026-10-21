@@ -67,7 +67,7 @@ describe("Banner Component", () => {
     expect(mockSetSearchParams).toHaveBeenCalledWith(new URLSearchParams());
   });
 
-  test("should not update search params when input is empty", () => {
+  test("should clear search params when input is empty", () => {
     render(<Banner searchRef={mockSearchRef} />);
 
     if (mockSearchRef.current) {
@@ -76,7 +76,7 @@ describe("Banner Component", () => {
 
     fireEvent.submit(screen.getByRole("button", { name: /Search/i }));
 
-    expect(mockSetSearchParams).not.toHaveBeenCalled();
+    expect(mockSetSearchParams).toHaveBeenCalledWith(new URLSearchParams());
   });
 
   test("should preserve query parameter in input field", () => {
