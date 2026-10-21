@@ -10,12 +10,20 @@ class TestSolutionsViews(unittest.TestCase):
         app.config["SERVER_NAME"] = "localhost.localdomain"
         self.client = app.test_client()
 
+    @patch("webapp.solutions.views.get_charms_data")
     @patch("webapp.solutions.views.get_published_solutions")
-    def test_solutions_json(self, mock_get_solutions):
+    def test_solutions_json(self, mock_get_solutions, mock_get_charms):
         mock_get_solutions.return_value = [
             {
+                "charms": ["grafana-k8s"],
                 "name": "observability",
                 "title": "Canonical Observability Stack",
+            }
+        ]
+        mock_get_charms.return_value = [
+            {
+                "icon": "https://example.com/grafana.png",
+                "name": "grafana-k8s",
             }
         ]
 
@@ -27,6 +35,10 @@ class TestSolutionsViews(unittest.TestCase):
             {
                 "solutions": [
                     {
+                        "charm_icons": {
+                            "grafana-k8s": "https://example.com/grafana.png"
+                        },
+                        "charms": ["grafana-k8s"],
                         "name": "observability",
                         "title": "Canonical Observability Stack",
                     }

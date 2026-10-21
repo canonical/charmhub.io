@@ -16,10 +16,16 @@ from webapp.solutions.logic import (
     "webapp.solutions.logic.SOLUTIONS_API_BASE", "http://localhost:5000/api"
 )
 class TestSolutionsLogic(unittest.TestCase):
+    @patch("webapp.solutions.logic.get_store_categories")
     @patch("webapp.solutions.logic.redis_cache")
     @patch("webapp.solutions.logic.session")
-    def test_get_published_solutions(self, mock_session, mock_cache):
+    def test_get_published_solutions(
+        self, mock_session, mock_cache, mock_store_categories
+    ):
         mock_cache.get.return_value = None
+        mock_store_categories.return_value = [
+            {"name": "monitoring", "display_name": "Monitoring"}
+        ]
         mock_response = MagicMock()
         mock_response.status_code = 200
         mock_response.json.return_value = [
@@ -54,7 +60,9 @@ class TestSolutionsLogic(unittest.TestCase):
                     "title": "Canonical Observability Stack",
                     "summary": "Observe applications and infrastructure.",
                     "icon": "https://example.com/icon.svg",
-                    "categories": ["monitoring"],
+                    "categories": [
+                        {"slug": "monitoring", "name": "Monitoring"}
+                    ],
                     "platform": "kubernetes",
                     "platform_version": [">=1.29"],
                     "last_updated": "2026-08-17T10:48:16.021584",
