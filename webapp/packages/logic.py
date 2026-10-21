@@ -195,8 +195,8 @@ def parse_package_for_card(
     }
 
     result = package.get("result", {})
-    publisher = result.get("publisher", {})
-    channel = package.get("default-release", {}).get("channel", {})
+    publisher = result.get("publisher") or {}
+    channel = (package.get("default-release") or {}).get("channel") or {}
     risk = channel.get("risk", "")
     track = channel.get("track", "")
     if libraries:
@@ -210,10 +210,13 @@ def parse_package_for_card(
     resp["package"]["display_name"] = result.get(
         "title", format_slug(package.get("name", ""))
     )
-    resp["package"]["channel"]["risk"] = risk
-    resp["package"]["channel"]["track"] = track
-    resp["package"]["channel"]["name"] = f"{track}/{risk}"
-    resp["package"]["last_updated"] = channel.get("released-at", "")
+    if channel:
+        resp["package"]["channel"] = {
+            "risk": risk,
+            "track": track,
+            "name": f"{track}/{risk}",
+        }
+        resp["package"]["last_updated"] = channel.get("released-at", "")
     resp["publisher"]["display_name"] = publisher.get("display-name", "")
     resp["publisher"]["validation"] = publisher.get("validation", "")
     category_map = {cat["slug"]: cat["name"] for cat in CATEGORIES}
@@ -224,9 +227,9 @@ def parse_package_for_card(
                 category["name"], format_slug(category["name"])
             ),
         }
-        for category in result.get("categories", [])
+        for category in result.get("categories") or []
     ]
-    resp["package"]["icon_url"] = get_icon(result.get("media", []))
+    resp["package"]["icon_url"] = get_icon(result.get("media") or [])
 
     platforms = result.get("deployable-on", [])
     if platforms:

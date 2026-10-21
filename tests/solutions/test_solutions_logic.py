@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 from webapp.solutions.logic import (
     _solution_listing_item,
+    get_charm_data,
     get_solution_from_backend,
     get_publisher_solutions,
     group_solution_drafts,
@@ -16,6 +17,64 @@ from webapp.solutions.logic import (
     "webapp.solutions.logic.SOLUTIONS_API_BASE", "http://localhost:5000/api"
 )
 class TestSolutionsLogic(unittest.TestCase):
+    @patch("webapp.solutions.logic.redis_cache")
+    @patch("webapp.solutions.logic.publisher_gateway.get_item_details")
+    def test_get_charm_data_includes_shared_card_data(
+        self, mock_details, mock_cache
+    ):
+        mock_cache.get.return_value = None
+        mock_details.return_value = {
+            "default-release": {
+                "channel": {
+                    "track": "latest",
+                    "risk": "stable",
+                    "released-at": "2026-10-01T12:00:00Z",
+                }
+            },
+            "result": {
+                "title": "Grafana",
+                "summary": "Dashboards",
+                "publisher": {"display-name": "Canonical"},
+                "categories": [{"name": "observability"}],
+                "deployable-on": ["kubernetes"],
+                "media": [
+                    {
+                        "type": "screenshot",
+                        "url": "https://example.com/screenshot.png",
+                    },
+                    {"type": "icon", "url": "https://example.com/icon.png"},
+                ],
+            }
+        }
+
+        charm = get_charm_data("grafana-k8s")
+
+        self.assertEqual(charm["card"]["package"]["name"], "grafana-k8s")
+        self.assertEqual(charm["url"], "/grafana-k8s")
+        self.assertEqual(charm["card"]["package"]["display_name"], "Grafana")
+        self.assertEqual(charm["card"]["package"]["summary"], "Dashboards")
+        self.assertEqual(charm["card"]["package"]["platforms"], ["kubernetes"])
+        self.assertEqual(
+            charm["card"]["publisher"]["display_name"], "Canonical"
+        )
+        self.assertEqual(
+            charm["card"]["categories"][0]["display_name"], "Observability"
+        )
+        self.assertEqual(charm["icon"], "https://example.com/icon.png")
+        self.assertEqual(charm["card"]["package"]["icon_url"], charm["icon"])
+        self.assertEqual(
+            charm["card"]["package"]["channel"]["name"], "latest/stable"
+        )
+        self.assertEqual(
+            charm["card"]["package"]["last_updated"], "2026-10-01T12:00:00Z"
+        )
+        self.assertIn(
+            "default-release.channel", mock_details.call_args.kwargs["fields"]
+        )
+        mock_cache.set.assert_called_once_with(
+            "solution-charm-card:grafana-k8s", charm, ttl=600
+        )
+
     @patch("webapp.solutions.logic.get_store_categories")
     @patch("webapp.solutions.logic.redis_cache")
     @patch("webapp.solutions.logic.session")
