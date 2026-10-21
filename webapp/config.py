@@ -25,6 +25,7 @@ CATEGORIES = [
 ]
 
 SEARCH_FIELDS = [
+    "default-release.channel.released-at",
     "result.categories",
     "result.summary",
     "result.media",

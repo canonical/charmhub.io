@@ -28,7 +28,8 @@ class TestSearchPackage(TestCase):
                 "?q=juju&category=&publisher=&",
                 urlencode(
                     {
-                        "fields": "result.categories,result.summary,"
+                        "fields": "default-release.channel.released-at,"
+                        "result.categories,result.summary,"
                         "result.media,result.title,"
                         "result.publisher.display-name,"
                         "result.deployable-on"
