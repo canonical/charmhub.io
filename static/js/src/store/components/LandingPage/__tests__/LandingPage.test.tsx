@@ -1,4 +1,11 @@
-import { act, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
@@ -202,7 +209,7 @@ describe("LandingPage", () => {
     expect(charmsLink).not.toHaveClass("is-active");
   });
 
-  test("leaves card sections empty when requests fail", async () => {
+  test("shows a notification in each section when requests fail", async () => {
     global.fetch = vi
       .fn()
       .mockResolvedValue({ ok: false } as Response) as unknown as typeof fetch;
@@ -212,13 +219,29 @@ describe("LandingPage", () => {
       status: "error",
     });
 
-    await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
+    await waitFor(() =>
+      expect(screen.queryByText("Loading solution")).not.toBeInTheDocument()
+    );
+    for (const [section, title] of [
+      ["Discover Solutions", "Solutions Service Unavailable"],
+      ["Explore Charms", "Charms Service Unavailable"],
+    ]) {
+      const content = within(screen.getByRole("region", { name: section }));
+      expect(content.getByRole("alert").parentElement).toHaveClass("col-6");
+      expect(content.getByRole("heading", { name: title })).toBeInTheDocument();
+      expect(content.getByRole("alert")).toHaveTextContent(
+        "This service is temporarily unavailable. Please try again later."
+      );
+    }
     expect(screen.queryByText("Loading charm")).not.toBeInTheDocument();
-    expect(
-      screen.queryByText("Solutions could not be loaded")
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByText("Charms could not be loaded")
-    ).not.toBeInTheDocument();
+    fireEvent.click(
+      within(
+        screen.getByRole("region", { name: "Discover Solutions" })
+      ).getByRole("button", { name: "Close notification" })
+    );
+    expect(screen.getAllByRole("alert")).toHaveLength(1);
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "Charms Service Unavailable"
+    );
   });
 });

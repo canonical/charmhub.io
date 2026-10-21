@@ -30,6 +30,8 @@ type Props = {
   categories: Store["categories"];
   counts: { charms: number; solutions: number };
   countsFetching: { charms: boolean; solutions: boolean };
+  countsReady: boolean;
+  errors: { charms: boolean; solutions: boolean };
   totalItems: number;
   resultCount: number;
   isFetching: boolean;
@@ -43,6 +45,8 @@ export const PackageList = ({
   categories,
   counts,
   countsFetching,
+  countsReady,
+  errors,
   totalItems,
   resultCount,
   isFetching,
@@ -58,6 +62,20 @@ export const PackageList = ({
   const platformCount =
     searchParams.get("platforms")?.split(",").filter(Boolean).length || 0;
   const hasFilters = categoryCount + platformCount > 0;
+  const otherType = type === "solutions" ? "charms" : "solutions";
+  const otherCount = errors[otherType] ? 0 : counts[otherType];
+  const hasError = errors[type];
+  const otherUnavailable = errors[otherType];
+  const loadingRelatedCharms =
+    type === "solutions" && !countsFetching.solutions && countsFetching.charms;
+  const showFallback =
+    (countsReady || loadingRelatedCharms || otherUnavailable) &&
+    !hasError &&
+    !isFetching &&
+    !showSkeletons &&
+    !countsFetching[type] &&
+    (!countsFetching[otherType] || loadingRelatedCharms) &&
+    totalItems === 0;
   const filterCount = categoryCount + platformCount;
   const filterLabel =
     categoryCount && platformCount
@@ -138,7 +156,17 @@ export const PackageList = ({
             />
           </div>
           {isFetching && <p>Loading results...</p>}
-          {!isFetching && (
+          {!isFetching && hasError && (
+            <div role="alert">
+              <h2 className="p-heading--4 u-no-padding u-no-margin u-sv1">
+                Service unavailable
+              </h2>
+              <p>
+                This service is temporarily unavailable. Please try again later.
+              </p>
+            </div>
+          )}
+          {!isFetching && !hasError && totalItems > 0 && (
             <div className="u-sv2">
               <div className="p-inline-list--stretch">
                 <p className="u-truncate u-no-margin--bottom">
@@ -185,6 +213,7 @@ export const PackageList = ({
             </Row>
           )}
           {!showSkeletons &&
+            !hasError &&
             type === "solutions" &&
             solutions.map((solution) => (
               <Row key={solution.name}>
@@ -196,7 +225,7 @@ export const PackageList = ({
                 </Col>
               </Row>
             ))}
-          {!showSkeletons && type === "charms" && (
+          {!showSkeletons && !hasError && type === "charms" && (
             <Row>
               {charms.map((charm) => (
                 <Col key={charm.id} size={3} style={{ marginBottom: "1.5rem" }}>
@@ -205,8 +234,127 @@ export const PackageList = ({
               ))}
             </Row>
           )}
-          {!isFetching && resultCount === 0 && <p>No results found.</p>}
-          {!showSkeletons && resultCount > 0 && (
+          {showFallback && (
+            <Row>
+              <Col size={6}>
+                <h2 className="p-heading--4 u-no-padding u-no-margin u-sv1">
+                  No {type} found
+                </h2>
+                <p className="u-no-padding u-no-margin u-sv3">
+                  {otherUnavailable ? (
+                    <>
+                      There are no available {type} in Charmhub related to your
+                      current search.
+                    </>
+                  ) : loadingRelatedCharms ? (
+                    <>
+                      There are no available solutions in Charmhub related to
+                      your current search.
+                    </>
+                  ) : query && !hasFilters ? (
+                    <>
+                      Your current search for <strong>{query}</strong> doesn't
+                      match any {type}
+                      {otherCount > 0
+                        ? ` in Charmhub, but we found ${otherType} matching your search.`
+                        : ` or ${otherType} in Charmhub.`}
+                    </>
+                  ) : otherCount > 0 ? (
+                    <>
+                      There are no available {type} in Charmhub related to your
+                      current search.
+                    </>
+                  ) : (
+                    <>
+                      There are no {type} or {otherType} in Charmhub related to
+                      your current search.
+                    </>
+                  )}
+                </p>
+                <div className="p-cta-block">
+                  {loadingRelatedCharms ? (
+                    <Button
+                      appearance="positive"
+                      className="u-no-margin--bottom"
+                      disabled
+                      aria-busy="true"
+                    >
+                      Looking for charms
+                    </Button>
+                  ) : (
+                    <Button<LinkProps>
+                      element={Link}
+                      appearance="positive"
+                      className="u-no-margin--bottom"
+                      to={
+                        otherCount > 0
+                          ? getTabLink(otherType)
+                          : `/?type=${type}`
+                      }
+                    >
+                      {otherCount > 0
+                        ? `Explore ${otherCount} related ${otherCount === 1 ? otherType.slice(0, -1) : otherType}`
+                        : `Browse all ${type}`}
+                    </Button>
+                  )}
+                  {(loadingRelatedCharms || otherCount > 0) && hasFilters && (
+                    <Button
+                      className="u-no-margin--bottom"
+                      onClick={clearSearch}
+                    >
+                      {query ? "Clear search & filters" : "Clear all filters"}
+                    </Button>
+                  )}
+                </div>
+                {type === "charms" && (
+                  <>
+                    <div className="u-sv3">
+                      <hr className="u-no-margin" />
+                    </div>
+                    <h3 className="p-muted-heading u-no-padding--top">
+                      Publish to Charmhub
+                    </h3>
+                    <Row>
+                      <Col size={5}>
+                        <ul className="p-list--divided u-no-margin--bottom">
+                          <li className="p-list__item has-bullet">
+                            Have a charm ready?{" "}
+                            <a href="https://charmhub.io/charms">
+                              Publish it to Charmhub
+                            </a>{" "}
+                            for others to find
+                          </li>
+                          <li className="p-list__item has-bullet">
+                            Just getting started? Read the{" "}
+                            <a href="https://canonical.com/juju/docs">
+                              Juju docs
+                            </a>{" "}
+                            for an introduction to charming and deployments on
+                            Juju
+                          </li>
+                          <li className="p-list__item has-bullet">
+                            Want to build a charm? Learn{" "}
+                            <a href="https://canonical.com/juju/docs/ops/latest/#get-started">
+                              Ops
+                            </a>{" "}
+                            to charm any app, or use{" "}
+                            <a href="https://canonical.com/juju/docs/charmcraft/latest/tutorial/">
+                              Charmcraft
+                            </a>{" "}
+                            for 12-factor applications
+                          </li>
+                        </ul>
+                      </Col>
+                    </Row>
+                  </>
+                )}
+              </Col>
+            </Row>
+          )}
+          {!isFetching && !hasError && totalItems > 0 && resultCount === 0 && (
+            <p>No results found.</p>
+          )}
+          {!showSkeletons && !hasError && resultCount > 0 && (
             <Pagination
               centered={false}
               className="p-pagination u-float-right"
