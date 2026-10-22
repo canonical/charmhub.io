@@ -1,5 +1,7 @@
 import unittest
 
+from bs4 import BeautifulSoup
+
 from webapp.app import app
 from webapp.llms import store_llm
 
@@ -73,6 +75,35 @@ class TestRoutes(unittest.TestCase):
 
             self.assertEqual(response.status_code, 200, path)
             self.assertIn("text/markdown", response.content_type, path)
+
+    def test_homepage_fallback_is_only_visible_without_javascript(self):
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.data, "html.parser")
+        root = soup.find(id="root")
+        fallback = root.find("noscript")
+
+        self.assertIsNotNone(fallback)
+        self.assertEqual(fallback.find("h1").get_text(), "The Open Operator Collection")
+        self.assertEqual(len(fallback.find_all("a")), 4)
+        fallback.decompose()
+        self.assertEqual(root.get_text(strip=True), "")
+
+    def test_homepage_markdown_preserves_the_fallback_content(self):
+        response = self.client.get("/index.md")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("text/markdown", response.content_type)
+        body = response.data.decode()
+        self.assertIn("# The Open Operator Collection", body)
+        self.assertIn("Charmhub is the home of charms and bundles", body)
+        for label in [
+            "All charms",
+            "Topic pages",
+            "Interface catalogue",
+            "Juju documentation",
+        ]:
+            self.assertIn(f"[{label}](", body)
 
     def test_pages_are_still_html_without_the_suffix(self):
         response = self.client.get("/contact-us")

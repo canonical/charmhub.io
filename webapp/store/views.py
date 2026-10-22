@@ -7,6 +7,7 @@ from canonicalwebteam.flask_base.decorators import (
     exclude_xframe_options_header,
 )
 from canonicalwebteam.exceptions import StoreApiResponseErrorList
+from canonicalwebteam.store_llm import is_markdown_request
 from flask import Blueprint, Response, abort, url_for
 from flask import jsonify, redirect, render_template, request, make_response
 import requests
@@ -1084,5 +1085,7 @@ def get_charms_from_bundle(entity_name):
 @trace_function
 @store.route("/")
 def store_index():
-    response = make_response(render_template("store.html"))
+    response = make_response(
+        render_template("store.html", is_markdown=is_markdown_request(request))
+    )
     return response

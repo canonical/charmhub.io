@@ -6,8 +6,9 @@
 
 {% block content %}
 <main id="root">
-  {# Server-rendered fallback: replaced by the React app on load. It's read by
-     crawlers and the Markdown version of the page. #}
+  {# Only show the fallback without JavaScript, not while React is loading.
+     Markdown requests need normal HTML because the converter strips noscript. #}
+  {% if not is_markdown %}<noscript>{% endif %}
   <div class="p-strip">
     <div class="row">
       <div class="col-12">
@@ -22,6 +23,7 @@
       </div>
     </div>
   </div>
+  {% if not is_markdown %}</noscript>{% endif %}
 </main>
 {{ vite_import('static/js/src/store/index.tsx') }}
 {% endblock content %}
