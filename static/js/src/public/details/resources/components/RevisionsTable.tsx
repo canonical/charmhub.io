@@ -35,7 +35,10 @@ function RevisionsTable({
   // They should be updated/removed once the page is migrated to use pragma.
   return (
     <>
-      <table aria-label={`${resourceName} release history`}>
+      <table
+        className="p-table--closed"
+        aria-label={`${resourceName} release history`}
+      >
         <thead>
           <tr>
             <th>Resource revision</th>

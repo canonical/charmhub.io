@@ -39,7 +39,7 @@ class TestDetailsResource(TestCase):
         body = response.get_data(as_text=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("default resource revision for 1.16/stable", body)
+        self.assertIn("Default resource revision for <br/>1.16/stable", body)
         self.assertIn(
             "juju deploy test --channel 1.16/stable --trust "
             "--resources vault-image=&lt;resource revision&gt;",
@@ -55,7 +55,7 @@ class TestDetailsResource(TestCase):
         response = self.client.get("/test/resources?channel=2/edge")
 
         self.assertIn(
-            "default resource revision for 2/edge",
+            "Default resource revision for <br/>2/edge",
             response.get_data(as_text=True),
         )
 

@@ -27,7 +27,9 @@
   <div class="col-9">
     {% for item in resources %}
       {% if loop.index > 1 %}
-        <hr>
+        <div class="p-section--shallow">
+          <hr>
+        </div>
       {% endif %}
       {{ details_resource(
         item.resource,
