@@ -1,0 +1,11 @@
+@mixin charmhub-resources {
+  .js-resource {
+    .p-icon--external-link {
+      @include vf-icon-external-link($colors--light-theme--link-default);
+    }
+
+    .p-table--closed tbody tr:last-child {
+      border-bottom: 1px solid $colors--theme--border-low-contrast;
+    }
+  }
+}

@@ -1,73 +1,81 @@
 import declareGlobal from "../../../libs/declare";
 
-function handleTogglePanels() {
-  const panelToggleButtons = document.querySelectorAll(".js-panel-toggle");
+const COPIED_TIMEOUT = 2000;
 
-  panelToggleButtons.forEach((panelToggleButton) => {
-    panelToggleButton.addEventListener("click", (e) => {
-      const target = e.target as HTMLElement;
-      const panelId = target.getAttribute("aria-controls") || "";
-      const panel = document.getElementById(panelId);
-
-      if (panelId && panel) {
-        target.classList.toggle("is-active");
-        panel.classList.toggle("is-open");
-
-        if (panel.classList.contains("is-open")) {
-          const panelInput = panel.querySelector("[readonly]") as HTMLElement;
-          panelInput.focus();
-          panel.setAttribute("role", "dialog");
-        } else {
-          panel.removeAttribute("role");
-        }
-      }
-    });
-  });
-
-  document.addEventListener("keydown", (e) => {
-    const escKeyCode = 27;
-    const tabKeyCode = 9;
-
-    const openPanelToggle = document.querySelector(
-      ".js-panel-toggle.is-active"
-    ) as HTMLElement;
-
-    const openPanel = document.querySelector("[readonly]");
-
-    if (e.keyCode === escKeyCode || e.keyCode === tabKeyCode) {
-      if (openPanelToggle) {
-        openPanelToggle.focus();
-        openPanelToggle.classList.remove("is-active");
-      }
-
-      if (openPanel) {
-        openPanel?.parentElement?.classList.remove("is-open");
-      }
-    }
-  });
-
-  document.addEventListener("click", (e) => {
-    const target = e.target;
-    const openPanelToggle = document.querySelector(
-      ".js-panel-toggle.is-active"
+function handleCopy() {
+  document.addEventListener("click", async (e) => {
+    const button = (e.target as HTMLElement).closest<HTMLButtonElement>(
+      "[data-js='copy']"
     );
-    const openPanel = document.querySelector(".p-inline-list__panel.is-open");
-    const openPanelInput = document.querySelector("[readonly]");
 
-    if (openPanel) {
-      if (target !== openPanelToggle && target !== openPanelInput) {
-        openPanelToggle?.classList.remove("is-active");
-        openPanel.classList.remove("is-open");
-        openPanel.removeAttribute("role");
+    if (!button || !navigator.clipboard) {
+      return;
+    }
+
+    const text = button.dataset.copy;
+    if (!text) {
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      return;
+    }
+
+    const icon = button.querySelector("i");
+    const originalLabel = button.getAttribute("aria-label") || "";
+
+    if (icon) {
+      icon.className = "p-icon--success";
+    }
+    button.setAttribute("aria-label", "Copied");
+    button.title = "Copied";
+
+    window.setTimeout(() => {
+      if (icon) {
+        icon.className = "p-icon--copy";
       }
+      button.setAttribute("aria-label", originalLabel);
+      button.title = originalLabel;
+    }, COPIED_TIMEOUT);
+  });
+}
+
+function setActiveNavItem() {
+  const links = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>(".p-in-page-navigation__link")
+  );
+  if (links.length === 0) {
+    return;
+  }
+
+  // Fall back to the first link (the server-rendered default) when the hash
+  // doesn't match any item, so a stale aria-current is never left behind.
+  const active =
+    links.find((link) => link.getAttribute("href") === window.location.hash) ??
+    links[0];
+
+  links.forEach((link) => {
+    if (link === active) {
+      link.setAttribute("aria-current", "true");
+    } else {
+      link.removeAttribute("aria-current");
     }
   });
 }
 
-function init() {
-  handleTogglePanels();
+function handleNavHighlight() {
+  setActiveNavItem();
+  window.addEventListener("hashchange", setActiveNavItem);
 }
 
-export { init };
+// Pagination of the release history is handled by React (see revisions.tsx).
+function init() {
+  handleCopy();
+  handleNavHighlight();
+}
+
+export { init, setActiveNavItem };
 
 declareGlobal("charmhub.resources", { init });

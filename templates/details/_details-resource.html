@@ -1,0 +1,129 @@
+{% macro copy_button(value, label, classes = '') %}
+<button type="button"
+  class="p-button--base is-dense has-icon u-no-margin--bottom {{ classes }}"
+  data-js="copy"
+  data-copy="{{ value }}"
+  aria-label="Copy {{ label }}"
+  title="Copy {{ label }}"
+>
+  <i class="p-icon--copy" aria-hidden="true"></i>
+</button>
+{% endmacro %}
+
+{#
+  Renders the details and release history of a single resource.
+
+  resource:             processed resource dict
+  revisions:            list of processed revisions for the resource
+  revisions_data:       serialisable revisions passed to the React table
+  deploy_command:       juju deploy command overriding this resource
+  current_channel:      channel name being displayed
+  current_revision:     revision number of the charm for the given channel
+  displayed_revisions:  number of revisions shown
+#}
+{% macro details_resource(resource, revisions, revisions_data, deploy_command, current_channel, current_revision, displayed_revisions) %}
+{% set total_revisions = revisions|length %}
+<section class="p-section--deep js-resource" id="{{ resource.name }}">
+  <div class="p-section--shallow">
+    <h2 class="p-heading--2">{{ resource.name }}</h2>
+    <hr>
+  </div>
+
+  <div class="row">
+    <div class="col-3">
+      <h3 class="p-heading--5">
+        <strong>Default resource revision for <br/>{{ current_channel }} {{ current_revision }}</strong>
+      </h3>
+    </div>
+
+    <div class="col-6">
+      <table aria-label="{{ resource.name }} details">
+        <tbody>
+          <tr>
+            <th scope="row">Revision</th>
+            <td>{{ resource.revision }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Updated</th>
+            <td>{{ resource.updated }}</td>
+          </tr>
+          <tr>
+            {% if resource.type == "oci-image" %}
+              <th scope="row">Checksum</th>
+              <td>{{ resource.checksum }} {{ copy_button(resource.checksum_full, "checksum") }}</td>
+            {% else %}
+              <th scope="row">Size</th>
+              <td>{{ resource.readable_size }}</td>
+            {% endif %}
+          </tr>
+          <tr>
+            <th scope="row">Type</th>
+            <td>{% if resource.type == "oci-image" %}OCI Image{% else %}File{% endif %}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="p-section--shallow">
+        {{ resource.description | markdown | safe }}
+      </div>
+
+      <div class="p-cta-block">
+        {% if resource.type == "oci-image" or resource.size > 0 %}
+        <a class="p-button" href="{{ resource.download.url }}" download>
+          Download resource{% if resource.type == "oci-image" %} credentials{% endif %}
+        </a>
+        {% endif %}
+        {% if resource.upstream_source and resource.type == "oci-image" %}
+          <a href="{{ resource.upstream_source }}">Upstream source link&nbsp;&rsaquo;</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="p-section--shallow">
+    <div class="row">
+      <div class="col-3">
+        <h3 class="p-heading--5">Release history</h3>
+      </div>
+      <div class="col-6">
+        <p>
+          Developers set and validate a default resource revision for each charm revision.
+          To override the default resource revision ({{ resource.revision }}) for {{ current_channel }},
+          you may use the following command for new deployments (this may select a resource revision that
+          has not been tested with this charm revision):
+        </p>
+        {% if total_revisions > 1 %}
+          <div class="p-code-snippet" style="position: relative">
+            <pre class="p-code-snippet__block is-wrapped"><code>{{ deploy_command }}</code></pre>
+            {{ copy_button(deploy_command, "deploy command", "p-code-snippet__button") }}
+          </div>
+        {% endif %}
+        <p>
+          {% if total_revisions > 1 %}
+            Already made a deployment?
+          {% endif %}
+          <a href="https://canonical.com/juju/docs/juju-cli/latest/howto/manage-charm-resources/">
+            Learn how to manage charm resources&nbsp;
+            <i class="p-icon--external-link" aria-hidden="true"></i>
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="js-revisions-root">
+    {# react root for revisions table #}
+  </div>
+
+  <script type="application/json" class="js-revisions-data">
+    {{ {
+      "resourceName": resource.name,
+      "resourceType": resource.type,
+      "limit": displayed_revisions | default(10),
+      "revisions": revisions_data | default([])
+    } | tojson }}
+  </script>
+</section>
+{% endmacro %}
