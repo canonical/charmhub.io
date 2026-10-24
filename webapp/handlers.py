@@ -1,3 +1,5 @@
+import re
+
 from flask import redirect, render_template, request, session, url_for
 from webapp.config import (
     SENTRY_DSN,
@@ -20,6 +22,12 @@ from canonicalwebteam.exceptions import (
 from canonicalwebteam import image_template
 
 from webapp import authentication, helpers
+
+# Match the fingerprinted JS/CSS output configured in vite.config.js, not
+# unversioned files, the build manifest or source maps.
+VITE_HASHED_ASSET = re.compile(
+    r"js/dist/vite/(?:chunks/|assets/)?[^/]+--[A-Za-z0-9_-]{8}\.(?:js|css)"
+)
 
 CSP = {
     "default-src": ["'self'"],
@@ -197,4 +205,19 @@ def set_handlers(app):
         )
         response.headers["Cross-Origin-Resource-Policy"] = "cross-origin"
         response.headers["X-Permitted-Cross-Domain-Policies"] = "none"
+
+        filename = (request.view_args or {}).get("filename", "")
+        if (
+            not IS_DEVELOPMENT
+            and request.endpoint == "static"
+            and request.method in {"GET", "HEAD"}
+            and response.status_code in {200, 304}
+            and VITE_HASHED_ASSET.fullmatch(filename)
+        ):
+            # FlaskBase recognises ?v= hashes, but Vite versions filenames.
+            # Replace Flask's no-cache policy only for fingerprinted assets.
+            response.headers["Cache-Control"] = (
+                "public, max-age=31536000, immutable"
+            )
+
         return response
