@@ -24,7 +24,7 @@ Flask-Caching==2.4.1
 responses==0.26.2
 
 # Observability
-opentelemetry-api==1.44.0
+opentelemetry-api==1.45.1
 opentelemetry-exporter-otlp==1.44.0
 opentelemetry-exporter-otlp-proto-http==1.44.0
 opentelemetry-instrumentation==0.65b0
