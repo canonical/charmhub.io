@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="3287" lines-covered="1627" line-rate="0.4949" branches-valid="2101" branches-covered="1024" branch-rate="0.48729999999999996" timestamp="1792793473480" complexity="0" version="0.1">
+<coverage lines-valid="3287" lines-covered="1627" line-rate="0.4949" branches-valid="2101" branches-covered="1024" branch-rate="0.48729999999999996" timestamp="1793398020966" complexity="0" version="0.1">
   <sources>
     <source>/home/runner/work/charmhub.io/charmhub.io</source>
   </sources>
@@ -1571,36 +1571,36 @@
         </class>
         <class name="highlight-nav.js" filename="static/js/src/libs/highlight-nav.js" line-rate="0.909" branch-rate="0.75">
           <methods>
-            <method name="getActiveNavItem" hits="10" signature="()V">
+            <method name="getActiveNavItem" hits="17" signature="()V">
               <lines>
-                <line number="1" hits="10"/>
+                <line number="1" hits="17"/>
               </lines>
             </method>
-            <method name="(anonymous_1)" hits="19" signature="()V">
+            <method name="(anonymous_1)" hits="40" signature="()V">
               <lines>
-                <line number="2" hits="19"/>
+                <line number="2" hits="40"/>
               </lines>
             </method>
-            <method name="setActiveNavItem" hits="8" signature="()V">
+            <method name="setActiveNavItem" hits="15" signature="()V">
               <lines>
-                <line number="7" hits="8"/>
+                <line number="7" hits="15"/>
               </lines>
             </method>
-            <method name="(anonymous_3)" hits="21" signature="()V">
+            <method name="(anonymous_3)" hits="42" signature="()V">
               <lines>
-                <line number="11" hits="21"/>
+                <line number="11" hits="42"/>
               </lines>
             </method>
           </methods>
           <lines>
-            <line number="2" hits="10" branch="false"/>
-            <line number="3" hits="19" branch="false"/>
-            <line number="8" hits="8" branch="false"/>
-            <line number="9" hits="8" branch="false"/>
-            <line number="11" hits="8" branch="false"/>
-            <line number="12" hits="21" branch="true" condition-coverage="100% (2/2)"/>
+            <line number="2" hits="17" branch="false"/>
+            <line number="3" hits="40" branch="false"/>
+            <line number="8" hits="15" branch="false"/>
+            <line number="9" hits="15" branch="false"/>
+            <line number="11" hits="15" branch="false"/>
+            <line number="12" hits="42" branch="true" condition-coverage="100% (2/2)"/>
             <line number="13" hits="6" branch="false"/>
-            <line number="15" hits="15" branch="false"/>
+            <line number="15" hits="36" branch="false"/>
             <line number="20" hits="1" branch="true" condition-coverage="50% (1/2)"/>
             <line number="21" hits="0" branch="false"/>
             <line number="24" hits="1" branch="false"/>
