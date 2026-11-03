@@ -1,0 +1,111 @@
+{# Keep the landing shell aligned with Banner and LandingPage so React can
+   replace it without moving the hero, section headings, or footer. #}
+{% macro solution_placeholder() %}
+<div class="p-card sc-solution-card sc-solution-loading-card u-no-margin--bottom" aria-hidden="true">
+  <div class="p-card__content">
+    <div class="sc-solution-card__body">
+      <div class="p-media-object u-no-margin--bottom">
+        <span class="p-media-object__image sc-solution-loading-card__placeholder sc-solution-loading-card__icon"></span>
+        <div class="p-media-object__details sc-solution-loading-card__identity">
+          <span class="sc-solution-loading-card__placeholder sc-solution-loading-card__title"></span>
+          <span class="sc-solution-loading-card__placeholder sc-solution-loading-card__publisher"></span>
+        </div>
+      </div>
+      <div class="sc-solution-card__summary sc-solution-loading-card__summary">
+        <span class="sc-solution-loading-card__placeholder"></span>
+        <span class="sc-solution-loading-card__placeholder"></span>
+        <span class="sc-solution-loading-card__placeholder sc-solution-loading-card__summary-end"></span>
+      </div>
+    </div>
+    <footer class="sc-solution-card__footer">
+      <div class="sc-solution-card__qualities">
+        <span class="sc-solution-loading-card__placeholder sc-solution-loading-card__footer-placeholder"></span>
+      </div>
+      <div class="sc-solution-card__metadata">
+        <span class="sc-solution-loading-card__placeholder sc-solution-loading-card__footer-placeholder"></span>
+      </div>
+    </footer>
+  </div>
+</div>
+{% endmacro %}
+
+<div id="store-loading">
+  {% if not request.args %}
+  <div class="p-strip--dark">
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-6 col-start-large-4">
+            <h1 class="p-heading--2">The Charm Collection</h1>
+            <form class="p-search-box" action="/" method="get">
+              <label class="u-off-screen" for="search">Search Solutions or Charms</label>
+              <input type="search" id="search" class="p-search-box__input" name="q" placeholder="Search Solutions or Charms">
+              <button type="reset" class="p-search-box__reset"><i class="p-icon--close">Close</i></button>
+              <button type="submit" class="p-search-box__button"><i class="p-icon--search">Search</i></button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="p-strip is-shallow">
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-3">
+            <div class="p-side-navigation is-sticky is-drawer-collapsed" id="landing-navigation">
+              <a aria-controls="landing-navigation-drawer" aria-expanded="false" class="p-side-navigation__toggle" href="#landing-navigation">Toggle side navigation</a>
+              <nav aria-label="Landing page sections" class="p-side-navigation__drawer" id="landing-navigation-drawer">
+                <ul class="p-side-navigation__list">
+                  <li class="p-side-navigation__item"><a aria-current="location" class="p-side-navigation__link is-active" href="#discover-solutions">Solutions</a></li>
+                  <li class="p-side-navigation__item"><a class="p-side-navigation__link" href="#explore-charms">Charms</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+          <div class="col-9">
+            <section aria-labelledby="discover-solutions-heading" class="p-section--shallow" id="discover-solutions">
+              <div class="row">
+                <div class="col-7">
+                  <h2 id="discover-solutions-heading">Discover Solutions</h2>
+                  <p>Solutions are curated collections of charms, integrations, and additional resources designed to work together as complete, deployable systems for real-world use cases.</p>
+                </div>
+              </div>
+              <div>
+                <div class="row">
+                  {% for _ in range(4) %}
+                  <div class="col-9" style="margin-bottom: 1.5rem;">{{ solution_placeholder() }}</div>
+                  {% endfor %}
+                </div>
+              </div>
+              <p class="u-no-padding--top"><a href="/?type=solutions">View all Solutions</a></p>
+            </section>
+            <section aria-labelledby="explore-charms-heading" id="explore-charms">
+              <div class="row">
+                <div class="col-7">
+                  <h2 id="explore-charms-heading">Explore Charms</h2>
+                  <p>Charms package a workload or application with the operational knowledge required to deploy, configure, scale, and maintain it consistently on any cloud. You can use charms with Juju, Canonical's open source orchestration engine for software operators.</p>
+                </div>
+              </div>
+              <div>
+                <div class="row" aria-hidden="true">
+                  {% for _ in range(12) %}
+                  <div class="col-3" style="margin-bottom: 1.5rem;">
+                    <div class="p-card" style="height: 290px;"></div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+              <p class="u-no-padding--top"><a href="/?type=charms">View all Charms</a></p>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="p-strip" style="min-height: 100vh;" role="status">
+    <div class="row">Loading results...</div>
+  </div>
+  {% endif %}
+</div>
