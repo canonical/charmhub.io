@@ -13,9 +13,7 @@ class TestDiscoveredPages(unittest.TestCase):
         self.paths = {page["path"] for page in self.pages}
 
     def test_the_marketing_pages_are_discovered(self):
-        self.assertLessEqual(
-            {"/contact-us", "/integrations", "/topics"}, self.paths
-        )
+        self.assertLessEqual({"/contact-us", "/integrations", "/topics"}, self.paths)
 
     def test_every_page_has_a_title_and_a_description(self):
         for page in self.pages:
@@ -76,18 +74,45 @@ class TestRoutes(unittest.TestCase):
             self.assertEqual(response.status_code, 200, path)
             self.assertIn("text/markdown", response.content_type, path)
 
-    def test_homepage_fallback_is_only_visible_without_javascript(self):
+    def test_homepage_has_a_visible_shell_before_javascript(self):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.data, "html.parser")
         root = soup.find(id="root")
-        fallback = root.find("noscript")
+        shell = root.find(id="store-loading")
+        self.assertIsNotNone(shell)
+        self.assertIsNone(shell.find_parent("noscript"))
+        self.assertEqual(shell.find("h1").get_text(), "The Charm Collection")
+        self.assertIsNotNone(shell.find(id="discover-solutions"))
+        self.assertIsNotNone(shell.find(id="explore-charms"))
+        self.assertEqual(len(shell.select(".sc-solution-loading-card")), 4)
+        self.assertIsNotNone(shell.find("form", action="/"))
+        self.assertEqual(len(soup.find_all("main")), 1)
 
+        fallback = root.find_all("noscript")[-1]
         self.assertIsNotNone(fallback)
         self.assertEqual(fallback.find("h1").get_text(), "The Open Operator Collection")
         self.assertEqual(len(fallback.find_all("a")), 4)
-        fallback.decompose()
-        self.assertEqual(root.get_text(strip=True), "")
+        self.assertIn("#store-loading { display: none; }", str(root))
+
+    def test_filtered_homepage_has_a_results_loading_shell(self):
+        response = self.client.get("/?type=charms&q=kafka")
+        soup = BeautifulSoup(response.data, "html.parser")
+        shell = soup.find(id="store-loading")
+
+        self.assertEqual(
+            shell.find(role="status").get_text(strip=True), "Loading results..."
+        )
+        self.assertIsNone(shell.find(id="discover-solutions"))
+
+    def test_font_preload_matches_the_variable_font(self):
+        response = self.client.get("/")
+        soup = BeautifulSoup(response.data, "html.parser")
+        fonts = soup.find_all("link", rel="preload", attrs={"as": "font"})
+
+        self.assertEqual(len(fonts), 1)
+        self.assertIn("Ubuntu%5Bwdth,wght%5D-latin", fonts[0]["href"])
+        self.assertIn("crossorigin", fonts[0].attrs)
 
     def test_homepage_markdown_preserves_the_fallback_content(self):
         response = self.client.get("/index.md")

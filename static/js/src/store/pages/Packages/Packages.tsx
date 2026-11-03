@@ -1,11 +1,17 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
-import { ITEMS_PER_PAGE, PackageList } from "../../components/PackageList";
+import { ITEMS_PER_PAGE } from "../../constants";
 import { v4 as uuidv4 } from "uuid";
 import { LandingPage } from "../../components/LandingPage";
 import { Solution, Store } from "../../types";
 import platforms from "../../data/platforms";
+
+const PackageList = lazy(() =>
+  import("../../components/PackageList").then(({ PackageList }) => ({
+    default: PackageList,
+  }))
+);
 
 function Packages() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -124,31 +130,41 @@ function Packages() {
   return isLandingPage ? (
     <LandingPage data={data} isFetching={isFetching} status={status} />
   ) : (
-    <PackageList
-      type={listType}
-      charms={status === "success" ? data.packages : []}
-      solutions={pagedSolutions}
-      categories={categories}
-      counts={{ charms: charmCount, solutions: filteredSolutions.length }}
-      countsFetching={{ charms: isFetching, solutions: areSolutionsFetching }}
-      countsReady={status === "success" && solutionsStatus === "success"}
-      errors={{
-        charms: status === "error",
-        solutions: solutionsStatus === "error",
-      }}
-      totalItems={
-        listType === "solutions" ? filteredSolutions.length : charmCount
+    <Suspense
+      fallback={
+        <div className="p-strip" style={{ minHeight: "100vh" }} role="status">
+          <div className="row">Loading results...</div>
+        </div>
       }
-      resultCount={
-        listType === "solutions"
-          ? pagedSolutions.length
-          : data?.packages.length || 0
-      }
-      isFetching={listType === "solutions" ? areSolutionsFetching : isFetching}
-      showSkeletons={
-        listType === "solutions" ? areSolutionsFetching : isFetching
-      }
-    />
+    >
+      <PackageList
+        type={listType}
+        charms={status === "success" ? data.packages : []}
+        solutions={pagedSolutions}
+        categories={categories}
+        counts={{ charms: charmCount, solutions: filteredSolutions.length }}
+        countsFetching={{ charms: isFetching, solutions: areSolutionsFetching }}
+        countsReady={status === "success" && solutionsStatus === "success"}
+        errors={{
+          charms: status === "error",
+          solutions: solutionsStatus === "error",
+        }}
+        totalItems={
+          listType === "solutions" ? filteredSolutions.length : charmCount
+        }
+        resultCount={
+          listType === "solutions"
+            ? pagedSolutions.length
+            : data?.packages.length || 0
+        }
+        isFetching={
+          listType === "solutions" ? areSolutionsFetching : isFetching
+        }
+        showSkeletons={
+          listType === "solutions" ? areSolutionsFetching : isFetching
+        }
+      />
+    </Suspense>
   );
 }
 
