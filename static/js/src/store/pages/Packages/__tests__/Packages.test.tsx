@@ -76,7 +76,9 @@ describe("Packages component", () => {
   test("renders the solutions package list page", async () => {
     renderPackages("/?type=solutions");
 
-    expect(screen.getByText("Package list: solutions")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Package list: solutions")
+    ).toBeInTheDocument();
     await waitFor(() => {
       expect(globalThis.fetch).toHaveBeenCalledWith("/store.json?type=charm");
       expect(globalThis.fetch).toHaveBeenCalledWith("/solutions.json");
@@ -86,27 +88,35 @@ describe("Packages component", () => {
   test("renders the charms package list page", async () => {
     renderPackages("/?type=charms");
 
-    expect(screen.getByText("Package list: charms")).toBeInTheDocument();
+    expect(await screen.findByText("Package list: charms")).toBeInTheDocument();
     await waitFor(() => {
       expect(globalThis.fetch).toHaveBeenCalledWith("/store.json?type=charm");
     });
   });
 
   test("counts become ready once both requests succeed", async () => {
-    globalThis.fetch = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        solutions: [],
-        packages: [],
-        total_items: 0,
-        total_pages: 0,
-        categories: [],
-      }),
+    let completeRequests!: () => void;
+    const pending = new Promise<void>((resolve) => {
+      completeRequests = resolve;
+    });
+    globalThis.fetch = vi.fn().mockImplementation(async () => {
+      await pending;
+      return {
+        ok: true,
+        json: async () => ({
+          solutions: [],
+          packages: [],
+          total_items: 0,
+          total_pages: 0,
+          categories: [],
+        }),
+      };
     });
 
     renderPackages("/?type=solutions");
 
-    expect(screen.getByText("Counts ready: false")).toBeInTheDocument();
+    expect(await screen.findByText("Counts ready: false")).toBeInTheDocument();
+    completeRequests();
     expect(await screen.findByText("Counts ready: true")).toBeInTheDocument();
   });
 
@@ -181,7 +191,7 @@ describe("Packages component", () => {
   ])("redirects %s to the charms tab", async (initialEntry, expected) => {
     renderPackages(initialEntry);
 
-    expect(screen.getByText("Package list: charms")).toBeInTheDocument();
+    expect(await screen.findByText("Package list: charms")).toBeInTheDocument();
     await waitFor(() => {
       expect(screen.getByTestId("location")).toHaveTextContent(expected);
     });

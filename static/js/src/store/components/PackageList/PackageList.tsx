@@ -21,7 +21,7 @@ import { Solution, Store } from "../../types";
 import { PackageFilter } from "../PackageFilter";
 import { SearchInput } from "../SearchInput";
 
-export const ITEMS_PER_PAGE = { charms: 12, solutions: 5 };
+import { ITEMS_PER_PAGE } from "../../constants";
 
 type Props = {
   type: "solutions" | "charms";
