@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="3287" lines-covered="1627" line-rate="0.4949" branches-valid="2101" branches-covered="1024" branch-rate="0.48729999999999996" timestamp="1793398020966" complexity="0" version="0.1">
+<coverage lines-valid="3287" lines-covered="1627" line-rate="0.4949" branches-valid="2101" branches-covered="1024" branch-rate="0.48729999999999996" timestamp="1794002854022" complexity="0" version="0.1">
   <sources>
     <source>/home/runner/work/charmhub.io/charmhub.io</source>
   </sources>
@@ -2102,14 +2102,14 @@
                 <line number="2" hits="12"/>
               </lines>
             </method>
-            <method name="(anonymous_1)" hits="25" signature="()V">
+            <method name="(anonymous_1)" hits="13" signature="()V">
               <lines>
-                <line number="6" hits="25"/>
+                <line number="6" hits="13"/>
               </lines>
             </method>
-            <method name="(anonymous_2)" hits="7" signature="()V">
+            <method name="(anonymous_2)" hits="4" signature="()V">
               <lines>
-                <line number="7" hits="7"/>
+                <line number="7" hits="4"/>
               </lines>
             </method>
             <method name="(anonymous_3)" hits="14" signature="()V">
@@ -2127,8 +2127,8 @@
             <line number="3" hits="12" branch="false"/>
             <line number="4" hits="12" branch="false"/>
             <line number="6" hits="12" branch="false"/>
-            <line number="7" hits="25" branch="false"/>
-            <line number="8" hits="7" branch="false"/>
+            <line number="7" hits="13" branch="false"/>
+            <line number="8" hits="4" branch="false"/>
             <line number="14" hits="14" branch="true" condition-coverage="100% (2/2)"/>
             <line number="15" hits="9" branch="false"/>
             <line number="16" hits="9" branch="true" condition-coverage="100% (2/2)"/>
@@ -5055,9 +5055,9 @@
             <line number="133" hits="3" branch="false"/>
             <line number="134" hits="3" branch="false"/>
             <line number="135" hits="3" branch="false"/>
-            <line number="140" hits="3" branch="false"/>
+            <line number="140" hits="2" branch="false"/>
             <line number="142" hits="0" branch="false"/>
-            <line number="144" hits="3" branch="false"/>
+            <line number="144" hits="2" branch="false"/>
             <line number="177" hits="0" branch="false"/>
             <line number="178" hits="0" branch="false"/>
             <line number="179" hits="0" branch="false"/>
