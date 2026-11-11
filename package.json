@@ -18,8 +18,8 @@
     "check-prettier": "prettier -c '**/*.js'"
   },
   "dependencies": {
-    "@canonical/cookie-policy": "3.10.0",
-    "@canonical/global-nav": "3.9.0",
+    "@canonical/cookie-policy": "4.0.0",
+    "@canonical/global-nav": "4.0.0",
     "@canonical/react-components": "4.9.0",
     "@canonical/react-ds-global": "0.33.0",
     "@canonical/store-components": "0.57.1",
