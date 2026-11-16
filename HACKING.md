@@ -13,10 +13,6 @@ The setup hook installs Python dependencies into `.venv`, installs JavaScript de
 
 Use `workshop exec -- <command>` for arbitrary commands or `workshop shell` for an interactive shell.
 
-### Migrating an existing checkout
-
-Stop the old development server before launching Workshop. If setup or tests fail with permission errors on generated files left by the old environment, move aside or fix ownership of `.venv`, `node_modules`, `static/js/dist`, `.ruff_cache`, and `coverage`, then rerun `workshop launch` (or `workshop refresh` for an existing workshop). These directories contain generated dependencies, assets, and caches, not source files.
-
 ### Native setup (without Workshop)
 
 Install Python 3.14 (as specified in `.python-version`), Node.js 24 and Yarn, then:
