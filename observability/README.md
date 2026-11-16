@@ -33,7 +33,10 @@ This starts the OpenTelemetry Collector, Grafana and Tempo containers for tracin
 
 ### 3. Run the application
 
-Back in the main terminal (in the root of the project), run `dotrun`
+Back in the main terminal (in the root of the project), run `workshop run -- start`
+(run `workshop launch` first for a new environment). When the tracing stack runs
+on the host, set `OTEL_EXPORTER_OTLP_ENDPOINT` in `.env.local` to a host address
+reachable from the Workshop container, rather than `localhost`.
 
 ### 4. Generate traces
 

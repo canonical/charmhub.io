@@ -20,20 +20,31 @@ If you have found a bug on the site or have an idea for a new feature, feel free
 
 ## Local development
 
-The simplest way to run the site locally is using [`dotrun`](https://github.com/canonical/dotrun):
+Use [Workshop](https://ubuntu.com/workshop/docs/) to run the site locally. It provides Python and Node.js, installs project dependencies, and forwards the Flask and Vite ports.
 
 ```bash
-dotrun
+workshop launch # first-time setup
+workshop run -- start
 ```
 
-Once the server has started, you can visit <http://127.0.0.1:8045> in your browser. You can stop the server using `<ctrl>+c`.
+Visit <http://127.0.0.1:8045> once the server has started. Vite runs on port 5045 with live reloading. Stop the server with `Ctrl+C`.
 
-> If you're running dotrun on macOS or Windows, you will have to use a different command to launch dotrun with an additional argument in order to get JavaScript code working:
+For an existing workshop, use `workshop start` if it is stopped, or `workshop refresh` to update dependencies after pulling changes. Put local credentials and configuration overrides in `.env.local`; Workshop loads it after `.env`.
+
 ```bash
-dotrun -p 5045:5045
+workshop run -- build             # build frontend assets
+workshop run -- test              # build, lint, and run Python/JS tests
+workshop run -- yarn test-js      # run an individual Yarn script
+workshop run -- prod              # build and serve without the Vite dev server
 ```
 
-For more detailed local development instructions, see [HACKING.md](HACKING.md).
+The `prod` action uses `ENVIRONMENT=production` and `FLASK_DEBUG=0`, serving built assets with Flask debug mode and the reloader disabled.
+
+> Workshop depends on LXD, which is only available on Linux. On macOS or Windows, run Workshop inside a [Multipass](https://canonical.com/multipass) VM. Configure Multipass to use the VirtualBox virtualization driver and allocate at least 4GB RAM and 10GB disk; after setting up the workshop in the VM, enable [port forwarding](https://canonical.com/multipass/docs/stable/how-to-guides/customise-multipass/set-up-the-driver/#use-virtualbox-to-set-up-port-forwarding-for-a-multipass-instance) for ports 8045 and 5045.
+
+Production packaging and deployment continue to use `rockcraft.yaml` and the Juju charm, not the development environment.
+
+For detailed development, testing, and native setup instructions, see [HACKING.md](HACKING.md).
 
 ## License
 
