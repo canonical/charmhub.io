@@ -73,8 +73,6 @@ workshop run -- yarn lint-scss
 workshop run -- yarn lint-python
 ```
 
-For Cypress, start `workshop run -- prod`, then run `workshop run -- yarn test-e2e` in another terminal. Cypress requires its [Linux system dependencies](https://docs.cypress.io/app/get-started/install-cypress#Linux-Prerequisites); CI runs it in the Cypress base image against the Workshop app.
-
 ## Status checks and prometheus metrics
 
 [Talisker](https://talisker.readthedocs.io/en/latest/) provides a bunch of useful status checks and metrics about the running application. Some of this information is sensitive and so to access it you need to run the site with your IP address mentioned in the `TALISKER_NETWORKS` variable.
