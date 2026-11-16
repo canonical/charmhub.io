@@ -122,6 +122,7 @@ jobs:
         filters: |
           py:
             - '.github/workflows/pr.yml'
+            - '.github/workflows/coverage.yml'
             - '.python-version'
             - 'package.json'
             - 'yarn.lock'
@@ -132,6 +133,7 @@ jobs:
             - 'templates/**/*'
           js:
             - '.github/workflows/pr.yml'
+            - '.github/workflows/coverage.yml'
             - '**/*.js'
             - '**/*.ts'
             - '**/*.jsx'
