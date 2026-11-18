@@ -5,7 +5,7 @@ on:
     branches: main
 
 env:
-  SECRET_KEY: insecure_test_key
+  FLASK_SECRET_KEY: insecure_test_key
 
 permissions:
   contents: read

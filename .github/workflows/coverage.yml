@@ -51,7 +51,7 @@ jobs:
       - name: Run Python tests with coverage (offline)
         env:
           FLASK_DEBUG: "0"
-          SECRET_KEY: simplesecretkey
+          FLASK_SECRET_KEY: simplesecretkey
         run: |
           sudo --preserve-env unshare --net -- bash -c '
             set -euo pipefail
