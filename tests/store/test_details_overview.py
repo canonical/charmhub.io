@@ -11,18 +11,24 @@ class TestDetailsOverview(TestCase):
         app.testing = True
         self.client = app.test_client()
 
+    @patch("webapp.store.views.package_has_sboms", return_value=False)
     @patch("webapp.store.views.redis_cache.get")
     @patch("webapp.store.views.get_package_details")
-    def test_details_with_discourse_link(self, mock_find, mock_cache_get):
+    def test_details_with_discourse_link(
+        self, mock_find, mock_cache_get, mock_has_sboms
+    ):
         mock_find.return_value = sample_package_detail
         mock_cache_get.return_value = None
         response = self.client.get("/test")
         self.assertNotIn(b"Read documentation", response.data)
         self.assertEqual(response.status_code, 200)
 
+    @patch("webapp.store.views.package_has_sboms", return_value=False)
     @patch("webapp.store.views.redis_cache.get")
     @patch("webapp.store.views.get_package_details")
-    def test_details_with_readthedocs_link(self, mock_find, mock_cache_get):
+    def test_details_with_readthedocs_link(
+        self, mock_find, mock_cache_get, mock_has_sboms
+    ):
         data = copy.deepcopy(sample_package_detail)
         data["default-release"]["revision"][
             "metadata-yaml"
