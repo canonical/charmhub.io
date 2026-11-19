@@ -14,6 +14,8 @@ export default defineConfig({
     environment: "jsdom",
     silent: "passed-only", // silence logs for passed tests
     pool: "threads",
+    // Workshop can expose every host CPU; avoid excessive worker processes.
+    maxWorkers: 4,
     testTimeout: 20000,
     coverage: {
       enabled: true,

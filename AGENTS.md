@@ -10,34 +10,35 @@ bundled by Vite 7 and styled with Vanilla Framework.
 
 ## Running commands
 
-Everything should run through `dotrun` for local development so commands use the
-same containerized environment as the app.
+Use Workshop for the managed development environment. Launch once with
+`workshop launch`, use `workshop start` for a stopped workshop, and run
+`workshop refresh` after dependency changes.
 
 ```bash
-dotrun                                          # Run the app on http://127.0.0.1:8045
-dotrun -p 5045:5045                            # macOS/Windows: expose the Vite dev server
-dotrun build                                   # Build frontend assets, as CI does
-dotrun exec yarn build                         # Build frontend assets via the yarn script
-dotrun test                                    # Full suite through dotrun
+workshop run -- start                         # Flask on 8045, Vite on 5045
+workshop run -- build                         # Build frontend assets
+workshop run -- test                          # Build + full unit/lint suite
+workshop run -- prod                          # Build and serve production assets
 ```
 
-Yarn scripts should be invoked through `dotrun exec yarn <script>` during local
-agent work:
+Run individual Yarn scripts through Workshop:
 
 ```bash
-dotrun exec yarn test-js                       # Vitest unit tests
-dotrun exec yarn test-python                   # Python unittest suite
-dotrun exec yarn test-e2e                      # Cypress; start the app first
-dotrun exec yarn lint-python                   # Ruff lint for webapp and tests
-dotrun exec yarn lint-js                       # ESLint for static/js/src
-dotrun exec yarn lint-scss                     # Stylelint for SCSS
-dotrun exec yarn format-python                 # Ruff format for webapp and tests
-dotrun exec yarn check-prettier                # Prettier check for JS files
+workshop run -- yarn test-js                  # Vitest unit tests
+workshop run -- yarn test-python              # Python unittest suite; build first
+workshop run -- yarn test-e2e                 # Cypress; start prod first
+workshop run -- yarn lint-python              # Ruff lint for webapp and tests
+workshop run -- yarn lint-js                  # ESLint for static/js/src
+workshop run -- yarn lint-scss                # Stylelint for SCSS
+workshop run -- yarn format-python            # Ruff format for webapp and tests
+workshop run -- yarn check-prettier           # Prettier check for JS files
 ```
+
+CI runs Python 3.14 and Node.js 24 directly. See HACKING.md for native setup.
 
 Build assets before validating Flask behavior after frontend or template changes.
 Cypress tests expect the site to be running, matching CI's pattern of building
-assets, starting `dotrun`, then running the e2e suite.
+assets, starting `workshop run -- prod`, then running the e2e suite.
 
 ## Architecture
 
@@ -87,7 +88,7 @@ usually means adding a `vite_import(...)` call to the template rather than
 manually editing Vite inputs.
 
 Vite config lives in `vite.config.js`. The dev server must be reachable by Flask
-on port `5045` when running through dotrun on macOS or Windows.
+on port `5045`; Workshop forwards both Flask and Vite ports.
 
 ## Conventions
 
@@ -111,8 +112,8 @@ details. Do not commit local credentials.
 The frontend uses Vanilla Framework for layout and components. Use the framework
 docs and existing project examples when adding or changing UI.
 
-The local development tool is `dotrun`, which provides the app's containerized
-development environment.
+The managed development environment is provided by Workshop, configured in
+`workshop.yaml` and `.workshop/`.
 
 ## Workflow
 

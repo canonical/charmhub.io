@@ -1,0 +1,20 @@
+set -eu
+
+uv venv --allow-existing
+uv pip install -r requirements.txt
+yarn install --immutable
+
+cat <<'EOF' > ~/.charmhub-env
+# Activate Python and load project defaults, then local overrides.
+. /project/.venv/bin/activate
+set -a
+. /project/.env
+if [ -f /project/.env.local ]; then
+    . /project/.env.local
+fi
+set +a
+EOF
+
+if ! grep -qF '. "$HOME/.charmhub-env"' ~/.profile; then
+    printf '\n. "$HOME/.charmhub-env"\n' >> ~/.profile
+fi
