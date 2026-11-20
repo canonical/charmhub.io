@@ -269,10 +269,10 @@
     hashery "^1.5.1"
     keyv "^5.6.0"
 
-"@canonical/cookie-policy@3.10.0":
-  version "3.10.0"
-  resolved "https://registry.yarnpkg.com/@canonical/cookie-policy/-/cookie-policy-3.10.0.tgz#bc17a6900b3014c2f262948d5a8b3a52acba9926"
-  integrity sha512-sAVw8fdD2RgwSI2YImvlOfn79FRFbbqd0TaD3UHYXfL58qVRAXFxqqymbp4qISN4agi8UuZ2+kqq9zOcW7ZbTA==
+"@canonical/cookie-policy@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@canonical/cookie-policy/-/cookie-policy-4.0.0.tgz#83341c8e3d9ec505d3a9b8c580580117c6231ab9"
+  integrity sha512-C3eY/yKHJ/YggHymFKzxJkyJmR/M47BUCGKCfptKpOHyUVc7Kq/cu1E8A1OZF/Owkya2+nThyAQo6skpm7nVPg==
 
 "@canonical/design-tokens@0.8.1":
   version "0.8.1"
@@ -291,10 +291,10 @@
   resolved "https://registry.yarnpkg.com/@canonical/ds-types/-/ds-types-0.33.0.tgz#98d74fa2189a3048addfde7ad30be9a2a28bc03e"
   integrity sha512-ccgtoTpF4eOYmKDoFOQjE4lhQybdDh1lN+xNeUlAfJJI+JHOQ8LAmtINAsYfiUuMIa15CdmVd5MGuP+9Kpp5Jg==
 
-"@canonical/global-nav@3.9.0":
-  version "3.9.0"
-  resolved "https://registry.yarnpkg.com/@canonical/global-nav/-/global-nav-3.9.0.tgz#00708ea529e85f25f217d2da3c2891328847813d"
-  integrity sha512-dFE9ioSSh5BZkG/s9o1HVNUB23HFbkfD4VWPFFxR+YRNNgHjtY5c3WdEMcsHnSL+OnYj0xv5ZqSl/rppI9hdCQ==
+"@canonical/global-nav@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@canonical/global-nav/-/global-nav-4.0.0.tgz#38c41105fa4d90ae4183ff458f4c018b9a93548c"
+  integrity sha512-KSawXydVacDzNdBjTWMOI0arPmU07xs4qrMvfq4ibY43dXj4jPIlS4uMCQuS92x2oZ0lIIzEuZAeSvN95lnx9A==
   dependencies:
     vanilla-framework "4.35.0"
 
