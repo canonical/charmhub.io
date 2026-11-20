@@ -31,6 +31,26 @@ describe("generateInviteToken", () => {
     );
   });
 
+  test("encodes query parameters without changing the returned token", async () => {
+    const token = "token+with/reserved=&?#% characters";
+    const packageName = "package+name";
+    global.fetch = vi.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ success: true, data: [{ token }] }),
+    });
+
+    const result = await generateInviteToken(email, packageName, csrfToken);
+    const url = new URL(result.inviteLink);
+
+    expect(result.token).toBe(token);
+    expect(result.inviteLink).toBe(
+      `https://charmhub.io/accept-invite?package=${encodeURIComponent(packageName)}&token=${encodeURIComponent(token)}`
+    );
+    expect(url.searchParams.get("package")).toBe(packageName);
+    expect(url.searchParams.get("token")).toBe(token);
+    expect(url.hash).toBe("");
+  });
+
   test("throws an error if response is not ok", async () => {
     global.fetch = vi.fn().mockResolvedValueOnce({
       ok: false,

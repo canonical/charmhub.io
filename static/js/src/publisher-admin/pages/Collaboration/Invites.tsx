@@ -1,7 +1,6 @@
 import { useAtomValue, useSetAtom } from "jotai";
 import { MainTable } from "@canonical/react-components";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
 
 import { getInvitesByStatus, buildInviteTableRows } from "../../utils";
 
@@ -16,8 +15,6 @@ type Props = {
 function Invites({ setShowRevokeModal, setShowReopenModal }: Props) {
   const invitesList = useAtomValue(filteredInvitesListState);
   const setActiveInviteEmail = useSetAtom(activeInviteEmailState);
-  const [loadingInviteUrl, setLoadingInviteUrl] = useState<string | null>(null);
-  const [copiedInviteUrl, setCopiedInviteUrl] = useState<string | null>(null);
 
   const pendingInvites = getInvitesByStatus(invitesList, "pending");
   const expiredInvites = getInvitesByStatus(invitesList, "expired");
@@ -34,11 +31,7 @@ function Invites({ setShowRevokeModal, setShowReopenModal }: Props) {
     packageName!,
     setShowRevokeModal,
     setShowReopenModal,
-    setActiveInviteEmail,
-    loadingInviteUrl,
-    setLoadingInviteUrl,
-    copiedInviteUrl,
-    setCopiedInviteUrl
+    setActiveInviteEmail
   );
   const expiredInvitesTableRows = buildInviteTableRows(
     expiredInvites,
@@ -46,11 +39,7 @@ function Invites({ setShowRevokeModal, setShowReopenModal }: Props) {
     packageName!,
     setShowRevokeModal,
     setShowReopenModal,
-    setActiveInviteEmail,
-    loadingInviteUrl,
-    setLoadingInviteUrl,
-    copiedInviteUrl,
-    setCopiedInviteUrl
+    setActiveInviteEmail
   );
   const revokedInvitesTableRows = buildInviteTableRows(
     uniqueRevokedInvites,
@@ -58,11 +47,7 @@ function Invites({ setShowRevokeModal, setShowReopenModal }: Props) {
     packageName!,
     setShowRevokeModal,
     setShowReopenModal,
-    setActiveInviteEmail,
-    loadingInviteUrl,
-    setLoadingInviteUrl,
-    copiedInviteUrl,
-    setCopiedInviteUrl
+    setActiveInviteEmail
   );
 
   return (
