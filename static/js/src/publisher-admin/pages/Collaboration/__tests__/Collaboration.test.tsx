@@ -1,6 +1,8 @@
 import type { Atom } from "jotai";
 import { BrowserRouter } from "react-router-dom";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { add } from "date-fns";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
@@ -12,6 +14,8 @@ import {
 import { QueryProvider } from "../../../utils";
 import JotaiObserver from "../../../../test-utils/JotaiObserver";
 import JotaiTestProvider from "../../../../test-utils/JotaiTestProvider";
+import { invitesListState } from "../../../state/atoms";
+import type { Invite } from "../../../types";
 
 const renderComponent = ({
   event,
@@ -33,6 +37,74 @@ const renderComponent = ({
 };
 
 describe("Collaboration", () => {
+  test("keeps the invite count aligned with displayed rows and filtering", async () => {
+    const baseInvite: Invite = {
+      "accepted-at": null,
+      "created-at": "2024-01-01",
+      "created-by": {
+        "display-name": "John Doe",
+        email: "john.doe@canonical.com",
+        id: "publisher-id",
+        username: "johndoe",
+      },
+      email: "pending@example.com",
+      "expires-at": add(new Date(), { days: 1 }).toISOString(),
+      "invite-type": "package-collaborator",
+      "revoked-at": null,
+    };
+    const revokedInvite = {
+      ...baseInvite,
+      email: "revoked@example.com",
+      "revoked-at": new Date().toISOString(),
+    };
+    const invites: Invite[] = [
+      baseInvite,
+      {
+        ...baseInvite,
+        email: "accepted@example.com",
+        "accepted-at": new Date().toISOString(),
+      },
+      {
+        ...baseInvite,
+        email: "expired@example.com",
+        "expires-at": "2020-01-01T00:00:00Z",
+      },
+      revokedInvite,
+      { ...revokedInvite },
+    ];
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { enabled: false } },
+    });
+    const user = userEvent.setup();
+
+    render(
+      <JotaiTestProvider initialValues={[[invitesListState, invites]]}>
+        <BrowserRouter>
+          <QueryClientProvider client={queryClient}>
+            <Collaboration />
+          </QueryClientProvider>
+        </BrowserRouter>
+      </JotaiTestProvider>
+    );
+
+    await user.click(screen.getByRole("tab", { name: "Invites (3)" }));
+
+    const table = screen.getByRole("grid");
+    expect(within(table).getAllByRole("row")).toHaveLength(4);
+    expect(
+      within(table).queryByText("accepted@example.com")
+    ).not.toBeInTheDocument();
+    expect(within(table).getAllByText("revoked@example.com")).toHaveLength(1);
+
+    await user.type(screen.getByRole("searchbox"), "pending@example.com");
+
+    expect(
+      screen.getByRole("tab", { name: "Invites (1)" })
+    ).toBeInTheDocument();
+    expect(within(table).getAllByRole("row")).toHaveLength(2);
+    expect(within(table).getByText("pending@example.com")).toBeInTheDocument();
+  });
+
   test("sets collaborators data", async () => {
     const onload = vi.fn();
     renderComponent({ event: onload, state: filteredCollaboratorsListState });
