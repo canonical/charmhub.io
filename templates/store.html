@@ -5,9 +5,12 @@
 {% block meta_copydoc %}https://docs.google.com/document/d/1mps4SOa8_DA25fccYor3wxwV3ulQiD-uaocDHmaGmhw{% endblock meta_copydoc %}
 
 {% block content %}
-<main id="root">
-  {# Only show the fallback without JavaScript, not while React is loading.
-     Markdown requests need normal HTML because the converter strips noscript. #}
+<div id="root">
+  {% if not is_markdown %}
+    {% include "partial/_store-loading.html" %}
+    <noscript><style>#store-loading { display: none; }</style></noscript>
+  {% endif %}
+  {# Markdown requests need normal HTML because the converter strips noscript. #}
   {% if not is_markdown %}<noscript>{% endif %}
   <div class="p-strip">
     <div class="row">
@@ -24,6 +27,6 @@
     </div>
   </div>
   {% if not is_markdown %}</noscript>{% endif %}
-</main>
+</div>
 {{ vite_import('static/js/src/store/index.tsx') }}
 {% endblock content %}
