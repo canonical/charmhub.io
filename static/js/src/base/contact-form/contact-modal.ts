@@ -1,5 +1,9 @@
 import { clearAnswers, restoreAnswers } from "./saved-answers";
-import { clearTracking, pushEvent } from "./tracking";
+import {
+  clearTracking,
+  currentURLWithoutTracking,
+  pushEvent,
+} from "./tracking";
 
 function trapTabFocus(event: KeyboardEvent, dialog: HTMLElement): void {
   const focusable = Array.from(
@@ -97,7 +101,7 @@ export function setupContactModal(): void {
     if (event.defaultPrevented) return;
     const returnURL = form.elements.namedItem("returnURL");
     if (returnURL instanceof HTMLInputElement) {
-      const url = new URL(window.location.href);
+      const url = currentURLWithoutTracking();
       url.hash = "contact-form-success";
       returnURL.value = url.href;
     }

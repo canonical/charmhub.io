@@ -59,6 +59,22 @@ describe("Field errors", () => {
 
     expect(wrapper("email").classList).toContain("is-error");
   });
+
+  it("links the error message to its field for screen readers", () => {
+    submitForm(renderForm());
+    const field = document.getElementById("firstName") as HTMLInputElement;
+    const messageId = field.getAttribute("aria-describedby");
+
+    expect(field.getAttribute("aria-invalid")).toBe("true");
+    expect(document.getElementById(messageId as string)?.textContent).toBe(
+      field.validationMessage
+    );
+
+    type("firstName", "Ada");
+
+    expect(field.hasAttribute("aria-invalid")).toBe(false);
+    expect(field.hasAttribute("aria-describedby")).toBe(false);
+  });
 });
 
 describe("Submission URLs", () => {

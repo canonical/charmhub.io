@@ -60,7 +60,7 @@ export function captureLanding(): void {
 
 export function fillTrackingFields(form: HTMLFormElement): void {
   const consent = getCookie("_cookies_accepted");
-  const saved = ACCEPTED.includes(consent) ? readSaved() : {};
+  const saved = hasTrackingConsent() ? readSaved() : {};
 
   const setField = (name: string, value: string) => {
     const field = form.elements.namedItem(name);
@@ -71,9 +71,22 @@ export function fillTrackingFields(form: HTMLFormElement): void {
   setField("_cookies_accepted", consent);
   setField("preferredLanguage", navigator.language || "");
 
-  const pageURL = new URL(window.location.href);
+  const pageURL = currentURLWithoutTracking();
   pageURL.hash = "";
   setField("acquisition_url", pageURL.href);
+}
+
+function hasTrackingConsent(): boolean {
+  return ACCEPTED.includes(getCookie("_cookies_accepted"));
+}
+
+// Without consent, UTMs and click IDs must not leak through page URLs either
+export function currentURLWithoutTracking(): URL {
+  const url = new URL(window.location.href);
+  if (!hasTrackingConsent()) {
+    Object.keys(PARAMS).forEach((param) => url.searchParams.delete(param));
+  }
+  return url;
 }
 
 export function clearTracking(): void {

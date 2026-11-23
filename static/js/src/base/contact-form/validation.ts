@@ -7,6 +7,9 @@ const FIELDS = "input, select, textarea";
 function clearError(wrapper: Element) {
   wrapper.classList.remove("is-error");
   wrapper.querySelector(".js-validation-message")?.remove();
+  const field = wrapper.querySelector<Field>(FIELDS);
+  field?.removeAttribute("aria-invalid");
+  field?.removeAttribute("aria-describedby");
 }
 
 function showError(field: Field) {
@@ -15,8 +18,11 @@ function showError(field: Field) {
   wrapper.classList.add("is-error");
   const message = document.createElement("p");
   message.className = "p-form-validation__message js-validation-message";
+  message.id = `${field.id || field.name}-error`;
   message.textContent = field.validationMessage;
   wrapper.appendChild(message);
+  field.setAttribute("aria-invalid", "true");
+  field.setAttribute("aria-describedby", message.id);
 }
 
 export function setupValidation(form: HTMLFormElement): void {

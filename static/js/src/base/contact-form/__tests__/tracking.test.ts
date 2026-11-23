@@ -1,4 +1,9 @@
-import { captureLanding, clearTracking, fillTrackingFields } from "../tracking";
+import {
+  captureLanding,
+  clearTracking,
+  currentURLWithoutTracking,
+  fillTrackingFields,
+} from "../tracking";
 
 const FIELDS = [
   "utm_source",
@@ -115,5 +120,32 @@ describe("Campaign tracking fields", () => {
       "Failed to save contact form tracking",
       error
     );
+  });
+});
+
+describe("Tracking in URLs", () => {
+  afterEach(() => {
+    window.history.replaceState({}, "", "/");
+  });
+
+  it.each([
+    ["essential", "/?q=postgresql"],
+    ["all", "/?q=postgresql&utm_source=qa&gclid=g1&fbclid=f1"],
+  ])("with cookies %s sends %s", (consent, expected) => {
+    document.cookie = `_cookies_accepted=${consent}`;
+    window.history.replaceState(
+      {},
+      "",
+      "/?q=postgresql&utm_source=qa&gclid=g1&fbclid=f1"
+    );
+    document.body.innerHTML = `<form><input type="hidden" name="acquisition_url"></form>`;
+    const form = document.querySelector("form") as HTMLFormElement;
+
+    fillTrackingFields(form);
+
+    expect(
+      (form.elements.namedItem("acquisition_url") as HTMLInputElement).value
+    ).toBe(`${window.location.origin}${expected}`);
+    expect(currentURLWithoutTracking().search).toBe(expected.slice(1));
   });
 });

@@ -1,51 +1,51 @@
 <form action="https://ubuntu.com/marketo/submit" method="post" id="mktoForm_1098" class="js-contact-form">
     <ul class="p-list">
       <li class="p-form-validation">
-        <label for="firstName">First name: *
+        <label for="contact-firstName">First name: *
         </label>
-        <input required id="firstName" name="firstName" maxlength="255" type="text">
+        <input required id="contact-firstName" name="firstName" maxlength="255" type="text">
       </li>
 
       <li class="p-form-validation">
-        <label for="lastName">Last name: *
+        <label for="contact-lastName">Last name: *
         </label>
-        <input required id="lastName" name="lastName" maxlength="255" type="text">
+        <input required id="contact-lastName" name="lastName" maxlength="255" type="text">
       </li>
 
       <li class="p-form-validation">
-        <label for="company">Company name: *
+        <label for="contact-company">Company name: *
         </label>
-        <input required id="company" name="company" maxlength="255" type="text">
+        <input required id="contact-company" name="company" maxlength="255" type="text">
       </li>
 
       <li class="p-form-validation">
-        <label for="title">Job title: *
+        <label for="contact-title">Job title: *
         </label>
-        <input required id="title" name="title" maxlength="255" type="text">
+        <input required id="contact-title" name="title" maxlength="255" type="text">
       </li>
 
       <li class="p-form-validation">
-        <label for="email">Email: *
+        <label for="contact-email">Email: *
         </label>
-        <input required id="email" name="email" maxlength="255" type="email" pattern="^[^ ]+@[^ ]+\.[a-zA-Z]{2,26}$">
+        <input required id="contact-email" name="email" maxlength="255" type="email" pattern="^[^ ]+@[^ ]+\.[a-zA-Z]{2,26}$">
       </li>
 
       <li class="p-form-validation">
-        <label for="phone">Mobile/cell phone number:
+        <label for="contact-phone">Mobile/cell phone number:
         </label>
-        <input id="phone" name="phone" maxlength="255" type="tel">
+        <input id="contact-phone" name="phone" maxlength="255" type="tel">
       </li>
 
       <li class="p-form-validation">
-        <label for="country">Country: *
+        <label for="contact-country">Country: *
         </label>
-        <select required id="country" name="country">
+        <select required id="contact-country" name="country">
           {% include 'partial/_country-options.html' %}
         </select>
       </li>
       <li class="js-state-field p-form-validation">
-        <label for="State">State: *</label>
-        <select id="State" name="State">
+        <label for="contact-State">State: *</label>
+        <select id="contact-State" name="State">
           <option value="">Select...</option>
           <optgroup label="Select Province" value="SelectProvince" data-country="CA">
             <option value="AB">Alberta</option>
@@ -119,20 +119,20 @@
         </select>
       </li>
       <li class="p-form-validation">
-        <label for="Comments_from_lead__c">What would you like to talk to us about? *
+        <label for="contact-Comments_from_lead__c">What would you like to talk to us about? *
         </label>
-        <textarea required id="Comments_from_lead__c" name="Comments_from_lead__c" rows="5" maxlength="2000"></textarea>
+        <textarea required id="contact-Comments_from_lead__c" name="Comments_from_lead__c" rows="5" maxlength="2000"></textarea>
       </li>
       <li>
-          <input value="yes" id="canonicalUpdatesOptIn" name="canonicalUpdatesOptIn" type="checkbox" />
-          <label for="canonicalUpdatesOptIn">I agree to receive information about Canonical&rsquo;s products and services.</label>
+          <input value="yes" id="contact-canonicalUpdatesOptIn" name="canonicalUpdatesOptIn" type="checkbox" />
+          <label for="contact-canonicalUpdatesOptIn">I agree to receive information about Canonical&rsquo;s products and services.</label>
       </li>
       <li class="u-sv3">In submitting this form, I confirm that I have read and agree to <a href="https://ubuntu.com/legal/data-privacy/contact" target="_blank">Canonical&rsquo;s Privacy Notice</a> and <a aria-label="Read the Canonical privacy policy" target="_blank" href="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy">Privacy Policy</a>.</li>
       <li>
         <button type="submit" class="p-button--positive">Submit</button>
         <input type="hidden" name="formid" value="1098">
         <input type="hidden" name="Consent_to_Processing__c" value="yes">
-        <input type="hidden" name="acquisition_url" value="{{ request.url }}">
+        <input type="hidden" name="acquisition_url" value="{{ request.url if request.cookies.get('_cookies_accepted') in ['functionality', 'performance', 'all'] else request.base_url }}">
         <input type="hidden" name="preferredLanguage" value="">
         <input type="hidden" name="_cookies_accepted" value="{{ request.cookies.get('_cookies_accepted', '') }}">
         <input type="hidden" name="utm_source" value="">
@@ -145,10 +145,10 @@
       </li>
     </ul>
     <div class="u-off-screen" aria-hidden="true">
-      <label for="website">Website</label>
-      <input type="text" id="website" name="website" value="" tabindex="-1" autocomplete="off">
-      <label for="name">Name</label>
-      <input type="text" id="name" name="name" value="" tabindex="-1" autocomplete="off">
+      <label for="contact-website">Website</label>
+      <input type="text" id="contact-website" name="website" value="" tabindex="-1" autocomplete="off">
+      <label for="contact-name">Name</label>
+      <input type="text" id="contact-name" name="name" value="" tabindex="-1" autocomplete="off">
     </div>
   <input type="hidden" name="returnURL" value="{{ contact_return_url }}" />
 </form>
