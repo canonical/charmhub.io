@@ -108,6 +108,11 @@ def contact_us():
     return render_template("contact-us.html")
 
 
+@app.route("/contact-us/error")
+def contact_us_error():
+    return render_template("contact-us-error.html")
+
+
 @app.route("/thank-you")
 def thank_you():
     return render_template("thank-you.html")

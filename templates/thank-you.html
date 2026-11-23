@@ -9,9 +9,8 @@
 <section class="p-strip is-deep">
   <div class="row u-equal-height">
     <div class="col-7">
-      <h1>Thanks for contacting us.</h1>
-      <h2>A member of our team will be in touch shortly.</h2>
-      <p>If you are stuck, help is always at hand. Reach out to the <a href="http://discourse.charmhub.io">Charmhub community</a> or <a href="http://askubuntu.com" class="p-link-external">ask a question on askubuntu</a>.</p>
+      {% set thanks_heading = 'h1' %}
+      {% include 'partial/_contact-thank-you-message.html' %}
     </div>
     <div class="col-5 prefix-1 u-vertically-center u-align--right u-hide--small">
       {{

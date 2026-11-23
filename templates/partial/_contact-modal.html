@@ -1,0 +1,23 @@
+<div class="p-modal u-hide js-contact-modal" id="contact-modal">
+  <section class="p-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title" tabindex="-1">
+    <header class="p-modal__header">
+      <h2 class="p-modal__title" id="contact-modal-title">Contact Canonical</h2>
+      <button class="p-modal__close js-contact-modal-close" aria-label="Close" aria-controls="contact-modal">Close</button>
+    </header>
+    <div class="js-contact-form-panel">
+      <p>Are you interested in adopting Charmhub for enterprise use or partner with Canonical? Just fill in the form below and a member of our team will be in touch within one working day.</p>
+      {% include 'partial/_contact-form.html' %}
+    </div>
+    <div class="js-contact-success" hidden>
+      {% include 'partial/_contact-thank-you-message.html' %}
+    </div>
+    <div class="js-contact-error" hidden>
+      <div class="p-notification--negative">
+        <div class="p-notification__content">
+          <p class="p-notification__message">There was an error while sending your message. Please try again.</p>
+        </div>
+      </div>
+      <button class="p-button--positive js-contact-try-again">Try again</button>
+    </div>
+  </section>
+</div>
