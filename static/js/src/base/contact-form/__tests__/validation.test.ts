@@ -9,12 +9,16 @@ function renderForm() {
       <div class="p-form-validation">
         <input id="email" name="email" type="email" required>
       </div>
-      <input type="hidden" name="acquisition_url" value="${window.location.href}">
-      <input type="hidden" name="returnURL" value="${window.location.origin}/thank-you#contact-form-success">
+      <input type="hidden" name="acquisition_url">
+      <input type="hidden" name="returnURL">
       <button type="submit">Submit</button>
     </form>
   `;
   const form = document.querySelector("form") as HTMLFormElement;
+  (form.elements.namedItem("acquisition_url") as HTMLInputElement).value =
+    window.location.href;
+  (form.elements.namedItem("returnURL") as HTMLInputElement).value =
+    `${window.location.origin}/thank-you#contact-form-success`;
   setupValidation(form);
   return form;
 }

@@ -25,9 +25,14 @@ function disableJavaScript() {
     req.on("response", (res) => {
       const type = res.headers["content-type"] || "";
       if (type.includes("text/html") && typeof res.body === "string") {
-        res.body = res.body
-          .replace(/<script\b[\s\S]*?<\/script>/gi, "")
-          .replace(/\son[a-z]+=("[^"]*"|'[^']*')/gi, "");
+        const doc = new DOMParser().parseFromString(res.body, "text/html");
+        doc.querySelectorAll("script").forEach((script) => script.remove());
+        doc.querySelectorAll("*").forEach((element) => {
+          Array.from(element.attributes)
+            .filter((attribute) => attribute.name.startsWith("on"))
+            .forEach((attribute) => element.removeAttribute(attribute.name));
+        });
+        res.body = `<!DOCTYPE html>${doc.documentElement.outerHTML}`;
       }
     });
   });
