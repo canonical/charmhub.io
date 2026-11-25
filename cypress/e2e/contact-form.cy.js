@@ -155,6 +155,7 @@ describe("Contact form", () => {
 
       cy.wait("@marketoSubmit").then(({ request }) => {
         const fields = new URLSearchParams(request.body);
+        expect(fields.get("formid")).to.equal("8143");
         expect(fields.get("returnURL")).to.equal(returnURL.href);
         expect(fields.get("acquisition_url")).to.equal(currentURL);
       });
