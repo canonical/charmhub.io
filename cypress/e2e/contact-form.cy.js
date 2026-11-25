@@ -49,6 +49,26 @@ function fillForm() {
 }
 
 describe("Contact form", () => {
+  it("Sends no State, which form 8143 does not have", () => {
+    cy.setCookie("_cookies_accepted", "essential");
+    mockUbuntuSubmit();
+    cy.visit("http://localhost:8045/");
+    cy.get("footer").contains("a", "Contact us").click();
+
+    cy.get(".js-contact-modal").within(() => {
+      cy.get('[name="State"]').should("not.exist");
+      fillForm();
+      cy.get('select[name="country"]').select("US");
+      cy.get('[type="submit"]').click();
+    });
+
+    cy.wait("@marketoSubmit").then(({ request }) => {
+      const fields = new URLSearchParams(request.body);
+      expect(fields.get("country")).to.equal("US");
+      expect(fields.has("State")).to.equal(false);
+    });
+  });
+
   it("Keeps keyboard focus in the pop-up and restores it on close", () => {
     cy.setCookie("_cookies_accepted", "essential");
     cy.visit("http://localhost:8045/");
