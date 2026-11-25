@@ -51,7 +51,7 @@ export function setupContactModal(): void {
   let trigger: HTMLElement | undefined = links[0];
 
   const open = (panel: "form" | "success" | "error") => {
-    if (formPanel) formPanel.hidden = panel !== "form";
+    if (formPanel) formPanel.hidden = panel === "success";
     if (successPanel) successPanel.hidden = panel !== "success";
     if (errorPanel) errorPanel.hidden = panel !== "error";
     modal.classList.remove("u-hide");
@@ -89,13 +89,6 @@ export function setupContactModal(): void {
       button.addEventListener("click", close);
     });
 
-  modal
-    .querySelector<HTMLButtonElement>(".js-contact-try-again")
-    ?.addEventListener("click", () => {
-      if (form) restoreAnswers(form);
-      open("form");
-    });
-
   // Runs after validation, which cancels invalid submits
   form?.addEventListener("submit", (event) => {
     if (event.defaultPrevented) return;
@@ -113,6 +106,7 @@ export function setupContactModal(): void {
     open("success");
     pushEvent("contact_form_success");
   } else if (window.location.hash === "#contact-form-fail") {
+    if (form) restoreAnswers(form);
     open("error");
     pushEvent("contact_form_failed");
   }

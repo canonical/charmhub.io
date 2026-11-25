@@ -114,18 +114,11 @@ describe("Contact form", () => {
       if (result === "success") {
         cy.focused().should("have.attr", "href", "http://askubuntu.com");
       } else {
-        cy.focused().should("have.class", "js-contact-try-again");
+        cy.focused().should("have.attr", "type", "submit");
       }
       cy.press(Cypress.Keyboard.Keys.TAB);
       cy.focused().should("have.class", "js-contact-modal-close");
 
-      if (result === "fail") {
-        cy.get(".js-contact-try-again").click();
-        cy.focused().should("have.attr", "role", "dialog");
-        cy.press(Cypress.Keyboard.Keys.TAB);
-        cy.focused().trigger("keydown", { key: "Tab", shiftKey: true });
-        cy.focused().should("have.attr", "type", "submit");
-      }
       cy.press(Cypress.Keyboard.Keys.ESC);
       cy.get(".js-contact-modal").should("not.be.visible");
       cy.focused().should("have.class", "js-contact-link");
@@ -225,7 +218,7 @@ describe("Contact form", () => {
           cy.contains(
             "There was an error while sending your message. Please try again."
           ).should("be.visible");
-          cy.contains(mode === "pop-up" ? "button" : "a", "Try again").click();
+          cy.contains("Try again").should("not.exist");
           cy.get('.js-contact-form input[name="firstName"]').should(
             "have.value",
             ""
@@ -309,8 +302,8 @@ describe("Contact form", () => {
       expect(events).to.include("contact_form_failed");
     });
 
-    cy.get(".js-contact-modal").contains("button", "Try again").click();
     cy.get(".js-contact-modal").within(() => {
+      cy.contains("button", "Try again").should("not.exist");
       cy.get('input[name="firstName"]').should("have.value", "Test");
       cy.get('input[name="email"]').should(
         "have.value",
@@ -322,6 +315,15 @@ describe("Contact form", () => {
         "Hello"
       );
     });
+
+    // A later page load starts empty
+    cy.visit("http://localhost:8045/");
+    cy.get("footer").contains("a", "Contact us").click();
+    cy.get('.js-contact-modal input[name="firstName"]').should(
+      "have.value",
+      ""
+    );
+    cy.get(".js-contact-modal .js-contact-error").should("not.be.visible");
   });
 
   it("Full page → ubuntu.com returns #contact-form-fail", () => {
@@ -333,17 +335,17 @@ describe("Contact form", () => {
     cy.get(`form[action="${MARKETO_SUBMIT}"] [type="submit"]`).click();
 
     cy.wait("@marketoSubmit");
-    cy.location("pathname").should("eq", "/contact-us/error");
+    cy.location("pathname").should("eq", "/contact-us");
+    cy.location("hash").should("eq", "#contact-form-fail");
     cy.contains(
       "There was an error while sending your message. Please try again."
-    );
+    ).should("be.visible");
     cy.window().then((win) => {
       const events = (win.dataLayer || []).map((entry) => entry.event);
       expect(events).to.include("contact_form_failed");
     });
 
-    cy.contains("a", "Try again").click();
-    cy.location("pathname").should("eq", "/contact-us");
+    cy.contains("Try again").should("not.exist");
     cy.get('input[name="firstName"]').should("have.value", "Test");
     cy.get('select[name="country"]').should("have.value", "NL");
     cy.get('textarea[name="Comments_from_lead__c"]').should(

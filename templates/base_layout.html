@@ -81,7 +81,7 @@
     </main>
 
     {% include 'partial/_footer.html' %}
-    {% if request.path not in ['/contact-us', '/contact-us/error', '/thank-you'] %}
+    {% if request.path not in ['/contact-us', '/thank-you'] %}
       {% include 'partial/_contact-modal.html' %}
     {% endif %}
 
