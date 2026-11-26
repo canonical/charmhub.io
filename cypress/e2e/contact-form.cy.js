@@ -7,13 +7,19 @@ const MARKETO_SUBMIT = "https://ubuntu.com/marketo/submit";
 function mockUbuntuSubmit(result = "success", delay = 0) {
   cy.intercept("POST", MARKETO_SUBMIT, (req) => {
     const returnURL = new URL(new URLSearchParams(req.body).get("returnURL"));
+    // The full page returns to production; stay on the local server
+    const local = new URL(
+      returnURL.pathname + returnURL.search,
+      "http://localhost:8045"
+    );
+    local.hash = returnURL.hash;
     if (result === "fail") {
-      returnURL.search = "";
-      returnURL.hash = "contact-form-fail";
+      local.search = "";
+      local.hash = "contact-form-fail";
     }
     req.reply({
       statusCode: 302,
-      headers: { location: returnURL.href },
+      headers: { location: local.href },
       delay,
     });
   }).as("marketoSubmit");
@@ -368,7 +374,11 @@ describe("Contact form", () => {
     cy.get("footer").contains("a", "Contact us").click();
     cy.location("pathname").should("eq", "/contact-us");
 
-    submitForm();
+    submitForm().then((fields) => {
+      expect(fields.get("returnURL")).to.equal(
+        "https://charmhub.io/thank-you#contact-form-success"
+      );
+    });
     cy.location("pathname").should("eq", "/thank-you");
     cy.contains("Thanks for contacting us");
   });
