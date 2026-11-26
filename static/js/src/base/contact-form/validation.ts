@@ -1,7 +1,6 @@
-import { saveAnswers } from "./saved-answers";
+import { type Field, saveAnswers } from "./saved-answers";
 import { fillTrackingFields, pushEvent } from "./tracking";
 
-type Field = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 const FIELDS = "input, select, textarea";
 
 function clearError(wrapper: Element) {
@@ -25,7 +24,10 @@ function showError(field: Field) {
   field.setAttribute("aria-describedby", message.id);
 }
 
-export function setupValidation(form: HTMLFormElement): void {
+export function setupValidation(
+  form: HTMLFormElement,
+  beforeSend?: () => void
+): void {
   // Show our own messages instead of the browser's bubbles
   form.noValidate = true;
 
@@ -56,6 +58,7 @@ export function setupValidation(form: HTMLFormElement): void {
       return;
     }
 
+    beforeSend?.();
     pushEvent("contact_form_submitted");
     fillTrackingFields(form);
     saveAnswers(form);

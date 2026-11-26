@@ -3,17 +3,10 @@ import {
   clearTracking,
   currentURLWithoutTracking,
   fillTrackingFields,
+  PARAMS,
 } from "../tracking";
 
-const FIELDS = [
-  "utm_source",
-  "utm_medium",
-  "utm_campaign",
-  "utm_content",
-  "utm_term",
-  "GCLID__c",
-  "Facebook_Click_ID__c",
-];
+const FIELDS = Object.values(PARAMS);
 
 function renderForm() {
   document.body.innerHTML = `

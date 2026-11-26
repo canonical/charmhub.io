@@ -1,9 +1,4 @@
-import { clearAnswers, restoreAnswers } from "./saved-answers";
-import {
-  clearTracking,
-  currentURLWithoutTracking,
-  pushEvent,
-} from "./tracking";
+import { currentURLWithoutTracking, pushEvent } from "./tracking";
 
 function trapTabFocus(event: KeyboardEvent, dialog: HTMLElement): void {
   const focusable = Array.from(
@@ -32,6 +27,16 @@ function trapTabFocus(event: KeyboardEvent, dialog: HTMLElement): void {
   }
 }
 
+// Marketo sends the visitor back to the page the pop-up was opened on
+export function setModalReturnURL(form: HTMLFormElement): void {
+  const returnURL = form.elements.namedItem("returnURL");
+  if (returnURL instanceof HTMLInputElement) {
+    const url = currentURLWithoutTracking();
+    url.hash = "contact-form-success";
+    returnURL.value = url.href;
+  }
+}
+
 export function setupContactModal(): void {
   const modal = document.querySelector<HTMLElement>(".js-contact-modal");
   if (!modal) return;
@@ -44,41 +49,38 @@ export function setupContactModal(): void {
 
   const formPanel = modal.querySelector<HTMLElement>(".js-contact-form-panel");
   const successPanel = modal.querySelector<HTMLElement>(".js-contact-success");
-  const errorPanel = modal.querySelector<HTMLElement>(".js-contact-error");
-  const form = modal.querySelector<HTMLFormElement>(".js-contact-form");
   const links =
     document.querySelectorAll<HTMLAnchorElement>(".js-contact-link");
   let trigger: HTMLElement | undefined = links[0];
 
-  const open = (panel: "form" | "success" | "error") => {
-    if (formPanel) formPanel.hidden = panel === "success";
-    if (successPanel) successPanel.hidden = panel !== "success";
-    if (errorPanel) errorPanel.hidden = panel !== "error";
-    modal.classList.remove("u-hide");
-    dialog.focus();
-  };
-
-  const close = () => {
-    modal.classList.add("u-hide");
-    trigger?.focus();
-  };
-
-  document.addEventListener("keydown", (event) => {
-    if (modal.classList.contains("u-hide")) return;
-
+  const onKeydown = (event: KeyboardEvent) => {
     if (event.key === "Escape") {
       event.preventDefault();
       close();
     } else if (event.key === "Tab") {
       trapTabFocus(event, dialog);
     }
-  });
+  };
+
+  const open = (success = false) => {
+    if (formPanel) formPanel.hidden = success;
+    if (successPanel) successPanel.hidden = !success;
+    modal.classList.remove("u-hide");
+    document.addEventListener("keydown", onKeydown);
+    dialog.focus();
+  };
+
+  const close = () => {
+    modal.classList.add("u-hide");
+    document.removeEventListener("keydown", onKeydown);
+    trigger?.focus();
+  };
 
   links.forEach((link) => {
     link.addEventListener("click", (event) => {
       event.preventDefault();
       trigger = link;
-      open("form");
+      open();
       pushEvent("contact_form_opened");
     });
   });
@@ -89,25 +91,10 @@ export function setupContactModal(): void {
       button.addEventListener("click", close);
     });
 
-  // Runs after validation, which cancels invalid submits
-  form?.addEventListener("submit", (event) => {
-    if (event.defaultPrevented) return;
-    const returnURL = form.elements.namedItem("returnURL");
-    if (returnURL instanceof HTMLInputElement) {
-      const url = currentURLWithoutTracking();
-      url.hash = "contact-form-success";
-      returnURL.value = url.href;
-    }
-  });
-
+  // Storage and analytics for the result are handled in result.ts
   if (window.location.hash === "#contact-form-success") {
-    clearAnswers();
-    clearTracking();
-    open("success");
-    pushEvent("contact_form_success");
+    open(true);
   } else if (window.location.hash === "#contact-form-fail") {
-    if (form) restoreAnswers(form);
-    open("error");
-    pushEvent("contact_form_failed");
+    open();
   }
 }

@@ -48,29 +48,49 @@ function fillForm() {
   cy.get('textarea[name="Comments_from_lead__c"]').type("Hello");
 }
 
+function openPopUp() {
+  cy.get("footer").contains("a", "Contact us").click();
+}
+
+// Fills and sends the form on the page, then yields the fields Marketo got
+function submitForm(changeAnswers = () => {}) {
+  cy.get(".js-contact-form").within(() => {
+    fillForm();
+    changeAnswers();
+    cy.get('[type="submit"]').click();
+  });
+  return cy
+    .wait("@marketoSubmit")
+    .then(({ request }) => new URLSearchParams(request.body));
+}
+
+function dataLayerEvents() {
+  return cy
+    .window()
+    .then((win) => (win.dataLayer || []).map((entry) => entry.event));
+}
+
 describe("Contact form", () => {
-  it("Sends no State, which form 8143 does not have", () => {
+  beforeEach(() => {
+    // Hide the cookie banner, which covers the footer
     cy.setCookie("_cookies_accepted", "essential");
+  });
+
+  it("Sends no State, which form 8143 does not have", () => {
     mockUbuntuSubmit();
     cy.visit("http://localhost:8045/");
-    cy.get("footer").contains("a", "Contact us").click();
+    openPopUp();
+    cy.get('.js-contact-modal [name="State"]').should("not.exist");
 
-    cy.get(".js-contact-modal").within(() => {
-      cy.get('[name="State"]').should("not.exist");
-      fillForm();
+    submitForm(() => {
       cy.get('select[name="country"]').select("US");
-      cy.get('[type="submit"]').click();
-    });
-
-    cy.wait("@marketoSubmit").then(({ request }) => {
-      const fields = new URLSearchParams(request.body);
+    }).then((fields) => {
       expect(fields.get("country")).to.equal("US");
       expect(fields.has("State")).to.equal(false);
     });
   });
 
   it("Keeps keyboard focus in the pop-up and restores it on close", () => {
-    cy.setCookie("_cookies_accepted", "essential");
     cy.visit("http://localhost:8045/");
     cy.get("footer .js-contact-link").focus();
     cy.press(Cypress.Keyboard.Keys.ENTER);
@@ -105,7 +125,6 @@ describe("Contact form", () => {
 
   ["success", "fail"].forEach((result) => {
     it(`Keeps keyboard focus in the ${result} panel after returning`, () => {
-      cy.setCookie("_cookies_accepted", "essential");
       cy.visit(`http://localhost:8045/#contact-form-${result}`);
       cy.focused().should("have.attr", "role", "dialog");
       cy.press(Cypress.Keyboard.Keys.TAB);
@@ -126,21 +145,14 @@ describe("Contact form", () => {
   });
 
   it("Footer link → pop-up → success", () => {
-    // Hide the cookie banner, which covers the footer
-    cy.setCookie("_cookies_accepted", "essential");
     mockUbuntuSubmit();
     cy.visit("http://localhost:8045/");
 
-    cy.get("footer").contains("a", "Contact us").click();
+    openPopUp();
     cy.get(".js-contact-modal").should("be.visible");
     cy.location("pathname").should("eq", "/");
 
-    cy.get(".js-contact-modal").within(() => {
-      fillForm();
-      cy.get('[type="submit"]').click();
-    });
-
-    cy.wait("@marketoSubmit");
+    submitForm();
     cy.location("pathname").should("eq", "/");
     cy.location("hash").should("eq", "#contact-form-success");
     cy.get(".js-contact-modal")
@@ -150,7 +162,6 @@ describe("Contact form", () => {
   });
 
   it("Returns to the current search after a pop-up submission", () => {
-    cy.setCookie("_cookies_accepted", "essential");
     mockUbuntuSubmit();
     cy.visit("http://localhost:8045/");
 
@@ -160,14 +171,8 @@ describe("Contact form", () => {
       const returnURL = new URL(currentURL);
       returnURL.hash = "contact-form-success";
 
-      cy.get("footer").contains("a", "Contact us").click();
-      cy.get(".js-contact-modal").within(() => {
-        fillForm();
-        cy.get('[type="submit"]').click();
-      });
-
-      cy.wait("@marketoSubmit").then(({ request }) => {
-        const fields = new URLSearchParams(request.body);
+      openPopUp();
+      submitForm().then((fields) => {
         expect(fields.get("formid")).to.equal("8143");
         expect(fields.get("returnURL")).to.equal(returnURL.href);
         expect(fields.get("acquisition_url")).to.equal(currentURL);
@@ -193,9 +198,7 @@ describe("Contact form", () => {
         mockUbuntuSubmit(result);
         const path = mode === "pop-up" ? "/" : "/contact-us";
         cy.visit(`http://localhost:8045${path}?utm_source=google&gclid=abc`);
-        if (mode === "pop-up") {
-          cy.get("footer").contains("a", "Contact us").click();
-        }
+        if (mode === "pop-up") openPopUp();
         cy.get(".js-contact-form").within(() => {
           fillForm();
           cy.get('[type="submit"]').then(($button) => {
@@ -230,13 +233,12 @@ describe("Contact form", () => {
   });
 
   it("Required field missing", () => {
-    cy.setCookie("_cookies_accepted", "essential");
     let requests = 0;
     cy.intercept("POST", MARKETO_SUBMIT, () => {
       requests += 1;
     });
     cy.visit("http://localhost:8045/");
-    cy.get("footer").contains("a", "Contact us").click();
+    openPopUp();
 
     cy.get(".js-contact-modal").within(() => {
       cy.get('[type="submit"]').click();
@@ -255,18 +257,16 @@ describe("Contact form", () => {
     });
 
     cy.get(".js-contact-modal").should("be.visible");
-    cy.window().then((win) => {
-      const events = (win.dataLayer || []).map((entry) => entry.event);
+    dataLayerEvents().then((events) => {
       expect(events).not.to.include("contact_form_submitted");
       expect(requests).to.equal(0);
     });
   });
 
   it("Send button while sending", () => {
-    cy.setCookie("_cookies_accepted", "essential");
     mockUbuntuSubmit("success", 3000);
     cy.visit("http://localhost:8045/");
-    cy.get("footer").contains("a", "Contact us").click();
+    openPopUp();
 
     cy.get(".js-contact-modal").within(() => {
       fillForm();
@@ -278,80 +278,46 @@ describe("Contact form", () => {
     });
   });
 
-  it("Pop-up → ubuntu.com returns #contact-form-fail", () => {
-    cy.setCookie("_cookies_accepted", "essential");
-    mockUbuntuSubmit("fail");
-    cy.visit("http://localhost:8045/");
-    cy.get("footer").contains("a", "Contact us").click();
+  [
+    { mode: "pop-up", path: "/" },
+    { mode: "full page", path: "/contact-us" },
+  ].forEach(({ mode, path }) => {
+    it(`${mode} → ubuntu.com returns #contact-form-fail`, () => {
+      mockUbuntuSubmit("fail");
+      cy.visit(`http://localhost:8045${path}`);
+      if (mode === "pop-up") openPopUp();
 
-    cy.get(".js-contact-modal").within(() => {
-      fillForm();
-      cy.get('[type="submit"]').click();
-    });
-
-    cy.wait("@marketoSubmit");
-    cy.location("hash").should("eq", "#contact-form-fail");
-    cy.get(".js-contact-modal")
-      .should("be.visible")
-      .and(
-        "contain",
+      submitForm();
+      cy.location("pathname").should("eq", path);
+      cy.location("hash").should("eq", "#contact-form-fail");
+      cy.contains(
         "There was an error while sending your message. Please try again."
-      );
-    cy.window().then((win) => {
-      const events = (win.dataLayer || []).map((entry) => entry.event);
-      expect(events).to.include("contact_form_failed");
-    });
+      ).should("be.visible");
+      dataLayerEvents().should("include", "contact_form_failed");
 
-    cy.get(".js-contact-modal").within(() => {
-      cy.contains("button", "Try again").should("not.exist");
-      cy.get('input[name="firstName"]').should("have.value", "Test");
-      cy.get('input[name="email"]').should(
+      cy.get(".js-contact-form").within(() => {
+        cy.contains("Try again").should("not.exist");
+        cy.get('input[name="firstName"]').should("have.value", "Test");
+        cy.get('input[name="email"]').should(
+          "have.value",
+          "test.user@example.com"
+        );
+        cy.get('select[name="country"]').should("have.value", "NL");
+        cy.get('textarea[name="Comments_from_lead__c"]').should(
+          "have.value",
+          "Hello"
+        );
+      });
+
+      // A later page load starts empty
+      cy.visit(`http://localhost:8045${path}`);
+      if (mode === "pop-up") openPopUp();
+      cy.get('.js-contact-form input[name="firstName"]').should(
         "have.value",
-        "test.user@example.com"
+        ""
       );
-      cy.get('select[name="country"]').should("have.value", "NL");
-      cy.get('textarea[name="Comments_from_lead__c"]').should(
-        "have.value",
-        "Hello"
-      );
+      cy.get(".js-contact-error").should("not.be.visible");
     });
-
-    // A later page load starts empty
-    cy.visit("http://localhost:8045/");
-    cy.get("footer").contains("a", "Contact us").click();
-    cy.get('.js-contact-modal input[name="firstName"]').should(
-      "have.value",
-      ""
-    );
-    cy.get(".js-contact-modal .js-contact-error").should("not.be.visible");
-  });
-
-  it("Full page → ubuntu.com returns #contact-form-fail", () => {
-    cy.setCookie("_cookies_accepted", "essential");
-    mockUbuntuSubmit("fail");
-    cy.visit("http://localhost:8045/contact-us");
-
-    fillForm();
-    cy.get(`form[action="${MARKETO_SUBMIT}"] [type="submit"]`).click();
-
-    cy.wait("@marketoSubmit");
-    cy.location("pathname").should("eq", "/contact-us");
-    cy.location("hash").should("eq", "#contact-form-fail");
-    cy.contains(
-      "There was an error while sending your message. Please try again."
-    ).should("be.visible");
-    cy.window().then((win) => {
-      const events = (win.dataLayer || []).map((entry) => entry.event);
-      expect(events).to.include("contact_form_failed");
-    });
-
-    cy.contains("Try again").should("not.exist");
-    cy.get('input[name="firstName"]').should("have.value", "Test");
-    cy.get('select[name="country"]').should("have.value", "NL");
-    cy.get('textarea[name="Comments_from_lead__c"]').should(
-      "have.value",
-      "Hello"
-    );
   });
 
   function sendFromLandingLink(consent) {
@@ -360,14 +326,8 @@ describe("Contact form", () => {
     cy.visit(
       "http://localhost:8045/?utm_source=google&utm_medium=cpc&utm_campaign=spring&utm_content=ad1&utm_term=juju&gclid=g123&fbclid=f456"
     );
-    cy.get("footer").contains("a", "Contact us").click();
-    cy.get(".js-contact-modal").within(() => {
-      fillForm();
-      cy.get('[type="submit"]').click();
-    });
-    return cy
-      .wait("@marketoSubmit")
-      .then((interception) => new URLSearchParams(interception.request.body));
+    openPopUp();
+    return submitForm();
   }
 
   it("Cookies accepted", () => {
@@ -404,13 +364,11 @@ describe("Contact form", () => {
     mockUbuntuSubmit();
     cy.visit("http://localhost:8045/");
 
+    // Without JS the footer link opens the full page
     cy.get("footer").contains("a", "Contact us").click();
     cy.location("pathname").should("eq", "/contact-us");
 
-    fillForm();
-    cy.get(`form[action="${MARKETO_SUBMIT}"] [type="submit"]`).click();
-
-    cy.wait("@marketoSubmit");
+    submitForm();
     cy.location("pathname").should("eq", "/thank-you");
     cy.contains("Thanks for contacting us");
   });

@@ -81,9 +81,9 @@
     </main>
 
     {% include 'partial/_footer.html' %}
-    {% if request.path not in ['/contact-us', '/thank-you'] %}
+    {% block contact_modal %}
       {% include 'partial/_contact-modal.html' %}
-    {% endif %}
+    {% endblock contact_modal %}
 
     {{ vite_import('static/js/src/base/base.js') }}
     {{ vite_import('static/js/src/base/contact-form/index.ts') }}

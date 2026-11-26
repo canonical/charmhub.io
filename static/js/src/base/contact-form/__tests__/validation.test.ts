@@ -1,6 +1,6 @@
 import { setupValidation } from "../validation";
 
-function renderForm() {
+function renderForm(beforeSend?: () => void) {
   document.body.innerHTML = `
     <form>
       <div class="p-form-validation">
@@ -19,7 +19,7 @@ function renderForm() {
     window.location.href;
   (form.elements.namedItem("returnURL") as HTMLInputElement).value =
     `${window.location.origin}/thank-you#contact-form-success`;
-  setupValidation(form);
+  setupValidation(form, beforeSend);
   return form;
 }
 
@@ -103,5 +103,18 @@ describe("Submission URLs", () => {
     expect(fields.get("returnURL")).toBe(
       `${window.location.origin}/thank-you#contact-form-success`
     );
+  });
+
+  it("runs the pre-send step only for a valid form", () => {
+    const beforeSend = vi.fn();
+    const form = renderForm(beforeSend);
+
+    submitForm(form);
+    expect(beforeSend).not.toHaveBeenCalled();
+
+    type("firstName", "Ada");
+    type("email", "ada@example.com");
+    submitForm(form);
+    expect(beforeSend).toHaveBeenCalledTimes(1);
   });
 });

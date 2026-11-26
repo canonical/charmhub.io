@@ -1,5 +1,5 @@
-import { setupContactModal } from "./contact-modal";
-import { setupFullPageResult } from "./full-page";
+import { setModalReturnURL, setupContactModal } from "./contact-modal";
+import { handleSubmitResult } from "./result";
 import { captureLanding } from "./tracking";
 import { setupValidation } from "./validation";
 
@@ -9,8 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .querySelectorAll<HTMLFormElement>(".js-contact-form")
     .forEach((form) => {
-      setupValidation(form);
+      const inModal = form.closest(".js-contact-modal");
+      setupValidation(
+        form,
+        inModal ? () => setModalReturnURL(form) : undefined
+      );
     });
-  setupFullPageResult();
+  handleSubmitResult();
   setupContactModal();
 });
