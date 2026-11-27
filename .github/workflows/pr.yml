@@ -11,65 +11,34 @@ permissions:
   contents: read
 
 jobs:
-  run-image:
+  run-workshop:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build image
-        run: DOCKER_BUILDKIT=1 docker build --tag charmhub-io .
+      - uses: canonical/launch-workshop@v1
 
-      - name: Run image
+      - name: Run workshop
         run: |
-          docker run -d -p 80:80 --env-file .env charmhub-io
-          sleep 1
-          curl --head --fail --retry-delay 1 --retry 30 --retry-connrefused http://localhost
-
-  run-dotrun:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Dotrun
-        run: |
-          sudo pip3 install dotrun requests==2.31.0 # requests version is pinned to avoid breaking changes, can be removed once issue is resolved: https://github.com/docker/docker-py/issues/3256
-
-      - name: Install dependencies
-        run: |
-          sudo chmod -R 777 .
-          dotrun install
-
-      - name: Build assets
-        run: dotrun build
-
-      - name: Test site
-        run: dotrun & sleep 60 && curl --head --fail --retry-delay 1 --retry 30 --retry-connrefused http://localhost:8045
+          workshop run -- start &
+          sleep 10
+          curl --head --fail --retry-delay 3 --retry 30 --retry-all-errors http://localhost:8045
+          curl --head --fail --retry-delay 3 --retry 30 --retry-all-errors http://localhost:5045/@vite/client
 
   run-cypress:
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
-      # START copy of the run-dotrun job
       - uses: actions/checkout@v4
 
-      - name: Install Dotrun
+      - uses: canonical/launch-workshop@v1
+
+      - name: Start production-mode app
         run: |
-          sudo pip3 install dotrun requests==2.31.0 # requests version is pinned to avoid breaking changes, can be removed once issue is resolved: https://github.com/docker/docker-py/issues/3256
-
-      - name: Install dependencies
-        run: |
-          sudo chmod -R 777 .
-          dotrun install
-
-      - name: Build assets
-        run: dotrun build
-
-      - name: Test site
-        run: dotrun & sleep 60 && curl --head --fail --retry-delay 1 --retry 30 --retry-connrefused http://localhost:8045
-      # END copy of the run-dotrun job
+          workshop run -- prod &
+          curl --head --fail --retry-delay 3 --retry 60 --retry-all-errors http://localhost:8045
 
       - name: Run Cypress as a Docker container
         run: |
@@ -126,6 +95,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: yarn
+
       - name: Install dependencies
         run: yarn install --immutable
 
@@ -147,10 +121,17 @@ jobs:
       with:
         filters: |
           py:
+            - '.github/workflows/pr.yml'
+            - '.python-version'
+            - 'package.json'
+            - 'yarn.lock'
+            - 'vite.config.js'
+            - 'vitePluginDetectInput.js'
             - '**/*.py'
             - 'requirements.txt'
             - 'templates/**/*'
           js:
+            - '.github/workflows/pr.yml'
             - '**/*.js'
             - '**/*.ts'
             - '**/*.jsx'
@@ -162,6 +143,7 @@ jobs:
             - 'vite.config.js'
             - 'tsconfig.json'
           scss:
+            - '.github/workflows/pr.yml'
             - '**/*.scss'
             - '.stylelintrc'
             - 'package.json'
@@ -190,6 +172,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.14"
+          cache: pip
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
 
       - name: Install Python dependencies
         run: |
@@ -207,6 +194,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: yarn
+
       - name: Install SCSS dependencies
         run: yarn install --immutable
 
@@ -220,6 +212,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: yarn
 
       - name: Install JS dependencies
         run: yarn install --immutable
@@ -238,16 +235,26 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.14"
+          cache: pip
 
-      - name: Install Python dependencies
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: yarn
+
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install coverage
+          pip install -r requirements.txt coverage
+          yarn install --immutable
+
+      - name: Build assets
+        run: yarn build
 
       - name: Run Python tests with coverage
         run: |
-          SECRET_KEY=insecure_secret_key coverage run  --source=. -m unittest discover tests
+          FLASK_DEBUG=0 coverage run --source=. -m unittest discover tests
+          coverage xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
@@ -264,7 +271,8 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
+          cache: yarn
 
       - name: Install dependencies
         run: yarn install --immutable

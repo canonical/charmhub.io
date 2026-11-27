@@ -102,15 +102,14 @@
         {% set extra_flags_part = " " + package["overlay_data"]["juju_cmd_extra_flags"] %}
       {% endif %}
       {% set deploy_command = "juju deploy " + package["name"] + channel_cmd_part + extra_flags_part %}
-      <div class="p-code-snippet u-no-margin--bottom" style="position: relative;">
-        <pre class="p-code-snippet__block is-wrapped" style="padding-right: 3.5rem;"><code id="deploy-command">{{ deploy_command }}</code></pre>
+      <div class="p-code-snippet u-no-margin--bottom">
+        <pre class="p-code-snippet__block is-wrapped"><code id="deploy-command">{{ deploy_command }}</code></pre>
         <button
           type="button"
-          class="p-button--base is-dense has-icon u-no-margin--bottom"
+          class="p-button--base is-dense has-icon u-no-margin--bottom p-code-snippet__button"
           aria-label="Copy deploy command"
           title="Copy deploy command"
           data-js="copy-deploy-command"
-          style="position: absolute; top: 0.5rem; right: 0.5rem;"
         >
           <i class="p-icon--copy" aria-hidden="true"></i>
         </button>

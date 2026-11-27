@@ -1,4 +1,6 @@
-from urllib.parse import urlparse
+import contextvars
+from concurrent.futures import ThreadPoolExecutor
+from urllib.parse import urlparse, urlsplit, urlunsplit
 
 import humanize
 from canonicalwebteam.discourse import DocParser
@@ -764,23 +766,49 @@ def add_required_fields(metadata_relations, relations):
 def details_resources(entity_name):
     channel_request = request.args.get("channel", default=None, type=str)
     package = get_package(entity_name, channel_request, FIELDS)
+    resources = package["default-release"]["resources"]
 
-    # /resources redirect to the first resource
-    if package["default-release"]["resources"]:
-        name = package["default-release"]["resources"][0]["name"]
-        return redirect(
-            url_for(
-                ".details_resource",
-                entity_name=entity_name,
-                resource_name=name,
-            )
-        )
-    else:
+    if not resources:
         return render_template(
             "details/no-resources.html",
             package=package,
             channel_requested=channel_request,
         )
+
+    current_channel = channel_request
+    if not current_channel:
+        release_channel = package["default-release"]["channel"]
+        current_channel = f"{release_channel['track']}/{release_channel['risk']}"
+    current_revision = package["default-release"]["revision"]["revision"]
+
+    def fetch(resource):
+        return _get_resource_details(
+            entity_name, package, resource, current_channel
+        )
+
+    # Fetch each resource's details concurrently; map() preserves order.
+    # Each worker runs inside a copy of the request's context so
+    # OpenTelemetry spans for the outgoing calls stay under this request.
+    with ThreadPoolExecutor(max_workers=min(len(resources), 8)) as executor:
+        contexts = [contextvars.copy_context() for _ in resources]
+        resources_details = list(
+            executor.map(
+                lambda args: args[0].run(fetch, args[1]),
+                zip(contexts, resources),
+            )
+        )
+
+    return render_template(
+        "details/resources.html",
+        package=package,
+        # used for navigation
+        channel_requested=channel_request,
+        # used for displaying the currently selected channel name
+        current_channel=current_channel,
+        current_revision=current_revision,
+        resources=resources_details,
+        displayed_revisions=10,
+    )
 
 
 @trace_function
@@ -792,60 +820,91 @@ def details_resources(entity_name):
 @store_maintenance
 @redirect_uppercase_to_lowercase
 def details_resource(entity_name, resource_name):
+    # All resources are now displayed on a single page; keep old links
+    # working by redirecting to the matching section.
     channel_request = request.args.get("channel", default=None, type=str)
-    package = get_package(entity_name, channel_request, FIELDS)
-    resources = package["default-release"]["resources"]
-
-    if not resources:
-        return redirect(url_for(".details_resources", entity_name=entity_name))
-
-    resource = next(
-        (item for item in resources if item["name"] == resource_name), None
+    return redirect(
+        url_for(
+            ".details_resources",
+            entity_name=entity_name,
+            channel=channel_request,
+            _anchor=resource_name,
+        )
     )
 
-    if not resource:
-        return redirect(url_for(".details_resources", entity_name=entity_name))
+
+def _get_resource_details(entity_name, package, resource, current_channel):
+    resource_name = resource["name"]
 
     # Get OCI image details
     if resource["type"] == "oci-image":
         oci_details = publisher_gateway.process_response(
             publisher_gateway.session.get(resource["download"]["url"])
         )
-        resource["image_name"], resource["digest"] = oci_details[
-            "ImageName"
-        ].split("@")
+        resource["image_name"], resource["digest"] = oci_details["ImageName"].split("@")
         resource["short_digest"] = resource["digest"].split(":")[1][:12]
 
     # Get upstream-source (if available)
-    metadata_resources = package["store_front"]["metadata"].get(
-        "resources", {}
-    )
+    resource["upstream_source"] = None
+    metadata_resources = package["store_front"]["metadata"].get("resources", {})
     if resource_name in metadata_resources:
         upstream = metadata_resources[resource_name].get("upstream-source")
-        resource["upstream_source"] = upstream
-    else:
-        resource["upstream_source"] = None
+        if upstream:
+            resource["upstream_source"] = _ensure_scheme(upstream)
 
-    revisions = device_gateway.get_resource_revisions(
-        entity_name, resource_name
-    )
+    revisions = device_gateway.get_resource_revisions(entity_name, resource_name)
     revisions = sorted(revisions, key=lambda k: k["revision"], reverse=True)
 
+    resource["size"] = resource["download"]["size"]
     # Humanize sizes
-    resource["size"] = humanize.naturalsize(resource["download"]["size"])
+    resource["readable_size"] = humanize.naturalsize(resource["download"]["size"])
     resource["updated"] = logic.convert_date(resource["created-at"])
+
+    checksum = resource["download"].get("hash-sha-256", "")
+    resource["checksum"] = checksum[:12]
+    resource["checksum_full"] = checksum
 
     for revision in revisions:
         revision["size"] = humanize.naturalsize(revision["download"]["size"])
         revision["updated"] = logic.convert_date(revision["created-at"])
+        revision_checksum = revision["download"].get("hash-sha-256", "")
+        revision["checksum"] = revision_checksum[:12]
+        revision["checksum_full"] = revision_checksum
+        revision["is_default"] = revision["revision"] == resource["revision"]
 
-    return render_template(
-        "details/resources.html",
-        package=package,
-        channel_requested=channel_request,
-        resource=resource,
-        revisions=revisions,
+    deploy_command = (
+        f"juju deploy {package['name']} --channel {current_channel} "
+        f"--trust --resources {resource_name}=<resource revision>"
     )
+
+    return {
+        "resource": resource,
+        "revisions": revisions,
+        # Minimal, serialisable data for the React revisions table
+        "revisions_data": [
+            {
+                "revision": revision["revision"],
+                "updated": revision["updated"],
+                "size": revision["size"],
+                "checksum": revision["checksum"],
+                "checksum_full": revision["checksum_full"],
+                "is_default": revision["is_default"],
+            }
+            for revision in revisions
+        ],
+        "deploy_command": deploy_command,
+    }
+
+
+def _ensure_scheme(link: str) -> str | None:
+    link = link.strip()
+    parts = urlsplit(link)
+    if parts.scheme not in ("http", "https"):
+        parts = urlsplit(f"https://{link}")
+    if parts.scheme and parts.netloc:
+        return urlunsplit(parts)
+    # Not usable as URL
+    return None
 
 
 @trace_function

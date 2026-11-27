@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python 3.10
+      - name: Set up Python 3.14
         uses: actions/setup-python@v6
         with:
           python-version: "3.14"
@@ -22,7 +22,8 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
+          cache: yarn
 
       - name: Install JS dependencies
         run: yarn install --immutable
@@ -38,9 +39,12 @@ jobs:
           pip3 install -r requirements.txt
           pip3 install coverage
 
+      - name: Build assets
+        run: yarn build
+
       - name: Run Python tests with coverage
         run: |
-          SECRET_KEY=simplesecretkey coverage run --source=. -m unittest discover tests
+          FLASK_DEBUG=0 SECRET_KEY=simplesecretkey coverage run --source=. -m unittest discover tests
           coverage xml -o coverage/coverage.xml
           coverage html -d coverage/python
 
@@ -120,7 +124,7 @@ jobs:
           name: charmhubio-coverage
           path: coverage
 
-      - name: Set up Python 3.10
+      - name: Set up Python 3.14
         uses: actions/setup-python@v4
         with:
           python-version: '3.14'
@@ -134,7 +138,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
           cache: 'yarn'
       - name: Install JavaScript dependencies
         run: yarn install --immutable
