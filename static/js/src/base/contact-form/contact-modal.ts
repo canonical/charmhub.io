@@ -1,3 +1,4 @@
+import { FAIL, SUCCESS } from "./result";
 import { currentURLWithoutTracking, pushEvent } from "./tracking";
 
 function trapTabFocus(event: KeyboardEvent, dialog: HTMLElement): void {
@@ -32,7 +33,7 @@ export function setModalReturnURL(form: HTMLFormElement): void {
   const returnURL = form.elements.namedItem("returnURL");
   if (returnURL instanceof HTMLInputElement) {
     const url = currentURLWithoutTracking();
-    url.hash = "contact-form-success";
+    url.hash = SUCCESS;
     returnURL.value = url.href;
   }
 }
@@ -78,6 +79,8 @@ export function setupContactModal(): void {
 
   links.forEach((link) => {
     link.addEventListener("click", (event) => {
+      // Leave open-in-new-tab and open-in-new-window clicks to the browser
+      if (event.metaKey || event.ctrlKey || event.shiftKey) return;
       event.preventDefault();
       trigger = link;
       open();
@@ -92,9 +95,9 @@ export function setupContactModal(): void {
     });
 
   // Storage and analytics for the result are handled in result.ts
-  if (window.location.hash === "#contact-form-success") {
+  if (window.location.hash === SUCCESS) {
     open(true);
-  } else if (window.location.hash === "#contact-form-fail") {
+  } else if (window.location.hash === FAIL) {
     open();
   }
 }

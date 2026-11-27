@@ -24,12 +24,26 @@ function showError(field: Field) {
   field.setAttribute("aria-describedby", message.id);
 }
 
+function showSending(button: HTMLButtonElement) {
+  button.disabled = true;
+  const spinner = document.createElement("i");
+  spinner.className = "p-icon--spinner u-animation--spin is-light";
+  button.replaceChildren(spinner, " Submitting…");
+}
+
+function showReady(button: HTMLButtonElement, label: string) {
+  button.disabled = false;
+  button.textContent = label;
+}
+
 export function setupValidation(
   form: HTMLFormElement,
   beforeSend?: () => void
 ): void {
   // Show our own messages instead of the browser's bubbles
   form.noValidate = true;
+
+  const sending = new Map<HTMLButtonElement, string>();
 
   const errorWrappers = () =>
     form.querySelectorAll(".p-form-validation.is-error");
@@ -65,7 +79,17 @@ export function setupValidation(
     form
       .querySelectorAll<HTMLButtonElement>('[type="submit"]')
       .forEach((button) => {
-        button.disabled = true;
+        if (!sending.has(button)) {
+          sending.set(button, button.textContent || "");
+        }
+        showSending(button);
       });
+  });
+
+  // Back can restore the page exactly as it was left, mid-send
+  window.addEventListener("pageshow", (event) => {
+    if (!event.persisted) return;
+    sending.forEach((label, button) => showReady(button, label));
+    sending.clear();
   });
 }

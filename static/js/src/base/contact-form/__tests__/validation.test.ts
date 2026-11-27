@@ -35,6 +35,12 @@ function type(id: string, value: string) {
   field.dispatchEvent(new Event("input", { bubbles: true }));
 }
 
+function submitValid(form: HTMLFormElement): Event {
+  type("firstName", "Ada");
+  type("email", "ada@example.com");
+  return submitForm(form);
+}
+
 const wrapper = (id: string) =>
   document.getElementById(id)?.closest(".p-form-validation") as HTMLElement;
 
@@ -50,6 +56,32 @@ describe("Field errors", () => {
       wrapper("firstName").querySelector(".js-validation-message")
     ).toBeNull();
     expect(wrapper("email").classList).toContain("is-error");
+  });
+
+  it("shows the submit button as sending after a valid submit", () => {
+    const form = renderForm();
+    submitValid(form);
+
+    const button = form.querySelector("button") as HTMLButtonElement;
+    expect(button.disabled).toBe(true);
+    expect(button.textContent).toContain("Submitting…");
+    expect(button.querySelector(".p-icon--spinner")).not.toBeNull();
+  });
+
+  it("makes the submit button usable again after coming back with Back", () => {
+    const form = renderForm();
+    submitValid(form);
+
+    const button = form.querySelector("button") as HTMLButtonElement;
+    expect(button.disabled).toBe(true);
+
+    window.dispatchEvent(
+      Object.assign(new Event("pageshow"), { persisted: true })
+    );
+
+    expect(button.disabled).toBe(false);
+    expect(button.textContent).toBe("Submit");
+    expect(button.querySelector(".p-icon--spinner")).toBeNull();
   });
 
   it("keeps the error while the field is still invalid", () => {
@@ -112,9 +144,7 @@ describe("Submission URLs", () => {
     submitForm(form);
     expect(beforeSend).not.toHaveBeenCalled();
 
-    type("firstName", "Ada");
-    type("email", "ada@example.com");
-    submitForm(form);
+    submitValid(form);
     expect(beforeSend).toHaveBeenCalledTimes(1);
   });
 });

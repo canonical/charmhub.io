@@ -1,5 +1,5 @@
 import { setModalReturnURL, setupContactModal } from "./contact-modal";
-import { handleSubmitResult } from "./result";
+import { clearResultHash, handleSubmitResult } from "./result";
 import { captureLanding } from "./tracking";
 import { setupValidation } from "./validation";
 
@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
         inModal ? () => setModalReturnURL(form) : undefined
       );
     });
-  handleSubmitResult();
+  if (handleSubmitResult()) return;
   setupContactModal();
+  // Last, as the result handler and the pop-up both read the hash
+  clearResultHash();
 });

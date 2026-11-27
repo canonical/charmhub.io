@@ -33,7 +33,6 @@ export function restoreAnswers(form: HTMLFormElement): void {
       if (typeof value === "boolean") field.checked = value;
     } else if (typeof value === "string") {
       field.value = value;
-      field.dispatchEvent(new Event("change"));
     }
   });
 }

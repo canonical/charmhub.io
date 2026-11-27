@@ -137,7 +137,7 @@ describe("Contact form", () => {
       cy.focused().should("have.class", "js-contact-modal-close");
       cy.focused().trigger("keydown", { key: "Tab", shiftKey: true });
       if (result === "success") {
-        cy.focused().should("have.attr", "href", "http://askubuntu.com");
+        cy.focused().should("have.attr", "href", "https://askubuntu.com");
       } else {
         cy.focused().should("have.attr", "type", "submit");
       }
@@ -160,11 +160,17 @@ describe("Contact form", () => {
 
     submitForm();
     cy.location("pathname").should("eq", "/");
-    cy.location("hash").should("eq", "#contact-form-success");
     cy.get(".js-contact-modal")
       .should("be.visible")
       .and("contain", "Thanks for contacting us.")
       .and("contain", "A member of our team will be in touch shortly.");
+    dataLayerEvents().should("include", "contact_form_success");
+
+    // The result hash is removed, so a refresh does not repeat the result
+    cy.location("hash").should("eq", "");
+    cy.reload();
+    cy.get(".js-contact-modal").should("not.be.visible");
+    dataLayerEvents().should("not.include", "contact_form_success");
   });
 
   it("Returns to the current search after a pop-up submission", () => {
@@ -280,6 +286,7 @@ describe("Contact form", () => {
       cy.get('[type="submit"]').then(($button) => {
         $button[0].click();
         expect($button[0].disabled).to.equal(true);
+        expect($button[0].textContent).to.contain("Submitting…");
       });
     });
   });
@@ -295,11 +302,11 @@ describe("Contact form", () => {
 
       submitForm();
       cy.location("pathname").should("eq", path);
-      cy.location("hash").should("eq", "#contact-form-fail");
       cy.contains(
         "There was an error while sending your message. Please try again."
       ).should("be.visible");
       dataLayerEvents().should("include", "contact_form_failed");
+      cy.location("hash").should("eq", "");
 
       cy.get(".js-contact-form").within(() => {
         cy.contains("Try again").should("not.exist");
