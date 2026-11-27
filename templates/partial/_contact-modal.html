@@ -1,0 +1,14 @@
+<div class="p-modal u-hide js-contact-modal" id="contact-modal">
+  <section class="p-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title" tabindex="-1">
+    <header class="p-modal__header">
+      <h2 class="p-modal__title" id="contact-modal-title">Contact Canonical</h2>
+      <button class="p-modal__close js-contact-modal-close" aria-label="Close" aria-controls="contact-modal">Close</button>
+    </header>
+    <div class="js-contact-form-panel">
+      {% include 'partial/_contact-form.html' %}
+    </div>
+    <div class="js-contact-success" hidden>
+      {% include 'partial/_contact-thank-you-message.html' %}
+    </div>
+  </section>
+</div>
